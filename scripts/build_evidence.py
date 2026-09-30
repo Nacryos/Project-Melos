@@ -21,6 +21,7 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from backend.morphology import normalize  # noqa: E402
+from backend.normalization_contract import NORMALIZATION_VERSION
 
 
 PREDICATES = {
@@ -31,6 +32,7 @@ PREDICATES = {
 ASSERTION_TYPES = {"quoted_source", "extracted_annotation", "model_inference"}
 STATUSES = {"source_claim", "machine_proposed", "needs_review"}
 SCHEMA = """
+CREATE TABLE lookup_metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 CREATE TABLE input_files (
     name TEXT PRIMARY KEY,
     sha256 TEXT NOT NULL,
@@ -222,6 +224,7 @@ def build(root: Path = ROOT, output: Path | None = None,
     try:
         con = sqlite3.connect(temp)
         con.executescript(SCHEMA)
+        con.execute('INSERT INTO lookup_metadata VALUES (?,?)', ('normalization_version', NORMALIZATION_VERSION))
         claim_count = 0
         edge_count = 0
         for path, digest, expected_records in accepted:

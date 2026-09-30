@@ -75,3 +75,42 @@ test('commentary preview never joins across lacunae, spaces or line divisions', 
   assert.equal(reading('αβ-\nγδ')[0].form, 'αβγδ');
   assert.equal(reading('αβʼ-\nγδ')[0].form, 'αβʼ');
 });
+
+test('spacing psili remains a distinct attached printed sign, not an apostrophe alias', () => {
+  const form = 'αβ\u1fbf';
+  const text = `🪶 [${form}] = γδ`;
+  const word = literal(text)[0];
+  assert.equal(word.form, form);
+  assert.equal(text.slice(word.start, word.end), form);
+  assert.equal(mention(form, text).children.length, 1);
+  assert.ok(mention(form, text).textContent.includes(text));
+  assert.equal(fold(form), form);
+  for (const other of ['αβ', "αβ'", 'αβ’', 'αβ᾽', 'αβʼ']) {
+    assert.notEqual(fold(form), fold(other));
+    assert.equal(mention(other, text).children.length, 0);
+    assert.equal(mention(form, other).children.length, 0);
+  }
+});
+
+test('internal spacing psili is preserved without matching a partial or unmarked word', () => {
+  const form = 'αβ\u1fbfγδ';
+  assert.equal(literal(form)[0].form, form);
+  assert.equal(mention(form, form).children.length, 1);
+  for (const other of ['αβ', 'γδ', 'αβ\u1fbf', 'αβγδ', 'αβ’γδ']) {
+    assert.equal(mention(other, form).children.length, 0, other);
+  }
+});
+
+test('orphan spacing signs create no word units and attached signs block line joining', () => {
+  assert.equal(literal('\u1fbf · \u1fbf \u0323').length, 0);
+  const leading = literal('\u1fbfαβ');
+  assert.equal(leading.length, 1);
+  assert.equal(leading[0].form, 'αβ');
+  assert.equal(leading[0].start, 1);
+  const doubled = literal('αβ\u1fbf\u1fbfγδ');
+  assert.equal(doubled.map(word => word.form).join('|'), 'αβ\u1fbf|γδ');
+  const divided = reading('αβ\u1fbf-\nγδ');
+  assert.equal(divided[0].form, 'αβ\u1fbf');
+  assert.ok(divided.every(word => !word.joined));
+  assert.equal(mention('αβ\u1fbfγδ', 'αβ\u1fbf-\nγδ').children.length, 0);
+});

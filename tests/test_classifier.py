@@ -417,6 +417,14 @@ def test_occurrence_guard_keeps_elided_and_unelided_tokens_distinct():
         assert 'does not occur' in result['reason']
 
 
+def test_occurrence_guard_preserves_spacing_psili_without_equating_it_with_apostrophe():
+    for query, found in [('α᾿', True), ('α', False), ("α'", False)]:
+        provider = StubProvider('parse_a')
+        result = classify_context(query, {**PASSAGE, 'text': 'α᾿ β'}, CANDIDATES, provider=provider)
+        assert provider.called == found
+        assert result['packet']['passage']['text'] == 'α᾿ β'
+
+
 def test_installed_local_model_requires_validation_and_explicit_opt_in():
     with patch.dict("os.environ", {"TYPESAFE_API_KEY": "", "JEV_API_KEY": "",
                                    "MELOS_EXPERIMENTAL_LOCAL_CLASSIFIER": "1"}):

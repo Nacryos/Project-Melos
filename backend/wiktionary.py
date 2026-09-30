@@ -17,6 +17,7 @@ from typing import Any
 from urllib.parse import quote
 
 from .morphology import normalize, query_variants
+from .normalization_contract import NORMALIZATION_VERSION
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -119,6 +120,7 @@ def build_index(source_path: str | Path = SOURCE, audit_path: str | Path = AUDIT
         """)
         connection.executemany("INSERT INTO metadata(key,value) VALUES (?,?)", [
             ("schema_version", SCHEMA_VERSION), ("approved_source_sha256", approved_hash),
+            ("normalization_version", NORMALIZATION_VERSION),
         ])
         with source.open("r", encoding="utf-8") as handle:
             for line_number, line in enumerate(handle, 1):
@@ -183,6 +185,9 @@ class WiktionaryLookup:
                 metadata.get("approved_source_sha256") != self.approved_hash):
             self._connection.close()
             raise AuditGateError("Wiktionary SQLite index does not match the accepted source hash")
+        if metadata.get('normalization_version') != NORMALIZATION_VERSION:
+            self._connection.close()
+            raise AuditGateError('Wiktionary lookup normalization version differs from runtime; migration/rebuild required')
 
     def close(self) -> None:
         with self._lock:

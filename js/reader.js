@@ -259,12 +259,13 @@
   }
 
   // Shared literal lexer: retain source spelling, combining marks and offsets.
-  // An apostrophe may connect Greek segments or occur once at the end. Repeated
-  // punctuation separates units; mixed-script tokens never become partial Greek.
+  // Apostrophes and the distinct printed spacing psili U+1FBF may attach inside
+  // or at the end of a unit. Keeping that sign does not reinterpret it as elision.
+  // Repeated punctuation separates units; mixed-script tokens are not partial Greek.
   function literalGreekWords(value) {
     const text = String(value || '');
     const letter = /\p{L}/u, greekLetter = /(?=\p{L})\p{Script=Greek}/u;
-    const mark = /\p{M}/u, apostrophe = /['’᾽ʼ]/u;
+    const mark = /\p{M}/u, attachedSign = /['’᾽ʼ\u1fbf]/u;
     const words = [];
     let start = -1, end = 0, mixed = false;
     const flush = () => {
@@ -278,11 +279,11 @@
       const character = String.fromCodePoint(text.codePointAt(offset));
       const next = offset + character.length;
       // Modifier apostrophe U+02BC is itself a letter: handle it first.
-      if (apostrophe.test(character)) {
+      if (attachedSign.test(character)) {
         if (start >= 0) {
           end = next;
           const following = next < text.length ? String.fromCodePoint(text.codePointAt(next)) : '';
-          if (apostrophe.test(following) || !letter.test(following)) flush();
+          if (attachedSign.test(following) || !letter.test(following)) flush();
         }
       } else if (letter.test(character)) {
         if (start < 0) start = offset;
@@ -935,6 +936,7 @@
     clear(ui.inspector);
     ui.inspector.append(node('span', 'eyebrow', 'SELECTED FORM'), node('div', 'word-title', form));
     if (joined) ui.inspector.append(node('p', 'word-normalized', 'Lookup joins an explicit printed line-end division. Both printed segments remain unchanged in the passage; no missing letters are supplied.'));
+    if (form.includes('\u1fbf')) ui.inspector.append(node('p', 'word-normalized', 'Printed spacing mark retained; not silently treated as an apostrophe.'));
     if (!passageId) ui.inspector.append(node('p', 'word-normalized', 'Standalone form lookup · no passage context supplied.'));
     const morphologyHost = node('div', 'morphology-panel');
     const wiktionaryHost = node('div', 'wiktionary-panel');

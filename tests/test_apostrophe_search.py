@@ -38,12 +38,32 @@ def test_non_greek_wording_keeps_existing_quotation_and_possessive_behavior():
     assert matches('café', "'café'")
 
 
+def test_spacing_psili_is_literal_and_blocks_partial_exact_matches():
+    assert matches('α᾿', 'α᾿ β')
+    assert not matches('α', 'α᾿ β')
+    assert not matches("α'", 'α᾿ β')
+    assert not matches('α᾿', "α' β")
+    assert not matches('β', 'α᾿β')
+    assert matches('α᾿β', 'α᾿β')
+
+
 @pytest.mark.parametrize('client', [[
     {'id': 'terminal', 'text': 'αβγ’ δεζ'},
     {'id': 'bare', 'text': 'αβγ δεζ'},
     {'id': 'internal', 'text': 'αβγ’δεζ'},
 ]], indirect=True)
 def test_exact_api_returns_only_literal_whole_form(client):
-    for query, expected in [("αβγ'", 'terminal'), ('αβγ', 'bare'), ("αβγ'δεζ", 'internal')]:
+    for query, expected in [("αβγ'", 'terminal'), ('αβγ', 'bare'), ("αβγ'δεζ", 'internal'),
+                            ("abg'", 'terminal'), ('abg᾽', 'terminal')]:
         result = client.get('/api/search', params={'q': query, 'mode': 'words', 'match': 'exact'}).json()
         assert {row['id'] for row in result['results']} == {expected}
+
+
+@pytest.mark.parametrize('client', [[
+    {'id': 'separated', 'text': 'α β'},
+    {'id': 'joined', 'text': 'αβ'},
+]], indirect=True)
+def test_query_punctuation_never_invents_joined_greek_word(client):
+    for query in ('a,b', 'a-b', 'a123b', 'a[b]'):
+        result = client.get('/api/search', params={'q': query, 'mode': 'words', 'match': 'exact'}).json()
+        assert {row['id'] for row in result['results']} == {'separated'}

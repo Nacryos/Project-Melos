@@ -16,6 +16,7 @@ from typing import Any
 
 from backend.morphology import normalize, query_variants
 from backend.publication import publication_restricted, EVIDENCE_HOLD
+from backend.normalization_contract import NORMALIZATION_VERSION
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -41,6 +42,14 @@ class EvidenceIndex:
             raise FileNotFoundError(f"Evidence index not built: {self.db_path}")
         con = sqlite3.connect(self.db_path)
         con.row_factory = sqlite3.Row
+        try:
+            version = con.execute("SELECT value FROM lookup_metadata WHERE key='normalization_version'").fetchone()
+        except sqlite3.Error as exc:
+            con.close()
+            raise RuntimeError('Evidence lookup keys require coordinated normalization migration/rebuild.') from exc
+        if version is None or version[0] != NORMALIZATION_VERSION:
+            con.close()
+            raise RuntimeError('Evidence lookup normalization version differs from runtime; migration/rebuild required.')
         return con
 
     @staticmethod

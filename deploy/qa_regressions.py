@@ -43,6 +43,19 @@ def verify(origin):
     truncated = get('/api/search', q='κἄμμ', mode='words', match='exact', author='Sappho', limit=100)
     assert source['id'] not in {row['id'] for row in truncated['results']}, 'Exact search must not silently discard the printed elision sign'
     print('Printed elision sign is preserved in lookup; bare-prefix exact search does not claim the Brothers Poem.', flush=True)
+    fragment = get('/api/passage', id='dcc-sappho:frag-27')
+    printed = 'κἄμμ᾿'
+    assert printed in fragment['text'], 'Distinct printed spacing psili must remain in fragment 27'
+    result = get('/api/word', form=printed, passage_id=fragment['id'])
+    assert fragment['id'] in {row['id'] for row in result['occurrences']}
+    assert fragment['id'] not in {row['id'] for row in truncated['results']}
+    exact_sets = []
+    for query in ('κἄμμ’', "kamm'", 'kamm᾽'):
+        result = get('/api/search', q=query, mode='words', match='exact', author='Sappho', limit=100)
+        assert result['total'] <= 100, 'Equivalence regression must compare complete results'
+        exact_sets.append({row['id'] for row in result['results']})
+    assert exact_sets[0] == exact_sets[1] == exact_sets[2]
+    print('Spacing psili remains distinct; Greek and Latin elision-sign queries agree without dropping signs.', flush=True)
 
 
 if __name__ == '__main__':

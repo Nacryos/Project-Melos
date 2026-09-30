@@ -33,7 +33,9 @@ def tokenize(text):
 
     Python's Unicode \w excludes combining marks. Using it alone splits
     uncertain Greek words into spurious fragments. Marks remain in the surface
-    token; only normalize() produces the separate lossy lookup key. A terminal
+    token; only normalize() produces the separate lossy lookup key. U+1FBF
+    spacing psili is retained as a DISTINCT printed sign, never folded to an
+    apostrophe or used to supply an ending. A terminal
     apostrophe is a printed sign, not permission to supply an elided vowel.
     Adjacent quotation/apostrophe signs are preserved conservatively without
     guessing their editorial function; orphan signs are not word tokens.
@@ -43,10 +45,10 @@ def tokenize(text):
     for index, char in enumerate(text):
         # U+02BC is a Unicode letter: test this branch BEFORE the base class so
         # all four known apostrophe glyphs have the same boundary behavior.
-        if char in "’'᾽ʼ":
+        if char in _WORD_SIGNS:
             if current:
                 current.append(char)
-                if index + 1 == len(text) or text[index + 1] in "’'᾽ʼ" or not _WORD_BASE.fullmatch(text[index + 1]):
+                if index + 1 == len(text) or text[index + 1] in _WORD_SIGNS or not _WORD_BASE.fullmatch(text[index + 1]):
                     tokens.append(''.join(current))
                     current = []
         elif _WORD_BASE.fullmatch(char):
@@ -62,3 +64,4 @@ def tokenize(text):
 
 
 _WORD_BASE = re.compile(r"[^\W\d_]", re.UNICODE)
+_WORD_SIGNS = "’'᾽ʼ᾿"

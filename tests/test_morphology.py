@@ -51,6 +51,22 @@ class MorphologyTests(unittest.TestCase):
         self.assertEqual(query_variants("m’")[0], "μ'")
         self.assertEqual(query_variants("λύει"), ["λυει"])
 
+    def test_transliterated_apostrophes_never_add_bare_word_fallback(self):
+        for mark in "'’᾽ʼ":
+            self.assertEqual(query_variants('kamm' + mark), ["καμμ'"])
+            self.assertEqual(query_variants('KAMM' + mark), ["καμμ'"])
+        self.assertEqual(query_variants("KA/MM'"), ["καμμ'", "κα μμ'"])
+        self.assertEqual(query_variants('kamm᾿'), ['καμμ᾿'])
+        self.assertEqual(query_variants('κἄμμ᾿'), ['καμμ᾿'])
+        self.assertNotEqual(normalize('κἄμμ᾿'), normalize('κἄμμ’'))
+
+    def test_transliteration_does_not_delete_boundaries_and_invent_joined_words(self):
+        for boundary in (',', '-', '[123]', '.', ';', '123', '—', '_'):
+            self.assertEqual(query_variants('a' + boundary + 'b'), ['α β'])
+        self.assertEqual(query_variants('a[b]c'), ['α β κ', 'α β ξ'])
+        self.assertEqual(query_variants('A)/')[0], 'α')
+        self.assertEqual(query_variants('A?')[0], 'α')
+
     def test_exact_retains_ambiguity_and_provenance(self):
         response = self.service.analyze("θεός")
         self.assertEqual(response["normalized"], "θεοσ")

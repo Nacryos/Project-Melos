@@ -61,3 +61,10 @@ def test_adjacent_quote_sign_is_preserved_without_inventing_an_editorial_interpr
     # Visually similar Greek signs are not silently treated as elision marks.
     for sign in ('\u1fbf', '\u1ffe', '\u0384'):
         assert normalize('α' + sign) != "α'"
+
+
+def test_spacing_psili_is_a_distinct_printed_sign_not_an_apostrophe_alias():
+    assert tokenize('α᾿ β\u0323᾿ γ᾿δ ᾿') == ['α᾿', 'β\u0323᾿', 'γ᾿δ']
+    assert normalize('α᾿') == 'α᾿'
+    assert normalize('α᾿') not in (normalize("α'"), normalize('α'))
+    assert tokenize('α᾿᾿β') == ['α᾿', 'β']

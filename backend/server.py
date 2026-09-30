@@ -104,8 +104,8 @@ def phrase_pattern(query):
     # Do not match a bare stem inside an elided form or the second half of an
     # internal-apostrophe word. An orphan leading quote remains punctuation.
     # Attached terminal signs are literal: we do not guess quote vs. elision.
-    ending = r'(?!\w)' if query.endswith("'") else r"(?![\w'])"
-    return re.compile(r"(?<!\w)(?<!\w')" + literal + ending)
+    ending = r'(?!\w)' if query.endswith(("'", '᾿')) else r"(?![\w'᾿])"
+    return re.compile(r"(?<!\w)(?<!\w['᾿])" + literal + ending)
 
 
 def author_key(label):

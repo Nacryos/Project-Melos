@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from backend.textutils import normalize, search_text, tokenize
 
 
-TOKENIZER_VERSION = 3
+TOKENIZER_VERSION = 4
 
 
 def _same_rows(original, repaired, query, label):

@@ -47,6 +47,25 @@ accents, sigma and the four apostrophe glyphs. They preserve the source excerpt
 and do not join words over gaps or infer a parse. Explicit printed line-end
 divisions are joined only for passage-word lookup, with source text unchanged.
 
+Spacing psili (`᾿`, U+1FBF) is a separate retained printed sign. It is not folded
+to an ordinary apostrophe: copying `κἄμμ᾿` from Sappho 27 preserves that spelling
+in word lookup, contextual checks, commentary matching and exact search. This
+does not identify the editorial function of every spacing breathing sign.
+
+Latin-letter queries retain apostrophes in both romanization and Beta Code
+paths. A Greek-block punctuation character alone does not make a query Greek
+script. Unsupported punctuation/digits separate query words instead of silently
+joining their letters. The partial Beta decoder strips the supported accent,
+breathing, case, iota-subscript, diaeresis and underdot syntax only; it is not a
+full Beta Code document importer. Character handling was checked against the
+[TLG Quick Reference, pp. 3–4](https://stephanus.tlg.uci.edu/encoding/quickbeta.pdf).
+
+Persistent evidence and Wiktionary indexes declare a lookup-normalization
+version. A version mismatch fails closed until their derivative lookup keys
+are rebuilt or repaired against unchanged, independently accepted source data.
+Corpus-token, evidence-key, and dictionary-key repairs must be deployed as a
+coordinated snapshot with the corresponding backend code.
+
 Reader developer owns `reader.html`, `js/reader.js`, `css/reader.css`; visualization
 developer owns `js/usage-space.js` and exposes `window.MelosUsageSpace.open(query,
 author)` plus `close()`. Main owns server, database and integration. Morphology

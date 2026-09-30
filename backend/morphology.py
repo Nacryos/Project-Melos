@@ -80,7 +80,8 @@ _ROMAN = dict(zip("abgdezhiklmnxoprstyufwqcv",
 def normalize(text: str) -> str:
     """Fold Unicode Greek accents, breathings and sigma for search keys.
 
-    Spaces and apostrophes survive. Other punctuation separates words. The
+    Spaces, apostrophes and literal spacing psili (U+1FBF) survive. Psili is
+    NOT equated with an apostrophe. Other punctuation separates words. The
     original text must always be stored separately from this lossy key.
     """
     decomposed = unicodedata.normalize("NFD", str(text).translate(_APOSTROPHES).lower())
@@ -90,7 +91,7 @@ def normalize(text: str) -> str:
             continue
         if char in "ςϲϹ":
             char = "σ"
-        if char.isalpha() or char == "'":
+        if char.isalpha() or char in "'᾿":
             chars.append(char)
         else:
             chars.append(" ")
@@ -103,10 +104,20 @@ def tokenize(text: str) -> list[str]:
 
 
 def _from_beta(text: str) -> str:
-    # Beta Code accent, breathing, case, iota-subscript and punctuation marks
-    # do not affect this intentionally folded retrieval key.
-    return "".join(_BETA.get(c, " " if c.isspace() else "")
-                   for c in text.lower() if c in _BETA or c.isspace())
+    # TLG Quick Reference, pp. 3–4: apostrophe is meaningful punctuation,
+    # unlike the supported accents/breathings/underdot removed in folded keys.
+    # https://stephanus.tlg.uci.edu/encoding/quickbeta.pdf
+    # Unsupported punctuation/digits must separate words, never concatenate
+    # their surrounding letters. This is a query decoder, not full TEI import.
+    out = []
+    for char in text.translate(_APOSTROPHES).lower():
+        if char in _BETA:
+            out.append(_BETA[char])
+        elif char in "'᾿":
+            out.append(char)
+        elif char not in "*/\\=()|+?":
+            out.append(' ')
+    return ''.join(out)
 
 
 def _from_roman(text: str) -> str:
@@ -125,10 +136,11 @@ def _from_roman(text: str) -> str:
         elif value[i].isspace():
             out.append(" ")
             i += 1
-        elif value[i] == "'":
-            out.append("'")
+        elif value[i] in "'᾿":
+            out.append(value[i])
             i += 1
         else:
+            out.append(" ")
             i += 1
     return "".join(out)
 
@@ -141,7 +153,7 @@ def query_variants(q: str) -> list[str]:
     """
     if not q.strip():
         return []
-    if any("\u0370" <= c <= "\u03ff" or "\u1f00" <= c <= "\u1fff" for c in q):
+    if any(c.isalpha() and ("\u0370" <= c <= "\u03ff" or "\u1f00" <= c <= "\u1fff") for c in q):
         return [normalize(q)]
     beta = normalize(_from_beta(q))
     roman = normalize(_from_roman(q))
