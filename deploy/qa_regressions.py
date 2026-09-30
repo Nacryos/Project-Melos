@@ -30,6 +30,12 @@ def verify(origin):
     assert any(row['lemma'] == 'ἐγώ' for row in result['candidates']), 'Original conflicting evidence must remain visible'
     assert not any(row['automatic_expansion_eligible'] for row in result['candidates'])
     print('Conflicting source lemma links remain visible but do not drive automatic expansion.', flush=True)
+    source = get('/api/passage', id='dcc-sappho:brothers-poem')
+    form = 'βασί̣λ̣η̣αν'
+    assert form in source['text'], 'Original underdots must remain present in the edition text'
+    result = get('/api/word', form=form, passage_id=source['id'])
+    assert source['id'] in {row['id'] for row in result['occurrences']}, 'Underdotted word must remain one occurrence token'
+    print('Underdotted Brothers Poem form remains intact and its original occurrence is discoverable.', flush=True)
 
 
 if __name__ == '__main__':

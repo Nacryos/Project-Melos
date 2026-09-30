@@ -109,6 +109,34 @@ existing verified local image. `deploy/start_backend.sh` accepts explicit
 `MELOS_HOST_PORT` (8791 or 8792 only), and refuses to replace an existing
 container. Preserve rollback state and validate before promotion.
 
+### Combining-mark search repair (qa6, 2026-09-30)
+
+`scripts/repair_search_tokens.py` rebuilds mismatched derived word tokens in a
+separate SQLite snapshot. Attached combining marks, including editorial
+underdots, remain part of the surface word; accent-folded lookup keys remain
+separate. It does not supply missing letters or resolve uncertain readings.
+
+The local and Hetzner migrations each scanned 103,171 eligible text/translation
+records, repaired 318 tokenized passages, and checked 3,653 affected vocabulary
+keys. All 287,536 source records, work metadata, normalized search text, and FTS
+rows compared unchanged. SQLite integrity and input-stability checks passed.
+The existing embeddings were rebound only after verifying unchanged inputs;
+no vectors were regenerated. Run this workflow on quiescent snapshots.
+
+For qa6 rollback, restore the paired previous corpus and embedding manifest,
+not just the old container. Local backups are
+`.benchmarks/corpus-before-qa6.sqlite` and
+`data/embeddings/manifest-before-qa6.json`; host backups use
+`data/corpus-before-qa6.sqlite` and the same manifest filename. Stop the Melos
+service before swapping the pair. Retain the previous image/container until
+the public smoke checks and live reader checks pass.
+
+The read-only regression probe includes the original underdotted form
+`βασί̣λ̣η̣αν` in `dcc-sappho:brothers-poem`: its source transcription must retain
+the marks, and its word occurrence lookup must include that same passage.
+This is a token-boundary regression, not an adjudication of the word's reading,
+parse, dialect, or sense.
+
 ### General maintenance
 
 - Inspect: `docker stats --no-stream melos-api`, `docker logs --tail=50 melos-api`, and `python3 deploy/smoke_backend.py` from the service directory.

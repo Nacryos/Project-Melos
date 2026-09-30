@@ -29,4 +29,27 @@ def normalize(text):
 
 
 def tokenize(text):
-    return re.findall(r"[^\W\d_]+(?:[’'᾽][^\W\d_]+)*", unicodedata.normalize('NFC', text), re.UNICODE)
+    r"""Keep combining marks with their letters, including editorial underdots.
+
+    Python's Unicode \w excludes combining marks. Using it alone splits
+    uncertain Greek words into spurious fragments. Marks remain in the surface
+    token; only normalize() produces the separate lossy lookup key.
+    """
+    text = unicodedata.normalize('NFC', text)
+    tokens, current = [], []
+    for index, char in enumerate(text):
+        if _WORD_BASE.fullmatch(char):
+            current.append(char)
+        elif current and unicodedata.category(char).startswith('M'):
+            current.append(char)
+        elif current and char in "’'᾽" and index + 1 < len(text) and _WORD_BASE.fullmatch(text[index + 1]):
+            current.append(char)
+        elif current:
+            tokens.append(''.join(current))
+            current = []
+    if current:
+        tokens.append(''.join(current))
+    return tokens
+
+
+_WORD_BASE = re.compile(r"[^\W\d_]", re.UNICODE)
