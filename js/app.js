@@ -38,7 +38,7 @@ const POETS = [
   { en: 'Bacchylides', gr: 'Βακχυλίδης', dt: 'c. 518–451' },
 ];
 
-const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 6, spread: 1.1, sat: 1.65, con: 1.1, bri: 0, amount: 1, lens: 0, shade: 0.9, blur: 3, dur: 2.2, glow: 0.14, parallax: 0, relief: 0.6, bevel: 0.5, edge: 2.2, aerial: 0.12, tilt: 0.23, grout: 0 };
+const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 6, spread: 1.1, sat: 1.65, con: 1.1, bri: 0, amount: 1, lens: 0, shade: 0.9, blur: 3, dur: 2.2, glow: 0.14, parallax: 0, relief: 0.6, bevel: 0.5, aerial: 0.12, tilt: 0.23, grout: 0 };
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = s => document.querySelector(s);
 const store = {
@@ -178,9 +178,9 @@ if (dither && freezeAt >= 0) previews[0].then(() => preview(1)).then(slot => { c
 scheduleAuto();
 
 /* ---------- Dither controls ---------- */
-const fields = ['on', 'palette', 'matrix', 'cell', 'levels', 'spread', 'sat', 'con', 'bri', 'amount', 'lens', 'shade', 'blur', 'dur', 'glow', 'parallax', 'relief', 'bevel', 'edge', 'aerial', 'tilt', 'grout'];
+const fields = ['on', 'palette', 'matrix', 'cell', 'levels', 'spread', 'sat', 'con', 'bri', 'amount', 'lens', 'shade', 'blur', 'dur', 'glow', 'parallax', 'relief', 'bevel', 'aerial', 'tilt', 'grout'];
 const pct = v => `${Math.round(v * 100)}%`;
-const fmt = { sat: pct, amount: pct, shade: pct, glow: pct, relief: pct, bevel: pct, edge: v => `${(1 + +v).toFixed(1)}×`, aerial: pct, tilt: pct, grout: pct, parallax: v => v ? `${v}px` : 'off', lens: v => v ? `${v}px` : 'off', cell: v => `${v}px`, blur: v => v ? `${v}px` : 'off', dur: v => `${(+v).toFixed(1)} s` };
+const fmt = { sat: pct, amount: pct, shade: pct, glow: pct, relief: pct, bevel: pct, aerial: pct, tilt: pct, grout: pct, parallax: v => v ? `${v}px` : 'off', lens: v => v ? `${v}px` : 'off', cell: v => `${v}px`, blur: v => v ? `${v}px` : 'off', dur: v => `${(+v).toFixed(1)} s` };
 
 function syncControls() {
   for (const k of fields) {

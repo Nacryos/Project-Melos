@@ -23,7 +23,7 @@ uniform float t, seed, reach, glow;        // transition progress, per-transitio
 uniform vec4 epi[4];                       // ink blots: xy in aspect space, z = radius, w = landing delay
 uniform float lensOn, maskView;               // maskView: dev aid, draws transition progress
 uniform vec2 view;                          // viewer offset, -1..1, eased
-uniform float parallax, relief, tilt, grout, shadowLen, bevel, aerial, edgeBoost;
+uniform float parallax, relief, tilt, grout, shadowLen, bevel, aerial;
 uniform vec3 pal[8];
 
 float b2(vec2 a){ a = floor(a); return fract(a.x * .5 + a.y * a.y * .75); }
@@ -126,11 +126,6 @@ void main(){
   float occ = max(max(h1 - h, (h2 - h) * .85), (h3 - h) * .7);
   float shadow = smoothstep(.02, .2, occ);
   float rim = smoothstep(.03, .2, h - h1);                      // edge facing the light stands proud
-  // Silhouette of a near figure: depth drops away to some neighbour 2 tiles off.
-  vec2 n2 = 2. * cell / res;
-  float drop = max(max(h - depth(uvc + vec2(n2.x, 0.), sw.x), h - depth(uvc - vec2(n2.x, 0.), sw.x)),
-                   max(h - depth(uvc + vec2(0., n2.y), sw.x), h - depth(uvc - vec2(0., n2.y), sw.x)));
-  float figEdge = smoothstep(.03, .15, drop) * smoothstep(.25, .55, h);
   col *= 1. - relief * .75 * shadow;
   col += relief * .3 * rim * (1. - col);
   col *= 1. + (hash(ix * 1.37 + 3.1) - .5) * tilt;              // each tessera set at a slight angle
@@ -144,7 +139,7 @@ void main(){
     vec2 q = fract(fc / cell) * cell;                            // pixel position inside the tile
     float lit = max(step(cell - 1., q.y), step(q.x, 1.));        // top row, left column
     float dark = max(step(q.y, 1.), step(cell - 1., q.x));       // bottom row, right column
-    float raise = bevel * (.35 + .9 * h) * (1. + edgeBoost * figEdge);
+    float raise = bevel * (.35 + .9 * h);
     d = d + lit * (1. - dark) * raise * .45 * (1. - d) - dark * (1. - lit) * raise * .5 * d;
   }
   if (grout > 0. && cell >= 4.) {                                // thin gaps between tesserae
@@ -269,7 +264,6 @@ export function createDither(canvas) {
     gl.uniform1f(U.shadowLen, 12 * scale);
     gl.uniform1f(U.bevel, p.bevel ?? 0);
     gl.uniform1f(U.aerial, p.aerial ?? 0);
-    gl.uniform1f(U.edgeBoost, p.edge ?? 0);
     const pal = PALETTES[p.palette];
     gl.uniform1f(U.palN, pal ? pal.length : 0);
     if (pal) gl.uniform3fv(U.pal, new Float32Array(pal.flatMap(hex).concat(Array(24).fill(0)).slice(0, 24)));
