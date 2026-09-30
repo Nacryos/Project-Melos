@@ -40,6 +40,19 @@ def verify(origin):
     assert form in source['text'], 'The source elision sign must remain present'
     result = get('/api/word', form=form, passage_id=source['id'])
     assert source['id'] in {row['id'] for row in result['occurrences']}, 'Printed elided form must find its own occurrence'
+    assert result['analysis_match_status'] == 'spelling_suggestions_only'
+    assert result['attested_forms'] == [], 'Nearby lemmas must not be pooled as forms of the query'
+    groups = result['observed_form_groups']
+    assert {'κάμνω', 'καῦμα', 'ἐγώ'} <= {group['lemma'] for group in groups}
+    assert all(group['query_relation'] == 'spelling_suggestion' for group in groups)
+    for group in groups:
+        assert group['complete_paradigm'] is False
+        assert group['shown_forms'] == len(group['forms']) <= group['total_forms']
+        assert group['truncated'] == (group['shown_forms'] < group['total_forms'])
+        for item in group['forms']:
+            assert item['source_refs'], 'Displayed inventory forms need source records'
+            assert all(ref['source'] == group['source'] for ref in item['source_refs'])
+    print('Nearby-spelling form inventories remain source/lemma-scoped, with explicit limits; no pooled query paradigm.', flush=True)
     truncated = get('/api/search', q='κἄμμ', mode='words', match='exact', author='Sappho', limit=100)
     assert source['id'] not in {row['id'] for row in truncated['results']}, 'Exact search must not silently discard the printed elision sign'
     print('Printed elision sign is preserved in lookup; bare-prefix exact search does not claim the Brothers Poem.', flush=True)

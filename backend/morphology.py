@@ -217,6 +217,11 @@ class Morphology:
         self._forms: dict[str, list[dict[str, Any]]] = defaultdict(list)
         self._lemma_forms: dict[str, set[str]] = defaultdict(set)
         self._form_lemmas: dict[str, set[str]] = defaultdict(set)
+        # References to the same compact rows held by _forms, not copied corpus
+        # tokens. Unlike retrieval keys, these identities preserve accents,
+        # case, source-local homograph numbers, and source attribution.
+        self._inventory_rows: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+        self._inventory_keys: dict[str, set[tuple[str, str, str]]] = defaultdict(set)
         self._grams: dict[str, set[str]] = defaultdict(set)
         self._short: dict[tuple[int, str], set[str]] = defaultdict(set)
 
@@ -231,7 +236,7 @@ class Morphology:
                 continue
             self._entries[normalize(lemma)].append(row)
             self.entry_count += 1
-        seen_forms: set[tuple[str, str, str, str, str]] = set()
+        seen_forms: set[tuple[str, ...]] = set()
         for row in _read_jsonl(self.forms_path):
             if publication_restricted() and not record_allowed(row):
                 continue
@@ -244,15 +249,22 @@ class Morphology:
             self._lemma_forms[lemma_key].add(form)
             self._form_lemmas[form_key].add(lemma_key)
             self.form_count += 1
-            identity = (form_key, form, lemma, str(row.get("analysis")), str(row.get("source_url")))
+            identity = (form_key, form, lemma, str(row.get("lemma_raw") or lemma),
+                        str(row.get("analysis")), str(row.get("source_url")), str(row.get("source")))
             if identity in seen_forms:
                 continue
             seen_forms.add(identity)
             # Raw JSONL keeps every token and its precise source location.
             # Lookup needs one copy of each attested reading, never its count.
-            self._forms[form_key].append({field: row.get(field) for field in
+            compact_row = {field: row.get(field) for field in
                                            ("form", "lemma", "lemma_raw", "analysis", "analysis_format",
-                                            "source", "source_url", "license", "quality")})
+                                            "source", "source_url", "license", "quality")}
+            self._forms[form_key].append(compact_row)
+            lemma_nfc = unicodedata.normalize('NFC', lemma)
+            raw_nfc = unicodedata.normalize('NFC', str(row.get('lemma_raw') or lemma))
+            inventory_key = (lemma_nfc, raw_nfc, str(row.get('source') or ''))
+            self._inventory_rows[inventory_key].append(compact_row)
+            self._inventory_keys[lemma_nfc].add(inventory_key)
         for key in self._forms.keys() | self._entries.keys():
             if len(key) < 5:
                 self._short[(len(key), key[:1])].add(key)
@@ -307,6 +319,81 @@ class Morphology:
         return [form for form in self.forms_for_lemma(lemma)
                 if len(self._form_lemmas.get(normalize(form), ())) == 1
                 and self._form_lemmas[normalize(form)] <= keys]
+
+    def _candidate_inventory_keys(self, candidate: Mapping[str, Any]) -> set[tuple[str, str, str]]:
+        keys = self._inventory_keys.get(candidate['lemma'], set())
+        if candidate['match_kind'] == 'lexicon_headword':
+            # A dictionary headword does not identify a treebank homograph.
+            # Keep every numbered source identity separate in the response.
+            return set(keys)
+        # Raw variants and source lists are independently flattened for the
+        # old candidate UI. Their Cartesian product is NOT provenance. Retain
+        # only the identity tuples of rows that actually built this candidate.
+        return set(candidate.get('_inventory_identity_keys', ())) & keys
+
+    def _observed_form_groups(self, candidates: list[dict[str, Any]],
+                              query_lemma_ambiguous: bool) -> list[dict[str, Any]]:
+        """Expose source inventories, never a generated or contextual paradigm.
+
+        Inventory membership uses exact NFC lemma/raw/source identities. The
+        source-local numeric suffix is not silently linked to another source's
+        homograph numbering. Unnumbered rows stay unnumbered. These inventories
+        cover the whole imported index, not just the selected author/passage.
+        """
+        matches: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+        for index, candidate in enumerate(candidates):
+            if candidate['match_kind'] == 'lexicon_headword':
+                match = {field: candidate[field] for field in
+                         ('match_kind', 'edit_distance', 'matched_form', 'matched_form_variants')}
+                match['candidate_index'] = index
+                for key in self._candidate_inventory_keys(candidate):
+                    matches[key].append(match)
+                continue
+            # A displayed candidate may merge spellings from different source
+            # identities and edit distances. Preserve their actual pairings in
+            # the inventory explanation instead of copying flattened variants.
+            identity_matches: dict[tuple[tuple[str, str, str], int], set[str]] = defaultdict(set)
+            for item in candidate['_inventory_match_rows']:
+                identity_matches[(item['identity_key'], item['edit_distance'])].add(item['matched_form'])
+            for (key, distance), spellings in sorted(identity_matches.items()):
+                variants = sorted(spellings, key=lambda value: (normalize(value), value))
+                matches[key].append({'candidate_index': index, 'match_kind': 'indexed_form',
+                                     'edit_distance': distance, 'matched_form': variants[0],
+                                     'matched_form_variants': variants})
+        groups = []
+        for key, candidate_matches in sorted(matches.items()):
+            lemma, raw, source = key
+            form_refs: dict[str, dict[str, dict[str, Any]]] = defaultdict(dict)
+            for row in self._inventory_rows[key]:
+                ref = {field: row.get(field) for field in
+                       ('source', 'source_url', 'analysis', 'analysis_format', 'license', 'quality')}
+                # Canonical sorting makes both truncation and source ordering
+                # stable regardless of ingestion/file order.
+                ref_key = json.dumps(ref, sort_keys=True, ensure_ascii=False)
+                form_refs[str(row['form'])][ref_key] = ref
+            spellings = sorted(form_refs, key=lambda value: (normalize(value), value))
+            forms = []
+            for spelling in spellings[:50]:
+                refs = form_refs[spelling]
+                shown_refs = [refs[ref_key] for ref_key in sorted(refs)[:10]]
+                forms.append({'form': spelling, 'source_refs': shown_refs,
+                              'source_ref_total': len(refs), 'source_refs_shown': len(shown_refs),
+                              'source_refs_truncated': len(refs) > len(shown_refs)})
+            unnumbered_ambiguity = raw == lemma and any(
+                other[1] != lemma and other[2] == source
+                for other in self._inventory_keys[lemma])
+            groups.append({'lemma': lemma, 'lemma_raw': raw, 'source': source or None,
+                           'query_relation': ('exact_or_folded_match' if any(
+                               item['edit_distance'] == 0 for item in candidate_matches)
+                               else 'spelling_suggestion'),
+                           'query_lemma_ambiguous': query_lemma_ambiguous,
+                           'identity_status': ('unnumbered_homograph_ambiguous' if unnumbered_ambiguity
+                                               else 'source_lemma'),
+                           'matches': candidate_matches, 'forms': forms,
+                           'total_forms': len(spellings), 'shown_forms': len(forms),
+                           'truncated': len(spellings) > len(forms),
+                           'complete_paradigm': False, 'scope': 'whole_imported_index'})
+        return groups
 
     def _near_keys(self, key: str, cutoff: int) -> list[tuple[int, str]]:
         pool: set[str] = set()
@@ -416,6 +503,8 @@ class Morphology:
                     elif author_support:
                         reasons.append("annotated parse in this author's corpus")
                     candidate: dict[str, Any] = {"lemma": lemma, "analysis": analysis,
+                                                 "_inventory_identity_keys": [(lemma, raw_lemma, str(row.get('source') or ''))] if kind == 'form' else [],
+                                                 "_inventory_match_rows": [{'identity_key': (lemma, raw_lemma, str(row.get('source') or '')), 'matched_form': matched_form, 'edit_distance': distance}] if kind == 'form' else [],
                                                  "matched_form": matched_form,
                                                  "matched_form_variants": [matched_form],
                                                  "match_kind": "indexed_form" if kind == "form" else "lexicon_headword",
@@ -461,6 +550,12 @@ class Morphology:
             if group not in grouped:
                 grouped[group] = candidate
             existing = grouped[group]
+            for identity_key in candidate['_inventory_identity_keys']:
+                if identity_key not in existing['_inventory_identity_keys']:
+                    existing['_inventory_identity_keys'].append(identity_key)
+            for match_row in candidate['_inventory_match_rows']:
+                if match_row not in existing['_inventory_match_rows']:
+                    existing['_inventory_match_rows'].append(match_row)
             if source["source_url"] and source not in existing["supporting_sources"]:
                 existing["supporting_sources"].append(source)
             for raw_variant in candidate["lemma_raw_variants"]:
@@ -471,7 +566,20 @@ class Morphology:
                     existing["matched_form_variants"].append(matched_variant)
             if not existing.get("lemma_raw") and candidate.get("lemma_raw"):
                 existing["lemma_raw"] = candidate["lemma_raw"]
-        candidates = list(grouped.values())[:limit]
+        all_candidates = list(grouped.values())
+        # Check the complete candidate set before display truncation. Numeric
+        # homograph identifiers are source-local; unnumbered NFC identities may
+        # share a legacy list across sources, but never across accents/case.
+        query_identities: set[tuple[str, str, str]] = set()
+        for candidate in all_candidates:
+            if candidate['edit_distance'] != 0:
+                continue
+            keys = self._candidate_inventory_keys(candidate)
+            for lemma, raw, source in keys:
+                query_identities.add((lemma, raw, source if raw != lemma else ''))
+            if not keys:
+                query_identities.add((candidate['lemma'], candidate['lemma'], ''))
+        candidates = all_candidates[:limit]
         # Determine eligibility against the complete index, not the truncated
         # UI candidates. A low display limit must not erase conflicting evidence.
         expansion_lemmas = set(self.expansion_lemmas_for_form(form))
@@ -508,9 +616,21 @@ class Morphology:
             entry = lexicon_entries.get(candidate.get("gloss_entry_id"))
             candidate["rendered_entry_text"] = entry.get("rendered_entry_text") if entry else None
             candidate["rendering_method"] = entry.get("rendering_method") if entry else None
+        observed_form_groups = self._observed_form_groups(candidates, len(query_identities) > 1)
+        for candidate in all_candidates:
+            candidate.pop('_inventory_identity_keys', None)
+            candidate.pop('_inventory_match_rows', None)
+        # Compatibility field, deliberately conservative: a nearby spelling's
+        # inventory is never an inventory of the query. Ambiguous exact queries
+        # also have no flat list. Consumers should prefer the scoped groups.
         attested_forms: set[str] = set()
-        for candidate in candidates:
-            attested_forms.update(self._lemma_forms.get(normalize(candidate["lemma"]), ()))
+        if len(query_identities) == 1 and any(
+                candidate['automatic_expansion_eligible'] for candidate in candidates):
+            for group in observed_form_groups:
+                if group['query_relation'] == 'exact_or_folded_match' and group['identity_status'] == 'source_lemma':
+                    key = (group['lemma'], group['lemma_raw'], group['source'] or '')
+                    attested_forms.update(str(row['form']) for row in self._inventory_rows[key])
+        legacy_total = len(attested_forms)
         attested_forms = set(sorted(attested_forms, key=lambda item: (normalize(item), item))[:100])
         warnings = []
         if any(candidate['lemma_link_status'] == 'ambiguous_source_lemmas'
@@ -541,7 +661,11 @@ class Morphology:
                 "candidates": candidates,
                 "expansion_lemmas": sorted(expansion_lemmas),
                 "lexicon_entries": list(lexicon_entries.values()),
+                "observed_form_groups": observed_form_groups,
                 "attested_forms": sorted(attested_forms, key=lambda item: (normalize(item), item)),
+                "attested_forms_policy": "exact_unambiguous_eligible_lemma_only; prefer source-scoped observed_form_groups",
+                "attested_forms_total": legacy_total,
+                "attested_forms_truncated": legacy_total > len(attested_forms),
                 "occurrences": occurrences, "context": context,
                 "method": "attested-form lookup with folded/transliterated keys and bounded edit distance",
                 "warnings": warnings}

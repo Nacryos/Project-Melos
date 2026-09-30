@@ -923,6 +923,65 @@
       } finally { if (sequence === state.wordSequence) button.disabled = false; }
     });
   }
+  function renderFormInventories(host, data) {
+    const groups = Array.isArray(data.observed_form_groups)
+      ? data.observed_form_groups.filter(group => group && typeof group === 'object') : [];
+    if (!groups.length) {
+      if (Array.isArray(data.attested_forms) && data.attested_forms.length) {
+        const section = addInspectorSection('Source lemma inventories unavailable', host);
+        section.append(node('p', 'candidate-reason', 'The service returned an ungrouped form list without lemma-specific provenance. It is not displayed as forms of the selected word.'));
+      }
+      return;
+    }
+    const section = addInspectorSection(`Source lemma inventories · ${groups.length} groups`, host);
+    section.append(node('p', 'candidate-reason', 'Forms recorded under each source lemma across indexed material—not a complete or dialect-specific paradigm, and not a list of attestations in the selected author or passage.'));
+    for (const group of groups) {
+      const forms = Array.isArray(group.forms) ? group.forms.filter(item => item && typeof item.form === 'string') : [];
+      const total = Number.isInteger(group.total_forms) && group.total_forms >= forms.length ? group.total_forms : null;
+      const count = total == null ? `${forms.length} forms shown; total not supplied` : `${forms.length} of ${total} forms shown`;
+      const details = node('details', 'entry-details');
+      const relationLabel = group.query_relation === 'spelling_suggestion' ? 'Nearby spelling'
+        : group.query_relation === 'exact_or_folded_match' ? 'Matched source lemma' : 'Relationship unknown';
+      const lemmaLabel = group.lemma_raw && group.lemma_raw !== group.lemma
+        ? `${group.lemma || 'Unspecified lemma'} [${group.lemma_raw}]` : group.lemma || 'Unspecified lemma';
+      details.append(node('summary', '', `${relationLabel}: ${lemmaLabel} · ${group.source || 'Unspecified source'} · ${count}`));
+      const relation = group.query_relation === 'spelling_suggestion'
+        ? 'Nearby-spelling suggestion only: this source lemma is not an analysis of the selected form.'
+        : group.query_relation === 'exact_or_folded_match'
+          ? 'Exact or normalized lookup candidate: the inventory belongs to this source lemma; it does not resolve the selected passage’s parse.'
+          : 'Relationship to the selected form was not supplied; no query-form analysis is inferred.';
+      details.append(node('p', 'candidate-reason', relation));
+      if (group.lemma_raw && group.lemma_raw !== group.lemma) details.append(node('p', 'candidate-reason', `Source lemma spelling / identifier: ${group.lemma_raw}`));
+      if (group.query_lemma_ambiguous) details.append(node('p', 'candidate-reason', 'The query has multiple lemma identities; choosing an inventory does not resolve the parse.'));
+      if (group.identity_status === 'unnumbered_homograph_ambiguous') details.append(node('p', 'candidate-reason', 'Source lemma identity is ambiguous between homographs; these records do not establish a single resolved lemma.'));
+      const matched = [...new Set((Array.isArray(group.matches) ? group.matches : []).flatMap(match => [match?.matched_form, ...(Array.isArray(match?.matched_form_variants) ? match.matched_form_variants : [])]).filter(value => typeof value === 'string' && value))];
+      if (matched.length) details.append(node('p', 'candidate-reason', `Candidate source spellings: ${matched.join(' · ')}`));
+      if (group.truncated || (total != null && forms.length < total)) details.append(node('p', 'candidate-reason', `Inventory preview is truncated: ${count}.`));
+      if (!forms.length) details.append(node('p', 'inspector-message', 'No form records were included for this source lemma.'));
+      for (const item of forms) {
+        const row = node('div', 'occurrence');
+        row.append(node('span', 'candidate-lemma', item.form));
+        const refs = Array.isArray(item.source_refs) ? item.source_refs.filter(ref => ref && typeof ref === 'object') : [];
+        const refTotal = Number.isInteger(item.source_ref_total) && item.source_ref_total >= refs.length ? item.source_ref_total : null;
+        const refCount = refTotal == null ? `${refs.length} source references shown; total not supplied` : `${refs.length} of ${refTotal} source references shown`;
+        const sources = node('details', 'entry-details');
+        sources.append(node('summary', '', refCount));
+        if (item.source_refs_truncated || (refTotal != null && refs.length < refTotal)) sources.append(node('p', 'candidate-reason', 'Source-reference preview is truncated.'));
+        if (!refs.length) sources.append(node('p', 'candidate-reason', 'No per-form source references were supplied.'));
+        for (const ref of refs) {
+          const source = node('div', 'candidate');
+          const link = safeLink(ref.source_url, `${ref.source || group.source || 'Source record'} ↗`);
+          source.append(link || node('p', 'candidate-reason', `${ref.source || group.source || 'Source record'} · source URL unavailable`));
+          if (ref.analysis) source.append(node('p', 'candidate-analysis', `Source analysis: ${ref.analysis}${ref.analysis_format ? ` (${ref.analysis_format})` : ''}`));
+          if (ref.quality) source.append(node('p', 'candidate-reason', `Source quality label: ${ref.quality}`));
+          if (ref.license) source.append(node('p', 'candidate-reason', `Source license label: ${ref.license}`));
+          sources.append(source);
+        }
+        row.append(sources); details.append(row);
+      }
+      section.append(details);
+    }
+  }
   async function inspectWord(form, button = null, joined = false) {
     if (!form) return;
     for (const active of ui.text.querySelectorAll('.word.active')) active.classList.remove('active');
@@ -1002,13 +1061,7 @@
         }
         analysis.append(card);
       }
-      const forms = Array.isArray(data.attested_forms) ? data.attested_forms : [];
-      if (forms.length) {
-        const observed = addInspectorSection(`Observed forms · ${forms.length}`, morphologyHost);
-        const details = node('details', 'entry-details');
-        details.append(node('summary', '', 'Show indexed forms'), node('p', '', forms.join(' · ')));
-        observed.append(details, node('p', 'candidate-reason', 'Recorded in indexed sources; this is not a complete paradigm.'));
-      }
+      renderFormInventories(morphologyHost, data);
       const occurrences = Array.isArray(data.occurrences) ? data.occurrences : [];
       const shown = Math.min(occurrences.length, 12);
       const found = addInspectorSection(`Occurrence preview · ${shown} shown`, morphologyHost);

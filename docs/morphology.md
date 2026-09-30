@@ -35,7 +35,7 @@ rule. It may miss some unusual spellings; a match never supplies an unattested
 parse. Distinct candidate analyses and source URLs remain separate.
 
 Results expose `form`, `normalized`, `candidates`, `lexicon_entries`,
-`attested_forms`, `occurrences`, `context`,
+`observed_form_groups`, `attested_forms`, `occurrences`, `context`,
 `method`, and `warnings`. Candidate fields include `lemma`, `analysis`,
 `gloss`, `entry_text`, `source`, `source_url`, `analysis_format`, `quality`,
 `supporting_sources`, and `reason`; `gloss_source_url` is supplied when its source differs from
@@ -75,9 +75,25 @@ Unicode spelling (NFD/NFC) are grouped; source spellings remain in
 `lemma_raw_variants`. A bare lemma can join its sole numbered treebank
 homograph, but different numbered homographs stay separate. Accent placement
 is retained for candidate identity, so `ὄρος` and `ὀρός` do not merge.
-The response also includes up to 100 `attested_forms` drawn from
-the top candidates' lemmas. These are observed in the indexed source texts,
-not a complete Aeolic or other dialect paradigm. An exact spelling reason
+`observed_form_groups` keeps recorded form inventories separate by NFC lemma,
+raw lemma identity (including source homograph markers), and source label.
+It does not merge accent-distinct lemmas through their folded search keys.
+Each group identifies its relation to the query, matched source spellings and
+candidate indices. A `spelling_suggestion` group concerns a nearby spelling;
+it does not establish a lemma or paradigm for the queried word.
+
+Groups carry `total_forms`, `shown_forms`, and `truncated`; each displayed form
+has its source references and explicit reference counts/truncation. These
+references describe indexed annotations, not independently adjudicated parses.
+The inventories are not filtered to the selected passage, author, or dialect.
+Unnumbered homograph ambiguity stays explicit instead of being resolved by
+spelling proximity. `complete_paradigm` is always false.
+
+The legacy flat `attested_forms` field is conservative: no fuzzy-only or
+unresolved multi-identity inventory is presented as forms of the query. The
+reader uses the grouped inventories, not that flat field. These are recorded
+in the indexed source texts, not a complete Aeolic or other dialect paradigm.
+An exact spelling reason
 means exact agreement with an indexed source form; it does not assert that
 the letters survive in an ancient witness rather than an edition.
 

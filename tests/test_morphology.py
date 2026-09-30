@@ -84,7 +84,10 @@ class MorphologyTests(unittest.TestCase):
                               if item["lemma"] == "θεός" and item["analysis"]]), 1)
         self.assertEqual(len(next(item for item in response["candidates"]
                                   if item["lemma"] == "θεός" and item["analysis"])["supporting_sources"]), 2)
-        self.assertIn("θεός", response["attested_forms"])
+        # Folded retrieval also offers the capitalized proper-name lemma.
+        # An unresolved query must not pool either lemma's recorded forms.
+        self.assertEqual(response["attested_forms"], [])
+        self.assertTrue(response["observed_form_groups"])
         self.assertEqual(self.service.forms_for_lemma("LUW"), ["λύει"])
         self.assertEqual(self.service.forms_for_lemma("ἀνύπαρκτος"), [])
 

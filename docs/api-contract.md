@@ -66,6 +66,13 @@ are rebuilt or repaired against unchanged, independently accepted source data.
 Corpus-token, evidence-key, and dictionary-key repairs must be deployed as a
 coordinated snapshot with the corresponding backend code.
 
+Word lookup exposes `observed_form_groups`, not a pooled paradigm for every
+spelling suggestion. Inventories retain source lemma identity, homograph
+markers, source references, query-match relationship, and explicit truncation
+counts. They are source annotations across the index, not attestations in the
+selected author or an adjudication of that occurrence. The reader does not
+fall back to an unscoped `attested_forms` list from an older backend.
+
 Reader developer owns `reader.html`, `js/reader.js`, `css/reader.css`; visualization
 developer owns `js/usage-space.js` and exposes `window.MelosUsageSpace.open(query,
 author)` plus `close()`. Main owns server, database and integration. Morphology
