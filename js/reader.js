@@ -915,6 +915,19 @@
     ui.selectionActions.hidden = false;
   }
   async function initialize() {
+    if (window.MELOS_FRONTEND_ONLY === true) {
+      ui.status.textContent = 'Frontend preview · corpus service not connected';
+      ui.bridgeNote.textContent = 'Search will become available when the hosted corpus service is connected.';
+      message(ui.authors, 'Poets and works will appear when the corpus service is connected.');
+      ui.authorCount.textContent = 'Not connected';
+      renderPassageEmpty('The reader is ready for its corpus connection. No research data or sample search results are served in this frontend preview.');
+      ui.title.textContent = 'The reading desk';
+      ui.readingHint.textContent = 'Passages, word analyses, and usage comparisons require the corpus service.';
+      message(ui.inspector, 'Source-backed word analyses will appear here once the corpus service is connected.');
+      for (const control of [ui.authorFilter, ui.edition, ui.language, ui.order, ui.reference, ui.usage, ui.lookupForm]) control.disabled = true;
+      document.querySelectorAll('input[name="search-mode"]').forEach(control => { control.disabled = true; });
+      return;
+    }
     const settled = await Promise.allSettled([api('/api/status'), api('/api/authors'), api('/api/works')]);
     if (settled[0].status === 'fulfilled') renderStatus(settled[0].value);
     else ui.status.textContent = `Corpus status unavailable: ${errorText(settled[0].reason)}`;

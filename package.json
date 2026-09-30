@@ -5,9 +5,10 @@
   "description": "Static frontend build for the Melos research reader",
   "scripts": {
     "build": "node scripts/build_frontend.mjs",
-    "build:preview": "node scripts/build_frontend.mjs --local-preview"
+    "build:preview": "node scripts/build_frontend.mjs --local-preview",
+    "test:frontend": "node --test tests/frontend.test.mjs"
   },
   "engines": {
-    "node": ">=20"
+    "node": "22.x"
   }
 }

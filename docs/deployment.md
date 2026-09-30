@@ -10,6 +10,8 @@ Set `MELOS_API_ORIGIN` in the Vercel project's environment variables to the publ
 
 For a local static artifact check without a deployed API, run `npm run build:preview`. It generates a same-origin API configuration for local preview only. For a production build check, set `MELOS_API_ORIGIN` to the intended public HTTPS API origin and run `npm run build`.
 
+To publish the design before backend hosting is available, explicitly set `MELOS_FRONTEND_ONLY=1` instead of `MELOS_API_ORIGIN`. This produces a labelled frontend preview with search disabled and no API network requests. It is not a functioning public corpus reader. When the API is ready, remove `MELOS_FRONTEND_ONLY`, set `MELOS_API_ORIGIN`, and redeploy. Conflicting settings fail the build. Run `npm run test:frontend` to check the configuration guards and API routing.
+
 ## Persistent API service
 
 Host `backend.server:app` on a service with persistent storage for the accepted indexes and enough memory and CPU for search and embedding loads. Build and audit the corpus and indexes using the procedures in [reader.md](reader.md) before making the API public. The API host must serve over HTTPS, expose a health/status endpoint at `/api/status`, and be reachable from browsers visiting the Vercel domain. Do not put the corpus, SQLite databases, downloaded source records, model weights, or API credentials in the public GitHub repository or the Vercel static artifact. Arrange backups and a documented index rebuild path for the persistent data.
@@ -26,4 +28,14 @@ Any hosted classification credential (`TYPESAFE_API_KEY` or `JEV_API_KEY`) belon
 4. Deploy a Vercel preview and test reader searches, passage navigation, word inspection, usage space, design studio, and unavailable-service states in a browser. Confirm the public contextual-classifier action reports its local-only restriction, browser calls go to the HTTPS API origin, and no keys or corpus files appear in the deployed assets.
 5. Promote to production only after the preview checks pass and the source rights and attribution review for any publicly exposed corpus data is complete.
 
-Vercel project configuration follows its [build and output directory](https://vercel.com/docs/builds/configure-a-build) and [routing configuration](https://vercel.com/docs/project-configuration/vercel-json) documentation. No Vercel project or live deployment is created by the repository configuration alone.
+Vercel project configuration follows its [build and output directory](https://vercel.com/docs/builds/configure-a-build) and [routing configuration](https://vercel.com/docs/project-configuration/vercel-json) documentation.
+
+## Published frontend (2026-09-30)
+
+- Vercel project: `nacryos-projects/project-melos`, connected to `Nacryos/Project-Melos` on GitHub.
+- Custom domain: <https://greeklyric.com>; Vercel alias: <https://project-melos.vercel.app>.
+- Production and Preview environments explicitly set `MELOS_FRONTEND_ONLY=1`. No hosted corpus API is connected, and no Jev credential is installed in this frontend project.
+- HTTPS root, design studio, configuration script, and a fingerprinted painting asset returned HTTP 200. JavaScript is `no-cache`; fingerprinted paintings have the one-year immutable cache policy. The live browser displays the preview notice and disables corpus controls.
+- `.env`, `.env.local`, database files, source paintings, and model/index files were excluded from the CLI upload. The static build uses its own explicit output allowlist.
+
+Publishing a complete research service still requires a persistent backend host, corpus redistribution/attribution checks, and public-service abuse controls. Do not describe this frontend-only release as a functioning public dictionary.

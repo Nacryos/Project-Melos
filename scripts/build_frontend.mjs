@@ -5,6 +5,7 @@ import path from 'node:path';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const output = path.join(root, 'dist');
 const localPreview = process.argv.includes('--local-preview');
+const frontendOnly = process.env.MELOS_FRONTEND_ONLY === '1';
 const jsFiles = [
   'api.js', 'app.js', 'dither.js', 'images.js', 'reader-hero.js',
   'reader.js', 'studio-live.js', 'usage-space.js'
@@ -13,6 +14,10 @@ const cssFiles = ['styles.css', 'reader.css'];
 
 function apiOrigin() {
   const raw = (process.env.MELOS_API_ORIGIN || '').trim();
+  if (frontendOnly) {
+    if (raw || localPreview) throw new Error('MELOS_FRONTEND_ONLY cannot be combined with an API origin or local preview.');
+    return '';
+  }
   if (!raw) {
     if (localPreview) return '';
     throw new Error('MELOS_API_ORIGIN is required for the production frontend build. It must be the public HTTPS origin of the separate Melos API.');
@@ -78,7 +83,7 @@ async function main() {
     await copy(`assets/paintings/${item.name}`, `assets/paintings/${item.name}`);
   }
   await writeFile(path.join(output, 'js', 'config.js'),
-    `window.MELOS_API_ORIGIN = ${JSON.stringify(origin)};\n`, 'utf8');
+    `window.MELOS_API_ORIGIN = ${JSON.stringify(origin)};\nwindow.MELOS_FRONTEND_ONLY = ${frontendOnly};\n`, 'utf8');
   await verifyLocalAssets();
   const files = await readdir(output, { recursive: true });
   if (files.some(name => /(?:^|[/\\])(?:data|backend|source|reports)(?:[/\\]|$)|\.(?:py|sqlite|jsonl|env)$/i.test(name))) {
@@ -90,7 +95,7 @@ async function main() {
       throw new Error(`Local endpoint, sample-data path, or credential name appeared in frontend file: ${name}`);
     }
   }
-  console.log(`Built ${files.length} static paths in dist/ with API origin ${origin || '(same origin local preview)'}.`);
+  console.log(`Built ${files.length} static paths in dist/ with API origin ${origin || (frontendOnly ? '(frontend preview; corpus service not connected)' : '(same origin local preview)')}.`);
 }
 
 main().catch(error => { console.error(error.message); process.exitCode = 1; });

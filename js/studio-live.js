@@ -194,5 +194,11 @@ queryInput.addEventListener('input', () => {
   // The backend combines several bounded indexes. Submit to run one deliberate query.
   if (!queryInput.value.trim()) count.textContent = 'Press Search to browse the live corpus.';
 });
-populatePoets();
-browseAuthor('Sappho');
+if (window.MELOS_FRONTEND_ONLY === true) {
+  count.textContent = 'Frontend preview · corpus service not connected';
+  setMessage('Search and source passages will become available when the hosted corpus service is connected.');
+  timeline.replaceChildren(el('li', 'empty', 'Poets and works require the corpus connection.'));
+} else {
+  populatePoets();
+  browseAuthor('Sappho');
+}
