@@ -16,6 +16,9 @@ Each new collector owns `scripts/ingest_p2_NAME.py`, `data/raw/p2_NAME/`,
 text, commentary, apparatus, bibliography, OCR, and model proposals distinct.
 No handwritten corpus entries or repaired Greek from model memory. OCR may be
 run reproducibly against saved scans but remains review-needed until checked.
+Rights are recorded per record, not used as an admission gate: modern editions
+and texts without a named printed edition are admitted (owner decision
+2026-09-30, [decisions.md](decisions.md)).
 No paywall, access-control, rate-limit or CAPTCHA circumvention; no acquisition
 of paid subscriptions or extraction permissions by assumption.
 

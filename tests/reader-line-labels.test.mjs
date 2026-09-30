@@ -6,7 +6,11 @@ import { readFileSync } from 'node:fs';
 // Synthetic mechanics fixtures only; no literary source claims or data writes.
 const source = readFileSync(new URL('../js/reader.js', import.meta.url), 'utf8');
 class Element {
-  constructor(tag, cls = '', text = '') { Object.assign(this, { tag, cls, text, children: [], dataset: {}, attributes: {}, handlers: {} }); }
+  constructor(tag, cls = '', text = '') {
+    Object.assign(this, { tag, cls, text, children: [], dataset: {}, attributes: {}, handlers: {} });
+    const classes = new Set(cls.split(/\s+/).filter(Boolean));
+    this.classList = { toggle(name, enabled) { if (enabled) classes.add(name); else classes.delete(name); }, contains: name => classes.has(name) };
+  }
   append(...children) { this.children.push(...children); }
   replaceChildren(...children) { this.children = children; }
   setAttribute(key, value) { this.attributes[key] = value; }
@@ -14,9 +18,11 @@ class Element {
   get textContent() { return this.text + this.children.map(child => child.textContent).join(''); }
 }
 const clicks = [];
+const fits = [];
 const ui = { text: new Element('div'), textLeading: {}, readingHint: {} };
 const context = vm.createContext({
   ui, node: (tag, cls, text) => new Element(tag, cls, text),
+  window: { MelosVerseFit: { watch: (host, selector) => fits.push(['watch', host, selector]), unwatch: host => fits.push(['unwatch', host]) } },
   document: { createTextNode: text => new Element('#text', '', text) },
   clear: element => element.replaceChildren(), inspectWord: (...args) => clicks.push(args),
 });
@@ -24,6 +30,7 @@ vm.runInContext(source.slice(source.indexOf('  function literalGreekWords('), so
 const label = vm.runInContext('separateLineLabel', context);
 const render = vm.runInContext('renderPassageText', context);
 const words = vm.runInContext('readingWords', context);
+const verseLines = vm.runInContext('verseLines', context);
 
 test('an exact printed numeric label suppresses only its duplicate UI label', () => {
   for (const value of ['1', '5', '10']) {
@@ -91,4 +98,40 @@ test('normal metadata labels remain and printed numbering still blocks unsafe cr
   assert.equal(ui.text.children[1].children[0].textContent, '');
   assert.equal(ui.text.children[2].children[0].textContent, '3');
   assert.ok(words(lines.map(line => line.text).join('\n')).every(word => !word.joined));
+});
+
+test('fallback verse lines preserve indentation, trailing spaces, blank rows and source word offsets', () => {
+  const text = '  αβ- \n\tγδ  \n\n εζ\t';
+  const passage = { kind: 'text', language: 'grc', text };
+  const lines = verseLines(passage);
+  assert.equal(lines.map(line => line.text).join('\n'), text);
+  render(passage);
+  assert.equal(ui.text.children.map(row => row.children[1].textContent).join('\n'), text);
+  assert.equal(ui.text.children[2].cls, 'line blank');
+  assert.equal(ui.text.classList.contains('verse-fit'), true);
+  assert.equal(fits.at(-1)[0], 'watch');
+  assert.equal(fits.at(-1)[2], '.line');
+  const units = words(text);
+  for (const row of ui.text.children) {
+    for (const button of row.children[1].children.filter(child => child.tag === 'button')) {
+      const expected = units.find(unit => String(unit.group) === button.dataset.lookupGroup && unit.text === button.textContent);
+      assert.ok(expected);
+      assert.equal(text.slice(expected.start, expected.end), button.textContent);
+      button.handlers.click();
+      assert.equal(clicks.at(-1)[0], expected.form);
+    }
+  }
+  assert.equal(units[0].form, 'αβγδ');
+  assert.equal(units[1].group, units[0].group);
+});
+
+test('short Greek text is fitted while undivided prose exits fitting without losing source text', () => {
+  render({ kind: 'text', language: 'grc', text: ' αβ ' });
+  assert.equal(ui.text.classList.contains('verse-fit'), true);
+  assert.equal(ui.text.children[0].children[1].textContent, ' αβ ');
+  const prose = '  A synthetic prose sentence with no line division.  ';
+  render({ kind: 'commentary', language: 'eng', text: prose });
+  assert.equal(ui.text.classList.contains('verse-fit'), false);
+  assert.equal(fits.at(-1)[0], 'unwatch');
+  assert.equal(ui.text.textContent, prose);
 });

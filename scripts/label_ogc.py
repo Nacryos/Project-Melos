@@ -143,8 +143,13 @@ def classify(record: dict, status: dict | None, readme_hash: str) -> tuple[dict,
         "edition_method": method,
         "block_label": block_label,
         "bibliographic_scope": bibliographic_scope,
+        # Edited source text and machine-corrected OCR blocks without Latin
+        # apparatus, defect or mixed-author flags are searchable. Raw OCR stays
+        # a reference candidate until corrected upstream or checked by eye.
         "primary_search_eligible": (
-            block_label == "clean_source_text" and record.get("kind") == "text"
+            (block_label == "clean_source_text"
+             or (block_label == "ocr_text_candidate" and method == "machine_corrected_ocr"))
+            and record.get("kind") == "text"
             and bibliographic_scope == "poetry" and "source_review_required" not in flags
         ),
         "flags": flags,

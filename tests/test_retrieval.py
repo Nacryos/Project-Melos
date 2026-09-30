@@ -95,19 +95,37 @@ def test_only_explicit_valid_greek_parent_projects_and_reference_filter_holds():
                 include_reference=True)["results"][0]["id"] == "reference"
 
 
-def test_same_edition_mirror_deduplicates_but_distinct_editions_survive():
+def test_identical_text_collapses_across_editions_but_different_words_survive():
     records = {
         "a": passage("a", metadata={"cts_urn": "urn:edition-a"}),
         "mirror": passage("mirror", metadata={"cts_urn": "urn:edition-a"}),
         "other": passage("other", edition="Edition B", metadata={"cts_urn": "urn:edition-b"}),
+        "variant": passage("variant", edition="Edition C", text="Greek fixture variant"),
     }
-    output = fuse("Greek", [records["a"], records["mirror"], records["other"]],
+    output = fuse("Greek", [records["a"], records["mirror"], records["other"], records["variant"]],
                   [], [], records.get)
+    # Same author, language, kind and words: one result whatever the edition
+    # label. The collapsed copies stay listed. Different words never merge.
     assert output["total"] == 2
-    assert [row["id"] for row in output["results"]] == ["a", "other"]
-    assert output["results"][0]["mirrored_ids"] == ["mirror"]
-    assert {e["id"] for e in output["results"][0]["matched_evidence"]} == {"a", "mirror"}
+    assert [row["id"] for row in output["results"]] == ["a", "variant"]
+    assert output["results"][0]["mirrored_ids"] == ["mirror", "other"]
+    assert output["results"][0]["mirror_count"] == 3
+    assert {e["id"] for e in output["results"][0]["matched_evidence"]} == {"a", "mirror", "other"}
     assert output["results"][1]["retrieval_ranks"] == {"lexical": 2}
+
+
+def test_merged_author_keys_group_spellings_and_admit_joint_labels():
+    records = {
+        "direct": passage("direct", author="Alcaeus of Mytilene"),
+        "slug": passage("slug", author="alcaeus-lyric"),
+        "joint": passage("joint", author="Sappho / Alcaeus", text="joint fixture"),
+        "sappho": passage("sappho", author="Sappho", text="other fixture"),
+    }
+    from backend.author_aliases import canonical_key, component_keys
+    output = fuse("fixture", list(records.values()), [], [], records.get,
+                  author="Alcaeus", author_key=canonical_key, author_keys=component_keys)
+    assert [row["id"] for row in output["results"]] == ["direct", "joint"]
+    assert output["results"][0]["mirrored_ids"] == ["slug"]
 
 
 def test_pagination_is_stable_after_grouping():

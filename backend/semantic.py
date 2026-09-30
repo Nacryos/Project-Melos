@@ -21,7 +21,12 @@ INDEX_VERSION = 1
 
 
 def _author_key(value: str) -> str:
-    return unicodedata.normalize("NFC", value).casefold().strip()
+    """Merged author key so every spelling of one poet passes the same filter."""
+    try:
+        from .author_aliases import canonical_key
+        return canonical_key(value)
+    except Exception:  # alias table unavailable: fall back to plain folding
+        return unicodedata.normalize("NFC", value).casefold().strip()
 
 
 class SemanticIndex:

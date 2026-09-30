@@ -37,7 +37,7 @@ def eligible(row: sqlite3.Row) -> bool:
     return (
         bool(row["text"] and row["text"].strip())
         and row["kind"] in {"text", "translation", "commentary"}
-        and row["quality"] == "source_text"
+        and row["quality"] in {"source_text", "machine_corrected_ocr"}
         and row["language"] in {"grc", "eng", "lat", "ita", "fra", "deu", "mul"}
     )
 
@@ -277,7 +277,8 @@ def build(
         "counts_by_source": dict(Counter(r["source"] for r in selected)),
         "rows_file": rows_file,
         "vectors_file": vectors_file,
-        "indexed_text": "Original text from passages.text; source_text quality only; declared Greek, English, Latin, Italian, French, German and multilingual text/translation/commentary",
+        "searchable_qualities": ["source_text", "machine_corrected_ocr"],
+        "indexed_text": "Original text from passages.text; source_text and explicitly labelled machine_corrected_ocr (not independently verified transcription); declared Greek, English, Latin, Italian, French, German and multilingual text/translation/commentary",
     }
     tmp = index_dir / f"manifest-{build_id}.tmp"
     tmp.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")

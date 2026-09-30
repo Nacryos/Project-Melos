@@ -54,9 +54,19 @@ function renderEntry(record) {
   const kind = record.kind || 'text', language = record.language || 'unspecified', quality = record.quality || 'unspecified';
   const label = el('p', 'studio-source-label', `${kind} · ${language} · ${quality.replaceAll('_', ' ')}`);
   entry.append(label);
-  const body = el('p', 'studio-source-text', record.text || 'Source text unavailable.');
+  const text = record.text || 'Source text unavailable.';
+  const body = el('div', 'studio-source-text');
   if (language === 'grc') body.lang = 'grc';
-  entry.append(body);
+  // One source line per visual line; the type shrinks to fit (js/verse-fit.js).
+  if (text.includes('\n') || (kind === 'text' && language === 'grc' && text.length <= 200)) {
+    body.classList.add('verse-fit');
+    for (const line of text.split('\n')) body.append(el('span', line.trim() ? 'line' : 'line blank', line.trim()));
+    entry.append(body);
+    window.MelosVerseFit?.watch(body, '.line');
+  } else {
+    body.textContent = text;
+    entry.append(body);
+  }
   if (record.match_reason) entry.append(el('p', 'note', `Retrieval: ${record.match_reason}`));
   const evidence = Array.isArray(record.matched_evidence) ? record.matched_evidence : [];
   if (evidence.length) {
@@ -75,7 +85,9 @@ function renderEntry(record) {
   const original = sourceLink(record.source_url, 'Original source ↗');
   if (original) actions.append(original);
   entry.append(actions);
-  if (quality !== 'source_text') entry.append(el('p', 'note', 'This record may include OCR or reference material; inspect its collection and source before using it as ancient text.'));
+  if (Number(record.mirror_count) > 1) entry.append(el('p', 'note', `${record.mirror_count - 1} identical ${record.mirror_count === 2 ? 'copy' : 'copies'} of this text collapsed into this result.`));
+  if (quality === 'machine_corrected_ocr') entry.append(el('p', 'note', 'Machine-corrected OCR of a printed edition; compare with the scan before quoting.'));
+  else if (quality !== 'source_text') entry.append(el('p', 'note', 'This record may include OCR or reference material; inspect its collection and source before using it as ancient text.'));
 }
 function renderRecords(items, summary) {
   records = items;

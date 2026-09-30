@@ -103,3 +103,10 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
   .reading-column{padding:28px 0 40px 24px}
   .inspector{grid-column:2;grid-row:2;padding:25px 0 40px 24px}
 }
+/* Verse never wraps onto an indented continuation line: js/verse-fit.js scales the type to the box instead. */
+.greek-text.verse-fit{overflow-wrap:normal;overflow-x:auto;overflow-y:hidden;padding-bottom:2px}
+.greek-text.verse-fit .line,.greek-text.verse-fit .line-content{white-space:nowrap}
+.greek-text.verse-fit .line-content{display:inline}
+.greek-text.verse-fit .line.blank{height:.7em}
+.greek-text.verse-fit .line-label{font-size:11px}
+.mirror-list .mirror-copy{margin:6px 0;color:#465965;font-size:14px;line-height:1.45}.mirror-list .related-open{margin:0 0 0 10px;padding:3px 8px;font-size:12px}

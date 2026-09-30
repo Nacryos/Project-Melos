@@ -15,15 +15,24 @@ import unicodedata
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from backend.textutils import normalize, tokenize, search_text
+from backend.textutils import normalize, tokenize, search_text, text_key
+from backend.author_aliases import canonical as canonical_author, canonical_key, component_keys
+
+# Quality labels whose text is searched by default. Raw OCR, mixed material and
+# review-needed rows stay in the index but are reached only with the reference
+# toggle. Machine-corrected OCR is searchable and labelled as such (owner
+# decision, 2026-09-30; see docs/decisions.md).
+SEARCHABLE_QUALITIES = ('source_text', 'machine_corrected_ocr')
 
 SCHEMA = '''
 CREATE TABLE passages (
  id TEXT PRIMARY KEY, work_id TEXT NOT NULL, source TEXT, author TEXT, work TEXT,
  edition TEXT, citation TEXT, language TEXT, kind TEXT, quality TEXT,
- text TEXT NOT NULL, normalized TEXT NOT NULL, data TEXT NOT NULL, sequence INTEGER);
+ text TEXT NOT NULL, normalized TEXT NOT NULL, data TEXT NOT NULL, sequence INTEGER,
+ author_canonical TEXT, text_key TEXT);
 CREATE TABLE works (id TEXT PRIMARY KEY, author TEXT, work TEXT, edition TEXT,
- source TEXT, language TEXT, count INTEGER);
+ source TEXT, language TEXT, count INTEGER, author_canonical TEXT);
+CREATE TABLE passage_authors (passage_id TEXT, author_key TEXT);
 CREATE TABLE tokens (passage_id TEXT, form TEXT, normalized TEXT, count INTEGER);
 CREATE TABLE vocabulary (normalized TEXT PRIMARY KEY, form TEXT, count INTEGER);
 CREATE TABLE metadata (key TEXT PRIMARY KEY, value TEXT);
@@ -52,9 +61,11 @@ def ogc_policy(approval):
                 'eligible':bool(row.get('primary_search_eligible')),
                 'block_label':row.get('block_label'),
                 'bibliographic_scope':row.get('bibliographic_scope'),
+                'edition_method':row.get('edition_method'),
                 'flags':row.get('flags',[]),
                 'parent_text_sha256':row['parent_text_sha256']}
     return policy,'source reproduction with heuristic quality screening; not passage-level attribution review'
+
 
 
 def build(output=ROOT / 'data/corpus.sqlite'):
@@ -96,6 +107,8 @@ def build(output=ROOT / 'data/corpus.sqlite'):
         raise RuntimeError('No independently accepted collector outputs. Index not replaced.')
     ogc_labels,ogc_review=ogc_policy(acceptance.get('ogc.jsonl',{})) if any(p.name=='ogc.jsonl' for p in files) else ({},'not indexed')
     policy_demotions=0
+    policy_promotions=0
+    canonical_keys=set()
     for path in files:
         file_count = 0
         with path.open(encoding='utf-8-sig') as stream:
@@ -130,23 +143,38 @@ def build(output=ROOT / 'data/corpus.sqlite'):
                     row.setdefault('metadata',{})['index_review']=ogc_review
                     row['metadata']['quality_screening']=screening
                     valid=screening.get('parent_text_sha256')==hashlib.sha256(row['text'].encode('utf-8')).hexdigest()
-                    eligible=valid and screening.get('eligible') and screening.get('block_label')=='clean_source_text' and screening.get('bibliographic_scope')=='poetry'
+                    poetry=screening.get('bibliographic_scope')=='poetry'
+                    eligible=valid and screening.get('eligible') and screening.get('block_label')=='clean_source_text' and poetry
+                    # Blocks of OCR that the upstream corpus has machine-corrected and
+                    # that carry no Latin apparatus, defect or mixed-author flags are
+                    # searchable under an explicit machine-corrected label.
+                    corrected=(valid and poetry and screening.get('edition_method')=='machine_corrected_ocr'
+                               and screening.get('block_label') in ('ocr_text_candidate','clean_source_text'))
                     if row['kind']=='text' and row['quality']=='source_text' and not eligible:
                         row['metadata']['original_index_classification']={'kind':row['kind'],'quality':row['quality']}
                         row['kind']='reference'
                         row['quality']='needs_review'
                         policy_demotions+=1
+                    elif row['kind']=='text' and row['quality']=='machine_ocr' and corrected:
+                        row['metadata']['original_index_classification']={'kind':row['kind'],'quality':row['quality']}
+                        row['quality']='machine_corrected_ocr'
+                        policy_promotions+=1
                 identity = [row.get(k) for k in ('source','author','work','edition','language')]
                 work_id = hashlib.sha256(json.dumps(identity,ensure_ascii=False).encode()).hexdigest()[:20]
                 row['work_id'] = work_id
                 indexed_text = search_text(row['text']) if row['language']=='grc' else row['text']
                 folded = normalize(indexed_text)
                 sequence = works.get(work_id, {}).get('count',0)
-                con.execute('INSERT INTO passages VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-                    (row['id'],work_id,row['source'],row['author'],row['work'],row['edition'],row['citation'],row['language'],row['kind'],row['quality'],row['text'],folded,json.dumps(row,ensure_ascii=False),sequence))
+                author_display = canonical_author(row['author'])
+                author_keys = component_keys(row['author'])
+                canonical_keys.add(canonical_key(row['author']))
+                con.execute('INSERT INTO passages VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+                    (row['id'],work_id,row['source'],row['author'],row['work'],row['edition'],row['citation'],row['language'],row['kind'],row['quality'],row['text'],folded,json.dumps(row,ensure_ascii=False),sequence,
+                     author_display,text_key(row['language'],row['kind'],row['text'])))
+                con.executemany('INSERT INTO passage_authors VALUES (?,?)',[(row['id'],key) for key in author_keys])
                 con.execute('INSERT INTO passage_fts VALUES (?,?,?,?,?)',
-                    (row['id'],folded,normalize(row['citation']),normalize(row['author']),normalize(row['work'])))
-                if row['quality'] not in ('mixed_content','machine_ocr','needs_review') and row['kind'] in ('text','translation'):
+                    (row['id'],folded,normalize(row['citation']),normalize(row['author']+' '+author_display) if author_display!=row['author'] else normalize(row['author']),normalize(row['work'])))
+                if row['quality'] in SEARCHABLE_QUALITIES and row['kind'] in ('text','translation'):
                     tokens = collections.Counter(tokenize(indexed_text))
                     con.executemany('INSERT INTO tokens VALUES (?,?,?,?)',[(row['id'],word,normalize(word),n) for word,n in tokens.items()])
                     for word,n in tokens.items():
@@ -168,24 +196,29 @@ def build(output=ROOT / 'data/corpus.sqlite'):
         con.close()
         raise RuntimeError(f'{len(failures)} accepted source rows failed validation; previous index retained.')
     for work_id,work in works.items():
-        con.execute('INSERT INTO works VALUES (?,?,?,?,?,?,?)',(work_id,work['author'],work['work'],work['edition'],work['source'],work['language'],work['count']))
+        con.execute('INSERT INTO works VALUES (?,?,?,?,?,?,?,?)',(work_id,work['author'],work['work'],work['edition'],work['source'],work['language'],work['count'],canonical_author(work['author'])))
     con.executemany('INSERT INTO vocabulary VALUES (?,?,?)',[(key,display_forms[key],count) for key,count in vocabulary.items()])
     con.executescript('''CREATE INDEX idx_passage_work ON passages(work_id,sequence);
       CREATE INDEX idx_passage_author ON passages(author);
+      CREATE INDEX idx_passage_canonical ON passages(author_canonical);
+      CREATE INDEX idx_passage_mirror ON passages(author_canonical,text_key);
+      CREATE INDEX idx_passage_authors_key ON passage_authors(author_key,passage_id);
+      CREATE INDEX idx_passage_authors_id ON passage_authors(passage_id);
       CREATE INDEX idx_parent ON passages(json_extract(data,'$.parent_id'));
       CREATE INDEX idx_source_scope ON passages(json_extract(data,'$.source_url'),json_extract(data,'$.metadata.scope'));
       CREATE INDEX idx_token_normal ON tokens(normalized);
       CREATE INDEX idx_token_passage ON tokens(passage_id);''')
-    manifest = {'passages':sum(counts.values()),'works':len(works),'sources':dict(counts),
+    manifest = {'schema':2,'passages':sum(counts.values()),'works':len(works),'sources':dict(counts),
         'vocabulary':len(vocabulary),'files':[str(p.relative_to(ROOT)) for p in files],
-        'ogc_policy':ogc_review,'ogc_policy_demotions':policy_demotions,
+        'ogc_policy':ogc_review,'ogc_policy_demotions':policy_demotions,'ogc_policy_promotions':policy_promotions,
+        'searchable_qualities':list(SEARCHABLE_QUALITIES),
         'rejected':failures,'quarantined':quarantined,'built_at':time.strftime('%Y-%m-%dT%H:%M:%SZ',time.gmtime()),
         'elapsed_seconds':round(time.time()-started,2)}
     manifest['statistics']={
         'languages':[{'language':key,'count':count} for key,count in language_counts.most_common()],
         'quality':[{'quality':key,'count':count} for key,count in sorted(quality_counts.items())],
         'sources':[{'source':key,'count':count} for key,count in sorted(counts.items())],
-        'authors':len({unicodedata.normalize('NFC',unicodedata.normalize('NFC',label).casefold()) for label in author_labels}),
+        'authors':len(canonical_keys),
         'author_labels':len(author_labels)}
     con.execute('INSERT INTO metadata VALUES (?,?)',('manifest',json.dumps(manifest)))
     con.commit()

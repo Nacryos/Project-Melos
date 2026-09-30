@@ -89,7 +89,7 @@
     }
   }
   function qualityLabel(value) {
-    return ({ source_text: 'Source text', machine_ocr: 'Machine OCR', mixed_content: 'Mixed content', needs_review: 'Needs review' })[value] || String(value || 'Unspecified');
+    return ({ source_text: 'Source text', machine_corrected_ocr: 'Machine-corrected OCR', machine_ocr: 'Raw machine OCR', mixed_content: 'Mixed content', needs_review: 'Needs review' })[value] || String(value || 'Unspecified');
   }
   function describeCount(count, thing) { return `${count.toLocaleString()} ${count === 1 ? thing : thing === 'match' ? 'matches' : `${thing}s`}`; }
   function semanticCoverage(embedding) {
@@ -181,6 +181,7 @@
       button.type = 'button';
       button.setAttribute('aria-expanded', String(state.selectedAuthor === author));
       const label = node('span', '', author);
+      if (item.merged && Array.isArray(item.labels)) label.title = `Merged source labels: ${item.labels.join(', ')}`;
       const tail = node('span');
       tail.append(node('small', '', item.count != null ? item.count : ''), node('span', 'chevron', state.selectedAuthor === author ? '−' : '+'));
       button.append(label, tail);
@@ -346,26 +347,49 @@
     const printed = String(line.text || '').match(/^[ \t\u00a0]*(\d+)[ \t\u00a0]*\.(?=\s|$|(?=\p{L})\p{Script=Greek}|[\[\]⟨⟩])/u);
     return printed?.[1] === label ? '' : label;
   }
+  // Verse keeps its line structure: each source line is one visual line and
+  // the type shrinks to fit the box (js/verse-fit.js). Prose without line
+  // breaks (long commentary, translations) wraps normally.
+  function verseLines(passage) {
+    if (Array.isArray(passage.lines) && passage.lines.length) {
+      return passage.lines.map(line => ({ label: String(line?.label ?? ''), text: String(line?.text ?? '') }));
+    }
+    const text = String(passage.text || '');
+    // Keep whitespace exactly: trimmed lines would shift lookup offsets and
+    // alter the source text when selecting/copying or inspecting a word.
+    if (text.includes('\n')) return text.split('\n').map(line => ({ label: '', text: line }));
+    if (passage.kind === 'text' && passage.language === 'grc' && text.length <= 200) return [{ label: '', text }];
+    return null;
+  }
   function renderPassageText(passage) {
     clear(ui.text);
     ui.text.lang = passage.language === 'grc' ? 'grc' : passage.language || 'en';
     ui.textLeading.textContent = (passage.language || 'text').toUpperCase();
-    if (Array.isArray(passage.lines) && passage.lines.length) {
-      const words = readingWords(passage.lines.map(line => line.text || '').join('\n'));
+    const lines = verseLines(passage);
+    ui.text.classList.toggle('verse-fit', Boolean(lines));
+    if (lines) {
+      // Lookup units are computed over the joined lines so a word divided at a
+      // line end still forms one lookup; each printed line stays its own row.
+      const words = readingWords(lines.map(line => line.text).join('\n'));
       let offset = 0;
-      for (const line of passage.lines) {
-        const row = node('div', 'line');
+      for (const line of lines) {
+        const row = node('div', line.text ? 'line' : 'line blank');
         row.append(node('span', 'line-label', separateLineLabel(line)));
         const content = node('span', 'line-content');
-        appendTextWithWords(content, line.text || '', words, offset);
-        offset += String(line.text || '').length + 1;
+        appendTextWithWords(content, line.text, words, offset);
+        offset += line.text.length + 1;
         row.append(content); ui.text.append(row);
       }
+      window.MelosVerseFit?.watch(ui.text, '.line');
     } else if (passage.text) {
+      window.MelosVerseFit?.unwatch(ui.text);
       const paragraph = node('p');
       appendTextWithWords(paragraph, passage.text, readingWords(passage.text));
       ui.text.append(paragraph);
-    } else message(ui.text, 'This record has no passage text.', 'loading-line');
+    } else {
+      window.MelosVerseFit?.unwatch(ui.text);
+      message(ui.text, 'This record has no passage text.', 'loading-line');
+    }
     ui.readingHint.textContent = passage.language === 'grc' && passage.kind === 'text'
       ? 'Select a phrase to trace it, or choose a Greek word to inspect it.'
       : passage.kind === 'translation'
@@ -500,6 +524,27 @@
     }
     ui.related.hidden = !ui.related.querySelector('.related-item');
   }
+  function renderMirrors(mirrors) {
+    if (!Array.isArray(mirrors) || !mirrors.length) return;
+    ui.related.hidden = false;
+    const block = node('div', 'related-item mirror-list');
+    block.append(node('span', 'eyebrow', `IDENTICAL TEXT IN ${mirrors.length} OTHER ${mirrors.length === 1 ? 'COPY' : 'COPIES'}`));
+    block.append(node('p', 'related-note', 'Same author, language and words in another collection or edition. Copies are grouped in search results.'));
+    for (const copy of mirrors) {
+      const line = node('p', 'mirror-copy');
+      line.append(node('span', '', [copy.source, copy.edition, copy.citation, copy.author, copy.quality && copy.quality !== 'source_text' ? qualityLabel(copy.quality) : ''].filter(Boolean).join(' · ')));
+      if (copy.id) {
+        const open = node('button', 'related-open', 'Open this copy →');
+        open.type = 'button';
+        open.addEventListener('click', () => openPassage(copy.id));
+        line.append(open);
+      }
+      const link = safeLink(copy.source_url, ' Source ↗');
+      if (link) line.append(link);
+      block.append(line);
+    }
+    ui.related.append(block);
+  }
   async function openPassage(id, focus = true) {
     if (!id) return;
     const sequence = ++state.passageSequence;
@@ -510,13 +555,14 @@
       const passage = await api('/api/passage', { id });
       if (sequence !== state.passageSequence) return;
       state.passage = passage;
-      state.selectedAuthor = passage.author || state.selectedAuthor;
+      state.selectedAuthor = passage.author_canonical || passage.author || state.selectedAuthor;
       if (passage.work_id) state.selectedWork = passage.work_id;
       ui.kicker.textContent = passage.kind === 'text' ? 'FROM THE LYRIC COLLECTION' : 'REFERENCE RECORD';
       ui.title.textContent = [passage.author, passage.work].filter(Boolean).join(' · ') || 'Unattributed passage';
       ui.subtitle.textContent = passage.citation || 'Citation not supplied by source';
       renderPassageText(passage);
       renderRelated(passage.related);
+      renderMirrors(passage.mirrors);
       renderProvenance(passage);
       ui.prev.disabled = !passage.previous_id;
       ui.next.disabled = !passage.next_id;
@@ -569,7 +615,9 @@
     const excerpt = (record.text || '').replace(/\s+/g, ' ').trim();
     body.append(node('span', 'result-excerpt', excerpt || 'Text unavailable'));
     const dateClaim = chronologyClaim(record);
-    const reason = [record.match_reason, dateClaim ? `Author date claim (${dateClaim.kind}): ${dateClaim.interval}` : ''].filter(Boolean).join(' · ');
+    const copies = Number(record.mirror_count) > 1 ? `${record.mirror_count - 1} identical ${record.mirror_count === 2 ? 'copy' : 'copies'} collapsed` : '';
+    const quality = record.quality && record.quality !== 'source_text' ? qualityLabel(record.quality) : '';
+    const reason = [record.match_reason, quality, copies, dateClaim ? `Author date claim (${dateClaim.kind}): ${dateClaim.interval}` : ''].filter(Boolean).join(' · ');
     if (reason) body.append(node('span', 'result-reason', reason));
     const evidence = Array.isArray(record.matched_evidence) ? record.matched_evidence : [];
     for (const hit of evidence.slice(0, 3)) {

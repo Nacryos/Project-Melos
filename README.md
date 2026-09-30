@@ -21,7 +21,9 @@ For Jev, configure `TYPESAFE_API_KEY` in a private `.env` and add
 configuration names; never place a provider key in frontend settings.
 
 Read [reader and source documentation](docs/reader.md),
-[coverage and gaps](docs/coverage.md), and
+[coverage and gaps](docs/coverage.md),
+[owner policy decisions](docs/decisions.md) (modern editions admitted,
+corrected OCR searchable, author labels merged, identical copies grouped), and
 [Vercel deployment preparation](docs/deployment.md).
 
 The public repository contains application code, collectors, tests and design

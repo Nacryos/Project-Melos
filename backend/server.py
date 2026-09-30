@@ -1,6 +1,7 @@
 """Local-only Melos API. Run: python -m uvicorn backend.server:app --port 8791"""
 from pathlib import Path
 from functools import lru_cache
+from contextlib import closing
 import collections
 import difflib
 import hashlib
@@ -22,10 +23,66 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from .textutils import normalize as basic_normalize, tokenize
 from .publication import publication_restricted, public_deployment, corpus_views, EVIDENCE_HOLD, WIKTIONARY_HOLD
+from .author_aliases import (canonical as canonical_author, canonical_key, component_keys,
+                             merged_labels, is_mixed as mixed_author_label, fold as fold_author,
+                             profile as alias_record)
+from .textutils import text_key as passage_text_key
 
 ROOT = Path(__file__).resolve().parents[1]
 DB = ROOT / 'data/corpus.sqlite'
-app = FastAPI(title='Melos research reader',version='0.3.0')
+app = FastAPI(title='Melos Greek Lyric Lexicon',version='0.4.0')
+# Quality labels searched by default; the reference toggle adds the rest.
+SEARCHABLE_QUALITIES = ('source_text','machine_corrected_ocr')
+QUALITY_SQL = "('source_text','machine_corrected_ocr')"
+MIRROR_SEPARATOR = '\x1f'
+
+
+def legacy_schema():
+    """True while the index predates author_canonical, text_key and passage_authors.
+
+    The API keeps working on such an index: authors still merge through SQL
+    functions over the raw label, but identical copies are not grouped until
+    the index is rebuilt or upgraded (scripts/migrate_corpus_schema.py).
+    """
+    try:
+        info=DB.stat()
+    except OSError:
+        return False
+    return not schema_ready(info.st_mtime_ns,info.st_size)
+
+
+def group_columns():
+    """Columns that identify one text copy group; each row is its own group on an old index.
+
+    Copies group only within one quality label, so an OCR duplicate of an
+    edited text stays a separate, labelled record when reference material is
+    included.
+    """
+    return 'id' if legacy_schema() else 'author_canonical,text_key,quality'
+
+
+def text_columns():
+    """Columns that identify one text regardless of quality label.
+
+    Relevance ranks are shared at this level so an edited copy and an OCR copy
+    of the same words sit together, ordered by preference, instead of being
+    separated by full-text length effects of unrelated columns.
+    """
+    return 'id' if legacy_schema() else 'author_canonical,text_key'
+
+
+def canonical_expr():
+    """SQL expression for the merged author name of a passages row."""
+    return 'author_canonical_key(author)' if legacy_schema() else 'author_canonical'
+
+
+def grouping(representative):
+    """Window expression that groups identical copies of one text (same canonical
+    author, language, kind and words) and keeps the collapsed IDs visible."""
+    cols=group_columns()
+    return (f'ROW_NUMBER() OVER (PARTITION BY {cols} ORDER BY {representative}) rn,'
+            f'COUNT(*) OVER (PARTITION BY {cols}) copies,'
+            f'group_concat(id,char(31)) OVER (PARTITION BY {cols}) copy_ids')
 # The static Vercel frontend may use a separately hosted read-only corpus API.
 # An empty list keeps the local same-origin default. Never allow credentialed
 # wildcard origins, and keep hosted classifier secrets exclusively server-side.
@@ -114,7 +171,7 @@ def author_key(label):
 
 
 def author_labels(label):
-    """Only externally identified aliases, never edit-distance name merges."""
+    """Every spelling merged with this label: the owner alias table plus audited profile aliases."""
     try:
         from .authors import equivalent_labels
         labels=equivalent_labels(label,path=ROOT/'data/metadata/p2-author-profiles.json',
@@ -122,7 +179,52 @@ def author_labels(label):
                                  acceptance_path=ROOT/'data/reports/p2-claim-acceptance.json')
     except (ImportError,OSError,ValueError,RuntimeError):
         labels=[]
-    return list(dict.fromkeys([label,*labels]))
+    return list(dict.fromkeys([label,*merged_labels(label),*labels]))
+
+
+def author_filter_keys(label):
+    """Keys in passage_authors that an author filter should match.
+
+    A single poet's label matches its canonical key (so every merged spelling
+    answers). A joint label such as ``Sappho / Alcaeus`` used as a filter
+    matches only records carrying that exact joint label.
+    """
+    if not label:
+        return []
+    if mixed_author_label(label):
+        return [fold_author(label)]
+    keys=[]
+    for item in author_labels(label):
+        for key in component_keys(item):
+            if key not in keys:
+                keys.append(key)
+    return keys
+
+
+def author_member_clause(keys):
+    """SQL test that a passages row (by table alias) belongs to one of the author keys.
+
+    On the current schema this is an indexed membership test in passage_authors;
+    on an older index it evaluates the alias table over the raw label per row.
+    Both bind exactly len(keys) parameters.
+    """
+    if legacy_schema():
+        return lambda alias: '('+' OR '.join(f'author_has_key({alias}.author,?)' for _ in keys)+')'
+    marks=','.join('?' for _ in keys)
+    return lambda alias: f'{alias}.id IN (SELECT passage_id FROM passage_authors WHERE author_key IN ({marks}))'
+
+
+def mirror_pref(source,quality):
+    """Lower is shown first among identical copies: edited text over OCR, a direct collector over an aggregator mirror."""
+    return {'source_text':0,'machine_corrected_ocr':1}.get(quality,3)*10+{'ogc':2,'p2_ogc':2,'ogc_derived':3}.get(source,0)
+
+
+@lru_cache(maxsize=4)
+def schema_ready(stamp,size):
+    with closing(sqlite3.connect(f'file:{DB.as_posix()}?mode=ro',uri=True)) as probe:
+        columns={row[1] for row in probe.execute('PRAGMA table_info(passages)')}
+        tables={row[0] for row in probe.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+    return 'text_key' in columns and 'author_canonical' in columns and 'passage_authors' in tables
 
 
 def connect():
@@ -132,9 +234,20 @@ def connect():
     con.row_factory = sqlite3.Row
     con.create_function('phrase_match',2,lambda text,query: bool(query and phrase_pattern(query).search(text or '')),deterministic=True)
     con.create_function('author_key',1,author_key,deterministic=True)
+    con.create_function('mirror_pref',2,mirror_pref,deterministic=True)
+    con.create_function('author_canonical_key',1,canonical_key,deterministic=True)
+    con.create_function('author_has_key',2,lambda label,key: key in component_keys(label),deterministic=True)
     if publication_restricted():
         corpus_views(con, DB)
     return con
+
+
+def with_mirrors(record,row):
+    """Attach the collapsed copies of a grouped search row to its representative record."""
+    ids=[value for value in str(row['copy_ids'] or '').split(MIRROR_SEPARATOR) if value and value!=record['id']]
+    record['mirror_count']=int(row['copies'] or 1)
+    record['mirrored_ids']=sorted(ids)
+    return record
 
 
 def unpack(row):
@@ -187,27 +300,27 @@ def variants(q):
 def filters(author='',language='',edition='',include_reference=False, alias='p'):
     clauses, values = [], []
     if author:
-        keys=list(dict.fromkeys(author_key(label) for label in author_labels(author)))
-        marks=','.join('?' for _ in keys)
+        keys=author_filter_keys(author)
+        member=author_member_clause(keys)
         # The commentary author's name remains its own. It enters an ancient
         # author's result set only through an explicit parent text or a
         # source-page note sharing a URL with text in the same collection.
-        clauses.append(f'''(author_key({alias}.author) IN ({marks}) OR ({alias}.kind='commentary' AND (
+        clauses.append(f'''({member(alias)} OR ({alias}.kind='commentary' AND (
             EXISTS (SELECT 1 FROM passages parent
                     WHERE parent.id=json_extract({alias}.data,'$.parent_id')
-                      AND parent.kind='text' AND author_key(parent.author) IN ({marks}))
+                      AND parent.kind='text' AND {member('parent')})
             OR (json_extract({alias}.data,'$.metadata.scope') IN ('page','source_section') AND
                 EXISTS (SELECT 1 FROM passages page_text
                         WHERE json_extract(page_text.data,'$.source_url')=json_extract({alias}.data,'$.source_url')
                           AND page_text.source={alias}.source AND page_text.kind='text'
-                          AND author_key(page_text.author) IN ({marks}))))))''')
+                          AND {member('page_text')})))))''')
         values.extend(keys*3)
     for col,value in [('language',language),('edition',edition)]:
         if value:
             clauses.append(f'{alias}.{col}=?')
             values.append(value)
     if not include_reference:
-        clauses += [f"{alias}.quality NOT IN ('mixed_content','machine_ocr','needs_review')",f"{alias}.kind IN ('text','translation','commentary')"]
+        clauses += [f"{alias}.quality IN {QUALITY_SQL}",f"{alias}.kind IN ('text','translation','commentary')"]
     return (' AND '+ ' AND '.join(clauses) if clauses else ''), values
 
 
@@ -383,10 +496,14 @@ def status():
             'sources':sources,'languages':langs,'embeddings':embedding,'quality':quality,
             'evidence':evidence_status,'classifier':classifier_status(),
             'publication_policy':('restricted' if publication_restricted() else 'source-labels') if public_deployment() else 'local',
+            'searchable_qualities':list(SEARCHABLE_QUALITIES),'schema':manifest.get('schema',1),
+            'mirror_grouping':not legacy_schema(),
             'built_at':manifest.get('built_at'),'warnings':[
                 'Edition text is not a claim of manuscript certainty. Editorial supplements remain in the source text.',
-                'Mixed OCR/reference material is excluded from ordinary search; enable reference material to include it.',
+                'Machine-corrected OCR is searchable and labelled as such; raw OCR, mixed and review-needed material needs the reference toggle.',
+                'Author labels are merged by the owner alias table; each record keeps its original source label.',
                 'Similarity retrieves candidates for comparison, not proof of literary influence.']
+                + (['Index predates mirror grouping; identical copies are listed separately until the index is upgraded.'] if legacy_schema() else [])
                 + ([EVIDENCE_HOLD,WIKTIONARY_HOLD] if publication_restricted() else [])}
 
 
@@ -404,7 +521,7 @@ def corpus_statistics(path,stamp,size,public=False):
                             works=con.execute('SELECT count(*) FROM works').fetchone()[0])
         langs=[dict(r) for r in con.execute('SELECT language,count(*) count FROM passages GROUP BY language ORDER BY count DESC')]
         sources=[dict(r) for r in con.execute('SELECT source,count(*) count FROM passages GROUP BY source')]
-        authors=con.execute('SELECT count(DISTINCT author_key(author)) FROM passages').fetchone()[0]
+        authors=con.execute(f'SELECT count(DISTINCT author_key({canonical_expr()})) FROM passages').fetchone()[0]
         labels_count=con.execute('SELECT count(DISTINCT author) FROM passages').fetchone()[0]
         quality=[dict(r) for r in con.execute('SELECT quality,count(*) count FROM passages GROUP BY quality')]
         return manifest,langs,sources,authors,labels_count,quality
@@ -416,28 +533,50 @@ def authors():
         rows = con.execute('SELECT author,count(*) count FROM passages GROUP BY author ORDER BY author COLLATE NOCASE,author').fetchall()
     merged={}
     for row in rows:
-        profile=author_profile(row['author'])
-        key=profile['id'] if profile else author_key(row['author'])
+        label=row['author']
+        alias=alias_record(label)
+        identity=author_profile(label)
+        # The owner alias table decides grouping and display for every label it
+        # knows; an audited identity profile merges only labels the table does
+        # not cover, and is reported alongside either way.
+        if alias:
+            key,display='alias:'+canonical_key(label),alias['canonical']
+        elif identity:
+            key,display='identity:'+identity['id'],identity.get('display_name',label)
+        else:
+            key,display='label:'+author_key(label),label
         if key not in merged:
-            merged[key]={'author':profile.get('display_name',row['author']) if profile else row['author'],
-                         'count':0,'labels':[],'identity_id':profile['id'] if profile else None}
+            merged[key]={'author':display,'count':0,'labels':[],'identity_id':None}
         merged[key]['count']+=row['count']
-        merged[key]['labels'].append(row['author'])
-    return {'authors':sorted(merged.values(),key=lambda item:author_key(item['author']))}
+        merged[key]['labels'].append(label)
+        if identity and not merged[key]['identity_id']:
+            merged[key]['identity_id']=identity['id']
+    for item in merged.values():
+        item['merged']=len(item['labels'])>1
+    return {'authors':sorted(merged.values(),key=lambda item:fold_author(item['author'])),
+            'method':'Author labels merged by the owner alias table (backend/author_aliases.json) and audited identity profiles; joint labels stay separate.'}
 
 
 @app.get('/api/works')
 def works(author: str=''):
-    keys=list(dict.fromkeys(author_key(label) for label in author_labels(author))) if author else []
+    keys=author_filter_keys(author) if author else []
     with connect() as con:
-        rows = con.execute('SELECT * FROM works'+(' WHERE author_key(author) IN ('+','.join('?' for _ in keys)+')' if author else '')+' ORDER BY author,work,edition,language',keys).fetchall()
-    return {'works':[dict(r) for r in rows]}
+        if author and legacy_schema():
+            where=' WHERE ('+' OR '.join('author_has_key(author,?)' for _ in keys)+')'
+        elif author:
+            where=' WHERE id IN (SELECT DISTINCT work_id FROM passages WHERE '+author_member_clause(keys)('passages')+')'
+        else:
+            where=''
+        # Ordered through the SQL function so the publication-policy view of
+        # works (which lacks the stored column) sorts the same way.
+        rows = con.execute('SELECT * FROM works'+where+' ORDER BY author_canonical_key(author),author,work,edition,language',keys).fetchall()
+    return {'works':[dict(r)|{'author_canonical':canonical_author(r['author'])} for r in rows]}
 
 
 @app.get('/api/passages')
 def passages(work_id: str='',offset:int=0,limit:int=Query(20,ge=1,le=100)):
     with connect() as con:
-        where = ' WHERE work_id=?' if work_id else " WHERE kind='text' AND language='grc' AND quality='source_text'"
+        where = ' WHERE work_id=?' if work_id else f" WHERE kind='text' AND language='grc' AND quality IN {QUALITY_SQL}"
         args = [work_id] if work_id else []
         total = con.execute('SELECT count(*) FROM passages'+where,args).fetchone()[0]
         rows = con.execute('SELECT data FROM passages'+where+' ORDER BY sequence,id LIMIT ? OFFSET ?',args+[limit,max(offset,0)]).fetchall()
@@ -458,6 +597,15 @@ def passage(id: str):
         # edition candidate, not a claim that two fragment numbering systems agree.
         related = con.execute("SELECT data FROM passages WHERE id<>? AND (json_extract(data,'$.parent_id')=? OR id=? OR (source=? AND json_extract(data,'$.source_url')=? AND json_extract(data,'$.metadata.scope') IN ('page','source_section'))) LIMIT 50",(id,id,result.get('parent_id',''),result.get('source',''),result.get('source_url',''))).fetchall()
         result['related'] = [unpack(r) for r in related]
+        # Other indexed copies of exactly this text (aggregator mirrors or
+        # editions printing the same words), listed so none is hidden.
+        if legacy_schema():
+            copies=[]
+        else:
+            copies = con.execute('SELECT data FROM passages WHERE author_canonical=? AND text_key=? AND quality=? AND id<>? ORDER BY mirror_pref(source,quality),id LIMIT 25',(row['author_canonical'],row['text_key'],row['quality'],id)).fetchall()
+        result['mirrors'] = [{key:record.get(key) for key in ('id','source','author','work','edition','citation','language','kind','quality','license','source_url')}
+                             for record in (json.loads(r['data']) for r in copies)]
+    result['author_canonical']=canonical_author(row['author'])
     result['structured_evidence']=evidence_lookup(passage_id=id)
     result['author_profile']=author_profile(result.get('author',''))
     return result
@@ -472,8 +620,8 @@ def occurrences(keys,author='',limit=30,con=None):
     sql = f'SELECT DISTINCT p.data FROM passages p JOIN tokens t ON t.passage_id=p.id WHERE t.normalized IN ({marks})'
     params = list(keys)
     if author:
-        labels=list(dict.fromkeys(author_key(label) for label in author_labels(author)))
-        sql += ' AND author_key(p.author) IN ('+','.join('?' for _ in labels)+')'
+        labels=author_filter_keys(author)
+        sql += ' AND '+author_member_clause(labels)('p')
         params.extend(labels)
     sql += " ORDER BY CASE WHEN p.language='grc' THEN 0 ELSE 1 END,p.author,p.work,p.sequence LIMIT ?"
     try:
@@ -635,7 +783,7 @@ def excluded_exact_matches(q,author='',language='',edition=''):
         return {}
     condition,values=wording_condition(keys)
     extra,params=filters(author,language,edition,True)
-    excluded=" AND (p.quality IN ('mixed_content','machine_ocr','needs_review') OR p.kind NOT IN ('text','translation','commentary'))"
+    excluded=f" AND (p.quality NOT IN {QUALITY_SQL} OR p.kind NOT IN ('text','translation','commentary'))"
     with connect() as con:
         groups=[dict(row) for row in con.execute(
             'SELECT p.quality,p.kind,count(*) count FROM passages p WHERE ('+condition+')'+extra+excluded+
@@ -678,7 +826,7 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
     fallback_provenance={}
     extra,params=filters(author,language,edition,include_reference)
     def mark_author_scope(item):
-        if author and item.get('kind')=='commentary' and author_key(item.get('author'))!=author_key(author):
+        if author and item.get('kind')=='commentary' and not (set(component_keys(item.get('author')))&set(author_filter_keys(author))):
             reason='Commentary linked to the selected author by an explicit parent passage or shared source page; commentary authorship is retained.'
             item['author_scope_reason']=reason
             item['match_reason']=item.get('match_reason','')+'; '+reason
@@ -696,13 +844,24 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
             return {'results':[],'total':0,'mode':mode,'method':'Semantic index unavailable',
                 'warnings':[str(exc),'Use word search while the local encoder index is being built.']}
         results=[]
+        groups={}
         with connect() as con:
             for hit in hits:
-                row=con.execute('SELECT p.data FROM passages p WHERE p.id=?'+extra,[hit['id']]+params).fetchone()
+                columns=("p.data,author_canonical_key(p.author) AS author_canonical,'' AS text_key,p.quality" if legacy_schema()
+                         else 'p.data,p.author_canonical,p.text_key,p.quality')
+                row=con.execute('SELECT '+columns+' FROM passages p WHERE p.id=?'+extra,[hit['id']]+params).fetchone()
                 if row:
+                    group_key=(row['author_canonical'],row['text_key'] or hit['id'],row['quality'])
+                    if group_key in groups:
+                        groups[group_key]['mirrored_ids'].append(hit['id'])
+                        groups[group_key]['mirror_count']+=1
+                        continue
                     item=unpack(row)
                     item['score']=hit.get('score')
                     item['match_reason']=hit.get('match_reason','Dense embedding similarity; inspect the passage to evaluate the parallel.')
+                    item['mirrored_ids']=[]
+                    item['mirror_count']=1
+                    groups[group_key]=item
                     results.append(mark_author_scope(item))
         if len(hits)==window:
             warnings.append('Semantic total counts only the first 1,000 ranked candidates; more indexed hits may exist.')
@@ -719,8 +878,10 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                 ((author_chronology(name) or {}).get('sort_year')
                  if (author_chronology(name) or {}).get('sort_year') is not None else 99999))
             warnings.append('Retrieved matches are ordered by sourced author biography, not by secure composition dates. Undated authors appear last.')
-        chronology='author_year(p.author),p.author,' if order=='chronological' else ''
-        ordinary="CASE WHEN p.language='grc' THEN 0 ELSE 1 END,p.author,p.work,p.sequence,p.id"
+        # Ordering applies to grouped rows (one representative per identical
+        # text), so the columns carry no table alias here.
+        chronology=f'author_year(author),{canonical_expr()},' if order=='chronological' else ''
+        ordinary=f"CASE WHEN language='grc' THEN 0 ELSE 1 END,{canonical_expr()},author,work,sequence,id"
         # Token boundaries prevent a queried word from matching inside a
         # different inflection. Citations and titles use the same literal test.
         cond,exactparams=wording_condition(keys)
@@ -779,19 +940,26 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                 'FROM passages p JOIN tokens t ON t.passage_id=p.id '
                 'WHERE t.normalized IN ('+marks+')'+extra+' GROUP BY p.id), '
                 'ranked AS (SELECT id,MIN(priority) priority,MAX(matched) matched '
-                'FROM candidates GROUP BY id) ')
+                'FROM candidates GROUP BY id), '
+                'matched AS (SELECT p.*,ranked.priority,ranked.matched FROM ranked JOIN passages p ON p.id=ranked.id), '
+                'grouped AS (SELECT matched.*,'
+                f'MIN(priority) OVER (PARTITION BY {text_columns()}) gpriority,'
+                f'MAX(matched) OVER (PARTITION BY {text_columns()}) gmatched,'
+                +grouping('priority,mirror_pref(source,quality),matched DESC,sequence,id')+' FROM matched) ')
             values=exactparams+params+token_keys+params
-            total=con.execute(candidates+'SELECT count(*) FROM ranked',values).fetchone()[0]
-            ordering=(chronology+'ranked.priority,ranked.matched DESC,'+ordinary) if order=='chronological' else ('ranked.priority,ranked.matched DESC,'+ordinary)
-            rows=con.execute(candidates+'SELECT p.data,ranked.priority FROM ranked JOIN passages p ON p.id=ranked.id '
+            total=con.execute(candidates+'SELECT count(*) FROM grouped WHERE rn=1',values).fetchone()[0]
+            ordering=chronology+'gpriority,gmatched DESC,mirror_pref(source,quality),'+ordinary
+            rows=con.execute(candidates+'SELECT data,priority,copies,copy_ids FROM grouped WHERE rn=1 '
                              'ORDER BY '+ordering+' LIMIT ? OFFSET ?',values+[limit,offset]).fetchall()
-            results=[mark_author_scope(unpack(row)|{'match_reason':'Normalized wording / citation match' if row['priority']==0 else method,
-                                                   'score':None}) for row in rows]
+            results=[mark_author_scope(with_mirrors(unpack(row)|{'match_reason':'Normalized wording / citation match' if row['priority']==0 else method,
+                                                   'score':None},row)) for row in rows]
         else:
-            total=exact_count
-            rows=con.execute('SELECT p.data FROM passages p WHERE '+exact_where+' ORDER BY '+
+            grouped=('WITH matched AS (SELECT p.* FROM passages p WHERE '+exact_where+'), '
+                     'grouped AS (SELECT matched.*,'+grouping('mirror_pref(source,quality),sequence,id')+' FROM matched) ')
+            total=con.execute(grouped+'SELECT count(*) FROM grouped WHERE rn=1',exactparams+params).fetchone()[0]
+            rows=con.execute(grouped+'SELECT data,copies,copy_ids FROM grouped WHERE rn=1 ORDER BY '+
                              chronology+ordinary+' LIMIT ? OFFSET ?',exactparams+params+[limit,offset]).fetchall()
-            results=[mark_author_scope(unpack(row)|{'match_reason':'Normalized wording / citation match','score':None}) for row in rows]
+            results=[mark_author_scope(with_mirrors(unpack(row)|{'match_reason':'Normalized wording / citation match','score':None},row)) for row in rows]
         if total==0 and match!='exact':
             terms=tokenize(basic_normalize(q))[:16]
             from .query_expansion import fallback_plan
@@ -809,8 +977,6 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                     warnings.append('Latin-script input also searched as indexed Greek spelling candidates; original query words are retained. These are retrieval suggestions, not morphological identifications.')
             if terms:
                 expression=' OR '.join('"'+t.replace('"','""')+'"' for t in terms)
-                fts_from=' FROM passage_fts JOIN passages p ON p.id=passage_fts.id WHERE passage_fts MATCH ?'+extra
-                total=con.execute('SELECT count(*)'+fts_from,[expression]+params).fetchone()[0]
                 coverage_sql=[]
                 coverage_params=[]
                 for group in coverage_groups:
@@ -819,20 +985,31 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                         '(phrase_match(p.normalized,?) OR phrase_match(lower(p.citation),?) OR phrase_match(lower(p.work),?))'
                         for _ in group_terms)+' THEN 1 ELSE 0 END')
                     coverage_params.extend(value for term in group_terms for value in (term,term,term))
-                coverage_select=','+'+'.join(coverage_sql)+' query_term_coverage' if coverage_sql else ''
-                coverage_order='query_term_coverage DESC,' if coverage_sql else ''
-                fetched=con.execute('SELECT p.data,bm25(passage_fts) rank'+coverage_select+fts_from+' ORDER BY '+
-                                    (chronology if order=='chronological' else '')+coverage_order+'rank,p.id'+
-                                    ' LIMIT ? OFFSET ?',coverage_params+[expression]+params+[limit,offset]).fetchall()
+                coverage_select=','+'+'.join(coverage_sql)+' query_term_coverage' if coverage_sql else ',0 query_term_coverage'
+                # Identical copies group here too; a group ranks by its best
+                # word-group coverage, then its best full-text rank.
+                cols=text_columns()
+                fts_sql=('WITH matched AS (SELECT p.*,bm25(passage_fts) rank'+coverage_select+
+                         ' FROM passage_fts JOIN passages p ON p.id=passage_fts.id WHERE passage_fts MATCH ?'+extra+'), '
+                         'grouped AS (SELECT matched.*,MIN(rank) OVER (PARTITION BY '+cols+') grank,'
+                         'MAX(query_term_coverage) OVER (PARTITION BY '+cols+') gcoverage,'
+                         +grouping('mirror_pref(source,quality),query_term_coverage DESC,rank,id')+' FROM matched) ')
+                fts_values=coverage_params+[expression]+params
+                total=con.execute(fts_sql+'SELECT count(*) FROM grouped WHERE rn=1',fts_values).fetchone()[0]
+                coverage_order='gcoverage DESC,' if coverage_sql else ''
+                fetched=con.execute(fts_sql+'SELECT data,rank,query_term_coverage,copies,copy_ids FROM grouped WHERE rn=1 ORDER BY '+
+                                    chronology+coverage_order+'grank,mirror_pref(source,quality),id LIMIT ? OFFSET ?',fts_values+[limit,offset]).fetchall()
                 results=[]
                 for row in fetched:
-                    item=unpack(row)|{'match_reason':'Shared search words (not necessarily an exact phrase)','score':-row['rank']}
+                    item=with_mirrors(unpack(row)|{'match_reason':'Shared search words (not necessarily an exact phrase)','score':-row['rank']},row)
                     if coverage_sql:
                         item['query_term_coverage']=row['query_term_coverage']
                         item['match_reason']=f"Matches {row['query_term_coverage']} of {len(coverage_groups)} original query word groups; spelling alternatives count once, not as separate evidence."
                     results.append(mark_author_scope(item))
                 method=('Original-word-group coverage, then full-text rank; native and transliterated terms retained'
                         if coverage_sql else 'Full-text shared-word retrieval')
+    if any(item.get('mirror_count',1)>1 for item in results):
+        warnings.append('Identical copies of a text (same author, language, quality label and words) are shown once; mirrored_ids lists the collapsed copies.')
     excluded={} if include_reference else excluded_exact_matches(q,author,language,edition)
     return {'results':results,'total':total,'mode':mode,'method':method,'warnings':list(dict.fromkeys(warnings)),**excluded,**fallback_provenance}
 
@@ -868,7 +1045,8 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
         fused=fuse(q,lexical['results'],forms['results'],dense,fetch_record,
                    author=author,language=language,edition=edition,
                    include_reference=include_reference,limit=2*pool+1000,offset=0,
-                   commentary_assisted=commentary_assisted,author_labels=author_labels(author) if author else ())
+                   commentary_assisted=commentary_assisted,author_labels=author_labels(author) if author else (),
+                   author_key=canonical_key,author_keys=component_keys)
     ranked=order_results(fused['results'],order)
     warnings+=fused['warnings']
     warnings.append('Counts cover a bounded pool of up to 400 word, 400 form and 1,000 dense candidates, not every possible match.')

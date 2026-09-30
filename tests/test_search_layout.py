@@ -15,7 +15,7 @@ def test_repair_preserves_records_and_replaces_only_derived_index(tmp_path):
     record = json.dumps({'id': 'test', 'text': text, 'source_url': 'https://example.org/test'})
     with sqlite3.connect(source) as con:
         con.executescript(SCHEMA)
-        con.execute('INSERT INTO passages VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        con.execute('INSERT INTO passages (id,work_id,source,author,work,edition,citation,language,kind,quality,text,normalized,data,sequence) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                     ('test','work','fixture','Poet','Work','Edition','1','grc','text','source_text',text,normalize(text),record,0))
         con.execute('INSERT INTO passage_fts VALUES (?,?,?,?,?)',('test',normalize(text),'1','poet','work'))
         con.executemany('INSERT INTO tokens VALUES (?,?,?,?)', [('test','φωνεί',normalize('φωνεί'),1),('test','σας','σασ',1)])

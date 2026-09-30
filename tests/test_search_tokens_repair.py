@@ -25,11 +25,11 @@ def make_database(path):
         con.execute('CREATE INDEX idx_token_normal ON tokens(normalized)')
         for i, (pid, text, language, kind, quality) in enumerate(rows):
             data = json.dumps({'id': pid, 'text': text, 'source_url': 'https://example.test/synthetic'})
-            con.execute('INSERT INTO passages VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+            con.execute('INSERT INTO passages (id,work_id,source,author,work,edition,citation,language,kind,quality,text,normalized,data,sequence) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                         (pid, 'work', 'fixture', 'Poet', 'Work', 'Edition', str(i), language, kind, quality,
                          text, normalize(search_text(text)), data, i))
             con.execute('INSERT INTO passage_fts VALUES (?,?,?,?,?)', (pid, normalize(text), str(i), 'poet', 'work'))
-        con.execute('INSERT INTO works VALUES (?,?,?,?,?,?,?)', ('work', 'Poet', 'Work', 'Edition', 'fixture', 'grc', 6))
+        con.execute('INSERT INTO works (id,author,work,edition,source,language,count) VALUES (?,?,?,?,?,?,?)', ('work', 'Poet', 'Work', 'Edition', 'fixture', 'grc', 6))
         con.executemany('INSERT INTO tokens VALUES (?,?,?,?)',
                         [('broken', 'α', 'α', 2), ('broken', 'β', 'β', 2), ('broken', 'γ', 'γ', 1),
                          ('shared', 'α', 'α', 1), ('shared', 'γ', 'γ', 1),

@@ -199,9 +199,27 @@ def carmina_near_overlaps(records: list[dict]) -> dict:
             "interpretation": "OCR near matches from one Bergk edition are not independent witnesses."}
 
 
+OCR_STATUSES = {"raw ocr", "auto-corrected", "manual"}
+
+
+def ocr_status_table(readme: str) -> dict[str, str]:
+    """Edition-level OCR status per URN from the pinned OGC README table."""
+    table: dict[str, str] = {}
+    for line in readme.splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) >= 6 and cells[-1].lower() in OCR_STATUSES:
+            table[cells[0].strip("`")] = cells[-1].lower()
+    return table
+
+
 def main() -> None:
     tree = json.loads((PRIOR_RAW / "tree.json").read_text(encoding="utf-8"))
     registry = json.loads((PRIOR_RAW / "corpus_editions.json").read_text(encoding="utf-8"))
+    ocr_statuses = ocr_status_table((PRIOR_RAW / "README.md").read_text(encoding="utf-8-sig", errors="replace"))
+    if not ocr_statuses:
+        raise ValueError("No OCR-status table rows found in the pinned OGC README")
     prior = json.loads(PRIOR_REPORT.read_text(encoding="utf-8"))
     if prior["upstream_commit"] != COMMIT or tree.get("truncated"):
         raise ValueError("Pinned OGC commit mismatch or truncated tree")
@@ -250,20 +268,22 @@ def main() -> None:
                 continue
             if row["urn"] != urn or row["edition"] != registry_row["edition"] or row["source"] != registry_row["source"]:
                 raise ValueError(f"Pinned registry disagreement: {name}:{line_no}")
-            if "BY-NC" in row["license"].upper():
-                raise ValueError(f"Noncommercial license: {name}:{line_no}")
             source_author, work = urn.split(".", 1)
             is_ocr = row["source"] == "ocr"
             greek = len(GREEK.findall(row["text"]))
             latin = len(LATIN.findall(row["text"]))
             language = "grc" if greek >= latin else ("lat" if latin else "other")
-            # Bergk fragment rows can contain ancient quotations, Latin
-            # apparatus, testimonia and other poets. The filename is a
-            # collection label, never proof of the quoted passage's author.
+            # Bergk fragment rows keep the poet their collection file names
+            # as the source attribution. Latin-heavy blocks (apparatus,
+            # testimonia) stay mixed reference material. Upstream-corrected
+            # OCR is searchable under its own label; raw OCR is reference.
             if is_ocr:
-                author = "unknown"
-                kind = "reference"
-                quality = "mixed_content" if latin >= 20 and latin > greek * 0.15 else "machine_ocr"
+                author = source_author
+                latin_heavy = latin >= 20 and latin > greek * 0.15
+                kind = "text" if language == "grc" and not latin_heavy else "reference"
+                quality = ("mixed_content" if latin_heavy or language != "grc"
+                           else "machine_corrected_ocr" if ocr_statuses.get(urn) == "auto-corrected"
+                           else "machine_ocr")
                 license_name = "CC-BY-4.0" if row["license"] == "PD" else row["license"]
             else:
                 author = source_author
@@ -293,7 +313,9 @@ def main() -> None:
                     "source_collection_author": source_author,
                     "source_row_number": line_no,
                     "selection_category": family,
-                    "author_label_basis": "ogc_work_urn" if not is_ocr else "unknown_due_to_mixed_fragment_collection",
+                    "author_label_basis": "ogc_work_urn" if not is_ocr else "ogc_collection_file_name",
+                    "ocr_status": ocr_statuses.get(urn, "unknown") if is_ocr else None,
+                    "noncommercial_license": "BY-NC" in row["license"].upper(),
                     "embedded_quote_author_verified": False,
                     "citation_scope": "ogc_row_locus_not_canonical_fragment_number" if is_ocr else "ogc_row_locus",
                     "text_verified_against_scan": False if is_ocr else None,

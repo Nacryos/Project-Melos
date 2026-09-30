@@ -15,6 +15,7 @@ import hashlib
 import itertools
 import json
 from pathlib import Path
+import shutil
 import sqlite3
 import sys
 import time
@@ -26,6 +27,21 @@ from backend.textutils import normalize, search_text, tokenize
 from backend.morphology import normalize as form_normalize
 from scripts import extract_p2_notes as notes
 from scripts.build_evidence import _validate, _listed_forms, _has_greek_letter, _json
+
+PASSAGE_COLUMNS = ('id', 'work_id', 'source', 'author', 'work', 'edition', 'citation', 'language',
+                   'kind', 'quality', 'text', 'normalized', 'data', 'sequence')
+
+
+def upsert_columns(con, table, values):
+    """Update named columns so unrelated future schema fields survive repair."""
+    identifier = values['id']
+    if con.execute(f'SELECT 1 FROM {table} WHERE id=?', (identifier,)).fetchone():
+        columns = [key for key in values if key != 'id']
+        con.execute(f'UPDATE {table} SET ' + ','.join(key + '=?' for key in columns) + ' WHERE id=?',
+                    [values[key] for key in columns] + [identifier])
+    else:
+        con.execute(f'INSERT INTO {table} (' + ','.join(values) + ') VALUES (' + ','.join('?' for _ in values) + ')',
+                    list(values.values()))
 
 
 def sha(path):
@@ -116,6 +132,17 @@ def patch_corpus(source, output, old, new, delta):
         original.execute('BEGIN')
         with closing(sqlite3.connect(output)) as con:
             original.backup(con)
+            passage_columns = [row[1] for row in con.execute('PRAGMA table_info(passages)')]
+            work_columns = {row[1] for row in con.execute('PRAGMA table_info(works)')}
+            schema_flags = ('author_canonical' in passage_columns, 'text_key' in passage_columns,
+                            'author_canonical' in work_columns,
+                            bool(con.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='passage_authors'").fetchone()))
+            if any(schema_flags) and not all(schema_flags):
+                raise ValueError('Partially migrated author/mirror schema; complete migration before source repair')
+            merged_schema = all(schema_flags)
+            if merged_schema:
+                from backend.author_aliases import canonical, canonical_key, component_keys
+                from backend.textutils import text_key
             # This tool consumes a complete accepted source collection, not a
             # partial page patch. Undeclared stale IDs must not survive silently.
             for source_name in {row['source'] for row in old.values()}:
@@ -139,6 +166,8 @@ def patch_corpus(source, output, old, new, delta):
                 if identifier in delta['added'] and con.execute('SELECT 1 FROM passages WHERE id=?', (identifier,)).fetchone():
                     raise ValueError('New ID collides with unrelated corpus record: ' + identifier)
                 con.execute('DELETE FROM tokens WHERE passage_id=?', (identifier,))
+                if merged_schema:
+                    con.execute('DELETE FROM passage_authors WHERE passage_id=?', (identifier,))
                 if identifier in fts_ids:
                     con.execute('DELETE FROM passage_fts WHERE rowid=?', (fts_ids[identifier],))
                 if identifier not in new:
@@ -158,10 +187,22 @@ def patch_corpus(source, output, old, new, delta):
                 values = (identifier, work_id, row['source'], row['author'], row['work'], row['edition'],
                           row['citation'], row['language'], row['kind'], row['quality'], row['text'], folded,
                           json.dumps(row, ensure_ascii=False), 0)
-                con.execute('INSERT OR REPLACE INTO passages VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)', values)
+                values_by_column = dict(zip(PASSAGE_COLUMNS, values))
+                author_index = row['author']
+                if merged_schema:
+                    display_author = canonical(row['author'])
+                    values_by_column.update(author_canonical=display_author,
+                                            text_key=text_key(row['language'], row['kind'], row['text']))
+                    con.executemany('INSERT INTO passage_authors VALUES (?,?)',
+                                    [(identifier, key) for key in component_keys(row['author'])])
+                    if display_author != row['author']:
+                        author_index += ' ' + display_author
+                upsert_columns(con, 'passages', values_by_column)
                 con.execute('INSERT INTO passage_fts VALUES (?,?,?,?,?)',
-                            (identifier, folded, normalize(row['citation']), normalize(row['author']), normalize(row['work'])))
-                if row['quality'] not in ('mixed_content', 'machine_ocr', 'needs_review') and row['kind'] in ('text', 'translation'):
+                            (identifier, folded, normalize(row['citation']), normalize(author_index), normalize(row['work'])))
+                quality_eligible = (row['quality'] in ('source_text', 'machine_corrected_ocr') if merged_schema else
+                                    row['quality'] not in ('mixed_content', 'machine_ocr', 'needs_review'))
+                if quality_eligible and row['kind'] in ('text', 'translation'):
                     counts = Counter(tokenize(indexed))
                     con.executemany('INSERT INTO tokens VALUES (?,?,?,?)',
                                     [(identifier, form, normalize(form), count) for form, count in counts.items()])
@@ -172,15 +213,20 @@ def patch_corpus(source, output, old, new, delta):
                 rows = con.execute('SELECT id,author,work,edition,source,language FROM passages WHERE work_id=?', (work_id,)).fetchall()
                 if any(row[0] not in order for row in rows):
                     raise ValueError('Affected work includes records outside reparsed input; explicit ordering required')
-                con.execute('DELETE FROM works WHERE id=?', (work_id,))
                 if rows:
                     rows.sort(key=lambda row: order[row[0]])
-                    con.execute('INSERT INTO works VALUES (?,?,?,?,?,?,?)', (work_id, *rows[0][1:], len(rows)))
+                    work_values = dict(zip(('id', 'author', 'work', 'edition', 'source', 'language', 'count'),
+                                           (work_id, *rows[0][1:], len(rows))))
+                    if merged_schema:
+                        work_values['author_canonical'] = canonical(rows[0][1])
+                    upsert_columns(con, 'works', work_values)
                     for index, row in enumerate(rows):
                         before = original.execute('SELECT sequence FROM passages WHERE id=?', (row[0],)).fetchone()
                         if before is None or before[0] != index:
                             sequence_changes.append(row[0])
                     con.executemany('UPDATE passages SET sequence=? WHERE id=?', [(index, row[0]) for index, row in enumerate(rows)])
+                else:
+                    con.execute('DELETE FROM works WHERE id=?', (work_id,))
             for key in token_keys:
                 count, form = con.execute('SELECT sum(count),min(form) FROM tokens WHERE normalized=?', (key,)).fetchone()
                 if count:
@@ -197,14 +243,15 @@ def patch_corpus(source, output, old, new, delta):
             manifest['statistics'] = {'sources': [{'source': key, 'count': value} for key, value in source_counts.items()],
                 'languages': [{'language': key, 'count': count} for key, count in con.execute('SELECT language,count(*) FROM passages GROUP BY language ORDER BY count(*) DESC')],
                 'quality': [{'quality': key, 'count': count} for key, count in con.execute('SELECT quality,count(*) FROM passages GROUP BY quality ORDER BY quality')],
-                'authors': len({unicodedata.normalize('NFC', value).casefold() for value in authors}), 'author_labels': len(authors)}
+                'authors': len({canonical_key(value) if merged_schema else unicodedata.normalize('NFC', value).casefold()
+                                for value in authors}), 'author_labels': len(authors)}
             con.execute("UPDATE metadata SET value=? WHERE key='manifest'", (json.dumps(manifest),))
             con.commit()
             # Unchanged source-bearing columns must retain exact stored bytes.
             con.execute('ATTACH DATABASE ? AS old', (str(Path(source).resolve()),))
             con.execute('CREATE TEMP TABLE touched(id TEXT PRIMARY KEY)')
             con.executemany('INSERT INTO touched VALUES (?)', [(identifier,) for identifier in touched])
-            columns = 'id,work_id,source,author,work,edition,citation,language,kind,quality,text,normalized,data'
+            columns = ','.join('"' + name.replace('"', '""') + '"' for name in passage_columns if name != 'sequence')
             for left, right in [('main', 'old'), ('old', 'main')]:
                 if con.execute(f'SELECT {columns} FROM {left}.passages WHERE id NOT IN touched EXCEPT SELECT {columns} FROM {right}.passages WHERE id NOT IN touched LIMIT 1').fetchone():
                     raise RuntimeError('Unrelated source records changed')
@@ -370,6 +417,102 @@ def stage(new_records_path, output_dir, root=ROOT, corpus=None, evidence=None,
               'embeddings': {'status': 'REBUILD_REQUIRED', 'reason': 'Changed text/IDs/parent metadata; do not rebind old vectors'},
               'created_at': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}
     (output / 'repair-manifest.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
+    return report
+
+
+def reconcile_snapshot(snapshot, output_dir, live_export, readme, root=ROOT):
+    """Combine an audited source repair with independently exported live policy.
+
+    Nothing in the input snapshot or active runtime is replaced. This accepts
+    only source-text-preserving schema additions and the exact quality/data
+    changes present in the live export. The result requires fresh audit and
+    embedding eligibility/materialization; copied historical audits remain
+    historical, not acceptance of the new database hash.
+    """
+    from scripts.migrate_corpus_schema import migrate
+    root, snapshot, output = Path(root).resolve(), Path(snapshot).resolve(), Path(output_dir).resolve()
+    live_export, readme = Path(live_export).resolve(), Path(readme).resolve()
+    if not output.is_relative_to(root / 'data/staging') or output.exists() or snapshot == output:
+        raise ValueError('Reconciliation requires a fresh data/staging directory')
+    audit_path = snapshot / 'qa12-independent-audit.json'
+    audit = json.loads(audit_path.read_text(encoding='utf-8'))
+    if audit.get('verdict') != 'PASS':
+        raise ValueError('Input source snapshot is not independently accepted')
+    for name in ('corpus.sqlite', 'evidence.sqlite', 'sappho.jsonl', 'p2_notes.jsonl'):
+        if sha(snapshot / name) != audit['artifacts'][name]['sha256']:
+            raise ValueError('Audited snapshot hash changed: ' + name)
+    export_rows = [json.loads(line) for line in live_export.read_text(encoding='utf-8').splitlines() if line.strip()]
+    if not export_rows or 'id' in export_rows[0]:
+        raise ValueError('Expected live export provenance header')
+    live_header = export_rows[0]
+    live_rows = {row['id']: row for row in export_rows[1:]}
+    if not live_rows or len(live_rows) != len(export_rows) - 1:
+        raise ValueError('Missing or duplicate live promotion rows')
+    if any(row.get('quality') != 'machine_corrected_ocr' or not isinstance(row.get('data'), str)
+           or not isinstance(row.get('previous_data_sha256'), str) for row in live_rows.values()):
+        raise ValueError('Malformed live policy export')
+    inputs = list(path for path in snapshot.iterdir() if path.is_file()) + [live_export, readme,
+              ROOT / 'scripts/migrate_corpus_schema.py', ROOT / 'backend/author_aliases.py',
+              ROOT / 'backend/author_aliases.json', ROOT / 'backend/textutils.py']
+    before = {str(path): sha(path) for path in inputs}
+    output.mkdir(parents=True, exist_ok=False)
+    for path in snapshot.iterdir():
+        if path.is_file():
+            shutil.copyfile(path, output / path.name)
+    migration = migrate(output / 'corpus.sqlite', promote=True, readme_path=readme, backup=False)
+    source_uri = (snapshot / 'corpus.sqlite').as_uri() + '?mode=ro'
+    target_uri = (output / 'corpus.sqlite').as_uri() + '?mode=ro'
+    with closing(sqlite3.connect(source_uri, uri=True)) as original, closing(sqlite3.connect(target_uri, uri=True)) as revised:
+        columns = [row[1] for row in original.execute('PRAGMA table_info(passages)')
+                   if row[1] not in ('author_canonical', 'text_key')]
+        names = ','.join('"' + name.replace('"', '""') + '"' for name in columns)
+        id_index, data_index, quality_index = (columns.index(name) for name in ('id', 'data', 'quality'))
+        sentinel, promoted, count = object(), set(), 0
+        for old_row, new_row in itertools.zip_longest(original.execute(f'SELECT {names} FROM passages ORDER BY id'),
+                                                      revised.execute(f'SELECT {names} FROM passages ORDER BY id'), fillvalue=sentinel):
+            if old_row is sentinel or new_row is sentinel or old_row[id_index] != new_row[id_index]:
+                raise RuntimeError('Migration added or removed passage IDs')
+            identifier = old_row[id_index]
+            if identifier in live_rows:
+                live = live_rows[identifier]
+                if hashlib.sha256(old_row[data_index].encode()).hexdigest() != live['previous_data_sha256']:
+                    raise RuntimeError('Live promotion base differs from audited snapshot: ' + identifier)
+                expected = list(old_row)
+                expected[quality_index], expected[data_index] = live['quality'], live['data']
+                if tuple(expected) != new_row or old_row[quality_index] != 'machine_ocr':
+                    raise RuntimeError('Promotion does not exactly reproduce live policy/source data: ' + identifier)
+                promoted.add(identifier)
+            elif old_row != new_row:
+                raise RuntimeError('Migration changed unrelated source-bearing columns: ' + identifier)
+            count += 1
+        if promoted != live_rows.keys() or migration['promoted_corrected_ocr'] != len(promoted):
+            raise RuntimeError('Migration promotion membership differs from live export')
+        work_columns = [row[1] for row in original.execute('PRAGMA table_info(works)') if row[1] != 'author_canonical']
+        names = ','.join('"' + name.replace('"', '""') + '"' for name in work_columns)
+        if any(a != b for a, b in itertools.zip_longest(original.execute(f'SELECT {names} FROM works ORDER BY id'),
+                                                       revised.execute(f'SELECT {names} FROM works ORDER BY id'), fillvalue=sentinel)):
+            raise RuntimeError('Migration changed original work metadata')
+        manifest = json.loads(revised.execute("SELECT value FROM metadata WHERE key='manifest'").fetchone()[0])
+        vocabulary = revised.execute('SELECT count(*) FROM vocabulary').fetchone()[0]
+        if manifest.get('vocabulary') != vocabulary:
+            raise RuntimeError('Migration vocabulary manifest count is stale')
+        eligible = revised.execute("SELECT count(*) FROM passages WHERE trim(text)!='' AND kind IN ('text','translation','commentary') AND quality IN ('source_text','machine_corrected_ocr') AND language IN ('grc','eng','lat','ita','fra','deu','mul')").fetchone()[0]
+    if any(sha(Path(path)) != digest for path, digest in before.items()):
+        raise RuntimeError('Reconciliation input changed during migration')
+    if sha(output / 'evidence.sqlite') != audit['artifacts']['evidence.sqlite']['sha256']:
+        raise RuntimeError('Evidence changed during schema reconciliation')
+    report = {'status': 'PENDING_INDEPENDENT_AUDIT', 'operation': 'source_repair_plus_existing_live_policy',
+              'source_snapshot': str(snapshot), 'inputs': before, 'live_provenance': live_header,
+              'promoted_records': len(promoted), 'promoted_ids_sha256': hashlib.sha256('\n'.join(sorted(promoted)).encode()).hexdigest(),
+              'source_rows_verified': count, 'migration': migration, 'vocabulary': vocabulary,
+              'vocabulary_policy': 'Rebuilt from all token rows; counts and MIN(form) display representatives are derived fields',
+              'source_sections_preserved': True, 'evidence_unchanged': True,
+              'embeddings': {'status': 'REBUILD_REQUIRED', 'eligible_records': eligible,
+                             'reason': 'Newly eligible corrected OCR; regenerate rows metadata and encode missing texts'},
+              'historical_reports_only': ['repair-manifest.json', 'qa12-independent-audit.json', 'qa12-embedding-audit.json'],
+              'artifacts': {path.name: {'sha256': sha(path), 'bytes': path.stat().st_size}
+                            for path in output.iterdir() if path.is_file()}}
+    (output / 'reconciliation-manifest.json').write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding='utf-8')
     return report
 
 
