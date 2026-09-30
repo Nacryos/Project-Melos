@@ -54,7 +54,7 @@ translation placeholder as text.
 
 ### 3. Author labels are merged
 
-`data/author-aliases.json` maps the spellings different collectors use for
+`backend/author_aliases.json` maps the spellings different collectors use for
 one poet (English name, "name of place" forms, aggregator slugs, Greek
 script in any accentuation) onto one display name. Merging drives the author
 chooser, the author filter, works listing, semantic filtering, mirror

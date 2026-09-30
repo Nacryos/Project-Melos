@@ -4,7 +4,7 @@
 `passage_authors` table. A deployment that only holds the built SQLite (no
 collector JSONL) cannot rebuild, so this script derives those columns from the
 rows already in the index and replaces the file atomically. Every value comes
-from the row itself: the merged author name from `data/author-aliases.json`
+from the row itself: the merged author name from `backend/author_aliases.json`
 applied to the stored label, and the text key from the stored language, kind
 and words. No passage text, label or provenance changes.
 

@@ -102,7 +102,7 @@ search-eligible), Pindar scholia, a Theognidean anthology, Pitotto's licensed
 2024 Stesichorus edition and source-critical notes. Ibycus has only five
 scan-verified partial Greek lines plus references and labelled page OCR:
 this is not a complete Ibycus corpus. Modern edition coverage remains partial.
-Author labels are merged through `data/author-aliases.json` and the audited
+Author labels are merged through `backend/author_aliases.json` and the audited
 identity profiles; joint labels remain separate. Since 2026-09-30 modern
 editions are admitted and rights are recorded rather than gating admission
 ([decisions](decisions.md)); the second-pass collectors for the Centre for

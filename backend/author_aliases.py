@@ -11,8 +11,9 @@ data.
 Labels that join several poets with ``" / "`` (for example ``Sappho / Alcaeus``)
 are never merged into one author. They match a filter for any of their parts.
 
-The table lives in ``data/author-aliases.json``. Adding a label there is the
-only step needed to merge a new spelling; the corpus must then be rebuilt so
+The table lives beside this module as ``backend/author_aliases.json`` so it ships
+with the API package (the deployment mounts its own ``data/``). Adding a label
+there is the only step needed to merge a new spelling; the corpus must then be rebuilt so
 the ``author_canonical`` column and ``passage_authors`` table pick it up.
 """
 
@@ -26,7 +27,7 @@ import unicodedata
 
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_TABLE = ROOT / "data/author-aliases.json"
+DEFAULT_TABLE = ROOT / "backend/author_aliases.json"
 MIXED_SEPARATOR = " / "
 _SPACES = re.compile(r"[\s_\-]+")
 

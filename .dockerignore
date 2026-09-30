@@ -4,6 +4,7 @@
 !deploy/requirements-runtime.txt
 !backend/
 !backend/*.py
+!backend/*.json
 !css/
 !css/*.css
 !js/

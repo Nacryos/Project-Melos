@@ -4,7 +4,7 @@
 Run from the project root: python scripts/report_coverage.py
 The input is the accepted SQLite index built by scripts/build_corpus.py. This
 script neither downloads material nor writes corpus passages. Author labels
-are merged through the owner alias table (data/author-aliases.json); every
+are merged through the owner alias table (backend/author_aliases.json); every
 exact source label stays listed beside its merged name.
 """
 
@@ -141,7 +141,7 @@ def report(db: Path) -> dict:
                 "Counts are records, not unique fragments or independent textual witnesses; identical copies are counted once per record, not once per text.",
                 "A source_text quality label does not remove editorial supplements or establish manuscript certainty.",
                 "Searchable Greek text adds machine-corrected OCR to clean source text; raw OCR, mixed and review-needed rows are excluded from both.",
-                "Author merging follows data/author-aliases.json; labels naming several poets are never merged and are listed separately.",
+                "Author merging follows backend/author_aliases.json; labels naming several poets are never merged and are listed separately.",
                 "Translations and commentary are counted separately from Greek text; source datasets may overlap.",
             ],
         }
@@ -190,7 +190,7 @@ def render_markdown(data: dict) -> str:
     if unmerged:
         lines.extend(["", "## Labels left unmerged", "",
             "Joint attributions and Greek-script labels that the alias table does not "
-            "assign to a single poet. Add a label to `data/author-aliases.json` to merge it.", "",
+            "assign to a single poet. Add a label to `backend/author_aliases.json` to merge it.", "",
             "| Exact source label | Clean Greek text | Searchable Greek text | Commentary / reference |",
             "| --- | ---: | ---: | ---: |"])
         for item in unmerged:

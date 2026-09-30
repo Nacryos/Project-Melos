@@ -23,7 +23,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from .textutils import normalize as basic_normalize, tokenize
 from .publication import publication_restricted, public_deployment, corpus_views, EVIDENCE_HOLD, WIKTIONARY_HOLD
 from .author_aliases import (canonical as canonical_author, canonical_key, component_keys,
-                             merged_labels, is_mixed as mixed_author_label, fold as fold_author)
+                             merged_labels, is_mixed as mixed_author_label, fold as fold_author,
+                             profile as alias_record)
 from .textutils import text_key as passage_text_key
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -532,22 +533,27 @@ def authors():
     merged={}
     for row in rows:
         label=row['author']
-        display=canonical_author(label) or label
-        profile=author_profile(label)
-        # The owner alias table decides the display name; an audited identity
-        # profile still merges labels it vouches for and is reported alongside.
-        key=canonical_key(label) if display!=label or not profile else profile['id']
+        alias=alias_record(label)
+        identity=author_profile(label)
+        # The owner alias table decides grouping and display for every label it
+        # knows; an audited identity profile merges only labels the table does
+        # not cover, and is reported alongside either way.
+        if alias:
+            key,display='alias:'+canonical_key(label),alias['canonical']
+        elif identity:
+            key,display='identity:'+identity['id'],identity.get('display_name',label)
+        else:
+            key,display='label:'+author_key(label),label
         if key not in merged:
-            merged[key]={'author':display if display!=label or not profile else profile.get('display_name',label),
-                         'count':0,'labels':[],'identity_id':profile['id'] if profile else None}
+            merged[key]={'author':display,'count':0,'labels':[],'identity_id':None}
         merged[key]['count']+=row['count']
         merged[key]['labels'].append(label)
-        if profile and not merged[key]['identity_id']:
-            merged[key]['identity_id']=profile['id']
+        if identity and not merged[key]['identity_id']:
+            merged[key]['identity_id']=identity['id']
     for item in merged.values():
         item['merged']=len(item['labels'])>1
     return {'authors':sorted(merged.values(),key=lambda item:fold_author(item['author'])),
-            'method':'Author labels merged by the owner alias table (data/author-aliases.json) and audited identity profiles; joint labels stay separate.'}
+            'method':'Author labels merged by the owner alias table (backend/author_aliases.json) and audited identity profiles; joint labels stay separate.'}
 
 
 @app.get('/api/works')
