@@ -3,6 +3,8 @@ set -eu
 cd /home/alvin/services/melos
 test -f data/corpus.sqlite
 test -f data/embeddings/manifest.json
+test -f secrets/jev.env
+test -d runtime
 if docker container inspect melos-api >/dev/null 2>&1; then
   echo 'melos-api already exists; explicitly review before replacing it.' >&2
   exit 1
@@ -14,7 +16,13 @@ docker run -d --name melos-api --restart unless-stopped \
   --log-driver=local --log-opt max-size=10m --log-opt max-file=3 \
   -p 127.0.0.1:8791:8791 \
   -e MELOS_PUBLIC_DEPLOYMENT=1 -e MELOS_PUBLICATION_POLICY=source-labels \
+  -e MELOS_PUBLIC_CLASSIFIER=1 -e MELOS_CLASSIFIER_STATE=/app/runtime/classifier.sqlite \
+  -e MELOS_JEV_MODEL=jev-1.13.0 -e MELOS_CLASSIFIER_DAILY_LIMIT=500 \
   -e MELOS_CORS_ORIGINS=https://greeklyric.com,https://project-melos.vercel.app \
   -v /home/alvin/services/melos/data:/app/data:ro \
   -v /home/alvin/services/melos/models:/models:ro \
-  melos-api:20260930
+  -v /home/alvin/services/melos/runtime:/app/runtime:rw \
+  -v /home/alvin/services/melos/secrets/jev.env:/run/secrets/jev.env:ro \
+  melos-api:20260930-jev \
+  python -m uvicorn backend.server:app --host 0.0.0.0 --port 8791 --workers 1 \
+  --limit-concurrency 8 --timeout-keep-alive 5 --no-access-log --env-file /run/secrets/jev.env

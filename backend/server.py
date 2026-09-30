@@ -4,15 +4,17 @@ from functools import lru_cache
 import collections
 import difflib
 import hashlib
+import hmac
 import json
 import os
 import re
+import secrets
 import sqlite3
 import threading
 import unicodedata
 
 import numpy as np
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -36,14 +38,39 @@ if cors_origins:
 
 @app.middleware('http')
 async def request_policy(request,call_next):
+    from .jev_gateway import public_enabled
+    visitor_cookie = None
     if request.url.path=='/api/classify-context' and request.method=='POST':
-        # A public static site must not turn a private paid key into an open
-        # spending endpoint. Production classification needs an authenticated,
-        # rate-limited gateway; the current interactive integration is local.
         client=request.client.host if request.client else ''
-        if os.environ.get('MELOS_PUBLIC_DEPLOYMENT')=='1' or client not in ('127.0.0.1','::1','testclient'):
-            return JSONResponse(status_code=403,content={'detail':'Contextual classification is local-only. A public deployment requires an authenticated, rate-limited classifier gateway.'})
+        if (public_deployment() or client not in ('127.0.0.1','::1','testclient')) and not public_enabled():
+            return JSONResponse(status_code=403,content={'detail':'Contextual classification is local-only unless public Jev is explicitly enabled.'})
+        if public_enabled():
+            if not (os.environ.get('TYPESAFE_API_KEY') or os.environ.get('JEV_API_KEY')):
+                return JSONResponse(status_code=503,content={'detail':'Jev is not configured on this server.'})
+            try:
+                size = int(request.headers.get('content-length', '-1'))
+            except ValueError:
+                size = -1
+            if size < 0 or size > 2048:
+                return JSONResponse(status_code=413,content={'detail':'A JSON request of at most 2048 bytes is required.'})
+            if request.headers.get('content-type','').split(';')[0].strip() != 'application/json':
+                return JSONResponse(status_code=415,content={'detail':'Use application/json.'})
+            # Browser sessions are convenience throttles, not authenticated users.
+            # Never trust spoofable forwarding headers; the durable global quota
+            # bounds spending even if visitors reset cookies or bypass Vercel.
+            key = (os.environ.get('TYPESAFE_API_KEY') or os.environ['JEV_API_KEY']).encode()
+            cookie = request.cookies.get('melos_visitor','')
+            token, _, signature = cookie.partition('.')
+            valid = bool(re.fullmatch(r'[0-9a-f]{32}', token)) and hmac.compare_digest(
+                signature, hmac.new(key, token.encode(), hashlib.sha256).hexdigest())
+            if not valid:
+                token = secrets.token_hex(16)
+                visitor_cookie = token + '.' + hmac.new(key, token.encode(), hashlib.sha256).hexdigest()
+            request.state.classifier_visitor = hashlib.sha256(token.encode()).hexdigest()
     response=await call_next(request)
+    if visitor_cookie:
+        response.set_cookie('melos_visitor',visitor_cookie,max_age=2592000,
+                            httponly=True,secure=public_deployment(),samesite='lax',path='/api')
     if response.status_code==200 and re.fullmatch(r'/assets/paintings/[^/]+\.[0-9a-f]{8}\.(?:avif|webp)',request.url.path):
         response.headers['Cache-Control']='public, max-age=31536000, immutable'
     elif request.url.path.startswith('/api/'):
@@ -275,6 +302,9 @@ def claim(id:str):
 def classifier_status():
     try:
         from .classifier import provider_status
+        from .jev_gateway import public_enabled
+        if public_deployment() and not public_enabled():
+            return {'configured':False,'reason':'Public Jev comparison is disabled by the server operator.'}
         return provider_status()
     except (ImportError,OSError,RuntimeError) as exc:
         return {'configured':False,'reason':safe_error(exc)}
@@ -477,12 +507,13 @@ def word(form: str, passage_id: str=''):
 
 
 class ContextRequest(BaseModel):
+    model_config = {'extra': 'forbid'}
     form: str = Field(min_length=1,max_length=200)
     passage_id: str = Field(min_length=1,max_length=500)
 
 
 @app.post('/api/classify-context')
-def classify_context_request(request:ContextRequest):
+def classify_context_request(request:ContextRequest,http_request:Request):
     """Explicit, bounded inference action; it never modifies source evidence."""
     from .classifier import classify_context
     analysis=word(request.form,request.passage_id)
@@ -512,8 +543,21 @@ def classify_context_request(request:ContextRequest):
                 profile_claims.append(found)
         except (OSError,RuntimeError,sqlite3.Error):
             pass
-    result=classify_context(request.form,analysis['context'],candidates=candidates,
-                            claims=claims,author_profile=profile_claims)
+    from .jev_gateway import CachedJevProvider, GatewayLimit, GatewayUnavailable, public_enabled
+    from .classifier import configured_provider
+    provider = None
+    if public_enabled():
+        try:
+            provider = CachedJevProvider(configured_provider(), http_request.state.classifier_visitor)
+        except (GatewayUnavailable, OSError, ValueError):
+            raise HTTPException(503,'Classifier cache is unavailable; no paid request was made.')
+    try:
+        result=classify_context(request.form,analysis['context'],candidates=candidates,
+                                claims=claims,author_profile=profile_claims,provider=provider)
+    except GatewayLimit as exc:
+        raise HTTPException(429,str(exc),headers={'Retry-After':str(exc.retry_after)})
+    except GatewayUnavailable:
+        raise HTTPException(503,'Classifier state is unavailable. Please try again later.')
     result['candidate_origin']=candidate_origin
     if selection_note:
         result['warnings'].append(selection_note)

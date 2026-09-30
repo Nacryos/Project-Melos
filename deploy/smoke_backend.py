@@ -47,7 +47,7 @@ get('/api/search', q='Sappho Cretan grove cold water and roses', mode='themes', 
 assert get('/api/usage-space', q='ἔρος', limit=10)['points']
 try:
     urlopen(Request(BASE + '/api/classify-context', data=b'{}', headers={'Content-Type':'application/json'}), timeout=10)
-    raise AssertionError('Paid public classifier unexpectedly enabled')
+    raise AssertionError('Invalid classifier request unexpectedly accepted')
 except HTTPError as error:
-    assert error.code == 403
-print('Hosted read API checks passed; paid public classification remains blocked.', flush=True)
+    assert error.code == (422 if status.get('classifier',{}).get('configured') else 403)
+print('Hosted read API checks passed; invalid classification request rejected without a paid call.', flush=True)

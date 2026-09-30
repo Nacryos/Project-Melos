@@ -9,6 +9,8 @@ screenshots/
 assets/source/
 requirements.txt
 deploy/
+runtime/
+secrets/
 .dockerignore
 *.py
 *.sqlite*

@@ -18,14 +18,14 @@ Host `backend.server:app` on a service with persistent storage for the accepted 
 
 Configure the API's `MELOS_CORS_ORIGINS` with the exact Vercel production and preview origins that should access it, and set `MELOS_PUBLIC_DEPLOYMENT=1` on the public API host. Browser CORS must allow the reader's read requests. Verify the API status, author/work listing, search, passage, word lookup, and usage space from the deployed frontend origin. A local browser test against `127.0.0.1` does not establish that public users can reach the API.
 
-Any hosted classification credential (`TYPESAFE_API_KEY` or `JEV_API_KEY`) belongs only in the API host's secret environment. The frontend must never contain the credential or call a paid classifier provider directly. The current `/api/classify-context` endpoint is local-only and returns 403 for remote callers or when `MELOS_PUBLIC_DEPLOYMENT=1`. The public reader can expose the sourced candidate analyses while contextual hosted classification remains unavailable. Before enabling that paid endpoint publicly, implement authentication or other abuse controls, rate limits, request size limits, and usage monitoring on the API host. Browser-visible API calls can be replayed by anyone; CORS by itself is not access control.
+Any hosted classification credential (`TYPESAFE_API_KEY` or `JEV_API_KEY`) belongs only on the API host. The frontend never contains it or calls TypeSafe directly. Public `/api/classify-context` requires explicit `MELOS_PUBLIC_CLASSIFIER=1`; otherwise it remains local-only. The enabled route accepts only small JSON requests naming an existing corpus passage and form, constructs the source evidence server-side, and passes paid decisions through durable cache/quota checks. CORS and browser-session cookies are not authentication; the global persistent quota bounds new provider attempts even when cookies are reset or the Funnel endpoint is called directly.
 
 ## Release check
 
 1. Complete the accepted corpus and indexes, and verify local backend tests and `/api/status` report the intended coverage.
 2. Provision the persistent HTTPS API service and set its exact allowed frontend origins. Check read endpoints and operational limits.
 3. Configure `MELOS_API_ORIGIN` in Vercel. Build the static artifact and inspect `dist/` for only the allowed frontend paths. `dist/` is Git-ignored.
-4. Deploy a Vercel preview and test reader searches, passage navigation, word inspection, usage space, design studio, and unavailable-service states in a browser. Confirm the public contextual-classifier action reports its local-only restriction, browser calls go to the HTTPS API origin, and no keys or corpus files appear in the deployed assets.
+4. Deploy a Vercel preview and test reader searches, passage navigation, word inspection, usage space, design studio, and unavailable-service states in a browser. Confirm contextual comparisons are labelled as model proposals, repeat decisions use the cache, quota errors are clear, and no keys or corpus files appear in deployed assets.
 5. Promote only after the preview checks pass and the operator has selected and documented the publication policy. Extraction acceptance does not itself establish redistribution permission.
 
 Vercel project configuration follows its [build and output directory](https://vercel.com/docs/builds/configure-a-build) and [routing configuration](https://vercel.com/docs/project-configuration/vercel-json) documentation.
@@ -43,15 +43,24 @@ The frontend and backend are connected. Public API checks run with `python deplo
 
 ## Basecamp backend (2026-09-30)
 
-The backend now runs on the existing Hetzner Basecamp machine in `/home/alvin/services/melos`, container `melos-api`, image `melos-api:20260930`. Host port `127.0.0.1:8791` is intentionally loopback-only. No existing Basecamp services or firewall rules were changed.
+The backend now runs on the existing Hetzner Basecamp machine in `/home/alvin/services/melos`, container `melos-api`, image `melos-api:20260930-jev`. The stopped `melos-api-before-jev` container retains the pre-Jev version for rollback. Host port `127.0.0.1:8791` is intentionally loopback-only. No other Basecamp services or firewall rules were changed.
 
 - Runtime: 125 files, 6,433,058,045 source bytes; all transfer hashes verified and all three SQLite quick checks passed. The original local corpus remains intact.
 - Coverage: 287,536 source records and 111,578 embedded records. Read endpoints, sourced word analysis, Wiktionary lookup, dense search, and usage-space projection passed `deploy/smoke_backend.py` on the host.
 - Warm measured container memory: about 1.87 GiB. Repeated semantic queries took 0.18–0.30 seconds in the bounded smoke test; this is not a concurrent-load benchmark.
-- Limits: two CPU cores, low CPU scheduling weight, 8 GiB memory with no container swap, eight concurrent HTTP connections, one worker, and bounded logs. Data and model mounts are read-only; the container has no access to other projects, Docker's socket, or a Jev key.
+- Limits: two CPU cores, low CPU scheduling weight, 8 GiB memory with no container swap, eight concurrent HTTP connections, one worker, and bounded logs. Corpus and model mounts remain read-only; only separate operational classifier state is writable. No access to other projects or Docker's socket is provided.
 - Encoder: CPU BGE-M3, pinned model revision in `deploy/cache_model.py`; runtime downloads are disabled.
 - Publication: the owner explicitly selected `MELOS_PUBLICATION_POLICY=source-labels`. This overrides only conservative publication filtering. Source labels, including unknown rights, are preserved; provenance/hash acceptance checks remain enforced. This selection is not a conclusion that every public source grants redistribution permission.
-- Paid classification: `MELOS_PUBLIC_DEPLOYMENT=1` still blocks `/api/classify-context` with HTTP 403 regardless of publication policy. No API key is shipped in the image or frontend.
+- Paid classification: enabled with pinned `jev-1.13.0`. The existing key is stored in owner-only `secrets/jev.env`, mounted read-only at `/run/secrets/jev.env` and loaded by Uvicorn. It is not shipped in the image, Docker environment configuration, Vercel, Git, or logs. The transfer helper selects only the Jev key from the local environment; it never uploads the entire local `.env`.
+
+### Jev cache and budgets
+
+- `runtime/classifier.sqlite` is operational state, not source evidence. Cache identity includes the exact evidence packet, configured model, and explicit prompt/schema version. Changed evidence does not reuse an older decision. Entries expire after 30 days; maximum 20,000 cached decisions.
+- Defaults: 500 new provider attempts per UTC day site-wide; 10 per minute and 60 per day per signed browser session; at most two concurrent calls. Each attempt is reserved atomically before contacting Jev, including failed attempts. Duplicate in-flight packets do not start another call. Cached results remain available after quota exhaustion.
+- Session cookies are HttpOnly, Secure in production, SameSite=Lax, and contain no key or raw IP. Visitors can reset cookies, so they are a convenience throttle, not user authentication. Global quotas persist across restarts. The provider's own capped key is an additional limit, not a replacement for these checks.
+- API outcomes: 429 with Retry-After for busy/quota conditions; 503 for unavailable model/cache state; invalid or oversized requests fail before a paid call. The model can choose a sourced candidate or abstain; its preference signals are not calibrated philological probabilities.
+- Verify without spending: `python deploy/smoke_backend.py --origin https://greeklyric.com`. Explicit paid check: `python deploy/smoke_jev.py --allow-paid`, which requests a real Sappho comparison and verifies a cache hit on repetition. Initial live verification returned `jev-1.13.0`, one new comparison, then a cached repeat.
+- Set `MELOS_PUBLIC_CLASSIFIER=0` when recreating the container to disable new public comparisons without changing corpus access. Adjust `MELOS_CLASSIFIER_DAILY_LIMIT`, `MELOS_CLASSIFIER_VISITOR_MINUTE_LIMIT`, `MELOS_CLASSIFIER_VISITOR_DAILY_LIMIT`, and `MELOS_CLASSIFIER_CONCURRENCY` in the container configuration as needed. Back up the runtime database alongside deployment state if preserving usage accounting across host recovery is required.
 
 ### Public network route
 

@@ -740,7 +740,7 @@
       section.append(node('p', 'inspector-message', state.classifierStatus?.reason || 'Contextual model comparison is not configured.'));
       return;
     }
-    const button = node('button', 'classifier-action', 'Compare candidates with model');
+    const button = node('button', 'classifier-action', 'Compare candidates with Jev');
     button.type = 'button';
     const output = node('div', 'classifier-output');
     section.append(button, output);
@@ -763,6 +763,9 @@
           output.append(node('p', 'candidate-reason', 'Other source candidates remain listed above. This proposal does not replace their source claims.'));
         } else output.append(node('p', 'warning', `Model abstained. ${result.reason || 'The available evidence did not support a selection.'}`));
         if (result.model) output.append(node('p', 'candidate-reason', `Model: ${result.model}. ${result.reason || ''}`));
+        if (result.cache_hit != null) output.append(node('p', 'candidate-reason', result.cache_hit
+          ? 'Cached comparison for this passage and evidence; no new Jev call.'
+          : 'New Jev comparison. Repeat lookups can reuse this result.'));
         const preference = result.model_probabilities_uncalibrated;
         const confidence = result.model_confidence_uncalibrated;
         if (preference != null || confidence != null) {

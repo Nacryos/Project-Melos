@@ -19,6 +19,7 @@ from .textutils import normalize, tokenize
 
 
 JEV_ENDPOINT = "https://api.typesafe.ai/v1/systemone"
+JEV_MODEL = 'jev-1.13.0'
 MAX_CANDIDATES = 12
 MAX_CLAIMS = 24
 MAX_STATE_CHARS = 16000
@@ -192,7 +193,7 @@ class JevProvider:
 def configured_provider() -> DecisionProvider | None:
     """Use Jev if configured; local inference needs validation and opt-in."""
     if os.environ.get("TYPESAFE_API_KEY") or os.environ.get("JEV_API_KEY"):
-        return JevProvider()
+        return JevProvider(model=os.environ.get('MELOS_JEV_MODEL', JEV_MODEL))
     try:
         from .local_classifier import LocalModelProvider, local_model_status
         status = local_model_status()
@@ -208,7 +209,7 @@ def provider_status() -> dict[str, Any]:
     """Describe capability without exposing credentials or calling a model."""
     if os.environ.get("TYPESAFE_API_KEY") or os.environ.get("JEV_API_KEY"):
         return {"configured": True, "provider": "TypeSafe Jev",
-                "model": "jev-latest", "reason": "Bearer key is configured; no request made."}
+                "model": os.environ.get('MELOS_JEV_MODEL', JEV_MODEL), "reason": "Jev is configured; each comparison is an evidence-bound model proposal."}
     try:
         from .local_classifier import local_model_status
         status = local_model_status()
@@ -268,12 +269,17 @@ def classify_context(
     if provider is None:
         result["reason"] = provider_status()["reason"]
         return result
+    from .jev_gateway import GatewayLimit, GatewayUnavailable
     try:
         answer = provider.decide(packet)
+    except (GatewayLimit, GatewayUnavailable):
+        raise
     except (RuntimeError, ValueError, TypeError, TimeoutError) as exc:
         result["reason"] = str(exc)
         return result
     choice = answer.get("choice")
+    if 'cache_hit' in answer:
+        result['cache_hit'] = bool(answer['cache_hit'])
     result["model"] = answer.get("model")
     if not isinstance(result["model"], str) or not result["model"]:
         result["reason"] = "Provider did not identify the model used."
