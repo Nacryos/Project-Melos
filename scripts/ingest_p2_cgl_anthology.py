@@ -146,14 +146,20 @@ def block_lines(block: Tag) -> list[dict]:
     lines: list[dict] = []
     pending_label = ""
     current: list[str] = []
+    gap_markup: list[dict] = []
 
     def flush() -> None:
-        nonlocal current, pending_label
+        nonlocal current, pending_label, gap_markup
         text = clean("".join(current))
         if text:
-            lines.append({"label": pending_label, "text": text})
+            line = {"label": pending_label, "text": text}
+            if gap_markup:
+                line["source_gap_markup"] = gap_markup
+                line["plain_text_limitation"] = "Source CSS gap spacing is not represented in plain text; no missing-letter count inferred."
+            lines.append(line)
             pending_label = ""
         current = []
+        gap_markup = []
 
     container = block.select_one("td") or block
     for node in container.descendants:
@@ -163,17 +169,69 @@ def block_lines(block: Tag) -> list[dict]:
                 continue
             current.append(str(node))
         elif isinstance(node, Tag):
+            if "gap" in node.get("class", []):
+                gap_markup.append({"tag": node.name, "classes": node.get("class", []),
+                                   "source_html": str(node)})
             if node.name == "br":
                 flush()
             elif node.name == "p" and current:
                 flush()
             elif "numbering" in node.get("class", []):
-                flush()
-                pending_label = clean(node.get_text(" "))
+                # Greek verse often starts with this marker; translations can
+                # end their paragraph with it. The source p/br boundaries,
+                # not the marker's position, delimit the numbered line.
+                label = clean(node.get_text(" "))
+                if pending_label and pending_label != label:
+                    raise ValueError("Conflicting numbering spans inside one source line")
+                pending_label = label
     flush()
     # Paragraph-per-line layouts (translations) leave text in <p> elements; the
     # loop above flushes at each <p> boundary, so nothing is joined across lines.
     return lines
+
+
+def inline_translations(container: Tag) -> list[dict]:
+    """Observed CGL layout: each direct text block immediately precedes its credit.
+
+    Empty clearfix elements are layout only. Other unpaired content is an
+    error, never a reason to borrow a credit from a later translation.
+    """
+    children = []
+    for node in container.children:
+        if isinstance(node, NavigableString):
+            if clean(str(node)):
+                raise ValueError("Unscoped text in inline translation container")
+            continue
+        if not isinstance(node, Tag):
+            continue
+        if "clearfix" in node.get("class", []) and not clean(node.get_text(" ")):
+            continue
+        children.append(node)
+    if len(children) % 2:
+        raise ValueError("Inline translation is missing its adjacent credit")
+    translations = []
+    for offset in range(0, len(children), 2):
+        block, credit = children[offset:offset + 2]
+        if block.name != "div" or "anth_text" not in block.get("class", []):
+            raise ValueError("Unexpected inline translation block")
+        if credit.name != "div" or "pull-right" not in credit.get("class", []):
+            raise ValueError("Inline translation is not followed by its credit")
+        names = credit.find_all("i", recursive=False)
+        if len(names) != 1 or not clean(names[0].get_text(" ")):
+            raise ValueError("Inline translation has missing or ambiguous credit")
+        translator = clean(names[0].get_text(" "))
+        if clean(credit.get_text(" ")) != translator:
+            raise ValueError("Additional unscoped content in inline translation credit")
+        lines = block_lines(block)
+        text = "\n".join(line["text"] for line in lines)
+        if not text:
+            raise ValueError("Inline translation text block is empty")
+        translations.append({"translator": translator, "lines": lines, "text": text,
+                             "pane_id": "", "source_translation_locator": {
+                                 "layout": "inline_adjacent_credit",
+                                 "block_ordinal": offset // 2 + 1,
+                                 "credit_selector": "adjacent div.pull-right > i"}})
+    return translations
 
 
 def parse_text_page(html: bytes, entry: dict) -> dict:
@@ -193,6 +251,14 @@ def parse_text_page(html: bytes, entry: dict) -> dict:
     translations = []
     tabs = soup.select("div.right-part ul.nav-tabs a[data-toggle=tab]")
     panes = soup.select("div.right-part div.tab-content > div.tab-pane")
+    inline_blocks = soup.select("div.right-part div.tab-content > div.anth_text")
+    if inline_blocks:
+        containers = soup.select("div.right-part div.tab-content")
+        if panes or len(containers) != 1 or len(tabs) > 1 or any(tab.get("href") for tab in tabs):
+            raise ValueError("Ambiguous mixed inline/tabbed translation layout")
+        translations = inline_translations(containers[0])
+        # The single unlinked tab is a section heading, not a translator credit.
+        tabs = []
     pane_by_id: dict[str, Tag] = {}
     for pane in panes:
         pane_id = pane.get("id", "")
@@ -223,7 +289,31 @@ def parse_text_page(html: bytes, entry: dict) -> dict:
             "greek_text": greek_text, "translations": translations, "edition_token": edition}
 
 
-def download_raw_selection(raw_dir: Path, text_ids: list[int], *, delay: float) -> dict:
+def discover_catalog(stage_dir: Path, *, delay: float) -> dict:
+    """Save the source catalog and exact discovered URL set for independent review."""
+    stage_dir = stage_dir.resolve()
+    stage_dir.relative_to((ROOT / "data/staging").resolve())
+    if stage_dir.exists() and any(stage_dir.iterdir()):
+        raise ValueError("Discovery staging directory must be new or empty")
+    receipt: dict = {}
+    catalog_path = stage_dir / "browse.html"
+    content = fetch(CATALOG, catalog_path, refresh=False, delay=delay, receipt=receipt)
+    entries = parse_catalog(content)
+    ids = [entry["text_id"] for entry in entries]
+    duplicate_ids = [text_id for text_id, count in Counter(ids).items() if count > 1]
+    discovery = {"status": "discovered_pending_independent_audit", "catalog_receipt": {
+        **receipt, "raw_path": catalog_path.relative_to(ROOT).as_posix(),
+        "sha256": sha256(content), "bytes": len(content)},
+        "page_count": len(entries), "unique_page_count": len(set(ids)), "duplicate_ids": duplicate_ids,
+        "pages": [{**entry, "url": f"{CATALOG}?text_id={entry['text_id']}"} for entry in entries]}
+    (stage_dir / "catalog-discovery.json").write_text(json.dumps(discovery, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if not entries or duplicate_ids:
+        raise ValueError("Catalog discovery empty or contains duplicate page IDs; audit required")
+    return discovery
+
+
+def download_raw_selection(raw_dir: Path, text_ids: list[int], *, delay: float,
+                           resume: bool = False, discovery: dict | None = None) -> dict:
     """Fetch only catalog, contributors and requested pages into fresh staging.
 
     No text-page parser, processed records or production corpus is touched.
@@ -233,20 +323,38 @@ def download_raw_selection(raw_dir: Path, text_ids: list[int], *, delay: float) 
     raw_dir.relative_to((ROOT / "data/staging").resolve())
     if not text_ids or len(set(text_ids)) != len(text_ids):
         raise ValueError("Download-only selection requires distinct text IDs")
-    if raw_dir.exists() and any(raw_dir.iterdir()):
-        raise ValueError("Download-only raw directory must be new or empty")
-    raw_dir.mkdir(parents=True, exist_ok=True)
-    manifest = {"status": "raw_download_in_progress", "requested_text_ids": text_ids,
-                "files": [], "failures": []}
     manifest_path = raw_dir / "fetch-manifest.json"
+    if raw_dir.exists() and any(raw_dir.iterdir()) and not (resume and manifest_path.exists()):
+        raise ValueError("Download-only raw directory must be new/empty or have a resume manifest")
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    manifest = json.loads(manifest_path.read_bytes()) if resume and manifest_path.exists() else {
+        "status": "raw_download_in_progress", "requested_text_ids": text_ids, "files": [], "failures": []}
+    if manifest["requested_text_ids"] != text_ids:
+        raise ValueError("Resume selection differs from recorded request")
+    completed = {item["requested_url"]: item for item in manifest["files"]}
+    if len(completed) != len(manifest["files"]):
+        raise ValueError("Duplicate URL receipts in resume manifest")
+    manifest["status"] = "raw_download_in_progress"
 
     def checkpoint() -> None:
-        manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        temporary = manifest_path.with_suffix(".json.tmp")
+        temporary.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        temporary.replace(manifest_path)
 
     def retrieve(url: str, filename: str, entry: dict | None = None) -> bytes:
+        if url in completed:
+            saved = completed[url]
+            path = (raw_dir / filename).resolve()
+            content = path.read_bytes()
+            if ((ROOT / saved["raw_path"]).resolve() != path or saved.get("http_status") != 200
+                    or len(content) != saved["bytes"] or sha256(content) != saved["sha256"]):
+                raise ValueError(f"Resume artifact failed verification: {filename}")
+            return content
         receipt: dict = {}
         try:
-            content = fetch(url, raw_dir / filename, refresh=False, delay=delay, receipt=receipt)
+            # An interrupted fetch may have saved bytes before its receipt; it
+            # must be re-fetched, not promoted to a fabricated HTTP receipt.
+            content = fetch(url, raw_dir / filename, refresh=True, delay=delay, receipt=receipt)
         except Exception as exc:
             manifest["status"] = "raw_download_failed"
             manifest["failures"].append({"requested_url": url, "error": str(exc),
@@ -258,10 +366,19 @@ def download_raw_selection(raw_dir: Path, text_ids: list[int], *, delay: float) 
         if entry is not None:
             receipt["catalog_entry"] = entry
         manifest["files"].append(receipt)
+        completed[url] = receipt
+        for failure in manifest["failures"]:
+            if failure.get("requested_url") == url and not failure.get("resolved_at_utc"):
+                failure["resolved_at_utc"] = receipt["fetched_at_utc"]
         checkpoint()
         return content
 
+    checkpoint()
     catalog = retrieve(CATALOG, "browse.html")
+    if discovery is not None and sha256(catalog) != discovery["catalog_receipt"]["sha256"]:
+        manifest["status"] = "catalog_changed_since_discovery"
+        checkpoint()
+        raise ValueError("Catalog changed since discovery audit; stop for a new source review")
     entries = parse_catalog(catalog)
     selected = []
     for text_id in text_ids:
@@ -276,6 +393,8 @@ def download_raw_selection(raw_dir: Path, text_ids: list[int], *, delay: float) 
     for entry in selected:
         text_id = entry["text_id"]
         retrieve(f"{CATALOG}?text_id={text_id}", f"text_{text_id}.html", entry)
+        if len(manifest["files"]) % 25 == 0:
+            print(f"Downloaded/verified {len(manifest['files'])}/{len(selected) + 2} raw files", flush=True)
     manifest["status"] = "raw_download_complete_pending_independent_audit"
     checkpoint()
     return manifest
@@ -289,18 +408,89 @@ def main() -> None:
     parser.add_argument("--download-only", action="store_true", help="fetch selected raw pages only; no final records")
     parser.add_argument("--raw-dir", type=Path, help="new/empty directory under data/staging for download-only mode")
     parser.add_argument("--text-id", type=int, action="append", default=[], help="catalog text ID for download-only mode (repeatable)")
+    parser.add_argument("--parse-raw-manifest", type=Path, help="parse an independently audited download-only manifest without network access")
+    parser.add_argument("--stage-dir", type=Path, help="new/empty directory under data/staging for provisional parsed output")
+    parser.add_argument("--discover-only", action="store_true", help="save full catalog URL discovery for independent review")
+    parser.add_argument("--download-discovery", type=Path, help="download the complete independently reviewed discovery set")
+    parser.add_argument("--resume", action="store_true", help="resume a download-discovery run using verified receipts")
+    parser.add_argument("--inspect-only", action="store_true", help="with --parse-raw-manifest, write parser diagnostics but no corpus records")
     args = parser.parse_args()
+    if args.discover_only:
+        if not args.stage_dir or args.download_only or args.download_discovery or args.parse_raw_manifest or args.raw_dir or args.text_id or args.resume:
+            parser.error("--discover-only requires --stage-dir and no other collection mode")
+        discovery = discover_catalog(args.stage_dir, delay=args.delay)
+        print(f"Discovered {discovery['page_count']} catalog pages; pending independent source audit.")
+        return
+    if args.download_discovery:
+        if not args.raw_dir or args.download_only or args.parse_raw_manifest or args.text_id or args.stage_dir or args.refresh or args.limit:
+            parser.error("--download-discovery requires --raw-dir and rejects other collection modes")
+        discovery = json.loads(args.download_discovery.read_bytes())
+        if discovery.get("duplicate_ids") or discovery.get("page_count") != len(discovery.get("pages", [])):
+            raise ValueError("Invalid discovery manifest")
+        ids = [page["text_id"] for page in discovery["pages"]]
+        if any(page["url"] != f"{CATALOG}?text_id={page['text_id']}" for page in discovery["pages"]):
+            raise ValueError("Discovery URL is outside the catalog source contract")
+        manifest = download_raw_selection(args.raw_dir, ids, delay=args.delay, resume=args.resume, discovery=discovery)
+        print(f"Downloaded/verified {len(manifest['files'])} raw files; pending independent audit.")
+        return
+    if args.resume:
+        parser.error("--resume requires --download-discovery")
+    if args.inspect_only and not args.parse_raw_manifest:
+        parser.error("--inspect-only requires --parse-raw-manifest")
     if args.download_only:
-        if not args.raw_dir or args.refresh or args.limit:
+        if not args.raw_dir or args.refresh or args.limit or args.parse_raw_manifest or args.stage_dir:
             parser.error("--download-only requires --raw-dir and does not accept --refresh or --limit")
         manifest = download_raw_selection(args.raw_dir, args.text_id, delay=args.delay)
         print(f"Downloaded {len(manifest['files'])} raw files; pending independent audit. No final records written.")
         return
     if args.raw_dir or args.text_id:
         parser.error("--raw-dir and --text-id require --download-only")
-    RAW.mkdir(parents=True, exist_ok=True)
-    catalog_raw = fetch(CATALOG, RAW / "browse.html", refresh=args.refresh, delay=args.delay)
-    contributors_raw = fetch(CONTRIBUTORS, RAW / "contributors.html", refresh=args.refresh, delay=args.delay)
+    raw_directory, output_path, report_path = RAW, OUT, REPORT
+    audited_files: dict[str, tuple[Path, bytes]] = {}
+    manifest = None
+    manifest_raw = b""
+    if args.parse_raw_manifest:
+        if not args.stage_dir or args.refresh or args.limit:
+            parser.error("--parse-raw-manifest requires --stage-dir and rejects --refresh/--limit")
+        manifest_path = args.parse_raw_manifest.resolve()
+        manifest_path.relative_to((ROOT / "data/staging").resolve())
+        manifest_raw = manifest_path.read_bytes()
+        manifest = json.loads(manifest_raw)
+        if manifest.get("status") != "raw_download_complete_pending_independent_audit" or any(not f.get("resolved_at_utc") for f in manifest.get("failures", [])):
+            raise ValueError("Raw manifest is incomplete or contains failures")
+        raw_directory = manifest_path.parent
+        for item in manifest["files"]:
+            path = (ROOT / item["raw_path"]).resolve()
+            path.relative_to(raw_directory)
+            content = path.read_bytes()
+            if item.get("http_status") != 200 or sha256(content) != item["sha256"] or len(content) != item["bytes"]:
+                raise ValueError(f"Raw input failed hash/size/HTTP verification: {path.name}")
+            url = item["requested_url"]
+            if url in audited_files:
+                raise ValueError("Duplicate raw manifest URL")
+            audited_files[url] = (path, content)
+        expected = {CATALOG, CONTRIBUTORS, *(f"{CATALOG}?text_id={n}" for n in manifest["requested_text_ids"])}
+        if set(audited_files) != expected:
+            raise ValueError("Raw manifest files do not exactly match requested selection")
+        stage_dir = args.stage_dir.resolve()
+        stage_dir.relative_to((ROOT / "data/staging").resolve())
+        if stage_dir.exists() and any(stage_dir.iterdir()):
+            raise ValueError("Parsed staging directory must be new or empty")
+        output_path, report_path = stage_dir / "cgl-pilot.jsonl", stage_dir / "parser-report.json"
+    elif args.stage_dir:
+        parser.error("--stage-dir requires --parse-raw-manifest")
+
+    def acquire(url: str, path: Path) -> bytes:
+        if manifest is not None:
+            actual_path, content = audited_files[url]
+            if actual_path != path.resolve():
+                raise ValueError("Raw manifest URL/path mismatch")
+            return content
+        return fetch(url, path, refresh=args.refresh, delay=args.delay)
+
+    raw_directory.mkdir(parents=True, exist_ok=True)
+    catalog_raw = acquire(CATALOG, raw_directory / "browse.html")
+    contributors_raw = acquire(CONTRIBUTORS, raw_directory / "contributors.html")
     entries = parse_catalog(catalog_raw)
     if not entries:
         raise ValueError("Catalog parse found no text links")
@@ -313,13 +503,16 @@ def main() -> None:
         unique.append(entry)
     if args.limit:
         unique = unique[:args.limit]
+    if manifest is not None:
+        by_id = {entry["text_id"]: entry for entry in unique}
+        unique = [by_id[text_id] for text_id in manifest["requested_text_ids"]]
     records: list[dict] = []
     failures: list[dict] = []
     for number, entry in enumerate(unique, 1):
         url = f"{CATALOG}?text_id={entry['text_id']}"
-        path = RAW / f"text_{entry['text_id']}.html"
+        path = raw_directory / f"text_{entry['text_id']}.html"
         try:
-            html = fetch(url, path, refresh=args.refresh, delay=args.delay)
+            html = acquire(url, path)
             page = parse_text_page(html, entry)
         except Exception as exc:  # noqa: BLE001 - logged per page, collection continues
             failures.append({"text_id": entry["text_id"], "url": url, "error": str(exc)})
@@ -360,20 +553,50 @@ def main() -> None:
                 "language": "ell", "text": translation["text"], "kind": "translation", "quality": "source_text",
                 "license": "all rights reserved (translator / Centre for the Greek Language); see metadata.rights_note",
                 "parent_id": base_id, "lines": translation["lines"],
-                "metadata": {**metadata, "translator": translation["translator"], "translation_of": base_id},
+                "metadata": {**metadata, "translator": translation["translator"], "translation_of": base_id,
+                             "source_translation_locator": translation.get("source_translation_locator") or {
+                                 "layout": "linked_tab", "pane_id": translation["pane_id"]}},
             })
         if number % 25 == 0:
             print(f"{number}/{len(unique)} pages, {len(records)} records", flush=True)
     if not records:
         raise RuntimeError("No records collected; output not written")
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    temporary = OUT.with_suffix(".jsonl.tmp")
+    if args.inspect_only:
+        diagnostic = {
+            "status": "parser_inspection_pending_independent_audit", "failures": failures,
+            "input_manifest": args.parse_raw_manifest.resolve().relative_to(ROOT).as_posix(),
+            "input_manifest_sha256": sha256(manifest_raw), "requested_pages": len(unique),
+            "parser_sha256": sha256(Path(__file__).read_bytes()),
+            "counts_by_kind": dict(Counter(record["kind"] for record in records)),
+            "records": [{"id": record["id"], "source_url": record["source_url"],
+                         "raw_sha256": record["raw_sha256"], "author": record["author"],
+                         "citation": record["citation"], "language": record["language"],
+                         "kind": record["kind"], "parent_id": record.get("parent_id"),
+                         "text_sha256": sha256(record["text"].encode("utf-8")),
+                         "text_characters": len(record["text"]), "line_count": len(record["lines"]),
+                         "lines_sha256": sha256(json.dumps(record["lines"], ensure_ascii=False, sort_keys=True).encode("utf-8")),
+                         "source_numbered_lines": [{"line_index": index, "label": line["label"]}
+                                                   for index, line in enumerate(record["lines"]) if line["label"]],
+                         "gap_markup_count": sum(len(line.get("source_gap_markup", [])) for line in record["lines"]),
+                         "source_translation_locator": record["metadata"].get("source_translation_locator")}
+                        for record in records],
+        }
+        report_path.parent.mkdir(parents=True, exist_ok=True)
+        report_path.write_text(json.dumps(diagnostic, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        print(f"Inspected {len(unique)} pages: {len(records)} provisional records, {len(failures)} failures. Diagnostics only; no JSONL written.")
+        if failures:
+            sys.exit(1)
+        return
+    if manifest is not None and failures:
+        raise RuntimeError(f"Pilot parse failed; no final staging records written: {failures}")
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = output_path.with_suffix(".jsonl.tmp")
     with temporary.open("w", encoding="utf-8", newline="\n") as stream:
         for record in records:
             stream.write(json.dumps(record, ensure_ascii=False) + "\n")
-    temporary.replace(OUT)
+    temporary.replace(output_path)
     report = {
-        "status": "collected_pending_index_acceptance",
+        "status": "staged_pending_independent_parser_audit" if manifest is not None else "collected_pending_index_acceptance",
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "source_url": BASE, "catalog_url": CATALOG, "catalog_sha256": sha256(catalog_raw),
         "contributors_sha256": sha256(contributors_raw),
@@ -385,11 +608,14 @@ def main() -> None:
         "counts_by_author": dict(Counter(r["author"] for r in records if r["kind"] == "text")),
         "counts_by_section": dict(Counter(r["metadata"]["catalog_section"] for r in records if r["kind"] == "text")),
         "cited_edition_tokens": dict(Counter(r["metadata"].get("cited_edition_token") or "unspecified" for r in records if r["kind"] == "text")),
-        "output": OUT.relative_to(ROOT).as_posix(), "output_sha256": sha256(OUT.read_bytes()),
+        "output": output_path.relative_to(ROOT).as_posix(), "output_sha256": sha256(output_path.read_bytes()),
     }
-    REPORT.parent.mkdir(parents=True, exist_ok=True)
-    REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {len(records)} records from {report['pages_collected']} pages to {OUT}; {len(failures)} failures", flush=True)
+    if manifest is not None:
+        report["input_manifest"] = args.parse_raw_manifest.resolve().relative_to(ROOT).as_posix()
+        report["input_manifest_sha256"] = sha256(manifest_raw)
+    report_path.parent.mkdir(parents=True, exist_ok=True)
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    print(f"Wrote {len(records)} records from {report['pages_collected']} pages to {output_path}; {len(failures)} failures", flush=True)
     if failures:
         sys.exit(1)
 

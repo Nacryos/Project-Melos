@@ -9,7 +9,7 @@ from urllib.parse import urlencode
 from urllib.request import urlopen
 
 
-def verify(origin):
+def verify(origin, *, cgl=False):
     def get(path, **params):
         with urlopen(origin.rstrip('/') + path + '?' + urlencode(params), timeout=60) as response:
             return json.load(response)
@@ -22,14 +22,38 @@ def verify(origin):
         print(json.dumps({'query': form, 'matches': result['total'], 'source_text_preserved': True}), flush=True)
     result = get('/api/search', q='Ibycus 286', mode='hybrid')
     assert result['mode'] == 'reference'
-    assert result['total'] == 1
-    assert result['results'][0]['reference_match']['coverage'] == 'reference_only'
-    print('Ibycus 286: exact catalogue-only result; no unrelated fallback.', flush=True)
+    if not cgl:
+        assert result['total'] == 1
+        assert result['results'][0]['reference_match']['coverage'] == 'reference_only'
+        print('Ibycus 286: exact catalogue-only result; no unrelated fallback.', flush=True)
+    else:
+        rows = {row['id']: row for row in result['results']}
+        greek_id = 'p2_cgl_anthology:354'
+        assert rows[greek_id]['reference_match']['coverage'] == 'text'
+        original = get('/api/passage', id=greek_id)
+        assert original['language'] == 'grc' and original['text']
+        assert original['citation'] == 'απ. 286 Page'
+        translated = get('/api/search', q='286 Page', author='Ibycus', language='ell', mode='hybrid')
+        credits = {'p2_cgl_anthology:354:tr1': 'Σ. Μενάρδος',
+                   'p2_cgl_anthology:354:tr2': 'Ηλ. Βουτιερίδης',
+                   'p2_cgl_anthology:354:tr3': 'Ι.Ν. Καζάζης'}
+        assert {row['id'] for row in translated['results']} == set(credits)
+        for row in translated['results']:
+            assert row['reference_match']['coverage'] == 'translation'
+            passage = get('/api/passage', id=row['id'])
+            assert passage['language'] == 'ell' and passage['kind'] == 'translation'
+            assert passage['parent_id'] == greek_id and passage['author'] == credits[row['id']]
+            assert passage['citation'] == original['citation'] and passage['text']
+        print('Ibycus 286: source Greek and all three explicitly linked, credited Modern Greek translations remain distinct.', flush=True)
     result = get('/api/word', form='φαίνεταί', passage_id='dcc-sappho:frag-31')
-    assert result['expansion_lemmas'] == []
-    assert any(row['lemma'] == 'ἐγώ' for row in result['candidates']), 'Original conflicting evidence must remain visible'
-    assert not any(row['automatic_expansion_eligible'] for row in result['candidates'])
-    print('Conflicting source lemma links remain visible but do not drive automatic expansion.', flush=True)
+    assert result['expansion_lemmas'] == ['φαίνω']
+    assert {row['lemma'] for row in result['candidates']} == {'φαίνω'}
+    quarantined = result['quarantined_source_analyses']
+    assert len(quarantined) == 1
+    assert quarantined[0]['lemma'] == 'ἐγώ'
+    assert quarantined[0]['sentence_id'] == '2857971' and quarantined[0]['token_id'] == '17'
+    assert quarantined[0]['status'] == 'quarantined_source_annotation'
+    print('Reviewed erroneous annotation is disclosed separately; only the independently attested verb drives analysis and expansion.', flush=True)
     source = get('/api/passage', id='dcc-sappho:brothers-poem')
     form = 'βασί̣λ̣η̣αν'
     assert form in source['text'], 'Original underdots must remain present in the edition text'
@@ -133,4 +157,6 @@ def verify(origin):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--origin', required=True)
-    verify(parser.parse_args().origin)
+    parser.add_argument('--cgl', action='store_true', help='Require the accepted CGL append (omit for QA13 rollback).')
+    args = parser.parse_args()
+    verify(args.origin, cgl=args.cgl)
