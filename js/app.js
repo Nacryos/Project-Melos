@@ -3,7 +3,7 @@ import { createDither } from './dither.js';
 // Each painting is paired with a line it answers. `focus` is the crop centre (0–1) for cover-fit.
 const PAINTINGS = [
   {
-    src: 'assets/paintings/alma-tadema.jpg', focus: [0.62, 0.45],
+    src: 'assets/paintings/alma-tadema.jpg', focus: [0.62, 0.45], focusTall: [0.2, 0.5],
     title: 'Sappho and Alcaeus', artist: 'Lawrence Alma-Tadema', year: '1881',
     gr: 'ἰόπλοκ᾽ ἄγνα μελλιχόμειδε Σάπφοι', tr: 'Violet-haired, holy, honey-smiling Sappho', cite: 'Alcaeus fr. 384 V',
   },
@@ -13,12 +13,12 @@ const PAINTINGS = [
     gr: 'Ἔρος δηὖτέ μ᾽ ὀ λυσιμέλης δόνει', tr: 'Eros the limb-loosener shakes me again', cite: 'Sappho fr. 130.1 V',
   },
   {
-    src: 'assets/paintings/godward.jpg', focus: [0.6, 0.4],
+    src: 'assets/paintings/godward.jpg', focus: [0.6, 0.4], focusTall: [0.66, 0.45],
     title: 'In the Days of Sappho', artist: 'John William Godward', year: '1904',
     gr: 'ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα', tr: 'Immortal Aphrodite of the intricate throne', cite: 'Sappho fr. 1.1 V',
   },
   {
-    src: 'assets/paintings/altar.jpg', focus: [0.5, 0.55],
+    src: 'assets/paintings/altar.jpg', focus: [0.5, 0.55], focusTall: [0.4, 0.55],
     title: 'Sacrifice at the altar', artist: 'Artist to be confirmed', year: '', verify: true,
     gr: 'βῶμοι δὲ τεθυμιάμενοι λιβανώτωι', tr: 'And altars smoking with frankincense', cite: 'Sappho fr. 2.4 V',
   },
@@ -37,7 +37,7 @@ const POETS = [
   { en: 'Bacchylides', gr: 'Βακχυλίδης', dt: 'c. 518–451' },
 ];
 
-const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 4, spread: 1, sat: 1.35, con: 1.08, bri: 0, amount: 1, lens: 140 };
+const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 4, spread: 1, sat: 1.35, con: 1.08, bri: 0, amount: 1, lens: 140, shade: 0.6, grow: 3, flicker: 0.5, coarsen: 1.2 };
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = s => document.querySelector(s);
 const store = {
@@ -50,10 +50,12 @@ const canvas = $('#dither');
 let dither = null;
 try { dither = createDither(canvas); } catch (e) { console.error(e); }
 let params = { ...DEFAULTS, ...store.get() };
-let current = 0, busy = false, autoTimer = 0;
+let current = -1, autoTimer = 0;
 
 const loadImg = src => new Promise((ok, err) => { const i = new Image(); i.onload = () => ok(i); i.onerror = err; i.src = src; });
 const images = PAINTINGS.map(p => loadImg(p.src));
+// Upload every painting to the GPU as soon as it arrives, never mid-transition.
+const slots = PAINTINGS.map((p, i) => images[i].then(img => dither?.load(i, img, p.focus)));
 
 function setCopy(p) {
   $('#verse-gr').textContent = p.gr;
@@ -64,14 +66,38 @@ function setCopy(p) {
 }
 
 async function go(i, instant = false) {
-  if (busy || (i === current && !instant)) return;
-  busy = true; current = i;
-  const p = PAINTINGS[i], img = await images[i];
-  setCopy(p);
+  if (i === current) return;
+  current = i;
+  const p = PAINTINGS[i], slot = await slots[i];
+  if (i !== current) return;
+  const still = instant || reduceMotion || document.hidden || !dither;
+  // The quote fades out as the dissolve starts and returns at its midpoint.
+  const copy = [$('#verse'), $('#caption')];
+  const swap = () => { setCopy(p); copy.forEach(el => el.classList.remove('out')); requestAnimationFrame(placeShade); };
+  if (still) swap();
+  else { copy.forEach(el => el.classList.add('out')); setTimeout(() => current === i && swap(), 1100); }
   if (!dither) { const f = $('#fallback'); f.hidden = false; f.src = p.src; }
-  else if (instant || reduceMotion || document.hidden) dither.show(img, p.focus);
-  else await dither.transition(img, p.focus);
-  busy = false;
+  else if (still) dither.show(slot);
+  else dither.transition(slot);
+}
+const next = d => { go((current + d + PAINTINGS.length) % PAINTINGS.length); scheduleAuto(); };
+
+// The shadow sits behind the quote and search: an ellipse anchored low-left of the copy block.
+function placeShade() {
+  if (!dither) return;
+  // Portrait screens crop hard; use each painting's tall-crop centre so the figures stay in frame.
+  const tall = canvas.clientHeight > canvas.clientWidth;
+  slots.forEach((s, i) => s.then(slot => {
+    const f = (tall && PAINTINGS[i].focusTall) || PAINTINGS[i].focus;
+    if (slot) slot.foc = [f[0], 1 - f[1]];
+  }));
+  const c = $('.hero-copy').getBoundingClientRect(), r = canvas.getBoundingClientRect();
+  const narrow = r.width < 820;
+  dither.setShade(
+    c.left - r.left + c.width * (narrow ? .45 : .3),
+    c.top - r.top + c.height * .6,
+    Math.max(c.width * (narrow ? 1.1 : 1.25), 380),
+    Math.max(c.height * (narrow ? 1.5 : 1.9), 360));
 }
 
 function scheduleAuto() {
@@ -84,7 +110,7 @@ PAINTINGS.forEach((p, i) => {
   b.type = 'button'; b.role = 'tab';
   b.style.backgroundImage = `url(${p.src})`;
   b.setAttribute('aria-label', `${p.title}, ${p.artist}`);
-  b.onclick = () => { go(i); scheduleAuto(); };
+  b.onclick = e => { e.stopPropagation(); go(i); scheduleAuto(); };
   $('#thumbs').append(b);
 });
 
@@ -94,15 +120,38 @@ $('#credits').textContent = 'Paintings: ' + PAINTINGS.map(p =>
 if (dither) {
   dither.set(params);
   const hero = $('.hero');
-  hero.addEventListener('pointermove', e => { const r = canvas.getBoundingClientRect(); dither.pointer(e.clientX - r.left, e.clientY - r.top); });
-  hero.addEventListener('pointerleave', () => dither.pointer(null));
+  const at = e => { const r = canvas.getBoundingClientRect(); dither.pointer(e.clientX - r.left, e.clientY - r.top); };
+  // Mouse: lens follows the cursor. Touch: lens appears under the finger while pressed;
+  // a horizontal swipe changes painting (vertical drags still scroll, via touch-action: pan-y).
+  let swipe = null;
+  const onArt = e => !e.target.closest('button, input, select, a, .tune, .search');
+  hero.addEventListener('pointerdown', e => {
+    if (e.pointerType === 'mouse' || !onArt(e)) return;
+    swipe = { x: e.clientX, y: e.clientY }; at(e);
+  });
+  hero.addEventListener('pointermove', e => { if (e.pointerType === 'mouse' || swipe) at(e); });
+  const end = e => {
+    if (e.pointerType === 'mouse') return;
+    if (swipe && e.type === 'pointerup') {
+      const dx = e.clientX - swipe.x, dy = e.clientY - swipe.y;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) next(dx < 0 ? 1 : -1);
+    }
+    swipe = null; dither.pointer(null);
+  };
+  hero.addEventListener('pointerup', end);
+  hero.addEventListener('pointercancel', end);
+  hero.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') dither.pointer(null); });
+  new ResizeObserver(placeShade).observe(hero);
+  document.fonts?.ready.then(placeShade);
 }
+if (matchMedia('(max-width: 640px)').matches) $('#q').placeholder = 'Greek, Beta Code or English';
 go(0, true);
 scheduleAuto();
 
 /* ---------- Dither controls ---------- */
-const fields = ['on', 'palette', 'matrix', 'cell', 'levels', 'spread', 'sat', 'con', 'bri', 'amount', 'lens'];
-const fmt = { sat: v => `${Math.round(v * 100)}%`, amount: v => `${Math.round(v * 100)}%`, lens: v => v ? `${v}px` : 'off', cell: v => `${v}px` };
+const fields = ['on', 'palette', 'matrix', 'cell', 'levels', 'spread', 'sat', 'con', 'bri', 'amount', 'lens', 'shade', 'grow', 'flicker', 'coarsen'];
+const pct = v => `${Math.round(v * 100)}%`;
+const fmt = { sat: pct, amount: pct, shade: pct, flicker: pct, lens: v => v ? `${v}px` : 'off', cell: v => `${v}px`, grow: v => v ? `+${v}px` : 'off', coarsen: v => `${(1 + +v).toFixed(1)}×` };
 
 function syncControls() {
   for (const k of fields) {
@@ -123,10 +172,12 @@ for (const k of fields) {
 }
 syncControls();
 
-$('#tune-toggle').onclick = () => {
-  const t = $('#tune'), open = t.hidden;
-  t.hidden = !open; $('#tune-toggle').setAttribute('aria-expanded', open);
+const toggleTune = (open = $('#tune').hidden) => {
+  $('#tune').hidden = !open; $('#tune-toggle').setAttribute('aria-expanded', open);
+  if (!open) $('#tune-toggle').focus({ preventScroll: true });
 };
+$('#tune-toggle').onclick = () => toggleTune();
+$('#tune-close').onclick = () => toggleTune(false);
 $('#p-reset').onclick = () => apply(DEFAULTS);
 $('#p-copy').onclick = async e => {
   const { on, ...rest } = params;
@@ -143,8 +194,8 @@ $('#p-save').onclick = () => {
 addEventListener('keydown', e => {
   if (e.target.closest('input, select, textarea')) return;
   if (e.key === 'd' || e.key === 'D') apply({ on: !params.on });
-  if (e.key === 'ArrowRight') { go((current + 1) % PAINTINGS.length); scheduleAuto(); }
-  if (e.key === 'ArrowLeft') { go((current + PAINTINGS.length - 1) % PAINTINGS.length); scheduleAuto(); }
+  if (e.key === 'ArrowRight') next(1);
+  if (e.key === 'ArrowLeft') next(-1);
 });
 
 /* ---------- Lexicon ---------- */
@@ -203,7 +254,10 @@ function renderResults(q = '') {
   for (const e of list) {
     const li = document.createElement('li');
     li.innerHTML = `<button type="button" data-lemma="${e.lemma}"><span class="lm" lang="grc">${e.lemma}</span><span class="gl">${esc(e.gloss)}</span></button>`;
-    li.firstChild.onclick = () => renderEntry(e);
+    li.firstChild.onclick = () => {
+      renderEntry(e);
+      if (matchMedia('(max-width: 820px)').matches) $('#entry').scrollIntoView({ block: 'start' });
+    };
     ol.append(li);
   }
   $('#count').textContent = `${list.length} of ${entries.length} sample entries` + (filterPoet ? ` attested in ${filterPoet}` : '') + (q ? ` matching “${q}”` : '');

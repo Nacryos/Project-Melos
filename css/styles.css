@@ -41,7 +41,9 @@ button, input, select { font: inherit; color: inherit; }
   padding: 20px var(--gutter);
   color: var(--on-dark);
   text-shadow: 0 1px 12px rgb(0 0 0 / .45);
+  pointer-events: none;   /* the bar spans the hero; only its links take taps */
 }
+.bar a { pointer-events: auto; }
 .mark { display: flex; align-items: baseline; gap: .75rem; text-decoration: none; }
 .mark-gr { font: 400 1.9rem/1 var(--greek); }
 .mark-en { font-style: italic; font-size: var(--step--1); opacity: .85; }
@@ -62,12 +64,12 @@ button, input, select { font: inherit; color: inherit; }
   position: absolute; inset: 0; width: 100%; height: 100%;
   display: block; object-fit: cover; image-rendering: pixelated;
 }
+/* Header legibility only; the shadow behind the quote is drawn (and dithered) in the shader. */
 .scrim {
   position: absolute; inset: 0; pointer-events: none;
-  background:
-    linear-gradient(to top, rgb(10 18 32 / .78), rgb(10 18 32 / 0) 55%),
-    linear-gradient(to bottom, rgb(10 18 32 / .45), rgb(10 18 32 / 0) 18%);
+  background: linear-gradient(to bottom, rgb(10 18 32 / .45), rgb(10 18 32 / 0) 18%);
 }
+.hero { touch-action: pan-y; -webkit-tap-highlight-color: transparent; }
 .hero-copy {
   position: absolute; left: var(--gutter); right: var(--gutter); bottom: clamp(28px, 7vh, 72px);
   max-width: 44rem; z-index: 2;
@@ -132,6 +134,7 @@ button, input, select { font: inherit; color: inherit; }
 .tune[hidden] { display: none; }
 .tune-head { display: flex; justify-content: space-between; align-items: baseline; }
 .tune h2 { font-size: var(--step-1); }
+.tune h3 { font: italic 400 var(--step--1)/1.2 var(--text); margin: .5rem 0 0; padding-top: .7rem; border-top: 1px solid rgb(255 255 255 / .14); opacity: .8; }
 .tune label { display: grid; grid-template-columns: 1fr auto; gap: .2rem .5rem; align-items: center; }
 .tune label > select, .tune label > input[type="range"] { grid-column: 1 / -1; width: 100%; }
 .tune select { background: rgb(255 255 255 / .08); border: 1px solid rgb(255 255 255 / .2); border-radius: 3px; padding: .3rem; }
@@ -140,6 +143,7 @@ button, input, select { font: inherit; color: inherit; }
 .tune input[type="range"] { accent-color: var(--saffron); }
 .tune .switch { display: flex; gap: .4rem; align-items: center; }
 .tune kbd { font: inherit; font-size: .75rem; border: 1px solid rgb(255 255 255 / .3); border-radius: 2px; padding: 0 .3rem; opacity: .7; }
+.tune-close { background: none; border: 1px solid rgb(255 255 255 / .3); border-radius: 3px; padding: .25rem .7rem; cursor: pointer; }
 .tune-actions { display: flex; gap: .4rem; flex-wrap: wrap; }
 .tune-actions button {
   flex: 1; background: none; border: 1px solid rgb(255 255 255 / .3); border-radius: 3px;
@@ -208,9 +212,20 @@ main { padding: 0 var(--gutter); }
   .plate { left: var(--gutter); right: auto; top: 76px; bottom: auto; text-align: left; }
   .plate figcaption { display: none; }
   .thumbs { justify-content: flex-start; }
-  .thumbs button { width: 40px; height: 40px; }
-  .tune-toggle { top: 20px; }
-  .tune { top: 62px; max-height: calc(100% - 80px); }
+  .thumbs button { width: 44px; height: 44px; }
+  .tune-toggle { top: 18px; padding: .55rem .8rem; }
+  /* Controls become a bottom sheet on phones */
+  .tune {
+    position: fixed; z-index: 20; left: 0; right: 0; bottom: 0; top: auto;
+    width: auto; max-height: 62vh; border-radius: 10px 10px 0 0;
+    padding: 1rem 16px calc(1rem + env(safe-area-inset-bottom));
+  }
+  .tune input[type="range"] { height: 28px; }
+  .hero-copy { bottom: 24px; }
+  .verse { margin-bottom: 1.1rem; }
+  .verse footer { font-size: var(--step--1); }
+  .search input { padding: .85rem .9rem; font-size: 1.05rem; }
+  .search button { padding: 0 1rem; }
   .lex-body { grid-template-columns: 1fr; gap: 1.5rem; }
   .results { max-height: 16rem; border-bottom: 1px solid var(--vein); }
   .attest li { grid-template-columns: 1fr; gap: .3rem; }
@@ -219,3 +234,8 @@ main { padding: 0 var(--gutter); }
   .timeline li { padding: 0 0 1rem 1.6rem; }
   .timeline li::before { top: .45rem; }
 }
+
+/* Quote and caption hand over with the painting */
+.verse, .plate figcaption { transition: opacity .5s ease; }
+.verse.out, .plate figcaption.out { opacity: 0; }
+@media (prefers-reduced-motion: reduce) { .verse, .plate figcaption { transition: none; } }

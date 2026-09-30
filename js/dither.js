@@ -1,6 +1,6 @@
 // Ordered (Bayer) dithering of a painting in one WebGL fragment pass.
-// Two texture slots (A = current, B = next) so painting changes dissolve
-// through the same Bayer matrix instead of a plain crossfade.
+// Every painting is uploaded once to its own texture; a transition just blends
+// two of them per cell (staggered by smooth noise), so there are no upload hitches.
 
 const VS = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }`;
 
@@ -8,25 +8,26 @@ const FS = `
 precision highp float;
 uniform sampler2D texA, texB;
 uniform vec2 res, sizeA, sizeB, focA, focB, mouse;
-uniform float cell, matrix, levels, spread, sat, con, bri, amount, t, lensR, palN;
+uniform vec4 shade;                       // ellipse centre xy, radii zw (device px)
+uniform float cell, matrix, levels, spread, sat, con, bri, amount, lensR, palN;
+uniform float shadeK, grow, growStep;     // darkening strength, extra pixel steps at its centre
+uniform float t, time, flick, coarsen;    // transition progress, clock, shimmer, pixelation peak
 uniform vec3 pal[8];
 
-// Recursive Bayer: values in [0,1)
 float b2(vec2 a){ a = floor(a); return fract(a.x * .5 + a.y * a.y * .75); }
 float b4(vec2 a){ return b2(.5 * a) * .25 + b2(a); }
 float b8(vec2 a){ return b4(.5 * a) * .25 + b2(a); }
 float bayer(vec2 a){ return matrix > 6. ? b8(a) : matrix > 3. ? b4(a) : b2(a); }
+float hash(vec2 p){ return fract(sin(dot(p, vec2(12.9898, 78.233))) * 43758.5453); }
+float vnoise(vec2 p){
+  vec2 i = floor(p), f = fract(p); f = f * f * (3. - 2. * f);
+  return mix(mix(hash(i), hash(i + vec2(1, 0)), f.x), mix(hash(i + vec2(0, 1)), hash(i + 1.), f.x), f.y);
+}
 
 vec2 cover(vec2 uv, vec2 img, vec2 foc){
   float ra = res.x / res.y, ia = img.x / img.y;
   vec2 s = vec2(min(ra / ia, 1.), min(ia / ra, 1.));
-  vec2 c = clamp(foc, s * .5, 1. - s * .5);
-  return c + (uv - .5) * s;
-}
-vec3 samplePair(vec2 uv, float useB){
-  vec3 a = texture2D(texA, cover(uv, sizeA, focA)).rgb;
-  vec3 b = texture2D(texB, cover(uv, sizeB, focB)).rgb;
-  return mix(a, b, useB);
+  return clamp(foc, s * .5, 1. - s * .5) + (uv - .5) * s;
 }
 vec3 grade(vec3 c){
   c = (c - .5) * con + .5 + bri;
@@ -42,25 +43,42 @@ vec3 nearest(vec3 c){
   }
   return best;
 }
+// Per-cell transition progress: a slow noise wave plus a little per-cell scatter.
+float local(vec2 uv){
+  if (t <= 0.) return 0.;
+  vec2 a = uv * vec2(res.x / res.y, 1.);
+  float d = .6 * vnoise(a * 2.5) + .2 * hash(floor(uv * res / (cell * 3.)));
+  return smoothstep(d, d + .2, t);
+}
+vec3 scene(vec2 uv){
+  vec3 a = texture2D(texA, cover(uv, sizeA, focA)).rgb;
+  if (t <= 0.) return a;
+  return mix(a, texture2D(texB, cover(uv, sizeB, focB)).rgb, local(uv));
+}
 
 void main(){
   vec2 fc = gl_FragCoord.xy;
-  vec2 cellIx = floor(fc / cell);
-  float th = bayer(cellIx);
-  // Transition mask: cells whose threshold is under t already show B.
-  float useB = step(th, t - .0001) ;
-  vec2 uvCell = (cellIx + .5) * cell / res;
-  vec3 c = grade(samplePair(uvCell, useB));
+  vec2 q = (fc - shade.xy) / shade.zw;
+  float dk = exp(-2.4 * dot(q, q));   // soft gaussian ball: 1 at the centre of the shadow
+  float e = sin(3.14159265 * t);                                             // transition envelope
+
+  // Pixel size grows in integer steps toward the shadow; step edges are themselves dithered.
+  float bf = dk * grow;
+  float band = floor(bf) + step(b8(floor(fc / (cell * 2.))), fract(bf));
+  float c = floor(cell + band * growStep + e * coarsen * cell + .5);
+
+  vec2 ix = floor(fc / c);
+  float th = bayer(ix);
+  th = clamp(th + (hash(ix + floor(time * 9.)) - .5) * flick * e, 0., 1.);   // TV-like shimmer, only mid-transition
+
+  float dark = 1. - shadeK * dk;
+  vec3 col = grade(scene((ix + .5) * c / res)) * dark;
 
   vec3 d;
-  if (palN > .5) {
-    d = nearest(c + (th - .5) * spread * .5);
-  } else {
-    float L = levels - 1.;
-    d = floor(c * L + th * spread + (1. - spread) * .5) / L;
-  }
+  if (palN > .5) d = nearest(col + (th - .5) * spread * .5);
+  else { float L = levels - 1.; d = floor(col * L + th * spread + (1. - spread) * .5) / L; }
 
-  vec3 orig = grade(samplePair(fc / res, useB));
+  vec3 orig = grade(scene(fc / res)) * dark;
   float k = amount;
   if (lensR > 0.) k *= smoothstep(.8, 1., length(fc - mouse) / lensR);
   gl_FragColor = vec4(mix(orig, d, k), 1.);
@@ -75,6 +93,7 @@ export const PALETTES = {
 };
 
 const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
+const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 
 export function createDither(canvas) {
   const gl = canvas.getContext('webgl', { antialias: false, preserveDrawingBuffer: true });
@@ -93,38 +112,47 @@ export function createDither(canvas) {
   gl.enableVertexAttribArray(0); gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
   const U = {};
   for (let i = 0, n = gl.getProgramParameter(prog, gl.ACTIVE_UNIFORMS); i < n; i++) {
-    const name = gl.getActiveUniform(prog, i).name.replace('[0]', '');
-    U[name] = gl.getUniformLocation(prog, gl.getActiveUniform(prog, i).name);
+    const name = gl.getActiveUniform(prog, i).name;
+    U[name.replace('[0]', '')] = gl.getUniformLocation(prog, name);
   }
   gl.uniform1i(U.texA, 0); gl.uniform1i(U.texB, 1);
 
-  const slots = [
-    { tex: gl.createTexture(), size: [1, 1], foc: [.5, .5] },
-    { tex: gl.createTexture(), size: [1, 1], foc: [.5, .5] },
-  ];
-  const upload = (slot, img, foc) => {
-    gl.activeTexture(gl.TEXTURE0 + slot);
-    gl.bindTexture(gl.TEXTURE_2D, slots[slot].tex);
+  const cache = new Map();   // key -> { tex, size, foc }
+  const load = (key, img, foc) => {
+    if (cache.has(key)) return cache.get(key);
+    const tex = gl.createTexture();
+    gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
     for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR],
       [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]])
       gl.texParameteri(gl.TEXTURE_2D, k, v);
-    slots[slot].size = [img.naturalWidth, img.naturalHeight];
-    slots[slot].foc = [foc[0], 1 - foc[1]];
+    const s = { tex, size: [img.naturalWidth, img.naturalHeight], foc: [foc[0], 1 - foc[1]] };
+    cache.set(key, s);
+    return s;
   };
 
-  let dpr = 1, params = {}, t = 0, mouse = [-1e4, -1e4], raf = 0;
+  let dpr = 1, params = {}, t = 0, mouse = [-1e4, -1e4], raf = 0, A = null, B = null;
+  let shadeCss = [0, 0, 1, 1];
 
-  const draw = () => {
+  const draw = (now = performance.now()) => {
     raf = 0;
-    const p = params;
+    if (!A) return;
+    const p = params, b = B || A;
+    gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, A.tex);
+    gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, b.tex);
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.uniform2f(U.res, canvas.width, canvas.height);
-    gl.uniform2fv(U.sizeA, slots[0].size); gl.uniform2fv(U.focA, slots[0].foc);
-    gl.uniform2fv(U.sizeB, slots[1].size); gl.uniform2fv(U.focB, slots[1].foc);
+    gl.uniform2fv(U.sizeA, A.size); gl.uniform2fv(U.focA, A.foc);
+    gl.uniform2fv(U.sizeB, b.size); gl.uniform2fv(U.focB, b.foc);
     gl.uniform2fv(U.mouse, mouse);
+    const [x, y, rx, ry] = shadeCss;
+    gl.uniform4f(U.shade, x * dpr, canvas.height - y * dpr, Math.max(1, rx * dpr), Math.max(1, ry * dpr));
+    const step = Math.max(1, Math.round(dpr));
     gl.uniform1f(U.cell, Math.max(1, Math.round(p.cell * dpr)));
+    gl.uniform1f(U.growStep, step);
+    gl.uniform1f(U.grow, p.grow);
+    gl.uniform1f(U.shadeK, p.shade);
     gl.uniform1f(U.matrix, p.matrix);
     gl.uniform1f(U.levels, p.levels);
     gl.uniform1f(U.spread, p.spread);
@@ -134,6 +162,9 @@ export function createDither(canvas) {
     gl.uniform1f(U.amount, p.on ? p.amount : 0);
     gl.uniform1f(U.lensR, p.lens * dpr);
     gl.uniform1f(U.t, t);
+    gl.uniform1f(U.time, now / 1000);
+    gl.uniform1f(U.flick, p.flicker);
+    gl.uniform1f(U.coarsen, p.coarsen);
     const pal = PALETTES[p.palette];
     gl.uniform1f(U.palN, pal ? pal.length : 0);
     if (pal) gl.uniform3fv(U.pal, new Float32Array(pal.flatMap(hex).concat(Array(24).fill(0)).slice(0, 24)));
@@ -152,21 +183,26 @@ export function createDither(canvas) {
   });
   ro.observe(canvas.parentElement);
 
+  let running = null;
   return {
+    load,
     set(p) { params = { ...params, ...p }; request(); },
-    show(img, foc) { upload(0, img, foc); upload(1, img, foc); t = 0; request(); },
-    // Dissolve A -> B through the Bayer thresholds.
-    transition(img, foc, ms = 1400) {
-      upload(1, img, foc);
+    setShade(x, y, rx, ry) { shadeCss = [x, y, rx, ry]; request(); },
+    show(slot) { A = slot; B = null; t = 0; request(); },
+    transition(slot, ms = 2600) {
+      if (running) running.cancel();
+      B = slot;
       return new Promise(done => {
         const t0 = performance.now();
+        let id = 0;
+        const finish = () => { cancelAnimationFrame(id); A = slot; B = null; t = 0; running = null; request(); done(); };
+        running = { cancel: finish };
         const step = now => {
-          t = Math.min(1, (now - t0) / ms);
-          draw();
-          if (t < 1) requestAnimationFrame(step);
-          else { upload(0, img, foc); t = 0; draw(); done(); }
+          const x = Math.min(1, (now - t0) / ms);
+          t = ease(x); draw(now);
+          if (x < 1) id = requestAnimationFrame(step); else finish();
         };
-        requestAnimationFrame(step);
+        id = requestAnimationFrame(step);
       });
     },
     pointer(x, y) {

@@ -53,6 +53,7 @@
       <div class="tune-head">
         <h2>Dither</h2>
         <label class="switch"><input type="checkbox" id="p-on" checked> On <kbd>D</kbd></label>
+        <button type="button" class="tune-close" id="tune-close">Done</button>
       </div>
       <label>Palette
         <select id="p-palette">
@@ -78,6 +79,12 @@
       <label>Brightness <output for="p-bri"></output><input type="range" id="p-bri" min="-0.3" max="0.3" step="0.01"></label>
       <label>Blend with original <output for="p-amount"></output><input type="range" id="p-amount" min="0" max="1" step="0.05"></label>
       <label>Reveal lens <output for="p-lens"></output><input type="range" id="p-lens" min="0" max="320" step="10"></label>
+      <h3>Behind the text</h3>
+      <label>Shadow <output for="p-shade"></output><input type="range" id="p-shade" min="0" max="0.9" step="0.05"></label>
+      <label>Pixel growth into shadow <output for="p-grow"></output><input type="range" id="p-grow" min="0" max="8" step="1"></label>
+      <h3>Changing painting</h3>
+      <label>Flicker <output for="p-flicker"></output><input type="range" id="p-flicker" min="0" max="1.2" step="0.05"></label>
+      <label>Pixelation peak <output for="p-coarsen"></output><input type="range" id="p-coarsen" min="0" max="4" step="0.1"></label>
       <div class="tune-actions">
         <button type="button" id="p-reset">Reset</button>
         <button type="button" id="p-copy">Copy settings</button>
