@@ -41,7 +41,7 @@ CATALOG = urljoin(BASE, "browse.html")
 CONTRIBUTORS = urljoin(BASE, "contributors.html")
 SOURCE = "p2_cgl_anthology"
 RIGHTS = "© Κέντρο Ελληνικής Γλώσσας (Centre for the Greek Language); all rights reserved as stated by the site. Admitted per docs/decisions.md (2026-09-30)."
-EDITION_TOKENS = ("West", "Page", "Voigt", "Maehler", "Davies", "Campbell", "Gentili", "Lobel", "Snell",
+EDITION_TOKENS = ("Lobel-Page", "West", "Page", "Voigt", "Maehler", "Davies", "Campbell", "Gentili", "Lobel", "Snell",
                   "Diehl", "Bergk", "Edmonds", "PMG", "PMGF", "L-P", "LP", "Gerber", "Kock", "Adrados")
 GREEK = re.compile(r"[Ͱ-Ͽἀ-῿]")
 SESSION = requests.Session()
@@ -79,6 +79,20 @@ def clean(text: str) -> str:
     return re.sub(r"[ \t ]+", " ", text.replace("\r", "")).strip()
 
 
+def cited_edition_label(citation: str) -> str:
+    """Preserve the printed edition label, preferring a complete compound name.
+
+    This extracts labels only: it does not assert numbering equivalences or
+    identify an edition from an otherwise unqualified fragment number.
+    """
+    for token in sorted(EDITION_TOKENS, key=len, reverse=True):
+        pattern = re.escape(token).replace(r"\-", r"\s*[-–—]\s*")
+        match = re.search(rf"(?<![A-Za-z]){pattern}(?![A-Za-z])", citation)
+        if match:
+            return match.group(0)
+    return ""
+
+
 def parse_catalog(html: bytes) -> list[dict]:
     """Every text link with its section, author and column heading, in page order."""
     soup = BeautifulSoup(html, "html.parser")
@@ -101,9 +115,15 @@ def parse_catalog(html: bytes) -> list[dict]:
                 author = label
             continue
         for table in element.select("table") if element.name != "table" else [element]:
-            headers = [clean(th.get_text(" ")) for th in table.select("tr > th")]
+            headers: list[str] = []
             for row in table.select("tr"):
-                cells = row.select("td")
+                # A single catalog table contains successive heading/data bands.
+                # Never apply the first band's headings to all later rows.
+                row_headers = row.find_all("th", recursive=False)
+                if row_headers:
+                    headers = [clean(th.get_text(" ")) for th in row_headers]
+                    continue
+                cells = row.find_all("td", recursive=False)
                 for index, cell in enumerate(cells):
                     heading = headers[index] if index < len(headers) else ""
                     for link in cell.select("a[href]"):
@@ -177,7 +197,7 @@ def parse_text_page(html: bytes, entry: dict) -> dict:
         if text:
             translations.append({"translator": translator, "lines": lines, "text": text,
                                  "pane_id": pane.get("id", "")})
-    edition = next((token for token in EDITION_TOKENS if re.search(rf"(?<![A-Za-z]){re.escape(token)}(?![A-Za-z])", citation)), "")
+    edition = cited_edition_label(citation)
     return {"author": title_author, "citation": citation, "crumbs": crumbs, "greek_lines": greek_lines,
             "greek_text": greek_text, "translations": translations, "edition_token": edition}
 
