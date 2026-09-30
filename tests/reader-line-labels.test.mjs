@@ -32,6 +32,18 @@ const render = vm.runInContext('renderPassageText', context);
 const words = vm.runInContext('readingWords', context);
 const verseLines = vm.runInContext('verseLines', context);
 
+test('Modern Greek translations preserve text without Ancient Greek inspection buttons', () => {
+  for (const text of ['αβ γδ', 'αβ\n γδ ']) {
+    render({ kind: 'translation', language: 'ell', text });
+    const all = element => element.children.flatMap(child => [child, ...all(child)]);
+    assert.equal(all(ui.text).filter(element => element.tag === 'button').length, 0);
+    assert.equal(all(ui.text).filter(element => element.tag === '#text').map(element => element.text).join('\n'), text);
+    assert.match(ui.readingHint.textContent, /Modern Greek translation/);
+    assert.match(ui.readingHint.textContent, /linked Ancient Greek/);
+    assert.equal(ui.text.lang, 'ell');
+  }
+});
+
 test('an exact printed numeric label suppresses only its duplicate UI label', () => {
   for (const value of ['1', '5', '10']) {
     assert.equal(label({ label: value, text: `${value}. αβ` }), '');

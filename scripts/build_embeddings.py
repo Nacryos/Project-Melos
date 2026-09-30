@@ -38,7 +38,7 @@ def eligible(row: sqlite3.Row) -> bool:
         bool(row["text"] and row["text"].strip())
         and row["kind"] in {"text", "translation", "commentary"}
         and row["quality"] in {"source_text", "machine_corrected_ocr"}
-        and row["language"] in {"grc", "eng", "lat", "ita", "fra", "deu", "mul"}
+        and row["language"] in {"grc", "ell", "eng", "lat", "ita", "fra", "deu", "mul"}
     )
 
 
@@ -77,7 +77,8 @@ def source_rows(db_path: Path) -> list[dict]:
                 parent_author = greek_by_id.get(record["parent_id"])
                 if parent_author:
                     linked.add(parent_author)
-                if record["scope"] in {"page", "source_section"} and record["source_url"]:
+                if (record["kind"] == "commentary" and record["scope"] in {"page", "source_section"}
+                        and record["source_url"]):
                     linked.update(greek_by_url.get((record['source'], record["source_url"]), ()))
             record["context_authors"] = sorted(linked)
         def priority(record: dict) -> tuple[int, str]:
@@ -278,7 +279,7 @@ def build(
         "rows_file": rows_file,
         "vectors_file": vectors_file,
         "searchable_qualities": ["source_text", "machine_corrected_ocr"],
-        "indexed_text": "Original text from passages.text; source_text and explicitly labelled machine_corrected_ocr (not independently verified transcription); declared Greek, English, Latin, Italian, French, German and multilingual text/translation/commentary",
+        "indexed_text": "Original text from passages.text; source_text and explicitly labelled machine_corrected_ocr (not independently verified transcription); declared Ancient Greek, Modern Greek, English, Latin, Italian, French, German and multilingual text/translation/commentary",
     }
     tmp = index_dir / f"manifest-{build_id}.tmp"
     tmp.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")

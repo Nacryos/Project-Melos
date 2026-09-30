@@ -111,6 +111,23 @@ def fuse(
             cached[identifier] = hit if "text" in hit and "kind" in hit else fetch_record(identifier)
         return cached[identifier]
 
+    def eligible_target(record: Mapping[str, Any]) -> bool:
+        if _eligible(record, authors=authors, language=language, edition=edition,
+                     include_reference=include_reference, author_keys=author_keys):
+            return True
+        # A selected output language/edition can prevent Greek-parent
+        # projection. Retain the translation's real author and constraints,
+        # but let an explicit eligible Greek parent establish author scope.
+        if (not commentary_assisted or not authors
+                or record.get("kind") not in {"translation", "commentary"}
+                or not _eligible(record, authors=set(), language=language, edition=edition,
+                                 include_reference=include_reference, author_keys=author_keys)):
+            return False
+        parent = resolve({"id": record.get("parent_id")})
+        return bool(parent and parent.get("kind") == "text" and parent.get("language") == "grc"
+                    and _eligible(parent, authors=authors, language="grc", edition="",
+                                  include_reference=include_reference, author_keys=author_keys))
+
     groups: dict[tuple[Any, ...], dict[str, Any]] = {}
     skipped_unresolved = 0
     for signal, hits in zip(SIGNALS, (lexical, forms, semantic)):
@@ -136,18 +153,14 @@ def fuse(
                                       edition=edition, include_reference=include_reference,
                                       author_keys=author_keys)):
                     target = parent
-            if not _eligible(target, authors=authors, language=language,
-                             edition=edition, include_reference=include_reference,
-                             author_keys=author_keys):
+            if not eligible_target(target):
                 # A grouped lexical hit may stand for copies that pass the
                 # filter although its representative does not (the same words
                 # in another edition). Fall back to the first eligible copy.
                 substitute = None
                 for copy_id in (target.get("mirrored_ids") or []):
                     candidate = resolve({"id": str(copy_id)})
-                    if candidate and _eligible(candidate, authors=authors, language=language,
-                                               edition=edition, include_reference=include_reference,
-                                               author_keys=author_keys):
+                    if candidate and eligible_target(candidate):
                         substitute = candidate
                         break
                 if substitute is None:
@@ -158,6 +171,10 @@ def fuse(
                 groups[group_key] = {"record": dict(target), "rrf": 0.0,
                                      "ranks": {}, "matched_evidence": [], "evidence_keys": set(),
                                      "mirror_ids": set()}
+                if authors and not (set(author_keys(target.get("author"))) & authors):
+                    groups[group_key]["record"]["author_scope_reason"] = (
+                        "Linked to the selected author by an explicit Greek parent passage; "
+                        "translation/commentary authorship is retained.")
             group = groups[group_key]
             group["mirror_ids"].add(target["id"])
             # A lexical hit may already be a grouped representative carrying the

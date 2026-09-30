@@ -156,6 +156,7 @@ def rank_reference_records(
     edition: str = "",
     limit: int = 30,
     offset: int = 0,
+    include_reference: bool = False,
 ) -> dict:
     """Return exact fragment records, including honestly labelled references.
 
@@ -168,10 +169,18 @@ def rank_reference_records(
     if limit < 0 or offset < 0:
         raise ValueError("limit and offset must be nonnegative")
     labels = {_key(label) for label in intent.author_labels}
+    records = list(records)
+    by_id = {record.get('id'): record for record in records if record.get('id')}
     hits = []
     if not intent.filter_conflict:
         for record in records:
-            if _key(record.get("author")) not in labels:
+            parent = by_id.get(record.get('parent_id'))
+            linked_author = bool(record.get('kind') in {'translation', 'commentary'}
+                                 and parent and parent.get('kind') == 'text'
+                                 and parent.get('language') == 'grc'
+                                 and _key(parent.get('author')) in labels
+                                 and (include_reference or parent.get('quality') in {'source_text', 'machine_corrected_ocr'}))
+            if _key(record.get("author")) not in labels and not linked_author:
                 continue
             if language and record.get("language") != language:
                 continue
@@ -182,6 +191,10 @@ def rank_reference_records(
             if not matches:
                 continue
             item = dict(record)
+            if linked_author and _key(record.get('author')) not in labels:
+                item['author_scope_reason'] = (
+                    'Linked to the selected author by an explicit Greek parent passage; '
+                    'translation/commentary authorship is retained.')
             metadata = item.get("metadata") or {}
             metadata = metadata if isinstance(metadata, Mapping) else {}
             reference_only = item.get("kind") in {"reference", "apparatus"} or metadata.get("greek_text_extracted") is False
@@ -190,7 +203,8 @@ def rank_reference_records(
             section = bool(metadata.get('source_section')) and item.get('kind') == 'text'
             status = ("reference_only" if reference_only else "needs_review" if review
                       else "partial_text" if partial else "section_text" if section
-                      else "text" if item.get("kind") == "text" else "commentary")
+                      else "text" if item.get("kind") == "text"
+                      else "translation" if item.get("kind") == "translation" else "commentary")
             item["reference_match"] = {"number": intent.number, "scheme": intent.scheme or None,
                                        "evidence": list(dict.fromkeys(m[2] for m in matches)),
                                        "coverage": status}
@@ -200,11 +214,12 @@ def rank_reference_records(
                 "partial_text": "partial fragment line, not a complete fragment",
                 "section_text": "source-labelled section or column, not whole-fragment scope",
                 "text": "source reading text; numbering remains edition-specific",
+                "translation": "translation; translator authorship and output language are retained, not a Greek reading text",
                 "commentary": "commentary, not the poem text",
             }[status]
             item["score"] = None
             hits.append(item)
-    ranks = {"text": 0, "section_text": 1, "partial_text": 2, "commentary": 3, "needs_review": 4, "reference_only": 5}
+    ranks = {"text": 0, "section_text": 1, "partial_text": 2, "translation": 3, "commentary": 4, "needs_review": 5, "reference_only": 6}
     hits.sort(key=lambda item: (ranks[item["reference_match"]["coverage"]], str(item.get("citation", "")), str(item.get("id", ""))))
     warnings = ["Fragment numbers are edition-specific. Only explicit recorded citations are matched; no numbering equivalence is inferred."]
     if intent.filter_conflict:
@@ -214,7 +229,7 @@ def rank_reference_records(
     elif all(item["reference_match"]["coverage"] == "reference_only" for item in hits):
         warnings.append("Only catalogue/reference records are available for this citation; the Greek reading text is not indexed here.")
     elif not any(item["reference_match"]["coverage"] == "text" for item in hits):
-        warnings.append("No whole-fragment-scope reading-text record was matched: results are source sections, partial lines, commentary, references, or text requiring review.")
+        warnings.append("No whole-fragment-scope reading-text record was matched: results are source sections, partial lines, translations, commentary, references, or text requiring review.")
     return {"results": hits[offset:offset + limit], "total": len(hits), "mode": "reference",
             "method": "Exact author + fragment reference lookup", "warnings": warnings,
             "reference_query": {"author": intent.author, "number": intent.number, "scheme": intent.scheme or None}}

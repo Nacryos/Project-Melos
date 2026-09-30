@@ -25,6 +25,30 @@ _TOKEN = re.compile(
 _APOSTROPHES = str.maketrans({"\u2019": "'", "\u02bc": "'", "\u1fbd": "'", "\u2018": "'", "`": "'"})
 _HOMOGRAPH_NUMBER = re.compile(r"\d+$")
 
+# Reviewed *exclusions*, not replacement linguistic data. Keep the immutable
+# source row on disk and disclose it separately. Match the full pinned token
+# identity plus its annotation: no form-wide, dialect or majority-vote rule.
+# QA13 source review (2026-09-30): the XML prints this form with a pronoun
+# annotation. Independent lexical evidence below identifies a verbal form;
+# the erroneous source annotation must not supply an I/me dictionary preview.
+_REVIEWED_SOURCE_EXCLUSIONS = ({
+    'id': 'perseus-1.6-tlg0059.tlg001-2857971-17',
+    'match': {
+        'source_url': 'https://raw.githubusercontent.com/PerseusDL/treebank_data/bf4334f0af5e13d16b04c1cccd6237e683ac6f5f/v1.6/greek/data/tlg0059.tlg001.perseus-grc1.tb.xml',
+        'raw_sha256': 'ef9e66087eded142748a291ff395d4faf9beba3c9b99226196aa0fafbad417be',
+        'document_id': 'urn:cts:greekLit:tlg0059.tlg001.perseus-grc1',
+        'sentence_id': '2857971', 'token_id': '17',
+        'form': 'φαίνεται', 'lemma': 'ἐγώ', 'lemma_raw': 'ἐγώ1', 'analysis': 'p-s---md-',
+    },
+    'reason': 'Reviewed source annotation mismatch: this pinned token associates the printed verbal form with a pronoun lemma and dative pronoun tag. The source is preserved, but this annotation is excluded from automated interpretation; no replacement parse is supplied.',
+    'review_evidence_url': 'https://en.wiktionary.org/w/index.php?title=φαίνεται&oldid=87216593#Ancient_Greek',
+},)
+
+
+def _source_exclusion(row: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    return next((rule for rule in _REVIEWED_SOURCE_EXCLUSIONS
+                 if all(row.get(field) == value for field, value in rule['match'].items())), None)
+
 # AGDT's nine-slot morphological code, documented by PerseusDL at
 # https://github.com/PerseusDL/treebank_data/blob/master/AGDT2/guidelines/Greek_guidelines.md
 # (older v1.x `t`/`e` part-of-speech codes are documented in the AGDT 1.7
@@ -217,6 +241,7 @@ class Morphology:
         self._forms: dict[str, list[dict[str, Any]]] = defaultdict(list)
         self._lemma_forms: dict[str, set[str]] = defaultdict(set)
         self._form_lemmas: dict[str, set[str]] = defaultdict(set)
+        self._quarantined_forms: dict[str, list[dict[str, Any]]] = defaultdict(list)
         # References to the same compact rows held by _forms, not copied corpus
         # tokens. Unlike retrieval keys, these identities preserve accents,
         # case, source-local homograph numbers, and source attribution.
@@ -253,6 +278,20 @@ class Morphology:
             if not isinstance(form, str) or not form.strip() or not isinstance(lemma, str) or not lemma.strip():
                 continue
             form_key = normalize(form)
+            exclusion = _source_exclusion(row)
+            if exclusion:
+                # Deliberately before every candidate/inventory/expansion
+                # index. Do not attach a dictionary gloss to a rejected edge.
+                public = {field: row.get(field) for field in (
+                    'form', 'lemma', 'lemma_raw', 'analysis', 'analysis_format',
+                    'source', 'source_url', 'raw_sha256', 'citation', 'document_id',
+                    'sentence_id', 'token_id', 'license', 'quality')}
+                public.update({'status': 'quarantined_source_annotation',
+                               'exclusion_id': exclusion['id'], 'reason': exclusion['reason'],
+                               'review_evidence_url': exclusion['review_evidence_url']})
+                if public not in self._quarantined_forms[form_key]:
+                    self._quarantined_forms[form_key].append(public)
+                continue
             lemma_key = normalize(lemma)
             self._lemma_forms[lemma_key].add(form)
             self._form_lemmas[form_key].add(lemma_key)
@@ -345,7 +384,7 @@ class Morphology:
     def expansion_forms_for_lemma(self, lemma: str) -> list[str]:
         """Source spellings excluding unresolved, conflicting lemma edges.
 
-        ``forms_for_lemma`` remains the complete raw-source inventory. This
+        ``forms_for_lemma`` remains the non-quarantined source inventory. This
         separate method is for automatic search expansion, not an assertion
         that excluded readings are false or that retained readings are true.
         """
@@ -678,6 +717,10 @@ class Morphology:
         legacy_total = len(attested_forms)
         attested_forms = set(sorted(attested_forms, key=lambda item: (normalize(item), item))[:100])
         warnings = []
+        quarantined = [dict(row) for key in dict.fromkeys(variants)
+                       for row in self._quarantined_forms.get(key, ())]
+        if quarantined:
+            warnings.append('A reviewed source annotation mismatch was quarantined: it cannot supply a parsing candidate, dictionary gloss, form inventory, or automatic expansion. The original source record is retained separately; no corrected parse was invented.')
         if any(candidate['lemma_link_status'] == 'ambiguous_source_lemmas'
                for candidate in candidates):
             warnings.append('The indexed form has conflicting lemma attributions. These may reflect legitimate homography or a source error; all readings are retained, but unresolved links do not drive automatic lemma expansion. Search a headword explicitly to choose a lemma.')
@@ -704,6 +747,7 @@ class Morphology:
                     ("indexed_match" if candidates else "no_match"),
                 "analysis_match_status": analysis_match_status,
                 "candidates": candidates,
+                "quarantined_source_analyses": quarantined,
                 "expansion_lemmas": sorted(expansion_lemmas),
                 "lexicon_entries": list(lexicon_entries.values()),
                 "observed_form_groups": observed_form_groups,

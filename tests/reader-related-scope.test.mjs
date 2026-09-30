@@ -55,3 +55,17 @@ test('passage-linked material retains its ordinary inline display and reading co
   assert.ok(button); button.handlers.click();
   assert.equal(opened.at(-1), 'linked-translation');
 });
+
+test('linked Modern Greek translations show their own source credit and language', () => {
+  const host = show([{ id: 'modern-translation', parent_id: 'selected-record', author: 'Fixture author', kind: 'translation', language: 'ell', text: 'Synthetic translation fixture', metadata: { translator: 'Source credit <literal>' } }]);
+  assert.match(host.textContent, /Modern Greek · Translator: Source credit <literal>/);
+  assert.ok(!host.textContent.includes('Fixture author'));
+  const button = descendants(host).find(element => element.tag === 'button');
+  assert.ok(button); button.handlers.click();
+  assert.equal(opened.at(-1), 'modern-translation');
+});
+
+test('translation credit falls back to recorded author without inventing missing credits', () => {
+  assert.match(show([{ id: 'tr', kind: 'translation', language: 'eng', author: 'Recorded translator', text: 'Fixture text' }]).textContent, /English · Translator: Recorded translator/);
+  assert.ok(!show([{ id: 'tr', kind: 'translation', language: 'ell', text: 'Fixture text' }]).textContent.includes('Translator:'));
+});

@@ -83,6 +83,32 @@ def grouping(representative):
     return (f'ROW_NUMBER() OVER (PARTITION BY {cols} ORDER BY {representative}) rn,'
             f'COUNT(*) OVER (PARTITION BY {cols}) copies,'
             f'group_concat(id,char(31)) OVER (PARTITION BY {cols}) copy_ids')
+
+
+def search_row_columns(alias='p'):
+    """Carry only ranking/identity columns through grouping, never source JSON.
+
+    Source records can contain large commentary/apparatus payloads. Sorting
+    p.* for every window and again for a count can exhaust bounded SQLite
+    temporary storage even when the requested result page is small.
+    """
+    columns=['id','source','author','work','language','quality','sequence']
+    if not legacy_schema():
+        columns+=['author_canonical','text_key']
+    return ','.join(f'{alias}.{column}' for column in columns)
+
+
+def count_search_groups(con,cte,params):
+    """Count mirror groups without executing representative/ranking windows."""
+    columns=group_columns()
+    return con.execute(cte+f'SELECT count(*) FROM (SELECT {columns} FROM matched GROUP BY {columns})',params).fetchone()[0]
+
+
+def fetch_search_page(con,cte,ordering,params,limit,offset):
+    """Hydrate the complete source record only after grouping and pagination."""
+    return con.execute(cte+'SELECT (SELECT payload.data FROM passages payload WHERE payload.id=selected.id) data,selected.* '
+                       'FROM (SELECT * FROM grouped WHERE rn=1 ORDER BY '+ordering+' LIMIT ? OFFSET ?) selected '
+                       'ORDER BY '+ordering,params+[limit,offset]).fetchall()
 # The static Vercel frontend may use a separately hosted read-only corpus API.
 # An empty list keeps the local same-origin default. Never allow credentialed
 # wildcard origins, and keep hosted classifier secrets exclusively server-side.
@@ -302,14 +328,14 @@ def filters(author='',language='',edition='',include_reference=False, alias='p')
     if author:
         keys=author_filter_keys(author)
         member=author_member_clause(keys)
-        # The commentary author's name remains its own. It enters an ancient
-        # author's result set only through an explicit parent text or a
-        # source-page note sharing a URL with text in the same collection.
-        clauses.append(f'''({member(alias)} OR ({alias}.kind='commentary' AND (
+        # Keep translator/commentator authorship. A translation answers to a
+        # poet only through an explicit Greek parent, never a shared page.
+        clauses.append(f'''({member(alias)} OR ({alias}.kind IN ('commentary','translation') AND (
             EXISTS (SELECT 1 FROM passages parent
                     WHERE parent.id=json_extract({alias}.data,'$.parent_id')
-                      AND parent.kind='text' AND {member('parent')})
-            OR (json_extract({alias}.data,'$.metadata.scope') IN ('page','source_section') AND
+                      AND parent.kind='text' AND parent.language='grc'
+                      {'' if include_reference else 'AND parent.quality IN '+QUALITY_SQL} AND {member('parent')})
+            OR ({alias}.kind='commentary' AND json_extract({alias}.data,'$.metadata.scope') IN ('page','source_section') AND
                 EXISTS (SELECT 1 FROM passages page_text
                         WHERE json_extract(page_text.data,'$.source_url')=json_extract({alias}.data,'$.source_url')
                           AND page_text.source={alias}.source AND page_text.kind='text'
@@ -814,10 +840,16 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
             if intent:
                 author_keys=list(dict.fromkeys(author_key(label) for label in intent.author_labels))
                 marks=','.join('?' for _ in author_keys)
-                records=[unpack(row) for row in con.execute(
-                    'SELECT data FROM passages WHERE author_key(author) IN ('+marks+')',author_keys)]
+                records=[unpack(row) for row in con.execute(f'''
+                    SELECT p.data FROM passages p WHERE author_key(p.author) IN ({marks})
+                    OR (p.kind IN ('translation','commentary') AND EXISTS (
+                        SELECT 1 FROM passages parent
+                        WHERE parent.id=json_extract(p.data,'$.parent_id')
+                          AND parent.kind='text' AND parent.language='grc'
+                          {'' if include_reference else 'AND parent.quality IN '+QUALITY_SQL}
+                          AND author_key(parent.author) IN ({marks})))''',author_keys*2)]
                 return rank_reference_records(intent,records,language=language,edition=edition,
-                                              limit=limit,offset=offset)
+                                              limit=limit,offset=offset,include_reference=include_reference)
     if mode=='hybrid':
         return hybrid_search(q,author=author,language=language,edition=edition,
                              include_reference=include_reference,match=match,limit=limit,
@@ -826,8 +858,10 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
     fallback_provenance={}
     extra,params=filters(author,language,edition,include_reference)
     def mark_author_scope(item):
-        if author and item.get('kind')=='commentary' and not (set(component_keys(item.get('author')))&set(author_filter_keys(author))):
-            reason='Commentary linked to the selected author by an explicit parent passage or shared source page; commentary authorship is retained.'
+        if author and item.get('kind') in {'commentary','translation'} and not (set(component_keys(item.get('author')))&set(author_filter_keys(author))):
+            reason=('Translation linked to the selected author by an explicit Greek parent passage; translator authorship is retained.'
+                    if item.get('kind')=='translation' else
+                    'Commentary linked to the selected author by an explicit parent passage or shared source page; commentary authorship is retained.')
             item['author_scope_reason']=reason
             item['match_reason']=item.get('match_reason','')+'; '+reason
         return item
@@ -865,7 +899,7 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                     results.append(mark_author_scope(item))
         if len(hits)==window:
             warnings.append('Semantic total counts only the first 1,000 ranked candidates; more indexed hits may exist.')
-        warnings.append('English translations/commentary are separate retrieval evidence; no automatic equivalence of senses is asserted.')
+        warnings.append('Translations/commentary are separate retrieval evidence; no automatic equivalence of senses is asserted.')
         total=len(results)
         return {'results':order_results(results,order)[offset:offset+limit],'total':total,'mode':mode,
             'method':'Local multilingual dense embeddings; similarity is not an influence claim.','warnings':warnings}
@@ -941,24 +975,22 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                 'WHERE t.normalized IN ('+marks+')'+extra+' GROUP BY p.id), '
                 'ranked AS (SELECT id,MIN(priority) priority,MAX(matched) matched '
                 'FROM candidates GROUP BY id), '
-                'matched AS (SELECT p.*,ranked.priority,ranked.matched FROM ranked JOIN passages p ON p.id=ranked.id), '
+                'matched AS (SELECT '+search_row_columns()+',ranked.priority,ranked.matched FROM ranked JOIN passages p ON p.id=ranked.id), '
                 'grouped AS (SELECT matched.*,'
                 f'MIN(priority) OVER (PARTITION BY {text_columns()}) gpriority,'
                 f'MAX(matched) OVER (PARTITION BY {text_columns()}) gmatched,'
                 +grouping('priority,mirror_pref(source,quality),matched DESC,sequence,id')+' FROM matched) ')
             values=exactparams+params+token_keys+params
-            total=con.execute(candidates+'SELECT count(*) FROM grouped WHERE rn=1',values).fetchone()[0]
+            total=count_search_groups(con,candidates,values)
             ordering=chronology+'gpriority,gmatched DESC,mirror_pref(source,quality),'+ordinary
-            rows=con.execute(candidates+'SELECT data,priority,copies,copy_ids FROM grouped WHERE rn=1 '
-                             'ORDER BY '+ordering+' LIMIT ? OFFSET ?',values+[limit,offset]).fetchall()
+            rows=fetch_search_page(con,candidates,ordering,values,limit,offset)
             results=[mark_author_scope(with_mirrors(unpack(row)|{'match_reason':'Normalized wording / citation match' if row['priority']==0 else method,
                                                    'score':None},row)) for row in rows]
         else:
-            grouped=('WITH matched AS (SELECT p.* FROM passages p WHERE '+exact_where+'), '
+            grouped=('WITH matched AS (SELECT '+search_row_columns()+' FROM passages p WHERE '+exact_where+'), '
                      'grouped AS (SELECT matched.*,'+grouping('mirror_pref(source,quality),sequence,id')+' FROM matched) ')
-            total=con.execute(grouped+'SELECT count(*) FROM grouped WHERE rn=1',exactparams+params).fetchone()[0]
-            rows=con.execute(grouped+'SELECT data,copies,copy_ids FROM grouped WHERE rn=1 ORDER BY '+
-                             chronology+ordinary+' LIMIT ? OFFSET ?',exactparams+params+[limit,offset]).fetchall()
+            total=count_search_groups(con,grouped,exactparams+params)
+            rows=fetch_search_page(con,grouped,chronology+ordinary,exactparams+params,limit,offset)
             results=[mark_author_scope(with_mirrors(unpack(row)|{'match_reason':'Normalized wording / citation match','score':None},row)) for row in rows]
         if total==0 and match!='exact':
             terms=tokenize(basic_normalize(q))[:16]
@@ -989,16 +1021,15 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                 # Identical copies group here too; a group ranks by its best
                 # word-group coverage, then its best full-text rank.
                 cols=text_columns()
-                fts_sql=('WITH matched AS (SELECT p.*,bm25(passage_fts) rank'+coverage_select+
+                fts_sql=('WITH matched AS (SELECT '+search_row_columns()+',bm25(passage_fts) rank'+coverage_select+
                          ' FROM passage_fts JOIN passages p ON p.id=passage_fts.id WHERE passage_fts MATCH ?'+extra+'), '
                          'grouped AS (SELECT matched.*,MIN(rank) OVER (PARTITION BY '+cols+') grank,'
                          'MAX(query_term_coverage) OVER (PARTITION BY '+cols+') gcoverage,'
                          +grouping('mirror_pref(source,quality),query_term_coverage DESC,rank,id')+' FROM matched) ')
                 fts_values=coverage_params+[expression]+params
-                total=con.execute(fts_sql+'SELECT count(*) FROM grouped WHERE rn=1',fts_values).fetchone()[0]
+                total=count_search_groups(con,fts_sql,fts_values)
                 coverage_order='gcoverage DESC,' if coverage_sql else ''
-                fetched=con.execute(fts_sql+'SELECT data,rank,query_term_coverage,copies,copy_ids FROM grouped WHERE rn=1 ORDER BY '+
-                                    chronology+coverage_order+'grank,mirror_pref(source,quality),id LIMIT ? OFFSET ?',fts_values+[limit,offset]).fetchall()
+                fetched=fetch_search_page(con,fts_sql,chronology+coverage_order+'grank,mirror_pref(source,quality),id',fts_values,limit,offset)
                 results=[]
                 for row in fetched:
                     item=with_mirrors(unpack(row)|{'match_reason':'Shared search words (not necessarily an exact phrase)','score':-row['rank']},row)

@@ -43,7 +43,7 @@ assert themes['results']
 assert themes['method'] == 'Local multilingual dense embeddings; similarity is not an influence claim.'
 expected_notices = {
     'Semantic total counts only the first 1,000 ranked candidates; more indexed hits may exist.',
-    'English translations/commentary are separate retrieval evidence; no automatic equivalence of senses is asserted.',
+    'Translations/commentary are separate retrieval evidence; no automatic equivalence of senses is asserted.',
 }
 assert set(themes.get('warnings', [])) <= expected_notices, themes.get('warnings')
 get('/api/search', q='Sappho Cretan grove cold water and roses', mode='themes', limit=5)

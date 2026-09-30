@@ -9,7 +9,7 @@
     authorFilter: $('author-filter'), edition: $('edition-filter'), language: $('language-filter'),
     order: $('order-filter'), reference: $('reference-filter'),
     results: $('search-results'), resultsHeading: $('results-heading'), resultsSummary: $('results-summary'),
-    resultsList: $('results-list'), moreResults: $('more-results'), closeResults: $('close-results'),
+    resultsList: $('results-list'), dictionaryPreview: $('dictionary-preview'), moreResults: $('more-results'), closeResults: $('close-results'),
     passage: $('passage'), title: $('passage-title'), subtitle: $('passage-subtitle'),
     kicker: $('passage-kicker'), text: $('passage-text'), textLeading: $('text-leading'),
     readingHint: $('reading-hint'), provenance: $('provenance'), related: $('related-material'),
@@ -21,7 +21,8 @@
   const state = {
     authors: [], works: new Map(), selectedAuthor: '', selectedWork: '', passage: null,
     search: null, searchSequence: 0, passageSequence: 0, wordSequence: 0,
-    selectedText: '', activeWord: null, semanticStatus: null, classifierStatus: null
+    selectedText: '', activeWord: null, semanticStatus: null, classifierStatus: null,
+    dictionarySequence: 0, dictionaryCache: new Map()
   };
 
   function node(tag, className, content) {
@@ -107,7 +108,7 @@
   function updateLanguageOptions(languages) {
     if (!Array.isArray(languages)) return;
     const selected = ui.language.value;
-    const labels = { grc: 'Greek', eng: 'English', lat: 'Latin', ita: 'Italian', fra: 'French', deu: 'German', mul: 'Multilingual' };
+    const labels = { grc: 'Ancient Greek', ell: 'Modern Greek', eng: 'English', lat: 'Latin', ita: 'Italian', fra: 'French', deu: 'German', mul: 'Multilingual' };
     const available = [...new Set(languages.map(row => row.language).filter(Boolean))];
     clear(ui.language);
     const all = node('option', '', 'Any'); all.value = ''; ui.language.append(all);
@@ -370,7 +371,9 @@
     if (lines) {
       // Lookup units are computed over the joined lines so a word divided at a
       // line end still forms one lookup; each printed line stays its own row.
-      const words = readingWords(lines.map(line => line.text).join('\n'));
+      // Modern Greek translations are searchable evidence, not Ancient Greek
+      // morphology attestations. Preserve their text without ancient-form buttons.
+      const words = passage.language === 'ell' ? [] : readingWords(lines.map(line => line.text).join('\n'));
       let offset = 0;
       for (const line of lines) {
         const row = node('div', line.text ? 'line' : 'line blank');
@@ -384,7 +387,7 @@
     } else if (passage.text) {
       window.MelosVerseFit?.unwatch(ui.text);
       const paragraph = node('p');
-      appendTextWithWords(paragraph, passage.text, readingWords(passage.text));
+      appendTextWithWords(paragraph, passage.text, passage.language === 'ell' ? [] : readingWords(passage.text));
       ui.text.append(paragraph);
     } else {
       window.MelosVerseFit?.unwatch(ui.text);
@@ -393,7 +396,9 @@
     ui.readingHint.textContent = passage.language === 'grc' && passage.kind === 'text'
       ? 'Select a phrase to trace it, or choose a Greek word to inspect it.'
       : passage.kind === 'translation'
-        ? 'Translation record. Related source material and provenance appear below when available.'
+        ? passage.language === 'ell'
+          ? 'Modern Greek translation. Open the linked Ancient Greek passage below to inspect its word forms.'
+          : 'Translation record. Related source material and provenance appear below when available.'
         : passage.kind === 'commentary' || passage.kind === 'apparatus'
           ? `${passage.kind === 'apparatus' ? 'Apparatus' : 'Commentary'} record. Consult its source details below.`
           : `This ${passage.kind || 'source'} record is labeled ${passage.language || 'unknown language'}; consult its source details below.`;
@@ -502,6 +507,11 @@
       const sourceSection = item.metadata?.scope === 'source_section';
       const nonAligned = pageWide || sourceSection;
       article.append(node('span', 'eyebrow', [sourceSection ? 'Source-section note · not passage-aligned' : pageWide ? 'Page-wide note' : item.kind, item.edition].filter(Boolean).join(' · ') || 'Related record'));
+      if (item.kind === 'translation') {
+        const credit = item.metadata?.translator || item.author;
+        const language = ({ ell: 'Modern Greek', eng: 'English', lat: 'Latin', grc: 'Ancient Greek' })[item.language] || item.language;
+        article.append(node('p', 'candidate-reason', [language, credit && `Translator: ${credit}`].filter(Boolean).join(' · ')));
+      }
       if (sourceSection) {
         const labels = [...new Set([item.metadata?.source_heading, item.metadata?.source_section, item.citation].filter(value => typeof value === 'string' && value.trim()))];
         article.append(node('p', 'candidate-reason', labels.length ? `Source section / citation: ${labels.join(' · ')}` : 'Source section label not supplied.'));
@@ -631,6 +641,80 @@
     button.addEventListener('click', () => openPassage(record.id));
     return button;
   }
+  function renderDictionaryPreview(host, data, { openEntries = true, wiktionary = null } = {}) {
+    const preview = window.MelosDictionaryPreview?.buildPreview(data, wiktionary);
+    if (!preview?.entries?.length) return false;
+    const section = node('section', 'dictionary-glimpse');
+    section.append(node('span', 'eyebrow', 'DICTIONARY'));
+    const lemmaGroups = new Map();
+    for (const entry of preview.entries) {
+      const key = String(entry.lemma).normalize('NFC');
+      let group = lemmaGroups.get(key);
+      if (!group) {
+        group = node('div', 'dictionary-glimpse-group');
+        group.append(node('h3', 'dictionary-glimpse-lemma', entry.lemma));
+        if (preview.query && preview.query !== entry.lemma) group.append(node('p', 'candidate-reason', `Searched form: ${preview.query}`));
+        lemmaGroups.set(key, group); section.append(group);
+      }
+      const card = node('div', 'dictionary-glimpse-entry');
+      if (entry.source) card.append(node('p', 'candidate-reason', entry.source));
+      if (entry.ambiguous && entry.label) card.append(node('p', 'candidate-reason', entry.label));
+      const parses = [...new Set((entry.analyses || []).map(analysis => analysis.text).filter(Boolean))];
+      if (parses.length) card.append(node('p', 'candidate-analysis', parses.slice(0, 3).join(' · ')));
+      const analysisSources = new Map((entry.analyses || []).map(analysis => [analysis.source_url, analysis.source]));
+      for (const [url, sourceName] of analysisSources) {
+        const source = safeLink(url, `Form analysis: ${sourceName || 'source'} ↗`);
+        if (source) { source.className = 'dictionary-glimpse-source'; card.append(source); }
+      }
+      for (const meaning of entry.meanings || []) {
+        const line = node('p', 'dictionary-glimpse-meaning', meaning.text);
+        const source = safeLink(meaning.source_url, `${meaning.source || entry.source || 'Dictionary source'} ↗`);
+        if (source) { source.className = 'dictionary-glimpse-source'; line.append(source); }
+        card.append(line);
+      }
+      if (openEntries) {
+        const open = node('button', 'text-action', 'Inspect this lemma →');
+        open.type = 'button';
+        open.addEventListener('click', () => {
+          inspectWord(entry.lemma);
+          ui.inspector.closest('.inspector').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        card.append(open);
+        const full = safeLink(entry.entry_url || entry.source_url, 'Full dictionary entry ↗');
+        if (full) { full.className = 'dictionary-glimpse-source'; card.append(full); }
+      }
+      group.append(card);
+    }
+    section.append(node('p', 'candidate-reason', preview.ambiguous
+      ? 'More than one dictionary analysis is recorded. These meanings are not a selected reading of a passage.'
+      : 'Dictionary meanings; the intended sense depends on the passage.'));
+    if (preview.truncated) section.append(node('p', 'candidate-reason', 'A short preview is shown. Open the full entry for additional analyses and senses.'));
+    host.append(section);
+    return true;
+  }
+  async function loadDictionaryPreview(query) {
+    const sequence = ++state.dictionarySequence;
+    clear(ui.dictionaryPreview);
+    ui.dictionaryPreview.hidden = true;
+    if (!window.MelosDictionaryPreview?.isCandidateQuery(query) || ui.language.value === 'ell') return;
+    try {
+      let evidence = state.dictionaryCache.get(query);
+      if (!evidence) {
+        const [word, wiktionary] = await Promise.all([
+          api('/api/word', { form: query }).catch(() => null),
+          /\p{Script=Greek}/u.test(query) ? api('/api/wiktionary', { form: query, limit: 8 }).catch(() => null) : Promise.resolve(null),
+        ]);
+        evidence = { word, wiktionary };
+        if (word || wiktionary) state.dictionaryCache.set(query, evidence);
+        if (state.dictionaryCache.size > 30) state.dictionaryCache.delete(state.dictionaryCache.keys().next().value);
+      }
+      if (sequence !== state.dictionarySequence) return;
+      ui.dictionaryPreview.hidden = !renderDictionaryPreview(ui.dictionaryPreview, evidence.word || { form: query }, { wiktionary: evidence.wiktionary });
+    } catch {
+      // An unavailable dictionary preview must never block passage search or
+      // fill the space with generated definitions.
+    }
+  }
   async function search(query, mode = formMode(), append = false) {
     query = String(query || '').trim();
     if (!query) { ui.searchInput.focus(); return; }
@@ -641,6 +725,7 @@
       ui.resultsHeading.textContent = `Results for “${query}”`;
       ui.resultsSummary.textContent = 'Searching the source index…';
       ui.moreResults.hidden = true;
+      loadDictionaryPreview(query);
       ui.results.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     const active = state.search;
@@ -807,6 +892,7 @@
       const data = await api('/api/wiktionary', { form, limit: 8 });
       if (sequence !== state.wordSequence) return;
       renderWiktionary(host, data);
+      return data;
     } catch (error) {
       if (sequence !== state.wordSequence) return;
       clear(host);
@@ -1138,7 +1224,7 @@
     const pending = node('p', 'inspector-message', 'Looking up recorded analyses…');
     morphologyHost.append(pending);
     const sequence = ++state.wordSequence;
-    loadWiktionary(form, sequence, wiktionaryHost);
+    const wikiPreview = loadWiktionary(form, sequence, wiktionaryHost);
     if (button && window.matchMedia('(max-width:1280px)').matches) {
       requestAnimationFrame(() => ui.inspector.closest('.inspector').scrollIntoView({ behavior: 'smooth', block: 'start' }));
     }
@@ -1147,6 +1233,14 @@
       if (sequence !== state.wordSequence) return;
       pending.remove();
       if (data.normalized && data.normalized !== form) morphologyHost.append(node('p', 'word-normalized', `Normalized search: ${data.normalized}`));
+      const glimpse = node('div');
+      morphologyHost.append(glimpse);
+      renderDictionaryPreview(glimpse, data, { openEntries: false });
+      wikiPreview.then(wiktionary => {
+        if (!wiktionary || sequence !== state.wordSequence) return;
+        clear(glimpse);
+        renderDictionaryPreview(glimpse, data, { openEntries: false, wiktionary });
+      });
       renderStructuredEvidence(morphologyHost, data.structured_evidence, passageId);
       renderParallelContexts(morphologyHost, data.parallel_contexts);
       renderContextualCandidates(morphologyHost, data.contextual_candidates, data.contextual_candidate_method);

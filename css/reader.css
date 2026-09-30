@@ -109,4 +109,13 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .greek-text.verse-fit .line-content{display:inline}
 .greek-text.verse-fit .line.blank{height:.7em}
 .greek-text.verse-fit .line-label{font-size:11px}
+.dictionary-glimpse{margin:0 0 24px;padding:18px 20px;border:1px solid var(--line);background:#f5f7f4;color:var(--ink)}
+.dictionary-glimpse-entry+.dictionary-glimpse-entry{margin-top:17px;padding-top:14px;border-top:1px solid var(--line)}
+.dictionary-glimpse-group+.dictionary-glimpse-group{margin-top:20px;padding-top:12px;border-top:1px solid var(--line)}
+.dictionary-glimpse-lemma{font:normal 30px/1.2 var(--greek);margin:7px 0;color:var(--ink)}
+.dictionary-glimpse-meaning{margin:8px 0;font-size:16px;line-height:1.45;overflow-wrap:anywhere}
+.dictionary-glimpse-source{display:inline-block;margin-left:9px;color:var(--ink);font-size:11px;text-decoration:none;border-bottom:1px solid #a8b8c5}
+.dictionary-glimpse .text-action{margin:6px 0 10px;color:var(--ink)}
+.inspector .dictionary-glimpse{padding:12px;margin-top:14px}
+@media(max-width:600px){.dictionary-glimpse{padding:14px}.dictionary-glimpse-lemma{font-size:27px}}
 .mirror-list .mirror-copy{margin:6px 0;color:#465965;font-size:14px;line-height:1.45}.mirror-list .related-open{margin:0 0 0 10px;padding:3px 8px;font-size:12px}

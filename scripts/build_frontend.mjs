@@ -8,7 +8,7 @@ const localPreview = process.argv.includes('--local-preview');
 const frontendOnly = process.env.MELOS_FRONTEND_ONLY === '1';
 const jsFiles = [
   'api.js', 'app.js', 'dither.js', 'images.js', 'reader-hero.js',
-  'reader.js', 'studio-live.js', 'usage-space.js', 'ui-icons.js', 'verse-fit.js'
+  'reader.js', 'studio-live.js', 'usage-space.js', 'ui-icons.js', 'verse-fit.js', 'dictionary-preview.js'
 ];
 const cssFiles = ['styles.css', 'reader.css', 'icons.css'];
 

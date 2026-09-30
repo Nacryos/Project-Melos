@@ -64,7 +64,7 @@ def test_build_search_checkpoint_and_translation_disclosure(tmp_path):
     matches = index.search("sea", limit=2)
     assert matches[0]["id"] == "english"
     assert matches[0]["parent_id"] == "greek"
-    assert matches[0]["match_reason"] == "English translation embedding"
+    assert matches[0]["match_reason"] == "Translation embedding"
     found, vectors = index.vectors_for(["english", "missing", "greek"])
     assert found == ["english", "greek"]
     assert vectors.shape == (2, 2)
