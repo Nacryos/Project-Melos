@@ -258,13 +258,50 @@
     ui.prev.disabled = true; ui.next.disabled = true;
   }
 
+  // Shared literal lexer: retain source spelling, combining marks and offsets.
+  // An apostrophe may connect Greek segments or occur once at the end. Repeated
+  // punctuation separates units; mixed-script tokens never become partial Greek.
+  function literalGreekWords(value) {
+    const text = String(value || '');
+    const letter = /\p{L}/u, greekLetter = /(?=\p{L})\p{Script=Greek}/u;
+    const mark = /\p{M}/u, apostrophe = /['’᾽ʼ]/u;
+    const words = [];
+    let start = -1, end = 0, mixed = false;
+    const flush = () => {
+      if (start >= 0 && !mixed) {
+        const raw = text.slice(start, end);
+        words.push({ text: raw, start, end, form: raw, group: start, joined: false });
+      }
+      start = -1; mixed = false;
+    };
+    for (let offset = 0; offset < text.length;) {
+      const character = String.fromCodePoint(text.codePointAt(offset));
+      const next = offset + character.length;
+      // Modifier apostrophe U+02BC is itself a letter: handle it first.
+      if (apostrophe.test(character)) {
+        if (start >= 0) {
+          end = next;
+          const following = next < text.length ? String.fromCodePoint(text.codePointAt(next)) : '';
+          if (apostrophe.test(following) || !letter.test(following)) flush();
+        }
+      } else if (letter.test(character)) {
+        if (start < 0) start = offset;
+        end = next;
+        if (!greekLetter.test(character)) mixed = true;
+      } else if (mark.test(character)) {
+        if (start >= 0) end = next;
+      } else flush();
+      offset = next;
+    }
+    flush();
+    return words;
+  }
   // Lookup units never replace the printed text. Only explicit line-end
   // divisions are joined; editorial brackets/lacunae/numbers remain barriers.
   function readingWords(value) {
     const text = String(value || '');
     const greekLetter = /(?=\p{L})\p{Script=Greek}/u;
-    const words = [...text.matchAll(/(?=\p{L})\p{Script=Greek}(?:(?=\p{L})\p{Script=Greek}|\p{M}|[᾽’'])*/gu)]
-      .map(match => ({ text: match[0], start: match.index, end: match.index + match[0].length, form: match[0], group: match.index, joined: false }));
+    const words = literalGreekWords(text);
     for (let i = 0; i < words.length; i++) {
       let end = i;
       while (end + 1 < words.length) {
@@ -674,7 +711,7 @@
     }
   }
   function foldGreekForm(value) {
-    return String(value || '').normalize('NFD').toLowerCase().replace(/\p{M}/gu, '').replaceAll('ς', 'σ');
+    return String(value || '').replace(/[’᾽ʼ]/gu, "'").normalize('NFD').toLowerCase().replace(/\p{M}/gu, '').replaceAll('ς', 'σ');
   }
   function renderRelatedCommentary(form, related, host) {
     if (!Array.isArray(related) || !/\p{Script=Greek}/u.test(form)) return;
@@ -682,10 +719,10 @@
     const hits = [];
     for (const item of related) {
       if (item?.kind !== 'commentary' || typeof item.text !== 'string') continue;
-      for (const match of item.text.matchAll(/[\p{Script=Greek}\p{M}]+(?:[᾽’'][\p{Script=Greek}\p{M}]+)*/gu)) {
-        if (foldGreekForm(match[0]) !== folded) continue;
-        const start = Math.max(0, match.index - 65);
-        const end = Math.min(item.text.length, match.index + match[0].length + 95);
+      for (const word of literalGreekWords(item.text)) {
+        if (foldGreekForm(word.text) !== folded) continue;
+        const start = Math.max(0, word.start - 65);
+        const end = Math.min(item.text.length, word.end + 95);
         hits.push({ item, start, end });
         break; // One preview per source note; nearby mentions remain in its full text.
       }

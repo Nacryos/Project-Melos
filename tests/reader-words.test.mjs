@@ -17,7 +17,7 @@ const context = vm.createContext({
   document: { createTextNode: text => new Element('text', '', text) },
   inspectWord: (...args) => clicks.push(args),
 });
-vm.runInContext(source.slice(source.indexOf('  function readingWords('), source.indexOf('  function renderPassageText(')), context);
+vm.runInContext(source.slice(source.indexOf('  function literalGreekWords('), source.indexOf('  function renderPassageText(')), context);
 const words = vm.runInContext('readingWords', context);
 const render = vm.runInContext('appendTextWithWords', context);
 
