@@ -237,6 +237,14 @@ class Morphology:
             self._entries[normalize(lemma)].append(row)
             self.entry_count += 1
         seen_forms: set[tuple[str, ...]] = set()
+        # Temporary collection before reading-level deduplication: later tokens
+        # of an already indexed form must not disappear. Buckets are shared by
+        # precise inventory identity + spelling + existing source-ref fields.
+        # Only capped, deduplicated summaries remain resident after loading.
+        location_buckets: dict[tuple[Any, ...], dict[str, Any]] = {}
+        # Document/sentence/token identifiers repeat heavily. Share immutable
+        # strings within this load instead of retaining one copy per raw row.
+        location_atoms: dict[str, str] = {'': ''}
         for row in _read_jsonl(self.forms_path):
             if publication_restricted() and not record_allowed(row):
                 continue
@@ -249,9 +257,24 @@ class Morphology:
             self._lemma_forms[lemma_key].add(form)
             self._form_lemmas[form_key].add(lemma_key)
             self.form_count += 1
+            lemma_nfc = unicodedata.normalize('NFC', lemma)
+            raw_nfc = unicodedata.normalize('NFC', str(row.get('lemma_raw') or lemma))
+            inventory_key = (lemma_nfc, raw_nfc, str(row.get('source') or ''))
+            source_ref_key = json.dumps({field: row.get(field) for field in
+                                        ('source', 'source_url', 'analysis', 'analysis_format', 'license', 'quality')},
+                                       sort_keys=True, ensure_ascii=False)
+            location_key = (*inventory_key, form, source_ref_key)
+            new_inventory_reading = location_key not in location_buckets
+            location_summary = location_buckets.setdefault(location_key, {'_rows': []})
+            raw_location = (str(row[field]) if row.get(field) not in (None, '') else ''
+                            for field in ('citation', 'document_id', 'sentence_id', 'token_id'))
+            location = tuple(location_atoms.setdefault(value, value) for value in raw_location)
+            if any(location):
+                location_summary['_rows'].append(location)
             identity = (form_key, form, lemma, str(row.get("lemma_raw") or lemma),
                         str(row.get("analysis")), str(row.get("source_url")), str(row.get("source")))
-            if identity in seen_forms:
+            new_candidate_reading = identity not in seen_forms
+            if not new_candidate_reading and not new_inventory_reading:
                 continue
             seen_forms.add(identity)
             # Raw JSONL keeps every token and its precise source location.
@@ -259,12 +282,24 @@ class Morphology:
             compact_row = {field: row.get(field) for field in
                                            ("form", "lemma", "lemma_raw", "analysis", "analysis_format",
                                             "source", "source_url", "license", "quality")}
-            self._forms[form_key].append(compact_row)
-            lemma_nfc = unicodedata.normalize('NFC', lemma)
-            raw_nfc = unicodedata.normalize('NFC', str(row.get('lemma_raw') or lemma))
-            inventory_key = (lemma_nfc, raw_nfc, str(row.get('source') or ''))
-            self._inventory_rows[inventory_key].append(compact_row)
-            self._inventory_keys[lemma_nfc].add(inventory_key)
+            compact_row['_location_summary'] = location_summary
+            if new_candidate_reading:
+                self._forms[form_key].append(compact_row)
+            if new_inventory_reading:
+                # Inventory references retain metadata variants even when
+                # candidate deduplication intentionally ignores those fields.
+                self._inventory_rows[inventory_key].append(compact_row)
+                self._inventory_keys[lemma_nfc].add(inventory_key)
+        for summary in location_buckets.values():
+            # A count of distinct supplied locator records, not a frequency or
+            # assertion of unique token occurrences. Conflicting citation aliases
+            # at identical coordinates remain distinct; absent fields stay null.
+            locations = sorted(set(summary.pop('_rows')),
+                               key=lambda value: (not bool(value[0]), *value))
+            shown = locations[:20]
+            # Keep compact tuples internally. JSON dictionaries are built only
+            # for the bounded inventories requested by a user, not every token.
+            summary.update({'_locations': tuple(shown), 'location_total': len(locations)})
         for key in self._forms.keys() | self._entries.keys():
             if len(key) < 5:
                 self._short[(len(key), key[:1])].add(key)
@@ -370,6 +405,16 @@ class Morphology:
                 # Canonical sorting makes both truncation and source ordering
                 # stable regardless of ingestion/file order.
                 ref_key = json.dumps(ref, sort_keys=True, ensure_ascii=False)
+                location_summary = row['_location_summary']
+                shown_locations = location_summary['_locations']
+                ref.update({
+                    'locations': [dict(zip(('citation', 'document_id', 'sentence_id', 'token_id'),
+                                           (value or None for value in location)))
+                                  for location in shown_locations],
+                    'location_total': location_summary['location_total'],
+                    'locations_shown': len(shown_locations),
+                    'locations_truncated': location_summary['location_total'] > len(shown_locations),
+                })
                 form_refs[str(row['form'])][ref_key] = ref
             spellings = sorted(form_refs, key=lambda value: (normalize(value), value))
             forms = []

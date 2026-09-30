@@ -85,6 +85,14 @@ it does not establish a lemma or paradigm for the queried word.
 Groups carry `total_forms`, `shown_forms`, and `truncated`; each displayed form
 has its source references and explicit reference counts/truncation. These
 references describe indexed annotations, not independently adjudicated parses.
+Each reference also exposes source-provided `locations` containing `citation`,
+`document_id`, `sentence_id`, and `token_id`. Missing values remain null. Later
+tokens are not lost when identical morphological readings in the same source
+file are deduplicated. `location_total`, `locations_shown`, and
+`locations_truncated` count distinct recorded locator tuples, not inferred
+unique ancient occurrences. Conflicting or incomplete locators are not silently
+completed; no work names, line references, or token URLs are invented. The
+location preview retains at most 20 locators per reference.
 The inventories are not filtered to the selected passage, author, or dialect.
 Unnumbered homograph ambiguity stays explicit instead of being resolved by
 spelling proximity. `complete_paradigm` is always false.

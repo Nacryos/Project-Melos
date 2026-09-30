@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 // Synthetic source/lemma fixtures exercise presentation, not literary claims.
 const source = readFileSync(new URL('../js/reader.js', import.meta.url), 'utf8');
 class Element {
-  constructor(tag, cls = '', text = '') { Object.assign(this, { tag, cls, text, children: [] }); }
+  constructor(tag, cls = '', text = '') { Object.assign(this, { tag, cls, text, children: [], style: {} }); }
   append(...children) { this.children.push(...children); }
   get textContent() { return this.text + this.children.map(child => child.textContent).join(''); }
 }
@@ -89,4 +89,54 @@ test('numbered homograph groups remain distinct before expansion and query ambig
   assert.match(summaries[0], /\[fixture lemma A1\]/);
   assert.match(summaries[1], /\[fixture lemma A2\]/);
   for (const details of groups) assert.match(details.textContent, /multiple lemma identities; choosing an inventory does not resolve the parse/);
+});
+
+function locatedInventory(ref) {
+  return inventory({ observed_form_groups: [group({ forms: [{ form: 'fixture form A', source_refs: [{ source: 'Fixture source', source_url: 'https://example.org/original.xml', ...ref }], source_ref_total: 1 }], total_forms: 1, truncated: false })] });
+}
+
+test('source citations are displayed verbatim without invented work labels or deep links', () => {
+  const citation = 'urn:cts:fixture:author.work.edition:12.34';
+  const host = locatedInventory({ locations: [{ citation, document_id: 'DOC', sentence_id: 'SENT', token_id: 'TOKEN' }], location_total: 1, locations_shown: 1, locations_truncated: false });
+  assert.match(host.textContent, /1 of 1 source location records shown/);
+  assert.ok(host.textContent.includes(`Source citation: ${citation}`));
+  assert.ok(host.textContent.includes('Source identifiers · Document: DOC · Sentence: SENT · Token: TOKEN'));
+  assert.equal(descendants(host, 'a').length, 1);
+  assert.equal(descendants(host, 'a')[0].href, 'https://example.org/original.xml');
+  const line = descendants(host, 'p').find(element => element.text === `Source citation: ${citation}`);
+  assert.equal(line.style.overflowWrap, 'anywhere');
+});
+
+test('missing citations fall back only to supplied document, sentence and token identifiers', () => {
+  const host = locatedInventory({ locations: [{ citation: null, document_id: 'literal document', sentence_id: 0, token_id: '7' }], location_total: 1 });
+  assert.match(host.textContent, /Source identifiers · Document: literal document · Sentence: 0 · Token: 7/);
+  assert.ok(!host.textContent.includes('Source citation:'));
+  const absent = locatedInventory({ locations: [], location_total: 0 });
+  assert.match(absent.textContent, /No precise locator supplied/);
+  const legacy = locatedInventory({});
+  assert.match(legacy.textContent, /0 source location records shown; total not supplied/);
+  assert.match(legacy.textContent, /No precise locator supplied/);
+});
+
+test('multiple location previews collapse separately and disclose true displayed count and truncation', () => {
+  const host = locatedInventory({ locations: [{ citation: 'verbatim A' }, { document_id: 'doc B', token_id: '9' }], location_total: 7, locations_shown: 99, locations_truncated: true });
+  const details = descendants(host, 'details').find(element => element.children[0].textContent === '2 of 7 source location records shown');
+  assert.ok(details);
+  assert.match(details.textContent, /Source-location preview is truncated/);
+  assert.match(details.textContent, /Source citation: verbatim A/);
+  assert.match(details.textContent, /Source identifiers · Document: doc B · Token: 9/);
+  assert.ok(!host.textContent.includes('99'));
+  assert.match(host.textContent, /1 of 1 source references shown/);
+});
+
+test('separate tokens sharing a source citation retain their distinct source identifiers', () => {
+  const host = locatedInventory({ locations: [
+    { citation: 'verbatim same citation', document_id: 'DOC', sentence_id: '3', token_id: '4' },
+    { citation: 'verbatim same citation', document_id: 'DOC', sentence_id: '3', token_id: '5' },
+  ], location_total: 2 });
+  const lines = descendants(host, 'p');
+  assert.equal(lines.filter(line => line.text === 'Source citation: verbatim same citation').length, 2);
+  assert.ok(lines.some(line => line.text === 'Source identifiers · Document: DOC · Sentence: 3 · Token: 4'));
+  assert.ok(lines.some(line => line.text === 'Source identifiers · Document: DOC · Sentence: 3 · Token: 5'));
+  assert.equal(descendants(host, 'a').length, 1);
 });

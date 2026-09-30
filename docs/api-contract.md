@@ -72,6 +72,11 @@ markers, source references, query-match relationship, and explicit truncation
 counts. They are source annotations across the index, not attestations in the
 selected author or an adjudication of that occurrence. The reader does not
 fall back to an unscoped `attested_forms` list from an older backend.
+Inventory source references retain their recorded token locators, including
+verbatim CTS citations where supplied and document/sentence/token IDs. Several
+tokens in one source file remain distinct after morphological-reading
+deduplication. Locator totals and preview limits are explicit; absent citations
+are not reconstructed from sentence metadata or model knowledge.
 
 Reader developer owns `reader.html`, `js/reader.js`, `css/reader.css`; visualization
 developer owns `js/usage-space.js` and exposes `window.MelosUsageSpace.open(query,

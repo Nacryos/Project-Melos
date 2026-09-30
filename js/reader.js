@@ -972,6 +972,7 @@
           const source = node('div', 'candidate');
           const link = safeLink(ref.source_url, `${ref.source || group.source || 'Source record'} ↗`);
           source.append(link || node('p', 'candidate-reason', `${ref.source || group.source || 'Source record'} · source URL unavailable`));
+          renderSourceLocations(source, ref);
           if (ref.analysis) source.append(node('p', 'candidate-analysis', `Source analysis: ${ref.analysis}${ref.analysis_format ? ` (${ref.analysis_format})` : ''}`));
           if (ref.quality) source.append(node('p', 'candidate-reason', `Source quality label: ${ref.quality}`));
           if (ref.license) source.append(node('p', 'candidate-reason', `Source license label: ${ref.license}`));
@@ -981,6 +982,33 @@
       }
       section.append(details);
     }
+  }
+  function renderSourceLocations(host, ref) {
+    const locations = Array.isArray(ref.locations) ? ref.locations.filter(location => location && typeof location === 'object') : [];
+    const total = Number.isInteger(ref.location_total) && ref.location_total >= locations.length ? ref.location_total : null;
+    const count = total == null ? `${locations.length} source location records shown; total not supplied` : `${locations.length} of ${total} source location records shown`;
+    const container = locations.length > 1 ? node('details', 'entry-details') : node('div');
+    container.append(node(locations.length > 1 ? 'summary' : 'p', 'candidate-reason', count));
+    if (ref.locations_truncated || (total != null && locations.length < total)) container.append(node('p', 'candidate-reason', 'Source-location preview is truncated.'));
+    if (!locations.length) container.append(node('p', 'candidate-reason', 'No precise locator supplied.'));
+    for (const location of locations) {
+      const fields = [['document_id', 'Document'], ['sentence_id', 'Sentence'], ['token_id', 'Token']];
+      const coordinates = fields.filter(([key]) => ['string', 'number'].includes(typeof location[key]) && String(location[key]).trim())
+        .map(([key, title]) => `${title}: ${location[key]}`);
+      const identifiers = coordinates.length ? `Source identifiers · ${coordinates.join(' · ')}` : '';
+      const hasCitation = typeof location.citation === 'string' && location.citation.trim();
+      const label = hasCitation ? `Source citation: ${location.citation}` : identifiers || 'No precise locator supplied.';
+      const line = node('p', 'candidate-analysis', label);
+      // CTS URNs and source document identifiers can be long unbroken strings.
+      line.style.overflowWrap = 'anywhere';
+      container.append(line);
+      if (hasCitation && identifiers) {
+        const coordinatesLine = node('p', 'candidate-reason', identifiers);
+        coordinatesLine.style.overflowWrap = 'anywhere';
+        container.append(coordinatesLine);
+      }
+    }
+    host.append(container);
   }
   async function inspectWord(form, button = null, joined = false) {
     if (!form) return;

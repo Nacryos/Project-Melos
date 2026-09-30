@@ -53,6 +53,20 @@ def verify(origin):
             assert item['source_refs'], 'Displayed inventory forms need source records'
             assert all(ref['source'] == group['source'] for ref in item['source_refs'])
     print('Nearby-spelling form inventories remain source/lemma-scoped, with explicit limits; no pooled query paradigm.', flush=True)
+    heat = next(group for group in groups if group['lemma'] == 'καῦμα')
+    genitive = next(item for item in heat['forms'] if item['form'] == 'καύματος')
+    locators = [location for ref in genitive['source_refs'] for location in ref['locations']]
+    assert any(location['citation'] == 'urn:cts:greekLit:tlg0012.tlg001:5.865'
+               and location['sentence_id'] == '2275891' and location['token_id'] == '8'
+               for location in locators), 'The explicit token citation must survive lookup'
+    assert {('1716136', '7'), ('1716230', '52')} <= {
+        (location['sentence_id'], location['token_id']) for location in locators
+        if location['document_id'] == 'urn:cts:greekLit:tlg0020.tlg002.perseus-grc1'
+        and not location['citation']}, 'Same-file tokens must retain distinct locators without invented citations'
+    for ref in genitive['source_refs']:
+        assert ref['locations_shown'] == len(ref['locations']) <= ref['location_total']
+        assert ref['locations_truncated'] == (ref['locations_shown'] < ref['location_total'])
+    print('Token citations and distinct same-file locators survive reading deduplication; missing citations stay absent.', flush=True)
     truncated = get('/api/search', q='κἄμμ', mode='words', match='exact', author='Sappho', limit=100)
     assert source['id'] not in {row['id'] for row in truncated['results']}, 'Exact search must not silently discard the printed elision sign'
     print('Printed elision sign is preserved in lookup; bare-prefix exact search does not claim the Brothers Poem.', flush=True)
