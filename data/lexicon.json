@@ -1,0 +1,120 @@
+{
+  "_note": "SAMPLE DATA for layout only. Replace with the real corpus backend. Fragment numbers: Sappho/Alcaeus = Voigt (V), Alcman = PMGF, Archilochus = West (W).",
+  "entries": [
+    {
+      "lemma": "γλυκύπικρος", "pos": "adj.", "gloss": "sweetbitter",
+      "note": "Sweet comes first: the order is the point.",
+      "attestations": [
+        { "poet": "Sappho", "cite": "fr. 130.2 V", "text": "γλυκύπικρον ἀμάχανον ὄρπετον", "tr": "sweetbitter, unmanageable creature" }
+      ]
+    },
+    {
+      "lemma": "λυσιμελής", "pos": "adj.", "gloss": "limb-loosening",
+      "note": "Stock epithet of desire and of Eros.",
+      "attestations": [
+        { "poet": "Sappho", "cite": "fr. 130.1 V", "text": "Ἔρος δηὖτέ μ' ὀ λυσιμέλης δόνει", "tr": "Eros the limb-loosener shakes me again" },
+        { "poet": "Alcman", "cite": "fr. 3.61 PMGF", "text": "λυσιμελεῖ τε πόθωι", "tr": "and with limb-loosening longing" },
+        { "poet": "Archilochus", "cite": "fr. 196 W", "text": "ἀλλά μ' ὁ λυσιμελὴς ὦταῖρε δάμναται πόθος", "tr": "but limb-loosening longing, friend, overpowers me" }
+      ]
+    },
+    {
+      "lemma": "ἀμήχανος", "pos": "adj.", "gloss": "unmanageable, against which there is no device",
+      "note": "Aeolic ἀμάχανος.",
+      "attestations": [
+        { "poet": "Sappho", "cite": "fr. 130.2 V", "text": "γλυκύπικρον ἀμάχανον ὄρπετον", "tr": "sweetbitter, unmanageable creature" }
+      ]
+    },
+    {
+      "lemma": "ἑρπετόν", "pos": "n.", "gloss": "creeping thing, creature",
+      "note": "Aeolic ὄρπετον, with psilosis.",
+      "attestations": [
+        { "poet": "Sappho", "cite": "fr. 130.2 V", "text": "γλυκύπικρον ἀμάχανον ὄρπετον", "tr": "sweetbitter, unmanageable creature" }
+      ]
+    },
+    {
+      "lemma": "ποικιλόθρονος", "pos": "adj.", "gloss": "of the intricate throne",
+      "note": "Part of the manuscript tradition reads ποικιλόφρον, “of intricate mind”.",
+      "attestations": [
+        { "poet": "Sappho", "cite": "fr. 1.1 V", "text": "ποικιλόθρον' ἀθανάτ' Ἀφρόδιτα", "tr": "immortal Aphrodite of the intricate throne" }
+      ]
+    },
+    {
+      "lemma": "ἰόπλοκος", "pos": "adj.", "gloss": "violet-tressed",
+      "note": "",
+      "attestations": [
+        { "poet": "Alcaeus", "cite": "fr. 384 V", "text": "ἰόπλοκ' ἄγνα μελλιχόμειδε Σάπφοι", "tr": "violet-haired, holy, honey-smiling Sappho" }
+      ]
+    },
+    {
+      "lemma": "μειλιχόμειδος", "pos": "adj.", "gloss": "honey-smiling, gently smiling",
+      "note": "Aeolic μελλιχόμειδος.",
+      "attestations": [
+        { "poet": "Alcaeus", "cite": "fr. 384 V", "text": "ἰόπλοκ' ἄγνα μελλιχόμειδε Σάπφοι", "tr": "violet-haired, holy, honey-smiling Sappho" }
+      ]
+    },
+    {
+      "lemma": "ῥοδοδάκτυλος", "pos": "adj.", "gloss": "rosy-fingered",
+      "note": "Homer gives it to Dawn; Sappho gives it to the moon. Aeolic βροδοδάκτυλος.",
+      "attestations": [
+        { "poet": "Sappho", "cite": "fr. 96.8 V", "text": "βροδοδάκτυλος σελάννα", "tr": "the rosy-fingered moon" }
+      ]
+    },
+    {
+      "lemma": "σελήνη", "pos": "n.", "gloss": "moon",
+      "note": "Aeolic σελάννα.",
+      "attestations": [
+        { "poet": "Sappho", "cite": "fr. 34.1 V", "text": "ἄστερες μὲν ἀμφὶ κάλαν σελάνναν", "tr": "the stars around the lovely moon" },
+        { "poet": "Sappho", "cite": "fr. 96.8 V", "text": "βροδοδάκτυλος σελάννα", "tr": "the rosy-fingered moon" }
+      ]
+    },
+    {
+      "lemma": "ἀστήρ", "pos": "n.", "gloss": "star",
+      "note": "",
+      "attestations": [
+        { "poet": "Sappho", "cite": "fr. 34.1 V", "text": "ἄστερες μὲν ἀμφὶ κάλαν σελάνναν", "tr": "the stars around the lovely moon" }
+      ]
+    },
+    {
+      "lemma": "χλωρός", "pos": "adj.", "gloss": "pale green, pallid; fresh",
+      "note": "",
+      "attestations": [
+        { "poet": "Sappho", "cite": "fr. 31.14 V", "text": "χλωροτέρα δὲ ποίας ἔμμι", "tr": "I am greener than grass" }
+      ]
+    },
+    {
+      "lemma": "εὕδω", "pos": "v.", "gloss": "sleep",
+      "note": "",
+      "attestations": [
+        { "poet": "Alcman", "cite": "fr. 89.1 PMGF", "text": "εὕδουσι δ' ὀρέων κορυφαί τε καὶ φάραγγες", "tr": "the peaks and ravines of the mountains sleep" }
+      ]
+    },
+    {
+      "lemma": "λιβανωτός", "pos": "n.", "gloss": "frankincense",
+      "note": "",
+      "attestations": [
+        { "poet": "Sappho", "cite": "fr. 2.4 V", "text": "βῶμοι δὲ τεθυμιάμενοι [λι]βανώτωι", "tr": "and altars smoking with frankincense" }
+      ]
+    },
+    {
+      "lemma": "πλεύμων", "pos": "n.", "gloss": "lung",
+      "note": "",
+      "attestations": [
+        { "poet": "Alcaeus", "cite": "fr. 347.1 V", "text": "τέγγε πλεύμονας οἴνωι, τὸ γὰρ ἄστρον περιτέλλεται", "tr": "wet your lungs with wine, for the star is coming round" }
+      ]
+    },
+    {
+      "lemma": "ἄστρον", "pos": "n.", "gloss": "star, constellation",
+      "note": "Here the Dog Star, marking high summer.",
+      "attestations": [
+        { "poet": "Alcaeus", "cite": "fr. 347.1 V", "text": "τέγγε πλεύμονας οἴνωι, τὸ γὰρ ἄστρον περιτέλλεται", "tr": "wet your lungs with wine, for the star is coming round" }
+      ]
+    },
+    {
+      "lemma": "ἴσος", "pos": "adj.", "gloss": "equal, like",
+      "note": "",
+      "attestations": [
+        { "poet": "Sappho", "cite": "fr. 31.1 V", "text": "φαίνεταί μοι κῆνος ἴσος θέοισιν", "tr": "that man seems to me equal to the gods" }
+      ]
+    }
+  ]
+}

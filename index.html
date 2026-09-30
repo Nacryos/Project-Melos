@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Melos — Archaic Greek Lyric Lexicon</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="bar">
+    <a class="mark" href="#top" aria-label="Melos, home">
+      <span class="mark-gr" lang="grc">Μέλος</span>
+      <span class="mark-en">a lexicon of archaic Greek lyric</span>
+    </a>
+    <nav>
+      <a href="#lexicon">Lexicon</a>
+      <a href="#poets">Poets</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <section class="hero" id="top">
+    <div class="stage">
+      <canvas id="dither" aria-hidden="true"></canvas>
+      <img id="fallback" alt="" hidden>
+    </div>
+    <div class="scrim" aria-hidden="true"></div>
+
+    <div class="hero-copy">
+      <blockquote class="verse" id="verse" aria-live="polite">
+        <p lang="grc" id="verse-gr"></p>
+        <footer><span id="verse-tr"></span> <cite id="verse-cite"></cite></footer>
+      </blockquote>
+
+      <form class="search" id="search" role="search" autocomplete="off">
+        <label for="q" class="sr">Search the lexicon</label>
+        <input id="q" name="q" type="search" spellcheck="false"
+               placeholder="Search Greek, Beta Code or English — try λυσιμελής, glukupikros, moon">
+        <button type="submit">Search</button>
+      </form>
+    </div>
+
+    <figure class="plate">
+      <figcaption id="caption"></figcaption>
+      <div class="thumbs" id="thumbs" role="tablist" aria-label="Paintings"></div>
+    </figure>
+
+    <button class="tune-toggle" id="tune-toggle" aria-expanded="false" aria-controls="tune">Adjust dither</button>
+    <aside class="tune" id="tune" hidden>
+      <div class="tune-head">
+        <h2>Dither</h2>
+        <label class="switch"><input type="checkbox" id="p-on" checked> On <kbd>D</kbd></label>
+      </div>
+      <label>Palette
+        <select id="p-palette">
+          <option value="levels">Full colour (quantised)</option>
+          <option value="aegean">Aegean</option>
+          <option value="lapis">Lapis &amp; gold</option>
+          <option value="krokos">Saffron</option>
+          <option value="marble">Marble &amp; ink</option>
+        </select>
+      </label>
+      <label>Bayer matrix
+        <select id="p-matrix">
+          <option value="8">8 × 8</option>
+          <option value="4">4 × 4</option>
+          <option value="2">2 × 2</option>
+        </select>
+      </label>
+      <label>Pixel size <output for="p-cell"></output><input type="range" id="p-cell" min="1" max="10" step="1"></label>
+      <label>Levels per channel <output for="p-levels"></output><input type="range" id="p-levels" min="2" max="8" step="1"></label>
+      <label>Dither strength <output for="p-spread"></output><input type="range" id="p-spread" min="0" max="1.5" step="0.05"></label>
+      <label>Colour boost <output for="p-sat"></output><input type="range" id="p-sat" min="0" max="2.5" step="0.05"></label>
+      <label>Contrast <output for="p-con"></output><input type="range" id="p-con" min="0.5" max="1.8" step="0.05"></label>
+      <label>Brightness <output for="p-bri"></output><input type="range" id="p-bri" min="-0.3" max="0.3" step="0.01"></label>
+      <label>Blend with original <output for="p-amount"></output><input type="range" id="p-amount" min="0" max="1" step="0.05"></label>
+      <label>Reveal lens <output for="p-lens"></output><input type="range" id="p-lens" min="0" max="320" step="10"></label>
+      <div class="tune-actions">
+        <button type="button" id="p-reset">Reset</button>
+        <button type="button" id="p-copy">Copy settings</button>
+        <button type="button" id="p-save">Save PNG</button>
+      </div>
+    </aside>
+  </section>
+
+  <main>
+    <section class="lexicon" id="lexicon" aria-labelledby="lex-h">
+      <div class="lex-head">
+        <h2 id="lex-h">Lexicon</h2>
+        <p class="count" id="count"></p>
+      </div>
+      <div class="lex-body">
+        <ol class="results" id="results"></ol>
+        <article class="entry" id="entry" tabindex="-1"></article>
+      </div>
+    </section>
+
+    <section class="poets" id="poets" aria-labelledby="poets-h">
+      <h2 id="poets-h">Poets, in order of floruit</h2>
+      <ol class="timeline" id="timeline"></ol>
+      <p class="aside">Dates are conventional and approximate.</p>
+    </section>
+  </main>
+
+  <footer class="colophon" id="about">
+    <p>Melos is a working prototype. The entries above are sample data standing in for the corpus backend.</p>
+    <p id="credits"></p>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
