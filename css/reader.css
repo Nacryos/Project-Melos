@@ -50,7 +50,11 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .reader-footer{background:var(--ink);color:var(--on-dark)}
 .reader-footer #hero-credits{max-width:60rem;margin-top:15px;font-size:11px;line-height:1.35;color:#bac4c9}
 .corpus-panel{align-self:start}
-.browse-body{overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+.browse-body{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:none}
+.browse-body::-webkit-scrollbar{display:none}
+.author-button>span:first-child{min-width:0;overflow-wrap:anywhere}
+.author-button>span:last-child{flex:none;white-space:nowrap}
+.work-button{overflow-wrap:anywhere}
 /* Keep the collection desk within the visible screen, including iPad Safari's
    changing browser chrome. The scrolling list fills the available space rather
    than stopping at a fixed 210px subtraction from the viewport. */
