@@ -189,6 +189,7 @@ def test_oversized_candidate_set_abstains_without_call():
     result = classify_context("α", PASSAGE, CANDIDATES * 7, provider=provider)
     assert result["status"] == "abstained"
     assert not provider.called
+    assert result['decision_stage'] == 'preflight'
 
 
 def test_fuzzy_choice_is_not_a_contextual_parse():

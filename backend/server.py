@@ -577,6 +577,20 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
         return {'results':[],'total':0,'mode':mode,'method':'Enter a word, citation, or description.','warnings':[]}
     if mode not in ('words','forms','themes','hybrid'):
         raise HTTPException(400,'Search mode must be words, forms, themes, or hybrid')
+    # Explicit references are navigation intent, not a bag of vocabulary.
+    # Keep catalogue-only coverage visible without pretending it is poem text.
+    if re.search(r'\d', q):
+        from .reference_lookup import parse_reference_query, rank_reference_records
+        with connect() as con:
+            labels=[row[0] for row in con.execute('SELECT DISTINCT author FROM works')]
+            intent=parse_reference_query(q,labels,selected_author=author,alias_resolver=author_labels)
+            if intent:
+                author_keys=list(dict.fromkeys(author_key(label) for label in intent.author_labels))
+                marks=','.join('?' for _ in author_keys)
+                records=[unpack(row) for row in con.execute(
+                    'SELECT data FROM passages WHERE author_key(author) IN ('+marks+')',author_keys)]
+                return rank_reference_records(intent,records,language=language,edition=edition,
+                                              limit=limit,offset=offset)
     if mode=='hybrid':
         return hybrid_search(q,author=author,language=language,edition=edition,
                              include_reference=include_reference,match=match,limit=limit,
@@ -645,7 +659,7 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
         if mode=='forms':
             try:
                 analyses=[morph_service().analyze(token,limit=6) for token in tokenize(q)[:12]]
-                lemmas=[c.get('lemma') for analysis in analyses for c in analysis.get('candidates',[]) if c.get('lemma')]
+                lemmas=[lemma for analysis in analyses for lemma in analysis.get('expansion_lemmas',[])]
                 expansion=set(key for token in tokenize(q)[:12] for key in variants(token))
                 service=morph_service()
                 source_forms=[]
@@ -664,9 +678,9 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                     expansion.update(basic_normalize(value) for value in source_forms)
                 except (ImportError,AttributeError,OSError,RuntimeError,sqlite3.Error):
                     warnings.append('Structured dictionary-form expansion is unavailable; using the existing lexicon/treebank index.')
-                if hasattr(service,'forms_for_lemma'):
+                if hasattr(service,'expansion_forms_for_lemma'):
                     for lemma in lemmas:
-                        expansion.update(basic_normalize(f) for f in service.forms_for_lemma(lemma))
+                        expansion.update(basic_normalize(f) for f in service.expansion_forms_for_lemma(lemma))
                 else:
                     for lemma in lemmas:
                         expansion.update(variants(lemma))

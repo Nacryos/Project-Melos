@@ -70,6 +70,38 @@ Activation used existing key-based administrator access, without changing any pa
 
 ### Maintenance
 
+### Live QA repair release (2026-09-30)
+
+`melos-api:20260930-qa1` adds exact author/fragment navigation, conservative
+ambiguous-lemma expansion guards, and distinct classifier preflight outcomes.
+The previous container is retained as `melos-api-before-qa1`. A loopback-only
+canary on port 8792 passed the hosted read smoke checks before production was
+replaced; that canary is stopped after promotion.
+
+`scripts/repair_search_layout.py` produced a separate accepted-index snapshot:
+413 passage search representations changed, 9,621 vocabulary keys checked,
+all source-bearing passage fields compared unchanged, SQLite quick check passed.
+Only explicit Greek line-end hyphenation is joined in derived search fields.
+Displayed Greek, edition metadata, raw sources, claims and embeddings are not
+rewritten. Host `data/corpus-before-qa1.sqlite` retains the previous index;
+local rollback copy is `.benchmarks/corpus-before-qa1.sqlite`.
+
+Run `python deploy/qa_regressions.py --origin https://greeklyric.com` for the
+specific read-only regressions, without provider calls. These checks and unit
+tests are engineering evidence, not a philological accuracy benchmark.
+Conflicting lemma attributions remain visible; withholding automatic expansion
+also affects legitimate homographs until a headword is explicitly selected.
+Reference lookup does not infer numbering equivalences, and catalogue pointers
+remain labelled as missing Greek reading text.
+
+For a code-only patch use `deploy/Dockerfile.patch` with `BASE_IMAGE` set to an
+existing verified local image. `deploy/start_backend.sh` accepts explicit
+`MELOS_IMAGE`, `MELOS_CONTAINER_NAME` (production or canary only), and
+`MELOS_HOST_PORT` (8791 or 8792 only), and refuses to replace an existing
+container. Preserve rollback state and validate before promotion.
+
+### General maintenance
+
 - Inspect: `docker stats --no-stream melos-api`, `docker logs --tail=50 melos-api`, and `python3 deploy/smoke_backend.py` from the service directory.
 - Restart without changing data: `docker restart melos-api`. Stop only this service with `docker stop melos-api`.
 - Rebuild: package a frozen local runtime with `scripts/package_runtime.py`, transfer it privately, verify with `deploy/verify_runtime.py`, build `deploy/Dockerfile`, and cache the pinned model with `deploy/cache_model.py` before starting offline. Do not package databases while a collector/indexer is writing them.

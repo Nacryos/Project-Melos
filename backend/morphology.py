@@ -204,6 +204,7 @@ class Morphology:
         self._entries: dict[str, list[dict[str, Any]]] = defaultdict(list)
         self._forms: dict[str, list[dict[str, Any]]] = defaultdict(list)
         self._lemma_forms: dict[str, set[str]] = defaultdict(set)
+        self._form_lemmas: dict[str, set[str]] = defaultdict(set)
         self._grams: dict[str, set[str]] = defaultdict(set)
         self._short: dict[tuple[int, str], set[str]] = defaultdict(set)
 
@@ -229,6 +230,7 @@ class Morphology:
             form_key = normalize(form)
             lemma_key = normalize(lemma)
             self._lemma_forms[lemma_key].add(form)
+            self._form_lemmas[form_key].add(lemma_key)
             self.form_count += 1
             identity = (form_key, form, lemma, str(row.get("analysis")), str(row.get("source_url")))
             if identity in seen_forms:
@@ -258,6 +260,41 @@ class Morphology:
         for key in query_variants(lemma):
             result.update(self._lemma_forms.get(key, ()))
         return sorted(result, key=lambda form: (normalize(form), form))
+
+    def expansion_lemmas_for_form(self, form: str) -> list[str]:
+        """Conservative, exact-key lemma links for automatic query expansion.
+
+        Multiple source lemmas can mean legitimate homography *or* a source
+        error. Neither token frequency nor this module adjudicates that. Keep
+        all readings in ``analyze`` but do not automatically expand an
+        ambiguous form into whole paradigms. An explicitly queried dictionary
+        headword remains usable. Nearby spelling suggestions never authorize
+        expansion of the original query.
+        """
+        self._load()
+        keys = query_variants(form)
+        headwords = {str(row['lemma']) for key in keys
+                     for row in self._entries.get(key, ())}
+        if headwords:
+            return sorted(headwords)
+        lemmas = {lemma for key in keys for lemma in self._form_lemmas.get(key, ())}
+        if len(lemmas) != 1:
+            return []
+        return sorted({str(row['lemma']) for key in keys
+                       for row in self._forms.get(key, ())})
+
+    def expansion_forms_for_lemma(self, lemma: str) -> list[str]:
+        """Source spellings excluding unresolved, conflicting lemma edges.
+
+        ``forms_for_lemma`` remains the complete raw-source inventory. This
+        separate method is for automatic search expansion, not an assertion
+        that excluded readings are false or that retained readings are true.
+        """
+        self._load()
+        keys = set(query_variants(lemma))
+        return [form for form in self.forms_for_lemma(lemma)
+                if len(self._form_lemmas.get(normalize(form), ())) == 1
+                and self._form_lemmas[normalize(form)] <= keys]
 
     def _near_keys(self, key: str, cutoff: int) -> list[tuple[int, str]]:
         pool: set[str] = set()
@@ -423,6 +460,17 @@ class Morphology:
             if not existing.get("lemma_raw") and candidate.get("lemma_raw"):
                 existing["lemma_raw"] = candidate["lemma_raw"]
         candidates = list(grouped.values())[:limit]
+        # Determine eligibility against the complete index, not the truncated
+        # UI candidates. A low display limit must not erase conflicting evidence.
+        expansion_lemmas = set(self.expansion_lemmas_for_form(form))
+        for candidate in candidates:
+            conflicting = sorted(self._form_lemmas.get(normalize(candidate['matched_form']), ()))
+            candidate['lemma_link_status'] = (
+                'ambiguous_source_lemmas' if len(conflicting) > 1 else
+                'single_indexed_lemma' if conflicting else 'headword_only')
+            candidate['conflicting_lemma_keys'] = conflicting if len(conflicting) > 1 else []
+            candidate['automatic_expansion_eligible'] = (
+                candidate['edit_distance'] == 0 and candidate['lemma'] in expansion_lemmas)
         lexicon_entries: dict[str, dict[str, Any]] = {}
         try:
             from .lexicon_render import render_source_record
@@ -453,6 +501,9 @@ class Morphology:
             attested_forms.update(self._lemma_forms.get(normalize(candidate["lemma"]), ()))
         attested_forms = set(sorted(attested_forms, key=lambda item: (normalize(item), item))[:100])
         warnings = []
+        if any(candidate['lemma_link_status'] == 'ambiguous_source_lemmas'
+               for candidate in candidates):
+            warnings.append('The indexed form has conflicting lemma attributions. These may reflect legitimate homography or a source error; all readings are retained, but unresolved links do not drive automatic lemma expansion. Search a headword explicitly to choose a lemma.')
         fuzzy_only = bool(candidates) and all(candidate["edit_distance"] > 0 for candidate in candidates)
         if fuzzy_only:
             warnings.append("No exact indexed morphological analysis was found for this form. The following analyses belong to nearby spellings, not necessarily the queried form.")
@@ -476,6 +527,7 @@ class Morphology:
                     ("indexed_match" if candidates else "no_match"),
                 "analysis_match_status": analysis_match_status,
                 "candidates": candidates,
+                "expansion_lemmas": sorted(expansion_lemmas),
                 "lexicon_entries": list(lexicon_entries.values()),
                 "attested_forms": sorted(attested_forms, key=lambda item: (normalize(item), item)),
                 "occurrences": occurrences, "context": context,

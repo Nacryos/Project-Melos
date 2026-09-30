@@ -761,7 +761,12 @@
           if (description) output.append(node('p', 'candidate-analysis', description));
           if (chosen.match_reason) output.append(node('p', 'candidate-reason', chosen.match_reason));
           output.append(node('p', 'candidate-reason', 'Other source candidates remain listed above. This proposal does not replace their source claims.'));
-        } else output.append(node('p', 'warning', `Model abstained. ${result.reason || 'The available evidence did not support a selection.'}`));
+        } else {
+          const outcome = result.decision_stage === 'model_abstained' ? 'Model abstained.'
+            : result.decision_stage === 'preflight' ? 'Comparison not run; no model call was made.'
+            : 'No usable model comparison was returned.';
+          output.append(node('p', 'warning', `${outcome} ${result.reason || 'The available evidence did not support a selection.'}`));
+        }
         if (result.model) output.append(node('p', 'candidate-reason', `Model: ${result.model}. ${result.reason || ''}`));
         if (result.cache_hit != null) output.append(node('p', 'candidate-reason', result.cache_hit
           ? 'Cached comparison for this passage and evidence; no new Jev call.'

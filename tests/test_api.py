@@ -18,7 +18,7 @@ from scripts import build_corpus
 
 
 @pytest.fixture
-def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
+def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch, request):
     root = tmp_path
     raw = root / "data/raw/synthetic.txt"
     raw.parent.mkdir(parents=True)
@@ -53,6 +53,8 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch):
              source_url="https://example.org/unrelated-page"),
         dict(common, id="c4", author="Heather", work="Notes", citation="4", text="Page orphan", language="eng", kind="commentary", parent_id="missing"),
     ]
+    # Optional rows are synthetic mechanics fixtures, never literary evidence.
+    rows.extend(dict(common, **row) for row in getattr(request, "param", []))
     fixture_file = processed / "synthetic.jsonl"
     fixture_file.write_text(
         "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows), encoding="utf-8"
@@ -140,6 +142,56 @@ def test_unknown_work_is_empty(client: TestClient):
     assert response.json() == {"results": [], "total": 0}
 
 
+@pytest.mark.parametrize("client", [[
+    {"id": "synthetic-reference", "author": "Alpha", "work": "Fragments", "citation": "fr. 286 Page",
+     "text": "Synthetic catalogue pointer only", "kind": "reference", "language": "mul",
+     "metadata": {"greek_text_extracted": False}},
+    {"id": "synthetic-irrelevant", "author": "Beta", "work": "Fragments", "citation": "fr. 286",
+     "text": "Synthetic unrelated Alpha 286 mention"},
+]], indirect=True)
+def test_reference_intent_catalogue_only_not_broad_fallback(client: TestClient):
+    for mode in ("words", "forms", "themes", "hybrid"):
+        result = client.get("/api/search", params={"q": "Alpha 286", "mode": mode}).json()
+        assert result["total"] == 1
+        assert result["mode"] == "reference"
+        assert result["results"][0]["id"] == "synthetic-reference"
+        assert result["results"][0]["reference_match"]["coverage"] == "reference_only"
+    assert client.get("/api/search", params={"q": "Alpha 286", "language": "grc"}).json()["total"] == 0
+    empty = client.get("/api/search", params={"q": "Alpha 999", "mode": "hybrid"}).json()
+    assert empty["total"] == 0
+    assert empty["mode"] == "reference"
+    conflict = client.get("/api/search", params={"q": "Alpha 286", "author": "Beta"}).json()
+    assert conflict["total"] == 0
+    assert any("conflicts" in warning for warning in conflict["warnings"])
+
+
+@pytest.mark.parametrize("client", [[
+    {"id": "synthetic-fragment", "author": "Alpha", "work": "Fragments", "citation": "Frag. 31",
+     "text": "SYNTHETIC FULL TEXT"},
+    {"id": "synthetic-line", "author": "Alpha", "work": "Fragments", "citation": "Frag. 31.1",
+     "text": "SYNTHETIC DOTTED LOCUS"},
+]], indirect=True)
+def test_reference_intent_primary_text_and_selected_author(client: TestClient):
+    result = client.get("/api/search", params={"q": "31", "author": "Alpha"}).json()
+    assert [record["id"] for record in result["results"]] == ["synthetic-fragment"]
+    assert result["results"][0]["reference_match"]["coverage"] == "text"
+
+
+@pytest.mark.parametrize("client", [[
+    {"id": "synthetic-split", "author": "Alpha", "work": "Layout", "citation": "test-layout",
+     "text": "αβγ-\nδε ζηθ"},
+]], indirect=True)
+def test_joined_search_tokens_leave_printed_text_unchanged(client: TestClient):
+    # Deliberately nonsense Greek strings test layout mechanics, not morphology.
+    for query in ("αβγδε", "αβγδε ζηθ"):
+        result = client.get("/api/search", params={"q": query, "match": "exact"}).json()
+        assert [record["id"] for record in result["results"]] == ["synthetic-split"]
+        assert result["results"][0]["text"] == "αβγ-\nδε ζηθ"
+    word = client.get("/api/word", params={"form": "αβγδε", "passage_id": "synthetic-split"}).json()
+    assert "synthetic-split" in {record["id"] for record in word["occurrences"]}
+    assert client.get("/api/passage", params={"id": "synthetic-split"}).json()["text"] == "αβγ-\nδε ζηθ"
+
+
 def test_exact_search_pages_have_stable_total_and_no_duplicates(client: TestClient):
     params = {"q": "μουσα", "match": "exact", "include_reference": "true", "limit": 1}
     pages = [client.get("/api/search", params=params | {"offset": offset}).json()
@@ -153,9 +205,9 @@ def test_exact_search_pages_have_stable_total_and_no_duplicates(client: TestClie
 def test_form_expansion_pages_deduplicate_exact_hits(client: TestClient, monkeypatch: pytest.MonkeyPatch):
     class FixtureForms:
         def analyze(self, form, limit=6):
-            return {"candidates": [{"lemma": "test-only-lemma"}], "warnings": []}
+            return {"candidates": [{"lemma": "test-only-lemma"}], "expansion_lemmas": ["test-only-lemma"], "warnings": []}
 
-        def forms_for_lemma(self, lemma):
+        def expansion_forms_for_lemma(self, lemma):
             # Synthetic associations verify query mechanics, not morphology.
             return ["μοῦσα", "μοῖρα", "ἀμουσία"]
 

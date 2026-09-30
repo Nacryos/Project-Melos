@@ -1,0 +1,7 @@
+# Code-only patch atop an already installed, verified runtime image.
+# Build with --build-arg BASE_IMAGE=<existing local image ID/tag>.
+# Corpus, models, secrets and operational state remain separate mounts.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+COPY backend /app/backend
+COPY js/reader.js /app/js/reader.js

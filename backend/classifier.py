@@ -241,7 +241,7 @@ def classify_context(
     """Return a model proposal or a reasoned abstention, never a corpus claim."""
     packet = build_evidence_packet(form, passage, candidates, claims,
                                    author_profile, dialect_rules)
-    result: dict[str, Any] = {"status": "abstained", "candidate_id": None,
+    result: dict[str, Any] = {"status": "abstained", "decision_stage": "preflight", "candidate_id": None,
                               "reason": "", "model": None, "evidence_ids": [],
                               "packet": packet, "warnings": list(packet["warnings"])}
     if packet["warnings"] and any("silently chosen" in w or "candidate ID" in w
@@ -270,6 +270,7 @@ def classify_context(
         result["reason"] = provider_status()["reason"]
         return result
     from .jev_gateway import GatewayLimit, GatewayUnavailable
+    result['decision_stage'] = 'provider_request'
     try:
         answer = provider.decide(packet)
     except (GatewayLimit, GatewayUnavailable):
@@ -293,6 +294,7 @@ def classify_context(
     if answer.get("usage") is not None:
         result["usage"] = answer["usage"]
     if choice == "abstain":
+        result['decision_stage'] = 'model_abstained'
         result["reason"] = "The model abstained on the supplied evidence."
         return result
     selected = next((c for c in packet["candidates"] if c["id"] == choice), None)
@@ -309,7 +311,7 @@ def classify_context(
     if not evidence_ids:
         result["reason"] = "Selected candidate has no linked evidence."
         return result
-    result.update(status="proposed", candidate_id=choice,
+    result.update(status="proposed", decision_stage="model_proposed", candidate_id=choice,
                   reason="Model-ranked existing candidate; interpretive proposal only.",
                   evidence_ids=evidence_ids)
     return result

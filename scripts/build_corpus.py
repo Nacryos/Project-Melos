@@ -15,7 +15,7 @@ import unicodedata
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from backend.textutils import normalize, tokenize
+from backend.textutils import normalize, tokenize, search_text
 
 SCHEMA = '''
 CREATE TABLE passages (
@@ -139,14 +139,15 @@ def build(output=ROOT / 'data/corpus.sqlite'):
                 identity = [row.get(k) for k in ('source','author','work','edition','language')]
                 work_id = hashlib.sha256(json.dumps(identity,ensure_ascii=False).encode()).hexdigest()[:20]
                 row['work_id'] = work_id
-                folded = normalize(row['text'])
+                indexed_text = search_text(row['text']) if row['language']=='grc' else row['text']
+                folded = normalize(indexed_text)
                 sequence = works.get(work_id, {}).get('count',0)
                 con.execute('INSERT INTO passages VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
                     (row['id'],work_id,row['source'],row['author'],row['work'],row['edition'],row['citation'],row['language'],row['kind'],row['quality'],row['text'],folded,json.dumps(row,ensure_ascii=False),sequence))
                 con.execute('INSERT INTO passage_fts VALUES (?,?,?,?,?)',
                     (row['id'],folded,normalize(row['citation']),normalize(row['author']),normalize(row['work'])))
                 if row['quality'] not in ('mixed_content','machine_ocr','needs_review') and row['kind'] in ('text','translation'):
-                    tokens = collections.Counter(tokenize(row['text']))
+                    tokens = collections.Counter(tokenize(indexed_text))
                     con.executemany('INSERT INTO tokens VALUES (?,?,?,?)',[(row['id'],word,normalize(word),n) for word,n in tokens.items()])
                     for word,n in tokens.items():
                         key = normalize(word)
