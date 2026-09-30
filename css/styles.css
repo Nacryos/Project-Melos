@@ -81,18 +81,18 @@ button, input, select { font: inherit; color: inherit; }
   pointer-events: none;
 }
 .shade {
-  --k: var(--shade, .95);
+  --k: var(--shade, .9);
   background: radial-gradient(var(--ellipse),
-    rgb(4 8 15 / var(--k)) 0%,
-    rgb(4 8 15 / var(--k)) 30%,
-    rgb(4 8 15 / calc(var(--k) * .88)) 50%,
-    rgb(4 8 15 / calc(var(--k) * .6)) 68%,
-    rgb(4 8 15 / calc(var(--k) * .24)) 85%,
-    rgb(4 8 15 / 0) 100%);
+    rgb(0 0 0 / var(--k)) 0%,
+    rgb(0 0 0 / var(--k)) 30%,
+    rgb(0 0 0 / calc(var(--k) * .88)) 50%,
+    rgb(0 0 0 / calc(var(--k) * .6)) 68%,
+    rgb(0 0 0 / calc(var(--k) * .24)) 85%,
+    rgb(0 0 0 / 0) 100%);
 }
 .shade-blur {
-  backdrop-filter: blur(var(--shade-blur, 1.5px));
-  -webkit-backdrop-filter: blur(var(--shade-blur, 1.5px));
+  backdrop-filter: blur(var(--shade-blur, 3px));
+  -webkit-backdrop-filter: blur(var(--shade-blur, 3px));
   --falloff: radial-gradient(var(--ellipse), #000 0%, rgb(0 0 0 / .8) 35%, rgb(0 0 0 / .3) 65%, transparent 90%);
   -webkit-mask-image: var(--falloff);
   mask-image: var(--falloff);
@@ -265,6 +265,6 @@ main { padding: 0 var(--gutter); }
 }
 
 /* Quote and caption hand over with the painting */
-.verse, .plate figcaption { transition: opacity .5s ease; }
+.verse, .plate figcaption { transition: opacity .2s ease; }
 .verse.out, .plate figcaption.out { opacity: 0; }
 @media (prefers-reduced-motion: reduce) { .verse, .plate figcaption { transition: none; } }

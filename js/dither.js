@@ -1,6 +1,8 @@
 // Ordered (Bayer) dithering of a painting in one WebGL fragment pass.
-// Every painting is uploaded once to its own texture; a transition just blends
-// two of them per cell (staggered by smooth noise), so there are no upload hitches.
+// Every painting is uploaded once to its own texture. A transition ("ink blot to ripple")
+// only decides, per dither cell, when that cell swaps from painting A to B: a few ink
+// blots near the centre flip first, then a ripple spreads outward from them. Cells the
+// ripple hasn't reached are untouched, and the Bayer pattern never moves.
 
 const VS = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }`;
 
@@ -9,7 +11,9 @@ precision highp float;
 uniform sampler2D texA, texB;
 uniform vec2 res, sizeA, sizeB, focA, focB, mouse;
 uniform float cell, matrix, levels, spread, sat, con, bri, amount, lensR, palN;
-uniform float t, time, flick, coarsen;    // transition progress, clock, shimmer, pixelation peak
+uniform float t, seed, reach, glow;        // transition progress, per-transition seed, ripple extent, crest brightness
+uniform vec3 epi[4];                       // ink blots: xy in aspect space, z = radius
+uniform float lensOn;
 uniform vec3 pal[8];
 
 float b2(vec2 a){ a = floor(a); return fract(a.x * .5 + a.y * a.y * .75); }
@@ -41,38 +45,55 @@ vec3 nearest(vec3 c){
   }
   return best;
 }
-// Per-cell transition progress: a slow noise wave plus a little per-cell scatter.
-float local(vec2 uv){
-  if (t <= 0.) return 0.;
-  vec2 a = uv * vec2(res.x / res.y, 1.);
-  float d = .6 * vnoise(a * 2.5) + .2 * hash(floor(uv * res / (cell * 3.)));
-  return smoothstep(d, d + .2, t);
+// Signed distance to the nearest ink blot (negative inside). Blot edges are lobed by
+// direction noise so they read as splashes, not circles.
+float blotField(vec2 p){
+  float f = 1e9;
+  for (int i = 0; i < 4; i++){
+    vec2 d = p - epi[i].xy;
+    float lobes = vnoise(normalize(d + 1e-5) * 2.2 + float(i) * 5.3 + seed);
+    float grain = vnoise(p * 18. + seed) * .25;
+    f = min(f, length(d) - epi[i].z * (.55 + .8 * lobes + grain));
+  }
+  return f;
 }
-vec3 scene(vec2 uv){
+// x: how far (0..1) this cell has turned into B; y: ripple-crest brightness.
+vec2 swap(vec2 uv, vec2 ix){
+  if (t <= 0.) return vec2(0.);
+  vec2 p = uv * vec2(res.x / res.y, 1.);
+  float f = blotField(p);
+  float ts;
+  if (f < 0.) ts = .12 * clamp(1. + f / .07, 0., 1.);                          // the blot splashes in fast
+  else ts = .12 + .74 * pow(clamp(f / reach, 0., 1.), .85)                     // then the ripple spreads
+          + (vnoise(p * 6. + seed) - .5) * .07 + (hash(ix + seed) - .5) * .035; // ragged, per-pixel front
+  if (f < .1 && hash(floor(ix * .5) + seed * 3.) < .06) ts = min(ts, .08);    // spatter near the blots
+  float w = .07;
+  float k = smoothstep(ts, ts + w, t);
+  float crest = f > 0. ? exp(-pow((t - ts - w * .5) / .035, 2.)) : 0.;
+  return vec2(k, crest);
+}
+vec3 scene(vec2 uv, float k){
   vec3 a = texture2D(texA, cover(uv, sizeA, focA)).rgb;
-  if (t <= 0.) return a;
-  return mix(a, texture2D(texB, cover(uv, sizeB, focB)).rgb, local(uv));
+  return k > 0. ? mix(a, texture2D(texB, cover(uv, sizeB, focB)).rgb, k) : a;
 }
 
 void main(){
   vec2 fc = gl_FragCoord.xy;
-  float e = sin(3.14159265 * t);                                             // transition envelope
-
-  float c = floor(cell + e * coarsen * cell + .5);   // pixels coarsen mid-transition
-
-  vec2 ix = floor(fc / c);
+  vec2 ix = floor(fc / cell);
   float th = bayer(ix);
-  th = clamp(th + (hash(ix + floor(time * 9.)) - .5) * flick * e, 0., 1.);   // TV-like shimmer, only mid-transition
+  vec2 uvc = (ix + .5) * cell / res;
+  vec2 sw = swap(uvc, ix);
 
-  vec3 col = grade(scene((ix + .5) * c / res));
+  vec3 col = grade(scene(uvc, sw.x)) + sw.y * glow;
 
   vec3 d;
   if (palN > .5) d = nearest(col + (th - .5) * spread * .5);
   else { float L = levels - 1.; d = floor(col * L + th * spread + (1. - spread) * .5) / L; }
 
-  vec3 orig = grade(scene(fc / res));
   float k = amount;
-  if (lensR > 0.) k *= smoothstep(.8, 1., length(fc - mouse) / lensR);
+  if (lensOn > .5) k *= smoothstep(.8, 1., length(fc - mouse) / lensR);
+  if (k >= 1.) { gl_FragColor = vec4(d, 1.); return; }   // skip the undithered pass when unseen
+  vec3 orig = grade(scene(fc / res, sw.x));
   gl_FragColor = vec4(mix(orig, d, k), 1.);
 }`;
 
@@ -85,10 +106,9 @@ export const PALETTES = {
 };
 
 const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
-const ease = x => x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
 
 export function createDither(canvas) {
-  const gl = canvas.getContext('webgl', { antialias: false, preserveDrawingBuffer: true });
+  const gl = canvas.getContext('webgl', { antialias: false, powerPreference: 'high-performance' });
   if (!gl) return null;
   const sh = (type, src) => {
     const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
@@ -111,7 +131,7 @@ export function createDither(canvas) {
 
   const cache = new Map();   // key -> { tex, size, foc }
   // Upload (or re-upload a sharper copy of) an image into the key's texture.
-  const load = (key, img, foc) => {
+  const upload = (key, img, foc) => {
     let s = cache.get(key);
     if (!s) { s = { tex: gl.createTexture(), foc: [foc[0], 1 - foc[1]] }; cache.set(key, s); }
     gl.bindTexture(gl.TEXTURE_2D, s.tex);
@@ -124,10 +144,17 @@ export function createDither(canvas) {
     if (s === A || s === B) request();
     return s;
   };
+  // Sharper copies that arrive mid-transition wait for it to end: a big upload blocks a frame.
+  const pending = [];
+  const load = (key, img, foc) => {
+    if (running && cache.has(key)) { pending.push([key, img, foc]); return cache.get(key); }
+    return upload(key, img, foc);
+  };
 
-  let dpr = 1, params = {}, t = 0, mouse = [-1e4, -1e4], raf = 0, A = null, B = null;
+  let scale = 1, params = {}, t = 0, mouse = [-1e4, -1e4], raf = 0, A = null, B = null, running = null;
+  let epi = new Float32Array(12), reach = 1, seed = 0;
 
-  const draw = (now = performance.now()) => {
+  const draw = () => {
     raf = 0;
     if (!A) return;
     const p = params, b = B || A;
@@ -138,7 +165,7 @@ export function createDither(canvas) {
     gl.uniform2fv(U.sizeA, A.size); gl.uniform2fv(U.focA, A.foc);
     gl.uniform2fv(U.sizeB, b.size); gl.uniform2fv(U.focB, b.foc);
     gl.uniform2fv(U.mouse, mouse);
-    gl.uniform1f(U.cell, Math.max(1, Math.round(p.cell * dpr)));
+    gl.uniform1f(U.cell, Math.max(1, Math.round(p.cell * scale)));
     gl.uniform1f(U.matrix, p.matrix);
     gl.uniform1f(U.levels, p.levels);
     gl.uniform1f(U.spread, p.spread);
@@ -146,11 +173,13 @@ export function createDither(canvas) {
     gl.uniform1f(U.con, p.con);
     gl.uniform1f(U.bri, p.bri);
     gl.uniform1f(U.amount, p.on ? p.amount : 0);
-    gl.uniform1f(U.lensR, p.lens * dpr);
+    gl.uniform1f(U.lensR, Math.max(1, p.lens * scale));
+    gl.uniform1f(U.lensOn, p.lens > 0 ? 1 : 0);
     gl.uniform1f(U.t, t);
-    gl.uniform1f(U.time, now / 1000);
-    gl.uniform1f(U.flick, p.flicker);
-    gl.uniform1f(U.coarsen, p.coarsen);
+    gl.uniform1f(U.seed, seed);
+    gl.uniform1f(U.reach, reach);
+    gl.uniform1f(U.glow, p.glow ?? .06);
+    gl.uniform3fv(U.epi, epi);
     const pal = PALETTES[p.palette];
     gl.uniform1f(U.palN, pal ? pal.length : 0);
     if (pal) gl.uniform3fv(U.pal, new Float32Array(pal.flatMap(hex).concat(Array(24).fill(0)).slice(0, 24)));
@@ -160,38 +189,62 @@ export function createDither(canvas) {
   const request = () => { if (document.hidden) draw(); else if (!raf) raf = requestAnimationFrame(draw); };
 
   // Size from the parent so the canvas attribute never feeds back into layout.
+  // Dither cells span several device pixels, so render at dpr / floor(dpr) and let CSS
+  // upscale by that whole number (image-rendering: pixelated): the same image, and a
+  // quarter of the fragments on a 2x screen.
   const ro = new ResizeObserver(() => {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = window.devicePixelRatio || 1;
+    scale = dpr / Math.max(1, Math.floor(dpr));
     const r = canvas.parentElement.getBoundingClientRect();
-    canvas.width = Math.max(1, Math.round(r.width * dpr));
-    canvas.height = Math.max(1, Math.round(r.height * dpr));
+    canvas.width = Math.max(1, Math.round(r.width * scale));
+    canvas.height = Math.max(1, Math.round(r.height * scale));
     request();
   });
   ro.observe(canvas.parentElement);
 
-  let running = null;
+  // Pick 3-4 ink blots clustered near the middle of the frame, in aspect space (x in 0..aspect).
+  const scatter = () => {
+    const a = canvas.width / canvas.height, rnd = Math.random;
+    const cx = a * (.5 + (rnd() - .5) * .3), cy = .5 + (rnd() - .5) * .25;
+    const n = 3 + (rnd() < .5 ? 1 : 0), pts = [];
+    for (let i = 0; i < 4; i++) {
+      const ang = rnd() * 6.283, dist = i === 0 ? 0 : .05 + rnd() * .13;
+      pts.push(i < n ? [cx + Math.cos(ang) * dist, cy + Math.sin(ang) * dist, .035 + rnd() * .045] : [1e3, 1e3, 0]);
+    }
+    epi = new Float32Array(pts.flat());
+    // The ripple has to reach the corner farthest from its nearest blot.
+    reach = Math.max(...[[0, 0], [a, 0], [0, 1], [a, 1]].map(([x, y]) =>
+      Math.min(...pts.slice(0, n).map(([px, py]) => Math.hypot(x - px, y - py))))) + .05;
+    seed = rnd() * 100;
+  };
+
   return {
     load,
     set(p) { params = { ...params, ...p }; request(); },
     show(slot) { A = slot; B = null; t = 0; request(); },
-    transition(slot, ms = 2600) {
+    transition(slot, ms = 1800) {
       if (running) running.cancel();
-      B = slot;
+      B = slot; scatter();
       return new Promise(done => {
         const t0 = performance.now();
         let id = 0;
-        const finish = () => { cancelAnimationFrame(id); A = slot; B = null; t = 0; running = null; request(); done(); };
+        const finish = () => {
+          cancelAnimationFrame(id); A = slot; B = null; t = 0; running = null;
+          pending.splice(0).forEach(args => upload(...args));
+          request(); done();
+        };
         running = { cancel: finish };
         const step = now => {
           const x = Math.min(1, (now - t0) / ms);
-          t = ease(x); draw(now);
+          t = 1 - Math.pow(1 - x, 1.6);   // quick splash, the ripple eases out
+          draw();
           if (x < 1) id = requestAnimationFrame(step); else finish();
         };
         id = requestAnimationFrame(step);
       });
     },
     pointer(x, y) {
-      mouse = x == null ? [-1e4, -1e4] : [x * dpr, canvas.height - y * dpr];
+      mouse = x == null ? [-1e4, -1e4] : [x * scale, canvas.height - y * scale];
       if (params.lens > 0) request();
     },
     snapshot() { draw(); return canvas.toDataURL('image/png'); },

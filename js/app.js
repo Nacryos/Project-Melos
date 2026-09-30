@@ -38,7 +38,7 @@ const POETS = [
   { en: 'Bacchylides', gr: 'Βακχυλίδης', dt: 'c. 518–451' },
 ];
 
-const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 4, spread: 1, sat: 1.35, con: 1.08, bri: 0, amount: 1, lens: 140, shade: 0.95, blur: 1.5, flicker: 0.5, coarsen: 1.2 };
+const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 6, spread: 1.1, sat: 1.65, con: 1.1, bri: 0, amount: 1, lens: 0, shade: 0.9, blur: 3, dur: 1.8, glow: 0.06 };
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = s => document.querySelector(s);
 const store = {
@@ -91,19 +91,25 @@ function setCopy(p) {
 async function go(i, instant = false) {
   if (i === current) return;
   current = i;
-  const p = PAINTINGS[i], slot = await preview(i);
-  if (i !== current) return;
+  const p = PAINTINGS[i];
   const still = instant || reduceMotion || document.hidden || !dither;
-  // The quote fades out as the dissolve starts and returns at its midpoint.
+  // Text leads: the old quote fades out at once and the new one is back within ~0.4 s,
+  // before the painting starts to change.
   const copy = [$('#verse'), $('#caption')];
   const swap = () => { setCopy(p); copy.forEach(el => el.classList.remove('out')); };
   if (still) swap();
-  else { copy.forEach(el => el.classList.add('out')); setTimeout(() => current === i && swap(), 1100); }
+  else { copy.forEach(el => el.classList.add('out')); setTimeout(() => current === i && swap(), 200); }
+  const slot = await preview(i);
+  if (i !== current) return;
   if (!dither) { const f = $('#fallback'); f.hidden = false; f.src = pick(IMAGES[p.img], neededWidth(IMAGES[p.img])).webp; return; }
   applyFocus();
   if (still) dither.show(slot);
-  else await dither.transition(slot);
-  sharpen(i);   // after the dissolve, so a big upload never lands mid-animation
+  else {
+    await new Promise(r => setTimeout(r, 180));
+    if (i !== current) return;
+    await dither.transition(slot, params.dur * 1000);
+  }
+  sharpen(i);   // after the transition, so a big upload never lands mid-animation
 }
 const next = d => { go((current + d + PAINTINGS.length) % PAINTINGS.length); scheduleAuto(); };
 
@@ -164,9 +170,9 @@ go(0, true).then(warm);
 scheduleAuto();
 
 /* ---------- Dither controls ---------- */
-const fields = ['on', 'palette', 'matrix', 'cell', 'levels', 'spread', 'sat', 'con', 'bri', 'amount', 'lens', 'shade', 'blur', 'flicker', 'coarsen'];
+const fields = ['on', 'palette', 'matrix', 'cell', 'levels', 'spread', 'sat', 'con', 'bri', 'amount', 'lens', 'shade', 'blur', 'dur', 'glow'];
 const pct = v => `${Math.round(v * 100)}%`;
-const fmt = { sat: pct, amount: pct, shade: pct, flicker: pct, lens: v => v ? `${v}px` : 'off', cell: v => `${v}px`, blur: v => v ? `${v}px` : 'off', coarsen: v => `${(1 + +v).toFixed(1)}×` };
+const fmt = { sat: pct, amount: pct, shade: pct, glow: pct, lens: v => v ? `${v}px` : 'off', cell: v => `${v}px`, blur: v => v ? `${v}px` : 'off', dur: v => `${(+v).toFixed(1)} s` };
 
 function syncControls() {
   for (const k of fields) {
