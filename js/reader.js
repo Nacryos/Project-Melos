@@ -443,6 +443,7 @@
     button.type = 'button';
     const source = node('span', 'result-source', record.author || 'Unattributed');
     source.append(node('small', '', [record.work, record.citation, record.kind && record.kind !== 'text' ? `indexed ${record.kind}` : record.language !== 'grc' ? record.language : 'Greek text'].filter(Boolean).join(' · ')));
+    if (record.quality && record.quality !== 'source_text') source.append(node('span', 'quality-tag caution', qualityLabel(record.quality)));
     const body = node('span', 'result-body');
     const excerpt = (record.text || '').replace(/\s+/g, ' ').trim();
     body.append(node('span', 'result-excerpt', excerpt || 'Text unavailable'));
@@ -452,7 +453,7 @@
     const evidence = Array.isArray(record.matched_evidence) ? record.matched_evidence : [];
     for (const hit of evidence.slice(0, 3)) {
       const detail = node('span', 'evidence-hit');
-      const label = [hit.signal && String(hit.signal).replaceAll('_', ' '), hit.kind, hit.author, hit.citation].filter(Boolean).join(' · ');
+      const label = [hit.signal && String(hit.signal).replaceAll('_', ' '), hit.kind, hit.quality && hit.quality !== 'source_text' ? qualityLabel(hit.quality) : '', hit.author, hit.citation].filter(Boolean).join(' · ');
       detail.append(node('span', '', `${label || 'Linked source'}: ${hit.match_reason || 'retrieval match'}`));
       body.append(detail);
     }
@@ -498,7 +499,23 @@
       ui.resultsSummary.textContent = `${describeCount(active.total, mode === 'themes' ? 'ranked candidate' : 'match')} · ${count} shown${method}${sortLabel}`;
       if (!count) ui.resultsList.append(node('p', 'inspector-message', mode === 'themes'
         ? 'No ranked passage candidates were returned for this query and filters.'
-        : 'No indexed passage matches these terms and filters. Try another spelling, mode, or edition.'));
+        : 'No indexed passage matches these terms and filters. This does not establish absence from the author’s work. Try another spelling, mode, or edition.'));
+      if (!append && data.excluded_exact_matches?.total > 0) {
+        const excluded = data.excluded_exact_matches;
+        const notice = node('div', 'warning excluded-matches');
+        const groups = (excluded.groups || []).map(group => `${group.count} ${qualityLabel(group.quality)} ${group.kind || 'record'}`).join('; ');
+        notice.append(node('p', '', `${describeCount(excluded.total, 'indexed record')} with exact normalized wording or citation ${excluded.total === 1 ? 'is' : 'are'} excluded by the default quality/reference filter. ${groups}. These are not verified attestations.`));
+        notice.append(node('p', 'candidate-reason', 'This check does not count excluded fuzzy, inflected-form, or thematic matches.'));
+        const show = node('button', 'text-action', 'Include these records in exact search →');
+        show.type = 'button';
+        show.addEventListener('click', () => {
+          ui.reference.checked = true;
+          setFormMode('exact');
+          search(query, 'exact');
+        });
+        notice.append(show);
+        ui.resultsList.append(notice);
+      }
       appendWarnings(ui.resultsList, data.warnings);
       ui.moreResults.hidden = count >= active.total || records.length === 0;
       const url = new URL(location.href);

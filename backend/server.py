@@ -601,6 +601,39 @@ def classify_context_request(request:ContextRequest,http_request:Request):
     return result
 
 
+def wording_condition(keys):
+    """Shared literal predicate for results and excluded-record notices."""
+    cond=' OR '.join(['phrase_match(p.normalized,?) OR phrase_match(lower(p.citation),?) OR phrase_match(lower(p.work),?)']*len(keys))
+    values=[value for key in keys for value in (key,key,key)]
+    fts_keys=[key for key in keys if any(c.isalnum() for c in key)]
+    if fts_keys:
+        expression=' OR '.join('"'+key.replace('"','""')+'"' for key in fts_keys)
+        cond='p.id IN (SELECT id FROM passage_fts WHERE passage_fts MATCH ?) AND ('+cond+')'
+        values=[expression]+values
+    return cond,values
+
+
+def excluded_exact_matches(q,author='',language='',edition=''):
+    """Count only indexed literal matches hidden by the default quality gate.
+
+    Uses the publication-filtered connection and every caller scope filter.
+    It is neither a semantic search nor an estimate of missing literary text.
+    """
+    keys=variants(q)
+    if not keys or not any(any(c.isalnum() for c in key) for key in keys):
+        return {}
+    condition,values=wording_condition(keys)
+    extra,params=filters(author,language,edition,True)
+    excluded=" AND (p.quality IN ('mixed_content','machine_ocr','needs_review') OR p.kind NOT IN ('text','translation','commentary'))"
+    with connect() as con:
+        groups=[dict(row) for row in con.execute(
+            'SELECT p.quality,p.kind,count(*) count FROM passages p WHERE ('+condition+')'+extra+excluded+
+            ' GROUP BY p.quality,p.kind ORDER BY p.quality,p.kind',values+params)]
+    total=sum(row['count'] for row in groups)
+    return {'excluded_exact_matches':{'total':total,'groups':groups,
+        'method':'Exact normalized wording/citation only; excludes fuzzy, morphological and semantic matches.'}} if total else {}
+
+
 @app.get('/api/search')
 def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='',
            include_reference:bool=False,match:str='fuzzy',limit:int=Query(30,ge=1,le=100),order:str='relevance',offset:int=0,
@@ -678,15 +711,7 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
         ordinary="CASE WHEN p.language='grc' THEN 0 ELSE 1 END,p.author,p.work,p.sequence,p.id"
         # Token boundaries prevent a queried word from matching inside a
         # different inflection. Citations and titles use the same literal test.
-        cond=' OR '.join(['phrase_match(p.normalized,?) OR phrase_match(lower(p.citation),?) OR phrase_match(lower(p.work),?)']*len(keys))
-        exactparams=[value for key in keys for value in (key,key,key)]
-        fts_keys=[key for key in keys if any(c.isalnum() for c in key)]
-        if fts_keys:
-            # The inverted index narrows candidates before Unicode boundary
-            # checks, avoiding a full corpus scan for every keystroke/query.
-            fts_expression=' OR '.join('"'+key.replace('"','""')+'"' for key in fts_keys)
-            cond='p.id IN (SELECT id FROM passage_fts WHERE passage_fts MATCH ?) AND ('+cond+')'
-            exactparams=[fts_expression]+exactparams
+        cond,exactparams=wording_condition(keys)
         exact_where='('+cond+')'+extra
         exact_count=con.execute('SELECT count(*) FROM passages p WHERE '+exact_where,exactparams+params).fetchone()[0]
         method='Accent-insensitive wording and citation search'
@@ -773,7 +798,8 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                                     ' LIMIT ? OFFSET ?',[expression]+params+[limit,offset]).fetchall()
                 results=[mark_author_scope(unpack(r)|{'match_reason':'Shared search words (not necessarily an exact phrase)','score':-r['rank']}) for r in fetched]
                 method='Full-text shared-word retrieval'
-    return {'results':results,'total':total,'mode':mode,'method':method,'warnings':list(dict.fromkeys(warnings))}
+    excluded={} if include_reference else excluded_exact_matches(q,author,language,edition)
+    return {'results':results,'total':total,'mode':mode,'method':method,'warnings':list(dict.fromkeys(warnings)),**excluded}
 
 
 def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
@@ -813,8 +839,9 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
     warnings.append('Counts cover a bounded pool of up to 400 word, 400 form and 1,000 dense candidates, not every possible match.')
     if order=='chronological':
         warnings.append('Author biography dates order these candidates; they are not secure passage composition dates.')
+    excluded={} if include_reference else excluded_exact_matches(q,author,language,edition)
     return {**fused,'results':ranked[offset:offset+limit],'mode':'hybrid',
-            'commentary_assisted':commentary_assisted,'warnings':list(dict.fromkeys(warnings))}
+            'commentary_assisted':commentary_assisted,'warnings':list(dict.fromkeys(warnings)),**excluded}
 
 
 @app.get('/api/usage-space')

@@ -29,7 +29,7 @@ def _eligible(record: Mapping[str, Any], *, authors: set[str], language: str,
         return False
     if not include_reference and record.get("kind") in {"reference", "apparatus"}:
         return False
-    if record.get("quality") in {"mixed_content", "machine_ocr", "needs_review"}:
+    if not include_reference and record.get("quality") in {"mixed_content", "machine_ocr", "needs_review"}:
         return False
     return True
 
@@ -110,7 +110,7 @@ def fuse(
             if record is None:
                 skipped_unresolved += 1
                 continue
-            if record.get("quality") in {"mixed_content", "machine_ocr", "needs_review"}:
+            if not include_reference and record.get("quality") in {"mixed_content", "machine_ocr", "needs_review"}:
                 continue
             if not commentary_assisted and (record.get("kind") != "text"
                                             or record.get("language") != "grc"):
@@ -141,6 +141,7 @@ def fuse(
                     "id": record["id"],
                     "signal": signal,
                     "kind": record.get("kind"),
+                    "quality": record.get("quality"),
                     "language": record.get("language"),
                     "author": record.get("author"),
                     "edition": record.get("edition"),
