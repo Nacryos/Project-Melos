@@ -52,8 +52,10 @@ def sha256(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
-def fetch(url: str, path: Path, *, refresh: bool, delay: float) -> bytes:
+def fetch(url: str, path: Path, *, refresh: bool, delay: float, receipt: dict | None = None) -> bytes:
     if path.exists() and path.stat().st_size and not refresh:
+        if receipt is not None:
+            receipt.update({"requested_url": url, "cached": True, "http_status": None})
         return path.read_bytes()
     error: Exception | None = None
     for attempt in range(4):
@@ -66,6 +68,10 @@ def fetch(url: str, path: Path, *, refresh: bool, delay: float) -> bytes:
             temporary = path.with_suffix(path.suffix + ".tmp")
             temporary.write_bytes(response.content)
             temporary.replace(path)
+            if receipt is not None:
+                receipt.update({"requested_url": url, "resolved_url": response.url,
+                                "cached": False, "http_status": response.status_code,
+                                "fetched_at_utc": datetime.now(timezone.utc).isoformat()})
             time.sleep(delay)
             return response.content
         except (requests.RequestException, ValueError) as exc:
@@ -187,19 +193,92 @@ def parse_text_page(html: bytes, entry: dict) -> dict:
     translations = []
     tabs = soup.select("div.right-part ul.nav-tabs a[data-toggle=tab]")
     panes = soup.select("div.right-part div.tab-content > div.tab-pane")
-    for tab, pane in zip(tabs, panes):
+    pane_by_id: dict[str, Tag] = {}
+    for pane in panes:
+        pane_id = pane.get("id", "")
+        if not pane_id or pane_id in pane_by_id:
+            raise ValueError("Translation panes have missing or duplicate IDs")
+        pane_by_id[pane_id] = pane
+    linked_panes: set[str] = set()
+    for tab in tabs:
+        href = tab.get("href", "")
+        pane_id = href[1:] if href.startswith("#") else ""
+        if pane_id not in pane_by_id or pane_id in linked_panes:
+            raise ValueError(f"Translation tab has missing or ambiguous pane target: {href!r}")
+        pane = pane_by_id[pane_id]
+        linked_panes.add(pane_id)
         translator = clean(tab.get("title") or tab.get_text(" "))
         block = pane.select_one("div.anth_text")
         if block is None:
-            continue
+            raise ValueError(f"Translation pane {pane_id!r} has no text block")
         lines = block_lines(block)
         text = "\n".join(line["text"] for line in lines)
         if text:
             translations.append({"translator": translator, "lines": lines, "text": text,
                                  "pane_id": pane.get("id", "")})
+    if linked_panes != set(pane_by_id):
+        raise ValueError("Translation pane has no corresponding translator tab")
     edition = cited_edition_label(citation)
     return {"author": title_author, "citation": citation, "crumbs": crumbs, "greek_lines": greek_lines,
             "greek_text": greek_text, "translations": translations, "edition_token": edition}
+
+
+def download_raw_selection(raw_dir: Path, text_ids: list[int], *, delay: float) -> dict:
+    """Fetch only catalog, contributors and requested pages into fresh staging.
+
+    No text-page parser, processed records or production corpus is touched.
+    The manifest is checkpointed after each HTTP fetch, including failures.
+    """
+    raw_dir = raw_dir.resolve()
+    raw_dir.relative_to((ROOT / "data/staging").resolve())
+    if not text_ids or len(set(text_ids)) != len(text_ids):
+        raise ValueError("Download-only selection requires distinct text IDs")
+    if raw_dir.exists() and any(raw_dir.iterdir()):
+        raise ValueError("Download-only raw directory must be new or empty")
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    manifest = {"status": "raw_download_in_progress", "requested_text_ids": text_ids,
+                "files": [], "failures": []}
+    manifest_path = raw_dir / "fetch-manifest.json"
+
+    def checkpoint() -> None:
+        manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+    def retrieve(url: str, filename: str, entry: dict | None = None) -> bytes:
+        receipt: dict = {}
+        try:
+            content = fetch(url, raw_dir / filename, refresh=False, delay=delay, receipt=receipt)
+        except Exception as exc:
+            manifest["status"] = "raw_download_failed"
+            manifest["failures"].append({"requested_url": url, "error": str(exc),
+                                         "failed_at_utc": datetime.now(timezone.utc).isoformat()})
+            checkpoint()
+            raise
+        receipt.update({"raw_path": (raw_dir / filename).relative_to(ROOT).as_posix(),
+                        "sha256": sha256(content), "bytes": len(content)})
+        if entry is not None:
+            receipt["catalog_entry"] = entry
+        manifest["files"].append(receipt)
+        checkpoint()
+        return content
+
+    catalog = retrieve(CATALOG, "browse.html")
+    entries = parse_catalog(catalog)
+    selected = []
+    for text_id in text_ids:
+        matches = [entry for entry in entries if entry["text_id"] == text_id]
+        if len(matches) != 1:
+            manifest["status"] = "catalog_selection_failed"
+            manifest["failures"].append({"text_id": text_id, "catalog_matches": len(matches)})
+            checkpoint()
+            raise ValueError(f"Requested page {text_id} is not unique in the fetched catalog")
+        selected.append(matches[0])
+    retrieve(CONTRIBUTORS, "contributors.html")
+    for entry in selected:
+        text_id = entry["text_id"]
+        retrieve(f"{CATALOG}?text_id={text_id}", f"text_{text_id}.html", entry)
+    manifest["status"] = "raw_download_complete_pending_independent_audit"
+    checkpoint()
+    return manifest
 
 
 def main() -> None:
@@ -207,7 +286,18 @@ def main() -> None:
     parser.add_argument("--refresh", action="store_true", help="re-download pages that are already cached")
     parser.add_argument("--limit", type=int, default=0, help="stop after N text pages (smoke test)")
     parser.add_argument("--delay", type=float, default=0.4, help="seconds to wait after each download")
+    parser.add_argument("--download-only", action="store_true", help="fetch selected raw pages only; no final records")
+    parser.add_argument("--raw-dir", type=Path, help="new/empty directory under data/staging for download-only mode")
+    parser.add_argument("--text-id", type=int, action="append", default=[], help="catalog text ID for download-only mode (repeatable)")
     args = parser.parse_args()
+    if args.download_only:
+        if not args.raw_dir or args.refresh or args.limit:
+            parser.error("--download-only requires --raw-dir and does not accept --refresh or --limit")
+        manifest = download_raw_selection(args.raw_dir, args.text_id, delay=args.delay)
+        print(f"Downloaded {len(manifest['files'])} raw files; pending independent audit. No final records written.")
+        return
+    if args.raw_dir or args.text_id:
+        parser.error("--raw-dir and --text-id require --download-only")
     RAW.mkdir(parents=True, exist_ok=True)
     catalog_raw = fetch(CATALOG, RAW / "browse.html", refresh=args.refresh, delay=args.delay)
     contributors_raw = fetch(CONTRIBUTORS, RAW / "contributors.html", refresh=args.refresh, delay=args.delay)

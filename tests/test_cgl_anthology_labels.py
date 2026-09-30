@@ -47,6 +47,31 @@ class CglSourceLabelTests(unittest.TestCase):
         self.assertEqual(page["citation"], citation)
         self.assertEqual(page["edition_token"], "Lobel-Page")
 
+    @staticmethod
+    def translation_fixture(tabs, panes):
+        return f'''<div class="part-header"><h2>Fixture</h2><h3>1 Page</h3></div>
+        <div class="left-part"><div class="anth_text">λόγος</div></div>
+        <div class="right-part"><ul class="nav-tabs">{tabs}</ul>
+        <div class="tab-content">{panes}</div></div>'''.encode()
+
+    def test_translation_tabs_resolve_by_target_not_position(self):
+        html = self.translation_fixture(
+            '<a href="#m1" title="Translator A" data-toggle="tab">A</a>'
+            '<a href="#m2" title="Translator B" data-toggle="tab">B</a>',
+            '<div class="tab-pane" id="m2"><div class="anth_text">Fixture B</div></div>'
+            '<div class="tab-pane" id="m1"><div class="anth_text">Fixture A</div></div>',
+        )
+        page = parse_text_page(html, {})
+        self.assertEqual([(t["translator"], t["text"], t["pane_id"]) for t in page["translations"]],
+                         [("Translator A", "Fixture A", "m1"), ("Translator B", "Fixture B", "m2")])
+
+    def test_missing_duplicate_or_unlinked_translation_panes_fail(self):
+        tab = '<a href="#m1" title="Translator A" data-toggle="tab">A</a>'
+        pane = '<div class="tab-pane" id="m1"><div class="anth_text">Fixture</div></div>'
+        for tabs, panes in [(tab, ""), (tab, pane + pane), (tab + tab, pane), ("", pane)]:
+            with self.subTest(tabs=tabs, panes=panes), self.assertRaises(ValueError):
+                parse_text_page(self.translation_fixture(tabs, panes), {})
+
 
 if __name__ == "__main__":
     unittest.main()
