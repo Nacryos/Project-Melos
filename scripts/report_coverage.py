@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Summarize indexed records without inferring author identities or witnesses.
+"""Summarize indexed records per author, merging spellings of one poet.
 
 Run from the project root: python scripts/report_coverage.py
 The input is the accepted SQLite index built by scripts/build_corpus.py. This
-script neither downloads material nor writes corpus passages.
+script neither downloads material nor writes corpus passages. Author labels
+are merged through the owner alias table (data/author-aliases.json); every
+exact source label stays listed beside its merged name.
 """
 
 from __future__ import annotations
@@ -13,10 +15,15 @@ import json
 import os
 from pathlib import Path
 import sqlite3
+import sys
 import tempfile
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from backend.author_aliases import canonical, canonical_key, is_mixed  # noqa: E402
+
 CORE_LABELS = (
     "Ibycus", "Alcaeus", "Sappho", "Pindar", "Bacchylides", "Alcman",
     "Stesichorus", "Simonides", "Anacreon", "Archilochus", "Mimnermus",
@@ -24,6 +31,7 @@ CORE_LABELS = (
     "Homer", "Hesiod", "Homeric Hymns",
 )
 REFERENCE_KINDS = {"commentary", "apparatus", "reference"}
+SEARCHABLE_QUALITIES = ("source_text", "machine_corrected_ocr")
 
 
 def counts(connection: sqlite3.Connection, column: str, where: str = "", args: tuple = ()) -> dict[str, int]:
@@ -42,18 +50,33 @@ def author_summary(connection: sqlite3.Connection, author: str) -> dict:
         "SELECT count(*) FROM passages WHERE author=? AND kind='text' "
         "AND language='grc' AND quality='source_text'", args
     ).fetchone()[0]
+    searchable = connection.execute(
+        "SELECT count(*) FROM passages WHERE author=? AND kind='text' "
+        "AND language='grc' AND quality IN ('source_text','machine_corrected_ocr')", args
+    ).fetchone()[0]
     return {
         "author_label": author,
+        "merged_author": canonical(author),
         "records": sum(kinds.values()),
         "text_records": kinds.get("text", 0),
         "translation_records": kinds.get("translation", 0),
         "commentary_reference_records": sum(kinds.get(kind, 0) for kind in REFERENCE_KINDS),
         "clean_greek_text_records": clean,
+        "searchable_greek_text_records": searchable,
         "by_kind": kinds,
         "by_quality": counts(connection, "quality", where, args),
         "by_language": counts(connection, "language", where, args),
         "by_source": counts(connection, "source", where, args),
     }
+
+
+SUMMED = ("clean_greek_text_records", "searchable_greek_text_records", "text_records",
+          "translation_records", "commentary_reference_records", "records")
+
+
+def merged_summary(name: str, items: list[dict]) -> dict:
+    return {"merged_author": name, "labels": [item["author_label"] for item in items],
+            **{key: sum(item[key] for item in items) for key in SUMMED}}
 
 
 def report(db: Path) -> dict:
@@ -70,27 +93,34 @@ def report(db: Path) -> dict:
         indexed_count = sum(item["records"] for item in summaries)
         if indexed_count != manifest["passages"]:
             raise ValueError(f"Index/manifest count mismatch: {indexed_count} vs {manifest['passages']}")
-        lookup: dict[str, list[dict]] = {}
+        by_canonical: dict[str, list[dict]] = {}
         for item in summaries:
-            lookup.setdefault(item["author_label"].casefold(), []).append(item)
+            by_canonical.setdefault(canonical_key(item["author_label"]), []).append(item)
+        merged = [merged_summary(canonical(items[0]["author_label"]), items)
+                  for items in by_canonical.values()]
+        merged.sort(key=lambda item: (-item["searchable_greek_text_records"], item["merged_author"].casefold()))
         targets = []
         for name in CORE_LABELS:
-            matched = lookup.get(name.casefold(), [])
+            items = by_canonical.get(canonical_key(name), [])
+            exact = [item for item in items if item["author_label"].casefold() == name.casefold()]
             candidates = [label for label in authors
                           if name.casefold() in label.casefold()
-                          and label.casefold() != name.casefold()]
+                          and canonical_key(label) != canonical_key(name)]
+            summed = merged_summary(name, items) if items else None
             targets.append({
                 "requested_name": name,
-                "exact_label_match": bool(matched),
-                "matched_author_labels": [item["author_label"] for item in matched],
-                "substring_label_candidates_not_merged": candidates,
+                "exact_label_match": bool(exact),
+                "merged_label_match": bool(items),
+                "matched_author_labels": [item["author_label"] for item in items],
+                "unmerged_similar_labels": candidates,
                 "label_counts": [{key: item[key] for key in (
-                    "author_label", "clean_greek_text_records", "text_records",
-                    "commentary_reference_records"
-                )} for item in matched],
-                "clean_greek_text_records": sum(item["clean_greek_text_records"] for item in matched) if matched else None,
-                "text_records": sum(item["text_records"] for item in matched) if matched else None,
-                "commentary_reference_records": sum(item["commentary_reference_records"] for item in matched) if matched else None,
+                    "author_label", "clean_greek_text_records", "searchable_greek_text_records",
+                    "text_records", "commentary_reference_records"
+                )} for item in items],
+                "clean_greek_text_records": summed["clean_greek_text_records"] if summed else None,
+                "searchable_greek_text_records": summed["searchable_greek_text_records"] if summed else None,
+                "text_records": summed["text_records"] if summed else None,
+                "commentary_reference_records": summed["commentary_reference_records"] if summed else None,
             })
         return {
             "scope": "Accepted indexed records in corpus.sqlite; not unique fragments, witnesses, or works",
@@ -98,16 +128,20 @@ def report(db: Path) -> dict:
             "index_files": manifest.get("files", []),
             "total_records": indexed_count,
             "author_labels": len(authors),
+            "merged_authors": len(merged),
             "by_source": counts(connection, "source"),
             "by_kind": counts(connection, "kind"),
             "by_quality": counts(connection, "quality"),
             "by_language": counts(connection, "language"),
+            "core_targets": targets,
             "core_targets_exact_label_only": targets,
+            "merged": merged,
             "authors": summaries,
             "limitations": [
-                "Counts are records, not unique fragments or independent textual witnesses.",
+                "Counts are records, not unique fragments or independent textual witnesses; identical copies are counted once per record, not once per text.",
                 "A source_text quality label does not remove editorial supplements or establish manuscript certainty.",
-                "Core target matching is exact case-insensitive label matching only; all matching source labels remain visible. Unmatched names may occur under other labels.",
+                "Searchable Greek text adds machine-corrected OCR to clean source text; raw OCR, mixed and review-needed rows are excluded from both.",
+                "Author merging follows data/author-aliases.json; labels naming several poets are never merged and are listed separately.",
                 "Translations and commentary are counted separately from Greek text; source datasets may overlap.",
             ],
         }
@@ -117,64 +151,68 @@ def report(db: Path) -> dict:
 
 def render_markdown(data: dict) -> str:
     clean_total = sum(item["clean_greek_text_records"] for item in data["authors"])
+    searchable_total = sum(item["searchable_greek_text_records"] for item in data["authors"])
     lines = [
         "# Indexed corpus coverage", "",
         f"Index snapshot: {data['index_built_at'] or 'unknown build time'}. "
         f"The accepted SQLite index contains {data['total_records']:,} records "
-        f"across {data['author_labels']} exact author labels. "
-        f"{clean_total:,} records meet the clean Greek text search filter.", "",
+        f"across {data['author_labels']} exact author labels, merged into "
+        f"{data['merged_authors']} authors. "
+        f"{searchable_total:,} records are searchable Greek text, of which "
+        f"{clean_total:,} are clean source text.", "",
         "A record is not necessarily a unique fragment, composition, or independent "
-        "witness. Multiple editions and translations can repeat a passage. "
+        "witness. Multiple editions and translations can repeat a passage; identical "
+        "copies are grouped in the reader but counted here per record. "
         "The complete SQL-derived counts by author, quality, language, kind, "
         "and source are in [`coverage.json`](../data/reports/coverage.json).", "",
         '"Clean Greek text" means `kind=text`, `language=grc`, and '
-        '`quality=source_text`. It is a search eligibility label; edition text '
-        'may contain editorial supplements.', "",
+        '`quality=source_text`. "Searchable Greek text" adds `machine_corrected_ocr`. '
+        'Both are search eligibility labels; edition text may contain editorial supplements.', "",
         "## Accepted records by source", "",
         "| Source label | Records |", "| --- | ---: |",
     ]
     lines.extend(f"| {label} | {number:,} |" for label, number in data["by_source"].items())
-    lines.extend(["", "## Core requested names: exact labels only", "",
-        "These rows match stored author labels only by case-insensitive exact spelling. "
-        "They do not merge transliterations, titles, uncertain attributions, "
-        "or Greek labels. A dash means no exact label match, not zero coverage.", "",
-        "| Requested name | Matched source labels | Clean Greek text records | Commentary / reference records |",
-        "| --- | --- | ---: | ---: |"])
-    for item in data["core_targets_exact_label_only"]:
+    lines.extend(["", "## Core requested names", "",
+        "Rows merge every source label that the alias table assigns to the named poet "
+        "(English, Greek-script, aggregator slugs and 'name of place' forms). "
+        "Labels naming several poets are not merged. A dash means no merged label matched.", "",
+        "| Requested name | Merged source labels | Clean Greek text | Searchable Greek text | Commentary / reference |",
+        "| --- | --- | ---: | ---: | ---: |"])
+    for item in data["core_targets"]:
         labels = ", ".join(f"`{label}`" for label in item["matched_author_labels"]) or "—"
-        clean = f"{item['clean_greek_text_records']:,}" if item["exact_label_match"] else "—"
-        reference = f"{item['commentary_reference_records']:,}" if item["exact_label_match"] else "—"
-        lines.append(f"| {item['requested_name']} | {labels} | {clean} | {reference} |")
-    greek_labels = [item for item in data["authors"]
-                    if any("\u0370" <= char <= "\u03ff" or "\u1f00" <= char <= "\u1fff"
-                           for char in item["author_label"])]
-    if greek_labels:
-        lines.extend(["", "## Additional Greek-script source labels", "",
-            "These source labels are reported separately. The script does not "
-            "assign them to an English author name.", "",
-            "| Exact source label | Clean Greek text records | Other text records | Commentary / reference records |",
+        clean = f"{item['clean_greek_text_records']:,}" if item["merged_label_match"] else "—"
+        searchable = f"{item['searchable_greek_text_records']:,}" if item["merged_label_match"] else "—"
+        reference = f"{item['commentary_reference_records']:,}" if item["merged_label_match"] else "—"
+        lines.append(f"| {item['requested_name']} | {labels} | {clean} | {searchable} | {reference} |")
+    unmerged = [item for item in data["merged"] if len(item["labels"]) == 1
+                and (is_mixed(item["merged_author"]) or any(
+                    "Ͱ" <= char <= "Ͽ" or "ἀ" <= char <= "῿" for char in item["merged_author"]))]
+    if unmerged:
+        lines.extend(["", "## Labels left unmerged", "",
+            "Joint attributions and Greek-script labels that the alias table does not "
+            "assign to a single poet. Add a label to `data/author-aliases.json` to merge it.", "",
+            "| Exact source label | Clean Greek text | Searchable Greek text | Commentary / reference |",
             "| --- | ---: | ---: | ---: |"])
-        for item in greek_labels:
-            other_text = item["text_records"] - item["clean_greek_text_records"]
-            lines.append(f"| {item['author_label']} | {item['clean_greek_text_records']:,} | "
-                         f"{other_text:,} | {item['commentary_reference_records']:,} |")
-    candidate_rows = [(item["requested_name"], item["substring_label_candidates_not_merged"])
-                      for item in data["core_targets_exact_label_only"]
-                      if item["substring_label_candidates_not_merged"]]
+        for item in unmerged:
+            lines.append(f"| {item['merged_author']} | {item['clean_greek_text_records']:,} | "
+                         f"{item['searchable_greek_text_records']:,} | {item['commentary_reference_records']:,} |")
+    candidate_rows = [(item["requested_name"], item["unmerged_similar_labels"])
+                      for item in data["core_targets"] if item["unmerged_similar_labels"]]
     if candidate_rows:
-        lines.extend(["", "## Similar spellings in source labels", "",
-            "These are string matches for discovery only. Their records are not "
-            "added to the exact-name counts above.", "",
+        lines.extend(["", "## Similar spellings not merged", "",
+            "String matches for discovery only; these labels belong to other poets, "
+            "joint attributions or reference collections and are not counted above.", "",
             "| Requested name | Other source labels containing that spelling |",
             "| --- | --- |"])
         for name, labels in candidate_rows:
             lines.append(f"| {name} | {', '.join(f'`{label}`' for label in labels)} |")
     lines.extend(["", "## Limits", "",
-        "The index includes reference, OCR, mixed, and review-needed records that "
-        "are excluded from ordinary clean-text search. Source author labels can "
-        "be inconsistent or disputed. Similar labels in separate sources do not "
-        "prove distinct witnesses. Coverage reports what the accepted index "
-        "contains; it cannot establish comprehensive surviving-text coverage.", ""])
+        "The index includes reference, raw OCR, mixed, and review-needed records that "
+        "are excluded from ordinary search. Source author labels can be inconsistent "
+        "or disputed; merging follows the owner alias table, not an inferred identity. "
+        "Similar labels in separate sources do not prove distinct witnesses. Coverage "
+        "reports what the accepted index contains; it cannot establish comprehensive "
+        "surviving-text coverage.", ""])
     return "\n".join(lines)
 
 
@@ -195,7 +233,8 @@ def main() -> None:
     data = report(args.db)
     write_atomic(args.out, json.dumps(data, ensure_ascii=False, indent=2) + "\n")
     write_atomic(args.markdown, render_markdown(data))
-    print(f"{data['total_records']:,} records, {data['author_labels']} exact author labels -> {args.out}, {args.markdown}")
+    print(f"{data['total_records']:,} records, {data['author_labels']} exact author labels, "
+          f"{data['merged_authors']} merged authors -> {args.out}, {args.markdown}")
 
 
 if __name__ == "__main__":

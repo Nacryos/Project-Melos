@@ -13,15 +13,23 @@ import unicodedata
 
 SIGNALS = ("lexical", "forms", "semantic")
 K = 60  # Conventional RRF damping; a rank, never a confidence probability.
+# Raw OCR, mixed material and review-needed rows never enter fusion. Text
+# labelled machine_corrected_ocr does, carrying that label into the result.
+EXCLUDED_QUALITIES = frozenset({"mixed_content", "machine_ocr", "needs_review"})
 
 
 def _key(value: Any) -> str:
     return unicodedata.normalize("NFC", str(value or "")).casefold().strip()
 
 
+def _default_author_keys(label: Any) -> set[str]:
+    return {_key(label)}
+
+
 def _eligible(record: Mapping[str, Any], *, authors: set[str], language: str,
-              edition: str, include_reference: bool) -> bool:
-    if authors and _key(record.get("author")) not in authors:
+              edition: str, include_reference: bool,
+              author_keys: Callable[[Any], Iterable[str]] = _default_author_keys) -> bool:
+    if authors and not (set(author_keys(record.get("author"))) & authors):
         return False
     if language and record.get("language") != language:
         return False
@@ -29,29 +37,25 @@ def _eligible(record: Mapping[str, Any], *, authors: set[str], language: str,
         return False
     if not include_reference and record.get("kind") in {"reference", "apparatus"}:
         return False
-    if not include_reference and record.get("quality") in {"mixed_content", "machine_ocr", "needs_review"}:
+    if not include_reference and record.get("quality") in EXCLUDED_QUALITIES:
         return False
     return True
 
 
-def _mirror_key(record: Mapping[str, Any]) -> tuple[Any, ...]:
-    """Collapse copies only where the *same edition and text* are identifiable.
+def _mirror_key(record: Mapping[str, Any], author_key: Callable[[Any], str] = _key) -> tuple[Any, ...]:
+    """Collapse copies of one text: same author, language, kind, quality label and words.
 
-    A shared work, citation, or similar text alone can represent distinct
-    editorial witnesses and must not erase a result.
+    Aggregator mirrors of a Perseus or DCC edition, and distinct editions that
+    print identical words, fold into one result. The collapsed IDs stay listed
+    in ``mirrored_ids`` so every copy remains reachable. Differing words are
+    never merged, however similar the citation.
     """
-    metadata = record.get("metadata") or {}
-    if not isinstance(metadata, Mapping):
-        metadata = {}
-    edition_id = metadata.get("cts_urn") or metadata.get("tei_edition_urn")
-    edition = edition_id or record.get("edition")
-    if not edition or not record.get("text"):
+    if not record.get("text"):
         return ("id", record["id"])
     return (
-        "edition", _key(edition), _key(record.get("author")),
-        _key(record.get("work")), _key(record.get("citation")),
-        record.get("language"), record.get("kind"),
-        " ".join(str(record["text"]).split()),
+        "text", author_key(record.get("author")),
+        record.get("language"), record.get("kind"), record.get("quality"),
+        " ".join(unicodedata.normalize("NFC", str(record["text"])).split()),
     )
 
 
@@ -70,6 +74,8 @@ def fuse(
     limit: int = 30,
     offset: int = 0,
     commentary_assisted: bool = True,
+    author_key: Callable[[Any], str] = _key,
+    author_keys: Callable[[Any], Iterable[str]] | None = None,
 ) -> dict[str, Any]:
     """Fuse ranked lists and return passage records with source-bearing hits.
 
@@ -85,9 +91,14 @@ def fuse(
     if not query.strip():
         return {"results": [], "total": 0, "method": "Empty query", "warnings": []}
 
-    authors = {_key(label) for label in (author_labels or ()) if _key(label)}
+    # ``author_key`` names the group a record belongs to (its canonical author);
+    # ``author_keys`` lists every author a record answers to, so a joint label
+    # such as ``Sappho / Alcaeus`` passes a filter for either poet.
+    if author_keys is None:
+        author_keys = lambda label: {author_key(label)}  # noqa: E731
+    authors = {author_key(label) for label in (author_labels or ()) if _key(label)}
     if author:
-        authors.add(_key(author))
+        authors.add(author_key(author))
 
     cached: dict[str, Mapping[str, Any] | None] = {}
 
@@ -110,7 +121,7 @@ def fuse(
             if record is None:
                 skipped_unresolved += 1
                 continue
-            if not include_reference and record.get("quality") in {"mixed_content", "machine_ocr", "needs_review"}:
+            if not include_reference and record.get("quality") in EXCLUDED_QUALITIES:
                 continue
             if not commentary_assisted and (record.get("kind") != "text"
                                             or record.get("language") != "grc"):
@@ -122,18 +133,36 @@ def fuse(
                 parent = resolve({"id": parent_id})
                 if (parent and parent.get("kind") == "text" and parent.get("language") == "grc"
                         and _eligible(parent, authors=authors, language=language,
-                                      edition=edition, include_reference=include_reference)):
+                                      edition=edition, include_reference=include_reference,
+                                      author_keys=author_keys)):
                     target = parent
             if not _eligible(target, authors=authors, language=language,
-                             edition=edition, include_reference=include_reference):
-                continue
-            group_key = _mirror_key(target)
+                             edition=edition, include_reference=include_reference,
+                             author_keys=author_keys):
+                # A grouped lexical hit may stand for copies that pass the
+                # filter although its representative does not (the same words
+                # in another edition). Fall back to the first eligible copy.
+                substitute = None
+                for copy_id in (target.get("mirrored_ids") or []):
+                    candidate = resolve({"id": str(copy_id)})
+                    if candidate and _eligible(candidate, authors=authors, language=language,
+                                               edition=edition, include_reference=include_reference,
+                                               author_keys=author_keys):
+                        substitute = candidate
+                        break
+                if substitute is None:
+                    continue
+                target = substitute
+            group_key = _mirror_key(target, author_key)
             if group_key not in groups:
                 groups[group_key] = {"record": dict(target), "rrf": 0.0,
                                      "ranks": {}, "matched_evidence": [], "evidence_keys": set(),
                                      "mirror_ids": set()}
             group = groups[group_key]
             group["mirror_ids"].add(target["id"])
+            # A lexical hit may already be a grouped representative carrying the
+            # copies it collapsed; keep them visible through fusion as well.
+            group["mirror_ids"].update(str(copy) for copy in (target.get("mirrored_ids") or []) if copy)
             evidence_key = (signal, record["id"])
             if evidence_key not in group["evidence_keys"]:
                 group["evidence_keys"].add(evidence_key)
@@ -175,6 +204,7 @@ def fuse(
         item["retrieval_ranks"] = group["ranks"]
         item["matched_evidence"] = group["matched_evidence"]
         item["mirrored_ids"] = sorted(group["mirror_ids"] - {item["id"]})
+        item["mirror_count"] = len(group["mirror_ids"])
         signals = [name for name in SIGNALS if name in group["ranks"]]
         bridged = any(e["id"] != item["id"] for e in group["matched_evidence"])
         item["match_reason"] = " + ".join(signals) + (

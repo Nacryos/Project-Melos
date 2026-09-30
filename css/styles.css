@@ -284,3 +284,11 @@ main { padding: 0 var(--gutter); }
 .verse, .plate figcaption { transition: opacity .2s ease; }
 .verse.out, .plate figcaption.out { opacity: 0; }
 @media (prefers-reduced-motion: reduce) { .verse, .plate figcaption { transition: none; } }
+
+/* Hero verse and studio source text keep one source line per visual line; the type scales to fit (js/verse-fit.js). */
+.verse p[lang="grc"] { white-space: nowrap; text-wrap: nowrap; }
+.studio-source-text { margin: 1rem 0 0; font: 400 var(--step-1)/1.5 var(--greek); }
+.studio-source-text.verse-fit { overflow-x: auto; }
+.studio-source-text.verse-fit .line { display: block; white-space: nowrap; }
+.studio-source-text.verse-fit .line.blank { height: .7em; }
+.studio-source-text:not(.verse-fit) { white-space: pre-line; }

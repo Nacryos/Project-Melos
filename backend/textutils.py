@@ -65,3 +65,16 @@ def tokenize(text):
 
 _WORD_BASE = re.compile(r"[^\W\d_]", re.UNICODE)
 _WORD_SIGNS = "’'᾽ʼ᾿"
+
+
+def text_key(language, kind, text):
+    """Identity of one text copy: same words, language and record kind.
+
+    Mirrors of one edition (an aggregator copy of a Perseus or DCC text) share
+    this key and are grouped in search. Distinct editions with identical words
+    also share it; the reader lists the collapsed copies so nothing is hidden.
+    The key is a search-grouping device, never a claim about witnesses.
+    """
+    import hashlib
+    collapsed = ' '.join(unicodedata.normalize('NFC', str(text)).split())
+    return hashlib.sha1(f'{language}\x1f{kind}\x1f{collapsed}'.encode('utf-8')).hexdigest()[:24]

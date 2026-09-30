@@ -50,6 +50,7 @@ async function warm() {
 }
 function setCopy(painting) {
   $('#verse-gr').textContent = painting.gr;
+  window.MelosVerseFit?.watch($('#verse-gr'));
   $('#verse-tr').textContent = painting.tr;
   $('#verse-cite').textContent = painting.cite;
   $('#caption').replaceChildren();

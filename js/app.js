@@ -87,6 +87,7 @@ async function warm() {
 
 function setCopy(p) {
   $('#verse-gr').textContent = p.gr;
+  window.MelosVerseFit?.watch($('#verse-gr'));
   $('#verse-tr').textContent = p.tr;
   $('#verse-cite').textContent = p.cite;
   $('#caption').innerHTML = `<i>${p.title}</i>${p.artist}${p.year ? ', ' + p.year : ''}`;

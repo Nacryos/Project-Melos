@@ -125,27 +125,55 @@ LATIN = re.compile(r"[A-Za-z]")
 REFERENCE_LOCI = {"callimachus.aetia": {"0.1", "0.4", "0.5"}}
 
 
-def classify(row: dict, category: str) -> tuple[str, str, str]:
+OCR_STATUSES = {"raw ocr", "auto-corrected", "manual"}
+
+
+def ocr_status_table(readme: str) -> dict[str, str]:
+    """Edition-level OCR status per URN from the pinned OGC README table."""
+    table: dict[str, str] = {}
+    for line in readme.splitlines():
+        if not line.startswith("|"):
+            continue
+        cells = [cell.strip() for cell in line.strip().strip("|").split("|")]
+        if len(cells) >= 6 and cells[-1].lower() in OCR_STATUSES:
+            table[cells[0].strip("`")] = cells[-1].lower()
+    return table
+
+
+def classify(row: dict, category: str, ocr_status: str | None = None) -> tuple[str, str, str]:
+    """Language, kind and quality of one OGC row.
+
+    OCR rows keep the poet named by their collection file (the source's own
+    attribution) and are labelled by how the upstream corpus produced them:
+    ``machine_corrected_ocr`` when its README marks the edition auto-corrected,
+    ``machine_ocr`` when it is raw. Latin-heavy blocks (apparatus, testimonia
+    and bibliography) remain ``mixed_content`` reference material. Owner
+    decision 2026-09-30; see docs/decisions.md.
+    """
     body = row["text"]
     greek = len(GREEK.findall(body))
     latin = len(LATIN.findall(body))
     ocr = row.get("source") == "ocr"
-    fragment_ocr = ocr and ("frag" in str(row.get("urn", "")).lower())
     testimony = "testimonia" in str(row.get("urn", "")).lower()
     audited_reference = str(row.get("locus", "")) in REFERENCE_LOCI.get(str(row.get("urn", "")), set())
-    mixed = fragment_ocr or testimony or audited_reference or (latin >= 20 and latin > greek * 0.15)
+    mixed = testimony or audited_reference or (latin >= 20 and latin > greek * 0.15)
     language = "grc" if greek >= latin else ("lat" if latin else "other")
     if category == "reference" or mixed or language != "grc":
         kind = "reference"
     else:
         kind = "text"
-    quality = "mixed_content" if mixed or language != "grc" else (
-        "machine_ocr" if ocr else "source_text"
-    )
+    if mixed or language != "grc":
+        quality = "mixed_content"
+    elif ocr:
+        quality = "machine_corrected_ocr" if ocr_status == "auto-corrected" else "machine_ocr"
+    else:
+        quality = "source_text"
     return language, kind, quality
 
 
-def convert_file(entry: dict, category: str, commit: str) -> tuple[list[dict], dict]:
+def convert_file(entry: dict, category: str, commit: str,
+                 ocr_statuses: dict[str, str] | None = None) -> tuple[list[dict], dict]:
+    ocr_statuses = ocr_statuses or {}
     source_path = entry["path"]
     filename = source_path.rsplit("/", 1)[-1]
     url = f"{RAW_BASE}/{commit}/{source_path}"
@@ -169,15 +197,13 @@ def convert_file(entry: dict, category: str, commit: str) -> tuple[list[dict], d
         if not isinstance(row["text"], str) or not row["text"].strip():
             skipped_empty += 1
             continue
-        if "BY-NC" in row["license"].upper():
-            raise ValueError(f"Noncommercial license at {source_path}:{line_no}")
-        language, kind, quality = classify(row, category)
         urn = str(row["urn"])
+        language, kind, quality = classify(row, category, ocr_statuses.get(urn))
         urn_parts = urn.split(".", 1)
         source_author = urn_parts[0]
-        # A fragment OCR row can include several attributed poets and Latin
-        # apparatus. Its source collection is retained without asserting that
-        # the row was composed by the filename's poet.
+        # Anthologies and mixed historical collections carry no poet in their
+        # file name. A poet's own fragment collection keeps that poet as its
+        # source attribution; a Latin-heavy block inside it stays mixed.
         collection = source_author in {
             "anthologia-graeca", "cougny-appendix-nova", "jacobs-anthologia-graeca-t13",
             "aratus-sicyonius",
@@ -219,6 +245,14 @@ def convert_file(entry: dict, category: str, commit: str) -> tuple[list[dict], d
             record["metadata"]["effective_license_basis"] = (
                 f"{RAW_BASE}/{commit}/LICENSE"
             )
+        if "BY-NC" in row["license"].upper():
+            # Recorded, not rejected: rights are per-record metadata (owner
+            # decision 2026-09-30), so the reader can show the notice.
+            record["metadata"]["noncommercial_license"] = True
+        if row["source"] == "ocr":
+            record["metadata"]["ocr_status"] = ocr_statuses.get(urn, "unknown")
+            record["metadata"]["author_label_basis"] = "ogc_collection_file_name"
+            record["metadata"]["text_verified_against_scan"] = False
         # Preserve any OGC fields not represented in the interchange schema.
         extras = {key: value for key, value in row.items()
                   if key not in {"urn", "edition", "locus", "source", "license", "text"}}
@@ -257,10 +291,15 @@ def main() -> None:
     tree = json.loads(tree_bytes)
     if tree.get("truncated"):
         raise ValueError("GitHub tree is truncated; selection could be incomplete")
+    ocr_statuses: dict[str, str] = {}
     for name in ("README.md", "LICENSE"):
         source_document = fetch_cached(f"{RAW_BASE}/{commit}/{name}", meta_dir / name)
         # Convenient current-run copy for downstream source-status parsers.
         save_raw(RAW / name, source_document)
+        if name == "README.md":
+            ocr_statuses = ocr_status_table(source_document.decode("utf-8-sig", errors="replace"))
+            if not ocr_statuses:
+                raise ValueError("No OCR-status table rows found in the pinned OGC README")
     for name in ("coverage.json", "corpus_editions.json"):
         fetch_cached(f"{RAW_BASE}/{commit}/data/{name}", meta_dir / name)
     choices = [(entry, category) for entry in tree["tree"]
@@ -271,7 +310,7 @@ def main() -> None:
     results = {}
     errors = []
     with ThreadPoolExecutor(max_workers=args.workers) as pool:
-        futures = {pool.submit(convert_file, entry, category, commit): entry["path"]
+        futures = {pool.submit(convert_file, entry, category, commit, ocr_statuses): entry["path"]
                    for entry, category in choices}
         for future in as_completed(futures):
             path = futures[future]

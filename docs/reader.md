@@ -68,9 +68,18 @@ is not a blanket license to redistribute all source material.
   remains available because hybrid search is not uniformly superior.
 - Author-date ordering uses sourced biographical metadata, not secure poem dates.
 - The 3D view is a lossy similarity projection, not a map of proven influences.
-- Mixed OCR, apparatus, and review-needed records are separately labelled and
-  excluded from ordinary text search unless reference material is enabled.
+- Machine-corrected OCR of public-domain editions is searchable and labelled
+  as such. Raw OCR, mixed, apparatus and review-needed records are separately
+  labelled and excluded from ordinary text search unless reference material is
+  enabled.
+- Author names merge every spelling a collector used for one poet; each record
+  still shows its own source label. Identical copies of a text (same quality label) are shown
+  once, with the other copies listed under the passage. See [decisions](decisions.md).
 - Editorial supplements remain edition evidence, not necessarily surviving letters.
+- Verse keeps its line structure on every screen: a source line is never
+  wrapped onto an indented continuation line. The type scales down until the
+  widest line fits the box (`js/verse-fit.js`) and grows back on wider screens.
+  Prose records without line breaks wrap normally.
 
 ## Current coverage and limits
 
@@ -93,9 +102,13 @@ search-eligible), Pindar scholia, a Theognidean anthology, Pitotto's licensed
 2024 Stesichorus edition and source-critical notes. Ibycus has only five
 scan-verified partial Greek lines plus references and labelled page OCR:
 this is not a complete Ibycus corpus. Modern edition coverage remains partial.
-Source-backed author identity profiles merge verified aliases; mixed or
-unidentified labels remain unresolved. Neither a large collection nor an audit
-establishes completeness, editorial correctness, or reliable sense selection.
+Author labels are merged through `data/author-aliases.json` and the audited
+identity profiles; joint labels remain separate. Since 2026-09-30 modern
+editions are admitted and rights are recorded rather than gating admission
+([decisions](decisions.md)); the second-pass collectors for the Centre for
+the Greek Language anthology and Eulogikon add modern-edition text for the
+fragmentary poets. Neither a large collection nor an audit establishes
+completeness, editorial correctness, or reliable sense selection.
 
 Jev is the preferred optional contextual classifier when a server-side
 `TYPESAFE_API_KEY` is configured. Its bounded choices are model proposals,

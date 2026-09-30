@@ -43,11 +43,14 @@ author identities. All modes exclude `machine_ocr`, `mixed_content`, and
 `needs_review` records. Reference and apparatus records require
 `include_reference=True`.
 
-Copies collapse only when edition identity, author, work, citation, language,
-kind, and actual text agree. A CTS/TEI edition URN is used when available;
-otherwise the edition label is used. Differing editions are retained, even
-when their words agree. `mirrored_ids` and `matched_evidence` keep the IDs of
-collapsed copies visible.
+Copies collapse when merged author, language, record kind, quality label and
+actual words agree, whatever their edition labels (owner decision 2026-09-30, see
+[decisions](decisions.md)). Aggregator mirrors of a Perseus or DCC text and
+distinct editions printing identical words therefore form one result, whose
+`mirrored_ids` and `mirror_count` list the collapsed copies; `matched_evidence`
+keeps every contributing hit. Records whose words differ are never merged.
+Author matching uses the alias table's canonical keys, so a filter for one
+poet reaches every spelling of that poet and any joint attribution naming them.
 
 For integration, retrieve a fixed candidate pool separately for each signal,
 then call `fuse` once before paginating. Fetching a supporting record's parent

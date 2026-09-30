@@ -37,7 +37,7 @@ def eligible(row: sqlite3.Row) -> bool:
     return (
         bool(row["text"] and row["text"].strip())
         and row["kind"] in {"text", "translation", "commentary"}
-        and row["quality"] == "source_text"
+        and row["quality"] in {"source_text", "machine_corrected_ocr"}
         and row["language"] in {"grc", "eng", "lat", "ita", "fra", "deu", "mul"}
     )
 
