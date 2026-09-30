@@ -196,7 +196,7 @@ def filters(author='',language='',edition='',include_reference=False, alias='p')
             EXISTS (SELECT 1 FROM passages parent
                     WHERE parent.id=json_extract({alias}.data,'$.parent_id')
                       AND parent.kind='text' AND author_key(parent.author) IN ({marks}))
-            OR (json_extract({alias}.data,'$.metadata.scope')='page' AND
+            OR (json_extract({alias}.data,'$.metadata.scope') IN ('page','source_section') AND
                 EXISTS (SELECT 1 FROM passages page_text
                         WHERE json_extract(page_text.data,'$.source_url')=json_extract({alias}.data,'$.source_url')
                           AND page_text.source={alias}.source AND page_text.kind='text'
@@ -456,7 +456,7 @@ def passage(id: str):
             result[label] = neighbor[0] if neighbor else None
         # Explicit collector links take priority; citation equality is only a related
         # edition candidate, not a claim that two fragment numbering systems agree.
-        related = con.execute("SELECT data FROM passages WHERE id<>? AND (json_extract(data,'$.parent_id')=? OR id=? OR (json_extract(data,'$.source_url')=? AND json_extract(data,'$.metadata.scope')='page')) LIMIT 50",(id,id,result.get('parent_id',''),result.get('source_url',''))).fetchall()
+        related = con.execute("SELECT data FROM passages WHERE id<>? AND (json_extract(data,'$.parent_id')=? OR id=? OR (source=? AND json_extract(data,'$.source_url')=? AND json_extract(data,'$.metadata.scope') IN ('page','source_section'))) LIMIT 50",(id,id,result.get('parent_id',''),result.get('source',''),result.get('source_url',''))).fetchall()
         result['related'] = [unpack(r) for r in related]
     result['structured_evidence']=evidence_lookup(passage_id=id)
     result['author_profile']=author_profile(result.get('author',''))

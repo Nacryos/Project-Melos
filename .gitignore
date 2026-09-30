@@ -17,6 +17,7 @@ data/wiktionary.sqlite*
 data/*.sqlite*
 data/embeddings/
 data/cache/
+data/staging/
 .env
 .env.*
 !.env.example

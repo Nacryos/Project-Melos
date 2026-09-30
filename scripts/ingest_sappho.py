@@ -43,7 +43,7 @@ def verse_text(tag: Tag) -> str:
     """Read a verse container after removing WordPress controls and footnotes."""
     copy = soup_from(str(tag))
     for node in copy.select(".para_marker, .commenticonbox, .captioned_image, "
-                            ".wp-caption, .mceTemp, fn, .footnote"):
+                            ".wp-caption, .mceTemp, fn, .footnote, .easy-footnote, .easy-footnote-margin-adjust"):
         node.decompose()
     return clean(copy.get_text(" ", strip=True))
 
@@ -185,100 +185,210 @@ def base_record(url: str, path: Path, data: bytes, record_id: str, edition: str,
     return record
 
 
-def digital_passages(soup: BeautifulSoup) -> list[tuple[str, list[dict]]]:
+def digital_sections(soup: BeautifulSoup) -> list[dict]:
+    """Preserve source headings, including malformed nested WordPress headings.
+
+    Parallel labels describe one source-layout group, not a supplied division
+    of its flattened columns. Explicit column subsections get separate records
+    so repeated printed line numbers cannot cross-link commentary.
+    """
     post = soup.select_one("div.post")
     if post is None:
         return []
     title_tag = post.select_one(".post_title")
     title = get_text(title_tag) if title_tag else "Untitled"
-    passages: list[tuple[str, list[dict]]] = []
-    # Group pages use explicit h4 fragment labels followed by Greek divs.
-    grouped: list[tuple[str, list[dict]]] = []
-    current_label = title
-    current_lines: list[dict] = []
-    saw_subheading = False
-    for child in post.find_all(recursive=False):
-        if child.name == "h4" and re.fullmatch(r"\d+[a-zA-ZΑ-Ωα-ω]?", get_text(child)):
-            if current_label and current_lines:
-                grouped.append((current_label, current_lines))
-            current_label = get_text(child)
-            current_lines = []
-            saw_subheading = True
-        elif current_label and child.get("lang") == "grc":
-            value = verse_text(child)
-            if value and source_line(value) and not is_editorial_prose(value):
-                current_lines.append({"label": printed_line_label(value), "text": value})
-    if current_label and current_lines:
-        grouped.append((current_label, current_lines))
-    if saw_subheading and grouped:
-        return grouped
-    combined_lines = []
-    for block in post.select("[lang='grc']"):
-        if block.find_parent(attrs={"lang": "grc"}) is not None:
+    sections = []
+    heading, subsection, subtitle = title, "", ""
+    lines = []
+    footnotes = []
+    editorial = []
+
+    def flush():
+        nonlocal lines, footnotes, editorial
+        if lines or editorial:
+            metadata = {"source_page_title": title, "source_heading": heading}
+            if subsection:
+                metadata["source_section"] = subsection
+            if subtitle:
+                metadata["source_subtitle"] = subtitle
+            if footnotes:
+                metadata["source_footnote_links"] = footnotes
+            if is_fragment_heading(heading) and len(re.findall(r"\d+[a-zΑ-Ωα-ω]?", heading, re.I)) > 1:
+                metadata["layout"] = "parallel_fragments"
+                metadata["source_group_description"] = "Multiple fragment labels share the source's parallel-column layout; no individual-column allocation is inferred."
+            sections.append({"citation": heading + (" — " + subsection if subsection else ""),
+                             "lines": lines, "metadata": metadata, "editorial": list(dict.fromkeys(editorial))})
+        lines, footnotes, editorial = [], [], []
+
+    for node in post.descendants:
+        if not isinstance(node, Tag):
             continue
-        if block.name == "ol":
-            start = int(block.get("start", 1))
-            lines = [{"label": str(start + i), "text": verse_text(li)}
-                     for i, li in enumerate(block.find_all("li", recursive=False))
-                     if verse_text(li) and source_line(verse_text(li))
-                     and not is_editorial_prose(verse_text(li))]
+        if (node.find_parent(class_="easy-footnotes-wrapper") or node.find_parent(class_="easy-footnote")
+                or node.find_parent(class_='search_meta') or node.find_parent(class_='running_header_bottom')):
+            continue
+        if node.name == "h4":
+            value = digital_heading_text(node)
+            if not value:
+                continue
+            # An initial descriptive title is a subtitle, not a different
+            # numbered fragment. Subsequent explicit headings are boundaries.
+            if not sections and not lines and heading == title and not re.match(r"(?i)^(?:fragment\s+)?\d", value):
+                subtitle = value
+                editorial.append(value)
+                continue
+            flush()
+            heading, subsection, subtitle = value, "", ""
+            for child in node.children:
+                if isinstance(child, Tag):
+                    if child.name in {'h4', 'div', 'p', 'ol', 'table', 'hr'}:
+                        break
+                    for anchor in child.select('.easy-footnote a[href]') if 'easy-footnote' not in child.get('class', []) else child.select('a[href]'):
+                        footnotes.append({'marker': get_text(anchor), 'href': anchor['href'],
+                                          'title_html': anchor.get('title', ''),
+                                          'description': get_text(soup_from(anchor.get('title', ''))), 'scope': 'heading'})
+            continue
+        if node.name in {"div", "p"} and node.get("lang") != "grc":
+            # Only a self-contained printed column heading, not a container
+            # whose descendants happen to include these words.
+            if not node.find(["div", "p", "table", "h4"], recursive=False):
+                value = verse_text(node)
+                if re.fullmatch(r"\([a-z]\)\s+Column\s+[ivxlcdm]+", value, re.I):
+                    flush()
+                    subsection = value
+                elif (node.name == 'p' and is_editorial_prose(value)
+                      and not node.select('.easy-footnote-to-top')
+                      and meaningful(value)):
+                    editorial.append(value)
+            continue
+        if node.get("lang") != "grc" or node.find_parent(attrs={"lang": "grc"}):
+            continue
+        if node.name == "h4":
+            continue
+        if node.name == "ol":
+            candidates = [(li, str(int(node.get("start", 1)) + i))
+                          for i, li in enumerate(node.find_all("li", recursive=False))]
         else:
-            lines = [{"label": printed_line_label(verse_text(item)), "text": verse_text(item)}
-                     for i, item in enumerate(block.find_all(["p", "div"], recursive=False), 1)
-                     if verse_text(item) and source_line(verse_text(item))
-                     and not is_editorial_prose(verse_text(item))]
-            value = verse_text(block)
-            if not lines and value and source_line(value) and not is_editorial_prose(value):
-                lines = [{"label": printed_line_label(value), "text": value}]
-        combined_lines.extend(lines)
-    if combined_lines:
-        passages.append((title, combined_lines))
-    return passages
+            children = node.find_all(["p", "div"], recursive=False)
+            candidates = [(child, "") for child in children] if children else [(node, "")]
+        for candidate, label in candidates:
+            value = verse_text(candidate)
+            if value and is_editorial_prose(value):
+                editorial.append(value)
+            if not value or not source_line(value) or is_editorial_prose(value):
+                continue
+            line = {"label": label or printed_line_label(value), "text": value}
+            if subsection:
+                line["section"] = subsection
+            lines.append(line)
+            for anchor in candidate.select(".easy-footnote a[href]"):
+                footnotes.append({"marker": get_text(anchor), "href": anchor["href"],
+                                  "title_html": anchor.get("title", ""),
+                                  "description": get_text(soup_from(anchor.get('title', ''))),
+                                  "line_index": len(lines) - 1})
+    flush()
+    return sections
 
 
-def digital_records(url: str, path: Path, data: bytes) -> list[dict]:
+def digital_heading_text(node: Tag) -> str:
+    """Read only heading inline content, not accidentally nested later text."""
+    pieces = []
+    for child in node.children:
+        if isinstance(child, Tag):
+            if child.name in {"h4", "div", "p", "ol", "table", "hr"}:
+                break
+            if any(cls.startswith("easy-footnote") for cls in child.get("class", [])):
+                continue
+            pieces.append(verse_text(child))
+        else:
+            pieces.append(str(child))
+    return clean(" ".join(pieces))
+
+
+def digital_passages(soup: BeautifulSoup) -> list[tuple[str, list[dict]]]:
+    return [(section["citation"], section["lines"]) for section in digital_sections(soup) if section['lines']]
+
+
+def digital_label_key(value: str) -> str:
+    """Source-page heading key, NOT Greek word/dialect normalization.
+
+    The downloaded body/sidebar use Greek Α/Β versus Latin A/B as numeric
+    heading suffix typography. Only an unambiguous match on this same page is
+    usable; exact printed labels are retained in each linked record.
+    """
+    value = re.sub(r"(?i)^fragment\s+", "", clean(value))
+    if is_fragment_heading(value) and len(value.split()) > 1:
+        return value.casefold()
+    # An explicit edition qualifier is not disposable typography: "178
+    # Campbell" must never silently match "178 Voigt" or even bare "178".
+    match = re.fullmatch(r"(\d+)([a-zΑΒαβ]?)", value, re.I)
+    if match:
+        return match.group(1) + match.group(2).upper().translate(str.maketrans({'Α': 'A', 'Β': 'B'}))
+    return value.casefold()
+
+
+def digital_records(url: str, path: Path, data: bytes, existing_records: list[dict] | None = None) -> list[dict]:
     soup = soup_from(data)
     slug = urlparse(url).path.strip("/").split("/")[-1]
     records = []
-    passages = digital_passages(soup)
-    for i, (citation, lines) in enumerate(passages, 1):
-        record_id = f"digital-sappho:{slug}:{i}"
+    sections = digital_sections(soup)
+    readings = [section for section in sections if section['lines']]
+    passages = [(section['citation'], section['lines']) for section in readings]
+    previous = {item['citation']: item['id'] for item in existing_records or [] if item['kind'] == 'text'}
+    for i, section in enumerate(readings, 1):
+        citation, lines = section['citation'], section['lines']
+        if citation in previous:
+            record_id = previous[citation]
+        elif not existing_records:
+            record_id = f"digital-sappho:{slug}:{i}"
+        else:
+            suffix = hashlib.sha256(citation.encode('utf-8')).hexdigest()[:16]
+            record_id = f"digital-sappho:{slug}:section:{suffix}"
         record = base_record(url, path, data, record_id, "The Digital Sappho",
                              citation, "text", "\n".join(line["text"] for line in lines),
-                             "grc", "CC BY-SA 4.0", {"source_collection": "The Digital Sappho"})
+                             "grc", "CC BY-SA 4.0", {"source_collection": "The Digital Sappho", **section['metadata']})
         record["lines"] = lines
+        if section['metadata'].get('layout') == 'parallel_fragments':
+            record['quality'] = 'mixed_content'
         mark_dialogue_attribution(record)
         records.append(record)
     if not records:
         return records
     parent = records[0]["id"]
     page_title = get_text(soup.select_one("div.post .post_title"))
-    grouped_page = len(passages) > 1
-    passage_map = {re.sub(r"\s+", "", item["citation"]).casefold(): item
-                   for item in records if item["kind"] == "text"}
+    grouped_page = len(passages) > 1 or any(section['metadata'].get('layout') == 'parallel_fragments' for section in readings)
+    text_records = [item for item in records if item['kind'] == 'text']
+
+    def resolve_sidebar(label, section=''):
+        caption = lambda value: clean(value.translate(str.maketrans('', '', '“”"'))).casefold()
+        candidates = [item for item in text_records
+                      if (digital_label_key(item['metadata']['source_heading']) == digital_label_key(label)
+                          or (item['metadata'].get('source_subtitle') and
+                              caption(item['metadata']['source_subtitle']) == caption(label)))
+                      and item['metadata'].get('source_section', '').casefold() == section.casefold()
+                      and item['metadata'].get('layout') != 'parallel_fragments']
+        return candidates[0] if len(candidates) == 1 else None
     post = soup.select_one("div.post")
-    editorial = []
-    if post:
-        for block in post.select("[lang='grc']"):
-            if block.find_parent(attrs={"lang": "grc"}) is not None:
-                continue
-            for candidate in ([block] if not block.find(["p", "div"], recursive=False)
-                              else block.find_all(["p", "div"], recursive=False)):
-                value = verse_text(candidate)
-                if value and is_editorial_prose(value):
-                    editorial.append(value)
-    if editorial:
+    for section in sections:
+        editorial = section.get('editorial', [])
+        if not editorial:
+            continue
+        parent_record = next((item for item in text_records if item['citation'] == section['citation']), None)
+        if parent_record and parent_record['metadata'].get('layout') == 'parallel_fragments':
+            parent_record = None
         for notice in editorial:
-            if "different poems" in notice.casefold():
-                records[0]["quality"] = "mixed_content"
-                records[0].setdefault("metadata", {})["source_group_description"] = notice
-        item = base_record(url, path, data, f"digital-sappho:{slug}:editorial",
-                           "The Digital Sappho", page_title if grouped_page else records[0]["citation"],
+            if parent_record and "different poems" in notice.casefold():
+                parent_record["quality"] = "mixed_content"
+                parent_record.setdefault("metadata", {})["source_group_description"] = notice
+        editorial_id = (f"digital-sappho:{slug}:editorial" if parent_record is text_records[0]
+                        else (parent_record['id'] if parent_record else f"digital-sappho:{slug}:section:" + hashlib.sha256(section['citation'].encode('utf-8')).hexdigest()[:16]) + ':editorial')
+        item = base_record(url, path, data, editorial_id,
+                           "The Digital Sappho", section['citation'],
                            "commentary", "\n".join(dict.fromkeys(editorial)), "eng",
                            "CC BY-SA 4.0", {"subtype": "editorial_notice",
-                                            "scope": "page" if grouped_page else "passage"})
-        if not grouped_page:
-            item["parent_id"] = parent
+                                            "scope": "passage" if parent_record else "source_section",
+                                            **section['metadata']})
+        if parent_record:
+            item["parent_id"] = parent_record['id']
         records.append(item)
     # The Comments sidebar contains meter, sources and bibliography. The Activity
     # sidebar contains a line-indexed vocabulary/commentary table where present.
@@ -290,18 +400,37 @@ def digital_records(url: str, path: Path, data: bytes) -> list[dict]:
         for removable in node.select("#respond_wrapper, #respond, .cancel-comment-reply"):
             removable.decompose()
         if subtype == "vocabulary":
-            rows = node.select("table tr")
-            active_parent = None if grouped_page else records[0]
-            for j, row in enumerate(rows, 1):
+            active_heading, active_section = page_title, ''
+            active_heading_row = None
+            active_parent = resolve_sidebar(active_heading) if grouped_page else records[0]
+            j = 0
+            # Headings also occur BETWEEN tables. Flattening table rows alone
+            # silently carries a previous poem's parent across witness changes.
+            events = [tag for tag in node.descendants if isinstance(tag, Tag)
+                      and (tag.name == 'tr' or (tag.name == 'h4' and not tag.find_parent('tr')))]
+            for row in events:
+                if row.name == 'h4':
+                    heading_value = digital_heading_text(row)
+                    if heading_value:
+                        active_heading, active_section, active_heading_row = heading_value, '', None
+                        active_parent = resolve_sidebar(active_heading)
+                    continue
+                j += 1
                 value = get_text(row)
                 if not value or not meaningful(value) or placeholder(value):
                     continue
                 label = get_text(row.find("td")) if row.find("td") else ""
-                if grouped_page:
-                    matched = passage_map.get(re.sub(r"\s+", "", label).casefold())
-                    if matched:
-                        active_parent = matched
-                if re.fullmatch(r"\d+[a-zA-ZΑ-Ωα-ω]?", value):
+                if grouped_page or row.find('h4'):
+                    heading_node = row.find('h4')
+                    if heading_node or is_fragment_heading(value):
+                        active_heading = digital_heading_text(heading_node) if heading_node else value
+                        active_heading_row = j
+                        active_section = ''
+                        active_parent = resolve_sidebar(active_heading)
+                    elif re.fullmatch(r"\([a-z]\)\s+Column\s+[ivxlcdm]+", value, re.I):
+                        active_section = value
+                        active_parent = resolve_sidebar(active_heading, active_section)
+                if row.find('h4') or is_fragment_heading(value) or re.fullmatch(r"\([a-z]\)\s+Column\s+[ivxlcdm]+", value, re.I):
                     continue
                 item = base_record(url, path, data, f"digital-sappho:{slug}:vocab:{j}",
                                    "The Digital Sappho",
@@ -311,6 +440,24 @@ def digital_records(url: str, path: Path, data: bytes) -> list[dict]:
                                     "scope": "passage" if active_parent else "page"})
                 if active_parent:
                     item["parent_id"] = active_parent["id"]
+                    if grouped_page:
+                        item['metadata']['source_heading_link'] = {
+                            'sidebar_heading': active_heading,
+                            'body_heading': active_parent['metadata']['source_heading'],
+                            'section': active_section,
+                            'method': 'Unique same-page source heading and explicit subsection match; heading suffix typography only.'}
+                        if active_heading_row is not None:
+                            alias = {'label': active_heading, 'body_heading': active_parent['metadata']['source_heading'],
+                                     'source_url': url, 'locator': f'#activity_sidebar table tr {active_heading_row}',
+                                     'scope': 'fragment_heading',
+                                     'method': 'Unique same-page body/sidebar heading match; original printed labels retained.'}
+                            aliases = active_parent['metadata'].setdefault('source_citation_aliases', [])
+                            if alias not in aliases:
+                                aliases.append(alias)
+                elif active_heading:
+                    item['metadata']['unresolved_source_heading'] = active_heading
+                    if active_section:
+                        item['metadata']['source_section'] = active_section
                 records.append(item)
             # Other explanatory prose may precede or follow the table.
             for table in node.select("table"):
@@ -493,12 +640,18 @@ def main() -> None:
     records = []
     failures = []
     empty = []
+    existing_pages = {}
+    if OUTPUT.exists():
+        for line in OUTPUT.read_text(encoding='utf-8').splitlines():
+            old = json.loads(line)
+            existing_pages.setdefault(old['source_url'], []).append(old)
     for edition, urls, parser_fn in (("digital", digital_urls, digital_records),
                                      ("dcc", dcc_urls, dcc_records)):
         for number, url in enumerate(urls, 1):
             try:
                 path, data = fetch(session, url, args.refresh)
-                parsed = parser_fn(url, path, data)
+                parsed = (digital_records(url, path, data, existing_pages.get(url))
+                          if edition == 'digital' else parser_fn(url, path, data))
                 if not parsed:
                     empty.append(url)
                 records.extend(parsed)

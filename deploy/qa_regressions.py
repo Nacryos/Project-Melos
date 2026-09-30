@@ -101,6 +101,33 @@ def verify(origin):
         assert result['fallback_terms']['original']
         assert result['results'][0]['query_term_coverage'] >= 3
     print('Romanized lyric phrase controls retain intended first results and explicit original-word coverage.', flush=True)
+    wedding = get('/api/passage', id='digital-sappho:fr44:1')
+    assert len(wedding['lines']) == 44, 'Source layout lines must stop at the explicit 44A heading'
+    columns = get('/api/search', q='Sappho 44A', mode='hybrid')
+    column_ids = {'digital-sappho:fr44:section:1c5658026225ae91',
+                  'digital-sappho:fr44:section:47d00865cc917d34'}
+    assert column_ids <= {row['id'] for row in columns['results']}
+    for row in columns['results']:
+        if row['id'] in column_ids:
+            assert row['reference_match']['coverage'] == 'section_text'
+    artemis_note = get('/api/passage', id='digital-sappho:fr44:vocab:138')
+    assert artemis_note['parent_id'] == 'digital-sappho:fr44:section:1c5658026225ae91'
+    print('44A source columns are separately discoverable; their notes no longer belong to the wedding poem.', flush=True)
+    tithonus = get('/api/passage', id='digital-sappho:fr58-59:1')
+    assert len(tithonus['lines']) == 12
+    preceding_note = get('/api/passage', id='digital-sappho:fr58-59:vocab:69')
+    assert 'parent_id' not in preceding_note
+    assert preceding_note['metadata']['unresolved_source_heading']
+    following = get('/api/passage', id='digital-sappho:fr58-59:section:a7623aca0f7471b6')
+    assert len(following['lines']) == 3
+    assert any(note.get('description') for note in following['metadata']['source_footnote_links'])
+    print('Tithonus, neighbouring witness sections and source dispute notes remain distinct; unresolved notes are not falsely aligned.', flush=True)
+    qualified_id = 'digital-sappho:fr169-192:section:8b523a2c33227ace'
+    qualified = get('/api/search', q='Sappho 178 Campbell', mode='hybrid')
+    assert qualified_id in {row['id'] for row in qualified['results']}
+    other_scheme = get('/api/search', q='Sappho 168A Page', mode='hybrid')
+    assert qualified_id not in {row['id'] for row in other_scheme['results']}
+    print('Edition-qualified heading is discoverable without misreading its parenthetical compound edition name.', flush=True)
 
 
 if __name__ == '__main__':

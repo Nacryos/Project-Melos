@@ -16,16 +16,19 @@ def _key(value: object) -> str:
     return " ".join(unicodedata.normalize("NFC", str(value or "")).casefold().split())
 
 
-_NUMBER = r"[0-9]{1,5}[a-z]?"
+_NUMBER = r"[0-9]{1,5}[a-zΑ-Ωα-ω]?"
 _MARKER = r"(?:fr(?:ag(?:ment)?)?s?\.?|fragmenta|απ\.)"
 # These are recognized query syntax, not claims of equivalence between editions.
-_SCHEMES = r"(?:Edmonds|Page|Voigt|Bergk|Lobel[ -]Page|PMG|PMGF)"
+_SCHEMES = r"(?:Edmonds|Page|Voigt|Bergk|Campbell|Lobel[ -]Page|PMG|PMGF)"
 _TAIL = re.compile(
     rf"^(?:{_MARKER}\s*)?(?P<number>{_NUMBER})(?:\s+(?P<scheme>{_SCHEMES}))?$",
     re.I,
 )
 _FRAGMENT = re.compile(rf"(?<!\w){_MARKER}\s*(?P<number>{_NUMBER})(?!\w)", re.I)
 _NAMED = re.compile(rf"(?<!\w)(?P<scheme>{_SCHEMES})\s+(?P<number>{_NUMBER})(?!\w)", re.I)
+_QUALIFIED_START = re.compile(
+    rf"^(?P<number>{_NUMBER})\s+(?P<scheme>{_SCHEMES})(?:\s*\(|\s*$)", re.I,
+)
 
 
 @dataclass(frozen=True)
@@ -88,6 +91,14 @@ def parse_reference_query(
 def _references(record: Mapping) -> list[tuple[str, str, str]]:
     """Return (number, scheme, evidence) from citation / explicit metadata only."""
     citation = str(record.get("citation") or "")
+    fragment_collection = bool(re.search(r"fragment", str(record.get("work") or ""), re.I))
+    qualified_heading = _QUALIFIED_START.match(citation.strip()) if fragment_collection else None
+    # A qualified primary heading may discuss other editions in parentheses.
+    # Keep that source text intact in the record, but do not interpret pieces
+    # of its prose as independent numbering concordances (e.g. Page within
+    # the compound name "Lobel & Page").
+    if qualified_heading:
+        citation = citation.split('(', 1)[0].strip()
     refs = []
     for match in _FRAGMENT.finditer(citation):
         # Do not turn a fragment range into a claim for its first number.
@@ -102,15 +113,38 @@ def _references(record: Mapping) -> list[tuple[str, str, str]]:
         if not re.match(r"(?:\s*[-–—]\s*|[.:])\d", citation[match.end():]):
             refs.append((match["number"].casefold(), _key(match["scheme"]), citation))
     # A plain numeric locus is a fragment only for a fragment collection.
-    if re.search(r"fragment", str(record.get("work") or ""), re.I):
+    if fragment_collection:
         bare = _TAIL.fullmatch(_key(citation))
         if bare:
             refs.append((bare["number"].casefold(), _key(bare["scheme"]), citation))
+        # An edition-qualified heading can retain a parenthetical source note.
+        # Match its stated leading identity, not numbers mentioned in the note.
+        qualified = _QUALIFIED_START.match(citation.strip())
+        if qualified:
+            refs.append((qualified["number"].casefold(), _key(qualified["scheme"]), citation))
     metadata = record.get("metadata") or {}
     if isinstance(metadata, Mapping):
         edmonds = str(metadata.get("edmonds_fragment_number") or "")
         if re.fullmatch(_NUMBER, edmonds, re.I):
             refs.append((edmonds.casefold(), "edmonds", "metadata.edmonds_fragment_number=" + edmonds))
+        # Source-local heading aliases are extracted from an explicit sidebar
+        # section on the same page. They do not establish a global equivalence
+        # between Greek and Latin suffixes or between editions.
+        aliases = metadata.get('source_citation_aliases', [])
+        for alias in aliases if isinstance(aliases, list) else []:
+            if not isinstance(alias, Mapping):
+                continue
+            heading = _key(alias.get('body_heading'))
+            if (alias.get('scope') != 'fragment_heading'
+                    or not alias.get('source_url')
+                    or alias.get('source_url') != record.get('source_url')
+                    or not alias.get('locator') or not heading
+                    or heading != _key(metadata.get('source_heading'))):
+                continue
+            explicit = _TAIL.fullmatch(_key(alias.get('label')))
+            if explicit:
+                evidence = f"Source heading alias {alias['label']} at {alias['locator']} ({alias['source_url']}); body heading {alias['body_heading']}"
+                refs.append((explicit['number'].casefold(), _key(explicit['scheme']), evidence))
     return refs
 
 
@@ -153,8 +187,10 @@ def rank_reference_records(
             reference_only = item.get("kind") in {"reference", "apparatus"} or metadata.get("greek_text_extracted") is False
             review = item.get("quality") in {"needs_review", "machine_ocr", "mixed_content"}
             partial = bool(metadata.get("partial_fragment_line"))
+            section = bool(metadata.get('source_section')) and item.get('kind') == 'text'
             status = ("reference_only" if reference_only else "needs_review" if review
-                      else "partial_text" if partial else "text" if item.get("kind") == "text" else "commentary")
+                      else "partial_text" if partial else "section_text" if section
+                      else "text" if item.get("kind") == "text" else "commentary")
             item["reference_match"] = {"number": intent.number, "scheme": intent.scheme or None,
                                        "evidence": list(dict.fromkeys(m[2] for m in matches)),
                                        "coverage": status}
@@ -162,12 +198,13 @@ def rank_reference_records(
                 "reference_only": "catalogue/reference only, not an available Greek reading text",
                 "needs_review": "source text requires review",
                 "partial_text": "partial fragment line, not a complete fragment",
+                "section_text": "source-labelled section or column, not whole-fragment scope",
                 "text": "source reading text; numbering remains edition-specific",
                 "commentary": "commentary, not the poem text",
             }[status]
             item["score"] = None
             hits.append(item)
-    ranks = {"text": 0, "partial_text": 1, "commentary": 2, "needs_review": 3, "reference_only": 4}
+    ranks = {"text": 0, "section_text": 1, "partial_text": 2, "commentary": 3, "needs_review": 4, "reference_only": 5}
     hits.sort(key=lambda item: (ranks[item["reference_match"]["coverage"]], str(item.get("citation", "")), str(item.get("id", ""))))
     warnings = ["Fragment numbers are edition-specific. Only explicit recorded citations are matched; no numbering equivalence is inferred."]
     if intent.filter_conflict:
@@ -177,7 +214,7 @@ def rank_reference_records(
     elif all(item["reference_match"]["coverage"] == "reference_only" for item in hits):
         warnings.append("Only catalogue/reference records are available for this citation; the Greek reading text is not indexed here.")
     elif not any(item["reference_match"]["coverage"] == "text" for item in hits):
-        warnings.append("No complete, ordinary reading-text record was matched: results are partial, commentary, references, or text requiring review.")
+        warnings.append("No whole-fragment-scope reading-text record was matched: results are source sections, partial lines, commentary, references, or text requiring review.")
     return {"results": hits[offset:offset + limit], "total": len(hits), "mode": "reference",
             "method": "Exact author + fragment reference lookup", "warnings": warnings,
             "reference_query": {"author": intent.author, "number": intent.number, "scheme": intent.scheme or None}}

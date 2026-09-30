@@ -335,6 +335,17 @@
     }
     if (cursor < text.length) host.append(document.createTextNode(text.slice(cursor)));
   }
+  function separateLineLabel(line) {
+    const label = String(line.label ?? '');
+    if (!/^\d+$/.test(label)) return label;
+    // Some source transcriptions retain their printed line number in text as
+    // well as metadata. Suppress only the duplicate UI label, never source text.
+    // Require a full stop followed by whitespace/end, a Greek letter or an
+    // explicit editorial bracket. Bare numerals, decimals, repeated stops,
+    // ranges and labels behind an editorial gap remain untouched.
+    const printed = String(line.text || '').match(/^[ \t\u00a0]*(\d+)[ \t\u00a0]*\.(?=\s|$|(?=\p{L})\p{Script=Greek}|[\[\]⟨⟩])/u);
+    return printed?.[1] === label ? '' : label;
+  }
   function renderPassageText(passage) {
     clear(ui.text);
     ui.text.lang = passage.language === 'grc' ? 'grc' : passage.language || 'en';
@@ -344,7 +355,7 @@
       let offset = 0;
       for (const line of passage.lines) {
         const row = node('div', 'line');
-        row.append(node('span', 'line-label', line.label || ''));
+        row.append(node('span', 'line-label', separateLineLabel(line)));
         const content = node('span', 'line-content');
         appendTextWithWords(content, line.text || '', words, offset);
         offset += String(line.text || '').length + 1;
@@ -371,6 +382,43 @@
     if (value instanceof Node) val.append(value); else val.textContent = String(value);
     item.append(val); host.append(item);
   }
+  function renderSourcePageNotes(host, passage) {
+    const metadata = passage.metadata && typeof passage.metadata === 'object' ? passage.metadata : {};
+    const seen = new Set([String(passage.citation || '').trim().replace(/\s+/g, ' ').toLowerCase()]);
+    for (const [key, label] of [['source_heading', 'Source heading'], ['source_section', 'Source column / section'], ['source_subtitle', 'Source subtitle'], ['source_page_title', 'Source page title']]) {
+      const value = metadata[key];
+      if (typeof value !== 'string' || !value.trim()) continue;
+      const identity = value.trim().replace(/\s+/g, ' ').toLowerCase();
+      if (seen.has(identity)) continue;
+      seen.add(identity); addMeta(host, label, value);
+    }
+    const notes = Array.isArray(metadata.source_footnote_links)
+      ? metadata.source_footnote_links.filter(note => note && typeof note === 'object') : [];
+    if (!notes.length) return;
+    const disclosure = node('details', 'entry-details');
+    disclosure.append(node('summary', '', `Read ${notes.length} source ${notes.length === 1 ? 'note' : 'notes'}`));
+    for (const note of notes) {
+      const entry = node('div', 'commentary-hit');
+      const marker = typeof note.marker === 'string' && note.marker.trim() ? note.marker : '';
+      let url = null;
+      if (typeof note.href === 'string' && note.href.trim()) {
+        try {
+          // Resolve fragment and relative links against the original source,
+          // never the current Melos route. safeLink still validates the protocol.
+          url = new URL(note.href, passage.source_url).href;
+        } catch { /* Keep the source note text when its link cannot be resolved. */ }
+      }
+      const link = safeLink(url, `${marker ? `Source note ${marker}` : 'Source note'} ↗`);
+      entry.append(link || node('p', 'candidate-reason', `${marker ? `Source marker: ${marker} · ` : ''}Source note link unavailable`));
+      if (note.scope === 'heading') entry.append(node('p', 'candidate-reason', 'Linked from the source heading.'));
+      // title_html is an archival field, not display markup or a fallback. The
+      // parser supplies plain description; line_index is not a verse citation.
+      entry.append(node('p', 'commentary-excerpt', typeof note.description === 'string' && note.description.trim()
+        ? note.description : 'Plain-text source note was not supplied.'));
+      disclosure.append(entry);
+    }
+    addMeta(host, 'Source notes', disclosure, true);
+  }
   function renderProvenance(passage) {
     clear(ui.provenance);
     addMeta(ui.provenance, 'Original reference', passage.citation || 'Not supplied');
@@ -392,6 +440,7 @@
     if (typeof metadata.scope === 'string' && metadata.scope) {
       addMeta(ui.provenance, 'Source scope', metadata.scope === 'page' ? 'Page-wide material; no line-level alignment' : metadata.scope);
     }
+    renderSourcePageNotes(ui.provenance, passage);
     const notes = [
       ['Attribution note', metadata.attribution_note, metadata.attribution_note_source_url],
       ['Source grouping note', metadata.source_group_description, metadata.source_group_source_url],
@@ -419,23 +468,29 @@
     if (!Array.isArray(related) || !related.length) { ui.related.hidden = true; return; }
     const heading = node('span', 'eyebrow', 'RELATED SOURCE MATERIAL');
     ui.related.append(heading);
-    if (related.some(item => item?.metadata?.scope === 'page')) {
-      ui.related.append(node('p', 'related-note', 'Page-wide notes belong to this source page; they are not aligned to this passage line by line.'));
+    if (related.some(item => ['page', 'source_section'].includes(item?.metadata?.scope))) {
+      ui.related.append(node('p', 'related-note', 'Page-wide and source-section notes are source-page material, not annotations aligned to the selected passage.'));
     }
     for (const item of related) {
       if (!item || !item.text) continue;
       const article = node('div', 'related-item');
       const pageWide = item.metadata?.scope === 'page';
-      article.append(node('span', 'eyebrow', [pageWide ? 'Page-wide note' : item.kind, item.edition].filter(Boolean).join(' · ') || 'Related record'));
-      if (pageWide) {
+      const sourceSection = item.metadata?.scope === 'source_section';
+      const nonAligned = pageWide || sourceSection;
+      article.append(node('span', 'eyebrow', [sourceSection ? 'Source-section note · not passage-aligned' : pageWide ? 'Page-wide note' : item.kind, item.edition].filter(Boolean).join(' · ') || 'Related record'));
+      if (sourceSection) {
+        const labels = [...new Set([item.metadata?.source_heading, item.metadata?.source_section, item.citation].filter(value => typeof value === 'string' && value.trim()))];
+        article.append(node('p', 'candidate-reason', labels.length ? `Source section / citation: ${labels.join(' · ')}` : 'Source section label not supplied.'));
+      }
+      if (nonAligned) {
         const details = node('details', 'related-details');
-        details.append(node('summary', '', `Read ${item.kind || 'reference'} from this source page`), node('p', item.language === 'grc' ? 'related-greek' : '', item.text));
+        details.append(node('summary', '', `Read ${item.kind || 'reference'} from this source ${sourceSection ? 'section' : 'page'}`), node('p', item.language === 'grc' ? 'related-greek' : '', item.text));
         article.append(details);
       } else article.append(node('p', item.language === 'grc' ? 'related-greek' : '', item.text));
-      const link = safeLink(item.metadata?.page_url || item.source_url, pageWide ? 'View source page ↗' : 'Source ↗');
+      const link = safeLink(item.metadata?.page_url || item.source_url, nonAligned ? 'View source page ↗' : 'Source ↗');
       if (link) article.append(link);
       const explicitlyLinked = item.parent_id === state.passage?.id || state.passage?.parent_id === item.id;
-      if (item.id && explicitlyLinked && ['text', 'translation'].includes(item.kind)) {
+      if (item.id && explicitlyLinked && !nonAligned && ['text', 'translation'].includes(item.kind)) {
         const read = node('button', 'related-open', item.language === 'grc' ? 'Read linked Greek passage →' : 'Read linked translation →');
         read.type = 'button';
         read.addEventListener('click', () => openPassage(item.id));
@@ -731,11 +786,15 @@
     }
     if (!hits.length) return;
     const section = addInspectorSection('Source commentary mentioning this form', host);
-    section.append(node('p', 'candidate-reason', 'Literal whole-form match with accents folded in commentary linked to this passage; no parse or sense is selected.'));
+    section.append(node('p', 'candidate-reason', 'Literal whole-form match with accents folded in related source commentary; each note retains its source scope. No parse or sense is selected.'));
     for (const { item, start, end } of hits) {
       const source = node('div', 'commentary-hit');
       source.append(node('p', 'commentary-source', [item.author, item.work, item.citation, item.edition].filter(Boolean).join(' · ') || 'Linked source commentary'));
       if (item.metadata?.scope === 'page') source.append(node('p', 'candidate-reason', 'Page-wide source note; no line-level alignment claimed.'));
+      if (item.metadata?.scope === 'source_section') {
+        const labels = [...new Set([item.metadata?.source_heading, item.metadata?.source_section, item.citation].filter(value => typeof value === 'string' && value.trim()))];
+        source.append(node('p', 'candidate-reason', `Source-section note; not aligned to the selected passage.${labels.length ? ` Source section / citation: ${labels.join(' · ')}` : ''}`));
+      }
       source.append(node('p', 'commentary-excerpt', `${start ? '…' : ''}${item.text.slice(start, end)}${end < item.text.length ? '…' : ''}`));
       const link = safeLink(item.metadata?.page_url || item.source_url, 'View source note ↗');
       if (link) source.append(link);

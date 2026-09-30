@@ -114,3 +114,17 @@ test('orphan spacing signs create no word units and attached signs block line jo
   assert.ok(divided.every(word => !word.joined));
   assert.equal(mention('αβ\u1fbfγδ', 'αβ\u1fbf-\nγδ').children.length, 0);
 });
+
+test('literal form matches in source-section notes disclose nonalignment without changing the match', () => {
+  const host = new Element('aside');
+  render('αβ’', [{ kind: 'commentary', text: 'αβʼ = γδ', citation: 'Fixture citation', metadata: { scope: 'source_section', source_heading: 'Fixture heading', source_section: 'Column A' } }], host);
+  assert.equal(host.children.length, 1);
+  assert.match(host.textContent, /Source-section note; not aligned to the selected passage/);
+  assert.match(host.textContent, /Source section \/ citation: Fixture heading · Column A · Fixture citation/);
+  assert.match(host.textContent, /related source commentary; each note retains its source scope/);
+  assert.ok(!host.textContent.includes('commentary linked to this passage'));
+  assert.ok(host.textContent.includes('αβʼ = γδ'));
+  const noMatch = new Element('aside');
+  render('αβ', [{ kind: 'commentary', text: 'αβʼ = γδ', metadata: { scope: 'source_section' } }], noMatch);
+  assert.equal(noMatch.children.length, 0);
+});

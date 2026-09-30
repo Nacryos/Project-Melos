@@ -98,3 +98,49 @@ def test_pagination_and_no_input_mutation():
     assert result["total"] == 3
     assert len(result["results"]) == 1
     assert "reference_match" not in records[0]
+
+
+def test_greek_suffixes_match_literally_without_global_latin_equivalence():
+    records = [row('greek-suffix', 'Fragment 44Α', author='Sappho'),
+               row('latin-suffix', 'Fragment 44A', author='Sappho')]
+    assert [r['id'] for r in lookup('Sappho 44α', records)['results']] == ['greek-suffix']
+    assert [r['id'] for r in lookup('Sappho 44a', records)['results']] == ['latin-suffix']
+    assert lookup('Sappho 44', records)['total'] == 0
+
+
+def test_qualified_heading_retains_edition_and_does_not_infer_parenthetical_equivalence():
+    records = [row('qualified', '178 Campbell (= Voigt, and Lobel & Page 168A)', author='Sappho'),
+               row('other-edition', '178 Voigt', author='Sappho'),
+               row('not-a-heading', 'See page 178 Campbell', author='Sappho'),
+               row('not-fragments', '178 Campbell (source qualification)', author='Sappho', work='Odes')]
+    assert [r['id'] for r in lookup('Sappho 178 Campbell', records)['results']] == ['qualified']
+    assert [r['id'] for r in lookup('Sappho 178 Voigt', records)['results']] == ['other-edition']
+    assert lookup('Sappho 168A Page', records)['total'] == 0
+    assert lookup('Sappho 168A Voigt', records)['total'] == 0
+    assert records[0]['citation'] == '178 Campbell (= Voigt, and Lobel & Page 168A)'
+
+
+def test_source_local_heading_alias_requires_matching_provenance():
+    url = 'https://example.test/synthetic-fragment-page'
+    alias = {'label': '44A', 'body_heading': 'Fragment 44Α', 'source_url': url,
+             'scope': 'fragment_heading', 'locator': '#synthetic-table tr3'}
+    def fixture(identifier, entry, **metadata):
+        return row(identifier, 'Fragment 44Α — source column', author='Sappho', source_url=url,
+                   metadata={'source_heading': 'Fragment 44Α', 'source_citation_aliases': [entry], **metadata})
+    records = [fixture('linked', alias),
+               fixture('wrong-page', alias | {'source_url': 'https://example.test/other'}),
+               fixture('wrong-heading', alias | {'body_heading': 'Fragment 45Α'}),
+               fixture('no-locator', alias | {'locator': ''}),
+               fixture('unscoped', alias | {'scope': 'page'})]
+    result = lookup('Sappho 44A', records)
+    assert [r['id'] for r in result['results']] == ['linked']
+    assert 'synthetic-table tr3' in result['results'][0]['reference_match']['evidence'][0]
+    assert lookup('Sappho 44A Voigt', records)['total'] == 0
+
+
+def test_explicit_source_column_is_not_reported_as_whole_fragment_scope():
+    result = lookup('Sappho 44Α', [row('column', 'Fragment 44Α — (a) Column i',
+        author='Sappho', metadata={'source_section': '(a) Column i'})])
+    assert result['results'][0]['reference_match']['coverage'] == 'section_text'
+    assert 'not whole-fragment scope' in result['results'][0]['match_reason']
+    assert any('source sections' in warning for warning in result['warnings'])

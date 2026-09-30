@@ -50,7 +50,7 @@ def source_rows(db_path: Path) -> list[dict]:
         )
         rows = []
         greek_by_id: dict[str, str] = {}
-        greek_by_url: dict[str, set[str]] = {}
+        greek_by_url: dict[tuple[str, str], set[str]] = {}
         for row in records:
             if not eligible(row):
                 continue
@@ -59,7 +59,7 @@ def source_rows(db_path: Path) -> list[dict]:
             if row["kind"] == "text" and row["language"] == "grc" and row["author"]:
                 greek_by_id[row["id"]] = row["author"]
                 if source_url:
-                    greek_by_url.setdefault(source_url, set()).add(row["author"])
+                    greek_by_url.setdefault((row['source'], source_url), set()).add(row["author"])
             rows.append({
                 "id": row["id"],
                 "source": row["source"],
@@ -77,8 +77,8 @@ def source_rows(db_path: Path) -> list[dict]:
                 parent_author = greek_by_id.get(record["parent_id"])
                 if parent_author:
                     linked.add(parent_author)
-                if record["scope"] == "page" and record["source_url"]:
-                    linked.update(greek_by_url.get(record["source_url"], ()))
+                if record["scope"] in {"page", "source_section"} and record["source_url"]:
+                    linked.update(greek_by_url.get((record['source'], record["source_url"]), ()))
             record["context_authors"] = sorted(linked)
         def priority(record: dict) -> tuple[int, str]:
             author = (record["author"] or "").casefold()

@@ -24,8 +24,26 @@ understanding. Return missing capability plainly, never fake successful results.
 An author filter matches case/Unicode-equivalent labels and independently
 accepted source-backed identity aliases, plus
 commentary explicitly linked to that author's text by `parent_id` or by a
-page-scoped note sharing a source URL within the same collection. A linked
+page-scoped or `source_section` note sharing a source URL within the same collection. A linked
 commentary result retains its modern `author` and adds `author_scope_reason`.
+This page association is not a `parent_id` or an occurrence-level alignment;
+hybrid retrieval does not project such notes onto a guessed poem.
+
+Source metadata may preserve `source_page_title`, `source_heading`,
+`source_section`, and `source_subtitle`. Separate source-labelled columns are
+returned as separate records, with exact-reference coverage `section_text`,
+not whole-fragment scope. `source_citation_aliases` are explicit same-page
+body/sidebar heading links, with raw labels and locators; they do not establish
+global Greek/Latin suffix equivalence or a numbering concordance.
+Edition-qualified primary headings retain their parenthetical notes, but the
+reference resolver does not mine those notes for assumed edition identities.
+
+`source_footnote_links` preserves extracted marker/link information and plain
+`description` where supplied. The reader displays descriptions as text and
+resolves links against the source URL; it never renders `title_html` or turns
+an array `line_index` into a verse citation. Duplicate UI line labels are
+suppressed only when an identical explicit printed prefix remains in the
+unchanged line text.
 
 ### Printed word boundaries
 

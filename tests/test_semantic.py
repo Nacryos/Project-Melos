@@ -108,14 +108,18 @@ def test_clean_commentary_is_available_as_labelled_bridge(tmp_path):
     assert "Sappho" in hit["context_authors"]
 
 
-def test_page_scope_author_link_does_not_change_record_author(tmp_path):
+@pytest.mark.parametrize('scope', ['page', 'source_section'])
+def test_page_scope_author_link_does_not_change_record_author(tmp_path, scope):
     db_path = tmp_path / "corpus.sqlite"
     make_db(db_path)
     with sqlite3.connect(db_path) as db:
         db.execute(
             "INSERT INTO passages VALUES (?,?,?,?,?,?,?,?)",
-            ("page_note", "sappho", "sea notes", "eng", "commentary", "source_text", "Editor", json.dumps({"source_url": "https://example.org/page", "metadata": {"scope": "page"}})),
+            ("page_note", "ogc", "sea notes", "eng", "commentary", "source_text", "Editor", json.dumps({"source_url": "https://example.org/page", "metadata": {"scope": scope}})),
         )
+        db.execute("INSERT INTO passages VALUES (?,?,?,?,?,?,?,?)",
+            ('other_collection', 'unrelated', 'sea notes', 'eng', 'commentary', 'source_text', 'Editor',
+             json.dumps({'source_url': 'https://example.org/page', 'metadata': {'scope': scope}})))
     index_dir = tmp_path / "index"
     build(db_path, index_dir, encoder=FakeEncoder())
     index = SemanticIndex(index_dir)
@@ -123,6 +127,7 @@ def test_page_scope_author_link_does_not_change_record_author(tmp_path):
     hit = next(item for item in index.search("sea", author="SAPPHO") if item["id"] == "page_note")
     assert hit["context_authors"] == ["Sappho"]
     assert index._rows[next(i for i, row in enumerate(index._rows) if row["id"] == "page_note")]["author"] == "Editor"
+    assert 'other_collection' not in {item['id'] for item in index.search('sea', author='Sappho')}
 
 
 def test_all_tokens_contribute_to_long_passage_vector():
