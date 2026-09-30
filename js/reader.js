@@ -684,6 +684,7 @@
     const card = node('article', 'claim-card');
     const scope = claim.strength === 'explicit_passage_span' ? 'Linked to this passage and text span'
       : claim.strength === 'explicit_passage_link' ? 'Linked to this passage'
+      : claim.strength === 'parallel_matching_text' ? 'Commentary on matching wording in another source'
       : claim.strength === 'listed_entry_form' ? 'Form listed in a source entry; no passage attestation'
       : 'General form claim; no passage attestation';
     card.append(node('div', 'claim-scope', `${scope} · ${String(claim.predicate || 'source claim').replaceAll('_', ' ')}`));
@@ -733,6 +734,25 @@
       section.append(row);
     }
   }
+  function renderParallelContexts(host, comparisons) {
+    if (!Array.isArray(comparisons) || !comparisons.length) return;
+    const section = addInspectorSection('Commentary on matching wording', host);
+    section.append(node('p', 'candidate-reason', 'These annotations belong to another source with the same complete word sequence. They are comparison evidence—not direct annotations of this edition. Editorial signs and source readings remain separate.'));
+    for (const item of comparisons) {
+      const card = node('div', 'parallel-context');
+      card.append(node('p', 'candidate-meta-label', [item.passage?.edition, item.passage?.citation].filter(Boolean).join(' · ')));
+      card.append(node('p', 'candidate-reason', `${item.alignment?.matched_words || 0} matching text tokens; local comparison window:`));
+      card.append(node('p', 'candidate-analysis', item.alignment?.window || ''));
+      for (const claim of item.claims || []) card.append(renderClaim({ ...claim, strength: 'parallel_matching_text', match_reason: item.alignment?.scope }));
+      if (item.passage?.id) {
+        const read = node('button', 'related-open', 'Read the annotated source →');
+        read.type = 'button';
+        read.addEventListener('click', () => openPassage(item.passage.id));
+        card.append(read);
+      }
+      section.append(card);
+    }
+  }
   function addContextAction(host, form, passageId, sequence) {
     if (!passageId) return;
     const section = addInspectorSection('Contextual comparison', host);
@@ -761,6 +781,7 @@
           const description = [chosen.analysis_text || chosen.analysis, chosen.features ? formatFeatures(chosen.features) : '', chosen.gloss].filter(Boolean).join(' · ');
           if (description) output.append(node('p', 'candidate-analysis', description));
           if (chosen.match_reason) output.append(node('p', 'candidate-reason', chosen.match_reason));
+          if (chosen.comparison_scope) output.append(node('p', 'warning', chosen.comparison_scope));
           output.append(node('p', 'candidate-reason', 'Other source candidates remain listed above. This proposal does not replace their source claims.'));
         } else {
           const outcome = result.decision_stage === 'model_abstained' ? 'Model abstained.'
@@ -825,6 +846,7 @@
       pending.remove();
       if (data.normalized && data.normalized !== form) morphologyHost.append(node('p', 'word-normalized', `Normalized search: ${data.normalized}`));
       renderStructuredEvidence(morphologyHost, data.structured_evidence, passageId);
+      renderParallelContexts(morphologyHost, data.parallel_contexts);
       renderContextualCandidates(morphologyHost, data.contextual_candidates, data.contextual_candidate_method);
       if (passageId) renderRelatedCommentary(form, state.passage?.related, morphologyHost);
       addContextAction(morphologyHost, form, passageId, sequence);

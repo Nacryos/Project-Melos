@@ -20,9 +20,14 @@ from .textutils import normalize, tokenize
 
 JEV_ENDPOINT = "https://api.typesafe.ai/v1/systemone"
 JEV_MODEL = 'jev-1.13.0'
-MAX_CANDIDATES = 12
-MAX_CLAIMS = 24
-MAX_STATE_CHARS = 16000
+MAX_CANDIDATES = 32
+MAX_CLAIMS = 32
+MAX_STATE_CHARS = 32000
+
+
+def _state_json(value: Any) -> str:
+    """The exact JSON encoding used on the wire (no insignificant whitespace)."""
+    return json.dumps(value, ensure_ascii=False, separators=(',', ':'), default=str)
 
 
 class DecisionProvider(Protocol):
@@ -47,6 +52,48 @@ def _claim_record(row: Mapping[str, Any]) -> dict[str, Any]:
                           ("record_id", "source_url", "quote", "locator") if e.get(k) is not None}
                          for e in row["evidence"] if isinstance(e, Mapping)],
             "status": "source_claim"}
+
+
+def _compact_packet(packet: dict[str, Any]) -> dict[str, Any]:
+    """Factor repeated candidate provenance, without discarding evidence.
+
+    Null optional candidate fields convey no supplied analysis. Everything
+    nested inside an analysis or quoted claim is retained verbatim, including
+    explicit nulls/empty values. Source-reference IDs remain candidate-specific;
+    only their repeated URL/scope payload is shared in a lookup catalogue.
+    """
+    options = [{key: value for key, value in candidate.items() if value is not None}
+               for candidate in packet['candidates']]
+    compact = {**packet, 'candidates': options}
+    catalog: dict[str, dict[str, Any]] = {}
+    index: dict[str, str] = {}
+    factored = []
+    for candidate in options:
+        refs = []
+        for ref in candidate['source_references']:
+            payload = {key: value for key, value in ref.items() if key != 'id'}
+            signature = json.dumps(payload, ensure_ascii=False, sort_keys=True)
+            if signature not in index:
+                source_id = f's{len(catalog) + 1}'
+                index[signature] = source_id
+                catalog[source_id] = payload
+            refs.append({'id': ref['id'], 'source_ref': index[signature]})
+        factored.append({**candidate, 'source_references': refs})
+    if not catalog:
+        return compact
+    shared = {**compact, 'candidates': factored, 'source_catalog': catalog,
+              'source_reference_format':
+              'Each candidate source_references item preserves its evidence id; '
+              'source_ref resolves to the complete URL and scope in source_catalog. '
+              'Sharing a URL does not merge claims, candidate IDs, or interpretations.'}
+    # Small packets need not pay for the lookup-table explanation.
+    size = lambda value: len(_state_json(value))
+    return shared if size(shared) < size(compact) else compact
+
+
+def _nearby_spelling(candidate: Mapping[str, Any]) -> bool:
+    distance = candidate.get('edit_distance')
+    return isinstance(distance, (int, float)) and distance > 0
 
 
 def build_evidence_packet(
@@ -116,6 +163,9 @@ def build_evidence_packet(
                         "strength": row.get("strength"),
                         "match_reason": row.get("match_reason"),
                         "source_family": row.get("source_family"),
+                        "comparison_scope": row.get("comparison_scope"),
+                        "source_passage_id": row.get("source_passage_id"),
+                        "comparison_context": row.get("comparison_context"),
                         "evidence_refs": row.get("evidence_refs"),
                         "source_references": source_refs, "claim_ids": linked})
     packet = {
@@ -131,11 +181,12 @@ def build_evidence_packet(
             "Author context and literary dialect rules are defeasible, not exclusive dialect assignments.",
             "A nearby spelling is a correction suggestion, not a parse of the queried form.",
             "An equivalent form or listed entry is an alternative relation, not an attested parse in this passage.",
+            "A computationally matching context in another edition is a comparison only: its source claim belongs to the original source passage, not proof of edition identity or direct target-passage attestation.",
             "Preserve conflicting interpretations; abstain if evidence does not resolve them.",
         ],
         "warnings": warnings,
     }
-    return packet
+    return _compact_packet(packet)
 
 
 class JevProvider:
@@ -150,17 +201,10 @@ class JevProvider:
     def decide(self, packet: Mapping[str, Any]) -> Mapping[str, Any]:
         if not self.api_key:
             raise RuntimeError("TypeSafe Jev API key is not configured")
-        choices = {str(item["id"]): {
-            "lemma": item.get("lemma"), "analysis": item.get("analysis"),
-            "gloss": item.get("gloss"), "analysis_text": item.get("analysis_text"),
-            "features": item.get("features"), "dialect": item.get("dialect"),
-            "matched_form": item.get("matched_form"),
-            "edit_distance": item.get("edit_distance"),
-            "strength": item.get("strength"),
-            "match_reason": item.get("match_reason"),
-            "source_family": item.get("source_family"),
-            "claim_ids": item.get("claim_ids"),
-            "source_references": item.get("source_references")}
+        # Full hypotheses/evidence occur once, in state. Repeating them in the
+        # choice criteria needlessly doubled much of the provider's input.
+        choices = {str(item["id"]):
+            "Select the candidate with this exact ID in state.candidates, using its complete evidence and scope."
             for item in packet["candidates"]}
         choices["abstain"] = "The supplied context and source evidence do not support a responsible selection."
         body = {"model": self.model, "state": packet,
@@ -168,7 +212,7 @@ class JevProvider:
                     "type": "choice",
                     "instructions": "Which supplied candidate best fits this exact Greek passage? Select abstain for unresolved ambiguity, conflicts, missing evidence, or inadequate context. Never create a new reading or assume the author's literary dialect makes every form exclusive.",
                     "criteria": choices}}}
-        request = Request(JEV_ENDPOINT, data=json.dumps(body, ensure_ascii=False).encode("utf-8"),
+        request = Request(JEV_ENDPOINT, data=_state_json(body).encode("utf-8"),
                           headers={"Authorization": f"Bearer {self.api_key}",
                                    "Content-Type": "application/json"}, method="POST")
         try:
@@ -258,10 +302,14 @@ def classify_context(
     if not packet["candidates"]:
         result["reason"] = "No existing candidate is available."
         return result
+    if all(_nearby_spelling(candidate) for candidate in packet['candidates']):
+        result['reason'] = ('Only nearby-spelling suggestions are available, not parses of this form. '
+                            'No model request was made; source-supported candidates for the exact form are needed.')
+        return result
     if not any(c["source_references"] or c["claim_ids"] for c in packet["candidates"]):
         result["reason"] = "Candidates have no source references or accepted claim links."
         return result
-    state_chars = len(json.dumps(packet, ensure_ascii=False, default=str))
+    state_chars = len(_state_json(packet))
     if state_chars > MAX_STATE_CHARS:
         result["reason"] = f"Evidence packet exceeds {MAX_STATE_CHARS} characters."
         return result
@@ -301,7 +349,7 @@ def classify_context(
     if selected is None:
         result["reason"] = "Provider returned a choice outside the supplied candidate IDs."
         return result
-    if isinstance(selected.get("edit_distance"), (int, float)) and selected["edit_distance"] > 0:
+    if _nearby_spelling(selected):
         result["reason"] = "Selected candidate is a nearby-spelling suggestion, not a parse of this form."
         return result
     evidence_ids = list(dict.fromkeys(

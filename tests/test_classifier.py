@@ -2,10 +2,12 @@
 
 import io
 import json
+from copy import deepcopy
 from unittest.mock import patch
 
 from backend.classifier import (JevProvider, build_evidence_packet, classify_context,
-                                configured_provider, provider_status)
+                                configured_provider, provider_status,
+                                MAX_CANDIDATES, MAX_STATE_CHARS)
 
 
 PASSAGE = {"id": "fixture:1", "text": "α β", "language": "grc", "kind": "text",
@@ -178,6 +180,8 @@ def test_jev_adapter_sends_official_systemone_choice_schema():
     assert captured["body"]["state"]["passage"]["text"] == "α β"
     criteria = captured["body"]["questions"]["contextual_parse"]["criteria"]
     assert set(criteria) == {"parse_a", "parse_b", "abstain"}
+    assert all(isinstance(value, str) for value in criteria.values())
+    assert captured['body']['state']['candidates'] == packet['candidates']
     assert answer["choice"] == "parse_a"
     assert answer["model"] == "jev-version-fixture"
     assert "fixture-secret" not in str(answer)
@@ -186,10 +190,28 @@ def test_jev_adapter_sends_official_systemone_choice_schema():
 
 def test_oversized_candidate_set_abstains_without_call():
     provider = StubProvider("parse_a")
-    result = classify_context("α", PASSAGE, CANDIDATES * 7, provider=provider)
+    result = classify_context("α", PASSAGE,
+                              CANDIDATES * (MAX_CANDIDATES // len(CANDIDATES) + 1),
+                              provider=provider)
     assert result["status"] == "abstained"
     assert not provider.called
     assert result['decision_stage'] == 'preflight'
+
+
+def test_expanded_candidate_bound_preserves_all_options_and_refuses_overflow():
+    candidates = [{**CANDIDATES[0], 'id': f'parse_{i}'}
+                  for i in range(MAX_CANDIDATES + 1)]
+    provider = StubProvider('parse_16')
+    within = classify_context('α', PASSAGE, candidates[:17], provider=provider)
+    assert provider.called
+    assert within['status'] == 'proposed'
+    assert len(within['packet']['candidates']) == 17
+    overflow_provider = StubProvider('parse_0')
+    overflow = classify_context('α', PASSAGE, candidates, provider=overflow_provider)
+    assert not overflow_provider.called
+    assert overflow['status'] == 'abstained'
+    assert len(overflow['packet']['candidates']) == MAX_CANDIDATES + 1
+    assert 'safe bounds' in overflow['reason']
 
 
 def test_fuzzy_choice_is_not_a_contextual_parse():
@@ -198,6 +220,97 @@ def test_fuzzy_choice_is_not_a_contextual_parse():
                               provider=provider)
     assert result["status"] == "abstained"
     assert "spelling suggestion" in result["reason"]
+    assert not provider.called
+    assert result['decision_stage'] == 'preflight'
+
+
+def test_shared_provenance_compacts_without_merging_hypotheses_or_evidence_ids():
+    sources = [{'source_url': 'https://example.test/source/' + str(i) + '/' + 'x' * 200}
+               for i in range(6)]
+    candidates = [{**CANDIDATES[0], 'id': f'parse_{i}', 'supporting_sources': sources,
+                   'features': {'case': str(i), 'unresolved': None},
+                   'gloss': '', 'edit_distance': 0}
+                  for i in range(5)]
+    original = deepcopy(candidates)
+    rows = [claim('claim:a', {'alternatives': ['A', 'B'], 'uncertain': None})]
+    packet = build_evidence_packet('α', PASSAGE, candidates, rows)
+    assert candidates == original
+    assert len(packet['candidates']) == len(candidates)
+    assert packet['claims'][0]['object'] == rows[0]['object']
+    assert packet['claims'][0]['evidence'] == rows[0]['evidence']
+    assert packet['passage']['text'] == PASSAGE['text']
+    assert 'source_catalog' in packet
+    for index, candidate in enumerate(packet['candidates']):
+        assert candidate['id'] == candidates[index]['id']
+        assert candidate['features'] == candidates[index]['features']
+        assert candidate['gloss'] == ''
+        assert candidate['edit_distance'] == 0
+        assert 'dialect' not in candidate  # Absent, not supplied with a value.
+        expanded = [{**packet['source_catalog'][ref['source_ref']], 'id': ref['id']}
+                    for ref in candidate['source_references']]
+        assert expanded[0]['id'] == f'parse_{index}:source_url'
+        assert expanded[0]['url'] == candidates[index]['source_url']
+        assert [ref['url'] for ref in expanded[1:]] == [s['source_url'] for s in sources]
+        assert all(ref['scope'] == 'candidate metadata; verify source scope' for ref in expanded)
+
+
+def test_repeated_provenance_no_longer_blocks_otherwise_small_exact_candidates():
+    sources = [{'source_url': 'https://example.test/' + str(i) + '/' + 'x' * 350}
+               for i in range(8)]
+    candidates = [{**CANDIDATES[0], 'id': f'parse_{i}', 'supporting_sources': sources}
+                  for i in range(8)]
+    provider = StubProvider('parse_3')
+    result = classify_context('α', PASSAGE, candidates, provider=provider)
+    assert provider.called
+    assert result['status'] == 'proposed'
+    assert 'parse_3:source_url' in result['evidence_ids']
+    assert len(result['packet']['candidates']) == 8
+    assert len(result['packet']['source_catalog']) == 9
+    assert len(json.dumps(result['packet'], ensure_ascii=False)) < 16000
+
+
+def test_fuzzy_only_oversized_packet_reports_missing_parses_without_provider_call():
+    candidate = {**CANDIDATES[0], 'edit_distance': 1, 'gloss': 'x' * (MAX_STATE_CHARS + 1)}
+    provider = StubProvider('parse_a')
+    result = classify_context('α', PASSAGE, [candidate], provider=provider)
+    assert not provider.called
+    assert 'Only nearby-spelling suggestions' in result['reason']
+    assert result['packet']['candidates'][0]['gloss'] == candidate['gloss']
+
+
+def test_genuine_oversize_is_refused_without_truncating_passage_or_quoted_claims():
+    rows = [claim('claim:a', 'A')]
+    rows[0]['evidence'][0]['quote'] = 'x' * (MAX_STATE_CHARS + 1)
+    provider = StubProvider('parse_a')
+    result = classify_context('α', PASSAGE, CANDIDATES, rows, provider=provider)
+    assert not provider.called
+    assert f'exceeds {MAX_STATE_CHARS}' in result['reason']
+    assert result['packet']['claims'][0]['evidence'][0]['quote'] == 'x' * (MAX_STATE_CHARS + 1)
+    assert result['packet']['passage']['text'] == PASSAGE['text']
+
+
+def test_mixed_fuzzy_and_exact_hypotheses_are_not_silently_removed():
+    candidates = [{**CANDIDATES[0], 'edit_distance': 1}, CANDIDATES[1]]
+    provider = StubProvider('parse_b')
+    result = classify_context('α', PASSAGE, candidates, provider=provider)
+    assert provider.called
+    assert result['status'] == 'proposed'
+    assert [c['id'] for c in result['packet']['candidates']] == ['parse_a', 'parse_b']
+
+
+def test_parallel_context_is_preserved_as_comparison_not_target_attestation():
+    comparison = {'target_excerpt': 'α β', 'source_excerpt': 'α β',
+                  'method': 'fixture exact context comparison'}
+    candidate = {**CANDIDATES[0], 'comparison_scope': 'parallel_context',
+                 'source_passage_id': 'fixture:other-edition',
+                 'comparison_context': comparison}
+    rows = [claim('claim:a', 'A')]
+    rows[0]['subject'] = {'passage_id': 'fixture:other-edition', 'form': 'α'}
+    packet = build_evidence_packet('α', PASSAGE, [candidate], rows)
+    assert packet['candidates'][0]['comparison_context'] == comparison
+    assert packet['candidates'][0]['source_passage_id'] == 'fixture:other-edition'
+    assert packet['claims'][0]['subject'] == rows[0]['subject']
+    assert 'not proof of edition identity' in ' '.join(packet['constraints'])
 
 
 def test_provider_status_never_returns_key():

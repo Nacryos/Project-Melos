@@ -487,7 +487,7 @@ def word(form: str, passage_id: str=''):
     result['context'] = context
     result['author_profile'] = author_profile(context.get('author','')) if context else None
     result['occurrences'] = occurrences(variants(form),limit=30)
-    result['structured_evidence'] = evidence_lookup(form,passage_id)
+    result['structured_evidence'] = evidence_lookup(form,passage_id,limit=100)
     occurrence_parses=[claim for claim in result['structured_evidence'].get('claims',[])
                        if claim.get('predicate')=='morphology' and claim.get('status')=='source_claim'
                        and claim.get('strength') in ('explicit_passage_span','explicit_passage_link')]
@@ -498,11 +498,43 @@ def word(form: str, passage_id: str=''):
             'A source-stated grammatical analysis is linked to this passage. General lexicon/treebank alternatives below remain separate.'
         ]
     try:
-        source_candidates=evidence_service().candidate_analyses(form,passage_id=passage_id or None,limit=20)
+        source_candidates=evidence_service().candidate_analyses(form,passage_id=passage_id or None,limit=100)
         result['contextual_candidates'] = source_candidates.get('candidates',[])
         result['contextual_candidate_method'] = source_candidates.get('method')
     except (ImportError,AttributeError,OSError,RuntimeError,sqlite3.Error):
         result['contextual_candidates'] = []
+    result['parallel_contexts'] = []
+    if context and context.get('author'):
+        from .parallel_context import matching_texts, source_claim_matches
+        pool=occurrences(variants(form),author=context['author'],limit=1000)
+        matched=matching_texts(form,context,pool,author_labels(context['author']))
+        try:
+            evidence=evidence_service()
+            for match in matched:
+                parallel=match['passage']
+                found=evidence.lookup(form,passage_id=parallel['id'],limit=100)
+                linked=[claim for claim in found['claims'] if claim.get('strength') in
+                        ('explicit_passage_span','explicit_passage_link') and source_claim_matches(claim,parallel,form)]
+                if not linked:
+                    continue
+                identifiers={claim['id'] for claim in linked}
+                projected=evidence.candidate_analyses(form,passage_id=parallel['id'],limit=100)
+                candidates=[]
+                for candidate in projected['candidates']:
+                    if not identifiers.intersection(candidate.get('claim_ids',[])):
+                        continue
+                    candidates.append({**candidate,'original_source_strength':candidate['strength'],
+                        'strength':'parallel_matching_text','source_passage_id':parallel['id'],
+                        'comparison_scope':match['alignment']['scope'],
+                        'comparison_context':match['alignment'],
+                        'match_reason':'Source analysis belongs to another indexed reading text with an identical complete word sequence; compare its edition and editorial signs.'})
+                result['parallel_contexts'].append({
+                    'passage':{key:parallel.get(key) for key in ('id','author','work','citation','edition','source_url')},
+                    'alignment':match['alignment'],'claims':linked,'candidates':candidates})
+                if len(result['parallel_contexts']) >= 10:
+                    break
+        except (ImportError,AttributeError,OSError,RuntimeError,sqlite3.Error):
+            result['warnings'].append('Parallel-text evidence comparison is unavailable; direct source evidence remains separate.')
     return result
 
 
@@ -525,18 +557,25 @@ def classify_context_request(request:ContextRequest,http_request:Request):
     candidate_origin='structured_source_claims' if candidates else 'lexicon_and_treebank_candidates'
     if not candidates:
         candidates=analysis.get('candidates',[])
-    selection_note=None
-    if len(candidates)>12:
-        selection_note='Classification considers the first 12 source-ranked candidates; further alternatives remain in the word panel.'
-    candidates=candidates[:12]
+    parallel=analysis.get('parallel_contexts') or []
+    comparison_candidates=[candidate for item in parallel for candidate in item.get('candidates',[])]
+    if comparison_candidates:
+        # Retain exact general alternatives, but nearby spelling suggestions
+        # cannot compete as parses when matching-wording source analyses exist.
+        candidates=[candidate for candidate in candidates if not candidate.get('edit_distance',0)]
+        # General morphology rows intentionally have no ID: the packet builder
+        # assigns stable per-request IDs and rejects duplicate explicit IDs.
+        candidates=[*candidates,*comparison_candidates]
+        candidate_origin += '_with_parallel_text_comparison'
     all_claims=analysis.get('structured_evidence',{}).get('claims',[])
+    all_claims=list({claim['id']:claim for claim in [*all_claims,*[claim for item in parallel for claim in item.get('claims',[])]]}.values())
     selected_ids={identifier for candidate in candidates for identifier in candidate.get('claim_ids',[])}
-    # Retain candidate support before supplemental context, with the bound
-    # stated in the response. Model inference never changes source records.
-    claims=sorted(all_claims,key=lambda item:item['id'] not in selected_ids)[:20]
+    # Preserve retrieved alternatives; the classifier rejects oversized sets
+    # rather than silently removing hypotheses to meet its request budget.
+    claims=sorted(all_claims,key=lambda item:item['id'] not in selected_ids)
     profile_claims=[]
     profile=analysis.get('author_profile') or {}
-    for identifier in profile.get('literary_dialect_claim_ids',[])[:4]:
+    for identifier in profile.get('literary_dialect_claim_ids',[]):
         try:
             found=evidence_service().get_claim(identifier)
             if found:
@@ -559,10 +598,6 @@ def classify_context_request(request:ContextRequest,http_request:Request):
     except GatewayUnavailable:
         raise HTTPException(503,'Classifier state is unavailable. Please try again later.')
     result['candidate_origin']=candidate_origin
-    if selection_note:
-        result['warnings'].append(selection_note)
-    if len(all_claims)>len(claims):
-        result['warnings'].append('Packet is limited to 20 source claims, prioritizing support for the candidate set; the full evidence remains available separately.')
     return result
 
 

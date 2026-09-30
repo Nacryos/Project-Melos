@@ -86,6 +86,8 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
    as paths, not OS-dependent arrow glyphs. Dark surfaces retain white contrast. */
 .reader-layout a,.reader-layout a:visited,.utility-bar a,.utility-bar a:visited{color:var(--ink);text-underline-offset:3px}
 .reader-layout a:hover,.utility-bar a:hover{text-decoration-thickness:2px}
+.inspector{min-width:0;overflow-wrap:anywhere}
+.claim-value,.claim-quote,.candidate-analysis{overflow-wrap:anywhere}
 .author-button .chevron{color:var(--ink)}
 .reader-layout .melos-icon,.utility-bar .melos-icon{color:var(--ink)}
 .bar .melos-icon,.reader-footer .melos-icon,.tune .melos-icon,.reader-hero .search button .melos-icon{color:#fff}
