@@ -71,14 +71,28 @@ this inspectable baseline.
 accepts the existing morphology converter's folded variants and a collection
 of `vocabulary.normalized` terms from the accepted corpus index. It returns at
 most 16 indexed Greek terms for a likely multiword transliteration. The terms
-can be used in a bounded FTS fallback when literal query variants miss.
+can be added to a bounded FTS fallback when literal query variants miss. They
+never replace the original query's native-script terms.
 
 The existing [ALA-LC-inspired input converter](morphology.md) deliberately accepts plain Latin
 `o` and `e`, which can stand for either ο/ω or ε/η. The fallback considers one
 of those substitutions near a word ending only when the resulting Greek token
-is already indexed. It requires at least two exact vocabulary matches before
-expanding, and returns nothing for short or clearly Greek-script queries.
+is already indexed. Expansion requires at least two distinct exact vocabulary
+anchors and indexed support for at least 80% of the substantial query words.
+This is a conservative retrieval heuristic, not a calibrated language detector:
+two accidental matches from an English description must not redirect its entire
+lexical search into Greek. Short or Greek-letter queries do not use this
+multiword Latin fallback. Printed terminal signs remain part of their tokens.
 When every substantial token already matches, it leaves the terms exact.
+Each original word must convert to exactly one token; a dropped word and a
+split word cannot cancel each other to manufacture coverage. Accepted native
+and Greek alternatives are grouped by their original word. Lexical results
+rank by the number of these groups matched, then BM25, over the full filtered
+FTS result set before pagination. Several alternatives for one word count
+once. Chronological ordering still takes precedence when requested.
+The API discloses the groups and per-result coverage; hybrid search retains
+the fallback provenance under its contributing channel. These counts are not
+confidence scores or evidence of an occurrence-specific interpretation.
 These are lossy spelling suggestions, never inflections, translations, or
 claims that a Greek word belongs to a particular author. A result still needs
 its actual passage text and source record as evidence.

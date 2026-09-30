@@ -83,6 +83,24 @@ def verify(origin):
         exact_sets.append({row['id'] for row in result['results']})
     assert exact_sets[0] == exact_sets[1] == exact_sets[2]
     print('Spacing psili remains distinct; Greek and Latin elision-sign queries agree without dropping signs.', flush=True)
+    description = 'the wedding of Hector and Andromache'
+    result = get('/api/search', q=description, mode='words', author='Sappho', limit=30)
+    assert not result.get('fallback_terms'), 'English description must not be replaced by accidental Greek keys'
+    assert result['results'] and 'fr44' in result['results'][0]['id']
+    result = get('/api/search', q=description, mode='hybrid', limit=30)
+    assert result['results'][0]['id'] == 'digital-sappho:fr44:1'
+    print('Wedding description retrieves Sappho 44 without accidental transliteration.', flush=True)
+    for query, target in [
+        ('Gygeo tou polychrysou', 'lyric_web:elws:10410:165084:8'),
+        ("Eudousin d' oreon koryphai", 'lyric_web:elws:17911:125703:1'),
+        ('Eudousin d’ oreon koryphai', 'lyric_web:elws:17911:125703:1'),
+        ('ballon chrysokomes Eros', 'lyric_web:elws:17312:140158:1'),
+    ]:
+        result = get('/api/search', q=query, mode='words', limit=10)
+        assert result['results'][0]['id'] == target, (query, result['results'][0]['id'])
+        assert result['fallback_terms']['original']
+        assert result['results'][0]['query_term_coverage'] >= 3
+    print('Romanized lyric phrase controls retain intended first results and explicit original-word coverage.', flush=True)
 
 
 if __name__ == '__main__':

@@ -78,6 +78,16 @@ tokens in one source file remain distinct after morphological-reading
 deduplication. Locator totals and preview limits are explicit; absent citations
 are not reconstructed from sentence metadata or model knowledge.
 
+Latin-script multiword fallback keeps original query terms and may supplement
+them with indexed Greek spelling alternatives. `fallback_terms` records
+`original`, `transliterated`, original-word `groups`, `covered_words`,
+`substantial_words`, and `exact_anchors`. Eligible lexical results expose
+`query_term_coverage`; alternatives within a group count once. Coverage ranks
+before BM25, after chronological ordering if requested, over all filtered
+lexical candidates before pagination. Hybrid responses nest this provenance
+under `fallback_terms.lexical` and/or `.forms`. These are retrieval mechanics,
+not calibrated language, morphology, or sense confidence.
+
 Reader developer owns `reader.html`, `js/reader.js`, `css/reader.css`; visualization
 developer owns `js/usage-space.js` and exposes `window.MelosUsageSpace.open(query,
 author)` plus `close()`. Main owns server, database and integration. Morphology

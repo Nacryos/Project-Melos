@@ -675,6 +675,7 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                              include_reference=include_reference,match=match,limit=limit,
                              order=order,offset=offset,commentary_assisted=commentary_assisted)
     warnings=[]
+    fallback_provenance={}
     extra,params=filters(author,language,edition,include_reference)
     def mark_author_scope(item):
         if author and item.get('kind')=='commentary' and author_key(item.get('author'))!=author_key(author):
@@ -793,24 +794,47 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
             results=[mark_author_scope(unpack(row)|{'match_reason':'Normalized wording / citation match','score':None}) for row in rows]
         if total==0 and match!='exact':
             terms=tokenize(basic_normalize(q))[:16]
-            from .query_expansion import fallback_tokens
-            if q.isascii() and 2<=len(tokenize(q))<=8:
+            from .query_expansion import fallback_plan
+            coverage_groups=[]
+            if 2<=len(tokenize(q))<=8:
                 vocabulary={row[0] for row in con.execute('SELECT normalized FROM vocabulary')}
-                greek_terms=fallback_tokens(q,keys,vocabulary)
+                plan=fallback_plan(q,keys,vocabulary)
+                greek_terms=plan.get('tokens',[])
                 if greek_terms:
-                    terms=greek_terms
-                    warnings.append('Latin-script input expanded to indexed Greek spelling candidates; these are retrieval suggestions, not morphological identifications.')
+                    coverage_groups=plan['groups']
+                    fallback_provenance={'fallback_terms':{'original':list(terms),'transliterated':greek_terms,
+                        'groups':coverage_groups,'covered_words':plan['covered_words'],
+                        'substantial_words':plan['substantial_words'],'exact_anchors':plan['exact_anchors']}}
+                    terms=list(dict.fromkeys([*terms,*greek_terms]))
+                    warnings.append('Latin-script input also searched as indexed Greek spelling candidates; original query words are retained. These are retrieval suggestions, not morphological identifications.')
             if terms:
                 expression=' OR '.join('"'+t.replace('"','""')+'"' for t in terms)
                 fts_from=' FROM passage_fts JOIN passages p ON p.id=passage_fts.id WHERE passage_fts MATCH ?'+extra
                 total=con.execute('SELECT count(*)'+fts_from,[expression]+params).fetchone()[0]
-                fetched=con.execute('SELECT p.data,bm25(passage_fts) rank'+fts_from+' ORDER BY '+
-                                    (chronology+'rank,p.id' if order=='chronological' else 'rank,p.id')+
-                                    ' LIMIT ? OFFSET ?',[expression]+params+[limit,offset]).fetchall()
-                results=[mark_author_scope(unpack(r)|{'match_reason':'Shared search words (not necessarily an exact phrase)','score':-r['rank']}) for r in fetched]
-                method='Full-text shared-word retrieval'
+                coverage_sql=[]
+                coverage_params=[]
+                for group in coverage_groups:
+                    group_terms=list(dict.fromkeys([group['original'],*group['transliterated']]))
+                    coverage_sql.append('CASE WHEN '+' OR '.join(
+                        '(phrase_match(p.normalized,?) OR phrase_match(lower(p.citation),?) OR phrase_match(lower(p.work),?))'
+                        for _ in group_terms)+' THEN 1 ELSE 0 END')
+                    coverage_params.extend(value for term in group_terms for value in (term,term,term))
+                coverage_select=','+'+'.join(coverage_sql)+' query_term_coverage' if coverage_sql else ''
+                coverage_order='query_term_coverage DESC,' if coverage_sql else ''
+                fetched=con.execute('SELECT p.data,bm25(passage_fts) rank'+coverage_select+fts_from+' ORDER BY '+
+                                    (chronology if order=='chronological' else '')+coverage_order+'rank,p.id'+
+                                    ' LIMIT ? OFFSET ?',coverage_params+[expression]+params+[limit,offset]).fetchall()
+                results=[]
+                for row in fetched:
+                    item=unpack(row)|{'match_reason':'Shared search words (not necessarily an exact phrase)','score':-row['rank']}
+                    if coverage_sql:
+                        item['query_term_coverage']=row['query_term_coverage']
+                        item['match_reason']=f"Matches {row['query_term_coverage']} of {len(coverage_groups)} original query word groups; spelling alternatives count once, not as separate evidence."
+                    results.append(mark_author_scope(item))
+                method=('Original-word-group coverage, then full-text rank; native and transliterated terms retained'
+                        if coverage_sql else 'Full-text shared-word retrieval')
     excluded={} if include_reference else excluded_exact_matches(q,author,language,edition)
-    return {'results':results,'total':total,'mode':mode,'method':method,'warnings':list(dict.fromkeys(warnings)),**excluded}
+    return {'results':results,'total':total,'mode':mode,'method':method,'warnings':list(dict.fromkeys(warnings)),**excluded,**fallback_provenance}
 
 
 def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
@@ -828,7 +852,7 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
                 order='relevance',offset=0)
     lexical=search(q=q,mode='words',**common)
     # Long descriptions are not sequences of Greek morphological queries.
-    greek=any('\u0370'<=c<='\u03ff' or '\u1f00'<=c<='\u1fff' for c in q)
+    greek=any(c.isalpha() and ('\u0370'<=c<='\u03ff' or '\u1f00'<=c<='\u1fff') for c in q)
     forms=search(q=q,mode='forms',**common) if greek or len(tokenize(q))<=2 else {'results':[],'warnings':[]}
     warnings=lexical.get('warnings',[])+forms.get('warnings',[])
     try:
@@ -851,8 +875,11 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
     if order=='chronological':
         warnings.append('Author biography dates order these candidates; they are not secure passage composition dates.')
     excluded={} if include_reference else excluded_exact_matches(q,author,language,edition)
+    fallbacks={channel:payload['fallback_terms'] for channel,payload in
+               (('lexical',lexical),('forms',forms)) if payload.get('fallback_terms')}
+    provenance={'fallback_terms':fallbacks} if fallbacks else {}
     return {**fused,'results':ranked[offset:offset+limit],'mode':'hybrid',
-            'commentary_assisted':commentary_assisted,'warnings':list(dict.fromkeys(warnings)),**excluded}
+            'commentary_assisted':commentary_assisted,'warnings':list(dict.fromkeys(warnings)),**excluded,**provenance}
 
 
 @app.get('/api/usage-space')
