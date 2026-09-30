@@ -62,7 +62,7 @@ def test_repairs_derivatives_and_rebinds_without_reembedding(tmp_path):
         manifest = json.loads(con.execute("SELECT value FROM metadata WHERE key='manifest'").fetchone()[0])
         assert manifest['custom'] == 'preserve'
         assert manifest['search_layout_version'] == 1
-        assert manifest['tokenizer_version'] == 2
+        assert manifest['tokenizer_version'] == repair_search_tokens.TOKENIZER_VERSION
     assert repair(output, tmp_path/'again.sqlite')['changed_passages'] == 0
     stat = source.stat()
     manifest_path, rebound = tmp_path/'vectors.json', tmp_path/'rebound.json'
@@ -81,6 +81,24 @@ def test_duplicate_token_rows_and_wrong_normalized_keys_repaired(tmp_path):
     with sqlite3.connect(output) as con:
         assert con.execute("SELECT count(*) FROM vocabulary WHERE normalized='wrong'").fetchone()[0] == 0
         assert con.execute("SELECT count(*) FROM tokens WHERE passage_id='shared'").fetchone()[0] == 2
+
+
+def test_repairs_legacy_terminal_apostrophes_without_changing_source(tmp_path):
+    source, output = tmp_path/'old.sqlite', tmp_path/'new.sqlite'
+    make_database(source)
+    with sqlite3.connect(source) as con:
+        con.execute("UPDATE passages SET text=? WHERE id='shared'", ('αβ’ γ',))
+        con.execute("DELETE FROM tokens WHERE passage_id='shared'")
+        con.execute("INSERT INTO tokens VALUES ('shared','αβ','αβ',1)")
+        con.execute("INSERT INTO tokens VALUES ('shared','γ','γ',1)")
+        con.execute("INSERT INTO vocabulary VALUES ('αβ','αβ',1)")
+    repair(source, output)
+    with sqlite3.connect(output) as con:
+        assert con.execute("SELECT form,normalized FROM tokens WHERE passage_id='shared' AND form LIKE 'αβ%'").fetchone() == ('αβ’', "αβ'")
+        assert con.execute("SELECT text FROM passages WHERE id='shared'").fetchone()[0] == 'αβ’ γ'
+        # The separate marked-letter fixture still contributes two αβ tokens;
+        # the former bare token from this passage must no longer inflate it.
+        assert con.execute("SELECT count FROM vocabulary WHERE normalized='αβ'").fetchone()[0] == 2
 
 
 def test_refuses_existing_or_input_path(tmp_path):

@@ -29,20 +29,29 @@ def normalize(text):
 
 
 def tokenize(text):
-    r"""Keep combining marks with their letters, including editorial underdots.
+    r"""Keep combining marks and attached apostrophes with their letters.
 
     Python's Unicode \w excludes combining marks. Using it alone splits
     uncertain Greek words into spurious fragments. Marks remain in the surface
-    token; only normalize() produces the separate lossy lookup key.
+    token; only normalize() produces the separate lossy lookup key. A terminal
+    apostrophe is a printed sign, not permission to supply an elided vowel.
+    Adjacent quotation/apostrophe signs are preserved conservatively without
+    guessing their editorial function; orphan signs are not word tokens.
     """
     text = unicodedata.normalize('NFC', text)
     tokens, current = [], []
     for index, char in enumerate(text):
-        if _WORD_BASE.fullmatch(char):
+        # U+02BC is a Unicode letter: test this branch BEFORE the base class so
+        # all four known apostrophe glyphs have the same boundary behavior.
+        if char in "’'᾽ʼ":
+            if current:
+                current.append(char)
+                if index + 1 == len(text) or text[index + 1] in "’'᾽ʼ" or not _WORD_BASE.fullmatch(text[index + 1]):
+                    tokens.append(''.join(current))
+                    current = []
+        elif _WORD_BASE.fullmatch(char):
             current.append(char)
         elif current and unicodedata.category(char).startswith('M'):
-            current.append(char)
-        elif current and char in "’'᾽" and index + 1 < len(text) and _WORD_BASE.fullmatch(text[index + 1]):
             current.append(char)
         elif current:
             tokens.append(''.join(current))

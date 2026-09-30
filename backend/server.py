@@ -94,7 +94,18 @@ class ReadConnection(sqlite3.Connection):
 
 @lru_cache(maxsize=256)
 def phrase_pattern(query):
-    return re.compile(r'(?<!\w)' + r'\s+'.join(re.escape(t) for t in query.split()) + r'(?!\w)')
+    literal = r'\s+'.join(re.escape(t) for t in query.split())
+    greek = any(c.isalpha() and ('\u0370' <= c <= '\u03ff' or '\u1f00' <= c <= '\u1fff') for c in query)
+    if not greek:
+        # Preserve ordinary English/Latin wording and quoted descriptions.
+        # Romanized Greek also supplies Greek query variants below this layer.
+        return re.compile(r'(?<!\w)' + literal + r'(?!\w)')
+    # Callers supply folded keys (all recognized apostrophes become ASCII).
+    # Do not match a bare stem inside an elided form or the second half of an
+    # internal-apostrophe word. An orphan leading quote remains punctuation.
+    # Attached terminal signs are literal: we do not guess quote vs. elision.
+    ending = r'(?!\w)' if query.endswith("'") else r"(?![\w'])"
+    return re.compile(r"(?<!\w)(?<!\w')" + literal + ending)
 
 
 def author_key(label):

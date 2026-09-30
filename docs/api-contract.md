@@ -11,7 +11,7 @@ is rebuilt from collector JSONL; raw/processed files remain authoritative.
 - `GET /api/search?q=...&mode=words|forms|themes|hybrid&author=&language=&include_reference=false&offset=0&limit=30`: `{results:[passage + score + match_reason],total,mode,method,warnings}`. Lexical totals count all distinct filtered matches; theme totals count a fixed first-1,000 ranked-candidate pool. Hybrid uses bounded lexical/form/dense candidate pools and exposes `matched_evidence`; its total is not every potentially relevant corpus passage. `commentary_assisted=false` restricts hybrid to direct Greek-text evidence.
 - `GET /api/word?form=...&passage_id=...`: generic lexical candidates and occurrences plus `structured_evidence`, `contextual_candidates:[]`, `context_analysis_status` and `author_profile`. Source-linked claims and model judgements are separate; missing morphology or senses are not filled from memory.
 - `GET /api/evidence?form=&passage_id=&claim_id=&limit=20`: source claims at their declared scope, with exact quotations and locators. Large paradigms are compacted for lookup; `GET /api/claim?id=...` returns the full source claim.
-- `POST /api/classify-context`: JSON `{form,passage_id}` returns `status=proposed|abstained`, an existing `candidate_id` if selected, source evidence IDs, inspectable packet and raw uncalibrated provider signals. Jev is server-side; this endpoint is local-only and never changes corpus evidence. Public deployments must set `MELOS_PUBLIC_DEPLOYMENT=1`, disabling paid classification pending an authenticated gateway.
+- `POST /api/classify-context`: JSON `{form,passage_id}` returns `status=proposed|abstained`, `decision_stage`, an existing `candidate_id` if selected, source evidence IDs, inspectable packet and raw uncalibrated provider signals. Jev is server-side and never changes corpus evidence. Public deployments require the explicit `MELOS_PUBLIC_CLASSIFIER=1` opt-in and use the durable quota/cache gateway described in `docs/deployment.md`; preflight rejection makes no provider request.
 - `GET /api/wiktionary?form=...`: independently gated `{ready,query,results,total,warnings}` reference lookup. Entry, sense, and listed-form tags retain their separate scopes; listed forms do not assert corpus attestation or unattestation.
 - `GET /api/usage-space?q=...&author=&limit=80`: `{points:[{id,x,y,z,text,author,work,citation,source_url,date_start,date_end,match_reason}],method,retrieval_method,warnings}`. Coordinates derive from actual passage features and are not historical facts. Any thematic fallback is disclosed and need not contain the queried word.
 - `GET /api/sources`: collection reports and counts.
@@ -26,6 +26,26 @@ accepted source-backed identity aliases, plus
 commentary explicitly linked to that author's text by `parent_id` or by a
 page-scoped note sharing a source URL within the same collection. A linked
 commentary result retains its modern `author` and adds `author_scope_reason`.
+
+### Printed word boundaries
+
+Derived occurrence tokens retain combining marks and a single attached terminal
+apostrophe. The recognized apostrophe glyphs `'`, `’`, `᾽`, and `ʼ` share a folded
+lookup key; the original glyph remains in the source and displayed token. No
+missing ending is supplied. Internal apostrophes do not split a word, whereas
+repeated signs form a boundary after the first attached sign.
+
+Greek exact-word searches and contextual occurrence checks distinguish a form
+with a terminal apostrophe from the same letters without it. Greek paired
+single quotes are consequently conservative/literal: bare `α` does not exactly
+match `'α'`, while `α'` does. The system cannot infer whether an attached mark is
+quotation punctuation or elision. English/Latin description searches retain
+their previous ordinary quotation-boundary behavior.
+
+Reader commentary previews compare literal complete Greek tokens with folded
+accents, sigma and the four apostrophe glyphs. They preserve the source excerpt
+and do not join words over gaps or infer a parse. Explicit printed line-end
+divisions are joined only for passage-word lookup, with source text unchanged.
 
 Reader developer owns `reader.html`, `js/reader.js`, `css/reader.css`; visualization
 developer owns `js/usage-space.js` and exposes `window.MelosUsageSpace.open(query,

@@ -400,6 +400,23 @@ def test_provider_status_never_returns_key():
     assert "fixture-secret" not in str(status)
 
 
+def test_occurrence_guard_keeps_elided_and_unelided_tokens_distinct():
+    for mark in "'’᾽ʼ":
+        original = 'α\u0323' + mark + ' β'
+        provider = StubProvider('parse_a')
+        result = classify_context("α'", {**PASSAGE, 'text': original}, CANDIDATES, provider=provider)
+        assert provider.called
+        assert result['packet']['passage']['text'] == original
+        provider = StubProvider('parse_a')
+        result = classify_context('α', {**PASSAGE, 'text': original}, CANDIDATES, provider=provider)
+        assert not provider.called
+        assert 'does not occur' in result['reason']
+        provider = StubProvider('parse_a')
+        result = classify_context("α'", {**PASSAGE, 'text': 'α β'}, CANDIDATES, provider=provider)
+        assert not provider.called
+        assert 'does not occur' in result['reason']
+
+
 def test_installed_local_model_requires_validation_and_explicit_opt_in():
     with patch.dict("os.environ", {"TYPESAFE_API_KEY": "", "JEV_API_KEY": "",
                                    "MELOS_EXPERIMENTAL_LOCAL_CLASSIFIER": "1"}):

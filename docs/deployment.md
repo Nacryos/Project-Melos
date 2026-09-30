@@ -137,6 +137,27 @@ the marks, and its word occurrence lookup must include that same passage.
 This is a token-boundary regression, not an adjudication of the word's reading,
 parse, dialect, or sense.
 
+### Attached-apostrophe search repair (qa7, 2026-09-30)
+
+Tokenizer version 3 retains a printed terminal apostrophe rather than indexing
+only its bare preceding letters. The local and independent Hetzner rebuilds
+each repaired 3,622 of 103,171 eligible passages and checked 50,819 affected
+vocabulary keys. All 287,536 source records, normalized search text, FTS and
+work metadata compared unchanged; existing embedding inputs were verified and
+their manifest rebound without regenerating vectors.
+
+The paired rollback is local `.benchmarks/corpus-before-qa7.sqlite` plus
+`data/embeddings/manifest-before-qa7.json`, and host
+`data/corpus-before-qa7.sqlite` plus that manifest filename. Restore the pair
+with the previous qa6 image/container if rolling back the tokenizer.
+
+The public read-only regression checks now require `κἄμμ’` to find its own
+Brothers Poem occurrence and require bare `κἄμμ` exact-word search not to claim
+that passage. The frontend also compares whole printed tokens for linked
+commentary previews, so the original DCC note is discoverable without creating
+new structured claims. See `docs/api-contract.md` for the conservative Greek
+single-quotation boundary tradeoff.
+
 ### General maintenance
 
 - Inspect: `docker stats --no-stream melos-api`, `docker logs --tail=50 melos-api`, and `python3 deploy/smoke_backend.py` from the service directory.

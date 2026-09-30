@@ -36,6 +36,13 @@ def verify(origin):
     result = get('/api/word', form=form, passage_id=source['id'])
     assert source['id'] in {row['id'] for row in result['occurrences']}, 'Underdotted word must remain one occurrence token'
     print('Underdotted Brothers Poem form remains intact and its original occurrence is discoverable.', flush=True)
+    form = 'κἄμμ’'
+    assert form in source['text'], 'The source elision sign must remain present'
+    result = get('/api/word', form=form, passage_id=source['id'])
+    assert source['id'] in {row['id'] for row in result['occurrences']}, 'Printed elided form must find its own occurrence'
+    truncated = get('/api/search', q='κἄμμ', mode='words', match='exact', author='Sappho', limit=100)
+    assert source['id'] not in {row['id'] for row in truncated['results']}, 'Exact search must not silently discard the printed elision sign'
+    print('Printed elision sign is preserved in lookup; bare-prefix exact search does not claim the Brothers Poem.', flush=True)
 
 
 if __name__ == '__main__':

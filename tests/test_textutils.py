@@ -36,7 +36,28 @@ def test_tokenizer_retains_attached_combining_marks_and_never_supplies_letters()
 
 
 def test_tokenizer_keeps_existing_word_boundaries_and_apostrophe_behavior():
-    assert tokenize("\u0323 α'β δ’ε ζ᾽η θ' 31.2 κ_λ - μ…ν") == ["α'β", 'δ’ε', 'ζ᾽η', 'θ', 'κ', 'λ', 'μ', 'ν']
-    assert tokenize("α''β") == ['α', 'β']
+    assert tokenize("\u0323 α'β δ’ε ζ᾽η θ' 31.2 κ_λ - μ…ν") == ["α'β", 'δ’ε', 'ζ᾽η', "θ'", 'κ', 'λ', 'μ', 'ν']
+    assert tokenize("α''β") == ["α'", 'β']
     assert tokenize('α\u0313\u0301β') == ['ἄβ']
     assert tokenize('α\u1ab0β') == ['α\u1ab0β']
+
+
+def test_attached_apostrophe_glyphs_preserve_terminal_internal_and_marked_forms():
+    for mark in "'’᾽ʼ":
+        for suffix in ('', ' ', '\n', '.', ']', ', β'):
+            assert tokenize('α\u0323' + mark + suffix)[0] == 'α\u0323' + mark
+        assert normalize(tokenize('α' + mark)[0]) == "α'"
+        assert normalize('α' + mark) != normalize('α')
+        assert tokenize('α' + mark + 'β') == ['α' + mark + 'β']
+        assert tokenize('α' + mark * 2 + 'β') == ['α' + mark, 'β']
+        assert tokenize(mark + ' α ' + mark) == ['α']
+        assert tokenize(mark * 2) == []
+
+
+def test_adjacent_quote_sign_is_preserved_without_inventing_an_editorial_interpretation():
+    assert tokenize("'αβ'") == ["αβ'"]
+    assert tokenize('‘αβ’') == ['αβ’']
+    assert tokenize('“αβ”') == ['αβ']
+    # Visually similar Greek signs are not silently treated as elision marks.
+    for sign in ('\u1fbf', '\u1ffe', '\u0384'):
+        assert normalize('α' + sign) != "α'"
