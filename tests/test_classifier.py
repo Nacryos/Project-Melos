@@ -180,7 +180,11 @@ def test_jev_adapter_sends_official_systemone_choice_schema():
     assert captured["body"]["state"]["passage"]["text"] == "α β"
     criteria = captured["body"]["questions"]["contextual_parse"]["criteria"]
     assert set(criteria) == {"parse_a", "parse_b", "abstain"}
-    assert all(isinstance(value, str) for value in criteria.values())
+    assert criteria['parse_a']['candidate_id'] == 'parse_a'
+    assert criteria['parse_a']['analysis'] == 'parse A'
+    assert criteria['parse_b']['analysis'] == 'parse B'
+    assert criteria['parse_a'] != criteria['parse_b']
+    assert isinstance(criteria['abstain'], str)
     assert captured['body']['state']['candidates'] == packet['candidates']
     assert answer["choice"] == "parse_a"
     assert answer["model"] == "jev-version-fixture"
@@ -311,6 +315,42 @@ def test_parallel_context_is_preserved_as_comparison_not_target_attestation():
     assert packet['candidates'][0]['source_passage_id'] == 'fixture:other-edition'
     assert packet['claims'][0]['subject'] == rows[0]['subject']
     assert 'not proof of edition identity' in ' '.join(packet['constraints'])
+
+
+def test_relation_candidates_keep_semantics_in_packet_and_choice_descriptions():
+    morphology = {**CANDIDATES[0], 'features': {'mood': 'infinitive'}}
+    equivalent = {**CANDIDATES[1], 'analysis': None, 'lemma': None,
+                  'equivalent_form': 'fixture-equivalent', 'relation_raw': '=',
+                  'lemma_targets': [{'word': 'fixture-headword', 'extra': 'source note'}],
+                  'source_tags': ['alternative-A', 'alternative-B'],
+                  'source_raw_tags': ['raw ambiguous source label'],
+                  'strength': 'parallel_matching_text',
+                  'comparison_scope': 'Comparison only; not direct target attestation',
+                  'source_passage_id': 'fixture:other'}
+    packet = build_evidence_packet('α', PASSAGE, [morphology, equivalent])
+    captured = {}
+
+    class Response(io.BytesIO):
+        def __enter__(self): return self
+        def __exit__(self, *_): self.close()
+
+    def fake_urlopen(request, timeout):
+        captured.update(json.loads(request.data))
+        return Response(json.dumps({'model': 'fixture-model', 'answers': {
+            'contextual_parse': {'type': 'choice', 'choice': 'abstain'}}}).encode())
+
+    with patch('backend.classifier.urlopen', fake_urlopen):
+        JevProvider(api_key='fixture-only').decide(packet)
+    criteria = captured['questions']['contextual_parse']['criteria']
+    for key in ('equivalent_form', 'relation_raw', 'lemma_targets', 'source_tags',
+                'source_raw_tags', 'strength', 'comparison_scope', 'source_passage_id'):
+        assert packet['candidates'][1][key] == equivalent[key]
+        assert criteria['parse_b'][key] == equivalent[key]
+    assert criteria['parse_a']['features'] == morphology['features']
+    assert 'lemma' not in criteria['parse_b']  # No invented completion.
+    assert 'analysis' not in criteria['parse_b']
+    assert set(criteria) == {'parse_a', 'parse_b', 'abstain'}
+    assert 'source_references' not in criteria['parse_b']  # Full provenance stays in state.
 
 
 def test_provider_status_never_returns_key():

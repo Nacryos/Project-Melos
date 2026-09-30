@@ -153,6 +153,11 @@ def build_evidence_packet(
                         "analysis": row.get("analysis"),
                         "analysis_text": row.get("analysis_text"),
                         "features": row.get("features"),
+                        "equivalent_form": row.get("equivalent_form"),
+                        "relation_raw": row.get("relation_raw"),
+                        "lemma_targets": row.get("lemma_targets"),
+                        "source_tags": row.get("source_tags"),
+                        "source_raw_tags": row.get("source_raw_tags"),
                         "dialect": row.get("dialect"),
                         "gloss": row.get("gloss"),
                         "matched_form": row.get("matched_form"),
@@ -201,11 +206,21 @@ class JevProvider:
     def decide(self, packet: Mapping[str, Any]) -> Mapping[str, Any]:
         if not self.api_key:
             raise RuntimeError("TypeSafe Jev API key is not configured")
-        # Full hypotheses/evidence occur once, in state. Repeating them in the
-        # choice criteria needlessly doubled much of the provider's input.
-        choices = {str(item["id"]):
-            "Select the candidate with this exact ID in state.candidates, using its complete evidence and scope."
-            for item in packet["candidates"]}
+        # Choice descriptions must distinguish the actual alternatives. Keep
+        # concise source-supplied semantics here, with the full evidence in
+        # state, rather than identical ID-lookup instructions for every option.
+        # These are projections, not newly merged or completed interpretations.
+        summary_fields = (
+            'lemma', 'analysis', 'analysis_text', 'features', 'equivalent_form',
+            'relation_raw', 'lemma_targets', 'source_tags', 'source_raw_tags',
+            'dialect', 'gloss', 'matched_form', 'edit_distance', 'strength',
+            'source_family', 'comparison_scope', 'source_passage_id',
+        )
+        choices = {str(item['id']): {
+            'candidate_id': item['id'],
+            **{key: item[key] for key in summary_fields if key in item},
+            'evidence': 'Use the complete candidate and its linked source claims in state. Missing fields remain unknown.'}
+            for item in packet['candidates']}
         choices["abstain"] = "The supplied context and source evidence do not support a responsible selection."
         body = {"model": self.model, "state": packet,
                 "questions": {"contextual_parse": {

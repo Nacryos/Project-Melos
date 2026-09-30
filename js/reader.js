@@ -753,6 +753,15 @@
       section.append(card);
     }
   }
+  function candidatePreferenceLabel(candidate) {
+    const parts = [candidate.lemma || candidate.matched_form || 'Unlabelled candidate'];
+    const analysis = candidate.analysis_text || candidate.analysis;
+    if (analysis) parts.push(Array.isArray(analysis) ? analysis.join(' · ') : typeof analysis === 'object' ? JSON.stringify(analysis) : String(analysis));
+    if (candidate.features) parts.push(formatFeatures(candidate.features));
+    if (candidate.equivalent_form) parts.push(`Equivalent form: ${candidate.equivalent_form}`);
+    if (parts.length === 1) parts.push('No grammatical analysis supplied');
+    return parts.filter(Boolean).join(' — ');
+  }
   function addContextAction(host, form, passageId, sequence) {
     if (!passageId) return;
     const section = addInspectorSection('Contextual comparison', host);
@@ -778,7 +787,7 @@
           const title = chosen.lemma || chosen.matched_form || form;
           output.append(node('p', 'candidate-meta-label', 'Model proposal · interpretive only'));
           output.append(node('p', 'candidate-lemma', title));
-          const description = [chosen.analysis_text || chosen.analysis, chosen.features ? formatFeatures(chosen.features) : '', chosen.gloss].filter(Boolean).join(' · ');
+          const description = [chosen.analysis_text || chosen.analysis, chosen.features ? formatFeatures(chosen.features) : '', chosen.equivalent_form ? `Equivalent form: ${chosen.equivalent_form} (source relation, not a complete parse)` : '', chosen.gloss].filter(Boolean).join(' · ');
           if (description) output.append(node('p', 'candidate-analysis', description));
           if (chosen.match_reason) output.append(node('p', 'candidate-reason', chosen.match_reason));
           if (chosen.comparison_scope) output.append(node('p', 'warning', chosen.comparison_scope));
@@ -804,7 +813,17 @@
             details.append(node('summary', '', 'Show raw candidate preference values'));
             for (const [id, value] of Object.entries(preference)) {
               const candidate = options.find(option => option.id === id);
-              details.append(node('p', 'candidate-reason', `${candidate?.lemma || candidate?.matched_form || id}: ${JSON.stringify(value)}`));
+              const label = candidate ? candidatePreferenceLabel(candidate) : id === 'abstain' ? 'Abstain — no supported selection' : id;
+              const row = node('div', 'candidate-preference');
+              row.append(node('p', 'candidate-reason', `${label}: ${JSON.stringify(value)}`));
+              if (candidate) {
+                const provenance = node('details', 'entry-details');
+                provenance.append(node('summary', '', 'Candidate identity and scope'));
+                provenance.append(node('p', 'candidate-reason', id));
+                provenance.append(node('p', 'candidate-reason', candidate.comparison_scope || candidate.match_reason || candidate.strength || 'Source scope not supplied'));
+                row.append(provenance);
+              }
+              details.append(row);
             }
             signal.append(details);
           }
