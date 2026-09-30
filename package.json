@@ -6,7 +6,7 @@
   "scripts": {
     "build": "node scripts/build_frontend.mjs",
     "build:preview": "node scripts/build_frontend.mjs --local-preview",
-    "test:frontend": "node --test tests/frontend.test.mjs"
+    "test:frontend": "node --test tests/*.test.mjs"
   },
   "engines": {
     "node": "22.x"

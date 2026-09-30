@@ -1,10 +1,12 @@
 """Synthetic index fixtures; no added corpus or historical assertions."""
 import json
 import sqlite3
+import pytest
 
 from backend.textutils import normalize
 from scripts.build_corpus import SCHEMA
 from scripts.repair_search_layout import repair
+from scripts.rebind_search_embeddings import rebind
 
 
 def test_repair_preserves_records_and_replaces_only_derived_index(tmp_path):
@@ -30,3 +32,15 @@ def test_repair_preserves_records_and_replaces_only_derived_index(tmp_path):
     with sqlite3.connect(source) as con:
         assert con.execute('SELECT normalized FROM passages').fetchone()[0] == normalize(text)
     assert repair(output, tmp_path/'again.sqlite')['changed_passages'] == 0
+    manifest = tmp_path/'manifest.json'
+    stat = source.stat()
+    manifest.write_text(json.dumps({'corpus_mtime_ns': stat.st_mtime_ns,
+                                    'corpus_size': stat.st_size, 'vectors_file': 'unchanged.npy'}))
+    rebound = tmp_path/'new-manifest.json'
+    assert rebind(source,output,manifest,rebound)['verified_unchanged_source_records'] == 1
+    assert json.loads(rebound.read_text())['vectors_file'] == 'unchanged.npy'
+    with sqlite3.connect(output) as con:
+        con.execute("UPDATE passages SET text='changed source' WHERE id='test'")
+    with pytest.raises(ValueError, match='Passage inputs differ'):
+        rebind(source,output,manifest,tmp_path/'must-not-exist.json')
+    assert not (tmp_path/'must-not-exist.json').exists()

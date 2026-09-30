@@ -1,4 +1,4 @@
-import { createDither, compactDither, COMPACT_BEVEL_MAX, constrainDither, coverPosition } from './dither.js?v=p2-20260930';
+import { createDither, compactDither, phoneDither, COMPACT_BEVEL_MAX, constrainDither, coverPosition } from './dither.js?v=p2-20260930';
 import { IMAGES } from './images.js?v=p2-20260930';
 
 // The original Melos painting sequence and crop positions. This module owns only
@@ -164,10 +164,11 @@ function apply(patch) {
 }
 for (const key of fields) {
   const input = $(`#p-${key}`);
-  input.addEventListener('input', () => apply({ [key]: input.type === 'checkbox' ? input.checked : key === 'palette' ? input.value : +input.value }));
+  input.addEventListener('input', () => apply({ ...(key === 'cell' ? { cellUserSet: true } : {}), [key]: input.type === 'checkbox' ? input.checked : key === 'palette' ? input.value : +input.value }));
 }
 apply({});
 compactDither.addEventListener('change', () => apply({}));
+phoneDither.addEventListener('change', () => apply({}));
 function toggleTune(open = $('#tune').hidden) {
   $('#tune').hidden = !open;
   $('#tune-toggle').setAttribute('aria-expanded', String(open));
@@ -175,7 +176,7 @@ function toggleTune(open = $('#tune').hidden) {
 }
 $('#tune-toggle').addEventListener('click', () => toggleTune());
 $('#tune-close').addEventListener('click', () => toggleTune(false));
-$('#p-reset').addEventListener('click', () => apply({ ...DEFAULTS, cell: compactDither.matches ? 2 : 3 }));
+$('#p-reset').addEventListener('click', () => apply({ ...DEFAULTS, cellUserSet: false }));
 $('#p-copy').addEventListener('click', async event => {
   const { on, ...rest } = params;
   try { await navigator.clipboard.writeText(JSON.stringify(rest, null, 2)); event.target.textContent = 'Copied'; }

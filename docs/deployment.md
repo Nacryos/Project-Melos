@@ -86,6 +86,15 @@ Displayed Greek, edition metadata, raw sources, claims and embeddings are not
 rewritten. Host `data/corpus-before-qa1.sqlite` retains the previous index;
 local rollback copy is `.benchmarks/corpus-before-qa1.sqlite`.
 
+The migration changes SQLite's file identity and therefore correctly trips the
+semantic stale-index guard. Before declaring the release healthy, run
+`scripts/rebind_search_embeddings.py` against the previous and current corpus
+and the prior embedding manifest. It verifies every source-bearing field and
+the previous manifest identity before writing a separate rebound manifest;
+promote that manifest atomically and retain the old one. The live repair checked
+all 287,536 records unchanged; no vectors were recalculated or relabelled.
+Then repeat semantic search and usage-space checks through the public origin.
+
 Run `python deploy/qa_regressions.py --origin https://greeklyric.com` for the
 specific read-only regressions, without provider calls. These checks and unit
 tests are engineering evidence, not a philological accuracy benchmark.

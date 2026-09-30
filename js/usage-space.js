@@ -10,6 +10,7 @@
     const node = document.createElement(tag);
     if (className) node.className = className;
     if (value !== undefined) node.textContent = value;
+    if (tag === 'a' || tag === 'button') window.MelosIcons?.decorate(node);
     return node;
   }
 
@@ -76,7 +77,7 @@
       .mus-reason { margin: .15rem 0 .7rem; padding-left: .55rem; border-left: 2px solid #d39a2c; color: #3f4e5a; font-size: .85rem; }
       .mus-text { margin: .7rem 0; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 1.08rem; line-height: 1.5; }
       .mus-links { display: flex; flex-wrap: wrap; gap: .4rem 1rem; align-items: center; }
-      .mus-source { display: inline-block; color: #225581; text-underline-offset: 2px; }
+      .mus-source, .mus-source:visited { display: inline-block; color: #14223a; text-underline-offset: 2px; }
       .mus-near { margin-top: 1rem; padding-top: .7rem; border-top: 1px solid #ccd4d5; }
       .mus-near h4 { margin: 0 0 .3rem; color: #4e5963; font: 600 .7rem/1.2 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .08em; }
       .mus-near button { display: block; width: 100%; border: 0; background: transparent; padding: .25rem 0; color: #225581; text-align: left; text-decoration: underline; text-underline-offset: 2px; }

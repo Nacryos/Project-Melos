@@ -166,6 +166,10 @@ const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
 
 // Include touch tablets in either orientation, including the larger iPad screens.
 export const compactDither = matchMedia('(max-width: 1024px), (pointer: coarse)');
+// Pixel density is a separate preference from tablet relief limits. A coarse
+// pointer with a short viewport side <= 600 CSS px covers phones in either
+// orientation without treating landscape iPads or short desktop windows as phones.
+export const phoneDither = matchMedia('(pointer: coarse) and (max-width: 600px), (pointer: coarse) and (max-height: 600px)');
 export const COMPACT_BEVEL_MAX = .1;
 // CSS object-position describes the remaining travel, while the shader uses a
 // source-image centre. Keep the no-WebGL painting crop identical to cover().
@@ -175,12 +179,17 @@ export function coverPosition(focus, aspect, width, height) {
     `${visible >= 1 ? 50 : 100 * Math.max(0, Math.min(1, (focus[axis] - visible / 2) / (1 - visible)))}%`).join(' ');
 }
 export function constrainDither(params) {
-  const { edge, ...next } = params; // Discard the retired outline control in saved settings.
+  const { edge, mobileDefaultsVersion, ...next } = params; // Retired settings.
+  if (next.pixelDefaultsVersion !== 2) {
+    // Old versions stored the automatic tablet 2px value as if it were a user
+    // preference. Migrate those defaults; retain distinctive custom pixel sizes.
+    next.cellUserSet = next.cell != null && next.cell !== 2 && next.cell !== 3;
+    next.pixelDefaultsVersion = 2;
+  }
+  if (!next.cellUserSet) next.cell = phoneDither.matches ? 2 : 3;
   if (compactDither.matches) {
     next.bevel = Math.max(0, Math.min(COMPACT_BEVEL_MAX, next.bevel ?? 0));
     next.relief = 0;
-    // Migrate the old 3px default once; later adjustments remain user-controlled.
-    if (next.mobileDefaultsVersion !== 1) { next.cell = 2; next.mobileDefaultsVersion = 1; }
   }
   return next;
 }

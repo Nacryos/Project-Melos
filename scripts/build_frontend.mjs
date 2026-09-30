@@ -8,9 +8,9 @@ const localPreview = process.argv.includes('--local-preview');
 const frontendOnly = process.env.MELOS_FRONTEND_ONLY === '1';
 const jsFiles = [
   'api.js', 'app.js', 'dither.js', 'images.js', 'reader-hero.js',
-  'reader.js', 'studio-live.js', 'usage-space.js'
+  'reader.js', 'studio-live.js', 'usage-space.js', 'ui-icons.js'
 ];
-const cssFiles = ['styles.css', 'reader.css'];
+const cssFiles = ['styles.css', 'reader.css', 'icons.css'];
 
 function apiOrigin() {
   const raw = (process.env.MELOS_API_ORIGIN || '').trim();

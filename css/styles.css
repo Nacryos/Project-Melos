@@ -147,19 +147,26 @@ button, input, select { font: inherit; color: inherit; }
 /* Dither controls */
 .tune-toggle {
   position: absolute; z-index: 4; right: var(--gutter); top: 76px;
-  background: rgb(20 34 58 / .72); color: var(--on-dark);
+  background: rgb(14 24 41 / .48); color: #fff;
   border: 1px solid rgb(255 255 255 / .25); border-radius: 3px;
-  padding: .4rem .8rem; font-size: var(--step--1); cursor: pointer; backdrop-filter: blur(6px);
+  padding: .4rem .8rem; font-size: var(--step--1); cursor: pointer;
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
 }
 .tune {
   position: absolute; z-index: 4; right: var(--gutter); top: 118px;
   width: min(300px, calc(100vw - 2 * var(--gutter)));
   max-height: calc(100% - 140px); overflow: auto;
-  background: rgb(14 24 41 / .86); backdrop-filter: blur(10px);
+  scrollbar-width: none; -ms-overflow-style: none;
+  overscroll-behavior: contain; touch-action: pan-y;
+  background: rgb(14 24 41 / .52); color: #fff; color-scheme: dark;
+  backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px);
   border: 1px solid rgb(255 255 255 / .14); border-radius: 4px;
   padding: 1rem 1.1rem; font-size: var(--step--1);
   display: grid; gap: .7rem;
 }
+.tune::-webkit-scrollbar { display: none; width: 0; height: 0; }
+.tune :focus-visible, .tune-toggle:focus-visible { outline-color: #fff; }
+.tune ::selection { color: #fff; background: rgb(255 255 255 / .2); }
 .tune[hidden] { display: none; }
 .tune-head { display: flex; justify-content: space-between; align-items: baseline; }
 .tune h2 { font-size: var(--step-1); }
@@ -167,9 +174,16 @@ button, input, select { font: inherit; color: inherit; }
 .tune label { display: grid; grid-template-columns: 1fr auto; gap: .2rem .5rem; align-items: center; }
 .tune label > select, .tune label > input[type="range"] { grid-column: 1 / -1; width: 100%; }
 .tune select { background: rgb(255 255 255 / .08); border: 1px solid rgb(255 255 255 / .2); border-radius: 3px; padding: .3rem; }
-.tune option { color: var(--ink); }
+.tune option { color: #fff; background: #14223a; }
+.tune option:checked { color: #14223a; background: #fff; }
 .tune output { font-variant-numeric: tabular-nums; opacity: .8; }
-.tune input[type="range"] { accent-color: var(--saffron); }
+.tune input { accent-color: #fff; }
+.tune input[type="range"] { appearance: none; -webkit-appearance: none; background: transparent; height: 20px; cursor: pointer; }
+.tune input[type="range"]::-webkit-slider-runnable-track { height: 2px; border-radius: 2px; background: rgb(255 255 255 / .4); }
+.tune input[type="range"]::-moz-range-track { height: 2px; border-radius: 2px; background: rgb(255 255 255 / .4); }
+.tune input[type="range"]::-webkit-slider-thumb { appearance: none; -webkit-appearance: none; width: 12px; height: 12px; margin-top: -5px; border: 0; border-radius: 50%; background: #fff; }
+.tune input[type="range"]::-moz-range-thumb { width: 12px; height: 12px; border: 0; border-radius: 50%; background: #fff; }
+.tune input:disabled { opacity: .35; cursor: default; }
 .tune .switch { display: flex; gap: .4rem; align-items: center; }
 .tune kbd { font: inherit; font-size: .75rem; border: 1px solid rgb(255 255 255 / .3); border-radius: 2px; padding: 0 .3rem; opacity: .7; }
 .tune-close { background: none; border: 1px solid rgb(255 255 255 / .3); border-radius: 3px; padding: .25rem .7rem; cursor: pointer; }
@@ -178,7 +192,8 @@ button, input, select { font: inherit; color: inherit; }
   flex: 1; background: none; border: 1px solid rgb(255 255 255 / .3); border-radius: 3px;
   padding: .35rem .5rem; cursor: pointer;
 }
-.tune-actions button:hover { border-color: var(--saffron); }
+.tune-actions button:hover, .tune-close:hover { border-color: #fff; background: rgb(255 255 255 / .08); }
+.tune-toggle:hover { border-color: #fff; background: rgb(14 24 41 / .62); }
 
 /* Lexicon */
 main { padding: 0 var(--gutter); }

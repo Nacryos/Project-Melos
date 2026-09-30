@@ -1,4 +1,4 @@
-import { createDither, compactDither, COMPACT_BEVEL_MAX, constrainDither, coverPosition } from './dither.js?v=p2-20260930';
+import { createDither, compactDither, phoneDither, COMPACT_BEVEL_MAX, constrainDither, coverPosition } from './dither.js?v=p2-20260930';
 import { IMAGES } from './images.js?v=p2-20260930';
 
 // Each painting is paired with a line it answers. `focus` is the crop centre (0–1) for cover-fit.
@@ -208,10 +208,11 @@ function apply(patch) {
 }
 for (const k of fields) {
   const el = $('#p-' + k);
-  el.addEventListener('input', () => apply({ [k]: el.type === 'checkbox' ? el.checked : el.tagName === 'SELECT' && k === 'palette' ? el.value : +el.value }));
+  el.addEventListener('input', () => apply({ ...(k === 'cell' ? { cellUserSet: true } : {}), [k]: el.type === 'checkbox' ? el.checked : el.tagName === 'SELECT' && k === 'palette' ? el.value : +el.value }));
 }
 apply({});
 compactDither.addEventListener('change', () => apply({}));
+phoneDither.addEventListener('change', () => apply({}));
 
 const toggleTune = (open = $('#tune').hidden) => {
   $('#tune').hidden = !open; $('#tune-toggle').setAttribute('aria-expanded', open);
@@ -219,7 +220,7 @@ const toggleTune = (open = $('#tune').hidden) => {
 };
 $('#tune-toggle').onclick = () => toggleTune();
 $('#tune-close').onclick = () => toggleTune(false);
-$('#p-reset').onclick = () => apply({ ...DEFAULTS, cell: compactDither.matches ? 2 : 3 });
+$('#p-reset').onclick = () => apply({ ...DEFAULTS, cellUserSet: false });
 $('#p-copy').onclick = async e => {
   const { on, ...rest } = params;
   try { await navigator.clipboard.writeText(JSON.stringify(rest, null, 2)); e.target.textContent = 'Copied'; }

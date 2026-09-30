@@ -28,6 +28,7 @@
     const el = document.createElement(tag);
     if (className) el.className = className;
     if (content != null) el.textContent = String(content);
+    if (tag === 'a' || tag === 'button') window.MelosIcons?.decorate(el);
     return el;
   }
   function clear(el) { el.replaceChildren(); }
