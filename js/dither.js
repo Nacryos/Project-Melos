@@ -21,9 +21,9 @@ uniform vec2 res, sizeA, sizeB, focA, focB, mouse;
 uniform float cell, matrix, levels, spread, sat, con, bri, amount, lensR, palN;
 uniform float t, seed, reach, glow;        // transition progress, per-transition seed, ripple extent, crest brightness
 uniform vec4 epi[4];                       // ink blots: xy in aspect space, z = radius, w = landing delay
-uniform float lensOn;
+uniform float lensOn, maskView;               // maskView: dev aid, draws transition progress
 uniform vec2 view;                          // viewer offset, -1..1, eased
-uniform float parallax, relief, tilt, grout, shadowLen, bevel, aerial;
+uniform float parallax, relief, tilt, grout, shadowLen, bevel, aerial, edgeBoost;
 uniform vec3 pal[8];
 
 float b2(vec2 a){ a = floor(a); return fract(a.x * .5 + a.y * a.y * .75); }
@@ -76,8 +76,8 @@ vec2 swap(vec2 uv, vec2 ix){
     if (e.z <= 0.) { tsi[i] = 9.; amp[i] = 0.; continue; }
     float f = blotField(p, e, float(i));
     // Splash flips fast from the middle out; beyond it the wave travels at one speed for every blot.
-    float ti = f < 0. ? e.w + .12 * clamp(1. + f / e.z, 0., 1.)
-                     : e.w + .12 + .74 * pow(clamp(f / reach, 0., 1.), .85) + jitter;
+    float ti = f < 0. ? e.w + .16 * clamp(1. + f / e.z, 0., 1.)
+                     : e.w + .16 + .7 * pow(clamp(f / reach, 0., 1.), .7) + jitter;
     tsi[i] = f < 0. ? 9. : ti;              // only the travelling wave carries a crest
     amp[i] = clamp(e.z / .08, .4, 1.);      // bigger splash, stronger wave
     ts = min(ts, ti);
@@ -90,9 +90,10 @@ vec2 swap(vec2 uv, vec2 ix){
   float crest = 0.;
   for (int i = 0; i < 4; i++){
     if (tsi[i] > ts + .03) continue;
-    crest += amp[i] * exp(-pow((t - tsi[i] - w * .5) / .035, 2.));
+    float dt = t - tsi[i] - w * .5;
+    crest += amp[i] * (exp(-pow(dt / .03, 2.)) - .6 * exp(-pow((dt - .06) / .04, 2.)));
   }
-  return vec2(k, min(crest, 1.8));
+  return vec2(k, clamp(crest, -1., 1.8));
 }
 vec3 scene(vec2 uv, float k){
   vec3 a = texture2D(texA, cover(uv, sizeA, focA)).rgb;
@@ -109,6 +110,7 @@ void main(){
   float th = bayer(ix);
   vec2 uvc = (ix + .5) * cell / res;
   vec2 sw = swap(uvc, ix);
+  if (maskView > .5) { gl_FragColor = vec4(sw.x, sw.y * .5, 0., 1.); return; }
 
   // Mosaic relief, decided per tile so the dither stays crisp.
   float h = depth(uvc, sw.x);
@@ -124,6 +126,11 @@ void main(){
   float occ = max(max(h1 - h, (h2 - h) * .85), (h3 - h) * .7);
   float shadow = smoothstep(.02, .2, occ);
   float rim = smoothstep(.03, .2, h - h1);                      // edge facing the light stands proud
+  // Silhouette of a near figure: depth drops away to some neighbour 2 tiles off.
+  vec2 n2 = 2. * cell / res;
+  float drop = max(max(h - depth(uvc + vec2(n2.x, 0.), sw.x), h - depth(uvc - vec2(n2.x, 0.), sw.x)),
+                   max(h - depth(uvc + vec2(0., n2.y), sw.x), h - depth(uvc - vec2(0., n2.y), sw.x)));
+  float figEdge = smoothstep(.03, .15, drop) * smoothstep(.25, .55, h);
   col *= 1. - relief * .75 * shadow;
   col += relief * .3 * rim * (1. - col);
   col *= 1. + (hash(ix * 1.37 + 3.1) - .5) * tilt;              // each tessera set at a slight angle
@@ -137,7 +144,7 @@ void main(){
     vec2 q = fract(fc / cell) * cell;                            // pixel position inside the tile
     float lit = max(step(cell - 1., q.y), step(q.x, 1.));        // top row, left column
     float dark = max(step(q.y, 1.), step(cell - 1., q.x));       // bottom row, right column
-    float raise = bevel * (.35 + .9 * h);
+    float raise = bevel * (.35 + .9 * h) * (1. + edgeBoost * figEdge);
     d = d + lit * (1. - dark) * raise * .45 * (1. - d) - dark * (1. - lit) * raise * .5 * d;
   }
   if (grout > 0. && cell >= 4.) {                                // thin gaps between tesserae
@@ -223,6 +230,7 @@ export function createDither(canvas) {
   let scale = 1, params = {}, t = 0, mouse = [-1e4, -1e4], raf = 0, A = null, B = null, running = null;
   let epi = new Float32Array(16), reach = 1, seed = 0;
   let view = [0, 0], viewTo = [0, 0], easing = 0;
+  const maskView = new URLSearchParams(location.search).has('mask') ? 1 : 0;
 
   const draw = () => {
     raf = 0;
@@ -247,6 +255,7 @@ export function createDither(canvas) {
     gl.uniform1f(U.amount, p.on ? p.amount : 0);
     gl.uniform1f(U.lensR, Math.max(1, p.lens * scale));
     gl.uniform1f(U.lensOn, p.lens > 0 ? 1 : 0);
+    gl.uniform1f(U.maskView, maskView);
     gl.uniform1f(U.t, t);
     gl.uniform1f(U.seed, seed);
     gl.uniform1f(U.reach, reach);
@@ -260,6 +269,7 @@ export function createDither(canvas) {
     gl.uniform1f(U.shadowLen, 12 * scale);
     gl.uniform1f(U.bevel, p.bevel ?? 0);
     gl.uniform1f(U.aerial, p.aerial ?? 0);
+    gl.uniform1f(U.edgeBoost, p.edge ?? 0);
     const pal = PALETTES[p.palette];
     gl.uniform1f(U.palN, pal ? pal.length : 0);
     if (pal) gl.uniform3fv(U.pal, new Float32Array(pal.flatMap(hex).concat(Array(24).fill(0)).slice(0, 24)));
@@ -304,10 +314,12 @@ export function createDither(canvas) {
     };
     const big = site();
     if (rnd() < .8) {
-      let small = site();
-      for (let n = 0; n < 20 && Math.hypot(small[0] - big[0], small[1] - big[1]) < .5 * a; n++) small = site();
-      splash(big, lerp(.06, .09), 0, rnd() < .5 ? 2 : 1);
-      splash(small, lerp(.045, .065), lerp(.12, .22), 0);
+      // The two drops land in opposite thirds of the frame, so they read as separate splashes.
+      const left = rnd() < .5, side = l => (l ? lerp(.16, .36) : lerp(.64, .86)) * a;
+      big[0] = side(left); big[1] = left ? lerp(.55, .88) : lerp(.4, .85);   // left side stays above the quote
+      const small = [side(!left), !left ? lerp(.55, .88) : lerp(.4, .85)];
+      splash(big, lerp(.035, .048), 0, rnd() < .5 ? 1 : 0);   // kept modest so it never swallows the second drop
+      splash(small, lerp(.03, .042), lerp(.05, .1), 0);
     } else {
       splash(big, lerp(.05, .08), 0, rnd() < .5 ? 3 : 2);
     }
@@ -316,7 +328,7 @@ export function createDither(canvas) {
     // Scale the wave speed so the corner reached last still settles before t = .93.
     const live = blots.filter(b => b[2] > 0);
     const arrival = r => Math.max(...[[0, 0], [a, 0], [0, 1], [a, 1]].map(([x, y]) =>
-      Math.min(...live.map(([px, py, , dl]) => dl + .12 + .74 * Math.pow(Math.hypot(x - px, y - py) / r, .85)))));
+      Math.min(...live.map(([px, py, , dl]) => dl + .16 + .7 * Math.pow(Math.hypot(x - px, y - py) / r, .7)))));
     let lo = .2, hi = 4;
     for (let n = 0; n < 30; n++) { const mid = (lo + hi) / 2; arrival(mid) > .86 ? lo = mid : hi = mid; }
     reach = hi;
@@ -335,6 +347,8 @@ export function createDither(canvas) {
     load, loadDepth,
     set(p) { params = { ...params, ...p }; request(); },
     show(slot) { A = slot; B = null; t = 0; request(); },
+    // Dev aid: hold a transition at progress `at` (0..1) to inspect a single frame.
+    freeze(slot, at) { B = slot; scatter(); t = at; running = { cancel() {} }; draw(); },
     transition(slot, ms = 1800) {
       if (running) running.cancel();
       B = slot; scatter();
@@ -349,7 +363,7 @@ export function createDither(canvas) {
         running = { cancel: finish };
         const step = now => {
           const x = Math.min(1, (now - t0) / ms);
-          t = 1 - Math.pow(1 - x, 1.6);   // quick splash, the ripple eases out
+          t = 1 - Math.pow(1 - x, 1.3);   // splash lands quickly, the ripple eases out
           draw();
           if (x < 1) id = requestAnimationFrame(step); else finish();
         };
