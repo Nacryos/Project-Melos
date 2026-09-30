@@ -69,14 +69,14 @@ async function go(i, instant = false) {
   const p = PAINTINGS[i], img = await images[i];
   setCopy(p);
   if (!dither) { const f = $('#fallback'); f.hidden = false; f.src = p.src; }
-  else if (instant || reduceMotion) dither.show(img, p.focus);
+  else if (instant || reduceMotion || document.hidden) dither.show(img, p.focus);
   else await dither.transition(img, p.focus);
   busy = false;
 }
 
 function scheduleAuto() {
   clearInterval(autoTimer);
-  if (!reduceMotion) autoTimer = setInterval(() => { if ($('#tune').hidden) go((current + 1) % PAINTINGS.length); }, 14000);
+  if (!reduceMotion) autoTimer = setInterval(() => { if ($('#tune').hidden && !document.hidden) go((current + 1) % PAINTINGS.length); }, 14000);
 }
 
 PAINTINGS.forEach((p, i) => {
@@ -195,7 +195,9 @@ function renderEntry(e) {
 }
 
 function renderResults(q = '') {
-  const list = entries.filter(e => matches(e, q));
+  const gq = fold(/[a-z]/i.test(q) ? toGreek(q) : q), ql = q.toLowerCase().trim();
+  const rank = e => (q && (fold(e.lemma).includes(gq) || e.gloss.toLowerCase().includes(ql))) ? 0 : 1;
+  const list = entries.filter(e => matches(e, q)).sort((a, b) => rank(a) - rank(b));
   const ol = $('#results');
   ol.innerHTML = list.length ? '' : '<li class="empty">No entries</li>';
   for (const e of list) {
@@ -205,7 +207,7 @@ function renderResults(q = '') {
     ol.append(li);
   }
   $('#count').textContent = `${list.length} of ${entries.length} sample entries` + (filterPoet ? ` attested in ${filterPoet}` : '') + (q ? ` matching “${q}”` : '');
-  renderEntry(list.includes(selected) ? selected : list[0]);
+  renderEntry(list[0]);
 }
 
 $('#search').addEventListener('submit', e => {

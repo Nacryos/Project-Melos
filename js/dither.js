@@ -139,7 +139,8 @@ export function createDither(canvas) {
     if (pal) gl.uniform3fv(U.pal, new Float32Array(pal.flatMap(hex).concat(Array(24).fill(0)).slice(0, 24)));
     gl.drawArrays(gl.TRIANGLES, 0, 3);
   };
-  const request = () => { if (!raf) raf = requestAnimationFrame(draw); };
+  // Hidden tabs freeze rAF; draw synchronously so state never goes stale.
+  const request = () => { if (document.hidden) draw(); else if (!raf) raf = requestAnimationFrame(draw); };
 
   // Size from the parent so the canvas attribute never feeds back into layout.
   const ro = new ResizeObserver(() => {
