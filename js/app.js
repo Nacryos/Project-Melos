@@ -5,22 +5,22 @@ import { IMAGES } from './images.js';
 const PAINTINGS = [
   {
     img: 'alma-tadema', focus: [0.62, 0.45], focusTall: [0.2, 0.5],
-    title: 'Sappho and Alcaeus', artist: 'Lawrence Alma-Tadema', year: '1881',
+    title: 'Sappho and Alcaeus', artist: 'Lawrence Alma-Tadema', year: '1881', where: 'Walters Art Museum, Baltimore',
     gr: 'ἰόπλοκ᾽ ἄγνα μελλιχόμειδε Σάπφοι', tr: 'Violet-haired, holy, honey-smiling Sappho', cite: 'Alcaeus fr. 384 V',
   },
   {
     img: 'leap', focus: [0.5, 0.35],
-    title: 'The Death of Sappho', artist: 'Miguel Carbonell Selva', year: '1881', verify: true,
+    title: 'Sappho', artist: 'Miquel Carbonell i Selva', year: '1881', where: 'Museo del Prado, Madrid',
     gr: 'Ἔρος δηὖτέ μ᾽ ὀ λυσιμέλης δόνει', tr: 'Eros the limb-loosener shakes me again', cite: 'Sappho fr. 130.1 V',
   },
   {
     img: 'godward', focus: [0.6, 0.4], focusTall: [0.66, 0.45],
-    title: 'In the Days of Sappho', artist: 'John William Godward', year: '1904',
+    title: 'Reverie (In the Days of Sappho)', artist: 'John William Godward', year: '1904', where: 'J. Paul Getty Museum, Los Angeles',
     gr: 'ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα', tr: 'Immortal Aphrodite of the intricate throne', cite: 'Sappho fr. 1.1 V',
   },
   {
     img: 'altar', focus: [0.5, 0.55], focusTall: [0.4, 0.55],
-    title: 'Sacrifice at the altar', artist: 'Artist to be confirmed', year: '', verify: true,
+    title: 'Dedication of a New Vestal Virgin', artist: 'Alessandro Marchesini', year: '1710s', where: 'State Hermitage Museum, St Petersburg',
     gr: 'βῶμοι δὲ τεθυμιάμενοι λιβανώτωι', tr: 'And altars smoking with frankincense', cite: 'Sappho fr. 2.4 V',
   },
 ];
@@ -38,7 +38,7 @@ const POETS = [
   { en: 'Bacchylides', gr: 'Βακχυλίδης', dt: 'c. 518–451' },
 ];
 
-const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 6, spread: 1.1, sat: 1.65, con: 1.1, bri: 0, amount: 1, lens: 0, shade: 0.9, blur: 3, dur: 1.8, glow: 0.06 };
+const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 6, spread: 1.1, sat: 1.65, con: 1.1, bri: 0, amount: 1, lens: 0, shade: 0.9, blur: 3, dur: 1.8, glow: 0.06, parallax: 8, relief: 0.45, tilt: 0.07, grout: 0 };
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = s => document.querySelector(s);
 const store = {
@@ -67,7 +67,12 @@ const pick = (meta, need) => meta.variants.find(v => v.w >= need) || meta.varian
 // then the size this screen needs, uploaded once into the same GPU texture.
 const previews = [], sharp = [];
 const preview = i => previews[i] ??= fetchVariant(IMAGES[PAINTINGS[i].img].variants[0])
-  .then(img => dither?.load(i, img, PAINTINGS[i].focus));
+  .then(img => {
+    const slot = dither?.load(i, img, PAINTINGS[i].focus);
+    const dep = IMAGES[PAINTINGS[i].img].depth;   // small; drives the mosaic relief
+    if (dep && dither) loadImg(dep).then(d => dither.loadDepth(i, d)).catch(() => {});
+    return slot;
+  });
 function sharpen(i) {
   const meta = IMAGES[PAINTINGS[i].img], v = pick(meta, neededWidth(meta));
   if ((sharp[i] || meta.variants[0].w) >= v.w) return Promise.resolve();
@@ -137,7 +142,7 @@ PAINTINGS.forEach((p, i) => {
 });
 
 $('#credits').textContent = 'Paintings: ' + PAINTINGS.map(p =>
-  `${p.artist}${p.verify ? ' (attribution to confirm)' : ''}, ${p.title}${p.year ? ' (' + p.year + ')' : ''}`).join('; ') + '.';
+  `${p.artist}, ${p.title}${p.year ? ' (' + p.year + ')' : ''}${p.where ? ', ' + p.where : ''}`).join('; ') + '. All public domain.';
 
 if (dither) {
   dither.set(params);
@@ -170,9 +175,9 @@ go(0, true).then(warm);
 scheduleAuto();
 
 /* ---------- Dither controls ---------- */
-const fields = ['on', 'palette', 'matrix', 'cell', 'levels', 'spread', 'sat', 'con', 'bri', 'amount', 'lens', 'shade', 'blur', 'dur', 'glow'];
+const fields = ['on', 'palette', 'matrix', 'cell', 'levels', 'spread', 'sat', 'con', 'bri', 'amount', 'lens', 'shade', 'blur', 'dur', 'glow', 'parallax', 'relief', 'tilt', 'grout'];
 const pct = v => `${Math.round(v * 100)}%`;
-const fmt = { sat: pct, amount: pct, shade: pct, glow: pct, lens: v => v ? `${v}px` : 'off', cell: v => `${v}px`, blur: v => v ? `${v}px` : 'off', dur: v => `${(+v).toFixed(1)} s` };
+const fmt = { sat: pct, amount: pct, shade: pct, glow: pct, relief: pct, tilt: pct, grout: pct, parallax: v => v ? `${v}px` : 'off', lens: v => v ? `${v}px` : 'off', cell: v => `${v}px`, blur: v => v ? `${v}px` : 'off', dur: v => `${(+v).toFixed(1)} s` };
 
 function syncControls() {
   for (const k of fields) {

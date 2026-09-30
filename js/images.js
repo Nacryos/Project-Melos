@@ -19,7 +19,8 @@ export const IMAGES = {
         "webp": "assets/paintings/alma-tadema-1024.a9b79584.webp"
       }
     ],
-    "thumb": "assets/paintings/alma-tadema-thumb.b039e98e.webp"
+    "thumb": "assets/paintings/alma-tadema-thumb.b039e98e.webp",
+    "depth": "assets/paintings/alma-tadema-depth.523c0ec7.webp"
   },
   "altar": {
     "aspect": 1.3989,
@@ -40,7 +41,8 @@ export const IMAGES = {
         "webp": "assets/paintings/altar-1024.e5ee666f.webp"
       }
     ],
-    "thumb": "assets/paintings/altar-thumb.000f4710.webp"
+    "thumb": "assets/paintings/altar-thumb.000f4710.webp",
+    "depth": "assets/paintings/altar-depth.a1a2aa30.webp"
   },
   "godward": {
     "aspect": 1.2468,
@@ -66,7 +68,8 @@ export const IMAGES = {
         "webp": "assets/paintings/godward-2400.b7d206b4.webp"
       }
     ],
-    "thumb": "assets/paintings/godward-thumb.b85f74fc.webp"
+    "thumb": "assets/paintings/godward-thumb.b85f74fc.webp",
+    "depth": "assets/paintings/godward-depth.8b4f9e4f.webp"
   },
   "leap": {
     "aspect": 0.8,
@@ -82,6 +85,7 @@ export const IMAGES = {
         "webp": "assets/paintings/leap-960.5b911c30.webp"
       }
     ],
-    "thumb": "assets/paintings/leap-thumb.451de45d.webp"
+    "thumb": "assets/paintings/leap-thumb.451de45d.webp",
+    "depth": "assets/paintings/leap-depth.c71e2782.webp"
   }
 };
