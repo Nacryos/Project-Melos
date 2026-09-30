@@ -38,12 +38,12 @@ const POETS = [
   { en: 'Bacchylides', gr: 'Βακχυλίδης', dt: 'c. 518–451' },
 ];
 
-const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 4, spread: 1, sat: 1.35, con: 1.08, bri: 0, amount: 1, lens: 140, shade: 0.85, blur: 3, flicker: 0.5, coarsen: 1.2 };
+const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 4, spread: 1, sat: 1.35, con: 1.08, bri: 0, amount: 1, lens: 140, shade: 0.95, blur: 1.5, flicker: 0.5, coarsen: 1.2 };
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const $ = s => document.querySelector(s);
 const store = {
-  get() { try { return JSON.parse(localStorage.getItem('melos.dither')) || {}; } catch { return {}; } },
-  set(v) { try { localStorage.setItem('melos.dither', JSON.stringify(v)); } catch {} },
+  get() { try { return JSON.parse(localStorage.getItem('melos.dither.v2')) || {}; } catch { return {}; } },
+  set(v) { try { localStorage.setItem('melos.dither.v2', JSON.stringify(v)); } catch {} },
 };
 
 /* ---------- Hero ---------- */
