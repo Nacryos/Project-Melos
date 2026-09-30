@@ -1,0 +1,9 @@
+fastapi==0.115.14
+uvicorn==0.35.0
+python-dotenv==1.1.1
+lxml>=5,<7
+requests>=2.32,<3
+numpy==2.3.1
+sentence-transformers==5.0.0
+transformers==4.57.6
+betacode==1.1

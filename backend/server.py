@@ -19,6 +19,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
 from .textutils import normalize as basic_normalize, tokenize
+from .publication import publication_restricted, public_deployment, corpus_views, EVIDENCE_HOLD, WIKTIONARY_HOLD
 
 ROOT = Path(__file__).resolve().parents[1]
 DB = ROOT / 'data/corpus.sqlite'
@@ -93,6 +94,8 @@ def connect():
     con.row_factory = sqlite3.Row
     con.create_function('phrase_match',2,lambda text,query: bool(query and phrase_pattern(query).search(text or '')),deterministic=True)
     con.create_function('author_key',1,author_key,deterministic=True)
+    if publication_restricted():
+        corpus_views(con, DB)
     return con
 
 
@@ -177,7 +180,7 @@ def file_digest(path,stamp,size):
 
 
 @lru_cache(maxsize=1)
-def _morph_service(entries_stamp,forms_stamp):
+def _morph_service(entries_stamp,forms_stamp,public=False):
     from .morphology import Morphology
     return Morphology(entries_path=ROOT/'data/lexica/entries.jsonl',forms_path=ROOT/'data/lexica/forms.jsonl')
 
@@ -199,7 +202,7 @@ def morph_service():
             raise RuntimeError('Dictionary source files changed since their audit; revalidation is required.')
         stamps.append(info.st_mtime_ns)
     with _service_lock:
-        service=_morph_service(*stamps)
+        service=_morph_service(*stamps,publication_restricted())
         service.counts()  # complete the one-time lazy load before concurrent lookups
         return service
 
@@ -222,6 +225,8 @@ def _evidence_index(path,stamp,size):
 
 
 def evidence_service():
+    if publication_restricted():
+        raise RuntimeError(EVIDENCE_HOLD)
     path=ROOT/'data/evidence.sqlite'
     info=path.stat()
     service,provenance=_evidence_index(str(path),info.st_mtime_ns,info.st_size)
@@ -276,6 +281,8 @@ def classifier_status():
 
 
 def author_profile(label):
+    if publication_restricted():
+        return None
     try:
         from .authors import lookup_author
         return lookup_author(label,path=ROOT/'data/metadata/p2-author-profiles.json',
@@ -295,6 +302,8 @@ def _wiktionary_service(stamps):
 def wiktionary(form:str='',limit:int=Query(8,ge=1,le=20)):
     """Separate listed-form references; never promoted to corpus attestations."""
     query=form.strip()[:200]
+    if publication_restricted():
+        return {'ready':False,'query':query,'results':[],'total':0,'warnings':[WIKTIONARY_HOLD]}
     if not query:
         return {'ready':False,'query':query,'results':[],'total':0,'warnings':['Enter a Greek form or transliteration.']}
     paths=[ROOT/'data/lexica/wiktionary-entries.jsonl',
@@ -317,10 +326,12 @@ def status():
         return {'passages':0,'authors':0,'author_labels':0,'works':0,'sources':[],'languages':[],
                 'embeddings':{'ready':False},'warnings':['Collectors are running; the corpus index has not yet been built.']}
     info=DB.stat()
-    manifest,langs,sources,authors,labels_count,quality=corpus_statistics(str(DB),info.st_mtime_ns,info.st_size)
+    manifest,langs,sources,authors,labels_count,quality=corpus_statistics(str(DB),info.st_mtime_ns,info.st_size,publication_restricted())
     embedding = {'ready':False}
     try:
         embedding=semantic_service().status
+        if publication_restricted():
+            embedding={**embedding,'count_scope':'Private index size; public results are filtered by publication policy.'}
     except (ImportError,OSError,ValueError):
         pass
     try:
@@ -330,21 +341,26 @@ def status():
     return {'passages':manifest['passages'],'authors':authors,'author_labels':labels_count,'works':manifest['works'],
             'sources':sources,'languages':langs,'embeddings':embedding,'quality':quality,
             'evidence':evidence_status,'classifier':classifier_status(),
+            'publication_policy':('restricted' if publication_restricted() else 'source-labels') if public_deployment() else 'local',
             'built_at':manifest.get('built_at'),'warnings':[
                 'Edition text is not a claim of manuscript certainty. Editorial supplements remain in the source text.',
                 'Mixed OCR/reference material is excluded from ordinary search; enable reference material to include it.',
-                'Similarity retrieves candidates for comparison, not proof of literary influence.']}
+                'Similarity retrieves candidates for comparison, not proof of literary influence.']
+                + ([EVIDENCE_HOLD,WIKTIONARY_HOLD] if publication_restricted() else [])}
 
 
 @lru_cache(maxsize=2)
-def corpus_statistics(path,stamp,size):
+def corpus_statistics(path,stamp,size,public=False):
     """Large corpus scans run once per published index, never on every UI load."""
     with connect() as con:
         manifest=json.loads(con.execute("SELECT value FROM metadata WHERE key='manifest'").fetchone()[0])
         summary=manifest.get('statistics')
-        if summary:
+        if summary and not publication_restricted():
             return (manifest,summary['languages'],summary['sources'],summary['authors'],
                     summary['author_labels'],summary['quality'])
+        if publication_restricted():
+            manifest = dict(manifest,passages=con.execute('SELECT count(*) FROM passages').fetchone()[0],
+                            works=con.execute('SELECT count(*) FROM works').fetchone()[0])
         langs=[dict(r) for r in con.execute('SELECT language,count(*) count FROM passages GROUP BY language ORDER BY count DESC')]
         sources=[dict(r) for r in con.execute('SELECT source,count(*) count FROM passages GROUP BY source')]
         authors=con.execute('SELECT count(DISTINCT author_key(author)) FROM passages').fetchone()[0]
@@ -754,7 +770,7 @@ def usage_space(q:str='',author:str='',limit:int=Query(80,ge=3,le=150)):
         coords/=max(float(np.abs(coords).max()),1e-8)
     points=[]
     for record,coord in zip(results,coords):
-        point={key:record.get(key) for key in ('id','text','author','work','citation','source_url','date_start','date_end','date_source','author_chronology','match_reason')}
+        point={key:record.get(key) for key in ('id','text','author','work','citation','source','source_url','license','edition','date_start','date_end','date_source','author_chronology','match_reason')}
         point.update(zip(('x','y','z'),[float(v) for v in coord]))
         points.append(point)
     return {'points':points,'method':retrieval+'. '+method,'retrieval_method':retrieval,
@@ -763,6 +779,11 @@ def usage_space(q:str='',author:str='',limit:int=Query(80,ge=3,le=150)):
 
 @app.get('/api/sources')
 def sources():
+    if public_deployment():
+        return {'reports':[],'status':status(),'publication_note':
+                ('Only source records with allowlisted redistribution terms are served.' if publication_restricted()
+                 else 'The owner-selected source-labels publication policy serves the accepted corpus with its original rights notices, including unknown or qualified terms.')
+                + ' Source attribution and license labels remain attached to each record.'}
     reports=[]
     accepted={}
     audit_path=ROOT/'data/reports/audit-acceptance.json'

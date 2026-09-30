@@ -1,15 +1,15 @@
-import { createDither } from './dither.js?v=p2-20260930';
+import { createDither, compactDither, COMPACT_BEVEL_MAX, constrainDither, coverPosition } from './dither.js?v=p2-20260930';
 import { IMAGES } from './images.js?v=p2-20260930';
 
 // The original Melos painting sequence and crop positions. This module owns only
 // the painting stage; research results are supplied by reader.js and the API.
 const PAINTINGS = [
-  { img: 'alma-tadema', focus: [.62, .45], focusTall: [.2, .5], edge: .05, title: 'Sappho and Alcaeus', artist: 'Lawrence Alma-Tadema', year: '1881', where: 'Walters Art Museum, Baltimore', gr: 'ἰόπλοκ᾽ ἄγνα μελλιχόμειδε Σάπφοι', tr: 'Violet-haired, holy, honey-smiling Sappho', cite: 'Alcaeus fr. 384 V' },
-  { img: 'leap', focus: [.5, .35], edge: 1.6, title: 'Sappho', artist: 'Miquel Carbonell i Selva', year: '1881', where: 'Museo del Prado, Madrid', gr: 'Ἔρος δηὖτέ μ᾽ ὀ λυσιμέλης δόνει', tr: 'Eros the limb-loosener shakes me again', cite: 'Sappho fr. 130.1 V' },
-  { img: 'godward', focus: [.6, .4], focusTall: [.66, .45], edge: 1.6, title: 'Reverie (In the Days of Sappho)', artist: 'John William Godward', year: '1904', where: 'J. Paul Getty Museum, Los Angeles', gr: 'ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα', tr: 'Immortal Aphrodite of the intricate throne', cite: 'Sappho fr. 1.1 V' },
-  { img: 'altar', focus: [.5, .55], focusTall: [.4, .55], edge: 1.6, title: 'Dedication of a New Vestal Virgin', artist: 'Alessandro Marchesini', year: '1710s', where: 'State Hermitage Museum, St Petersburg', gr: 'βῶμοι δὲ τεθυμιάμενοι λιβανώτωι', tr: 'And altars smoking with frankincense', cite: 'Sappho fr. 2.4 V' },
+  { img: 'alma-tadema', focus: [.62, .45], focusTall: [.8, .5], title: 'Sappho and Alcaeus', artist: 'Lawrence Alma-Tadema', year: '1881', where: 'Walters Art Museum, Baltimore', gr: 'ἰόπλοκ᾽ ἄγνα μελλιχόμειδε Σάπφοι', tr: 'Violet-haired, holy, honey-smiling Sappho', cite: 'Alcaeus fr. 384 V' },
+  { img: 'leap', focus: [.5, .35], title: 'Sappho', artist: 'Miquel Carbonell i Selva', year: '1881', where: 'Museo del Prado, Madrid', gr: 'Ἔρος δηὖτέ μ᾽ ὀ λυσιμέλης δόνει', tr: 'Eros the limb-loosener shakes me again', cite: 'Sappho fr. 130.1 V' },
+  { img: 'godward', focus: [.6, .4], focusTall: [.66, .45], title: 'Reverie (In the Days of Sappho)', artist: 'John William Godward', year: '1904', where: 'J. Paul Getty Museum, Los Angeles', gr: 'ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα', tr: 'Immortal Aphrodite of the intricate throne', cite: 'Sappho fr. 1.1 V' },
+  { img: 'altar', focus: [.5, .55], focusTall: [.8, .55], title: 'Dedication of a New Vestal Virgin', artist: 'Alessandro Marchesini', year: '1710s', where: 'State Hermitage Museum, St Petersburg', gr: 'βῶμοι δὲ τεθυμιάμενοι λιβανώτωι', tr: 'And altars smoking with frankincense', cite: 'Sappho fr. 2.4 V' },
 ];
-const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 6, spread: 1.1, sat: 1.65, con: 1.1, bri: 0, amount: 1, lens: 0, shade: .9, blur: 3, dur: 2.2, glow: .14, parallax: 0, relief: .6, bevel: .5, edge: 1.2, aerial: .12, tilt: .23, grout: 0 };
+const DEFAULTS = { on: true, palette: 'levels', matrix: 8, cell: 3, levels: 6, spread: 1.1, sat: 1.65, con: 1.1, bri: 0, amount: 1, lens: 0, shade: .9, blur: 3, dur: 2.2, glow: .14, parallax: 0, relief: .6, bevel: .5, aerial: .12, tilt: .23, grout: 0 };
 const fields = Object.keys(DEFAULTS);
 const $ = s => document.querySelector(s);
 const hero = $('.reader-hero');
@@ -20,6 +20,7 @@ try { dither = createDither(canvas); } catch (error) { console.warn('Dither unav
 let params;
 try { params = { ...DEFAULTS, ...JSON.parse(localStorage.getItem('melos.dither.v2') || '{}') }; }
 catch { params = { ...DEFAULTS }; }
+params = constrainDither(params);
 let current = -1, autoTimer = 0;
 const previews = [], sharp = [];
 const loadImg = src => new Promise((resolve, reject) => {
@@ -31,7 +32,6 @@ const neededWidth = meta => Math.max(innerWidth * Math.min(devicePixelRatio || 1
 const pick = (meta, need) => meta.variants.find(v => v.w >= need) || meta.variants.at(-1);
 const preview = i => previews[i] ??= fetchVariant(IMAGES[PAINTINGS[i].img].variants[0]).then(img => {
   const slot = dither?.load(i, img, PAINTINGS[i].focus);
-  if (slot) slot.edge = PAINTINGS[i].edge ?? 1;
   if (dither && IMAGES[PAINTINGS[i].img].depth) loadImg(IMAGES[PAINTINGS[i].img].depth).then(depth => dither.loadDepth(i, depth)).catch(() => {});
   return slot;
 });
@@ -58,8 +58,12 @@ function setCopy(painting) {
   document.querySelectorAll('.thumbs button').forEach((button, i) => button.setAttribute('aria-selected', String(i === current)));
 }
 function applyFocus() {
-  if (!dither) return;
   const tall = canvas.clientHeight > canvas.clientWidth;
+  if (current >= 0) {
+    const painting = PAINTINGS[current];
+    $('#fallback').style.objectPosition = coverPosition(tall && painting.focusTall || painting.focus,
+      IMAGES[painting.img].aspect, canvas.clientWidth, canvas.clientHeight);
+  }
   PAINTINGS.forEach((painting, i) => previews[i]?.then(slot => {
     const focus = tall && painting.focusTall || painting.focus;
     if (slot) { slot.foc = [focus[0], 1 - focus[1]]; dither.set({}); }
@@ -83,6 +87,7 @@ async function go(i, instant = false) {
     const fallback = $('#fallback');
     fallback.hidden = false;
     fallback.src = pick(IMAGES[painting.img], neededWidth(IMAGES[painting.img])).webp;
+    applyFocus();
     return;
   }
   applyFocus();
@@ -126,8 +131,8 @@ if (dither) {
   hero.addEventListener('pointerup', end);
   hero.addEventListener('pointercancel', end);
   hero.addEventListener('pointerleave', event => { if (event.pointerType === 'mouse') dither.pointer(null); });
-  new ResizeObserver(() => { applyFocus(); if (current >= 0) sharpen(current).catch(() => {}); }).observe(hero);
 }
+new ResizeObserver(() => { applyFocus(); if (current >= 0) sharpen(current).catch(() => {}); }).observe(hero);
 if (matchMedia('(max-width: 640px)').matches) $('#search-input').placeholder = 'Greek, Beta Code or English';
 go(0, true).then(warm).catch(() => {});
 const freezeAt = parseFloat(new URLSearchParams(location.search).get('freeze'));
@@ -136,9 +141,12 @@ scheduleAuto();
 
 const pct = value => `${Math.round(value * 100)}%`;
 const format = { sat: pct, amount: pct, shade: pct, glow: pct, relief: pct, bevel: pct, aerial: pct, tilt: pct, grout: pct,
-  edge: pct, parallax: value => value ? `${value}px` : 'off', lens: value => value ? `${value}px` : 'off',
+  parallax: value => value ? `${value}px` : 'off', lens: value => value ? `${value}px` : 'off',
   cell: value => `${value}px`, blur: value => value ? `${value}px` : 'off', dur: value => `${(+value).toFixed(1)} s` };
 function syncControls() {
+  $('#p-bevel').max = compactDither.matches ? COMPACT_BEVEL_MAX : 1.2;
+  $('#p-bevel').step = compactDither.matches ? .01 : .05;
+  $('#p-relief').disabled = compactDither.matches;
   for (const key of fields) {
     const input = $(`#p-${key}`);
     if (input.type === 'checkbox') input.checked = params[key]; else input.value = params[key];
@@ -148,7 +156,7 @@ function syncControls() {
   $('#p-levels').disabled = params.palette !== 'levels';
 }
 function apply(patch) {
-  params = { ...params, ...patch };
+  params = constrainDither({ ...params, ...patch });
   try { localStorage.setItem('melos.dither.v2', JSON.stringify(params)); } catch {}
   syncControls(); dither?.set(params);
   hero.style.setProperty('--shade', params.shade);
@@ -159,6 +167,7 @@ for (const key of fields) {
   input.addEventListener('input', () => apply({ [key]: input.type === 'checkbox' ? input.checked : key === 'palette' ? input.value : +input.value }));
 }
 apply({});
+compactDither.addEventListener('change', () => apply({}));
 function toggleTune(open = $('#tune').hidden) {
   $('#tune').hidden = !open;
   $('#tune-toggle').setAttribute('aria-expanded', String(open));
@@ -166,7 +175,7 @@ function toggleTune(open = $('#tune').hidden) {
 }
 $('#tune-toggle').addEventListener('click', () => toggleTune());
 $('#tune-close').addEventListener('click', () => toggleTune(false));
-$('#p-reset').addEventListener('click', () => apply(DEFAULTS));
+$('#p-reset').addEventListener('click', () => apply({ ...DEFAULTS, cell: compactDither.matches ? 2 : 3 }));
 $('#p-copy').addEventListener('click', async event => {
   const { on, ...rest } = params;
   try { await navigator.clipboard.writeText(JSON.stringify(rest, null, 2)); event.target.textContent = 'Copied'; }

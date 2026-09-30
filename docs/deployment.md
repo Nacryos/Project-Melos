@@ -26,7 +26,7 @@ Any hosted classification credential (`TYPESAFE_API_KEY` or `JEV_API_KEY`) belon
 2. Provision the persistent HTTPS API service and set its exact allowed frontend origins. Check read endpoints and operational limits.
 3. Configure `MELOS_API_ORIGIN` in Vercel. Build the static artifact and inspect `dist/` for only the allowed frontend paths. `dist/` is Git-ignored.
 4. Deploy a Vercel preview and test reader searches, passage navigation, word inspection, usage space, design studio, and unavailable-service states in a browser. Confirm the public contextual-classifier action reports its local-only restriction, browser calls go to the HTTPS API origin, and no keys or corpus files appear in the deployed assets.
-5. Promote to production only after the preview checks pass and the source rights and attribution review for any publicly exposed corpus data is complete.
+5. Promote only after the preview checks pass and the operator has selected and documented the publication policy. Extraction acceptance does not itself establish redistribution permission.
 
 Vercel project configuration follows its [build and output directory](https://vercel.com/docs/builds/configure-a-build) and [routing configuration](https://vercel.com/docs/project-configuration/vercel-json) documentation.
 
@@ -38,4 +38,30 @@ Vercel project configuration follows its [build and output directory](https://ve
 - HTTPS root, design studio, configuration script, and a fingerprinted painting asset returned HTTP 200. JavaScript is `no-cache`; fingerprinted paintings have the one-year immutable cache policy. The live browser displays the preview notice and disables corpus controls.
 - `.env`, `.env.local`, database files, source paintings, and model/index files were excluded from the CLI upload. The static build uses its own explicit output allowlist.
 
-Publishing a complete research service still requires a persistent backend host, corpus redistribution/attribution checks, and public-service abuse controls. Do not describe this frontend-only release as a functioning public dictionary.
+The frontend is not yet connected to the backend described below. Do not describe the frontend-only release as a functioning public dictionary.
+
+## Basecamp backend (2026-09-30)
+
+The backend now runs on the existing Hetzner Basecamp machine in `/home/alvin/services/melos`, container `melos-api`, image `melos-api:20260930`. Host port `127.0.0.1:8791` is intentionally loopback-only. No existing Basecamp services or firewall rules were changed.
+
+- Runtime: 125 files, 6,433,058,045 source bytes; all transfer hashes verified and all three SQLite quick checks passed. The original local corpus remains intact.
+- Coverage: 287,536 source records and 111,578 embedded records. Read endpoints, sourced word analysis, Wiktionary lookup, dense search, and usage-space projection passed `deploy/smoke_backend.py` on the host.
+- Warm measured container memory: about 1.87 GiB. Repeated semantic queries took 0.18–0.30 seconds in the bounded smoke test; this is not a concurrent-load benchmark.
+- Limits: two CPU cores, low CPU scheduling weight, 8 GiB memory with no container swap, eight concurrent HTTP connections, one worker, and bounded logs. Data and model mounts are read-only; the container has no access to other projects, Docker's socket, or a Jev key.
+- Encoder: CPU BGE-M3, pinned model revision in `deploy/cache_model.py`; runtime downloads are disabled.
+- Publication: the owner explicitly selected `MELOS_PUBLICATION_POLICY=source-labels`. This overrides only conservative publication filtering. Source labels, including unknown rights, are preserved; provenance/hash acceptance checks remain enforced. This selection is not a conclusion that every public source grants redistribution permission.
+- Paid classification: `MELOS_PUBLIC_DEPLOYMENT=1` still blocks `/api/classify-context` with HTTP 403 regardless of publication policy. No API key is shipped in the image or frontend.
+
+### Remaining network step
+
+Tailscale Funnel requires owner enablement. The intended public endpoint uses HTTPS port **8443** forwarding only to `http://127.0.0.1:8791`. Basecamp's existing port-443 console must remain tailnet-only. Never replace the existing port-443 service with a default Funnel command.
+
+After approval, run `tailscale funnel --bg --https=8443 --yes http://127.0.0.1:8791` on Basecamp, inspect `tailscale serve status` and `tailscale funnel status`, and verify the resulting public HTTPS API from outside the tailnet. Then configure that exact origin in Vercel, remove `MELOS_FRONTEND_ONLY`, redeploy, and verify public browser search. Until then the production frontend stays explicitly in preview mode.
+
+### Maintenance
+
+- Inspect: `docker stats --no-stream melos-api`, `docker logs --tail=50 melos-api`, and `python3 deploy/smoke_backend.py` from the service directory.
+- Restart without changing data: `docker restart melos-api`. Stop only this service with `docker stop melos-api`.
+- Rebuild: package a frozen local runtime with `scripts/package_runtime.py`, transfer it privately, verify with `deploy/verify_runtime.py`, build `deploy/Dockerfile`, and cache the pinned model with `deploy/cache_model.py` before starting offline. Do not package databases while a collector/indexer is writing them.
+- `deploy/start_backend.sh` deliberately refuses to replace an existing container. Review the old image and mounts and arrange rollback before explicitly replacing it. Retain the previous verified runtime snapshot for data rollback; no automatic backup job has been configured.
+- To restore conservative publication filtering, recreate only the Melos container without `MELOS_PUBLICATION_POLICY=source-labels`. Do not weaken source validation or the separate paid-classifier guard.

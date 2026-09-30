@@ -23,7 +23,7 @@ uniform float t, seed, reach, glow;        // transition progress, per-transitio
 uniform vec4 epi[4];                       // ink blots: xy in aspect space, z = radius, w = landing delay
 uniform float lensOn, maskView;               // maskView: dev aid, draws transition progress
 uniform vec2 view;                          // viewer offset, -1..1, eased
-uniform float parallax, relief, tilt, grout, shadowLen, bevel, aerial, edgeBoost, edgeA, edgeB;
+uniform float parallax, relief, tilt, grout, shadowLen, bevel, aerial;
 uniform vec3 pal[8];
 
 float b2(vec2 a){ a = floor(a); return fract(a.x * .5 + a.y * a.y * .75); }
@@ -126,13 +126,6 @@ void main(){
   float occ = max(max(h1 - h, (h2 - h) * .85), (h3 - h) * .7);
   float shadow = smoothstep(.02, .2, occ);
   float rim = smoothstep(.03, .2, h - h1);                      // edge facing the light stands proud
-  // Outline of a near figure: only the outermost ring of tiles, where depth falls away to
-  // the very next tile. Each of those tiles gets its own bevel strength, like hand-set stones.
-  vec2 n1 = cell / res;
-  float fall = max(max(h - depth(uvc + vec2(n1.x, 0.), sw.x), h - depth(uvc - vec2(n1.x, 0.), sw.x)),
-                   max(h - depth(uvc + vec2(0., n1.y), sw.x), h - depth(uvc - vec2(0., n1.y), sw.x)));
-  float figEdge = smoothstep(.04, .1, fall) * smoothstep(.3, .55, h)
-                * edgeBoost * mix(edgeA, edgeB, sw.x) * mix(.15, 1.6, hash(ix * .731 + 17.3));
   col *= 1. - relief * .75 * shadow;
   col += relief * .3 * rim * (1. - col);
   col *= 1. + (hash(ix * 1.37 + 3.1) - .5) * tilt;              // each tessera set at a slight angle
@@ -146,7 +139,7 @@ void main(){
     vec2 q = fract(fc / cell) * cell;                            // pixel position inside the tile
     float lit = max(step(cell - 1., q.y), step(q.x, 1.));        // top row, left column
     float dark = max(step(q.y, 1.), step(cell - 1., q.x));       // bottom row, right column
-    float raise = bevel * (.35 + .9 * h) * (1. + figEdge);
+    float raise = bevel * (.35 + .9 * h);
     d = d + lit * (1. - dark) * raise * .45 * (1. - d) - dark * (1. - lit) * raise * .5 * d;
   }
   if (grout > 0. && cell >= 4.) {                                // thin gaps between tesserae
@@ -170,6 +163,27 @@ export const PALETTES = {
 };
 
 const hex = h => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16) / 255);
+
+// Include touch tablets in either orientation, including the larger iPad screens.
+export const compactDither = matchMedia('(max-width: 1024px), (pointer: coarse)');
+export const COMPACT_BEVEL_MAX = .1;
+// CSS object-position describes the remaining travel, while the shader uses a
+// source-image centre. Keep the no-WebGL painting crop identical to cover().
+export function coverPosition(focus, aspect, width, height) {
+  const ratio = width / height;
+  return [Math.min(ratio / aspect, 1), Math.min(aspect / ratio, 1)].map((visible, axis) =>
+    `${visible >= 1 ? 50 : 100 * Math.max(0, Math.min(1, (focus[axis] - visible / 2) / (1 - visible)))}%`).join(' ');
+}
+export function constrainDither(params) {
+  const { edge, ...next } = params; // Discard the retired outline control in saved settings.
+  if (compactDither.matches) {
+    next.bevel = Math.max(0, Math.min(COMPACT_BEVEL_MAX, next.bevel ?? 0));
+    next.relief = 0;
+    // Migrate the old 3px default once; later adjustments remain user-controlled.
+    if (next.mobileDefaultsVersion !== 1) { next.cell = 2; next.mobileDefaultsVersion = 1; }
+  }
+  return next;
+}
 
 export function createDither(canvas) {
   const gl = canvas.getContext('webgl', { antialias: false, powerPreference: 'high-performance' });
@@ -271,8 +285,6 @@ export function createDither(canvas) {
     gl.uniform1f(U.shadowLen, 12 * scale);
     gl.uniform1f(U.bevel, p.bevel ?? 0);
     gl.uniform1f(U.aerial, p.aerial ?? 0);
-    gl.uniform1f(U.edgeBoost, p.edge ?? 0);
-    gl.uniform1f(U.edgeA, A.edge ?? 1); gl.uniform1f(U.edgeB, b.edge ?? 1);
     const pal = PALETTES[p.palette];
     gl.uniform1f(U.palN, pal ? pal.length : 0);
     if (pal) gl.uniform3fv(U.pal, new Float32Array(pal.flatMap(hex).concat(Array(24).fill(0)).slice(0, 24)));
@@ -348,7 +360,7 @@ export function createDither(canvas) {
 
   return {
     load, loadDepth,
-    set(p) { params = { ...params, ...p }; request(); },
+    set(p) { params = constrainDither({ ...params, ...p }); request(); },
     show(slot) { A = slot; B = null; t = 0; request(); },
     // Dev aid: hold a transition at progress `at` (0..1) to inspect a single frame.
     freeze(slot, at) { B = slot; scatter(); t = at; running = { cancel() {} }; draw(); },

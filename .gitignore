@@ -28,3 +28,4 @@ dist/
 *.pfx
 *.log
 screenshots/
+.benchmarks/

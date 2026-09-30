@@ -15,6 +15,7 @@ import unicodedata
 from typing import Any
 
 from backend.morphology import normalize, query_variants
+from backend.publication import publication_restricted, EVIDENCE_HOLD
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -34,6 +35,8 @@ class EvidenceIndex:
         self.db_path = Path(db_path)
 
     def _connect(self) -> sqlite3.Connection:
+        if publication_restricted():
+            raise RuntimeError(EVIDENCE_HOLD)
         if not self.db_path.is_file():
             raise FileNotFoundError(f"Evidence index not built: {self.db_path}")
         con = sqlite3.connect(self.db_path)

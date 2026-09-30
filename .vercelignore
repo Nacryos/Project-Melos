@@ -8,6 +8,8 @@ tools/
 screenshots/
 assets/source/
 requirements.txt
+deploy/
+.dockerignore
 *.py
 *.sqlite*
 *.jsonl

@@ -10,6 +10,7 @@ from collections import Counter, defaultdict
 from collections.abc import Callable, Iterable, Mapping
 import json
 from pathlib import Path
+from .publication import publication_restricted, record_allowed
 import re
 import unicodedata
 from typing import Any
@@ -210,6 +211,8 @@ class Morphology:
         if self._loaded:
             return
         for row in _read_jsonl(self.entries_path):
+            if publication_restricted() and not record_allowed(row):
+                continue
             lemma = row.get("lemma")
             if not isinstance(lemma, str) or not lemma.strip():
                 continue
@@ -217,6 +220,8 @@ class Morphology:
             self.entry_count += 1
         seen_forms: set[tuple[str, str, str, str, str]] = set()
         for row in _read_jsonl(self.forms_path):
+            if publication_restricted() and not record_allowed(row):
+                continue
             form = row.get("form")
             lemma = row.get("lemma")
             if not isinstance(form, str) or not form.strip() or not isinstance(lemma, str) or not lemma.strip():
@@ -233,7 +238,7 @@ class Morphology:
             # Lookup needs one copy of each attested reading, never its count.
             self._forms[form_key].append({field: row.get(field) for field in
                                            ("form", "lemma", "lemma_raw", "analysis", "analysis_format",
-                                            "source", "source_url", "quality")})
+                                            "source", "source_url", "license", "quality")})
         for key in self._forms.keys() | self._entries.keys():
             if len(key) < 5:
                 self._short[(len(key), key[:1])].add(key)
@@ -370,6 +375,8 @@ class Morphology:
                                                  "entry_text": gloss_row.get("entry_text") if gloss_row else None,
                                                  "source_url": source_url,
                                                  "source": row.get("source"),
+                                                 "license": row.get("license"),
+                                                 "gloss_license": gloss_row.get("license") if gloss_row else None,
                                                  "analysis_format": row.get("analysis_format"),
                                                  "analysis_text": (describe_postag(str(analysis)) if
                                                     kind == "form" and "Perseus treebank" in
@@ -401,7 +408,7 @@ class Morphology:
         grouped: dict[tuple[str, str, str, str], dict[str, Any]] = {}
         for _, group, candidate in ranked:
             source = {field: candidate.get(field) for field in
-                      ("source", "source_url", "analysis_format", "quality")}
+                      ("source", "source_url", "license", "analysis_format", "quality")}
             if group not in grouped:
                 grouped[group] = candidate
             existing = grouped[group]

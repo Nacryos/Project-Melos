@@ -1,0 +1,16 @@
+**
+!deploy/
+!deploy/Dockerfile
+!deploy/requirements-runtime.txt
+!backend/
+!backend/*.py
+!css/
+!css/*.css
+!js/
+!js/*.js
+!assets/
+!assets/paintings/
+!assets/paintings/*.avif
+!assets/paintings/*.webp
+!reader.html
+!index.html
