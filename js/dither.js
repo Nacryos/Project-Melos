@@ -6,10 +6,11 @@
 // their crests add for a moment and then die. Cells no wave has reached are untouched,
 // and the Bayer pattern never moves.
 //
-// Mosaic relief: each painting also has a depth map (near = bright). Tiles sample the
-// painting shifted by their depth as the viewer moves (parallax), nearer tiles cast a short
-// shadow down-right and catch a rim of light up-left, and every tile gets a slight random
-// tilt, so figures read as set a touch proud of the ground like real tesserae.
+// Mosaic relief: each painting also has a depth map (near = bright). All static cues:
+// every tile is bevelled (lit top-left edge, shaded bottom-right) and nearer tiles more so;
+// nearer areas cast a soft shadow down-right onto what lies behind; far areas are a little
+// hazier and near ones crisper; each tile is set at a slight random tilt. Optional
+// parallax shifts near tiles as the pointer moves.
 
 const VS = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0., 1.); }`;
 
@@ -22,7 +23,7 @@ uniform float t, seed, reach, glow;        // transition progress, per-transitio
 uniform vec4 epi[4];                       // ink blots: xy in aspect space, z = radius, w = landing delay
 uniform float lensOn;
 uniform vec2 view;                          // viewer offset, -1..1, eased
-uniform float parallax, relief, tilt, grout, shadowLen;
+uniform float parallax, relief, tilt, grout, shadowLen, bevel, aerial;
 uniform vec3 pal[8];
 
 float b2(vec2 a){ a = floor(a); return fract(a.x * .5 + a.y * a.y * .75); }
@@ -113,12 +114,18 @@ void main(){
   float h = depth(uvc, sw.x);
   vec2 par = view * (h - .35) * parallax / res;                 // nearer tiles slide against the ground
   vec3 col = grade(scene(uvc + par, sw.x));
-  vec2 L = vec2(-1., 1.) * shadowLen / res;                     // toward the light (up-left)
-  float h1 = depth(uvc + L * .5, sw.x), h2 = depth(uvc + L, sw.x);
-  float shadow = smoothstep(.03, .22, max(h1 - h, (h2 - h) * .75));   // a nearer tile blocks the light
-  float rim = smoothstep(.03, .22, h - h1);                     // this tile's lit edge stands proud
-  col *= 1. - relief * shadow;
-  col += relief * .35 * rim * (1. - col);
+  // Aerial perspective: far tiles hazier and cooler, near tiles a touch crisper.
+  float lum = dot(col, vec3(.3333));
+  col = mix(col, vec3(lum) * .85 + vec3(.06, .08, .11), aerial * (1. - h));
+  col = mix(col, clamp((col - .5) * 1.15 + .5, 0., 1.), aerial * h);
+  // Cast shadow: sample toward the light (up-left); anything nearer there shades this tile.
+  vec2 L = vec2(-1., 1.) * shadowLen / res;
+  float h1 = depth(uvc + L * .33, sw.x), h2 = depth(uvc + L * .66, sw.x), h3 = depth(uvc + L, sw.x);
+  float occ = max(max(h1 - h, (h2 - h) * .85), (h3 - h) * .7);
+  float shadow = smoothstep(.02, .2, occ);
+  float rim = smoothstep(.03, .2, h - h1);                      // edge facing the light stands proud
+  col *= 1. - relief * .75 * shadow;
+  col += relief * .3 * rim * (1. - col);
   col *= 1. + (hash(ix * 1.37 + 3.1) - .5) * tilt;              // each tessera set at a slight angle
   col += sw.y * glow;
 
@@ -126,6 +133,13 @@ void main(){
   if (palN > .5) d = nearest(col + (th - .5) * spread * .5);
   else { float L = levels - 1.; d = floor(col * L + th * spread + (1. - spread) * .5) / L; }
 
+  if (bevel > 0. && cell >= 3.) {                               // each tessera's raised edges
+    vec2 q = fract(fc / cell) * cell;                            // pixel position inside the tile
+    float lit = max(step(cell - 1., q.y), step(q.x, 1.));        // top row, left column
+    float dark = max(step(q.y, 1.), step(cell - 1., q.x));       // bottom row, right column
+    float raise = bevel * (.35 + .9 * h);
+    d = d + lit * (1. - dark) * raise * .45 * (1. - d) - dark * (1. - lit) * raise * .5 * d;
+  }
   if (grout > 0. && cell >= 4.) {                                // thin gaps between tesserae
     vec2 q = fract(fc / cell) * cell;
     d *= 1. - grout * .55 * step(min(q.x, q.y), .999);
@@ -243,7 +257,9 @@ export function createDither(canvas) {
     gl.uniform1f(U.relief, p.relief ?? 0);
     gl.uniform1f(U.tilt, p.tilt ?? 0);
     gl.uniform1f(U.grout, p.grout ?? 0);
-    gl.uniform1f(U.shadowLen, 7 * scale);
+    gl.uniform1f(U.shadowLen, 12 * scale);
+    gl.uniform1f(U.bevel, p.bevel ?? 0);
+    gl.uniform1f(U.aerial, p.aerial ?? 0);
     const pal = PALETTES[p.palette];
     gl.uniform1f(U.palN, pal ? pal.length : 0);
     if (pal) gl.uniform3fv(U.pal, new Float32Array(pal.flatMap(hex).concat(Array(24).fill(0)).slice(0, 24)));
@@ -273,7 +289,7 @@ export function createDither(canvas) {
     const a = canvas.width / canvas.height, rnd = Math.random, lerp = (x, y) => x + (y - x) * rnd();
     const site = () => {
       for (let n = 0; n < 20; n++) {
-        const x = lerp(.15, .88) * a, y = lerp(.25, .85);
+        const x = lerp(.15, .85) * a, y = lerp(.4, .88);   // clear of the quote and the caption
         if (!(x < .5 * a && y < .45)) return [x, y];
       }
       return [.62 * a, .6];
@@ -287,11 +303,11 @@ export function createDither(canvas) {
       }
     };
     const big = site();
-    if (rnd() < .6) {
+    if (rnd() < .8) {
       let small = site();
-      for (let n = 0; n < 20 && Math.hypot(small[0] - big[0], small[1] - big[1]) < .35 * Math.max(a, 1); n++) small = site();
+      for (let n = 0; n < 20 && Math.hypot(small[0] - big[0], small[1] - big[1]) < .5 * a; n++) small = site();
       splash(big, lerp(.06, .09), 0, rnd() < .5 ? 2 : 1);
-      splash(small, lerp(.035, .055), lerp(.03, .14), 0);
+      splash(small, lerp(.045, .065), lerp(.12, .22), 0);
     } else {
       splash(big, lerp(.05, .08), 0, rnd() < .5 ? 3 : 2);
     }
@@ -300,7 +316,7 @@ export function createDither(canvas) {
     // Scale the wave speed so the corner reached last still settles before t = .93.
     const live = blots.filter(b => b[2] > 0);
     const arrival = r => Math.max(...[[0, 0], [a, 0], [0, 1], [a, 1]].map(([x, y]) =>
-      Math.min(...live.map(([px, py, , dl]) => dl + .12 + .74 * Math.pow(Math.min(1, Math.hypot(x - px, y - py) / r), .85)))));
+      Math.min(...live.map(([px, py, , dl]) => dl + .12 + .74 * Math.pow(Math.hypot(x - px, y - py) / r, .85)))));
     let lo = .2, hi = 4;
     for (let n = 0; n < 30; n++) { const mid = (lo + hi) / 2; arrival(mid) > .86 ? lo = mid : hi = mid; }
     reach = hi;
