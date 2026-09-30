@@ -1,6 +1,36 @@
-# Melos
+# Project Melos
 
-Front-end prototype for a lexicon of archaic Greek lyric. Plain HTML/CSS/JS, no build step.
+A source-backed research reader and lexicon for Ancient Greek lyric and its
+literary traditions, using the original Melos painting, mosaic and dither design.
+The frontend is plain HTML/CSS/JavaScript; the corpus API is Python/FastAPI.
+
+## Research reader
+
+```powershell
+python -m pip install -r requirements.txt
+python -m uvicorn backend.server:app --host 127.0.0.1 --port 8791
+```
+
+Open http://127.0.0.1:8791. This requires locally provisioned, independently
+accepted corpus/index files; a fresh code clone does not contain the datasets.
+The full reader is served at `/`, and the original design/search page at
+`/legacy`. Both use the real API, not the sample lexicon.
+
+For Jev, configure `TYPESAFE_API_KEY` in a private `.env` and add
+`--env-file .env` to the server command. Use `.env.example` for the non-secret
+configuration names; never place a provider key in frontend settings.
+
+Read [reader and source documentation](docs/reader.md),
+[coverage and gaps](docs/coverage.md), and
+[Vercel deployment preparation](docs/deployment.md).
+
+The public repository contains application code, collectors, tests and design
+assets. Downloaded source collections, derived corpora, extraction reports,
+embeddings, model weights, credentials and generated indexes stay local.
+Source rights and attribution remain record-specific; this repository does
+not grant blanket redistribution rights over the collected texts.
+
+## Original frontend and asset tools
 
 ```
 python tools/serve.py          # static dev server, caching off; http://127.0.0.1:8790
@@ -17,7 +47,12 @@ Because filenames change whenever content changes, serve `assets/paintings/*` wi
 `Cache-Control: public, max-age=31536000, immutable`.
 
 - `js/dither.js`: WebGL ordered (Bayer 2/4/8) dithering, colour boost, palettes, reveal lens, and a Bayer-threshold dissolve between paintings.
-- `js/app.js`: hero, dither controls (saved in localStorage; "Copy settings" gives JSON to hard-code as `DEFAULTS`), and lexicon search (Greek accent-insensitive, Beta Code, English).
-- `data/lexicon.json`: **sample entries only**. Swap for the corpus backend (same shape: `lemma, pos, gloss, note, attestations[{poet, cite, text, tr}]`).
+- `js/app.js`: hero, dither controls (saved in localStorage; "Copy settings" gives JSON to hard-code as `DEFAULTS`), and the original search entry point connected to the corpus API.
+- `data/lexicon.json`: historical **sample entries only**, retained with the original design history; not used as research evidence.
 
 Keys: `D` toggles dither, `←` / `→` change painting.
+
+The static design server on port 8790 does not provide the corpus API. Use the
+research service on port 8791 for local integrated search, or configure a
+separate API origin for a static deployment. Hashed painting assets receive
+immutable caching; original source paintings and depth maps are not served.

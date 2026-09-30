@@ -1,5 +1,5 @@
-import { createDither } from './dither.js';
-import { IMAGES } from './images.js';
+import { createDither } from './dither.js?v=p2-20260930';
+import { IMAGES } from './images.js?v=p2-20260930';
 
 // Each painting is paired with a line it answers. `focus` is the crop centre (0–1) for cover-fit.
 const PAINTINGS = [
@@ -231,90 +231,5 @@ addEventListener('keydown', e => {
   if (e.key === 'ArrowLeft') next(-1);
 });
 
-/* ---------- Lexicon ---------- */
-const BETA = { a: 'α', b: 'β', g: 'γ', d: 'δ', e: 'ε', z: 'ζ', h: 'η', q: 'θ', i: 'ι', k: 'κ', l: 'λ', m: 'μ', n: 'ν', c: 'ξ', o: 'ο', p: 'π', r: 'ρ', s: 'σ', t: 'τ', u: 'υ', f: 'φ', x: 'χ', y: 'ψ', w: 'ω' };
-// Accent-, breathing- and case-insensitive; η/α folded so Aeolic and Attic-Ionic forms meet.
-const norm = s => s.normalize('NFD').replace(/[̀-ͯ᾽᾿'’᾽\[\]]/g, '').toLowerCase().replace(/ς/g, 'σ');
-const fold = s => norm(s).replace(/η/g, 'α');
-const toGreek = s => s.toLowerCase().replace(/[a-z]/g, ch => BETA[ch] || ch);
-
-let entries = [], filterPoet = null, selected = null;
-
-function matches(e, q) {
-  if (filterPoet && !e.attestations.some(a => a.poet === filterPoet)) return false;
-  if (!q) return true;
-  const ql = q.toLowerCase().trim(), gq = fold(/[a-z]/i.test(q) ? toGreek(q) : q);
-  const greek = [e.lemma, ...e.attestations.map(a => a.text)].map(fold);
-  const english = [e.gloss, e.note, ...e.attestations.flatMap(a => [a.tr, a.poet])].join(' ').toLowerCase();
-  return greek.some(g => g.includes(gq)) || english.includes(ql);
-}
-
-function highlight(text, lemma) {
-  const stem = fold(lemma).slice(0, 4);
-  return text.split(/(\s+)/).map(w => (!/\s/.test(w) && stem.length > 2 && fold(w).includes(stem)) ? `<mark>${w}</mark>` : esc(w)).join('');
-}
-const esc = s => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
-
-function renderEntry(e) {
-  selected = e;
-  const box = $('#entry');
-  if (!e) { box.innerHTML = '<p class="note">Nothing matches that search. Try a Greek word without accents, Beta Code such as <i>selanna</i>, or an English gloss.</p>'; return; }
-  const byPoet = {};
-  e.attestations.forEach(a => (byPoet[a.poet] = (byPoet[a.poet] || 0) + 1));
-  box.innerHTML = `
-    <h3 lang="grc">${e.lemma}</h3>
-    <p class="meta"><em>${e.pos}</em>${esc(e.gloss)}</p>
-    ${e.note ? `<p class="note">${esc(e.note)}</p>` : ''}
-    <ul class="spread" aria-label="Attestations by poet">
-      ${Object.entries(byPoet).map(([p, n]) => `<li>${p} <b>${n}</b></li>`).join('')}
-    </ul>
-    <ol class="attest">
-      ${e.attestations.map(a => `
-        <li>
-          <div class="src"><span>${a.poet}</span>${a.cite}</div>
-          <div><p class="gr" lang="grc">${highlight(a.text, e.lemma)}</p><p class="tr">${esc(a.tr)}</p></div>
-        </li>`).join('')}
-    </ol>`;
-  document.querySelectorAll('.results button').forEach(b => b.setAttribute('aria-current', b.dataset.lemma === e.lemma));
-}
-
-function renderResults(q = '') {
-  const gq = fold(/[a-z]/i.test(q) ? toGreek(q) : q), ql = q.toLowerCase().trim();
-  const rank = e => (q && (fold(e.lemma).includes(gq) || e.gloss.toLowerCase().includes(ql))) ? 0 : 1;
-  const list = entries.filter(e => matches(e, q)).sort((a, b) => rank(a) - rank(b));
-  const ol = $('#results');
-  ol.innerHTML = list.length ? '' : '<li class="empty">No entries</li>';
-  for (const e of list) {
-    const li = document.createElement('li');
-    li.innerHTML = `<button type="button" data-lemma="${e.lemma}"><span class="lm" lang="grc">${e.lemma}</span><span class="gl">${esc(e.gloss)}</span></button>`;
-    li.firstChild.onclick = () => {
-      renderEntry(e);
-      if (matchMedia('(max-width: 820px)').matches) $('#entry').scrollIntoView({ block: 'start' });
-    };
-    ol.append(li);
-  }
-  $('#count').textContent = `${list.length} of ${entries.length} sample entries` + (filterPoet ? ` attested in ${filterPoet}` : '') + (q ? ` matching “${q}”` : '');
-  renderEntry(list[0]);
-}
-
-$('#search').addEventListener('submit', e => {
-  e.preventDefault();
-  filterPoet = null;
-  renderResults($('#q').value);
-  $('#lexicon').scrollIntoView();
-});
-$('#q').addEventListener('input', () => renderResults($('#q').value));
-
-fetch('data/lexicon.json').then(r => r.json()).then(d => {
-  entries = d.entries.sort((a, b) => norm(a.lemma).localeCompare(norm(b.lemma), 'el'));
-  renderResults();
-  $('#timeline').innerHTML = POETS.map(p => {
-    const has = entries.some(e => e.attestations.some(a => a.poet === p.en));
-    return `<li class="${has ? 'has' : ''}"><button type="button" data-poet="${p.en}"><span class="nm" lang="grc">${p.gr}</span><span class="en">${p.en}</span><span class="dt">${p.dt}</span></button></li>`;
-  }).join('');
-  $('#timeline').onclick = e => {
-    const b = e.target.closest('button'); if (!b) return;
-    filterPoet = b.dataset.poet; $('#q').value = '';
-    renderResults(); $('#lexicon').scrollIntoView();
-  };
-}).catch(() => { $('#count').textContent = 'Could not load data/lexicon.json. Serve the folder over http (see README).'; });
+/* The original painting studio now reads the same live corpus as the reader. */
+import('./studio-live.js?v=p2-20260930');

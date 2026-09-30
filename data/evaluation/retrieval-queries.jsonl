@@ -1,0 +1,38 @@
+{"id":"lit-archilochus-gyges","query":"Γύγεω τοῦ πολυχρύσου","category":"literal_greek","target_id":"lyric_web:elws:10410:165084:8","evidence_quote":"Γύγεω τοῦ πολυχρύσου"}
+{"id":"lit-archilochus-storm","query":"κύμασιν ταράσσεται πόντος","category":"literal_greek","target_id":"lyric_web:elws:10410:165084:21","evidence_quote":"κύμασιν ταράσσεται\nπόντος"}
+{"id":"lit-archilochus-eclipse","query":"ἐκ μεσημβρίης ἔθηκε νύκτ᾽","category":"literal_greek","target_id":"lyric_web:elws:10410:165084:18","evidence_quote":"ἐκ μεσημβρίης ἔθηκε νύκτ᾽"}
+{"id":"lit-stesichorus-helen","query":"οὐκ ἔστ᾽ ἔτυμος λόγος οὗτος","category":"literal_greek","target_id":"lyric_web:elws:10477:92168:1","evidence_quote":"οὐκ ἔστ᾽ ἔτυμος λόγος οὗτος"}
+{"id":"lit-alcman-mountains","query":"Εὕδουσιν δ' ὀρέων κορυφαί","category":"literal_greek","target_id":"lyric_web:elws:17911:125703:1","evidence_quote":"Εὕδουσιν δ' ὀρέων κορυφαί"}
+{"id":"lit-mimnermus-leaves","query":"οἷά τε φύλλα φύει πολυάνθεμος","category":"literal_greek","target_id":"lyric_web:elws:10426:149351:1","evidence_quote":"οἷά τε φύλλα φύει πολυάνθεμος"}
+{"id":"lit-simonides-thermopylae","query":"τῶν ἐν Θερμοπύλαις θανόντων","category":"literal_greek","target_id":"lyric_web:elws:17325:63845:1","evidence_quote":"τῶν ἐν Θερμοπύλαις θανόντων"}
+{"id":"lit-anacreon-eros","query":"βάλλων χρυσοκόμης Ἔρως","category":"literal_greek","target_id":"lyric_web:elws:17312:140158:1","evidence_quote":"βάλλων χρυσοκόμης Ἔρως"}
+{"id":"lit-sappho-aphrodite","query":"ποικιλόθρον’ ἀθανάτ’ Ἀφρόδιτα","category":"literal_greek","target_id":"digital-sappho:fr1:1","evidence_quote":"ποικιλόθρον’ ἀθανάτ’ Ἀφρόδιτα"}
+{"id":"lit-sappho-moon","query":"ἄστερες μὲν ἀμφὶ κάλαν σελάνναν","category":"literal_greek","target_id":"digital-sappho:fr34:1","evidence_quote":"ἄστερες μὲν ἀμφὶ κάλαν σελάνναν"}
+{"id":"lit-archilochus-general","query":"Οὐ φιλέω μέγαν στρατηγὸν","category":"literal_greek","target_id":"lyric_web:elws:10410:165084:17","evidence_quote":"Οὐ φιλέω μέγαν στρατηγὸν"}
+{"id":"lit-archilochus-dithyramb","query":"οἶδα διθύραμβον οἴνωι","category":"literal_greek","target_id":"lyric_web:elws:10410:165084:29","evidence_quote":"οἶδα διθύραμβον οἴνωι"}
+{"id":"lit-anacreon-artemis","query":"ἐλαφηβόλε,\nξανθὴ παῑ Διός","category":"literal_greek","target_id":"lyric_web:elws:17309:149370:1","evidence_quote":"ἐλαφηβόλε,\nξανθὴ παῑ Διός"}
+{"id":"lit-anacreon-grey-hair","query":"Πολιοὶ μὲν ἡμὶν ἤδη κρόταφοι","category":"literal_greek","target_id":"lyric_web:elws:17313:149360:1","evidence_quote":"Πολιοὶ μὲν ἡμὶν ἤδη κρόταφοι"}
+{"id":"lit-mimnermus-sixty","query":"ἑξηκονταέτη μοῖρα κίχοι θανάτου","category":"literal_greek","target_id":"lyric_web:elws:17322:150356:1","evidence_quote":"ἑξηκονταέτη μοῖρα κίχοι θανάτου"}
+{"id":"lit-mimnermus-aphrodite","query":"τί δὲ τερπνὸν ἄτερ χρυσῆς Ἀφροδίτης","category":"literal_greek","target_id":"lyric_web:elws:16169:94036:1","evidence_quote":"τί δὲ τερπνὸν ἄτερ χρυσῆς Ἀφροδίτης"}
+{"id":"lit-stesichorus-sun","query":"δέπας ἐσκατέβαινεν χρύσεον","category":"literal_greek","target_id":"lyric_web:elws:46317:156002:2","evidence_quote":"δέπας ἐσκατέβαινεν χρύσεον"}
+{"id":"lit-simonides-tomorrow","query":"μή ποτε φάσηις ὅ τι γίνεται αὔριον","category":"literal_greek","target_id":"lyric_web:elws:17325:63845:2","evidence_quote":"μή ποτε φάσηις ὅ τι γίνεται αὔριον"}
+{"id":"form-alcman-parthenikai","query":"παρθενικαὶ","category":"word_form","target_id":"lyric_web:elws:17308:149925:1","evidence_quote":"παρθενικαὶ"}
+{"id":"form-stesichorus-silver-rooted","query":"ἀργυρορίζους","category":"word_form","target_id":"lyric_web:elws:46317:156002:1","evidence_quote":"ἀργυρορίζους"}
+{"id":"accent-sappho-aphrodite","query":"ποικιλοθρον αθανατ Αφροδιτα","category":"accentless_greek","target_id":"digital-sappho:fr1:1","evidence_quote":"ποικιλόθρον’ ἀθανάτ’ Ἀφρόδιτα"}
+{"id":"accent-archilochus-gyges","query":"Γυγεω του πολυχρυσου","category":"accentless_greek","target_id":"lyric_web:elws:10410:165084:8","evidence_quote":"Γύγεω τοῦ πολυχρύσου"}
+{"id":"accent-stesichorus-helen","query":"ουκ εστ ετυμος λογος ουτος","category":"accentless_greek","target_id":"lyric_web:elws:10477:92168:1","evidence_quote":"οὐκ ἔστ᾽ ἔτυμος λόγος οὗτος"}
+{"id":"accent-alcman-mountains","query":"ευδουσιν δ ορεων κορυφαι","category":"accentless_greek","target_id":"lyric_web:elws:17911:125703:1","evidence_quote":"Εὕδουσιν δ' ὀρέων κορυφαί"}
+{"id":"accent-mimnermus-leaves","query":"οια τε φυλλα φυει πολυανθεμος","category":"accentless_greek","target_id":"lyric_web:elws:10426:149351:1","evidence_quote":"οἷά τε φύλλα φύει πολυάνθεμος"}
+{"id":"accent-simonides-thermopylae","query":"των εν Θερμοπυλαις θανοντων","category":"accentless_greek","target_id":"lyric_web:elws:17325:63845:1","evidence_quote":"τῶν ἐν Θερμοπύλαις θανόντων"}
+{"id":"translit-sappho-aphrodite","query":"poikilothron athanat Aphrodita","category":"transliteration","target_id":"digital-sappho:fr1:1","evidence_quote":"ποικιλόθρον’ ἀθανάτ’ Ἀφρόδιτα"}
+{"id":"translit-archilochus-gyges","query":"Gygeo tou polychrysou","category":"transliteration","target_id":"lyric_web:elws:10410:165084:8","evidence_quote":"Γύγεω τοῦ πολυχρύσου"}
+{"id":"translit-alcman-mountains","query":"Eudousin d' oreon koryphai","category":"transliteration","target_id":"lyric_web:elws:17911:125703:1","evidence_quote":"Εὕδουσιν δ' ὀρέων κορυφαί"}
+{"id":"translit-stesichorus-helen","query":"ouk est etymos logos outos","category":"transliteration","target_id":"lyric_web:elws:10477:92168:1","evidence_quote":"οὐκ ἔστ᾽ ἔτυμος λόγος οὗτος"}
+{"id":"translit-anacreon-eros","query":"ballon chrysokomes Eros","category":"transliteration","target_id":"lyric_web:elws:17312:140158:1","evidence_quote":"βάλλων χρυσοκόμης Ἔρως"}
+{"id":"translit-sappho-moon","query":"asteres men amphi kalan selannan","category":"transliteration","target_id":"digital-sappho:fr34:1","evidence_quote":"ἄστερες μὲν ἀμφὶ κάλαν σελάνναν"}
+{"id":"english-sappho-rose","query":"Sappho's Cretan grove with cold water and roses","category":"english_description","target_id":"digital-sappho:fr2:1","evidence_quote":"βρόδοισι","bridge_id":"digital-sappho:fr2:vocab:23","bridge_quote":"rose"}
+{"id":"english-sappho-moon","query":"Sappho on the moon outshining surrounding stars","category":"english_description","target_id":"digital-sappho:fr34:1","evidence_quote":"ἄστερες μὲν ἀμφὶ κάλαν σελάνναν","bridge_id":"digital-sappho:fr34:vocab:4","bridge_quote":"moon"}
+{"id":"english-sappho-old-age","query":"Sappho's fragment about old age approaching","category":"english_description","target_id":"digital-sappho:fr21:1","evidence_quote":"χρόα γῆρας ἤδη","bridge_id":"digital-sappho:fr21:vocab:5","bridge_quote":"old age"}
+{"id":"english-sappho-gold-crown","query":"Aphrodite with a golden crown in Sappho","category":"english_description","target_id":"digital-sappho:fr33:1","evidence_quote":"χρυσοστέφαν᾿ Ἀφρόδιτα","bridge_id":"digital-sappho:fr33:vocab:2","bridge_quote":"golden-crowned"}
+{"id":"english-sappho-armies-ships","query":"Sappho compares cavalry infantry and ships with what one loves","category":"english_description","target_id":"digital-sappho:fr16:1","evidence_quote":"ἰππήων στρότον οἰ δὲ πέσδων\nοἰ δὲ νάων","bridge_id":"digital-sappho:fr16:vocab:4","bridge_quote":"infantry"}
+{"id":"english-sappho-charaxos","query":"Charaxos comes home by ship in Sappho's brothers poem","category":"english_description","target_id":"digital-sappho:the-brothers-poem:1","evidence_quote":"Χάραξον ἔλθην\nνᾶϊ","bridge_id":"digital-sappho:the-brothers-poem:vocab:3","bridge_quote":"Charaxos"}

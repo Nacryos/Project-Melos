@@ -1,0 +1,1000 @@
+(() => {
+  'use strict';
+
+  const $ = (id) => document.getElementById(id);
+  const ui = {
+    searchForm: $('search-form'), searchInput: $('search-input'), bridgeNote: $('bridge-note'),
+    status: $('corpus-status'), authors: $('author-list'), authorCount: $('author-count'),
+    browseToggle: $('browse-toggle'), browseBody: $('browse-body'),
+    authorFilter: $('author-filter'), edition: $('edition-filter'), language: $('language-filter'),
+    order: $('order-filter'), reference: $('reference-filter'),
+    results: $('search-results'), resultsHeading: $('results-heading'), resultsSummary: $('results-summary'),
+    resultsList: $('results-list'), moreResults: $('more-results'), closeResults: $('close-results'),
+    passage: $('passage'), title: $('passage-title'), subtitle: $('passage-subtitle'),
+    kicker: $('passage-kicker'), text: $('passage-text'), textLeading: $('text-leading'),
+    readingHint: $('reading-hint'), provenance: $('provenance'), related: $('related-material'),
+    prev: $('prev-passage'), next: $('next-passage'),
+    selectedPhrase: $('selected-phrase'), selectionActions: $('selection-actions'),
+    inspector: $('inspector-content'), usage: $('open-usage'), lookupForm: $('lookup-form'),
+    backToPassage: $('back-to-passage')
+  };
+  const state = {
+    authors: [], works: new Map(), selectedAuthor: '', selectedWork: '', passage: null,
+    search: null, searchSequence: 0, passageSequence: 0, wordSequence: 0,
+    selectedText: '', activeWord: null, semanticStatus: null, classifierStatus: null
+  };
+
+  function node(tag, className, content) {
+    const el = document.createElement(tag);
+    if (className) el.className = className;
+    if (content != null) el.textContent = String(content);
+    return el;
+  }
+  function clear(el) { el.replaceChildren(); }
+  function safeLink(url, label) {
+    if (!url) return null;
+    try {
+      const parsed = new URL(url, location.href);
+      if (!['http:', 'https:'].includes(parsed.protocol)) return null;
+      const a = node('a', '', label || 'Open original source ↗');
+      a.href = parsed.href;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      return a;
+    } catch { return null; }
+  }
+  function message(host, content, className = 'inspector-message') {
+    clear(host); host.append(node('p', className, content));
+  }
+  function errorText(error) { return error instanceof Error ? error.message : String(error); }
+  async function api(path, params = {}) {
+    const url = window.melosApiUrl(path);
+    for (const [key, value] of Object.entries(params)) {
+      if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, String(value));
+    }
+    const response = await fetch(url, { headers: { Accept: 'application/json' } });
+    if (!response.ok) {
+      let detail = '';
+      try { const body = await response.json(); detail = body.detail || body.error || ''; } catch { /* HTTP status remains useful. */ }
+      throw new Error(detail ? `${response.status}: ${detail}` : `The corpus service returned ${response.status}.`);
+    }
+    return response.json();
+  }
+  async function apiPost(path, body) {
+    const response = await fetch(window.melosApiUrl(path), { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+    if (!response.ok) {
+      let detail = '';
+      try { const result = await response.json(); detail = result.detail || result.error || ''; } catch {}
+      throw new Error(detail ? `${response.status}: ${detail}` : `The corpus service returned ${response.status}.`);
+    }
+    return response.json();
+  }
+  function formMode() { return document.querySelector('input[name="search-mode"]:checked')?.value || 'hybrid'; }
+  function setFormMode(mode) {
+    const radio = document.querySelector(`input[name="search-mode"][value="${mode}"]`);
+    if (radio) radio.checked = true;
+    updateBridgeNote();
+  }
+  function updateBridgeNote() {
+    ui.bridgeNote.textContent = formMode() === 'themes'
+      ? 'Theme search may bridge through translations or commentary. Each result identifies the text that was indexed.'
+      : formMode() === 'hybrid'
+        ? 'All evidence combines word, form, and semantic candidates. Source links explain each result; ranking is not certainty or influence.'
+        : 'English searches may use translations or commentary as a bridge. Results identify the indexed text.';
+    if (state.semanticStatus) {
+      const status = node('span', 'semantic-inline', ` ${state.semanticStatus.label}`);
+      status.title = state.semanticStatus.detail;
+      ui.bridgeNote.append(status);
+    }
+  }
+  function qualityLabel(value) {
+    return ({ source_text: 'Source text', machine_ocr: 'Machine OCR', mixed_content: 'Mixed content', needs_review: 'Needs review' })[value] || String(value || 'Unspecified');
+  }
+  function describeCount(count, thing) { return `${count.toLocaleString()} ${count === 1 ? thing : thing === 'match' ? 'matches' : `${thing}s`}`; }
+  function semanticCoverage(embedding) {
+    if (!embedding?.ready) return {
+      label: 'Themes: unavailable (absent or stale).',
+      detail: embedding?.warning || 'The local semantic index is absent or stale.'
+    };
+    const count = Number(embedding.count);
+    const eligible = embedding.eligible_count == null ? NaN : Number(embedding.eligible_count);
+    if (!Number.isFinite(count)) return { label: 'Themes: indexed.', detail: embedding.warning || 'Semantic index is ready.' };
+    const detail = `${count.toLocaleString()} indexed${Number.isFinite(eligible) && eligible >= 0 ? ` of ${eligible.toLocaleString()} eligible source records` : ' source records'}. ${embedding.warning || ''}`;
+    if (Number.isFinite(eligible) && eligible > count) return { label: `Themes: partial (${count.toLocaleString()}/${eligible.toLocaleString()} eligible).`, detail };
+    return { label: Number.isFinite(eligible) ? `Themes: eligible index complete (${count.toLocaleString()}).` : `Themes: ${count.toLocaleString()} records indexed.`, detail };
+  }
+  function updateLanguageOptions(languages) {
+    if (!Array.isArray(languages)) return;
+    const selected = ui.language.value;
+    const labels = { grc: 'Greek', eng: 'English', lat: 'Latin', ita: 'Italian', fra: 'French', deu: 'German', mul: 'Multilingual' };
+    const available = [...new Set(languages.map(row => row.language).filter(Boolean))];
+    clear(ui.language);
+    const all = node('option', '', 'Any'); all.value = ''; ui.language.append(all);
+    for (const code of available) {
+      const option = node('option', '', labels[code] || code);
+      option.value = code;
+      ui.language.append(option);
+    }
+    if (available.includes(selected)) ui.language.value = selected;
+  }
+  function renderStatus(data) {
+    const passages = Number(data.passages || 0);
+    const authors = Number(data.authors || 0);
+    const sourceLabels = data.author_labels == null ? null : Number(data.author_labels);
+    ui.status.textContent = passages
+      ? `${describeCount(passages, 'source record')} · ${Number.isFinite(sourceLabels) ? describeCount(sourceLabels, 'source author label') : describeCount(authors, 'author choice')}`
+      : 'The corpus index is empty. Source records will appear when collection is complete.';
+    if (Array.isArray(data.warnings) && data.warnings.length) ui.status.title = data.warnings.join(' ');
+    state.semanticStatus = semanticCoverage(data.embeddings);
+    state.classifierStatus = data.classifier || null;
+    updateLanguageOptions(data.languages);
+    updateBridgeNote();
+  }
+  function updateEditionOptions(allWorks) {
+    const old = ui.edition.value;
+    const editions = [...new Set(allWorks.map(w => w.edition).filter(Boolean))].sort((a, b) => a.localeCompare(b));
+    clear(ui.edition);
+    ui.edition.append(node('option', '', 'All editions'));
+    ui.edition.firstChild.value = '';
+    for (const edition of editions) {
+      const option = node('option', '', edition);
+      option.value = edition;
+      ui.edition.append(option);
+    }
+    if (editions.includes(old)) ui.edition.value = old;
+  }
+  function updateAuthorOptions() {
+    const selected = ui.authorFilter.value;
+    clear(ui.authorFilter);
+    const all = node('option', '', 'All authors');
+    all.value = '';
+    ui.authorFilter.append(all);
+    for (const entry of state.authors) {
+      if (!entry.author) continue;
+      const option = node('option', '', entry.author);
+      option.value = entry.author;
+      ui.authorFilter.append(option);
+    }
+    if (state.authors.some(entry => entry.author === selected)) ui.authorFilter.value = selected;
+  }
+  function allKnownWorks() { return [...state.works.values()].flat(); }
+  async function ensureWorks(author) {
+    if (state.works.has(author)) return state.works.get(author);
+    const data = await api('/api/works', { author });
+    const works = Array.isArray(data.works) ? data.works : [];
+    state.works.set(author, works);
+    updateEditionOptions(allKnownWorks());
+    return works;
+  }
+  function renderAuthors() {
+    clear(ui.authors);
+    ui.authorCount.textContent = String(state.authors.length).padStart(2, '0');
+    if (!state.authors.length) {
+      message(ui.authors, 'No authors are indexed yet.', 'panel-placeholder');
+      return;
+    }
+    for (const item of state.authors) {
+      const author = item.author || 'Unattributed';
+      const row = node('div', 'author-row');
+      const button = node('button', 'author-button');
+      button.type = 'button';
+      button.setAttribute('aria-expanded', String(state.selectedAuthor === author));
+      const label = node('span', '', author);
+      const tail = node('span');
+      tail.append(node('small', '', item.count != null ? item.count : ''), node('span', 'chevron', state.selectedAuthor === author ? '−' : '+'));
+      button.append(label, tail);
+      button.addEventListener('click', () => selectAuthor(author));
+      row.append(button);
+      if (state.selectedAuthor === author) {
+        const list = node('div', 'work-list');
+        const works = state.works.get(author);
+        if (!works) list.append(node('p', 'panel-placeholder', 'Loading works…'));
+        else if (!works.length) list.append(node('p', 'panel-placeholder', 'No works indexed.'));
+        else for (const work of works) {
+          const workButton = node('button', 'work-button');
+          workButton.type = 'button';
+          workButton.setAttribute('aria-current', String(work.id === state.selectedWork));
+          workButton.append(node('span', '', work.work || 'Untitled work'));
+          workButton.append(node('small', '', [work.edition, work.count != null ? `${work.count} passages` : ''].filter(Boolean).join(' · ')));
+          workButton.addEventListener('click', () => selectWork(work));
+          list.append(workButton);
+        }
+        row.append(list);
+      }
+      ui.authors.append(row);
+    }
+  }
+  async function selectAuthor(author, openFirst = false) {
+    if (state.selectedAuthor === author && !openFirst) {
+      state.selectedAuthor = '';
+      renderAuthors();
+      return;
+    }
+    state.selectedAuthor = author;
+    renderAuthors();
+    try {
+      const works = await ensureWorks(author);
+      if (state.selectedAuthor !== author) return;
+      renderAuthors();
+      if (openFirst && works.length) {
+        const preferred = works.find(w => w.language === 'grc') || works[0];
+        await selectWork(preferred, false);
+      }
+    } catch (error) {
+      if (state.selectedAuthor === author) {
+        const list = ui.authors.querySelector('.work-list');
+        if (list) message(list, `Could not load works: ${errorText(error)}`, 'warning error-message');
+      }
+    }
+  }
+  async function selectWork(work, focus = true) {
+    state.selectedAuthor = work.author || state.selectedAuthor;
+    state.selectedWork = work.id;
+    ui.results.hidden = true;
+    renderAuthors();
+    ui.title.textContent = work.work || 'Opening work';
+    message(ui.text, 'Loading a passage from this work…', 'loading-line');
+    try {
+      const data = await api('/api/passages', { work_id: work.id, limit: 20, offset: 0 });
+      if (state.selectedWork !== work.id) return;
+      const results = Array.isArray(data.results) ? data.results : [];
+      const first = results.find(p => p.language === 'grc' && p.kind === 'text' && p.quality === 'source_text' && p.text?.length < 700)
+        || results.find(p => p.language === 'grc' && p.kind === 'text' && p.quality === 'source_text')
+        || results.find(p => p.language === 'grc' && p.kind === 'text')
+        || results.find(p => p.kind === 'text') || results[0];
+      if (!first) { renderPassageEmpty('This work has no readable passages in the index.'); return; }
+      await openPassage(first.id, focus);
+    } catch (error) {
+      if (state.selectedWork === work.id) renderPassageEmpty(`Could not load passages: ${errorText(error)}`, true);
+    }
+  }
+  function renderPassageEmpty(text, isError = false) {
+    ui.title.textContent = isError ? 'Passage unavailable' : 'No passage available';
+    ui.subtitle.textContent = '';
+    ui.kicker.textContent = 'THE COLLECTION';
+    message(ui.text, text, isError ? 'warning error-message' : 'loading-line');
+    ui.provenance.hidden = true; ui.related.hidden = true;
+    ui.prev.disabled = true; ui.next.disabled = true;
+  }
+
+  // Token buttons preserve all intervening punctuation and whitespace exactly as supplied.
+  function appendTextWithWords(host, value) {
+    const parts = String(value || '').split(/(\p{Script=Greek}[\p{Script=Greek}\p{M}᾽’']*)/u);
+    for (const part of parts) {
+      if (!part) continue;
+      if (/^\p{Script=Greek}/u.test(part)) {
+        const button = node('button', 'word', part);
+        button.type = 'button';
+        button.setAttribute('aria-label', `Inspect ${part}`);
+        button.addEventListener('click', () => inspectWord(part, button));
+        host.append(button);
+      } else host.append(document.createTextNode(part));
+    }
+  }
+  function renderPassageText(passage) {
+    clear(ui.text);
+    ui.text.lang = passage.language === 'grc' ? 'grc' : passage.language || 'en';
+    ui.textLeading.textContent = (passage.language || 'text').toUpperCase();
+    if (Array.isArray(passage.lines) && passage.lines.length) {
+      for (const line of passage.lines) {
+        const row = node('div', 'line');
+        row.append(node('span', 'line-label', line.label || ''));
+        const content = node('span', 'line-content');
+        appendTextWithWords(content, line.text || '');
+        row.append(content); ui.text.append(row);
+      }
+    } else if (passage.text) {
+      const paragraph = node('p');
+      appendTextWithWords(paragraph, passage.text);
+      ui.text.append(paragraph);
+    } else message(ui.text, 'This record has no passage text.', 'loading-line');
+    ui.readingHint.textContent = passage.language === 'grc' && passage.kind === 'text'
+      ? 'Select a phrase to trace it, or choose a Greek word to inspect it.'
+      : passage.kind === 'translation'
+        ? 'Translation record. Related source material and provenance appear below when available.'
+        : passage.kind === 'commentary' || passage.kind === 'apparatus'
+          ? `${passage.kind === 'apparatus' ? 'Apparatus' : 'Commentary'} record. Consult its source details below.`
+          : `This ${passage.kind || 'source'} record is labeled ${passage.language || 'unknown language'}; consult its source details below.`;
+  }
+  function addMeta(host, label, value, wide = false) {
+    if (value == null || value === '') return;
+    const item = node('div', `provenance-item${wide ? ' wide' : ''}`);
+    item.append(node('span', 'meta-label', label));
+    const val = node('div', 'meta-value');
+    if (value instanceof Node) val.append(value); else val.textContent = String(value);
+    item.append(val); host.append(item);
+  }
+  function renderProvenance(passage) {
+    clear(ui.provenance);
+    addMeta(ui.provenance, 'Original reference', passage.citation || 'Not supplied');
+    addMeta(ui.provenance, 'Edition', passage.edition || 'Not supplied');
+    addMeta(ui.provenance, 'Collection', passage.source || 'Not supplied');
+    addMeta(ui.provenance, 'Record type / language', [passage.kind || 'unlabeled', passage.language || 'unlabeled'].join(' · '));
+    const tag = node('span', `quality-tag${passage.quality && passage.quality !== 'source_text' ? ' caution' : ''}`, qualityLabel(passage.quality));
+    addMeta(ui.provenance, 'Text quality', tag);
+    addMeta(ui.provenance, 'License', passage.license || 'Not supplied');
+    const claim = chronologyClaim(passage);
+    if (claim) {
+      const date = node('span', '', `${claim.kind} claim: ${claim.interval} · selected ${claim.kind} interval; not a poem date`);
+      if (claim.uncertainty.length) date.title = claim.uncertainty.join('; ');
+      const sourceDate = safeLink(claim.sourceUrl, ' claim source ↗');
+      if (sourceDate) date.append(sourceDate);
+      addMeta(ui.provenance, 'Author date claim', date, true);
+    }
+    const metadata = passage.metadata && typeof passage.metadata === 'object' ? passage.metadata : {};
+    if (typeof metadata.scope === 'string' && metadata.scope) {
+      addMeta(ui.provenance, 'Source scope', metadata.scope === 'page' ? 'Page-wide material; no line-level alignment' : metadata.scope);
+    }
+    const notes = [
+      ['Attribution note', metadata.attribution_note, metadata.attribution_note_source_url],
+      ['Source grouping note', metadata.source_group_description, metadata.source_group_source_url],
+      ['Source note', metadata.source_note, metadata.source_note_url],
+      ['Source warning', metadata.aggregation_warning || metadata.warning, metadata.warning_source_url],
+      ['Index review', metadata.index_review, null]
+    ];
+    for (const [label, value, url] of notes) {
+      if (typeof value !== 'string' || !value.trim()) continue;
+      const note = node('span', '', value);
+      const link = safeLink(url, ' source ↗');
+      if (link) note.append(link);
+      addMeta(ui.provenance, label, note, true);
+    }
+    const source = safeLink(passage.source_url, 'View the original source ↗');
+    if (source) addMeta(ui.provenance, 'Source record', source, true);
+    const page = safeLink(passage.metadata?.page_url, 'View scanned page ↗');
+    if (page) addMeta(ui.provenance, 'Page in source edition', page, true);
+    const image = safeLink(passage.metadata?.page_image_url, 'View page image ↗');
+    if (image) addMeta(ui.provenance, 'Source image', image, true);
+    ui.provenance.hidden = false;
+  }
+  function renderRelated(related) {
+    clear(ui.related);
+    if (!Array.isArray(related) || !related.length) { ui.related.hidden = true; return; }
+    const heading = node('span', 'eyebrow', 'RELATED SOURCE MATERIAL');
+    ui.related.append(heading);
+    if (related.some(item => item?.metadata?.scope === 'page')) {
+      ui.related.append(node('p', 'related-note', 'Page-wide notes belong to this source page; they are not aligned to this passage line by line.'));
+    }
+    for (const item of related) {
+      if (!item || !item.text) continue;
+      const article = node('div', 'related-item');
+      const pageWide = item.metadata?.scope === 'page';
+      article.append(node('span', 'eyebrow', [pageWide ? 'Page-wide note' : item.kind, item.edition].filter(Boolean).join(' · ') || 'Related record'));
+      if (pageWide) {
+        const details = node('details', 'related-details');
+        details.append(node('summary', '', `Read ${item.kind || 'reference'} from this source page`), node('p', item.language === 'grc' ? 'related-greek' : '', item.text));
+        article.append(details);
+      } else article.append(node('p', item.language === 'grc' ? 'related-greek' : '', item.text));
+      const link = safeLink(item.metadata?.page_url || item.source_url, pageWide ? 'View source page ↗' : 'Source ↗');
+      if (link) article.append(link);
+      const explicitlyLinked = item.parent_id === state.passage?.id || state.passage?.parent_id === item.id;
+      if (item.id && explicitlyLinked && ['text', 'translation'].includes(item.kind)) {
+        const read = node('button', 'related-open', item.language === 'grc' ? 'Read linked Greek passage →' : 'Read linked translation →');
+        read.type = 'button';
+        read.addEventListener('click', () => openPassage(item.id));
+        article.append(read);
+      }
+      ui.related.append(article);
+    }
+    ui.related.hidden = !ui.related.querySelector('.related-item');
+  }
+  async function openPassage(id, focus = true) {
+    if (!id) return;
+    const sequence = ++state.passageSequence;
+    ++state.wordSequence;
+    ui.title.textContent = 'Opening passage';
+    message(ui.text, 'Loading the original text…', 'loading-line');
+    try {
+      const passage = await api('/api/passage', { id });
+      if (sequence !== state.passageSequence) return;
+      state.passage = passage;
+      state.selectedAuthor = passage.author || state.selectedAuthor;
+      if (passage.work_id) state.selectedWork = passage.work_id;
+      ui.kicker.textContent = passage.kind === 'text' ? 'FROM THE LYRIC COLLECTION' : 'REFERENCE RECORD';
+      ui.title.textContent = [passage.author, passage.work].filter(Boolean).join(' · ') || 'Unattributed passage';
+      ui.subtitle.textContent = passage.citation || 'Citation not supplied by source';
+      renderPassageText(passage);
+      renderRelated(passage.related);
+      renderProvenance(passage);
+      ui.prev.disabled = !passage.previous_id;
+      ui.next.disabled = !passage.next_id;
+      clear(ui.inspector);
+      const empty = node('div', 'inspector-empty');
+      empty.append(node('span', 'inspector-symbol', 'α'), node('p', '', 'Choose a Greek word in the passage. Its recorded forms, possible analyses, and sources will appear here.'));
+      ui.inspector.append(empty);
+      ui.selectionActions.hidden = true;
+      if (state.works.has(state.selectedAuthor)) renderAuthors();
+      const current = new URL(location.href);
+      current.searchParams.set('id', passage.id || id);
+      history.replaceState(null, '', current);
+      if (focus) ui.passage.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (error) {
+      if (sequence === state.passageSequence) renderPassageEmpty(`Could not open this passage: ${errorText(error)}`, true);
+    }
+  }
+
+  function appendWarnings(host, warnings) {
+    if (!Array.isArray(warnings)) return;
+    for (const warning of warnings.slice(0, 3)) {
+      if (warning) host.append(node('p', 'warning', typeof warning === 'string' ? warning : JSON.stringify(warning)));
+    }
+  }
+  function chronologyClaim(record) {
+    const chronology = record?.author_chronology;
+    if (!chronology) return null;
+    const selected = chronology.selected_claim;
+    const bounds = Array.isArray(selected?.effective_year_interval) ? selected.effective_year_interval : [chronology.sort_start, chronology.sort_end];
+    if (bounds[0] == null || bounds[0] === '' || !Number.isFinite(Number(bounds[0]))) return null;
+    const start = Number(bounds[0]);
+    const end = bounds[1] == null || bounds[1] === '' || !Number.isFinite(Number(bounds[1])) ? start : Number(bounds[1]);
+    if (!start || !end) return null;
+    const year = value => `${Math.abs(value)} ${value < 0 ? 'BCE' : 'CE'}`;
+    const interval = start === end ? year(start) : (start < 0) === (end < 0)
+      ? `${Math.abs(start)}–${Math.abs(end)} ${start < 0 ? 'BCE' : 'CE'}`
+      : `${year(start)}–${year(end)}`;
+    const kind = selected?.kind || chronology.claim_kind;
+    if (!['birth', 'floruit'].includes(kind)) return null;
+    return { kind, interval, sourceUrl: selected?.statement_url || chronology.source_url,
+      uncertainty: Array.isArray(selected?.uncertainty) ? selected.uncertainty : [] };
+  }
+  function renderResult(record) {
+    const button = node('button', 'result-button');
+    button.type = 'button';
+    const source = node('span', 'result-source', record.author || 'Unattributed');
+    source.append(node('small', '', [record.work, record.citation, record.kind && record.kind !== 'text' ? `indexed ${record.kind}` : record.language !== 'grc' ? record.language : 'Greek text'].filter(Boolean).join(' · ')));
+    const body = node('span', 'result-body');
+    const excerpt = (record.text || '').replace(/\s+/g, ' ').trim();
+    body.append(node('span', 'result-excerpt', excerpt || 'Text unavailable'));
+    const dateClaim = chronologyClaim(record);
+    const reason = [record.match_reason, dateClaim ? `Author date claim (${dateClaim.kind}): ${dateClaim.interval}` : ''].filter(Boolean).join(' · ');
+    if (reason) body.append(node('span', 'result-reason', reason));
+    const evidence = Array.isArray(record.matched_evidence) ? record.matched_evidence : [];
+    for (const hit of evidence.slice(0, 3)) {
+      const detail = node('span', 'evidence-hit');
+      const label = [hit.signal && String(hit.signal).replaceAll('_', ' '), hit.kind, hit.author, hit.citation].filter(Boolean).join(' · ');
+      detail.append(node('span', '', `${label || 'Linked source'}: ${hit.match_reason || 'retrieval match'}`));
+      body.append(detail);
+    }
+    if (record.retrieval_score_kind === 'reciprocal_rank_fusion') body.append(node('span', 'result-reason', 'Ranked by reciprocal rank fusion; rank is not confidence.'));
+    button.append(source, body);
+    button.addEventListener('click', () => openPassage(record.id));
+    return button;
+  }
+  async function search(query, mode = formMode(), append = false) {
+    query = String(query || '').trim();
+    if (!query) { ui.searchInput.focus(); return; }
+    if (!append) {
+      state.search = { query, mode, offset: 0, total: 0 };
+      clear(ui.resultsList);
+      ui.results.hidden = false;
+      ui.resultsHeading.textContent = `Results for “${query}”`;
+      ui.resultsSummary.textContent = 'Searching the source index…';
+      ui.moreResults.hidden = true;
+      ui.results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    const active = state.search;
+    if (!active) return;
+    const sequence = ++state.searchSequence;
+    const searchMode = ['forms', 'themes', 'hybrid'].includes(mode) ? mode : 'words';
+    const params = {
+      q: query, mode: searchMode, match: mode === 'exact' ? 'exact' : 'fuzzy',
+      commentary_assisted: true,
+      author: ui.authorFilter.value, edition: ui.edition.value, language: ui.language.value,
+      order: ui.order.value,
+      include_reference: ui.reference.checked, limit: 30, offset: append ? active.offset : 0
+    };
+    try {
+      const data = await api('/api/search', params);
+      if (sequence !== state.searchSequence) return;
+      const records = Array.isArray(data.results) ? data.results : [];
+      active.total = Number(data.total || 0);
+      active.offset += records.length;
+      if (!append) clear(ui.resultsList);
+      for (const record of records) ui.resultsList.append(renderResult(record));
+      const count = ui.resultsList.querySelectorAll('.result-button').length;
+      const method = data.method ? ` · ${String(data.method).replaceAll('_', ' ')}` : '';
+      const sortLabel = ui.order.value === 'chronological' ? ' · author chronology, where sourced' : '';
+      ui.resultsSummary.textContent = `${describeCount(active.total, mode === 'themes' ? 'ranked candidate' : 'match')} · ${count} shown${method}${sortLabel}`;
+      if (!count) ui.resultsList.append(node('p', 'inspector-message', mode === 'themes'
+        ? 'No ranked passage candidates were returned for this query and filters.'
+        : 'No indexed passage matches these terms and filters. Try another spelling, mode, or edition.'));
+      appendWarnings(ui.resultsList, data.warnings);
+      ui.moreResults.hidden = count >= active.total || records.length === 0;
+      const url = new URL(location.href);
+      url.searchParams.set('q', query);
+      history.replaceState(null, '', url);
+    } catch (error) {
+      if (sequence !== state.searchSequence) return;
+      ui.resultsSummary.textContent = 'Search could not be completed.';
+      ui.resultsList.append(node('p', 'warning error-message', errorText(error)));
+      ui.moreResults.hidden = true;
+    }
+  }
+
+  function addInspectorSection(title, host = ui.inspector) {
+    const section = node('section', 'inspector-section');
+    section.append(node('h3', '', title));
+    host.append(section);
+    return section;
+  }
+  function stringList(value) {
+    if (typeof value === 'string') return value ? [value] : [];
+    return Array.isArray(value) ? value.filter(item => typeof item === 'string' && item.trim()) : [];
+  }
+  function referenceList(value) {
+    if (!Array.isArray(value)) return [];
+    return value.map(item => typeof item === 'string' ? item : item?.word || item?.form || item?.term).filter(Boolean);
+  }
+  function addWiktionaryLabels(host, scope, tags, rawTags) {
+    const labels = stringList(tags);
+    const raw = stringList(rawTags);
+    if (!labels.length && !raw.length) return;
+    const row = node('p', 'wiktionary-labels');
+    row.append(node('b', '', `${scope} labels: `), document.createTextNode(labels.join(' · ') || 'none supplied'));
+    if (raw.length) row.append(node('span', 'wiktionary-raw-labels', `Source labels: ${raw.join(' · ')}`));
+    host.append(row);
+  }
+  function addWiktionaryRelation(host, label, value) {
+    const words = referenceList(value);
+    if (words.length) host.append(node('p', 'wiktionary-relation', `${label}: ${words.join(' · ')}`));
+  }
+  function renderWiktionary(host, data) {
+    clear(host);
+    const section = addInspectorSection('Wiktionary dialect references', host);
+    section.classList.add('wiktionary-section');
+    section.append(node('p', 'wiktionary-caveat', 'Machine-extracted dictionary reference. Listed forms are not corpus attestations, and senses are not selected for this passage.'));
+    if (!data.ready) {
+      section.append(node('p', 'inspector-message', 'Audited Wiktionary references are unavailable for this snapshot.'));
+      appendWarnings(section, data.warnings);
+      return;
+    }
+    const entries = Array.isArray(data.results) ? data.results : [];
+    if (!entries.length) {
+      section.append(node('p', 'inspector-message', 'No audited headword or dictionary-listed form matched this query.'));
+      appendWarnings(section, data.warnings);
+      return;
+    }
+    const total = Number(data.total);
+    section.append(node('p', 'candidate-reason', `${entries.length} of ${Number.isFinite(total) ? total : entries.length} source entries shown · ${data.method || 'audited dictionary lookup'}`));
+    for (const entry of entries) {
+      const card = node('article', 'wiktionary-entry');
+      const heading = node('div', 'wiktionary-entry-heading');
+      heading.append(node('span', 'candidate-lemma', entry.headword || 'Unlabeled headword'));
+      if (entry.pos) heading.append(node('span', 'wiktionary-pos', entry.pos));
+      card.append(heading);
+      addWiktionaryLabels(card, 'Entry', entry.entry_tags, entry.entry_raw_tags);
+      addWiktionaryRelation(card, 'Entry form of', entry.entry_form_of);
+      addWiktionaryRelation(card, 'Entry alternative of', entry.entry_alt_of);
+      const matches = Array.isArray(entry.matches) ? entry.matches : [];
+      for (const match of matches) {
+        if (match.kind === 'headword') {
+          card.append(node('p', 'wiktionary-match', 'Matched dictionary headword'));
+        } else if (match.kind === 'listed_form' && match.form) {
+          const listed = node('div', 'wiktionary-listed-form');
+          listed.append(node('p', 'wiktionary-match', `Matched dictionary-listed form: ${match.form.form || 'unlabeled'}`));
+          addWiktionaryLabels(listed, 'Listed form', match.form.tags, match.form.raw_tags);
+          card.append(listed);
+        }
+      }
+      const senses = Array.isArray(entry.senses) ? entry.senses : [];
+      if (senses.length) {
+        const list = node('div', 'wiktionary-senses');
+        list.append(node('span', 'candidate-meta-label', `Dictionary senses · ${senses.length}${Number(entry.total_senses) > senses.length ? ` of ${entry.total_senses} shown` : ''}`));
+        for (const sense of senses) {
+          const item = node('div', 'wiktionary-sense');
+          const index = Number.isInteger(sense.sense_index) ? sense.sense_index + 1 : '';
+          const glosses = stringList(sense.glosses);
+          item.append(node('p', 'wiktionary-gloss', `${index ? `${index}. ` : ''}${glosses.join('; ') || 'No gloss supplied'}`));
+          addWiktionaryLabels(item, 'Sense', sense.tags, sense.raw_tags);
+          addWiktionaryRelation(item, 'Sense form of', sense.form_of);
+          addWiktionaryRelation(item, 'Sense alternative of', sense.alt_of);
+          const rawGlosses = stringList(sense.raw_glosses);
+          if (rawGlosses.length && rawGlosses.join('; ') !== glosses.join('; ')) {
+            const details = node('details', 'entry-details');
+            details.append(node('summary', '', 'Source gloss text'), node('p', '', rawGlosses.join('; ')));
+            item.append(details);
+          }
+          list.append(item);
+        }
+        card.append(list);
+      }
+      const live = safeLink(entry.entry_url || entry.live_entry_url, 'Live Wiktionary page ↗');
+      if (live) {
+        live.title = entry.live_entry_note || 'The live page may differ from the audited snapshot.';
+        card.append(live, node('p', 'candidate-reason', 'Live page may differ from the saved dictionary snapshot.'));
+      }
+      card.append(node('p', 'candidate-reason', [entry.source, entry.quality, entry.license].filter(Boolean).join(' · ')));
+      if (entry.raw_line_sha256) {
+        const hash = node('details', 'entry-details');
+        hash.append(node('summary', '', 'Snapshot record hash'), node('code', '', entry.raw_line_sha256));
+        card.append(hash);
+      }
+      section.append(card);
+    }
+    appendWarnings(section, (data.warnings || []).filter(warning => !/not attestations/i.test(String(warning))));
+  }
+  async function loadWiktionary(form, sequence, host) {
+    const section = addInspectorSection('Wiktionary dialect references', host);
+    section.append(node('p', 'inspector-message', 'Checking the audited dictionary snapshot…'));
+    try {
+      const data = await api('/api/wiktionary', { form, limit: 8 });
+      if (sequence !== state.wordSequence) return;
+      renderWiktionary(host, data);
+    } catch (error) {
+      if (sequence !== state.wordSequence) return;
+      clear(host);
+      const unavailable = addInspectorSection('Wiktionary dialect references', host);
+      unavailable.append(node('p', 'inspector-message', `Dictionary reference unavailable: ${errorText(error)}`));
+    }
+  }
+  function foldGreekForm(value) {
+    return String(value || '').normalize('NFD').toLowerCase().replace(/\p{M}/gu, '').replaceAll('ς', 'σ');
+  }
+  function renderRelatedCommentary(form, related, host) {
+    if (!Array.isArray(related) || !/\p{Script=Greek}/u.test(form)) return;
+    const folded = foldGreekForm(form);
+    const hits = [];
+    for (const item of related) {
+      if (item?.kind !== 'commentary' || typeof item.text !== 'string') continue;
+      for (const match of item.text.matchAll(/[\p{Script=Greek}\p{M}]+(?:[᾽’'][\p{Script=Greek}\p{M}]+)*/gu)) {
+        if (foldGreekForm(match[0]) !== folded) continue;
+        const start = Math.max(0, match.index - 65);
+        const end = Math.min(item.text.length, match.index + match[0].length + 95);
+        hits.push({ item, start, end });
+        break; // One preview per source note; nearby mentions remain in its full text.
+      }
+      if (hits.length >= 3) break;
+    }
+    if (!hits.length) return;
+    const section = addInspectorSection('Source commentary mentioning this form', host);
+    section.append(node('p', 'candidate-reason', 'Literal whole-form match with accents folded in commentary linked to this passage; no parse or sense is selected.'));
+    for (const { item, start, end } of hits) {
+      const source = node('div', 'commentary-hit');
+      source.append(node('p', 'commentary-source', [item.author, item.work, item.citation, item.edition].filter(Boolean).join(' · ') || 'Linked source commentary'));
+      if (item.metadata?.scope === 'page') source.append(node('p', 'candidate-reason', 'Page-wide source note; no line-level alignment claimed.'));
+      source.append(node('p', 'commentary-excerpt', `${start ? '…' : ''}${item.text.slice(start, end)}${end < item.text.length ? '…' : ''}`));
+      const link = safeLink(item.metadata?.page_url || item.source_url, 'View source note ↗');
+      if (link) source.append(link);
+      if (start || end < item.text.length) {
+        const full = node('details', 'entry-details');
+        full.append(node('summary', '', 'Read full source note'), node('p', '', item.text));
+        source.append(full);
+      }
+      section.append(source);
+    }
+  }
+  function formatFeatures(features) {
+    if (!features || typeof features !== 'object') return String(features || '');
+    const order = ['tense', 'voice', 'mood', 'person', 'number', 'gender', 'case'];
+    return [...order.filter(key => features[key] != null), ...Object.keys(features).filter(key => !order.includes(key))]
+      .map(key => String(features[key])).join(' · ');
+  }
+  function claimValue(claim) {
+    const value = claim.object;
+    if (typeof value === 'string') return value;
+    if (Array.isArray(value)) return value.map(item => typeof item === 'string' ? item : JSON.stringify(item)).join(' · ');
+    if (!value || typeof value !== 'object') return String(value ?? '');
+    const pieces = ['form', 'lemma', 'raw_label', 'gloss', 'sense', 'relation_raw', 'equivalent_form'].filter(key => value[key] != null).map(key => `${key.replaceAll('_', ' ')}: ${typeof value[key] === 'object' ? JSON.stringify(value[key]) : value[key]}`);
+    if (value.features) pieces.push(`features: ${formatFeatures(value.features)}`);
+    if (value.listed_form_count != null) pieces.push(`${value.listed_form_count} listed source forms`);
+    return pieces.join(' · ') || JSON.stringify(value);
+  }
+  function renderClaim(claim) {
+    const card = node('article', 'claim-card');
+    const scope = claim.strength === 'explicit_passage_span' ? 'Linked to this passage and text span'
+      : claim.strength === 'explicit_passage_link' ? 'Linked to this passage'
+      : claim.strength === 'listed_entry_form' ? 'Form listed in a source entry; no passage attestation'
+      : 'General form claim; no passage attestation';
+    card.append(node('div', 'claim-scope', `${scope} · ${String(claim.predicate || 'source claim').replaceAll('_', ' ')}`));
+    card.append(node('p', 'claim-value', claimValue(claim)));
+    if (Array.isArray(claim.matched_object_forms) && claim.matched_object_forms.length) {
+      card.append(node('p', 'claim-scope', `Matched listed form: ${claim.matched_object_forms.map(value => typeof value === 'string' ? value : value?.form || JSON.stringify(value)).join(' · ')}`));
+    }
+    if (claim.status !== 'source_claim' || claim.assertion_type === 'model_inference') card.append(node('p', 'claim-status', `${String(claim.status || 'unreviewed').replaceAll('_', ' ')} · ${String(claim.assertion_type || '').replaceAll('_', ' ')}`));
+    if (claim.match_reason) card.append(node('p', 'claim-scope', claim.match_reason));
+    for (const evidence of (claim.evidence || []).slice(0, 2)) {
+      if (evidence.quote) card.append(node('p', 'claim-quote', `“${evidence.quote}”`));
+      const source = safeLink(evidence.source_url, [claim.source_family, evidence.locator].filter(Boolean).join(' · ') + ' ↗');
+      if (source) card.append(source);
+    }
+    return card;
+  }
+  function renderStructuredEvidence(host, data, passageId) {
+    if (!data) return;
+    const claims = Array.isArray(data.claims) ? data.claims : [];
+    const linked = claims.filter(claim => claim.strength === 'explicit_passage_span' || claim.strength === 'explicit_passage_link');
+    const general = claims.filter(claim => !linked.includes(claim));
+    if (passageId) {
+      const section = addInspectorSection(`Claims linked to this passage · ${linked.length}`, host);
+      section.append(node('p', 'candidate-reason', 'Only explicit source links to this passage appear here. A claim may still need editorial review.'));
+      if (!linked.length) section.append(node('p', 'inspector-message', 'No accepted form claim is explicitly linked to this passage.'));
+      linked.forEach(claim => section.append(renderClaim(claim)));
+    }
+    const section = addInspectorSection(`General source claims · ${general.length}`, host);
+    section.append(node('p', 'candidate-reason', 'These concern a form or dictionary entry generally; they do not establish an occurrence here.'));
+    if (!general.length) section.append(node('p', 'inspector-message', 'No general structured claims were returned.'));
+    general.forEach(claim => section.append(renderClaim(claim)));
+    if (Number(data.total) > claims.length) section.append(node('p', 'candidate-reason', `${data.total} claims matched; ${claims.length} shown in this preview.`));
+    appendWarnings(host, data.warnings);
+  }
+  function renderContextualCandidates(host, candidates, method) {
+    if (!Array.isArray(candidates) || !candidates.length) return;
+    const section = addInspectorSection(`Source candidate analyses · ${candidates.length}`, host);
+    section.append(node('p', 'candidate-reason', method || 'Fields quoted or extracted from separate source claims; alternatives are retained.'));
+    for (const candidate of candidates) {
+      const row = node('div', 'candidate');
+      row.append(node('div', 'candidate-lemma', candidate.lemma || candidate.equivalent_form || candidate.matched_form || 'Unlabeled candidate'));
+      if (candidate.analysis) row.append(node('p', 'candidate-analysis', String(candidate.analysis)));
+      if (candidate.features) row.append(node('p', 'candidate-analysis', formatFeatures(candidate.features)));
+      if (candidate.equivalent_form) row.append(node('p', 'candidate-analysis', `Equivalent form: ${candidate.equivalent_form}`));
+      row.append(node('p', 'candidate-reason', [candidate.strength?.replaceAll('_', ' '), candidate.source_family, candidate.match_reason].filter(Boolean).join(' · ')));
+      if (candidate.status !== 'source_claim') row.append(node('p', 'claim-status', `Status: ${String(candidate.status || 'unreviewed').replaceAll('_', ' ')}`));
+      section.append(row);
+    }
+  }
+  function addContextAction(host, form, passageId, sequence) {
+    if (!passageId) return;
+    const section = addInspectorSection('Contextual comparison', host);
+    section.append(node('p', 'candidate-reason', 'A model may compare the existing candidates against this Greek passage. Its output is an interpretive proposal, not a new source claim.'));
+    if (!state.classifierStatus?.configured) {
+      section.append(node('p', 'inspector-message', state.classifierStatus?.reason || 'Contextual model comparison is not configured.'));
+      return;
+    }
+    const button = node('button', 'classifier-action', 'Compare candidates with model');
+    button.type = 'button';
+    const output = node('div', 'classifier-output');
+    section.append(button, output);
+    button.addEventListener('click', async () => {
+      button.disabled = true;
+      message(output, 'Comparing candidates…');
+      try {
+        const result = await apiPost('/api/classify-context', { form, passage_id: passageId });
+        if (sequence !== state.wordSequence) return;
+        clear(output);
+        const options = Array.isArray(result.packet?.candidates) ? result.packet.candidates : [];
+        const chosen = options.find(candidate => candidate.id === result.candidate_id);
+        if (result.status === 'proposed' && chosen) {
+          const title = chosen.lemma || chosen.matched_form || form;
+          output.append(node('p', 'candidate-meta-label', 'Model proposal · interpretive only'));
+          output.append(node('p', 'candidate-lemma', title));
+          const description = [chosen.analysis_text || chosen.analysis, chosen.features ? formatFeatures(chosen.features) : '', chosen.gloss].filter(Boolean).join(' · ');
+          if (description) output.append(node('p', 'candidate-analysis', description));
+          if (chosen.match_reason) output.append(node('p', 'candidate-reason', chosen.match_reason));
+          output.append(node('p', 'candidate-reason', 'Other source candidates remain listed above. This proposal does not replace their source claims.'));
+        } else output.append(node('p', 'warning', `Model abstained. ${result.reason || 'The available evidence did not support a selection.'}`));
+        if (result.model) output.append(node('p', 'candidate-reason', `Model: ${result.model}. ${result.reason || ''}`));
+        const preference = result.model_probabilities_uncalibrated;
+        const confidence = result.model_confidence_uncalibrated;
+        if (preference != null || confidence != null) {
+          const signal = node('div', 'model-signal');
+          signal.append(node('p', 'candidate-reason', 'Raw model preference signals only; these are not calibrated probabilities of philological truth.'));
+          if (confidence != null) signal.append(node('p', 'candidate-reason', `Raw model confidence signal: ${JSON.stringify(confidence)}`));
+          if (preference != null) {
+            const details = node('details', 'entry-details');
+            details.append(node('summary', '', 'Show raw candidate preference values'));
+            for (const [id, value] of Object.entries(preference)) {
+              const candidate = options.find(option => option.id === id);
+              details.append(node('p', 'candidate-reason', `${candidate?.lemma || candidate?.matched_form || id}: ${JSON.stringify(value)}`));
+            }
+            signal.append(details);
+          }
+          output.append(signal);
+        }
+        const technical = node('details', 'entry-details');
+        technical.append(node('summary', '', 'Technical candidate and evidence IDs'));
+        technical.append(node('p', 'candidate-reason', `Candidate: ${result.candidate_id || 'none'}`));
+        if (Array.isArray(result.evidence_ids) && result.evidence_ids.length) technical.append(node('p', 'candidate-reason', `Linked evidence: ${result.evidence_ids.join(' · ')}`));
+        output.append(technical);
+        appendWarnings(output, result.warnings);
+      } catch (error) {
+        if (sequence === state.wordSequence) message(output, `Comparison unavailable: ${errorText(error)}`, 'warning error-message');
+      } finally { if (sequence === state.wordSequence) button.disabled = false; }
+    });
+  }
+  async function inspectWord(form, button = null) {
+    if (!form) return;
+    if (state.activeWord) state.activeWord.classList.remove('active');
+    state.activeWord = button;
+    if (button) button.classList.add('active');
+    const passageId = button ? state.passage?.id : '';
+    clear(ui.inspector);
+    ui.inspector.append(node('span', 'eyebrow', 'SELECTED FORM'), node('div', 'word-title', form));
+    if (!passageId) ui.inspector.append(node('p', 'word-normalized', 'Standalone form lookup · no passage context supplied.'));
+    const morphologyHost = node('div', 'morphology-panel');
+    const wiktionaryHost = node('div', 'wiktionary-panel');
+    ui.inspector.append(morphologyHost, wiktionaryHost);
+    const pending = node('p', 'inspector-message', 'Looking up recorded analyses…');
+    morphologyHost.append(pending);
+    const sequence = ++state.wordSequence;
+    loadWiktionary(form, sequence, wiktionaryHost);
+    if (button && window.matchMedia('(max-width:1280px)').matches) {
+      requestAnimationFrame(() => ui.inspector.closest('.inspector').scrollIntoView({ behavior: 'smooth', block: 'start' }));
+    }
+    try {
+      const data = await api('/api/word', { form, passage_id: passageId });
+      if (sequence !== state.wordSequence) return;
+      pending.remove();
+      if (data.normalized && data.normalized !== form) morphologyHost.append(node('p', 'word-normalized', `Normalized search: ${data.normalized}`));
+      renderStructuredEvidence(morphologyHost, data.structured_evidence, passageId);
+      renderContextualCandidates(morphologyHost, data.contextual_candidates, data.contextual_candidate_method);
+      if (passageId) renderRelatedCommentary(form, state.passage?.related, morphologyHost);
+      addContextAction(morphologyHost, form, passageId, sequence);
+      const candidates = Array.isArray(data.candidates) ? data.candidates : [];
+      const analysisTitle = data.analysis_match_status === 'spelling_suggestions_only'
+        ? 'Nearby spelling analyses'
+        : candidates.length === 1 ? 'Recorded analysis' : 'Possible analyses';
+      const hasLinkedSource = (data.contextual_candidates || []).some(candidate => candidate.strength === 'explicit_passage_span' || candidate.strength === 'explicit_passage_link');
+      const collapseNearby = hasLinkedSource && data.analysis_match_status === 'spelling_suggestions_only';
+      const analysisHost = collapseNearby ? node('details', 'entry-details nearby-analysis') : morphologyHost;
+      if (collapseNearby) {
+        analysisHost.append(node('summary', '', `Nearby spelling analyses · ${candidates.length} other forms`));
+        morphologyHost.append(analysisHost);
+      }
+      const analysis = addInspectorSection(collapseNearby ? 'General lexicon / treebank lookup' : analysisTitle, analysisHost);
+      appendWarnings(analysis, data.warnings);
+      if (!candidates.length) analysis.append(node('p', 'inspector-message', 'No sourced dictionary or morphology analysis is available for this form.'));
+      for (const candidate of candidates) {
+        const card = node('div', 'candidate');
+        if (candidate.lemma) card.append(node('div', 'candidate-lemma', candidate.lemma));
+        if (candidate.gloss) card.append(node('span', 'candidate-meta-label', 'Dictionary excerpt'), node('p', 'candidate-gloss', candidate.gloss));
+        if (candidate.analysis_text) {
+          const parse = node('p', 'candidate-analysis', candidate.analysis_text);
+          if (candidate.analysis) parse.title = `Source analysis: ${candidate.analysis}${candidate.analysis_format ? ` (${candidate.analysis_format})` : ''}`;
+          card.append(parse);
+        } else if (candidate.analysis) card.append(node('p', 'candidate-analysis', `${candidate.analysis}${candidate.analysis_format ? ` (${candidate.analysis_format})` : ''}`));
+        if (candidate.matched_form && candidate.matched_form !== form) card.append(node('p', 'candidate-reason', `Matched source spelling: ${candidate.matched_form}`));
+        else if (candidate.attested_form && candidate.attested_form !== form) card.append(node('p', 'candidate-reason', `Recorded form: ${candidate.attested_form}`));
+        if (candidate.reason) card.append(node('p', 'candidate-reason', candidate.reason));
+        const entryText = candidate.rendered_entry_text || candidate.entry_text;
+        if (entryText) {
+          const details = node('details', 'entry-details');
+          details.append(node('summary', '', candidate.rendered_entry_text ? 'Read source entry' : 'Read source entry · original encoding'), node('p', '', entryText));
+          if (!candidate.rendered_entry_text) details.append(node('p', 'candidate-reason', 'Entry text is shown in its source encoding; Beta Code may appear.'));
+          card.append(details);
+        }
+        const link = safeLink(candidate.source_url, 'Analysis source ↗');
+        if (link) card.append(link);
+        const glossLink = safeLink(candidate.gloss_source_url, 'Gloss source ↗');
+        if (glossLink) card.append(glossLink);
+        for (const supporting of (candidate.supporting_sources || []).slice(0, 5)) {
+          if (supporting.source_url === candidate.source_url) continue;
+          const supportLink = safeLink(supporting.source_url, `${supporting.source || 'Additional source'} ↗`);
+          if (supportLink) card.append(supportLink);
+        }
+        analysis.append(card);
+      }
+      const forms = Array.isArray(data.attested_forms) ? data.attested_forms : [];
+      if (forms.length) {
+        const observed = addInspectorSection(`Observed forms · ${forms.length}`, morphologyHost);
+        const details = node('details', 'entry-details');
+        details.append(node('summary', '', 'Show indexed forms'), node('p', '', forms.join(' · ')));
+        observed.append(details, node('p', 'candidate-reason', 'Recorded in indexed sources; this is not a complete paradigm.'));
+      }
+      const occurrences = Array.isArray(data.occurrences) ? data.occurrences : [];
+      const shown = Math.min(occurrences.length, 12);
+      const found = addInspectorSection(`Occurrence preview · ${shown} shown`, morphologyHost);
+      if (!occurrences.length) found.append(node('p', 'inspector-message', 'No occurrence preview was returned. Search the full index for additional matches.'));
+      for (const occurrence of occurrences.slice(0, 12)) {
+        const row = node('div', 'occurrence');
+        const label = [occurrence.author, occurrence.work, occurrence.citation].filter(Boolean).join(' · ') || 'Passage';
+        if (occurrence.id) {
+          const open = node('button', '', label);
+          open.type = 'button'; open.addEventListener('click', () => openPassage(occurrence.id));
+          row.append(open);
+        } else row.append(node('span', '', label));
+        found.append(row);
+      }
+      const fullSearch = node('button', 'occurrence-search', 'Search all indexed occurrences ↗');
+      fullSearch.type = 'button';
+      fullSearch.title = 'Searches every indexed record, including reference material; clears the current author, edition, and language filters.';
+      fullSearch.addEventListener('click', () => {
+        ui.searchInput.value = form;
+        ui.authorFilter.value = '';
+        ui.edition.value = '';
+        ui.language.value = '';
+        ui.reference.checked = true;
+        ui.order.value = 'relevance';
+        setFormMode('exact');
+        search(form, 'exact');
+      });
+      found.append(fullSearch);
+      if (data.method) morphologyHost.append(node('p', 'candidate-reason', `Lookup method: ${String(data.method).replaceAll('_', ' ')}`));
+    } catch (error) {
+      if (sequence === state.wordSequence) message(morphologyHost, `Word lookup unavailable: ${errorText(error)}`, 'warning error-message');
+    }
+  }
+  function updateSelection() {
+    const selection = window.getSelection();
+    const phrase = selection?.toString().replace(/\s+/g, ' ').trim() || '';
+    const anchor = selection?.anchorNode;
+    const focus = selection?.focusNode;
+    const inside = anchor && focus && ui.text.contains(anchor) && ui.text.contains(focus);
+    if (!inside || phrase.length < 2 || phrase.length > 180) { ui.selectionActions.hidden = true; return; }
+    state.selectedText = phrase;
+    ui.selectedPhrase.textContent = `“${phrase}”`;
+    ui.selectionActions.hidden = false;
+  }
+  async function initialize() {
+    const settled = await Promise.allSettled([api('/api/status'), api('/api/authors'), api('/api/works')]);
+    if (settled[0].status === 'fulfilled') renderStatus(settled[0].value);
+    else ui.status.textContent = `Corpus status unavailable: ${errorText(settled[0].reason)}`;
+    if (settled[2].status === 'fulfilled' && Array.isArray(settled[2].value.works)) {
+      const works = settled[2].value.works;
+      for (const work of works) {
+        if (!state.works.has(work.author)) state.works.set(work.author, []);
+        state.works.get(work.author).push(work);
+      }
+      updateEditionOptions(works);
+    }
+    if (settled[1].status !== 'fulfilled') {
+      message(ui.authors, `Could not load authors: ${errorText(settled[1].reason)}`, 'warning error-message');
+      renderPassageEmpty('The corpus service is unavailable. Please try again when the index is running.', true);
+      return;
+    }
+    state.authors = Array.isArray(settled[1].value.authors) ? settled[1].value.authors : [];
+    updateAuthorOptions();
+    renderAuthors();
+    const params = new URL(location.href).searchParams;
+    if (params.get('q')) { ui.searchInput.value = params.get('q'); search(params.get('q')); }
+    if (params.get('id')) { await openPassage(params.get('id'), false); return; }
+    const preferred = state.authors.find(a => /sappho/i.test(a.author || ''))
+      || state.authors.find(a => /pindar/i.test(a.author || ''))
+      || state.authors.find(a => /bacchylides/i.test(a.author || ''))
+      || state.authors[0];
+    if (preferred) await selectAuthor(preferred.author, true);
+    else renderPassageEmpty('The corpus has no indexed authors yet.');
+  }
+
+  ui.searchForm.addEventListener('submit', event => { event.preventDefault(); search(ui.searchInput.value); });
+  for (const radio of document.querySelectorAll('input[name="search-mode"]')) radio.addEventListener('change', updateBridgeNote);
+  ui.browseToggle.addEventListener('click', () => {
+    const open = ui.browseToggle.getAttribute('aria-expanded') !== 'true';
+    ui.browseToggle.setAttribute('aria-expanded', String(open));
+    ui.browseBody.classList.toggle('open', open);
+  });
+  ui.prev.addEventListener('click', () => openPassage(state.passage?.previous_id));
+  ui.next.addEventListener('click', () => openPassage(state.passage?.next_id));
+  ui.closeResults.addEventListener('click', () => { ui.results.hidden = true; ui.passage.scrollIntoView({ behavior: 'smooth' }); });
+  ui.moreResults.addEventListener('click', () => { if (state.search) search(state.search.query, state.search.mode, true); });
+  for (const control of [ui.authorFilter, ui.edition, ui.language, ui.order, ui.reference]) control.addEventListener('change', () => {
+    if (state.search && !ui.results.hidden) search(state.search.query, state.search.mode);
+  });
+  ui.usage.addEventListener('click', () => {
+    const query = ui.searchInput.value.trim() || state.selectedText || state.activeWord?.textContent?.trim() || '';
+    if (!query) {
+      ui.searchInput.placeholder = 'Enter a word or theme to explore its usage…';
+      ui.searchInput.focus();
+      return;
+    }
+    if (window.MelosUsageSpace?.open) window.MelosUsageSpace.open(query, ui.authorFilter.value);
+    else message(ui.inspector, 'The usage view is unavailable on this page.', 'warning error-message');
+  });
+  ui.lookupForm.addEventListener('click', () => {
+    const form = ui.searchInput.value.trim();
+    if (!form) {
+      ui.searchInput.placeholder = 'Enter a Greek form or transliteration to look up…';
+      ui.searchInput.focus();
+      return;
+    }
+    if (formMode() === 'themes') {
+      message(ui.inspector, 'Choose Words or Forms before looking up a Greek form. A theme description is not a dictionary form.', 'warning');
+      ui.lookupForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+    inspectWord(form);
+    ui.lookupForm.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  });
+  ui.backToPassage.addEventListener('click', () => {
+    const target = state.activeWord?.isConnected ? state.activeWord : ui.passage;
+    target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    if (target === state.activeWord) target.focus({ preventScroll: true });
+  });
+  for (const button of ui.selectionActions.querySelectorAll('[data-phrase-mode]')) button.addEventListener('click', () => {
+    const mode = button.dataset.phraseMode;
+    ui.searchInput.value = state.selectedText;
+    setFormMode(mode);
+    search(state.selectedText, mode);
+  });
+  document.addEventListener('selectionchange', () => requestAnimationFrame(updateSelection));
+  initialize();
+})();

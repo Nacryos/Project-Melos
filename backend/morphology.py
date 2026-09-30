@@ -1,0 +1,479 @@
+"""Source-bound Greek word lookup and query normalization.
+
+This module never generates inflections or parses. It ranks only lexicon and
+treebank rows actually present in the source-derived JSONL files.
+"""
+
+from __future__ import annotations
+
+from collections import Counter, defaultdict
+from collections.abc import Callable, Iterable, Mapping
+import json
+from pathlib import Path
+import re
+import unicodedata
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+_TOKEN = re.compile(
+    r"[A-Za-z\u0370-\u03ff\u1f00-\u1fff\u0300-\u036f]+"
+    r"(?:['\u2019\u02bc\u1fbd][A-Za-z\u0370-\u03ff\u1f00-\u1fff\u0300-\u036f]+)*"
+    r"['\u2019\u02bc\u1fbd]?"
+)
+_APOSTROPHES = str.maketrans({"\u2019": "'", "\u02bc": "'", "\u1fbd": "'", "\u2018": "'", "`": "'"})
+_HOMOGRAPH_NUMBER = re.compile(r"\d+$")
+
+# AGDT's nine-slot morphological code, documented by PerseusDL at
+# https://github.com/PerseusDL/treebank_data/blob/master/AGDT2/guidelines/Greek_guidelines.md
+# (older v1.x `t`/`e` part-of-speech codes are documented in the AGDT 1.7
+# README mirrored at https://github.com/cltk/greek_treebank_perseus).
+_POSTAG_FIELDS: tuple[dict[str, str], ...] = (
+    {"n": "noun", "v": "verb", "t": "participle", "a": "adjective", "d": "adverb",
+     "l": "article", "g": "particle", "c": "conjunction", "r": "preposition",
+     "p": "pronoun", "m": "numeral", "i": "interjection", "e": "exclamation",
+     "u": "punctuation", "x": "unavailable"},
+    {"1": "first person", "2": "second person", "3": "third person"},
+    {"s": "singular", "p": "plural", "d": "dual"},
+    {"p": "present", "i": "imperfect", "r": "perfect", "l": "pluperfect",
+     "t": "future perfect", "f": "future", "a": "aorist"},
+    {"i": "indicative", "s": "subjunctive", "o": "optative",
+     "n": "infinitive", "m": "imperative", "p": "participle"},
+    {"a": "active", "p": "passive", "m": "middle", "e": "medio-passive"},
+    {"m": "masculine", "f": "feminine", "n": "neuter"},
+    {"n": "nominative", "g": "genitive", "d": "dative", "a": "accusative",
+     "v": "vocative", "l": "locative"},
+    {"c": "comparative", "s": "superlative"},
+)
+
+
+def describe_postag(code: str | None) -> str | None:
+    """Expand a documented Perseus nine-slot code, never infer a sense."""
+    if not code or len(code) != 9:
+        return None
+    parts: list[str] = []
+    for position, char in enumerate(code.lower()):
+        if char == "-":
+            continue
+        value = _POSTAG_FIELDS[position].get(char)
+        if value is None:
+            return None
+        if position == 4 and value == "participle" and code[0].lower() == "t":
+            continue
+        parts.append(value)
+    return " · ".join(parts) or None
+
+# TLG Beta Code Manual, https://stephanus.tlg.uci.edu/encoding.php
+_BETA = dict(zip("abgdez hqiklmncoprstufxyw".replace(" ", ""),
+                 "αβγδεζηθικλμνξοπρστυφχψω"))
+# ALA-LC Ancient Greek romanization as tabulated alongside ISO 843 by
+# T. T. Pedersen, https://transliteration.eki.ee/pdf/Greek.pdf . The input
+# converter accepts common unmarked alternatives (f, y, o) for retrieval;
+# it is deliberately not a reversible scholarly transliterator.
+_ROMAN_DIGRAPHS = {"th": "θ", "ph": "φ", "ch": "χ", "kh": "χ", "ps": "ψ",
+                   "rh": "ρ"}
+_ROMAN = dict(zip("abgdezhiklmnxoprstyufwqcv",
+                  "αβγδεζηικλμνξοπρστυυφωκκβ"))
+
+
+def normalize(text: str) -> str:
+    """Fold Unicode Greek accents, breathings and sigma for search keys.
+
+    Spaces and apostrophes survive. Other punctuation separates words. The
+    original text must always be stored separately from this lossy key.
+    """
+    decomposed = unicodedata.normalize("NFD", str(text).translate(_APOSTROPHES).lower())
+    chars: list[str] = []
+    for char in decomposed:
+        if unicodedata.category(char).startswith("M"):
+            continue
+        if char in "ςϲϹ":
+            char = "σ"
+        if char.isalpha() or char == "'":
+            chars.append(char)
+        else:
+            chars.append(" ")
+    return " ".join("".join(chars).split())
+
+
+def tokenize(text: str) -> list[str]:
+    """Return original-script word tokens without claiming editorial certainty."""
+    return _TOKEN.findall(text)
+
+
+def _from_beta(text: str) -> str:
+    # Beta Code accent, breathing, case, iota-subscript and punctuation marks
+    # do not affect this intentionally folded retrieval key.
+    return "".join(_BETA.get(c, " " if c.isspace() else "")
+                   for c in text.lower() if c in _BETA or c.isspace())
+
+
+def _from_roman(text: str) -> str:
+    value = unicodedata.normalize("NFD", text.translate(_APOSTROPHES).lower())
+    value = "".join(c for c in value if not unicodedata.category(c).startswith("M"))
+    out: list[str] = []
+    i = 0
+    while i < len(value):
+        pair = value[i:i + 2]
+        if pair in _ROMAN_DIGRAPHS:
+            out.append(_ROMAN_DIGRAPHS[pair])
+            i += 2
+        elif value[i] in _ROMAN:
+            out.append(_ROMAN[value[i]])
+            i += 1
+        elif value[i].isspace():
+            out.append(" ")
+            i += 1
+        elif value[i] == "'":
+            out.append("'")
+            i += 1
+        else:
+            i += 1
+    return "".join(out)
+
+
+def query_variants(q: str) -> list[str]:
+    """Greek folded key(s) for Unicode, Beta Code, or Latin-letter input.
+
+    Both ASCII conventions are retained where ambiguous. A candidate's
+    source record, not this transliteration, determines whether it is a word.
+    """
+    if not q.strip():
+        return []
+    if any("\u0370" <= c <= "\u03ff" or "\u1f00" <= c <= "\u1fff" for c in q):
+        return [normalize(q)]
+    beta = normalize(_from_beta(q))
+    roman = normalize(_from_roman(q))
+    preferred = (beta, roman) if any(c in q for c in "*/\\=()|+") else (roman, beta)
+    result = []
+    for value in preferred:
+        if value and value not in result:
+            result.append(value)
+    return result
+
+
+def _distance(a: str, b: str, cutoff: int) -> int:
+    """Levenshtein distance with length and row-minimum cutoffs."""
+    if abs(len(a) - len(b)) > cutoff:
+        return cutoff + 1
+    if a == b:
+        return 0
+    previous = list(range(len(b) + 1))
+    for i, ca in enumerate(a, 1):
+        current = [i]
+        for j, cb in enumerate(b, 1):
+            current.append(min(current[-1] + 1, previous[j] + 1,
+                               previous[j - 1] + (ca != cb)))
+        if min(current) > cutoff:
+            return cutoff + 1
+        previous = current
+    return previous[-1]
+
+
+def _trigrams(key: str) -> set[str]:
+    padded = "^" + key + "$"
+    return {padded[i:i + 3] for i in range(len(padded) - 2)}
+
+
+def _read_jsonl(path: Path) -> Iterable[dict[str, Any]]:
+    if not path.is_file():
+        return
+    with path.open("r", encoding="utf-8") as handle:
+        for line_number, line in enumerate(handle, 1):
+            if line.strip():
+                try:
+                    row = json.loads(line)
+                except json.JSONDecodeError as exc:
+                    raise ValueError(f"Invalid JSONL {path}:{line_number}") from exc
+                if not isinstance(row, dict):
+                    raise ValueError(f"Expected object at {path}:{line_number}")
+                yield row
+
+
+class Morphology:
+    """Lazy lexicon lookup; keys and trigram postings build once per process."""
+
+    def __init__(self, entries_path: str | Path = ROOT / "data/lexica/entries.jsonl",
+                 forms_path: str | Path = ROOT / "data/lexica/forms.jsonl") -> None:
+        self.entries_path = Path(entries_path)
+        self.forms_path = Path(forms_path)
+        self._loaded = False
+        self.entry_count = 0
+        self.form_count = 0
+        self._entries: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        self._forms: dict[str, list[dict[str, Any]]] = defaultdict(list)
+        self._lemma_forms: dict[str, set[str]] = defaultdict(set)
+        self._grams: dict[str, set[str]] = defaultdict(set)
+        self._short: dict[tuple[int, str], set[str]] = defaultdict(set)
+
+    def _load(self) -> None:
+        if self._loaded:
+            return
+        for row in _read_jsonl(self.entries_path):
+            lemma = row.get("lemma")
+            if not isinstance(lemma, str) or not lemma.strip():
+                continue
+            self._entries[normalize(lemma)].append(row)
+            self.entry_count += 1
+        seen_forms: set[tuple[str, str, str, str, str]] = set()
+        for row in _read_jsonl(self.forms_path):
+            form = row.get("form")
+            lemma = row.get("lemma")
+            if not isinstance(form, str) or not form.strip() or not isinstance(lemma, str) or not lemma.strip():
+                continue
+            form_key = normalize(form)
+            lemma_key = normalize(lemma)
+            self._lemma_forms[lemma_key].add(form)
+            self.form_count += 1
+            identity = (form_key, form, lemma, str(row.get("analysis")), str(row.get("source_url")))
+            if identity in seen_forms:
+                continue
+            seen_forms.add(identity)
+            # Raw JSONL keeps every token and its precise source location.
+            # Lookup needs one copy of each attested reading, never its count.
+            self._forms[form_key].append({field: row.get(field) for field in
+                                           ("form", "lemma", "lemma_raw", "analysis", "analysis_format",
+                                            "source", "source_url", "quality")})
+        for key in self._forms.keys() | self._entries.keys():
+            if len(key) < 5:
+                self._short[(len(key), key[:1])].add(key)
+            else:
+                for gram in _trigrams(key):
+                    self._grams[gram].add(key)
+        self._loaded = True
+
+    def counts(self) -> dict[str, int]:
+        self._load()
+        return {"entries": self.entry_count, "forms": self.form_count}
+
+    def forms_for_lemma(self, lemma: str) -> list[str]:
+        """Attested spellings for a headword, with no generated paradigms."""
+        self._load()
+        result: set[str] = set()
+        for key in query_variants(lemma):
+            result.update(self._lemma_forms.get(key, ()))
+        return sorted(result, key=lambda form: (normalize(form), form))
+
+    def _near_keys(self, key: str, cutoff: int) -> list[tuple[int, str]]:
+        pool: set[str] = set()
+        if len(key) < 5:
+            for length in range(max(1, len(key) - cutoff), len(key) + cutoff + 1):
+                pool.update(self._short.get((length, key[:1]), ()))
+        else:
+            grams = sorted(_trigrams(key), key=lambda gram: len(self._grams.get(gram, ())))
+            for gram in grams[:5]:
+                pool.update(self._grams.get(gram, ()))
+            # Short keys may be within two edits of a five/six-letter query.
+            if len(key) <= 6:
+                for length in range(max(1, len(key) - cutoff), 5):
+                    pool.update(self._short.get((length, key[:1]), ()))
+        return sorted((d, candidate) for candidate in pool
+                      if (d := _distance(key, candidate, cutoff)) <= cutoff)[:80]
+
+    def analyze(self, form: str, passage: str | Mapping[str, Any] | None = None,
+                occurrence_lookup: Callable[[str, int], list[dict[str, Any]]] | None = None,
+                limit: int = 12) -> dict[str, Any]:
+        self._load()
+        variants = query_variants(form)
+        normalized = variants[0] if variants else ""
+        limit = max(1, min(int(limit), 50))
+        context = dict(passage) if isinstance(passage, Mapping) else ({"text": passage} if passage else None)
+        occurrences: list[dict[str, Any]] = []
+        if occurrence_lookup and normalized:
+            occurrences = occurrence_lookup(normalized, 30)
+        annotated: dict[tuple[str, str], tuple[bool, bool]] = defaultdict(lambda: (False, False))
+        passage_id = context.get("id") if context else None
+        author_id = context.get("author_id") if context else None
+        for row in occurrences:
+            if not isinstance(row, dict) or not row.get("lemma") or not row.get("analysis"):
+                continue
+            identity = (normalize(str(row["lemma"])), str(row["analysis"]))
+            in_passage, same_author = annotated[identity]
+            in_passage |= bool(passage_id and row.get("passage_id") == passage_id)
+            # A display-name match is not provenance. Same-author support
+            # requires source-backed identifiers in both records.
+            same_author |= bool(author_id and row.get("author_id") == author_id
+                                and row.get("source_url"))
+            annotated[identity] = (in_passage, same_author)
+
+        matches: dict[str, tuple[int, int]] = {}
+        for variant_index, key in enumerate(variants):
+            matches.setdefault(key, (0, variant_index))
+        if not any(key in self._forms or key in self._entries for key in matches):
+            for variant_index, key in enumerate(variants):
+                cutoff = 1 if len(key) < 6 else 2
+                for distance, near in self._near_keys(key, cutoff):
+                    old = matches.get(near)
+                    if old is None or (distance, variant_index) < old:
+                        matches[near] = (distance, variant_index)
+
+        numbered: dict[tuple[str, str], set[str]] = defaultdict(set)
+        for key in matches:
+            for row in self._forms.get(key, ()):
+                lemma_nfc = unicodedata.normalize("NFC", str(row["lemma"]))
+                raw_nfc = unicodedata.normalize("NFC", str(row.get("lemma_raw") or lemma_nfc))
+                if raw_nfc.startswith(lemma_nfc) and (marker := _HOMOGRAPH_NUMBER.search(raw_nfc[len(lemma_nfc):])):
+                    numbered[(lemma_nfc, str(row.get("analysis")))].add(marker.group())
+        ranked: list[tuple[tuple[Any, ...], tuple[str, str, str, str], dict[str, Any]]] = []
+        for key, (distance, variant_index) in matches.items():
+            for kind, rows in (("form", self._forms.get(key, ())), ("lemma", self._entries.get(key, ()))):
+                for row in rows:
+                    lemma = unicodedata.normalize("NFC", str(row.get("lemma", "")))
+                    analysis = row.get("analysis") if kind == "form" else None
+                    source_url = row.get("source_url")
+                    raw_lemma = unicodedata.normalize("NFC", str(row.get("lemma_raw") or lemma))
+                    suffix = (raw_lemma[len(lemma):] if raw_lemma.startswith(lemma) else "")
+                    marker = suffix if suffix.isdigit() else ""
+                    if not marker and len(numbered.get((lemma, str(analysis)), ())) == 1:
+                        marker = next(iter(numbered[(lemma, str(analysis))]))
+                    group = (kind, lemma, marker,
+                             str(analysis) if kind == "form" else str(row.get("entry_id", "")))
+                    if kind == "lemma":
+                        possible_entries = [row]
+                        gloss_row = row
+                    else:
+                        entries = self._entries.get(normalize(lemma), ())
+                        exact_entries = [item for item in entries if
+                                         unicodedata.normalize("NFC", str(item.get("lemma", ""))) ==
+                                         unicodedata.normalize("NFC", lemma)]
+                        possible_entries = exact_entries or entries
+                        source_counts = Counter(str(item.get("source")) for item in possible_entries)
+                        # LSJ and Autenrieth may each have one entry for a
+                        # lemma; use the first only as a display default.
+                        # Same-source homographs have no chosen gloss.
+                        gloss_row = (possible_entries[0] if possible_entries and
+                                     max(source_counts.values()) == 1 else None)
+                    exact_surface = int(str(row.get("form", lemma)) == form)
+                    matched_form = str(row.get("form", lemma))
+                    passage_support, author_support = annotated[(normalize(lemma), str(analysis))]
+                    reasons = []
+                    if distance:
+                        source_label = "indexed source form" if kind == "form" else "lexicon headword"
+                        reasons.append(f"possible spelling match ({distance} edit{'s' if distance != 1 else ''})"
+                                       f" to {source_label} {matched_form}")
+                    elif variant_index:
+                        reasons.append("alternate transliteration")
+                    elif exact_surface:
+                        reasons.append("exact indexed source form" if kind == "form" else "exact lexicon headword")
+                    else:
+                        reasons.append("diacritic/sigma-folded attested form" if kind == "form" else "diacritic/sigma-folded headword")
+                    if passage_support:
+                        reasons.append("annotated parse in this passage")
+                    elif author_support:
+                        reasons.append("annotated parse in this author's corpus")
+                    candidate: dict[str, Any] = {"lemma": lemma, "analysis": analysis,
+                                                 "matched_form": matched_form,
+                                                 "matched_form_variants": [matched_form],
+                                                 "match_kind": "indexed_form" if kind == "form" else "lexicon_headword",
+                                                 "edit_distance": distance,
+                                                 "gloss": gloss_row.get("gloss") if gloss_row else row.get("gloss"),
+                                                 "entry_text": gloss_row.get("entry_text") if gloss_row else None,
+                                                 "source_url": source_url,
+                                                 "source": row.get("source"),
+                                                 "analysis_format": row.get("analysis_format"),
+                                                 "analysis_text": (describe_postag(str(analysis)) if
+                                                    kind == "form" and "Perseus treebank" in
+                                                    str(row.get("analysis_format", "")) else None),
+                                                 "quality": row.get("quality"),
+                                                 "supporting_sources": [],
+                                                 "lemma_raw_variants": [str(row.get("lemma_raw") or row.get("lemma"))],
+                                                 "lexicon_entry_ids": [str(item.get("id") or
+                                                     f"{item.get('source_url')}#{item.get('entry_id')}")
+                                                     for item in possible_entries],
+                                                 "reason": "; ".join(reasons)}
+                    if gloss_row:
+                        candidate["gloss_entry_id"] = str(gloss_row.get("id") or
+                            f"{gloss_row.get('source_url')}#{gloss_row.get('entry_id')}")
+                    if kind == "form":
+                        candidate["attested_form"] = row.get("form")
+                        if row.get("lemma_raw") and row.get("lemma_raw") != lemma:
+                            candidate["lemma_raw"] = row.get("lemma_raw")
+                    elif row.get("entry_id"):
+                        candidate["entry_id"] = row.get("entry_id")
+                    if gloss_row and gloss_row.get("source_url") != source_url:
+                        candidate["gloss_source_url"] = gloss_row.get("source_url")
+                        candidate["gloss_source"] = gloss_row.get("source")
+                    sort_key = (distance, -int(passage_support), -int(author_support), -exact_surface,
+                                variant_index, 0 if kind == "form" else 1,
+                                lemma, str(analysis), str(source_url), str(row.get("entry_id", "")))
+                    ranked.append((sort_key, group, candidate))
+        ranked.sort(key=lambda item: item[0])
+        grouped: dict[tuple[str, str, str, str], dict[str, Any]] = {}
+        for _, group, candidate in ranked:
+            source = {field: candidate.get(field) for field in
+                      ("source", "source_url", "analysis_format", "quality")}
+            if group not in grouped:
+                grouped[group] = candidate
+            existing = grouped[group]
+            if source["source_url"] and source not in existing["supporting_sources"]:
+                existing["supporting_sources"].append(source)
+            for raw_variant in candidate["lemma_raw_variants"]:
+                if raw_variant not in existing["lemma_raw_variants"]:
+                    existing["lemma_raw_variants"].append(raw_variant)
+            for matched_variant in candidate["matched_form_variants"]:
+                if matched_variant not in existing["matched_form_variants"]:
+                    existing["matched_form_variants"].append(matched_variant)
+            if not existing.get("lemma_raw") and candidate.get("lemma_raw"):
+                existing["lemma_raw"] = candidate["lemma_raw"]
+        candidates = list(grouped.values())[:limit]
+        lexicon_entries: dict[str, dict[str, Any]] = {}
+        try:
+            from .lexicon_render import render_source_record
+        except ImportError:
+            render_source_record = None
+        for candidate in candidates:
+            for entry in self._entries.get(normalize(candidate["lemma"]), ()):
+                entry_id = str(entry.get("id") or
+                               f"{entry.get('source_url')}#{entry.get('entry_id')}")
+                if entry_id not in candidate["lexicon_entry_ids"]:
+                    continue
+                display_entry = {field: entry.get(field) for field in
+                                             ("id", "entry_id", "lemma", "gloss", "entry_text",
+                                              "source", "source_url", "entry_url")}
+                if render_source_record:
+                    display_entry.update(render_source_record(entry))
+                else:
+                    display_entry.update({"rendered_entry_text": None,
+                                          "rendering_method": None,
+                                          "rendering_warning": "The Beta Code renderer is unavailable."})
+                lexicon_entries[entry_id] = display_entry
+        for candidate in candidates:
+            entry = lexicon_entries.get(candidate.get("gloss_entry_id"))
+            candidate["rendered_entry_text"] = entry.get("rendered_entry_text") if entry else None
+            candidate["rendering_method"] = entry.get("rendering_method") if entry else None
+        attested_forms: set[str] = set()
+        for candidate in candidates:
+            attested_forms.update(self._lemma_forms.get(normalize(candidate["lemma"]), ()))
+        attested_forms = set(sorted(attested_forms, key=lambda item: (normalize(item), item))[:100])
+        warnings = []
+        fuzzy_only = bool(candidates) and all(candidate["edit_distance"] > 0 for candidate in candidates)
+        if fuzzy_only:
+            warnings.append("No exact indexed morphological analysis was found for this form. The following analyses belong to nearby spellings, not necessarily the queried form.")
+        if not self.form_count:
+            warnings.append("No attested form index is available; only sourced headwords can be returned.")
+        if not candidates:
+            warnings.append("No sourced parsing or headword match was found.")
+        if context and candidates and not any(in_passage for in_passage, _ in annotated.values()):
+            warnings.append("Context shown; these analyses are alternatives, not a resolved sense.")
+        if candidates:
+            warnings.append("Listed forms come only from indexed source texts, not a complete dialect paradigm.")
+        if any(entry.get("rendering_warning") for entry in lexicon_entries.values()):
+            warnings.append("Some dictionary display text could not be rendered from local TEI; raw entry text remains available.")
+        analysis_match_status = (
+            "spelling_suggestions_only" if fuzzy_only else
+            "source_analysis_available" if any(candidate["analysis"] for candidate in candidates) else
+            "headword_only" if candidates else "no_match"
+        )
+        return {"form": form, "normalized": normalized,
+                "match_status": "spelling_suggestions_only" if fuzzy_only else
+                    ("indexed_match" if candidates else "no_match"),
+                "analysis_match_status": analysis_match_status,
+                "candidates": candidates,
+                "lexicon_entries": list(lexicon_entries.values()),
+                "attested_forms": sorted(attested_forms, key=lambda item: (normalize(item), item)),
+                "occurrences": occurrences, "context": context,
+                "method": "attested-form lookup with folded/transliterated keys and bounded edit distance",
+                "warnings": warnings}
+
+
+__all__ = ["Morphology", "normalize", "tokenize", "query_variants", "describe_postag"]

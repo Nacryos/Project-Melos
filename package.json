@@ -1,0 +1,13 @@
+{
+  "name": "melos-frontend",
+  "private": true,
+  "version": "0.0.0",
+  "description": "Static frontend build for the Melos research reader",
+  "scripts": {
+    "build": "node scripts/build_frontend.mjs",
+    "build:preview": "node scripts/build_frontend.mjs --local-preview"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

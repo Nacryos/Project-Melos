@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#14223a">
+  <title>Reader · Melos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/reader.css?v=p2-20260930">
+</head>
+<body>
+  <a class="skip-link" href="#passage">Skip to passage</a>
+  <header class="bar">
+    <a class="mark" href="./" aria-label="Melos, home"><span class="mark-gr" lang="grc">Μέλος</span><span class="mark-en">a lexicon of archaic Greek lyric</span></a>
+    <nav aria-label="Main navigation"><a href="#reader">Reader</a><a href="#collection">Poets &amp; works</a><a href="legacy">Design studio</a></nav>
+  </header>
+  <section class="hero reader-hero" id="top" aria-label="Explore the lyric corpus">
+    <div class="stage"><canvas id="dither" aria-hidden="true"></canvas><img id="fallback" alt="" hidden></div>
+    <div class="scrim" aria-hidden="true"></div><div class="shade-blur" aria-hidden="true"></div><div class="shade" aria-hidden="true"></div>
+    <div class="hero-copy">
+      <blockquote class="verse" id="verse" aria-live="polite"><p id="verse-gr" lang="grc"></p><footer><span id="verse-tr"></span> <cite id="verse-cite"></cite></footer></blockquote>
+      <form class="search" id="search-form" role="search" autocomplete="off"><label class="sr" for="search-input">Search Greek, Latin, or English</label><input id="search-input" name="q" type="search" spellcheck="false" placeholder="Search Greek, Beta Code or English — try λύσιμελής, glukupikros, moon"><button type="submit">Search</button></form>
+      <div class="search-options"><fieldset class="mode-picker"><legend>Search by</legend><label><input type="radio" name="search-mode" value="hybrid" checked><span>All evidence</span></label><label><input type="radio" name="search-mode" value="exact"><span>Exact words</span></label><label><input type="radio" name="search-mode" value="fuzzy"><span>Fuzzy words</span></label><label><input type="radio" name="search-mode" value="forms"><span>Forms</span></label><label><input type="radio" name="search-mode" value="themes"><span>Themes</span></label></fieldset><p class="bridge-note" id="bridge-note">English searches may use translations or commentary as a bridge. Results identify the indexed text.</p></div>
+    </div>
+    <figure class="plate"><figcaption id="caption"></figcaption><div class="thumbs" id="thumbs" role="tablist" aria-label="Paintings"></div></figure>
+    <button class="tune-toggle" id="tune-toggle" type="button" aria-expanded="false" aria-controls="tune">Adjust dither</button>
+    <aside class="tune" id="tune" hidden aria-label="Dither settings">
+      <div class="tune-head"><h2>Dither</h2><label class="switch"><input type="checkbox" id="p-on" checked> On <kbd>D</kbd></label><button type="button" class="tune-close" id="tune-close">Done</button></div>
+      <label>Palette<select id="p-palette"><option value="levels">Full colour (quantised)</option><option value="aegean">Aegean</option><option value="lapis">Lapis &amp; gold</option><option value="krokos">Saffron</option><option value="marble">Marble &amp; ink</option></select></label>
+      <label>Bayer matrix<select id="p-matrix"><option value="8">8 × 8</option><option value="4">4 × 4</option><option value="2">2 × 2</option></select></label>
+      <label>Pixel size <output for="p-cell"></output><input type="range" id="p-cell" min="1" max="10" step="1"></label>
+      <label>Levels per channel <output for="p-levels"></output><input type="range" id="p-levels" min="2" max="8" step="1"></label>
+      <label>Dither strength <output for="p-spread"></output><input type="range" id="p-spread" min="0" max="1.5" step="0.05"></label>
+      <label>Colour boost <output for="p-sat"></output><input type="range" id="p-sat" min="0" max="2.5" step="0.05"></label>
+      <label>Contrast <output for="p-con"></output><input type="range" id="p-con" min="0.5" max="1.8" step="0.05"></label>
+      <label>Brightness <output for="p-bri"></output><input type="range" id="p-bri" min="-0.3" max="0.3" step="0.01"></label>
+      <label>Blend with original <output for="p-amount"></output><input type="range" id="p-amount" min="0" max="1" step="0.05"></label>
+      <label>Reveal lens <output for="p-lens"></output><input type="range" id="p-lens" min="0" max="320" step="10"></label>
+      <h3>Behind the text</h3>
+      <label>Shadow <output for="p-shade"></output><input type="range" id="p-shade" min="0" max="1" step="0.05"></label>
+      <label>Shadow blur <output for="p-blur"></output><input type="range" id="p-blur" min="0" max="12" step="0.5"></label>
+      <h3>Mosaic depth</h3>
+      <label>Tile bevel <output for="p-bevel"></output><input type="range" id="p-bevel" min="0" max="1.2" step="0.05"></label>
+      <label>Figure outline bevel <output for="p-edge"></output><input type="range" id="p-edge" min="0" max="3" step="0.05"></label>
+      <label>Cast shadows <output for="p-relief"></output><input type="range" id="p-relief" min="0" max="1" step="0.05"></label>
+      <label>Atmospheric depth <output for="p-aerial"></output><input type="range" id="p-aerial" min="0" max="0.7" step="0.05"></label>
+      <label>Tile unevenness <output for="p-tilt"></output><input type="range" id="p-tilt" min="0" max="0.3" step="0.01"></label>
+      <label>Grout <output for="p-grout"></output><input type="range" id="p-grout" min="0" max="1" step="0.05"></label>
+      <label>Parallax with pointer <output for="p-parallax"></output><input type="range" id="p-parallax" min="0" max="24" step="1"></label>
+      <h3>Changing painting</h3>
+      <label>Length <output for="p-dur"></output><input type="range" id="p-dur" min="0.8" max="4" step="0.1"></label>
+      <label>Ripple crest <output for="p-glow"></output><input type="range" id="p-glow" min="0" max="0.35" step="0.01"></label>
+      <div class="tune-actions"><button type="button" id="p-reset">Reset</button><button type="button" id="p-copy">Copy settings</button><button type="button" id="p-save">Save PNG</button></div>
+    </aside>
+  </section>
+  <div class="utility-bar" id="reader"><div class="utility-inner"><span id="corpus-status">Connecting to the corpus…</span><div class="filter-controls"><label for="author-filter">Author <select id="author-filter"><option value="">All authors</option></select></label><label for="edition-filter">Edition <select id="edition-filter"><option value="">All editions</option></select></label><label for="language-filter">Language <select id="language-filter"><option value="">Any</option><option value="grc">Greek</option><option value="eng">English</option><option value="lat">Latin</option></select></label><label for="order-filter">Order <select id="order-filter"><option value="relevance">Relevance</option><option value="chronological">Author date</option></select></label><label class="reference-toggle"><input id="reference-filter" type="checkbox"> Include reference material</label></div><button id="open-usage" type="button" class="text-action">Explore usage space <span aria-hidden="true">↗</span></button></div></div>
+  <main class="reader-layout">
+    <aside class="corpus-panel" id="collection" aria-labelledby="browse-title"><div class="panel-top"><div><span class="eyebrow">THE COLLECTION</span><h2 id="browse-title">Browse the corpus</h2></div><button id="browse-toggle" class="mobile-toggle" type="button" aria-expanded="false" aria-controls="browse-body">Browse <span aria-hidden="true">⌄</span></button></div><div id="browse-body" class="browse-body"><div class="browse-heading"><span>POETS &amp; WORKS</span><span id="author-count"></span></div><div id="author-list" class="author-list" aria-live="polite"><p class="panel-placeholder">Loading authors…</p></div></div><div class="browse-foot"><span class="tiny-asterisk">✳</span> Source texts and reference material retain their collection labels.</div></aside>
+    <section class="reading-column" aria-label="Reading desk"><div id="search-results" class="search-results" hidden><div class="results-top"><div><span class="eyebrow">DISCOVERY</span><h2 id="results-heading">Search results</h2><p id="results-summary"></p></div><button id="close-results" type="button" class="quiet-button">Return to reading <span aria-hidden="true">×</span></button></div><div id="results-list" class="results-list"></div><button id="more-results" type="button" class="more-button" hidden>Load more results <span aria-hidden="true">↓</span></button></div>
+      <article id="passage" class="passage-card" tabindex="-1" aria-labelledby="passage-title"><div class="passage-heading"><div><span class="eyebrow" id="passage-kicker">A TEXT IN THE COLLECTION</span><h2 id="passage-title">Opening the reader</h2><p id="passage-subtitle" class="passage-subtitle">The first available source text will appear here.</p></div><div class="passage-counter" id="passage-counter" aria-hidden="true">Μ</div></div><div class="passage-body"><div class="text-frame"><div class="text-leading" id="text-leading">TEXT</div><div id="passage-text" class="greek-text" lang="grc"><p class="loading-line">Loading a passage from the corpus…</p></div></div><div id="selection-actions" class="selection-actions" hidden><span id="selected-phrase"></span><button type="button" data-phrase-mode="exact">Same wording</button><button type="button" data-phrase-mode="forms">Related word forms</button><button type="button" data-phrase-mode="themes">Similar theme</button></div><p class="reading-hint" id="reading-hint">Select a phrase to trace it, or choose a Greek word to inspect it.</p></div><div id="related-material" class="related-material" hidden></div><div id="provenance" class="provenance" hidden></div><div class="passage-nav"><button id="prev-passage" type="button" disabled><span aria-hidden="true">←</span> Previous passage</button><span class="passage-nav-label">THROUGH THE TEXT</span><button id="next-passage" type="button" disabled>Next passage <span aria-hidden="true">→</span></button></div></article></section>
+    <aside class="inspector" aria-labelledby="inspector-title"><div class="inspector-sticky"><span class="eyebrow">CLOSE READING</span><h2 id="inspector-title">At a glance</h2><div class="inspector-tools"><button id="lookup-form" class="lookup-action" type="button">Look up entered form <span aria-hidden="true">↗</span></button><button id="back-to-passage" class="back-to-passage" type="button">← Back to passage</button></div><div id="inspector-content"><div class="inspector-empty"><span class="inspector-symbol" lang="grc">α</span><p>Choose a Greek word in the passage. Its recorded forms, possible analyses, and sources will appear here.</p></div></div></div></aside>
+  </main>
+  <footer class="reader-footer"><div><span lang="grc">Μέλος</span><p>Reading the record, one surviving line at a time.</p><p id="hero-credits"></p></div><a href="legacy">Design studio <span aria-hidden="true">↗</span></a></footer>
+  <script src="js/config.js?v=p2-20260930"></script>
+  <script src="js/api.js?v=p2-20260930"></script>
+  <script src="js/usage-space.js?v=p2-20260930" defer></script>
+  <script src="js/reader.js?v=p2-20260930" defer></script>
+  <script type="module" src="js/reader-hero.js?v=p2-20260930"></script>
+</body>
+</html>
