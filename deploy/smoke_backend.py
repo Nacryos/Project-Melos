@@ -1,11 +1,14 @@
 """Bounded hosted read-endpoint checks and timings; no paid classifier calls."""
+import argparse
 import json
 import time
 from urllib.error import HTTPError
 from urllib.parse import urlencode
 from urllib.request import urlopen, Request
 
-BASE = 'http://127.0.0.1:8791'
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--origin', default='http://127.0.0.1:8791')
+BASE = parser.parse_args().origin.rstrip('/')
 
 
 def get(path, **params):

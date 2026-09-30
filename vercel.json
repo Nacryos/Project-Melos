@@ -3,11 +3,16 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "rewrites": [
+    { "source": "/api/:path*", "destination": "https://basecamp.taila44c41.ts.net:8443/api/:path*" },
     { "source": "/reader.html", "destination": "/index.html" },
     { "source": "/legacy", "destination": "/design-studio.html" },
     { "source": "/design-studio", "destination": "/design-studio.html" }
   ],
   "headers": [
+    {
+      "source": "/api/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
+    },
     {
       "source": "/js/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "no-cache" }]

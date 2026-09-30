@@ -20,6 +20,16 @@ test('local default keeps same-origin API behavior', () => {
 test('configured origin routes API requests to the separate host', () => {
   assert.equal(apiContext({ MELOS_API_ORIGIN: 'https://api.example.com' }).melosApiUrl('/api/status').href, 'https://api.example.com/api/status');
 });
+
+test('production API proxy targets only Melos and disables response caching', () => {
+  const config = JSON.parse(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
+  const apiRoutes = config.rewrites.filter(route => route.source.startsWith('/api'));
+  assert.deepEqual(apiRoutes, [{ source: '/api/:path*', destination: 'https://basecamp.taila44c41.ts.net:8443/api/:path*' }]);
+  const headers = config.headers.find(rule => rule.source === '/api/(.*)').headers;
+  assert.ok(headers.some(header => header.key === 'Cache-Control' && header.value === 'no-store'));
+  assert.equal(apiContext({ MELOS_API_ORIGIN: 'https://greeklyric.com' }).melosApiUrl('/api/status').href,
+    'https://greeklyric.com/api/status');
+});
 test('frontend-only mode prevents all API network calls', () => {
   const api = apiContext({ MELOS_FRONTEND_ONLY: true });
   assert.throws(() => api.melosApiUrl('/api/status'), /corpus service is not connected/);

@@ -34,11 +34,12 @@ Vercel project configuration follows its [build and output directory](https://ve
 
 - Vercel project: `nacryos-projects/project-melos`, connected to `Nacryos/Project-Melos` on GitHub.
 - Custom domain: <https://greeklyric.com>; Vercel alias: <https://project-melos.vercel.app>.
-- Production and Preview environments explicitly set `MELOS_FRONTEND_ONLY=1`. No hosted corpus API is connected, and no Jev credential is installed in this frontend project.
-- HTTPS root, design studio, configuration script, and a fingerprinted painting asset returned HTTP 200. JavaScript is `no-cache`; fingerprinted paintings have the one-year immutable cache policy. The live browser displays the preview notice and disables corpus controls.
+- Production and Preview environments set `MELOS_API_ORIGIN=https://greeklyric.com`. `MELOS_FRONTEND_ONLY` is removed; the generated configuration sets it to `false`. No Jev credential is installed in this frontend project.
+- `vercel.json` proxies only `/api/*` to the hosted Melos service. Browser traffic uses ordinary HTTPS on greeklyric.com, without requiring a tailnet connection or access to outbound port 8443. API responses are `no-store`.
+- HTTPS root, design studio, configuration script, and a fingerprinted painting asset returned HTTP 200. JavaScript is `no-cache`; fingerprinted paintings have the one-year immutable cache policy. The connected configuration removes the preview notice and enables corpus controls.
 - `.env`, `.env.local`, database files, source paintings, and model/index files were excluded from the CLI upload. The static build uses its own explicit output allowlist.
 
-The frontend is not yet connected to the backend described below. Do not describe the frontend-only release as a functioning public dictionary.
+The frontend and backend are connected. Public API checks run with `python deploy/smoke_backend.py --origin https://greeklyric.com`. The desktop/mobile design was visually checked before connection; the final connected-browser automation attempt timed out, so it is not recorded as a completed visual click-through test.
 
 ## Basecamp backend (2026-09-30)
 
@@ -52,11 +53,11 @@ The backend now runs on the existing Hetzner Basecamp machine in `/home/alvin/se
 - Publication: the owner explicitly selected `MELOS_PUBLICATION_POLICY=source-labels`. This overrides only conservative publication filtering. Source labels, including unknown rights, are preserved; provenance/hash acceptance checks remain enforced. This selection is not a conclusion that every public source grants redistribution permission.
 - Paid classification: `MELOS_PUBLIC_DEPLOYMENT=1` still blocks `/api/classify-context` with HTTP 403 regardless of publication policy. No API key is shipped in the image or frontend.
 
-### Remaining network step
+### Public network route
 
-Tailscale Funnel requires owner enablement. The intended public endpoint uses HTTPS port **8443** forwarding only to `http://127.0.0.1:8791`. Basecamp's existing port-443 console must remain tailnet-only. Never replace the existing port-443 service with a default Funnel command.
+The owner enabled Tailscale Funnel. The public endpoint `https://basecamp.taila44c41.ts.net:8443` forwards only to `http://127.0.0.1:8791`. Basecamp's existing port-443 console was verified to remain tailnet-only. Never replace that private console with a default Funnel command.
 
-After approval, run `tailscale funnel --bg --https=8443 --yes http://127.0.0.1:8791` on Basecamp, inspect `tailscale serve status` and `tailscale funnel status`, and verify the resulting public HTTPS API from outside the tailnet. Then configure that exact origin in Vercel, remove `MELOS_FRONTEND_ONLY`, redeploy, and verify public browser search. Until then the production frontend stays explicitly in preview mode.
+Activation used existing key-based administrator access, without changing any password or granting new operator privileges: `tailscale funnel --bg --https=8443 --yes http://127.0.0.1:8791`. The public relay was checked independently of tailnet DNS, followed by the Vercel proxy at `https://greeklyric.com/api/status`. Only the Melos Funnel can be stopped with `tailscale funnel --https=8443 off`; this leaves port 443 unchanged. The persisted background configuration and container restart policy keep Melos running independently of the local computer.
 
 ### Maintenance
 
