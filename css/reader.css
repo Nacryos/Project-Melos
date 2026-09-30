@@ -59,7 +59,7 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
    changing browser chrome. The scrolling list fills the available space rather
    than stopping at a fixed 210px subtraction from the viewport. */
 @media(min-width:701px){
-  .corpus-panel{position:sticky;top:12px;height:calc(100vh - 24px);height:calc(100dvh - 24px);display:flex;flex-direction:column;padding-top:18px;padding-bottom:8px;min-height:0}
+  .corpus-panel{position:sticky;top:12px;height:calc(100vh - 24px);height:calc(100dvh - 24px - env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;padding-top:18px;padding-bottom:8px;min-height:0}
   .corpus-panel .panel-top{flex:none}
   .corpus-panel .panel-top h2{margin-bottom:20px}
   .corpus-panel .browse-body{flex:1;min-height:0;max-height:none}
