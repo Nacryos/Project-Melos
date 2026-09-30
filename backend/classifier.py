@@ -15,7 +15,7 @@ from typing import Any, Mapping, Protocol, Sequence
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from .textutils import normalize, tokenize
+from .textutils import normalize, search_text, tokenize
 
 
 JEV_ENDPOINT = "https://api.typesafe.ai/v1/systemone"
@@ -177,7 +177,7 @@ def build_evidence_packet(
         "form": form,
         "passage": {k: context.get(k) for k in
                     ("id", "text", "author", "author_id", "work", "citation",
-                     "language", "kind", "source_url") if context.get(k) is not None},
+                     "language", "kind", "quality", "edition", "source_url") if context.get(k) is not None},
         "candidates": options,
         **groups,
         "constraints": [
@@ -187,6 +187,7 @@ def build_evidence_packet(
             "A nearby spelling is a correction suggestion, not a parse of the queried form.",
             "An equivalent form or listed entry is an alternative relation, not an attested parse in this passage.",
             "A computationally matching context in another edition is a comparison only: its source claim belongs to the original source passage, not proof of edition identity or direct target-passage attestation.",
+            "The original passage preserves editorial signs and uncertainty. A search-only diacritic fold or explicit line-division join establishes a lookup match, not secure letters, restored text, or an attested editorial reading; respect the supplied quality and edition.",
             "Preserve conflicting interpretations; abstain if evidence does not resolve them.",
         ],
         "warnings": warnings,
@@ -311,7 +312,12 @@ def classify_context(
     if not context.get("text") or context.get("language", "grc") != "grc" or context.get("kind", "text") != "text":
         result["reason"] = "An original Greek text passage is required."
         return result
-    if normalize(form) not in {normalize(token) for token in tokenize(str(context["text"]))}:
+    # Normalize only a lookup copy, before tokenizing: combining underdots and
+    # other marks must not split a word into spurious tokens. search_text joins
+    # explicit Greek line divisions only; brackets, lacunae and digits remain
+    # boundaries. The model still receives the unchanged editorial passage.
+    context_tokens = tokenize(normalize(search_text(str(context['text']))))
+    if normalize(form) not in set(context_tokens):
         result["reason"] = "The queried form does not occur as a token in the supplied Greek passage."
         return result
     if not packet["candidates"]:

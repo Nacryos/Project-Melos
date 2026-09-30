@@ -2,6 +2,7 @@
 
 import io
 import json
+import unicodedata
 from copy import deepcopy
 from unittest.mock import patch
 
@@ -351,6 +352,45 @@ def test_relation_candidates_keep_semantics_in_packet_and_choice_descriptions():
     assert 'analysis' not in criteria['parse_b']
     assert set(criteria) == {'parse_a', 'parse_b', 'abstain'}
     assert 'source_references' not in criteria['parse_b']  # Full provenance stays in state.
+
+
+def test_occurrence_guard_accepts_explicit_line_division_without_editing_source():
+    original = 'φωνεί-\r\n  σας'
+    passage = {**PASSAGE, 'text': original, 'quality': 'source_transcription',
+               'edition': {'title': 'Synthetic fixture edition', 'uncertain': True}}
+    provider = StubProvider('parse_a')
+    result = classify_context('φωνείσας', passage, CANDIDATES, provider=provider)
+    assert provider.called
+    assert result['packet']['passage']['text'] == original
+    assert result['packet']['passage']['quality'] == passage['quality']
+    assert result['packet']['passage']['edition'] == passage['edition']
+    assert 'not secure letters, restored text' in ' '.join(result['packet']['constraints'])
+
+
+def test_occurrence_guard_handles_combining_marks_before_tokenization():
+    # Purely synthetic spellings to exercise Unicode handling, not attestations.
+    for original in ('ἄ\u0323μμι', unicodedata.normalize('NFD', 'ἄ\u0323μμι'),
+                     'α\u0323β', 'άβ', 'α\u0301β'):
+        query = 'ἄμμι' if 'μ' in original else 'αβ'
+        passage = {**PASSAGE, 'text': original}
+        provider = StubProvider('parse_a')
+        result = classify_context(query, passage, CANDIDATES, provider=provider)
+        assert provider.called, (original, result['reason'])
+        assert result['packet']['passage']['text'] == original
+
+
+def test_occurrence_guard_does_not_join_editorial_gaps_or_non_layout_boundaries():
+    for original in ('φωνεί- σας', 'φωνεί\nσας', 'φωνεί-\n[σας]',
+                     'φωνεί-\n4 σας', 'φωνεί-\n\nσας', 'φωνεί—\nσας',
+                     'φωνεί-\n…σας', 'φωνεί[σ]ας', 'φωνεί2σας',
+                     'φωνεί[…]σας', 'φωνεί-\n.σας'):
+        provider = StubProvider('parse_a')
+        result = classify_context('φωνείσας', {**PASSAGE, 'text': original},
+                                  CANDIDATES, provider=provider)
+        assert not provider.called, original
+        assert result['decision_stage'] == 'preflight'
+        assert 'does not occur' in result['reason']
+        assert result['packet']['passage']['text'] == original
 
 
 def test_provider_status_never_returns_key():

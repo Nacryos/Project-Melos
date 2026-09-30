@@ -258,35 +258,63 @@
     ui.prev.disabled = true; ui.next.disabled = true;
   }
 
-  // Token buttons preserve all intervening punctuation and whitespace exactly as supplied.
-  function appendTextWithWords(host, value) {
-    const parts = String(value || '').split(/(\p{Script=Greek}[\p{Script=Greek}\p{M}᾽’']*)/u);
-    for (const part of parts) {
-      if (!part) continue;
-      if (/^\p{Script=Greek}/u.test(part)) {
-        const button = node('button', 'word', part);
-        button.type = 'button';
-        button.setAttribute('aria-label', `Inspect ${part}`);
-        button.addEventListener('click', () => inspectWord(part, button));
-        host.append(button);
-      } else host.append(document.createTextNode(part));
+  // Lookup units never replace the printed text. Only explicit line-end
+  // divisions are joined; editorial brackets/lacunae/numbers remain barriers.
+  function readingWords(value) {
+    const text = String(value || '');
+    const greekLetter = /(?=\p{L})\p{Script=Greek}/u;
+    const words = [...text.matchAll(/(?=\p{L})\p{Script=Greek}(?:(?=\p{L})\p{Script=Greek}|\p{M}|[᾽’'])*/gu)]
+      .map(match => ({ text: match[0], start: match.index, end: match.index + match[0].length, form: match[0], group: match.index, joined: false }));
+    for (let i = 0; i < words.length; i++) {
+      let end = i;
+      while (end + 1 < words.length) {
+        const left = words[end], right = words[end + 1];
+        const last = [...left.text.normalize('NFC')].at(-1);
+        if (!greekLetter.test(last) || !/^[-\u2010\u00ad][ \t]*\r?\n[ \t]*$/u.test(text.slice(left.end, right.start))) break;
+        end++;
+      }
+      if (end > i) {
+        const form = words.slice(i, end + 1).map(word => word.text).join('');
+        for (let j = i; j <= end; j++) Object.assign(words[j], { form, group: words[i].start, joined: true });
+        i = end;
+      }
     }
+    return words;
+  }
+  function appendTextWithWords(host, value, words, offset = 0) {
+    const text = String(value || '');
+    let cursor = 0;
+    for (const word of words.filter(word => word.start >= offset && word.end <= offset + text.length)) {
+      const start = word.start - offset, end = word.end - offset;
+      if (start > cursor) host.append(document.createTextNode(text.slice(cursor, start)));
+      const button = node('button', 'word', text.slice(start, end));
+      button.type = 'button';
+      button.dataset.lookupGroup = String(word.group);
+      button.setAttribute('aria-label', `Inspect ${word.form}${word.joined ? `, printed segment ${word.text}, divided across source lines` : ''}`);
+      button.addEventListener('click', () => inspectWord(word.form, button, word.joined));
+      host.append(button);
+      cursor = end;
+    }
+    if (cursor < text.length) host.append(document.createTextNode(text.slice(cursor)));
   }
   function renderPassageText(passage) {
     clear(ui.text);
     ui.text.lang = passage.language === 'grc' ? 'grc' : passage.language || 'en';
     ui.textLeading.textContent = (passage.language || 'text').toUpperCase();
     if (Array.isArray(passage.lines) && passage.lines.length) {
+      const words = readingWords(passage.lines.map(line => line.text || '').join('\n'));
+      let offset = 0;
       for (const line of passage.lines) {
         const row = node('div', 'line');
         row.append(node('span', 'line-label', line.label || ''));
         const content = node('span', 'line-content');
-        appendTextWithWords(content, line.text || '');
+        appendTextWithWords(content, line.text || '', words, offset);
+        offset += String(line.text || '').length + 1;
         row.append(content); ui.text.append(row);
       }
     } else if (passage.text) {
       const paragraph = node('p');
-      appendTextWithWords(paragraph, passage.text);
+      appendTextWithWords(paragraph, passage.text, readingWords(passage.text));
       ui.text.append(paragraph);
     } else message(ui.text, 'This record has no passage text.', 'loading-line');
     ui.readingHint.textContent = passage.language === 'grc' && passage.kind === 'text'
@@ -857,14 +885,19 @@
       } finally { if (sequence === state.wordSequence) button.disabled = false; }
     });
   }
-  async function inspectWord(form, button = null) {
+  async function inspectWord(form, button = null, joined = false) {
     if (!form) return;
-    if (state.activeWord) state.activeWord.classList.remove('active');
+    for (const active of ui.text.querySelectorAll('.word.active')) active.classList.remove('active');
     state.activeWord = button;
-    if (button) button.classList.add('active');
+    if (button) {
+      for (const part of ui.text.querySelectorAll('.word')) {
+        if (part.dataset.lookupGroup === button.dataset.lookupGroup) part.classList.add('active');
+      }
+    }
     const passageId = button ? state.passage?.id : '';
     clear(ui.inspector);
     ui.inspector.append(node('span', 'eyebrow', 'SELECTED FORM'), node('div', 'word-title', form));
+    if (joined) ui.inspector.append(node('p', 'word-normalized', 'Lookup joins an explicit printed line-end division. Both printed segments remain unchanged in the passage; no missing letters are supplied.'));
     if (!passageId) ui.inspector.append(node('p', 'word-normalized', 'Standalone form lookup · no passage context supplied.'));
     const morphologyHost = node('div', 'morphology-panel');
     const wiktionaryHost = node('div', 'wiktionary-panel');
