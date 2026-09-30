@@ -8,7 +8,10 @@ from urllib.request import urlopen, Request
 
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--origin', default='http://127.0.0.1:8791')
-BASE = parser.parse_args().origin.rstrip('/')
+parser.add_argument('--expected-passages', type=int, default=287552,
+                    help='Expected audited snapshot count (override when verifying a rollback)')
+args = parser.parse_args()
+BASE = args.origin.rstrip('/')
 
 
 def get(path, **params):
@@ -22,7 +25,7 @@ def get(path, **params):
 
 
 status = get('/api/status')
-assert status['passages'] == 287536
+assert status['passages'] == args.expected_passages, (status['passages'], args.expected_passages)
 assert status['embeddings']['ready'] is True
 assert status['evidence']['ready'] is True
 assert status['publication_policy'] == 'source-labels', status['publication_policy']
