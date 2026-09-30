@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 // Entirely synthetic entry/parse fixtures; these are not Greek corpus evidence.
 const context = vm.createContext({ window: {}, URL });
 vm.runInContext(readFileSync(new URL('../js/dictionary-preview.js', import.meta.url), 'utf8'), context);
-const { isCandidateQuery, buildPreview } = context.window.MelosDictionaryPreview;
+const { isCandidateQuery, buildPreview, friendlySourceName } = context.window.MelosDictionaryPreview;
 function fixture() {
   return { form: 'λόγου', match_status: 'indexed_match',
     candidates: [{ lemma: 'λόγος', match_kind: 'indexed_form', edit_distance: 0,
@@ -173,4 +173,93 @@ test('Wiktionary exact Greek listed forms retain accent and quantity folding wit
   assert.equal(buildPreview({ form: 'βλεφάροις' }, wiki).entries.length, 1);
   const latin = wikiFixture('love', 'λοβός', [{ kind: 'listed_form', form: { form: 'λοβέ', tags: ['vocative'] } }]);
   assert.equal(buildPreview({ form: 'love' }, latin).entries.length, 0);
+});
+
+test('compact meanings prefer structured literal glosses and retain full source entries separately', () => {
+  const data = fixture();
+  data.lexicon_entries.push({ ...data.lexicon_entries[0], id: 'entry:b', source: 'Other fixture dictionary', gloss: 'Another long dictionary excerpt.' });
+  data.candidates[0].lexicon_entry_ids.push('entry:b');
+  const wiki = wikiFixture(data.form, 'λόγος', [{ kind: 'listed_form', form: { form: data.form, tags: ['genitive'] } }]);
+  wiki.results[0].senses = [
+    { sense_index: 0, glosses: ['Short first fixture meaning.'] },
+    { sense_index: 1, glosses: ['Short first fixture meaning.'] },
+    { sense_index: 2, glosses: ['Short second fixture meaning.'] }
+  ];
+  wiki.results[0].total_senses = 3;
+  const result = buildPreview(data, wiki);
+  assert.equal(result.entries.length, 3);
+  assert.equal(result.compact.entries.length, 1);
+  assert.equal(result.compact.entries[0].id, 'wiki:synthetic');
+  assert.equal(result.compact.entries[0].meanings.length, 2);
+  const first = result.compact.entries[0].meanings[0];
+  assert.deepEqual(Array.from(first.sense_indices), [0, 1]);
+  assert.equal(first.provenance.length, 2);
+  assert.equal(first.provenance[1].entry_id, 'wiki:synthetic');
+  assert.equal(first.provenance[1].sense_index, 1);
+  assert.equal(result.compact.omitted_entry_count, 2);
+  assert.equal(result.compact.omitted_meaning_count, 2);
+  assert.equal(result.compact.entries[0].analyses[0].text, 'genitive');
+  assert.ok(!result.compact.entries[0].analyses.some(row => row.text === 'fixture readable parse'));
+});
+
+test('dictionary-only compact view chooses one excerpt without losing other source-entry actions', () => {
+  const data = fixture();
+  data.lexicon_entries.push({ ...data.lexicon_entries[0], id: 'entry:b', source: 'Other fixture dictionary' });
+  data.candidates[0].lexicon_entry_ids.push('entry:b');
+  const result = buildPreview(data);
+  assert.equal(result.entries.length, 2);
+  assert.equal(result.compact.entries.length, 1);
+  assert.equal(result.compact.entries[0].meanings.length, 1);
+  assert.equal(result.compact.omitted_entries[0].id, 'entry:b');
+});
+
+test('compact selection keeps same-spelling homographs separate even when glosses are identical', () => {
+  const wiki = wikiFixture('λόγος', 'λόγος', [{ kind: 'headword', word: 'λόγος' }]);
+  wiki.results.push({ ...wiki.results[0], id: 'wiki:other-homograph' });
+  const result = buildPreview({ form: 'λόγος' }, wiki);
+  assert.equal(result.entries.length, 2);
+  assert.equal(result.compact.entries.length, 2);
+  assert.equal(result.compact.entries[0].meanings[0].text, result.compact.entries[1].meanings[0].text);
+  assert.notEqual(result.compact.entries[0].meanings[0].provenance[0].entry_id,
+    result.compact.entries[1].meanings[0].provenance[0].entry_id);
+  assert.equal(result.compact.ambiguous, true);
+});
+
+test('three-meaning budget reports every hidden alternative and does not impose the old six-entry cap', () => {
+  const data = fixture();
+  data.lexicon_entries = Array.from({ length: 8 }, (_, index) => ({
+    ...data.lexicon_entries[0], id: `entry:${index}`, lemma: `lemma-${index}`, gloss: `Literal fixture meaning ${index}.`
+  }));
+  data.candidates = data.lexicon_entries.map(entry => ({
+    ...data.candidates[0], lemma: entry.lemma, lexicon_entry_ids: [entry.id], gloss_entry_id: entry.id
+  }));
+  const result = buildPreview(data);
+  assert.equal(result.entries.length, 8);
+  assert.equal(result.compact.entries.length, 3);
+  assert.equal(result.compact.entries.reduce((sum, entry) => sum + entry.meanings.length, 0), 3);
+  assert.equal(result.compact.omitted_entry_count, 5);
+  assert.equal(result.compact.omitted_meaning_count, 5);
+  assert.equal(result.compact.omitted_entries[4].lemma, 'lemma-7');
+  assert.equal(result.compact.ambiguous, true);
+});
+
+test('glosses with identical shortened prefixes but distinct full qualifiers are not deduplicated', () => {
+  const wiki = wikiFixture('λόγος', 'λόγος', [{ kind: 'headword', word: 'λόγος' }]);
+  const prefix = 'Long common literal fixture qualifier. '.repeat(10);
+  wiki.results[0].senses = [
+    { sense_index: 0, glosses: [prefix + 'first ending'] },
+    { sense_index: 1, glosses: [prefix + 'different ending'] }
+  ];
+  const result = buildPreview({ form: 'λόγος' }, wiki);
+  assert.equal(result.entries[0].meanings.length, 2);
+  assert.equal(result.entries[0].meanings[0].provenance.length, 1);
+  assert.equal(result.entries[0].meanings[1].provenance.length, 1);
+});
+
+test('friendly source names use established exact labels and preserve unknown names', () => {
+  assert.equal(friendlySourceName('PerseusDL LSJ TEI'), 'LSJ');
+  assert.equal(friendlySourceName('Perseus Autenrieth TEI via Homerica'), 'Autenrieth');
+  assert.equal(friendlySourceName('Kaikki Ancient Greek postprocessed enwiktionary extraction'), 'Wiktionary');
+  assert.equal(friendlySourceName('PerseusDL Greek Dependency Treebank v1.6'), 'Perseus treebank');
+  assert.equal(friendlySourceName('Unverified notes mentioning LSJ'), 'Unverified notes mentioning LSJ');
 });

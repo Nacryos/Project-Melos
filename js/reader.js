@@ -413,6 +413,9 @@
   }
   function renderSourcePageNotes(host, passage) {
     const metadata = passage.metadata && typeof passage.metadata === 'object' ? passage.metadata : {};
+    const layoutNotes = [...new Set((Array.isArray(passage.lines) ? passage.lines : [])
+      .map(line => line?.plain_text_limitation).filter(value => typeof value === 'string' && value.trim()))];
+    if (layoutNotes.length) addMeta(host, 'Source layout', layoutNotes.join(' '));
     const seen = new Set([String(passage.citation || '').trim().replace(/\s+/g, ' ').toLowerCase()]);
     for (const [key, label] of [['source_heading', 'Source heading'], ['source_section', 'Source column / section'], ['source_subtitle', 'Source subtitle'], ['source_page_title', 'Source page title']]) {
       const value = metadata[key];
@@ -646,49 +649,58 @@
     if (!preview?.entries?.length) return false;
     const section = node('section', 'dictionary-glimpse');
     section.append(node('span', 'eyebrow', 'DICTIONARY'));
+    const friendlySource = name => window.MelosDictionaryPreview.friendlySourceName?.(name) || name || 'Source';
+    function renderEntries(entries, target, compact = false) {
     const lemmaGroups = new Map();
-    for (const entry of preview.entries) {
+    for (const entry of entries) {
       const key = String(entry.lemma).normalize('NFC');
       let group = lemmaGroups.get(key);
       if (!group) {
         group = node('div', 'dictionary-glimpse-group');
         group.append(node('h3', 'dictionary-glimpse-lemma', entry.lemma));
         if (preview.query && preview.query !== entry.lemma) group.append(node('p', 'candidate-reason', `Searched form: ${preview.query}`));
-        lemmaGroups.set(key, group); section.append(group);
+        lemmaGroups.set(key, group); target.append(group);
       }
       const card = node('div', 'dictionary-glimpse-entry');
-      if (entry.source) card.append(node('p', 'candidate-reason', entry.source));
-      if (entry.ambiguous && entry.label) card.append(node('p', 'candidate-reason', entry.label));
+      if (!compact && entry.source) card.append(node('p', 'candidate-reason', entry.source));
+      if (entry.ambiguous && entry.label && !compact) card.append(node('p', 'candidate-reason', entry.label));
       const parses = [...new Set((entry.analyses || []).map(analysis => analysis.text).filter(Boolean))];
       if (parses.length) card.append(node('p', 'candidate-analysis', parses.slice(0, 3).join(' · ')));
       const analysisSources = new Map((entry.analyses || []).map(analysis => [analysis.source_url, analysis.source]));
-      for (const [url, sourceName] of analysisSources) {
-        const source = safeLink(url, `Form analysis: ${sourceName || 'source'} ↗`);
+      for (const [url, sourceName] of compact ? [] : analysisSources) {
+        const source = safeLink(url, `Form analysis: ${friendlySource(sourceName)}`);
         if (source) { source.className = 'dictionary-glimpse-source'; card.append(source); }
       }
       for (const meaning of entry.meanings || []) {
         const line = node('p', 'dictionary-glimpse-meaning', meaning.text);
-        const source = safeLink(meaning.source_url, `${meaning.source || entry.source || 'Dictionary source'} ↗`);
-        if (source) { source.className = 'dictionary-glimpse-source'; line.append(source); }
+        const source = safeLink(meaning.source_url, friendlySource(meaning.source || entry.source));
+        if (source) { source.className = 'dictionary-glimpse-source'; source.title = meaning.source || entry.source || 'Dictionary source'; line.append(source); }
         card.append(line);
       }
       if (openEntries) {
-        const open = node('button', 'text-action', 'Inspect this lemma →');
+        const open = node('button', 'text-action', 'Inspect this lemma');
         open.type = 'button';
         open.addEventListener('click', () => {
           inspectWord(entry.lemma);
           ui.inspector.closest('.inspector').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
         card.append(open);
-        const full = safeLink(entry.entry_url || entry.source_url, 'Full dictionary entry ↗');
+        const full = safeLink(entry.entry_url || entry.source_url, 'Full dictionary entry');
         if (full) { full.className = 'dictionary-glimpse-source'; card.append(full); }
       }
       group.append(card);
     }
+    }
+    renderEntries(preview.compact?.entries || preview.entries, section, true);
+    if (preview.compact && (preview.compact.omitted_entry_count || preview.compact.omitted_meaning_count || preview.truncated)) {
+      const details = node('details', 'dictionary-glimpse-details');
+      details.append(node('summary', '', 'More meanings and dictionary sources'));
+      renderEntries(preview.entries, details);
+      section.append(details);
+    }
     section.append(node('p', 'candidate-reason', preview.ambiguous
-      ? 'More than one dictionary analysis is recorded. These meanings are not a selected reading of a passage.'
-      : 'Dictionary meanings; the intended sense depends on the passage.'));
-    if (preview.truncated) section.append(node('p', 'candidate-reason', 'A short preview is shown. Open the full entry for additional analyses and senses.'));
+      ? 'Several readings are recorded; context determines the intended sense.'
+      : 'Dictionary meanings; context determines the intended sense.'));
     host.append(section);
     return true;
   }
@@ -748,9 +760,11 @@
       if (!append) clear(ui.resultsList);
       for (const record of records) ui.resultsList.append(renderResult(record));
       const count = ui.resultsList.querySelectorAll('.result-button').length;
-      const method = data.method ? ` · ${String(data.method).replaceAll('_', ' ')}` : '';
+      const ranked = ['themes', 'hybrid'].includes(mode) && !String(data.method || '').includes('reference');
+      const method = ranked ? (mode === 'themes' ? ' · Thematic similarity' : ' · Words, forms and thematic links') : '';
       const sortLabel = ui.order.value === 'chronological' ? ' · author chronology, where sourced' : '';
-      ui.resultsSummary.textContent = `${describeCount(active.total, mode === 'themes' ? 'ranked candidate' : 'match')} · ${count} shown${method}${sortLabel}`;
+      ui.resultsSummary.textContent = `${describeCount(active.total, ranked ? 'ranked result' : 'match')} · ${count} shown${method}${sortLabel}`;
+      ui.resultsSummary.title = String(data.method || '').replaceAll('_', ' ');
       if (!count) ui.resultsList.append(node('p', 'inspector-message', mode === 'themes'
         ? 'No ranked passage candidates were returned for this query and filters.'
         : 'No indexed passage matches these terms and filters. This does not establish absence from the author’s work. Try another spelling, mode, or edition.'));

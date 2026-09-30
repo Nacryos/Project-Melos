@@ -80,3 +80,20 @@ test('one lemma heading groups dictionary sources without conflating their excer
   assert.match(host.textContent, /<literal fixture gloss>/);
   assert.match(host.textContent, /Another literal excerpt/);
 });
+
+test('compact meanings lead while additional source entries are collapsed', () => {
+  const host = new Element('div');
+  const data = fixture('FixtureLemma');
+  data.entries.push({ ...data.entries[0], source: 'Second fixture source', meanings: [{ text: 'Second fixture excerpt' }] });
+  data.compact = { entries: [data.entries[0]], omitted_entry_count: 1, omitted_meaning_count: 1 };
+  render(host, data);
+  const section = host.children[0];
+  const details = section.children.find(element => element.tag === 'details');
+  assert.ok(details);
+  assert.notEqual(details.open, true);
+  assert.equal(details.children[0].textContent, 'More meanings and dictionary sources');
+  assert.match(details.textContent, /Second fixture excerpt/);
+  const main = section.children.filter(element => element.tag !== 'details').map(element => element.textContent).join('');
+  assert.ok(!main.includes('Second fixture excerpt'));
+  assert.match(main, /<literal fixture gloss>/);
+});

@@ -61,3 +61,14 @@ test('distinct headings, columns and subtitles render without repeating equivale
   assert.equal(descendants(host, 'details').length, 0);
   assert.match(script, /renderSourcePageNotes\(ui\.provenance, passage\)/);
 });
+
+test('source-supplied plain-text layout limitations remain visible without inventing gap lengths', () => {
+  const host = new Element('div');
+  render(host, { lines: [
+    { text: 'Fixture', plain_text_limitation: 'Source spacing is not represented in plain text.' },
+    { text: 'Another fixture', plain_text_limitation: 'Source spacing is not represented in plain text.' },
+  ] });
+  assert.equal(host.children.length, 1);
+  assert.match(host.textContent, /Source layoutSource spacing is not represented in plain text/);
+  assert.ok(!host.textContent.includes('letters'));
+});
