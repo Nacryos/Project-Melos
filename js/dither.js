@@ -8,9 +8,7 @@ const FS = `
 precision highp float;
 uniform sampler2D texA, texB;
 uniform vec2 res, sizeA, sizeB, focA, focB, mouse;
-uniform vec4 shade;                       // ellipse centre xy, radii zw (device px)
 uniform float cell, matrix, levels, spread, sat, con, bri, amount, lensR, palN;
-uniform float shadeK, grow, growStep;     // darkening strength, extra pixel steps at its centre
 uniform float t, time, flick, coarsen;    // transition progress, clock, shimmer, pixelation peak
 uniform vec3 pal[8];
 
@@ -58,27 +56,21 @@ vec3 scene(vec2 uv){
 
 void main(){
   vec2 fc = gl_FragCoord.xy;
-  vec2 q = (fc - shade.xy) / shade.zw;
-  float dk = exp(-2.4 * dot(q, q));   // soft gaussian ball: 1 at the centre of the shadow
   float e = sin(3.14159265 * t);                                             // transition envelope
 
-  // Pixel size grows in integer steps toward the shadow; step edges are themselves dithered.
-  float bf = dk * grow;
-  float band = floor(bf) + step(b8(floor(fc / (cell * 2.))), fract(bf));
-  float c = floor(cell + band * growStep + e * coarsen * cell + .5);
+  float c = floor(cell + e * coarsen * cell + .5);   // pixels coarsen mid-transition
 
   vec2 ix = floor(fc / c);
   float th = bayer(ix);
   th = clamp(th + (hash(ix + floor(time * 9.)) - .5) * flick * e, 0., 1.);   // TV-like shimmer, only mid-transition
 
-  float dark = 1. - shadeK * dk;
-  vec3 col = grade(scene((ix + .5) * c / res)) * dark;
+  vec3 col = grade(scene((ix + .5) * c / res));
 
   vec3 d;
   if (palN > .5) d = nearest(col + (th - .5) * spread * .5);
   else { float L = levels - 1.; d = floor(col * L + th * spread + (1. - spread) * .5) / L; }
 
-  vec3 orig = grade(scene(fc / res)) * dark;
+  vec3 orig = grade(scene(fc / res));
   float k = amount;
   if (lensR > 0.) k *= smoothstep(.8, 1., length(fc - mouse) / lensR);
   gl_FragColor = vec4(mix(orig, d, k), 1.);
@@ -118,22 +110,22 @@ export function createDither(canvas) {
   gl.uniform1i(U.texA, 0); gl.uniform1i(U.texB, 1);
 
   const cache = new Map();   // key -> { tex, size, foc }
+  // Upload (or re-upload a sharper copy of) an image into the key's texture.
   const load = (key, img, foc) => {
-    if (cache.has(key)) return cache.get(key);
-    const tex = gl.createTexture();
-    gl.bindTexture(gl.TEXTURE_2D, tex);
+    let s = cache.get(key);
+    if (!s) { s = { tex: gl.createTexture(), foc: [foc[0], 1 - foc[1]] }; cache.set(key, s); }
+    gl.bindTexture(gl.TEXTURE_2D, s.tex);
     gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, img);
     for (const [k, v] of [[gl.TEXTURE_MIN_FILTER, gl.LINEAR], [gl.TEXTURE_MAG_FILTER, gl.LINEAR],
       [gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE], [gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE]])
       gl.texParameteri(gl.TEXTURE_2D, k, v);
-    const s = { tex, size: [img.naturalWidth, img.naturalHeight], foc: [foc[0], 1 - foc[1]] };
-    cache.set(key, s);
+    s.size = [img.naturalWidth, img.naturalHeight];
+    if (s === A || s === B) request();
     return s;
   };
 
   let dpr = 1, params = {}, t = 0, mouse = [-1e4, -1e4], raf = 0, A = null, B = null;
-  let shadeCss = [0, 0, 1, 1];
 
   const draw = (now = performance.now()) => {
     raf = 0;
@@ -146,13 +138,7 @@ export function createDither(canvas) {
     gl.uniform2fv(U.sizeA, A.size); gl.uniform2fv(U.focA, A.foc);
     gl.uniform2fv(U.sizeB, b.size); gl.uniform2fv(U.focB, b.foc);
     gl.uniform2fv(U.mouse, mouse);
-    const [x, y, rx, ry] = shadeCss;
-    gl.uniform4f(U.shade, x * dpr, canvas.height - y * dpr, Math.max(1, rx * dpr), Math.max(1, ry * dpr));
-    const step = Math.max(1, Math.round(dpr));
     gl.uniform1f(U.cell, Math.max(1, Math.round(p.cell * dpr)));
-    gl.uniform1f(U.growStep, step);
-    gl.uniform1f(U.grow, p.grow);
-    gl.uniform1f(U.shadeK, p.shade);
     gl.uniform1f(U.matrix, p.matrix);
     gl.uniform1f(U.levels, p.levels);
     gl.uniform1f(U.spread, p.spread);
@@ -187,7 +173,6 @@ export function createDither(canvas) {
   return {
     load,
     set(p) { params = { ...params, ...p }; request(); },
-    setShade(x, y, rx, ry) { shadeCss = [x, y, rx, ry]; request(); },
     show(slot) { A = slot; B = null; t = 0; request(); },
     transition(slot, ms = 2600) {
       if (running) running.cancel();

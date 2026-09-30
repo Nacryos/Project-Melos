@@ -28,6 +28,8 @@
       <img id="fallback" alt="" hidden>
     </div>
     <div class="scrim" aria-hidden="true"></div>
+    <div class="shade-blur" aria-hidden="true"></div>
+    <div class="shade" aria-hidden="true"></div>
 
     <div class="hero-copy">
       <blockquote class="verse" id="verse" aria-live="polite">
@@ -80,8 +82,8 @@
       <label>Blend with original <output for="p-amount"></output><input type="range" id="p-amount" min="0" max="1" step="0.05"></label>
       <label>Reveal lens <output for="p-lens"></output><input type="range" id="p-lens" min="0" max="320" step="10"></label>
       <h3>Behind the text</h3>
-      <label>Shadow <output for="p-shade"></output><input type="range" id="p-shade" min="0" max="0.9" step="0.05"></label>
-      <label>Pixel growth into shadow <output for="p-grow"></output><input type="range" id="p-grow" min="0" max="8" step="1"></label>
+      <label>Shadow <output for="p-shade"></output><input type="range" id="p-shade" min="0" max="0.95" step="0.05"></label>
+      <label>Shadow blur <output for="p-blur"></output><input type="range" id="p-blur" min="0" max="12" step="0.5"></label>
       <h3>Changing painting</h3>
       <label>Flicker <output for="p-flicker"></output><input type="range" id="p-flicker" min="0" max="1.2" step="0.05"></label>
       <label>Pixelation peak <output for="p-coarsen"></output><input type="range" id="p-coarsen" min="0" max="4" step="0.1"></label>
