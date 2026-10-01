@@ -121,7 +121,15 @@ def verify(origin, *, cgl=False):
         ('ballon chrysokomes Eros', 'lyric_web:elws:17312:140158:1'),
     ]:
         result = get('/api/search', q=query, mode='words', limit=10)
-        assert result['results'][0]['id'] == target, (query, result['results'][0]['id'])
+        first_id = result['results'][0]['id']
+        if cgl and query == 'Gygeo tou polychrysou':
+            assert first_id in {target, 'p2_cgl_anthology:20'}, (query, first_id)
+            assert target in {row['id'] for row in result['results']}
+            parallel = get('/api/passage', id='p2_cgl_anthology:20')
+            assert parallel['author'] == 'ΑΡΧΙΛΟΧΟΣ' and parallel['citation'] == 'απ. 19 West'
+            assert parallel['language'] == 'grc' and 'Γύγεω τοῦ πολυχρύσου' in parallel['text']
+        else:
+            assert first_id == target, (query, first_id)
         assert result['fallback_terms']['original']
         assert result['results'][0]['query_term_coverage'] >= 3
     print('Romanized lyric phrase controls retain intended first results and explicit original-word coverage.', flush=True)

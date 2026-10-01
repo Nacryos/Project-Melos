@@ -144,3 +144,48 @@ def test_explicit_source_column_is_not_reported_as_whole_fragment_scope():
     assert result['results'][0]['reference_match']['coverage'] == 'section_text'
     assert 'not whole-fragment scope' in result['results'][0]['match_reason']
     assert any('source sections' in warning for warning in result['warnings'])
+
+
+def test_verified_raw_author_spelling_includes_primary_and_linked_translations():
+    # Synthetic source labels; no fixture text is a corpus transcription.
+    source_author = '\u0399\u0392\u03a5\u039a\u039f\u03a3'
+    accented_alias = '\u038a\u03b2\u03c5\u03ba\u03bf\u03c2'
+    calls = []
+    def resolver(label):
+        calls.append(label)
+        if label in {'Ibycus', 'ibycus', source_author, accented_alias}:
+            return [label, 'Ibycus', accented_alias]
+        return [label]
+    known = [source_author, 'Ibycus Scholia', 'Other named author', 'Translator']
+    intent = parse_reference_query('Ibycus 286 Page', known,
+                                   selected_author=source_author, alias_resolver=resolver)
+    assert intent is not None and not intent.filter_conflict
+    assert source_author in intent.author_labels  # also used by exact SQL preselection
+    assert 'Ibycus Scholia' not in intent.author_labels
+    assert set(calls) <= {'ibycus', source_author}
+    assert len(calls) == len(set(calls))
+    records = [row('primary', '\u03b1\u03c0. 286 Page', author=source_author),
+               row('pointer', '\u03b1\u03c0. 286 Page', author=source_author, kind='reference'),
+               row('wrong-edition', 'fr. 286 Edmonds', author=source_author),
+               row('scholia', 'fr. 286 Page', author='Ibycus Scholia'),
+               row('other-author', 'fr. 286 Page', author='Other named author')]
+    records.extend(row(f'tr{n}', '\u03b1\u03c0. 286 Page', author='Translator',
+                       kind='translation', language='ell', parent_id='primary') for n in range(3))
+    result = rank_reference_records(intent, records)
+    assert [r['id'] for r in result['results']] == ['primary', 'tr0', 'tr1', 'tr2', 'pointer']
+    assert all(r['author'] == 'Translator' for r in result['results'][1:4])
+    assert rank_reference_records(intent, records, language='ell')['total'] == 3
+    assert rank_reference_records(intent, records, edition='nonexistent')['total'] == 0
+
+
+def test_diacritic_candidate_without_verified_identity_is_not_merged():
+    accented_alias = '\u038a\u03b2\u03c5\u03ba\u03bf\u03c2'
+    raw_label = '\u0399\u0392\u03a5\u039a\u039f\u03a3'
+    def resolver(label):
+        return ['Ibycus', accented_alias] if label == 'Ibycus' else [label]
+    intent = parse_reference_query('Ibycus 286', ['Ibycus', raw_label], alias_resolver=resolver)
+    assert raw_label not in intent.author_labels
+    assert rank_reference_records(intent, [row('unverified', 'fr. 286', author=raw_label)])['total'] == 0
+    assert parse_reference_query('Ibycus 286', [raw_label], alias_resolver=resolver) is None
+    literal = parse_reference_query('Ibycus 286', ['Ibycus', raw_label])
+    assert raw_label not in literal.author_labels

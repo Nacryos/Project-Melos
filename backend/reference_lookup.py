@@ -11,9 +11,37 @@ from dataclasses import dataclass
 import re
 import unicodedata
 
+from backend.author_aliases import fold as author_spelling_key
+
 
 def _key(value: object) -> str:
     return " ".join(unicodedata.normalize("NFC", str(value or "")).casefold().split())
+
+
+def _verified_corpus_labels(
+    aliases: Iterable[str],
+    corpus_labels: Iterable[str],
+    resolver: Callable[[str], Iterable[str]] | None,
+) -> tuple[str, ...]:
+    """Retain raw corpus spellings only when the identity resolver verifies them.
+
+    The lossy spelling key is a cheap candidate gate, NOT identity evidence.
+    Require the candidate's resolved labels to overlap a verified label exactly;
+    an echo-only resolver cannot turn a diacritic resemblance into authorship.
+    Returning the actual spellings also makes callers' exact SQL preselection
+    agree with the subsequent reference ranking, without changing source data.
+    """
+    result = list(dict.fromkeys(aliases))
+    if not resolver:
+        return tuple(result)
+    verified_keys = {_key(label) for label in result}
+    spelling_keys = {author_spelling_key(label) for label in result}
+    for label in corpus_labels:
+        if _key(label) in verified_keys or author_spelling_key(label) not in spelling_keys:
+            continue
+        if verified_keys.intersection(_key(alias) for alias in resolver(label)):
+            result.append(label)
+    return tuple(result)
 
 
 _NUMBER = r"[0-9]{1,5}[a-zΑ-Ωα-ω]?"
@@ -59,6 +87,12 @@ def parse_reference_query(
         labels.append(selected_author)
     explicit_author = ""
     tail = query
+    resolved = {}
+    def resolve(label: str) -> tuple[str, ...]:
+        if label not in resolved:
+            resolved[label] = tuple(alias_resolver(label)) if alias_resolver else ()
+        return resolved[label]
+
     for label in sorted(labels, key=len, reverse=True):
         prefix = _key(label) + " "
         if query.startswith(prefix):
@@ -72,7 +106,7 @@ def parse_reference_query(
             remainder = " ".join(query.split()[split:])
             if not _TAIL.fullmatch(remainder):
                 continue
-            aliases = list(alias_resolver(candidate))
+            aliases = _verified_corpus_labels(resolve(candidate), labels, resolve)
             if {_key(a) for a in aliases} & {_key(a) for a in labels}:
                 explicit_author, tail = candidate, remainder
                 break
@@ -82,7 +116,8 @@ def parse_reference_query(
     match = _TAIL.fullmatch(tail)
     if not match:
         return None
-    aliases = tuple(dict.fromkeys((author, *(alias_resolver(author) if alias_resolver else ()))))
+    aliases = _verified_corpus_labels((author, *resolve(author)), labels,
+                                     resolve if alias_resolver else None)
     conflict = bool(selected_author and _key(selected_author) not in {_key(a) for a in aliases})
     return ReferenceIntent(author, aliases, match["number"].casefold(),
                            match["scheme"] or "", conflict)
