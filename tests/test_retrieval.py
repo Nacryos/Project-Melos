@@ -49,8 +49,27 @@ def test_explicit_supporting_records_group_into_greek_parent_without_losing_evid
     assert result["matched_evidence"][2]["author"] == "Scholar"
     assert result["matched_evidence"][1]["raw_score"] == .8
     assert result["matched_evidence"][1]["source_url"] == "https://example.org/t"
+    assert result["matched_evidence"][1]["projection_scope"] == "explicit_parent_id"
+    assert result["matched_evidence"][1]["text_excerpt"] == "sea voyage"
+    assert result["matched_evidence"][1]["excerpt_truncated"] is False
+    assert result["matched_evidence"][0]["projection_scope"] == "direct_source_record"
     assert "linked translation/commentary" in result["match_reason"]
     assert "matched_evidence" not in records["g"]
+
+
+def test_supporting_excerpt_is_a_bounded_literal_source_prefix():
+    full_text = "source\nline " * 30
+    records = {
+        "g": passage("g", text="Greek fixture"),
+        "c": passage("c", kind="commentary", language="eng", author="Scholar",
+                     text=full_text, parent_id="g"),
+    }
+    result = fuse("source", [], [], [{"id": "c", "score": .5}], records.get)
+    evidence = result["results"][0]["matched_evidence"][0]
+    assert result["results"][0]["id"] == "g"
+    assert evidence["text_excerpt"] == full_text[:200]
+    assert evidence["excerpt_truncated"] is True
+    assert records["c"]["text"] == full_text
 
 
 def test_greek_only_and_filters_do_not_leak_parent_across_selected_language_or_edition():

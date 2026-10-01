@@ -944,32 +944,68 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
         except (ImportError,FileNotFoundError,RuntimeError) as exc:
             return {'results':[],'total':0,'mode':mode,'method':'Semantic index unavailable',
                 'warnings':[str(exc),'Use word search while the local encoder index is being built.']}
-        results=[]
-        groups={}
+        from .retrieval import evidence_hit, fuse
         with connect() as con:
-            for hit in hits:
-                columns=("p.data,author_canonical_key(p.author) AS author_canonical,'' AS text_key,p.quality" if legacy_schema()
-                         else 'p.data,p.author_canonical,p.text_key,p.quality')
-                row=con.execute('SELECT '+columns+' FROM passages p WHERE p.id=?'+extra,[hit['id']]+params).fetchone()
-                if row:
-                    group_key=(row['author_canonical'],row['text_key'] or hit['id'],row['quality'])
-                    if group_key in groups:
-                        groups[group_key]['mirrored_ids'].append(hit['id'])
-                        groups[group_key]['mirror_count']+=1
+            def fetch_record(identifier):
+                return unpack(con.execute('SELECT data FROM passages WHERE id=?',(identifier,)).fetchone())
+            # One dense list means reciprocal rank preserves its order while
+            # grouping all hits attached by an explicit parent_id under their
+            # Greek passage. No shared-page or citation-based parent guesses.
+            fused=fuse(q,(),(),hits,fetch_record,author=author,
+                       author_labels=author_labels(author) if author else (),
+                       language=language,edition=edition,include_reference=include_reference,
+                       limit=window,offset=0,commentary_assisted=commentary_assisted,
+                       author_key=canonical_key,author_keys=component_keys)
+            results=fused['results']
+            if not include_reference:
+                # With the ordinary all-language/Greek reading, show source
+                # texts, not orphan notes and individual vocabulary snippets.
+                # An explicit English language filter may show linked English
+                # material, but page-only commentary remains reference opt-in.
+                if language in ('','grc'):
+                    results=[item for item in results if item.get('kind')=='text']
+                else:
+                    results=[item for item in results if item.get('kind')!='commentary'
+                             or item.get('parent_id')]
+            elif author and commentary_assisted:
+                # Author-scoped page/source-section notes have no unique Greek
+                # parent. Keep them as separate opt-in references, never
+                # project them to a passage based on URL or citation alone.
+                known={item['id'] for item in results}
+                for hit in hits:
+                    row=con.execute('''SELECT p.data FROM passages p WHERE p.id=?
+                        AND p.kind='commentary'
+                        AND json_extract(p.data,'$.metadata.scope') IN ('page','source_section')
+                        AND COALESCE(json_extract(p.data,'$.parent_id'),'')=''
+                        '''+extra,[hit['id']]+params).fetchone()
+                    if not row or hit['id'] in known:
                         continue
                     item=unpack(row)
-                    item['score']=hit.get('score')
-                    item['match_reason']=hit.get('match_reason','Dense embedding similarity; inspect the passage to evaluate the parallel.')
+                    item['score']=None
+                    item['retrieval_score_kind']='unprojected_reference'
+                    item['match_reason']='Dense similarity in unprojected source-page commentary; no unique Greek parent is asserted.'
+                    item['matched_evidence']=[evidence_hit(item,hit,'semantic','unprojected_page_scope')]
                     item['mirrored_ids']=[]
                     item['mirror_count']=1
-                    groups[group_key]=item
                     results.append(mark_author_scope(item))
+                    known.add(item['id'])
+        for item in results:
+            if item.get('retrieval_score_kind')=='reciprocal_rank_fusion':
+                item['retrieval_score_kind']='reciprocal_rank'
+        if order=='relevance' and language in ('','grc'):
+            results=[item for item in results if item.get('kind')=='text' and item.get('language')=='grc']+[
+                item for item in results if item.get('kind')!='text' or item.get('language')!='grc']
         if len(hits)==window:
             warnings.append('Semantic total counts only the first 1,000 ranked candidates; more indexed hits may exist.')
-        warnings.append('Translations/commentary are separate retrieval evidence; no automatic equivalence of senses is asserted.')
+        warnings.extend(message for message in fused['warnings']
+                        if not message.startswith('RRF scores rank'))
+        warnings.append('Scores are a one-list reciprocal-rank transform of the bounded dense order, not cosine similarities, probabilities, or confidence.')
+        warnings.append('Dense candidates are ranked and grouped by explicit Greek parent IDs; linked commentary/translation remains separately attributed evidence, not a word-level alignment or verified sense equivalence.')
+        if include_reference:
+            warnings.append('Unlinked page/source-section notes may appear as separate reference results; a shared URL is never used to assign one Greek passage.')
         total=len(results)
         return {'results':order_results(results,order)[offset:offset+limit],'total':total,'mode':mode,
-            'method':'Local multilingual dense embeddings; similarity is not an influence claim.','warnings':warnings}
+            'method':'Local multilingual dense rank grouped by explicit parent IDs; rank is not confidence or influence evidence.','warnings':warnings}
     keys=variants(q)
     if not keys:
         keys=[basic_normalize(q)]

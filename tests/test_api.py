@@ -286,16 +286,59 @@ def test_author_scope_uses_only_exact_label_or_source_links(client: TestClient):
     }).json()["results"] == []
 
 
-def test_theme_author_scope_post_filter_keeps_linked_commentary(client: TestClient, monkeypatch: pytest.MonkeyPatch):
+def test_theme_projects_only_explicit_parent_and_page_notes_require_reference_opt_in(client: TestClient, monkeypatch: pytest.MonkeyPatch):
     class FixtureSemantic:
         def search(self, query, limit, **filters):
             return [{"id": id, "score": 0.9, "match_reason": "synthetic ranking"}
                     for id in ["c3", "c1", "c2", "p1"]][:limit]
 
     monkeypatch.setattr(server, "semantic_service", lambda: FixtureSemantic())
-    data = client.get("/api/search", params={
+    common = {
         "q": "synthetic theme", "mode": "themes", "author": "alpha", "limit": 10
-    }).json()
-    assert [r["id"] for r in data["results"]] == ["c1", "c2", "p1"]
-    assert all(r["author"] == "Heather" and r["author_scope_reason"]
-               for r in data["results"][:2])
+    }
+    data = client.get("/api/search", params=common).json()
+    assert [r["id"] for r in data["results"]] == ["p1"]
+    assert data["results"][0]["author"] == "Alpha"
+    evidence = data["results"][0]["matched_evidence"]
+    assert [hit["id"] for hit in evidence] == ["c1", "p1"]
+    assert evidence[0]["projection_scope"] == "explicit_parent_id"
+    assert evidence[0]["author"] == "Heather"
+    assert evidence[0]["parent_id"] == "p1"
+    assert evidence[0]["text_excerpt"] == "Muse discussion"
+    assert evidence[0]["excerpt_truncated"] is False
+    assert data["results"][0]["retrieval_score_kind"] == "reciprocal_rank"
+    opted = client.get("/api/search", params=common | {"include_reference": "true"}).json()
+    assert [r["id"] for r in opted["results"]] == ["p1", "c2"]
+    assert opted["results"][1]["author"] == "Heather"
+    assert opted["results"][1]["matched_evidence"][0]["projection_scope"] == "unprojected_page_scope"
+    assert "c3" not in {r["id"] for r in opted["results"]}
+    english = client.get("/api/search", params=common | {"language": "eng"}).json()
+    assert [r["id"] for r in english["results"]] == ["c1"]
+    assert english["results"][0]["author"] == "Heather"
+    assert client.get("/api/search", params=common | {"edition": "Not this edition"}).json()["results"] == []
+
+
+def test_theme_grouped_pagination_has_no_repeated_parent(client: TestClient, monkeypatch: pytest.MonkeyPatch):
+    class FixtureSemantic:
+        requested_limits = []
+
+        def search(self, query, limit, **filters):
+            self.requested_limits.append(limit)
+            return [{"id": id, "score": 1 - i / 10, "match_reason": "synthetic ranking"}
+                    for i, id in enumerate(["c1", "t1", "p2", "p1", "c2"])][:limit]
+
+    index = FixtureSemantic()
+    monkeypatch.setattr(server, "semantic_service", lambda: index)
+    common = {"q": "synthetic theme", "mode": "themes", "author": "Alpha", "limit": 1}
+    pages = [client.get("/api/search", params=common | {"offset": offset}).json()
+             for offset in range(3)]
+    assert [page["total"] for page in pages] == [2, 2, 2]
+    assert [page["results"][0]["id"] for page in pages[:2]] == ["p1", "p2"]
+    assert pages[2]["results"] == []
+    assert {hit["id"] for hit in pages[0]["results"][0]["matched_evidence"]} == {"c1", "t1", "p1"}
+    opted = [client.get("/api/search", params=common | {"offset": offset, "include_reference": "true"}).json()
+             for offset in range(4)]
+    assert [page["total"] for page in opted] == [3] * 4
+    assert [page["results"][0]["id"] for page in opted[:3]] == ["p1", "p2", "c2"]
+    assert opted[3]["results"] == []
+    assert index.requested_limits == [1000] * 7

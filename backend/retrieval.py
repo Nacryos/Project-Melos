@@ -16,6 +16,34 @@ K = 60  # Conventional RRF damping; a rank, never a confidence probability.
 # Raw OCR, mixed material and review-needed rows never enter fusion. Text
 # labelled machine_corrected_ocr does, carrying that label into the result.
 EXCLUDED_QUALITIES = frozenset({"mixed_content", "machine_ocr", "needs_review"})
+EVIDENCE_EXCERPT_LIMIT = 200
+
+
+def evidence_hit(record: Mapping[str, Any], hit: Mapping[str, Any], signal: str,
+                 projection_scope: str = "direct_source_record") -> dict[str, Any]:
+    """Keep a bounded literal source snippet with a retrieval breadcrumb."""
+    source_text = record.get("text") if isinstance(record.get("text"), str) else ""
+    excerpt = source_text[:EVIDENCE_EXCERPT_LIMIT]
+    return {
+        "id": record["id"],
+        "signal": signal,
+        "kind": record.get("kind"),
+        "quality": record.get("quality"),
+        "language": record.get("language"),
+        "author": record.get("author"),
+        "edition": record.get("edition"),
+        "citation": record.get("citation"),
+        "source_url": record.get("source_url"),
+        "parent_id": record.get("parent_id"),
+        "projection_scope": projection_scope,
+        "text_excerpt": excerpt,
+        "excerpt_truncated": len(source_text) > EVIDENCE_EXCERPT_LIMIT,
+        "match_reason": hit.get("match_reason") or (
+            "Ranked word match" if signal == "lexical" else
+            "Ranked source-backed form match" if signal == "forms" else
+            "Dense embedding similarity"),
+        "raw_score": hit.get("score"),
+    }
 
 
 def _key(value: Any) -> str:
@@ -192,23 +220,9 @@ def fuse(
             evidence_key = (signal, record["id"])
             if evidence_key not in group["evidence_keys"]:
                 group["evidence_keys"].add(evidence_key)
-                group["matched_evidence"].append({
-                    "id": record["id"],
-                    "signal": signal,
-                    "kind": record.get("kind"),
-                    "quality": record.get("quality"),
-                    "language": record.get("language"),
-                    "author": record.get("author"),
-                    "edition": record.get("edition"),
-                    "citation": record.get("citation"),
-                    "source_url": record.get("source_url"),
-                    "parent_id": parent_id,
-                    "match_reason": hit.get("match_reason") or (
-                        "Ranked word match" if signal == "lexical" else
-                        "Ranked source-backed form match" if signal == "forms" else
-                        "Dense embedding similarity"),
-                    "raw_score": hit.get("score"),
-                })
+                scope = ("explicit_parent_id" if target["id"] != record["id"]
+                         and parent_id == target["id"] else "direct_source_record")
+                group["matched_evidence"].append(evidence_hit(record, hit, signal, scope))
             # Multiple matches to one Greek passage or mirrored edition in a
             # single list provide one RRF vote. Their evidence is still shown.
             if group_key not in seen_this_signal:

@@ -719,10 +719,43 @@
     const reason = [record.match_reason, quality, copies, dateClaim ? `Author date claim (${dateClaim.kind}): ${dateClaim.interval}` : ''].filter(Boolean).join(' · ');
     if (reason) body.append(node('span', 'result-reason', reason));
     const evidence = Array.isArray(record.matched_evidence) ? record.matched_evidence : [];
-    for (const hit of evidence.slice(0, 3)) {
+    const readingIds = new Set([record.id, ...(Array.isArray(record.mirrored_ids) ? record.mirrored_ids : [])]);
+    const hasLinkedExcerpt = hit => record.kind === 'text' && record.language === 'grc' &&
+      hit && ['commentary', 'translation'].includes(hit.kind) &&
+      typeof hit.id === 'string' && hit.id !== record.id &&
+      hit.projection_scope === 'explicit_parent_id' &&
+      typeof hit.parent_id === 'string' && readingIds.has(hit.parent_id) &&
+      typeof hit.text_excerpt === 'string' && !!hit.text_excerpt.trim();
+    // Put the actual supporting source text before generic signal labels.
+    // Multiple retrieval signals for one source record are not new witnesses.
+    const linkedEvidence = evidence.filter(hasLinkedExcerpt);
+    const seenEvidence = new Set();
+    const displayedEvidence = [...linkedEvidence, ...evidence.filter(hit => hit && !hasLinkedExcerpt(hit))]
+      .filter(hit => {
+        if (!hit.id) return true;
+        if (seenEvidence.has(hit.id)) return false;
+        seenEvidence.add(hit.id); return true;
+      }).slice(0, 3);
+    if (displayedEvidence.some(hasLinkedExcerpt)) body.append(node('span', 'result-reason', 'Matched source excerpts'));
+    for (const hit of displayedEvidence) {
       const detail = node('span', 'evidence-hit');
-      const label = [hit.signal && String(hit.signal).replaceAll('_', ' '), hit.kind, hit.quality && hit.quality !== 'source_text' ? qualityLabel(hit.quality) : '', hit.author, hit.citation].filter(Boolean).join(' · ');
-      detail.append(node('span', '', `${label || 'Linked source'}: ${hit.match_reason || 'retrieval match'}`));
+      if (hasLinkedExcerpt(hit)) {
+        const credit = [
+          hit.kind === 'commentary' ? 'Commentary excerpt' : 'Translation excerpt',
+          hit.author || 'Author not recorded',
+          hit.citation, hit.edition,
+          hit.quality && hit.quality !== 'source_text' ? qualityLabel(hit.quality) : ''
+        ].filter(Boolean).join(' · ');
+        detail.append(node('span', '', credit), node('span', 'result-reason', hit.text_excerpt));
+        const scope = hit.parent_id === record.id
+          ? 'Linked passage; not word-aligned.'
+          : 'Linked to another indexed reading; compare editions.';
+        detail.append(node('span', 'result-reason',
+          `${scope}${hit.excerpt_truncated ? ' Excerpt shortened.' : ''}`));
+      } else {
+        const label = [hit.signal && String(hit.signal).replaceAll('_', ' '), hit.kind, hit.quality && hit.quality !== 'source_text' ? qualityLabel(hit.quality) : '', hit.author, hit.citation].filter(Boolean).join(' · ');
+        detail.append(node('span', '', `${label || 'Linked source'}: ${hit.match_reason || 'retrieval match'}`));
+      }
       body.append(detail);
     }
     if (record.retrieval_score_kind === 'reciprocal_rank_fusion') body.append(node('span', 'result-reason', 'Ranked by reciprocal rank fusion; rank is not confidence.'));
