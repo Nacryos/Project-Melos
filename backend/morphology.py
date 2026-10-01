@@ -732,10 +732,12 @@ class Morphology:
                        for row in self._quarantined_forms.get(key, ())]
         if quarantined:
             warnings.append('A reviewed source annotation mismatch was quarantined: it cannot supply a parsing candidate, dictionary gloss, form inventory, or automatic expansion. The original source record is retained separately; no corrected parse was invented.')
+        fuzzy_only = bool(candidates) and all(candidate["edit_distance"] > 0 for candidate in candidates)
         if any(candidate['lemma_link_status'] == 'ambiguous_source_lemmas'
                for candidate in candidates):
-            warnings.append('The indexed form has conflicting lemma attributions. These may reflect legitimate homography or a source error; all readings are retained, but unresolved links do not drive automatic lemma expansion. Search a headword explicitly to choose a lemma.')
-        fuzzy_only = bool(candidates) and all(candidate["edit_distance"] > 0 for candidate in candidates)
+            subject = ('Some nearby spellings have conflicting lemma attributions; this does not establish conflicting parses of the queried form. '
+                       if fuzzy_only else 'The indexed form has conflicting lemma attributions. ')
+            warnings.append(subject + 'These may reflect legitimate homography or a source error; all readings are retained, but unresolved links do not drive automatic lemma expansion. Search a headword explicitly to choose a lemma.')
         if fuzzy_only:
             warnings.append("No exact indexed morphological analysis was found for this form. The following analyses belong to nearby spellings, not necessarily the queried form.")
         if not self.form_count:

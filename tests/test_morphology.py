@@ -131,6 +131,24 @@ class MorphologyTests(unittest.TestCase):
         self.assertEqual(result["candidates"], [])
         self.assertTrue(result["warnings"])
 
+    def test_nearby_lemma_conflict_is_not_attributed_to_the_query(self):
+        # Deliberately conflicting synthetic annotations test warning scope,
+        # not a claim about the Greek words used by the fixture.
+        with (Path(self.scratch.name) / "forms.jsonl").open("a", encoding="utf-8") as target:
+            target.write(json.dumps({"form": "λύει", "lemma": "θεός", "analysis": "n-s---mn-",
+                                     "source_url": "https://example.test/conflicting-fixture"},
+                                    ensure_ascii=False) + "\n")
+        exact = self.service.analyze("λύει")
+        nearby = self.service.analyze("λυεο")
+        self.assertTrue(any(w.startswith('The indexed form has conflicting lemma attributions.')
+                            for w in exact['warnings']))
+        self.assertEqual(nearby['analysis_match_status'], 'spelling_suggestions_only')
+        self.assertTrue(any(w.startswith('Some nearby spellings have conflicting lemma attributions;')
+                            for w in nearby['warnings']))
+        self.assertFalse(any(w.startswith('The indexed form has conflicting lemma attributions.')
+                             for w in nearby['warnings']))
+        self.assertTrue(all(not c['automatic_expansion_eligible'] for c in nearby['candidates']))
+
     def test_nfc_duplicates_group_without_folding_distinct_accents(self):
         forms = Path(self.scratch.name) / "forms.jsonl"
         with forms.open("a", encoding="utf-8") as target:
