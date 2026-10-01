@@ -1203,6 +1203,38 @@
     if (Number(data.total) > claims.length) section.append(node('p', 'candidate-reason', `${data.total} claims matched; ${claims.length} shown in this preview.`));
     appendWarnings(host, data.warnings);
   }
+  function renderSourceGrammarAlternatives(host, candidate) {
+    const notices = {
+      incomplete_explicit_alternatives: 'Not all source alternatives are indexed yet.',
+      explicit_alternatives_represented: 'The source alternatives are indexed; no reading is selected here.',
+      partial_with_explicit_alternatives: 'Partial analysis; the source alternatives remain open.'
+    };
+    const status = candidate?.source_projection_status;
+    if (!Object.prototype.hasOwnProperty.call(notices, status)) return false;
+    const notice = notices[status];
+    const section = node('div', 'source-grammar-alternatives');
+    section.append(node('p', 'candidate-meta-label', 'Source alternatives'),
+      node('p', 'candidate-reason', notice));
+    const proofs = Array.isArray(candidate.source_grammar_alternatives) ? candidate.source_grammar_alternatives : [];
+    for (const proof of proofs) {
+      if (!proof || typeof proof !== 'object') continue;
+      if (typeof proof.source_text === 'string' && proof.source_text.trim()) {
+        section.append(node('p', 'candidate-analysis', proof.source_text));
+      } else {
+        // Older/incomplete display packets can still carry printed branches.
+        // Do not complete their features or invent connecting source words.
+        for (const branch of Array.isArray(proof.branches) ? proof.branches : []) {
+          if (typeof branch?.raw_label === 'string' && branch.raw_label.trim()) {
+            section.append(node('p', 'candidate-analysis', branch.raw_label));
+          }
+        }
+      }
+      const link = safeLink(proof.source_url, 'Read source ↗');
+      if (link) section.append(link);
+    }
+    host.append(section);
+    return true;
+  }
   function renderContextualCandidates(host, candidates, method) {
     if (!Array.isArray(candidates) || !candidates.length) return;
     const section = addInspectorSection(`Source candidate analyses · ${candidates.length}`, host);
@@ -1212,6 +1244,7 @@
       row.append(node('div', 'candidate-lemma', candidate.lemma || candidate.equivalent_form || candidate.matched_form || 'Unlabeled candidate'));
       if (candidate.analysis) row.append(node('p', 'candidate-analysis', String(candidate.analysis)));
       if (candidate.features) row.append(node('p', 'candidate-analysis', formatFeatures(candidate.features)));
+      renderSourceGrammarAlternatives(row, candidate);
       if (candidate.equivalent_form) row.append(node('p', 'candidate-analysis', `Equivalent form: ${candidate.equivalent_form}`));
       row.append(node('p', 'candidate-reason', [candidate.strength?.replaceAll('_', ' '), candidate.source_family, candidate.match_reason].filter(Boolean).join(' · ')));
       if (candidate.status !== 'source_claim') row.append(node('p', 'claim-status', `Status: ${String(candidate.status || 'unreviewed').replaceAll('_', ' ')}`));
@@ -1520,6 +1553,7 @@
           if (candidate.analysis) parse.title = `Source analysis: ${candidate.analysis}${candidate.analysis_format ? ` (${candidate.analysis_format})` : ''}`;
           card.append(parse);
         } else if (candidate.analysis) card.append(node('p', 'candidate-analysis', `${candidate.analysis}${candidate.analysis_format ? ` (${candidate.analysis_format})` : ''}`));
+        renderSourceGrammarAlternatives(card, candidate);
         if (candidate.matched_form && candidate.matched_form !== form) card.append(node('p', 'candidate-reason', `Matched source spelling: ${candidate.matched_form}`));
         else if (candidate.attested_form && candidate.attested_form !== form) card.append(node('p', 'candidate-reason', `Recorded form: ${candidate.attested_form}`));
         if (candidate.reason) card.append(node('p', 'candidate-reason', candidate.reason));

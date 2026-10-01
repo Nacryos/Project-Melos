@@ -17,6 +17,7 @@ from typing import Any
 from backend.morphology import normalize, query_variants
 from backend.publication import publication_restricted, EVIDENCE_HOLD
 from backend.normalization_contract import NORMALIZATION_VERSION
+from backend.source_grammar import projection_qualification
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -310,6 +311,7 @@ class EvidenceIndex:
         wiktionary_entries = self._wiktionary_entry_context(found["claims"])
         candidates: list[dict[str, Any]] = []
         excluded = 0
+        projection_warnings = []
         for claim in found["claims"]:
             predicate = claim["predicate"]
             if predicate not in {"lemma", "morphology"}:
@@ -400,6 +402,19 @@ class EvidenceIndex:
                     break
             if len(candidates) >= limit:
                 break
+        # "Represented" means present in this returned candidate inventory,
+        # not merely somewhere in the unlimited source lookup. A pagination
+        # budget must not hide a necessary alternative while lifting the guard.
+        projected_ids = {claim_id for candidate in candidates for claim_id in candidate['claim_ids']}
+        visible_claims = [claim for claim in found['claims'] if claim['id'] in projected_ids]
+        by_claim_id = {claim['id']: claim for claim in visible_claims}
+        for candidate in candidates:
+            for claim_id in candidate['claim_ids']:
+                claim = by_claim_id.get(claim_id)
+                qualification = projection_qualification(claim, visible_claims) if claim else {}
+                if qualification:
+                    candidate.update(qualification)
+                    projection_warnings.append(f"{claim_id}: {qualification['source_projection_note']}")
         # A listed spelling can differ from its entry headword, so its
         # source-stated form-of target may not be among lookup(form)'s raw
         # claims. Supply only accepted sibling proof used by these bounded
@@ -433,7 +448,7 @@ class EvidenceIndex:
             "supporting_claims": supporting_claims,
             "method": "Source-stated grammatical labels and explicit form-of links; lexical entry metadata remains in raw claims",
             "warnings": ([f"{excluded} lexical metadata or non-grammatical claim projection(s) excluded."]
-                         if excluded else []),
+                         if excluded else []) + list(dict.fromkeys(projection_warnings)),
         }
 
     def equivalent_forms_for_form(self, form: str, limit: int = 500) -> list[str]:

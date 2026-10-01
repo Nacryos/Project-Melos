@@ -482,8 +482,17 @@ def build_evidence_packet(
                         "comparison_scope": row.get("comparison_scope"),
                         "source_passage_id": row.get("source_passage_id"),
                         "comparison_context": row.get("comparison_context"),
+                        "source_projection_status": row.get("source_projection_status"),
+                        "source_grammar_alternatives": row.get("source_grammar_alternatives"),
+                        "source_projection_note": row.get("source_projection_note"),
                         "evidence_refs": row.get("evidence_refs"),
                         "source_references": source_refs, "claim_ids": linked})
+    # Preserve inventory-level incompleteness before grouping can consume a
+    # member ID. Source alternatives and their quotes remain unchanged.
+    incomplete_projections = [{key: option[key] for key in
+        ('id', 'claim_ids', 'source_projection_status', 'source_grammar_alternatives', 'source_projection_note')}
+        for option in options
+        if option.get('source_projection_status') == 'incomplete_explicit_alternatives']
     original_option_count = len(options)
     options, grouped_count = _group_source_bridged_options(
         form, options, [row for row in claims if _source_claim(row)])
@@ -513,6 +522,8 @@ def build_evidence_packet(
         "constraints": constraints,
         "warnings": warnings,
     }
+    if incomplete_projections:
+        packet['incomplete_source_projections'] = incomplete_projections
     return _compact_packet(packet)
 
 
@@ -642,6 +653,11 @@ def classify_context(
     context_tokens = tokenize(normalize(search_text(str(context['text']))))
     if normalize(form) not in set(context_tokens):
         result["reason"] = "The queried form does not occur as a token in the supplied Greek passage."
+        return result
+    if packet.get('incomplete_source_projections'):
+        result['reason'] = ('A source explicitly gives grammatical alternatives, but the candidate inventory '
+                            'does not preserve all of those alternatives. Comparison was not run; '
+                            'the original source claims and quoted alternatives remain available.')
         return result
     if not packet["candidates"]:
         result["reason"] = "No existing candidate is available."
