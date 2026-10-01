@@ -537,9 +537,11 @@
       const nonAligned = pageWide || sourceSection;
       article.append(node('span', 'eyebrow', [sourceSection ? 'Source-section note · not passage-aligned' : pageWide ? 'Page-wide note' : item.kind, item.edition].filter(Boolean).join(' · ') || 'Related record'));
       if (item.kind === 'translation') {
-        const credit = item.metadata?.translator || item.author;
+        // `author` commonly names the ancient poet, not the translator.
+        // Only an explicit source-extracted translator field supplies a credit.
+        const credit = typeof item.metadata?.translator === 'string' ? item.metadata.translator.trim() : '';
         const language = ({ ell: 'Modern Greek', eng: 'English', lat: 'Latin', grc: 'Ancient Greek' })[item.language] || item.language;
-        article.append(node('p', 'candidate-reason', [language, credit && `Translator: ${credit}`].filter(Boolean).join(' · ')));
+        article.append(node('p', 'candidate-reason', [language, credit ? `Translator: ${credit}` : 'Translator not recorded'].filter(Boolean).join(' · ')));
       }
       if (sourceSection) {
         const labels = [...new Set([item.metadata?.source_heading, item.metadata?.source_section, item.citation].filter(value => typeof value === 'string' && value.trim()))];

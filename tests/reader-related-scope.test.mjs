@@ -65,7 +65,22 @@ test('linked Modern Greek translations show their own source credit and language
   assert.equal(opened.at(-1), 'modern-translation');
 });
 
-test('translation credit falls back to recorded author without inventing missing credits', () => {
-  assert.match(show([{ id: 'tr', kind: 'translation', language: 'eng', author: 'Recorded translator', text: 'Fixture text' }]).textContent, /English · Translator: Recorded translator/);
-  assert.ok(!show([{ id: 'tr', kind: 'translation', language: 'ell', text: 'Fixture text' }]).textContent.includes('Translator:'));
+test('a Perseus record ancient author is not relabelled as its translator', () => {
+  const host = show([{ id: 'fixture:perseus:translation', source: 'perseus', parent_id: 'selected-record',
+    kind: 'translation', language: 'eng', author: 'Euripides', edition: 'Synthetic edition label',
+    text: 'Synthetic translation text.', source_url: 'https://example.org/fixture-translation',
+    metadata: { cts_urn: 'fixture:edition' } }]);
+  assert.match(host.textContent, /English · Translator not recorded/);
+  assert.ok(!host.textContent.includes('Translator: Euripides'));
+  assert.match(host.textContent, /Synthetic edition label/);
+  assert.equal(descendants(host).find(element => element.tag === 'a').href, 'https://example.org/fixture-translation');
+});
+
+test('missing or nontext translator metadata stays explicitly unknown', () => {
+  for (const translator of [undefined, null, '', '   ', { name: 'Not a source string' }]) {
+    const host = show([{ id: 'fixture:translation', kind: 'translation', language: 'ell',
+      author: 'Ancient author', text: 'Synthetic text.', metadata: { translator } }]);
+    assert.match(host.textContent, /Modern Greek · Translator not recorded/);
+    assert.ok(!host.textContent.includes('Translator:'));
+  }
 });
