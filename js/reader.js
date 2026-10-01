@@ -20,7 +20,7 @@
   };
   const state = {
     authors: [], works: new Map(), selectedAuthor: '', selectedWork: '', passage: null,
-    search: null, searchSequence: 0, passageSequence: 0, wordSequence: 0,
+    search: null, searchSequence: 0, passageSequence: 0, wordSequence: 0, passageLoading: false,
     selectedText: '', activeWord: null, semanticStatus: null, classifierStatus: null,
     dictionarySequence: 0, dictionaryCache: new Map()
   };
@@ -230,7 +230,31 @@
       }
     }
   }
+  function resetPassageContext(loading = false) {
+    ++state.wordSequence;
+    state.passage = null;
+    state.passageLoading = loading;
+    state.activeWord = null;
+    state.selectedText = '';
+    const selection = window.getSelection?.();
+    if (selection?.anchorNode && ui.text.contains(selection.anchorNode)) selection.removeAllRanges?.();
+    ui.passage.setAttribute('aria-busy', String(loading));
+    ui.subtitle.textContent = '';
+    ui.kicker.textContent = 'THE COLLECTION';
+    ui.textLeading.textContent = '';
+    ui.readingHint.textContent = '';
+    clear(ui.provenance); ui.provenance.hidden = true;
+    clear(ui.related); ui.related.hidden = true;
+    ui.prev.disabled = true; ui.next.disabled = true;
+    ui.selectionActions.hidden = true;
+    ui.selectedPhrase.textContent = '';
+    for (const button of ui.selectionActions.querySelectorAll('[data-phrase-mode]')) button.disabled = true;
+    message(ui.inspector, loading ? 'Opening a new passage. Word lookup will be available once its text has loaded.' :
+      'Open a passage to inspect a word in its context.');
+  }
   async function selectWork(work, focus = true) {
+    const sequence = ++state.passageSequence;
+    resetPassageContext(true);
     state.selectedAuthor = work.author || state.selectedAuthor;
     state.selectedWork = work.id;
     ui.results.hidden = true;
@@ -239,7 +263,7 @@
     message(ui.text, 'Loading a passage from this work…', 'loading-line');
     try {
       const data = await api('/api/passages', { work_id: work.id, limit: 20, offset: 0 });
-      if (state.selectedWork !== work.id) return;
+      if (sequence !== state.passageSequence || state.selectedWork !== work.id) return;
       const results = Array.isArray(data.results) ? data.results : [];
       const first = results.find(p => p.language === 'grc' && p.kind === 'text' && p.quality === 'source_text' && p.text?.length < 700)
         || results.find(p => p.language === 'grc' && p.kind === 'text' && p.quality === 'source_text')
@@ -248,10 +272,12 @@
       if (!first) { renderPassageEmpty('This work has no readable passages in the index.'); return; }
       await openPassage(first.id, focus);
     } catch (error) {
-      if (state.selectedWork === work.id) renderPassageEmpty(`Could not load passages: ${errorText(error)}`, true);
+      if (sequence === state.passageSequence && state.selectedWork === work.id) renderPassageEmpty(`Could not load passages: ${errorText(error)}`, true);
     }
   }
   function renderPassageEmpty(text, isError = false) {
+    ++state.passageSequence;
+    resetPassageContext(false);
     ui.title.textContent = isError ? 'Passage unavailable' : 'No passage available';
     ui.subtitle.textContent = '';
     ui.kicker.textContent = 'THE COLLECTION';
@@ -561,13 +587,18 @@
   async function openPassage(id, focus = true) {
     if (!id) return;
     const sequence = ++state.passageSequence;
-    ++state.wordSequence;
+    resetPassageContext(true);
     ui.title.textContent = 'Opening passage';
     message(ui.text, 'Loading the original text…', 'loading-line');
     try {
       const passage = await api('/api/passage', { id });
       if (sequence !== state.passageSequence) return;
+      ++state.wordSequence;
       state.passage = passage;
+      state.passageLoading = false;
+      state.activeWord = null;
+      state.selectedText = '';
+      ui.passage.setAttribute('aria-busy', 'false');
       state.selectedAuthor = passage.author_canonical || passage.author || state.selectedAuthor;
       if (passage.work_id) state.selectedWork = passage.work_id;
       ui.kicker.textContent = passage.kind === 'text' ? 'FROM THE LYRIC COLLECTION' : 'REFERENCE RECORD';
@@ -1065,6 +1096,7 @@
     const output = node('div', 'classifier-output');
     section.append(button, output);
     button.addEventListener('click', async () => {
+      if (sequence !== state.wordSequence || state.passageLoading || state.passage?.id !== passageId) return;
       button.disabled = true;
       message(output, 'Comparing candidates…');
       try {
@@ -1219,6 +1251,7 @@
   }
   async function inspectWord(form, button = null, joined = false) {
     if (!form) return;
+    if (button && (state.passageLoading || !state.passage?.id || !ui.text.contains(button))) return;
     for (const active of ui.text.querySelectorAll('.word.active')) active.classList.remove('active');
     state.activeWord = button;
     if (button) {
@@ -1339,15 +1372,22 @@
     }
   }
   function updateSelection() {
+    if (state.passageLoading || !state.passage) {
+      state.selectedText = ''; ui.selectedPhrase.textContent = ''; ui.selectionActions.hidden = true;
+      return;
+    }
     const selection = window.getSelection();
     const phrase = selection?.toString().replace(/\s+/g, ' ').trim() || '';
     const anchor = selection?.anchorNode;
     const focus = selection?.focusNode;
     const inside = anchor && focus && ui.text.contains(anchor) && ui.text.contains(focus);
-    if (!inside || phrase.length < 2 || phrase.length > 180) { ui.selectionActions.hidden = true; return; }
+    if (!inside || phrase.length < 2 || phrase.length > 180) {
+      state.selectedText = ''; ui.selectedPhrase.textContent = ''; ui.selectionActions.hidden = true; return;
+    }
     state.selectedText = phrase;
     ui.selectedPhrase.textContent = `“${phrase}”`;
     ui.selectionActions.hidden = false;
+    for (const button of ui.selectionActions.querySelectorAll('[data-phrase-mode]')) button.disabled = false;
   }
   async function initialize() {
     if (window.MELOS_FRONTEND_ONLY === true) {
@@ -1438,6 +1478,7 @@
     if (target === state.activeWord) target.focus({ preventScroll: true });
   });
   for (const button of ui.selectionActions.querySelectorAll('[data-phrase-mode]')) button.addEventListener('click', () => {
+    if (state.passageLoading || !state.passage || !state.selectedText) return;
     const mode = button.dataset.phraseMode;
     ui.searchInput.value = state.selectedText;
     setFormMode(mode);
