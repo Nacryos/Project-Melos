@@ -30,10 +30,13 @@ STOPWORDS = frozenset("""a an and are as at be but by for from has have he her h
 she that the their them they this to was were which who will with you your not no so than then
 there these those into upon when where while whom whose shall thou thee thy ye hath doth unto""".split())
 SEARCHABLE = "('source_text','machine_corrected_ocr')"
-# Fusion weights for a query without Greek letters. The Greek-vector signal
-# stays as weak evidence; English evidence (dense over English records, BM25
-# over linked English records) and rare-word feedback carry the ranking.
-ENGLISH_QUERY_WEIGHTS = {"semantic": 0.5, "dense_english": 1.0, "bm25_bridge": 1.0, "prf": 1.0}
+# Fusion weights for a query without Greek letters. Measured 2026-09-30: the
+# BM25 bridge raised both Recall@10 and MRR in every round; rare-word feedback
+# (prf_hits) added recall but lowered MRR because wrong dense seeds boost wrong
+# passages, and down-weighting the Greek-vector list or adding an English-only
+# dense list lowered MRR too. Production fuses the bridge only; prf_hits stays
+# available for the lab.
+ENGLISH_QUERY_WEIGHTS = {"semantic": 1.0, "bm25_bridge": 1.0}
 
 
 def is_greek_query(query: str) -> bool:

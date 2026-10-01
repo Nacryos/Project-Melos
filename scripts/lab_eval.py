@@ -288,7 +288,7 @@ class Lab:
             if greek_query:
                 hits = self.fused(query, exclude)
             else:
-                hits = self.fused(query, exclude, extra_signals=["bm25_bridge", "dense_english", "prf"], weights=dict(ENGLISH_QUERY_WEIGHTS))
+                hits = self.fused(query, exclude, extra_signals=["bm25_bridge"], weights=dict(ENGLISH_QUERY_WEIGHTS))
         elif method == "hybrid_prf":
             hits = self.fused(query, exclude, extra_signals=["prf"])
         elif method == "hybrid_bm25_prf":

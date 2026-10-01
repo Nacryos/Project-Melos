@@ -85,8 +85,8 @@ def test_english_hybrid_query_returns_greek_parent_with_bridge_evidence(client: 
     assert "bm25_bridge" in top["retrieval_ranks"] and "semantic" in top["retrieval_ranks"]
     assert any(hit["id"] == "apple-eng" for hit in top["matched_evidence"])
     assert any("English query" in warning for warning in result["warnings"])
-    # Feedback from the dense Greek hit reaches the passage sharing its rare words.
-    assert "oak-twin" in ids
+    # Feedback is a lab signal only; production fuses the English bridge alone.
+    assert "prf" not in top["retrieval_ranks"]
 
 
 def test_greek_hybrid_query_keeps_plain_fusion(client: TestClient):
