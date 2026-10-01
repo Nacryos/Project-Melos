@@ -40,12 +40,15 @@ assert wiktionary['ready']
 assert get('/api/search', q='λύσις', mode='words')['results']
 themes = get('/api/search', q='Sappho Cretan grove cold water and roses', mode='themes', limit=5)
 assert themes['results']
-assert themes['method'] == 'Local multilingual dense embeddings; similarity is not an influence claim.'
+assert themes['method'] == 'Local multilingual dense rank grouped by explicit parent IDs; rank is not confidence or influence evidence.'
 expected_notices = {
     'Semantic total counts only the first 1,000 ranked candidates; more indexed hits may exist.',
-    'Translations/commentary are separate retrieval evidence; no automatic equivalence of senses is asserted.',
+    'Scores are a one-list reciprocal-rank transform of the bounded dense order, not cosine similarities, probabilities, or confidence.',
+    'Dense candidates are ranked and grouped by explicit Greek parent IDs; linked commentary/translation remains separately attributed evidence, not a word-level alignment or verified sense equivalence.',
 }
 assert set(themes.get('warnings', [])) <= expected_notices, themes.get('warnings')
+assert expected_notices - {'Semantic total counts only the first 1,000 ranked candidates; more indexed hits may exist.'} <= set(themes['warnings'])
+assert all(row['kind']=='text' and row['language']=='grc' and row['retrieval_score_kind']=='reciprocal_rank' for row in themes['results'])
 get('/api/search', q='Sappho Cretan grove cold water and roses', mode='themes', limit=5)
 assert get('/api/usage-space', q='ἔρος', limit=10)['points']
 try:
