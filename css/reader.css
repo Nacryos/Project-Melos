@@ -137,3 +137,4 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .machine-comparison{padding-left:10px;border-left:2px solid var(--gold);margin-top:12px}
 .machine-attribution a{color:var(--sea);font-size:12px;text-underline-offset:3px}
 .result-edition,.result-collection{display:block;color:var(--muted);font-size:12px;line-height:1.4;margin-top:4px;overflow-wrap:anywhere}
+.selection-actions.selection-too-long>span{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}

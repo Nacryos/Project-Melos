@@ -233,6 +233,7 @@
   }
   function resetPassageContext(loading = false) {
     state.machineAnalysisCancel?.();
+    ui.selectionActions.classList.remove('selection-too-long');
     ++state.wordSequence;
     state.passage = null;
     state.passageLoading = loading;
@@ -1745,24 +1746,57 @@
     }
     button.hidden = false;
   }
+  function selectedPassageText(selection, root) {
+    if (!selection || selection.rangeCount !== 1) return '';
+    const range = selection.getRangeAt(0);
+    if (range.collapsed || !root.contains(range.startContainer) || !root.contains(range.endContainer)) return '';
+    // Read the ORIGINAL nodes, not cloneContents(): a range wholly inside a
+    // label would clone a bare text node and lose its metadata ancestry.
+    const walker = root.ownerDocument.createTreeWalker(root, 4); // SHOW_TEXT
+    const pieces = [];
+    let previousBlock = null;
+    while (walker.nextNode()) {
+      const text = walker.currentNode;
+      if (text.parentElement?.closest('.line-label') || !range.intersectsNode(text)) continue;
+      const start = text === range.startContainer ? range.startOffset : 0;
+      const end = text === range.endContainer ? range.endOffset : text.data.length;
+      const selected = text.data.slice(start, end);
+      if (!selected) continue;
+      const block = text.parentElement?.closest('.line, p') || null;
+      if (pieces.length && block !== previousBlock) pieces.push('\n');
+      pieces.push(selected);
+      previousBlock = block;
+    }
+    return pieces.join('');
+  }
   function updateSelection() {
+    ui.selectionActions.classList.remove('selection-too-long');
     if (state.passageLoading || !state.passage) {
       state.selectedText = ''; ui.selectedPhrase.textContent = ''; ui.selectionActions.hidden = true;
       return;
     }
     const selection = window.getSelection();
-    const phrase = selection?.toString().replace(/\s+/g, ' ').trim() || '';
     const anchor = selection?.anchorNode;
     const focus = selection?.focusNode;
     const inside = anchor && focus && ui.text.contains(anchor) && ui.text.contains(focus);
-    if (!inside || phrase.length < 2 || phrase.length > 180) {
+    const phrase = inside ? selectedPassageText(selection, ui.text).replace(/\s+/g, ' ').trim() : '';
+    const length = [...phrase].length; // Match the backend's Unicode-codepoint query limit.
+    if (!inside || length < 2) {
       state.selectedText = ''; ui.selectedPhrase.textContent = ''; ui.selectionActions.hidden = true; return;
+    }
+    if (length > 1000) {
+      state.selectedText = '';
+      ui.selectionActions.classList.add('selection-too-long');
+      ui.selectedPhrase.textContent = 'Select up to 1,000 characters to search a passage. This selection has not been shortened or sent.';
+      ui.selectionActions.hidden = false;
+      for (const button of ui.selectionActions.querySelectorAll('button')) button.disabled = true;
+      return;
     }
     state.selectedText = phrase;
     ui.selectedPhrase.textContent = `“${phrase}”`;
     ui.selectionActions.hidden = false;
     updateSelectionTranslationAction();
-    for (const button of ui.selectionActions.querySelectorAll('[data-phrase-mode]')) button.disabled = false;
+    for (const button of ui.selectionActions.querySelectorAll('button')) button.disabled = false;
   }
   async function initialize() {
     if (window.MELOS_FRONTEND_ONLY === true) {
