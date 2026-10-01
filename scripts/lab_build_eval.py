@@ -28,13 +28,31 @@ import sqlite3
 from pathlib import Path
 
 
-def sample_linked(con: sqlite3.Connection, kind: str, count: int, seed: int, min_len: int, max_len: int, keep_siblings: bool = False) -> list[dict]:
+import re
+
+GREEK_CHARS = re.compile(r"[\u0370-\u03ff\u1f00-\u1fff]")
+# Commentary that glosses words, prints metrical schemes or cites scholarship
+# is not a description of the poem's content; these patterns drop it from the
+# "descriptive" query set.
+NON_DESCRIPTIVE = re.compile(r"Meter:|\bMetre\b|\bsee\b|\bcf\.|\bpp?\.\s*\d|\bvol\.|\b(?:18|19|20)\d\d\b|\bLoeb\b|\bed\.|\bfrr?\.\s*\d|"
+                             r"\b(?:pres|aor|perf|impf|fut|gen|dat|acc|nom|sg|pl|partic|infin|subj|opt|indic)\b\.?", re.I)
+
+
+def descriptive(text: str) -> bool:
+    letters = sum(1 for c in text if c.isalpha())
+    greek = len(GREEK_CHARS.findall(text))
+    return letters >= 80 and greek <= letters * 0.05 and not NON_DESCRIPTIVE.search(text)
+
+
+def sample_linked(con: sqlite3.Connection, kind: str, count: int, seed: int, min_len: int, max_len: int, keep_siblings: bool = False, only_descriptive: bool = False) -> list[dict]:
     rows = con.execute(
         """SELECT t.id, t.text, t.author, p.id, p.author, p.author_canonical, p.text_key, p.quality, p.work, p.citation, p.source
            FROM passages t JOIN passages p ON p.id=json_extract(t.data,'$.parent_id')
            WHERE t.kind=? AND t.language='eng' AND p.kind='text' AND p.language='grc'
              AND p.quality IN ('source_text','machine_corrected_ocr')
              AND length(t.text) BETWEEN ? AND ?""", (kind, min_len, max_len)).fetchall()
+    if only_descriptive:
+        rows = [row for row in rows if descriptive(row[1])]
     rng = random.Random(seed)
     # Stratify: at most a third of the sample from any single parent author so
     # Homer does not swamp the translation family.
@@ -98,10 +116,11 @@ def main() -> None:
     parser.add_argument("--per-family", type=int, default=150)
     parser.add_argument("--seed", type=int, default=20260930)
     parser.add_argument("--keep-siblings", action="store_true", help="exclude only the query record itself; other translations/commentary of the parent stay in the pool (realistic description search)")
+    parser.add_argument("--descriptive", action="store_true", help="keep only commentary/translation that reads as a description (no glosses, metre, bibliography)")
     args = parser.parse_args()
     con = sqlite3.connect(f"file:{args.db.as_posix()}?mode=ro", uri=True)
-    queries = (sample_linked(con, "translation", args.per_family, args.seed, 60, 600, args.keep_siblings)
-               + sample_linked(con, "commentary", args.per_family, args.seed + 1, 80, 900, args.keep_siblings)
+    queries = (sample_linked(con, "translation", args.per_family, args.seed, 60, 600, args.keep_siblings, args.descriptive)
+               + sample_linked(con, "commentary", args.per_family, args.seed + 1, 80, 900, args.keep_siblings, args.descriptive)
                + fixtures(args.fixtures, con))
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.out.open("w", encoding="utf-8") as stream:

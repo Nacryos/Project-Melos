@@ -113,10 +113,25 @@ class Lab:
             return []
         return [row for row in found.get("results", []) if row["id"] not in exclude]
 
-    def bm25_bridge_hits(self, query: str, exclude: set[str], limit: int | None = None) -> list[dict]:
+    def rare_terms(self, query: str, keep: int = 12, ceiling: int = 2500) -> list[str]:
+        """Query words ordered by rarity in the index vocabulary; frequent words carry little signal."""
+        terms = [t for t in dict.fromkeys(tokenize(normalize(query))) if len(t) > 2 and t not in STOPWORDS and not GREEK.search(t)]
+        scored = []
+        for term in terms:
+            row = self.con.execute("SELECT count FROM vocabulary WHERE normalized=?", (term,)).fetchone()
+            count = row["count"] if row else 0
+            if 0 < count <= ceiling:
+                scored.append((count, term))
+        scored.sort()
+        return [term for _, term in scored[:keep]]
+
+    def bm25_bridge_hits(self, query: str, exclude: set[str], limit: int | None = None, rare: bool = False) -> list[dict]:
         """BM25 over linked English translations and commentary, projected later to Greek parents."""
-        terms = [t for t in tokenize(normalize(query)) if len(t) > 2 and t not in STOPWORDS and not GREEK.search(t)]
-        terms = list(dict.fromkeys(terms))[:24]
+        if rare:
+            terms = self.rare_terms(query)
+        else:
+            terms = [t for t in tokenize(normalize(query)) if len(t) > 2 and t not in STOPWORDS and not GREEK.search(t)]
+            terms = list(dict.fromkeys(terms))[:24]
         if not terms:
             return []
         expression = " OR ".join('"' + t.replace('"', '""') + '"' for t in terms)
@@ -125,6 +140,35 @@ class Lab:
             "WHERE passage_fts MATCH ? AND p.language='eng' AND p.kind IN ('translation','commentary') "
             "AND json_extract(p.data,'$.parent_id') IS NOT NULL ORDER BY rank LIMIT ?", (expression, limit or self.pool)).fetchall()
         return [{"id": r["id"], "score": -r["rank"], "match_reason": "BM25 over linked English records"} for r in rows if r["id"] not in exclude]
+
+    def prf_hits(self, query: str, exclude: set[str], seeds: int = 5, terms_per_seed: int = 6) -> list[dict]:
+        """Pseudo-relevance feedback: rare Greek words of the top dense Greek hits become a lexical query.
+
+        The seed passages are only a device for choosing words; nothing about
+        them is asserted. Rarity comes from the index vocabulary counts.
+        """
+        seed_hits = self.dense_hits(query, exclude, language="grc", kind="text", limit=seeds * 2)[:seeds]
+        candidates: dict[str, int] = {}
+        for hit in seed_hits:
+            record = self.record(hit["id"])
+            if not record:
+                continue
+            for token in set(tokenize(record.get("text", ""))):
+                key = normalize(token)
+                if len(key) < 4 or not GREEK.search(key):
+                    continue
+                row = self.con.execute("SELECT count FROM vocabulary WHERE normalized=?", (key,)).fetchone()
+                if row and 1 < row["count"] <= 400:
+                    candidates[key] = min(candidates.get(key, 10**9), row["count"])
+        if not candidates:
+            return []
+        terms = [key for key, _ in sorted(candidates.items(), key=lambda kv: kv[1])[:seeds * terms_per_seed]]
+        expression = " OR ".join('"' + t.replace('"', '""') + '"' for t in terms)
+        rows = self.con.execute(
+            "SELECT p.id, bm25(passage_fts) rank FROM passage_fts JOIN passages p ON p.id=passage_fts.id "
+            "WHERE passage_fts MATCH ? AND p.language='grc' AND p.kind='text' AND p.quality IN ('source_text','machine_corrected_ocr') "
+            "ORDER BY rank LIMIT ?", (expression, self.pool)).fetchall()
+        return [{"id": r["id"], "score": -r["rank"], "match_reason": "Rare words shared with top dense hits (pseudo-relevance feedback)"} for r in rows if r["id"] not in exclude]
 
     def fused(self, query: str, exclude: set[str], *, weights=None, extra_signals=None, dense_language=None) -> list[dict]:
         greek = bool(GREEK.search(query))
@@ -137,6 +181,10 @@ class Lab:
                 extra[name] = self.bm25_bridge_hits(query, exclude)
             elif name == "dense_english":
                 extra[name] = self.dense_hits(query, exclude, language="eng")
+            elif name == "prf":
+                extra[name] = self.prf_hits(query, exclude)
+            elif name == "bm25_rare":
+                extra[name] = self.bm25_bridge_hits(query, exclude, rare=True)
         result = fuse(query, lexical, forms, dense, self.record, limit=self.limit * 5, offset=0,
                       commentary_assisted=True, author_key=canonical_key, author_keys=component_keys,
                       weights=weights, extra=extra)
@@ -144,10 +192,12 @@ class Lab:
 
     # ----- reranking -----------------------------------------------------
     def load_reranker(self, name: str):
-        if self.reranker is None:
+        if not isinstance(self.reranker, dict):
+            self.reranker = {}
+        if name not in self.reranker:
             from sentence_transformers import CrossEncoder
-            self.reranker = CrossEncoder(name, max_length=512)
-        return self.reranker
+            self.reranker[name] = CrossEncoder(name, max_length=512)
+        return self.reranker[name]
 
     def rerank(self, query: str, candidates: list[dict], exclude: set[str], model: str, top: int = 30, prefer_english: bool = True) -> list[dict]:
         pool = candidates[:top]
@@ -163,6 +213,28 @@ class Lab:
         scores = reranker.predict(pairs, batch_size=16)
         order = sorted(range(len(pool)), key=lambda i: -float(scores[i]))
         return [dict(pool[i], rerank_score=float(scores[i])) for i in order] + candidates[top:]
+
+    def rerank_english_first(self, query: str, candidates: list[dict], exclude: set[str], model: str, top: int = 30) -> list[dict]:
+        """Rerank only candidates that have linked English text; Greek-only candidates keep their fused order after them.
+
+        For a Greek query nothing is reranked: the lexical evidence already
+        decides, and a cross-encoder cannot judge Greek against Greek here.
+        """
+        if GREEK.search(query) or not candidates:
+            return candidates
+        pool, rest = candidates[:top], candidates[top:]
+        with_english, without = [], []
+        for item in pool:
+            text = self.english_for(item["id"], exclude)
+            (with_english if text else without).append((item, text))
+        if with_english:
+            reranker = self.load_reranker(model)
+            scores = reranker.predict([(query, text) for _, text in with_english], batch_size=16)
+            order = sorted(range(len(with_english)), key=lambda i: -float(scores[i]))
+            ranked = [dict(with_english[i][0], rerank_score=float(scores[i])) for i in order]
+        else:
+            ranked = []
+        return ranked + [item for item, _ in without] + rest
 
     # ----- methods -------------------------------------------------------
     def run(self, method: str, query: str, exclude: set[str], rerank_model: str | None) -> list[str]:
@@ -183,6 +255,38 @@ class Lab:
                               weights={"lexical": 1.0, "forms": 0.6, "semantic": 0.8, "bm25_bridge": 1.2, "dense_english": 1.2})
         elif method == "hybrid_english_dense":
             hits = self.fused(query, exclude, extra_signals=["dense_english"])
+        elif method == "hybrid_bm25_engdense":
+            greek_query = bool(GREEK.search(query))
+            hits = self.fused(query, exclude, extra_signals=["bm25_bridge", "dense_english"],
+                              weights={"semantic": 1.0 if greek_query else 0.3, "dense_english": 1.0, "bm25_bridge": 1.0})
+        elif method == "rerank_english_first":
+            candidates = self.fused(query, exclude, extra_signals=["bm25_bridge"])
+            hits = self.rerank_english_first(query, candidates, exclude, rerank_model or "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1")
+        elif method == "rerank_english_first_engdense":
+            greek_query = bool(GREEK.search(query))
+            candidates = self.fused(query, exclude, extra_signals=["bm25_bridge", "dense_english"],
+                                    weights={"semantic": 1.0 if greek_query else 0.3, "dense_english": 1.0, "bm25_bridge": 1.0})
+            hits = self.rerank_english_first(query, candidates, exclude, rerank_model or "cross-encoder/mmarco-mMiniLMv2-L12-H384-v1")
+        elif method == "hybrid_rare_prf":
+            hits = self.fused(query, exclude, extra_signals=["bm25_rare", "prf"])
+        elif method == "hybrid_rare_bm25_prf":
+            hits = self.fused(query, exclude, extra_signals=["bm25_bridge", "bm25_rare", "prf"])
+        elif method == "hybrid_eng_only":
+            # For an English query the Greek-vector signal is switched off; English
+            # evidence (dense over English records, both BM25 bridges) decides.
+            greek_query = bool(GREEK.search(query))
+            hits = self.fused(query, exclude, extra_signals=["bm25_bridge", "bm25_rare", "dense_english", "prf"],
+                              weights={"semantic": 1.0 if greek_query else 0.0, "dense_english": 1.5, "bm25_rare": 1.2})
+        elif method == "rerank_big_rare_prf":
+            candidates = self.fused(query, exclude, extra_signals=["bm25_bridge", "bm25_rare", "prf"])
+            hits = self.rerank_english_first(query, candidates, exclude, "BAAI/bge-reranker-v2-m3", top=20)
+        elif method == "hybrid_prf":
+            hits = self.fused(query, exclude, extra_signals=["prf"])
+        elif method == "hybrid_bm25_prf":
+            hits = self.fused(query, exclude, extra_signals=["bm25_bridge", "prf"])
+        elif method == "rerank_big_hybrid_bm25":
+            candidates = self.fused(query, exclude, extra_signals=["bm25_bridge"])
+            hits = self.rerank(query, candidates, exclude, "BAAI/bge-reranker-v2-m3", top=20)
         elif method.startswith("rerank_"):
             base = method.removeprefix("rerank_")
             candidates = self.fused(query, exclude, extra_signals=["bm25_bridge", "dense_english"]) if base == "hybrid_bm25_w" else self.fused(query, exclude)
@@ -229,12 +333,15 @@ def main() -> None:
     parser.add_argument("--methods", nargs="+", default=["dense_all", "dense_english_bridge", "hybrid_current", "bm25_bridge", "hybrid_bm25"])
     parser.add_argument("--families", nargs="*", default=None)
     parser.add_argument("--max-queries", type=int, default=0)
+    parser.add_argument("--every", type=int, default=1, help="take every Nth query (stratified subsample for quick loops)")
     parser.add_argument("--limit", type=int, default=10)
     parser.add_argument("--rerank-model", default=None)
     args = parser.parse_args()
     queries = [json.loads(line) for line in args.queries.read_text(encoding="utf-8").splitlines() if line.strip()]
     if args.families:
         queries = [q for q in queries if any(q["family"].startswith(f) for f in args.families)]
+    if args.every > 1:
+        queries = queries[::args.every]
     if args.max_queries:
         queries = queries[:args.max_queries]
     lab = Lab(limit=args.limit)
