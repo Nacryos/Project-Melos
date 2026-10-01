@@ -338,13 +338,27 @@
       let end = i;
       while (end + 1 < words.length) {
         const left = words[end], right = words[end + 1];
-        const last = [...left.text.normalize('NFC')].at(-1);
-        if (!greekLetter.test(last) || !/^[-\u2010\u00ad][ \t]*\r?\n[ \t]*$/u.test(text.slice(left.end, right.start))) break;
+        if (!/^[-\u2010\u00ad][ \t]*\r?\n[ \t]*$/u.test(text.slice(left.end, right.start))) break;
         end++;
       }
       if (end > i) {
-        const form = words.slice(i, end + 1).map(word => word.text).join('');
-        for (let j = i; j <= end; j++) Object.assign(words[j], { form, group: words[i].start, joined: true });
+        const chain = words.slice(i, end + 1);
+        const before = text.slice(0, words[i].start).match(/\S*$/u)[0];
+        const after = text.slice(words[end].end).match(/^\S*/u)[0];
+        const editorial = /[\[\]<>\{\}⟨⟩〈〉‹›⟦⟧⸢⸣⸤⸥†‡…\u0323\u2010\u00ad-]|\.{2,}/u;
+        const dottedGap = /^\.(?:[ \t]*\.)+/u.test(text.slice(words[end].end));
+        const orphanContinuation = /[-\u2010\u00ad][ \t]*\r?\n[ \t]*$/u.test(text.slice(0, words[i].start));
+        const safe = !editorial.test(before) && !editorial.test(after) && !dottedGap && !orphanContinuation
+          && chain.every(word => !/\u0323/u.test(word.text))
+          && chain.slice(0, -1).every(word => greekLetter.test([...word.text.normalize('NFC')].at(-1)));
+        if (safe) {
+          const form = chain.map(word => word.text).join('');
+          for (let j = i; j <= end; j++) Object.assign(words[j], { form, group: words[i].start, joined: true });
+        } else {
+          for (let j = i; j <= end; j++) words[j].fragmentaryJoinRejected = true;
+        }
+        // Advance even on rejection: never salvage a plausible-looking suffix
+        // from the same uncertain chain as an independently complete word.
         i = end;
       }
     }
@@ -359,8 +373,10 @@
       const button = node('button', 'word', text.slice(start, end));
       button.type = 'button';
       button.dataset.lookupGroup = String(word.group);
-      button.setAttribute('aria-label', `Inspect ${word.form}${word.joined ? `, printed segment ${word.text}, divided across source lines` : ''}`);
-      button.addEventListener('click', () => inspectWord(word.form, button, word.joined));
+      button.setAttribute('aria-label', `Inspect ${word.form}${word.fragmentaryJoinRejected
+        ? ', printed segment; complete word not established'
+        : word.joined ? `, printed segment ${word.text}, divided across source lines` : ''}`);
+      button.addEventListener('click', () => inspectWord(word.form, button, word.joined, Boolean(word.fragmentaryJoinRejected)));
       host.append(button);
       cursor = end;
     }
@@ -1605,7 +1621,7 @@
     const clause = linked.length === 1 ? window.MelosDictionaryPreview?.definitionExcerpt?.(linked[0]) : null;
     return clause || { text: candidate.gloss, provenance: null };
   }
-  async function inspectWord(form, button = null, joined = false) {
+  async function inspectWord(form, button = null, joined = false, fragmentSegment = false) {
     if (!form) return;
     if (button && (state.passageLoading || !state.passage?.id || !ui.text.contains(button))) return;
     for (const active of ui.text.querySelectorAll('.word.active')) active.classList.remove('active');
@@ -1618,8 +1634,9 @@
     const passageId = button ? state.passage?.id : '';
     state.machineAnalysisCancel?.();
     clear(ui.inspector);
-    ui.inspector.append(node('span', 'eyebrow', 'SELECTED FORM'), node('div', 'word-title', form));
+    ui.inspector.append(node('span', 'eyebrow', fragmentSegment ? 'PRINTED SEGMENT' : 'SELECTED FORM'), node('div', 'word-title', form));
     if (joined) ui.inspector.append(node('p', 'word-normalized', 'Lookup joins an explicit printed line-end division. Both printed segments remain unchanged in the passage; no missing letters are supplied.'));
+    if (fragmentSegment) ui.inspector.append(node('p', 'warning', 'Printed segment of an editorially marked or uncertain line-divided span. No complete word has been reconstructed. Dictionary matches concern this literal string, not necessarily the source word; computational and Jev analysis are unavailable for this segment.'));
     if (form.includes('\u1fbf')) ui.inspector.append(node('p', 'word-normalized', 'Printed spacing mark retained; not silently treated as an apostrophe.'));
     if (!passageId) ui.inspector.append(node('p', 'word-normalized', 'Standalone form lookup · no passage context supplied.'));
     const machineHost = node('div', 'machine-panel');
@@ -1629,7 +1646,7 @@
     const pending = node('p', 'inspector-message', 'Looking up recorded analyses…');
     morphologyHost.append(pending);
     const sequence = ++state.wordSequence;
-    if (window.MelosMachineMorphology) state.machineAnalysisCancel = window.MelosMachineMorphology.mount({
+    if (!fragmentSegment && window.MelosMachineMorphology) state.machineAnalysisCancel = window.MelosMachineMorphology.mount({
       host: machineHost, form, passageId, node, safeLink, post: apiPost,
       current: () => sequence === state.wordSequence && !state.passageLoading && (!passageId || state.passage?.id === passageId),
       classifierReady: () => Boolean(state.classifierStatus?.configured),
@@ -1658,8 +1675,10 @@
       if (passageId) renderRelatedCommentary(form, state.passage?.related, morphologyHost);
       const onlyNearby = data.analysis_match_status === 'spelling_suggestions_only'
         && !data.contextual_candidates?.length && !data.parallel_contexts?.some(item => item.candidates?.length);
-      if (onlyNearby) morphologyHost.append(node('p', 'candidate-reason', 'Only nearby spellings were found in the source lookup. Use Analyze this form for separate computational alternatives.'));
-      else addContextAction(morphologyHost, form, passageId, sequence);
+      if (!fragmentSegment) {
+        if (onlyNearby) morphologyHost.append(node('p', 'candidate-reason', 'Only nearby spellings were found in the source lookup. Use Analyze this form for separate computational alternatives.'));
+        else addContextAction(morphologyHost, form, passageId, sequence);
+      }
       const candidates = Array.isArray(data.candidates) ? data.candidates : [];
       const analysisTitle = data.analysis_match_status === 'spelling_suggestions_only'
         ? 'Nearby spelling analyses'

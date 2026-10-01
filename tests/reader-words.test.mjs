@@ -67,3 +67,55 @@ test('all supported explicit hyphens and multi-line divisions retain one lookup 
     assert.ok(units.every(unit => unit.form === 'αβγδεζ' && unit.group === 0));
   }
 });
+
+test('editorial markers on either outer boundary block whole-chain joining', () => {
+  for (const input of ['[αβ-\nγδ', 'αβ-\nγδ]', 'α[β-\nγδ', 'αβ-\nγ[δ]',
+    '⟨αβ-\nγδ⟩', '<αβ-\nγδ>', '{αβ-\nγδ}', '†αβ-\nγδ', 'αβ-\nγδ…', 'αβ-\nγδ. . .',
+    'α\u0323β-\nγδ', 'αβ-\nγ\u0323δ']) {
+    const units = words(input);
+    assert.ok(units.every(unit => !unit.joined), input);
+    assert.ok(units.some(unit => unit.fragmentaryJoinRejected), input);
+    assert.ok(units.every(unit => unit.form === unit.text), input);
+  }
+});
+
+test('rejected multiple-line chains never salvage a suffix or drop terminal signs', () => {
+  for (const input of ['[αβ-\nγδ-\nεζ', 'αβ-\nγδ-\nεζ]', 'α\u0323β-\nγδ-\nεζ',
+    'αβ\u1fbf-\nγδ-\nεζ', "αβ'-\nγδ-\nεζ",
+    'αβ]-\nγδ-\nεζ']) {
+    const units = words(input);
+    assert.ok(units.every(unit => !unit.joined), input);
+    assert.ok(units.every(unit => unit.form === unit.text), input);
+  }
+});
+
+test('final attached elision and spacing signs survive intact joins; interior signs remain barriers', () => {
+  for (const sign of ["'", '’', '᾽', 'ʼ', '\u1fbf']) {
+    const complete = words(`αβ-\nγδ${sign}`);
+    assert.ok(complete.every(unit => unit.joined));
+    assert.ok(complete.every(unit => unit.form === `αβγδ${sign}`));
+    const interrupted = words(`αβ${sign}-\nγδ-\nεζ`);
+    assert.ok(interrupted.every(unit => !unit.joined));
+  }
+});
+
+test('intact divisions remain joined beside ordinary punctuation and unrelated editorial spans', () => {
+  for (const input of ['αβ-\nγδ.', '“αβ-\nγδ”', '[α] βγ-\nδε [ζ]', 'ἄβ-\nγδ', 'α\u0301β-\nγδ']) {
+    const units = words(input);
+    assert.ok(units.some(unit => unit.joined), input);
+    assert.ok(units.every(unit => !unit.fragmentaryJoinRejected), input);
+  }
+});
+
+test('rejected chain buttons retain exact printed text and pass a segment-only inspector flag', () => {
+  const input = '[αβ-\nγδ]', units = words(input), host = new Element('p');
+  render(host, input, units);
+  assert.equal(host.textContent, input);
+  for (const button of host.children.filter(item => item.tag === 'button')) {
+    assert.match(button.attributes['aria-label'], /printed segment; complete word not established/);
+    assert.doesNotMatch(button.attributes['aria-label'], /divided across source lines/);
+    button.handlers.click();
+    assert.equal(clicks.at(-1)[0], button.textContent);
+    assert.equal(clicks.at(-1)[2], false); assert.equal(clicks.at(-1)[3], true);
+  }
+});
