@@ -157,6 +157,91 @@ test('Wiktionary lexical-list tags are not grammatical inflection analyses', () 
   assert.equal(result.entries[0].analyses[0].text, 'dative, plural');
 });
 
+test('source-shaped Πατήρ/Πάτερ records do not attach a vocative gloss to searched nominative πατήρ', () => {
+  // Exact source-shaped Kaikki scopes, used only as UI fixtures, not corpus data.
+  const wiki = { ready: true, query: 'πατήρ', results: [
+    { id: 'wiktionary:kaikki:line:177', headword: 'πατήρ', pos: 'noun',
+      source: 'Wiktionary / Kaikki', source_url: 'https://example.test/kaikki',
+      matches: [
+        { kind: 'headword', word: 'πατήρ' },
+        { kind: 'listed_form', form_index: 0, form: { form: 'πᾰτήρ', tags: ['canonical', 'masculine'] } },
+        { kind: 'listed_form', form_index: 7, form: { form: 'πᾰτήρ', tags: ['nominative', 'singular'] } },
+      ], senses: [{ sense_index: 0, glosses: ['father'] }], total_senses: 1 },
+    { id: 'wiktionary:kaikki:line:36869', headword: 'Πατήρ', pos: 'name',
+      source: 'Wiktionary / Kaikki', source_url: 'https://example.test/kaikki',
+      matches: [{ kind: 'headword', word: 'Πατήρ' },
+        { kind: 'listed_form', form_index: 6, form: { form: 'Πᾰτήρ', tags: ['nominative', 'singular'] } }],
+      senses: [{ sense_index: 0, glosses: ['God the Father; (one of the three Persons of the Trinity)'] }],
+      total_senses: 1 },
+    { id: 'wiktionary:kaikki:line:36875', headword: 'Πάτερ', pos: 'name',
+      source: 'Wiktionary / Kaikki', source_url: 'https://example.test/kaikki',
+      matches: [{ kind: 'listed_form', form_index: 4,
+        form: { form: 'Πᾰτήρ', tags: ['nominative', 'singular'], source: 'declension' } }],
+      senses: [{ sense_index: 0, glosses: ['vocative singular of Πᾰτήρ (Pătḗr)'],
+        tags: ['form-of', 'singular', 'vocative'], form_of: [{ word: 'Πᾰτήρ', extra: 'Pătḗr' }] }],
+      total_senses: 1 },
+  ] };
+  const original = structuredClone(wiki);
+  const result = buildPreview({ form: 'πατήρ' }, wiki);
+  assert.deepEqual(wiki, original); // The source/API payload is never rewritten.
+  assert.deepEqual(Array.from(result.entries, entry => entry.id),
+    ['wiktionary:kaikki:line:177', 'wiktionary:kaikki:line:36869']);
+  assert.equal(result.compact.entries.length, 2);
+  assert.ok(!JSON.stringify(result).includes('vocative singular of Πᾰτήρ'));
+  assert.deepEqual(Array.from(result.entries[0].analyses, row => row.text), ['nominative, singular']);
+  assert.ok(!JSON.stringify(result.entries[0].analyses).includes('masculine'));
+  assert.equal(result.entries[1].meanings[0].text, 'God the Father; (one of the three Persons of the Trinity)');
+});
+
+test('direct Πάτερ and ὄμμασι headwords retain source form-of glosses and sense grammar', () => {
+  for (const [query, target, tags, gloss] of [
+    ['Πάτερ', 'Πᾰτήρ', ['form-of', 'singular', 'vocative'], 'vocative singular of Πᾰτήρ'],
+    ['ὄμμασι', 'ὄμμᾰ', ['dative', 'form-of', 'plural'], 'dative plural of ὄμμᾰ'],
+  ]) {
+    const wiki = wikiFixture(query, query, [
+      { kind: 'headword', word: query },
+      { kind: 'listed_form', form: { form: query, tags: ['canonical', 'masculine'] } },
+    ]);
+    wiki.results[0].senses = [{ sense_index: 0, glosses: [gloss], tags,
+      form_of: [{ word: target }] }];
+    const result = buildPreview({ form: query }, wiki);
+    assert.equal(result.entries.length, 1);
+    assert.equal(result.entries[0].meanings[0].text, gloss);
+    assert.equal(result.entries[0].analyses[0].text, tags.filter(tag => tag !== 'form-of').join(', '));
+    assert.match(result.entries[0].analyses[0].label, /form-of sense tags/);
+    assert.equal(result.compact.entries.length, 1);
+  }
+});
+
+test('mixed lexical and form-of senses retain only applicable glosses for a different listed form', () => {
+  const wiki = wikiFixture('πατήρ', 'Πάτερ', [
+    { kind: 'listed_form', form: { form: 'Πᾰτήρ', tags: ['nominative', 'singular'] } },
+  ]);
+  wiki.results[0].senses = [
+    { sense_index: 0, glosses: ['Source lexical sense.'] },
+    { sense_index: 1, glosses: ['vocative singular of Πᾰτήρ'],
+      tags: ['form-of', 'singular', 'vocative'], form_of: [{ word: 'Πᾰτήρ' }] },
+  ];
+  const result = buildPreview({ form: 'πατήρ' }, wiki);
+  assert.equal(result.entries.length, 1);
+  assert.deepEqual(Array.from(result.entries[0].meanings, row => row.text), ['Source lexical sense.']);
+  assert.deepEqual(Array.from(result.entries[0].analyses, row => row.text), ['nominative, singular']);
+  assert.ok(!JSON.stringify(result.compact).includes('vocative'));
+});
+
+test('review-only form-of sense tags cannot leak into a direct-headword analysis', () => {
+  const wiki = wikiFixture('Πάτερ', 'Πάτερ', [{ kind: 'headword', word: 'Πάτερ' }]);
+  wiki.results[0].senses = [
+    { sense_index: 0, glosses: ['Source-approved form-of gloss.'],
+      tags: ['form-of', 'singular', 'vocative'], form_of: [{ word: 'Πᾰτήρ' }] },
+    { sense_index: 1, status: 'needs_review', glosses: ['Unaccepted reading.'],
+      tags: ['form-of', 'plural', 'nominative'], form_of: [{ word: 'Πᾰτήρ' }] },
+  ];
+  const result = buildPreview({ form: 'Πάτερ' }, wiki);
+  assert.deepEqual(Array.from(result.entries[0].analyses, row => row.text), ['singular, vocative']);
+  assert.deepEqual(Array.from(result.entries[0].meanings, row => row.text), ['Source-approved form-of gloss.']);
+});
+
 test('Wiktionary suffix/headword punctuation cannot disappear into a standalone-word meaning', () => {
   for (const suffix of ['-λογος', '-λόγος']) {
     const wiki = wikiFixture('λόγος', suffix, [{ kind: 'headword', word: suffix }]);

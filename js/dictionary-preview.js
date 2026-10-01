@@ -38,6 +38,14 @@
     // transliterated lookup. Wiki previews require comparable Greek forms.
     return /\p{Script=Greek}/u.test(query) && !!matched && greekFormKey(matched) === greekFormKey(query);
   }
+  function formOfSense(sense) {
+    return list(sense?.form_of).length > 0 || list(sense?.tags).some(tag =>
+      typeof tag === 'string' && tag.toLowerCase() === 'form-of');
+  }
+  function grammaticalTags(tags) {
+    const metadata = new Set(['canonical', 'alternative', 'romanization', 'transliteration', 'form-of', 'alt-of']);
+    return list(tags).filter(tag => typeof tag === 'string' && !metadata.has(tag.toLowerCase()));
+  }
   function excerpt(value) {
     const original = text(value);
     if (!original) return null;
@@ -164,9 +172,14 @@
         const url = sourceUrl(row.source_url), source = text(row.source) || 'Wiktionary / Kaikki';
         const matches = list(row.matches).filter(match => eligibleWikiMatch(match, row, query));
         if (!url || !matches.length) continue;
+        const headwordMatched = matches.some(match => match.kind === 'headword');
+        // A form-of page can embed its target's full declension table. A hit
+        // on that table does not make the page-headword's form-of gloss a
+        // meaning of the listed row. Ordinary lexical senses still apply.
+        const sourceSenses = list(row.senses).filter(sense =>
+          !rejected(sense) && (!formOfSense(sense) || headwordMatched));
         const meanings = new Map();
-        for (const sense of list(row.senses)) {
-          if (rejected(sense)) continue;
+        for (const sense of sourceSenses) {
           for (const gloss of list(sense.glosses)) {
             // Compare the complete literal gloss, before excerpt truncation.
             // Identical text in two source senses remains one display excerpt
@@ -188,13 +201,27 @@
         }
         const distinctMeanings = [...meanings.values()];
         if (!distinctMeanings.length) continue;
-        const analyses = unique(matches.flatMap(match => {
+        const listedAnalyses = matches.flatMap(match => {
           if (match.kind !== 'listed_form' || rejected(match.form)) return [];
-          const metadataTags = new Set(['canonical', 'alternative', 'romanization', 'transliteration']);
-          const tags = list(match.form.tags).filter(tag => typeof tag === 'string' && !metadataTags.has(tag.toLowerCase()));
+          // Canonical rows can contain noun gender, which describes the
+          // lexeme, not a competing inflectional analysis of this form.
+          if (list(match.form.tags).some(tag => typeof tag === 'string' &&
+            ['canonical', 'romanization', 'transliteration'].includes(tag.toLowerCase()))) return [];
+          const tags = grammaticalTags(match.form.tags);
           return tags.length ? [{ text: tags.join(', '), matched_form: text(match.form.form),
             source, source_url: url, label: 'Dictionary-listed form tags (not a corpus attestation)' }] : [];
-        }), item => `${item.text}\0${item.matched_form}`);
+        });
+        // On a direct inflected-headword lookup, form-of sense tags describe
+        // that headword. Do not distribute them over a different table form,
+        // or across a mixed entry's unrelated lexical senses.
+        const formOfOnly = sourceSenses.length > 0 && sourceSenses.every(formOfSense);
+        const senseAnalyses = headwordMatched && formOfOnly ? sourceSenses.flatMap(sense => {
+          const tags = grammaticalTags(sense.tags);
+          return tags.length ? [{ text: tags.join(', '), matched_form: text(row.headword),
+            source, source_url: url, label: 'Source form-of sense tags (not a corpus attestation)' }] : [];
+        }) : [];
+        const analyses = unique([...senseAnalyses, ...listedAnalyses],
+          item => `${item.text}\0${item.matched_form}`);
         entries.push({ id: row.id, lemma: text(row.headword), source, source_url: url,
           entry_url: sourceUrl(row.live_entry_url) || url, meanings: distinctMeanings.slice(0, MAX_MEANINGS),
           meaning_kind: 'structured_dictionary_gloss', omitted_meaning_count: Math.max(0, distinctMeanings.length - MAX_MEANINGS),
