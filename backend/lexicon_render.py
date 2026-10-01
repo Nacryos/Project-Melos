@@ -97,7 +97,8 @@ def _safe_entities(fragment: bytes) -> tuple[bytes, dict[str, str]]:
 
 
 @lru_cache(maxsize=8)
-def _entry_offsets(path: Path) -> dict[str, tuple[int, int]]:
+def _entry_offsets(path: Path, mtime_ns: int | None = None,
+                   size: int | None = None) -> dict[str, tuple[int, int]]:
     if not path.is_file():
         raise FileNotFoundError(path)
     result: dict[str, tuple[int, int]] = {}
@@ -112,8 +113,8 @@ def _entry_offsets(path: Path) -> dict[str, tuple[int, int]]:
     return result
 
 
-def render_entry_text(raw_path: str | Path, entry_id: str) -> str:
-    """Render one entry by source archive path and TEI entry ID.
+def read_entry(raw_path: str | Path, entry_id: str) -> tuple[etree._Element, dict[str, str]]:
+    """Read one source entry without flattening its sense/citation hierarchy.
 
     Missing files/IDs raise; callers may surface that failure as a warning.
     The first lookup indexes byte offsets in that source file. Only the chosen
@@ -121,8 +122,9 @@ def render_entry_text(raw_path: str | Path, entry_id: str) -> str:
     word. External DTDs and network entity resolution are off.
     """
     source = _source_path(raw_path)
+    signature = source.stat()
     try:
-        start, end = _entry_offsets(source)[entry_id]
+        start, end = _entry_offsets(source, signature.st_mtime_ns, signature.st_size)[entry_id]
     except KeyError as exc:
         raise KeyError(f"Entry {entry_id!r} missing in {source}") from exc
     with source.open("rb") as handle:
@@ -134,6 +136,12 @@ def render_entry_text(raw_path: str | Path, entry_id: str) -> str:
     entry = etree.fromstring(safe_fragment, parser=parser)
     if entry.tag != "entryFree" or entry.get("id") != entry_id:
         raise ValueError(f"Malformed entry fragment {entry_id!r} in {source}")
+    return entry, entities
+
+
+def render_entry_text(raw_path: str | Path, entry_id: str) -> str:
+    """Render one entry; only explicitly Greek spans undergo Beta conversion."""
+    entry, entities = read_entry(raw_path, entry_id)
     return SPACE.sub(" ", _render_node(entry, entities)).strip()
 
 
@@ -148,4 +156,4 @@ def render_source_record(record: dict[str, Any]) -> dict[str, str | None]:
             "rendering_warning": None}
 
 
-__all__ = ["render_entry_text", "render_source_record", "METHOD"]
+__all__ = ["read_entry", "render_entry_text", "render_source_record", "METHOD"]

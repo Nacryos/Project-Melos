@@ -676,6 +676,7 @@ class Morphology:
             candidate['automatic_expansion_eligible'] = (
                 candidate['edit_distance'] == 0 and candidate['lemma'] in expansion_lemmas)
         lexicon_entries: dict[str, dict[str, Any]] = {}
+        quotation_entries: list[dict[str, Any]] = []
         try:
             from .lexicon_render import render_source_record
         except ImportError:
@@ -686,6 +687,7 @@ class Morphology:
                                f"{entry.get('source_url')}#{entry.get('entry_id')}")
                 if entry_id not in candidate["lexicon_entry_ids"]:
                     continue
+                quotation_entries.append(entry)
                 display_entry = {field: entry.get(field) for field in
                                              ("id", "entry_id", "lemma", "gloss", "entry_text",
                                               "source", "source_url", "entry_url")}
@@ -742,6 +744,8 @@ class Morphology:
             "source_analysis_available" if any(candidate["analysis"] for candidate in candidates) else
             "headword_only" if candidates else "no_match"
         )
+        from .lexical_quotes import lookup_quotes
+        lexical_evidence = lookup_quotes(form, context, quotation_entries)
         return {"form": form, "normalized": normalized,
                 "match_status": "spelling_suggestions_only" if fuzzy_only else
                     ("indexed_match" if candidates else "no_match"),
@@ -750,6 +754,7 @@ class Morphology:
                 "quarantined_source_analyses": quarantined,
                 "expansion_lemmas": sorted(expansion_lemmas),
                 "lexicon_entries": list(lexicon_entries.values()),
+                "lexical_evidence": lexical_evidence,
                 "observed_form_groups": observed_form_groups,
                 "attested_forms": sorted(attested_forms, key=lambda item: (normalize(item), item)),
                 "attested_forms_policy": "exact_unambiguous_eligible_lemma_only; prefer source-scoped observed_form_groups",

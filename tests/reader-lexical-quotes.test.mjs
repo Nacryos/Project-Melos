@@ -45,3 +45,11 @@ test('missing local sense remains missing and bounded coverage stays explicit', 
   assert.ok(!host.textContent.includes('Source sense excerpt'));
   assert.match(host.textContent, /additional entries or quotations were not checked/);
 });
+test('source decoding and OCR qualifications remain visible', () => {
+  const host = new Element('div');
+  render(host, { hits: [{ ...hit, raw_quote: 'fixture encoding', raw_quote_encoding: 'Source entities decoded', passage_quality: 'machine_corrected_ocr' }],
+    warnings: ['Corrected OCR remains uncertain.'] }, 'fixture');
+  assert.match(host.textContent, /Source entities decoded: fixture encoding/);
+  assert.match(host.textContent, /Passage quality: machine_corrected_ocr/);
+  assert.match(host.textContent, /Corrected OCR remains uncertain/);
+});

@@ -1336,10 +1336,11 @@
       const provenance = node('details', 'entry-details');
       provenance.append(node('summary', '', 'Quotation provenance'));
       for (const [label, value] of [['Source', hit.source], ['Entry', hit.entry_id], ['Sense', hit.sense_id],
-        ['Source locator', hit.source_locator], ['Source SHA-256', hit.raw_sha256], ['Matching method', hit.match_method]]) {
+        ['Source locator', hit.source_locator], ['Source SHA-256', hit.raw_sha256], ['Matching method', hit.match_method],
+        ['Passage quality', hit.passage_quality]]) {
         if (value) provenance.append(node('p', 'candidate-reason', `${label}: ${value}`));
       }
-      if (hit.raw_quote) provenance.append(node('p', 'candidate-reason', `Original encoding: ${hit.raw_quote}`));
+      if (hit.raw_quote) provenance.append(node('p', 'candidate-reason', `${hit.raw_quote_encoding || 'Source quotation encoding'}: ${hit.raw_quote}`));
       card.append(provenance);
       section.append(card);
     }
