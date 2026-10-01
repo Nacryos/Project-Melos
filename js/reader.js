@@ -655,7 +655,7 @@
     ui.related.hidden = false;
     const block = node('div', 'related-item mirror-list');
     block.append(node('span', 'eyebrow', `IDENTICAL TEXT IN ${mirrors.length} OTHER ${mirrors.length === 1 ? 'COPY' : 'COPIES'}`));
-    block.append(node('p', 'related-note', 'Same author, language and words in another collection or edition. Copies are grouped in search results.'));
+    block.append(node('p', 'related-note', 'Identical wording is shown together here; each copy retains its own source and citation.'));
     for (const copy of mirrors) {
       const line = node('p', 'mirror-copy');
       line.append(node('span', '', [copy.source, copy.edition, copy.citation, copy.author, copy.quality && copy.quality !== 'source_text' ? qualityLabel(copy.quality) : ''].filter(Boolean).join(' · ')));
@@ -745,6 +745,8 @@
     const body = node('span', 'result-body');
     const excerpt = (record.text || '').replace(/\s+/g, ' ').trim();
     body.append(node('span', 'result-excerpt', excerpt || 'Text unavailable'));
+    body.append(node('span', 'result-edition', `Edition: ${record.edition || 'Not supplied'}`),
+      node('span', 'result-collection', `Collection: ${record.source || 'Not supplied'}`));
     const translation = passageTranslationPreviews(record)[0];
     if (translation) {
       const preview = node('span', 'result-translation');
