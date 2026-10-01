@@ -37,6 +37,15 @@ GREEK = re.compile(r"[\u0370-\u03ff\u1f00-\u1fff]")
 MARKUP = re.compile(r"\[\[([^\]|]+)\|([^\]]+)\]\]|\[\[([^\]]+)\]\]")
 HEADER = re.compile(r"\{\{Κεφαλίδα\b(.*?)\}\}", re.I | re.S)
 USER_AGENT = "MelosCorpus/0.1 (Wikisource research corpus; polite API client)"
+SOURCE_NAME = "lyric_web"
+# Further author pages collected under a separate source name (owner decision
+# 2026-09-30, docs/decisions.md): pass --authors/--source to run them without
+# changing the audited lyric_web output.
+MORE_AUTHORS = [
+    "Σαπφώ", "Αλκαίος", "Πίνδαρος", "Βακχυλίδης", "Σόλων", "Θέογνις", "Ιππώναξ", "Καλλίνος",
+    "Τιμοκρέων", "Πρατίνας", "Λάσος", "Τέρπανδρος", "Ξενοφάνης", "Φωκυλίδης", "Πραξίλλα", "Τελέσιλλα",
+    "Ήριννα", "Τιμόθεος", "Αρίων", "Ανακρεόντεια", "Θέογνις ο Μεγαρεύς", "Σημωνίδης", "Σιμωνίδης",
+]
 
 
 def fetch(session: requests.Session, title: str) -> tuple[dict, str, str]:
@@ -201,8 +210,8 @@ def main() -> None:
                 quality = "needs_review"
             # Wikisource headers sometimes label fragments only by incipit.
             record = {
-                "id": f"lyric_web:elws:{page['pageid']}:{page['revisions'][0]['revid']}:{index}",
-                "source": "lyric_web", "source_url": source_url,
+                "id": f"{SOURCE_NAME}:elws:{page['pageid']}:{page['revisions'][0]['revid']}:{index}",
+                "source": SOURCE_NAME, "source_url": source_url,
                 "raw_path": path, "raw_sha256": digest,
                 "author": author, "work": page["title"],
                 "edition": "Greek Wikisource community transcription (source edition unspecified)",
@@ -236,4 +245,19 @@ def main() -> None:
 
 
 if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--source", default=SOURCE_NAME, help="collector/source name (default lyric_web)")
+    parser.add_argument("--authors", nargs="*", help="Wikisource author page names; default is the audited list")
+    parser.add_argument("--more", action="store_true", help="use the extended MORE_AUTHORS list")
+    args = parser.parse_args()
+    if args.source != SOURCE_NAME:
+        SOURCE_NAME = args.source
+        RAW = ROOT / "data/raw" / SOURCE_NAME
+        OUT = ROOT / "data/processed" / f"{SOURCE_NAME}.jsonl"
+        REPORT = ROOT / "data/reports" / f"{SOURCE_NAME}.json"
+    if args.more:
+        AUTHORS = MORE_AUTHORS
+    elif args.authors:
+        AUTHORS = args.authors
     main()
