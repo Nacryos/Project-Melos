@@ -1070,17 +1070,31 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
     except (ImportError,OSError,RuntimeError,ValueError) as exc:
         dense=[]
         warnings.append('Dense retrieval unavailable; hybrid results currently use lexical/form signals only: '+safe_error(exc))
+    extra={}
+    weights=None
     with connect() as con:
         def fetch_record(identifier):
             return unpack(con.execute('SELECT data FROM passages WHERE id=?',(identifier,)).fetchone())
+        if not greek and commentary_assisted:
+            # English queries: Greek vectors alone find the judged passage about
+            # one time in ten (retrieval lab, 2026-09-30). Linked English
+            # records and rare-word feedback from the top Greek hits carry the
+            # ranking; the Greek-vector signal stays as weak evidence.
+            from .bridges import ENGLISH_QUERY_WEIGHTS, bm25_bridge_hits, prf_hits
+            extra['bm25_bridge']=bm25_bridge_hits(con,q,limit=pool)
+            extra['dense_english']=[hit for hit in dense if hit.get('indexed_language')=='eng'][:pool]
+            seeds=[hit['id'] for hit in dense if hit.get('indexed_language')=='grc' and hit.get('indexed_kind')=='text']
+            extra['prf']=prf_hits(con,seeds,limit=pool)
+            weights=ENGLISH_QUERY_WEIGHTS
+            warnings.append('English query: linked translations and commentary (BM25 and dense over English records) and rare-word feedback from the top Greek candidates are fused with the Greek-vector signal, which is down-weighted.')
         fused=fuse(q,lexical['results'],forms['results'],dense,fetch_record,
                    author=author,language=language,edition=edition,
                    include_reference=include_reference,limit=2*pool+1000,offset=0,
                    commentary_assisted=commentary_assisted,author_labels=author_labels(author) if author else (),
-                   author_key=canonical_key,author_keys=component_keys)
+                   author_key=canonical_key,author_keys=component_keys,weights=weights,extra=extra)
     ranked=order_results(fused['results'],order)
     warnings+=fused['warnings']
-    warnings.append('Counts cover a bounded pool of up to 400 word, 400 form and 1,000 dense candidates, not every possible match.')
+    warnings.append('Counts cover a bounded pool of up to 400 word, 400 form and 1,000 dense candidates'+(', 400 English-bridge and 400 feedback candidates' if extra else '')+', not every possible match.')
     if order=='chronological':
         warnings.append('Author biography dates order these candidates; they are not secure passage composition dates.')
     excluded={} if include_reference else excluded_exact_matches(q,author,language,edition)

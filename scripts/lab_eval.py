@@ -280,6 +280,15 @@ class Lab:
         elif method == "rerank_big_rare_prf":
             candidates = self.fused(query, exclude, extra_signals=["bm25_bridge", "bm25_rare", "prf"])
             hits = self.rerank_english_first(query, candidates, exclude, "BAAI/bge-reranker-v2-m3", top=20)
+        elif method == "hybrid_prod":
+            # Mirrors backend.server.hybrid_search for an English query after the
+            # 2026-09-30 bridge change: same signals, same weights.
+            from backend.bridges import ENGLISH_QUERY_WEIGHTS
+            greek_query = bool(GREEK.search(query))
+            if greek_query:
+                hits = self.fused(query, exclude)
+            else:
+                hits = self.fused(query, exclude, extra_signals=["bm25_bridge", "dense_english", "prf"], weights=dict(ENGLISH_QUERY_WEIGHTS))
         elif method == "hybrid_prf":
             hits = self.fused(query, exclude, extra_signals=["prf"])
         elif method == "hybrid_bm25_prf":
