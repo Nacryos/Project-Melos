@@ -125,6 +125,28 @@
     return canonical || original || 'Unknown author';
   }
 
+  function recordLabels(point) {
+    const language = { grc: 'Ancient Greek', ell: 'Modern Greek', eng: 'English', lat: 'Latin' }[point.language] || point.language;
+    const quality = { source_text: 'Source text', machine_corrected_ocr: 'Machine-corrected OCR',
+      machine_ocr: 'Raw machine OCR', mixed_content: 'Mixed content', needs_review: 'Needs review' }[point.quality] || point.quality;
+    return [language, point.kind, quality].filter(Boolean).join(' · ');
+  }
+
+  function usageRequest(query, author, scope = {}) {
+    return new URLSearchParams({ q: String(query), author: String(author || ''), limit: '80',
+      mode: scope.mode || 'forms', match: scope.match || 'fuzzy', language: scope.language || '',
+      edition: scope.edition || '', include_reference: String(scope.include_reference === true),
+      order: scope.order || 'relevance', commentary_assisted: String(scope.commentary_assisted !== false) });
+  }
+
+  function scopeLabel(scope) {
+    const mode = { forms: 'Forms', themes: 'Themes', hybrid: 'All evidence', words: scope.match === 'exact' ? 'Exact words' : 'Fuzzy words' }[scope.mode] || scope.mode || 'Forms';
+    const language = { grc: 'Ancient Greek', ell: 'Modern Greek', eng: 'English', lat: 'Latin' }[scope.language] || scope.language || 'Any language';
+    return [scope.scope_origin || 'Requested search', mode, scope.author || 'All authors', language,
+      scope.edition || 'All editions', scope.include_reference ? 'Reference/uncertain records included' : 'Default quality/reference filter',
+      scope.order === 'chronological' ? 'Chronological order' : 'Relevance order'].join(' · ');
+  }
+
   function preparePoints(raw) {
     if (!Array.isArray(raw)) return { points: [], rejected: 0 };
     const usableCoordinate = value =>
@@ -218,6 +240,7 @@
     }
     detail.append(element('h3', 'mus-detail-title', preview ? 'Passage preview' : 'Selected passage'));
     detail.append(element('p', 'mus-meta', [point.author, point.work, point.citation].filter(Boolean).join(' · ') || 'Citation unavailable'));
+    if (recordLabels(point)) detail.append(element('p', 'mus-meta', recordLabels(point)));
     if (typeof point.match_reason === 'string' && point.match_reason.trim()) {
       detail.append(element('p', 'mus-reason', `Retrieved because: ${point.match_reason.trim()}`));
     }
@@ -262,12 +285,18 @@
     if (points.length) setupGeometry(state);
     const authors = [...new Set(points.map(colorAuthor))].sort((a, b) => a.localeCompare(b));
     state.colors = new Map(authors.map((author, i) => [author, colorFor(i)]));
-    state.status.textContent = points.length ? '' : 'No passages with usable coordinates were returned for this query.';
-    state.count.textContent = `${points.length} passage${points.length === 1 ? '' : 's'}`;
+    state.status.textContent = points.length ? '' : payload.retrieved_count === 0
+      ? 'No passages matched these search filters.'
+      : 'No passages with usable coordinates were returned for this query.';
+    const retrieved = Number.isInteger(payload.retrieved_count) ? payload.retrieved_count : points.length;
+    const omitted = Number.isInteger(payload.omitted_count) ? payload.omitted_count : 0;
+    state.count.textContent = `${points.length} plotted · ${retrieved} retrieved${omitted || rejected ? ` · ${omitted + rejected} omitted` : ''}`;
+    if (state.scope) state.scope.textContent = scopeLabel({ ...state.requestScope, ...(payload.scope || {}) });
     state.method.textContent = typeof payload.method === 'string' && payload.method.trim()
       ? `Retrieval and projection method: ${payload.method}`
       : 'Retrieval and projection method was not supplied by the server.';
     const warnings = Array.isArray(payload.warnings) ? payload.warnings.filter(Boolean).map(String) : payload.warnings ? [String(payload.warnings)] : [];
+    if (state.requestScope?.scope_notice) warnings.unshift(state.requestScope.scope_notice);
     if (rejected) warnings.push(`${rejected} passage${rejected === 1 ? ' was' : 's were'} omitted because its coordinates or ID were invalid.`);
     state.warnings.textContent = warnings.join(' ');
     state.warnings.hidden = warnings.length === 0;
@@ -291,6 +320,7 @@
       swatch.setAttribute('aria-hidden', 'true');
       head.append(swatch, element('span', '', point.author || 'Unknown author'));
       button.append(head, element('span', 'mus-item-cite', [point.work, point.citation].filter(Boolean).join(' · ') || 'Citation unavailable'));
+      if (recordLabels(point)) button.append(element('span', 'mus-item-cite', recordLabels(point)));
       button.append(element('span', 'mus-item-excerpt', point.text || 'Passage text unavailable.'));
       button.addEventListener('click', () => select(state, point));
       li.append(button); state.list.append(li);
@@ -299,7 +329,7 @@
     draw(state);
   }
 
-  function open(query = '', author = '') {
+  function open(query = '', author = '', scope = {}) {
     close();
     injectStyle();
     const priorFocus = document.activeElement;
@@ -312,6 +342,8 @@
     heading.append(element('p', 'mus-eyebrow', 'Passage usage'), element('h2', 'mus-title', 'Usage in space'));
     heading.querySelector('h2').id = 'mus-title';
     heading.append(element('p', 'mus-subtitle', String(query).trim() ? `“${String(query).trim()}”${author ? ` · ${author}` : ''}` : author ? String(author) : 'Corpus passages'));
+    const scopeDescription = element('p', 'mus-subtitle', scopeLabel({ ...scope, author }));
+    heading.append(scopeDescription);
     const closeButton = element('button', 'mus-close', 'Close ×'); closeButton.type = 'button';
     head.append(heading, closeButton);
     const main = element('div', 'mus-main');
@@ -350,7 +382,8 @@
     dialog.append(head, main, foot); root.append(dialog); document.body.append(root);
     document.body.style.overflow = 'hidden';
 
-    const state = { root, canvas, status, count, method, warnings, legend, list, detail, points: [], projected: [], colors: new Map(), selected: null, hover: null, yaw: -.55, pitch: .28, zoom: 1, controller: new AbortController(), priorFocus, priorOverflow };
+    const state = { root, canvas, status, count, method, warnings, legend, list, detail, scope: scopeDescription,
+      requestScope: { ...scope, author }, points: [], projected: [], colors: new Map(), selected: null, hover: null, yaw: -.55, pitch: .28, zoom: 1, controller: new AbortController(), priorFocus, priorOverflow };
     active = state;
     showDetail(state, null, false);
     closeButton.focus();
@@ -415,7 +448,7 @@
       state.resizeObserver.observe(canvas);
     } else { state.onResize = () => draw(state); window.addEventListener('resize', state.onResize); }
 
-    const params = new URLSearchParams({ q: String(query), author: String(author || ''), limit: '80' });
+    const params = usageRequest(query, author, scope);
     fetch(window.melosApiUrl(`/api/usage-space?${params}`), { signal: state.controller.signal, headers: { Accept: 'application/json' } })
       .then(async response => {
         if (!response.ok) throw new Error(`The server returned ${response.status}.`);

@@ -1267,19 +1267,18 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
 
 
 @app.get('/api/usage-space')
-def usage_space(q:str='',author:str='',limit:int=Query(80,ge=3,le=150)):
-    found=search(q=q,mode='forms',author=author,language='',edition='',include_reference=False,match='fuzzy',limit=limit)
-    results=found['results']
-    retrieval='Source-backed form/word search candidates'
-    if len(results)<3:
-        try:
-            sem=search(q=q,mode='themes',author=author,language='',edition='',include_reference=False,match='fuzzy',limit=limit)
-            ids={r['id'] for r in results}
-            results.extend(r for r in sem['results'] if r['id'] not in ids)
-            if sem['results']:
-                retrieval='Word/form hits plus thematic candidates; thematic candidates need not contain the queried form'
-        except Exception:
-            pass
+def usage_space(q:str='',author:str='',limit:int=Query(80,ge=3,le=150),
+                mode:str='forms',match:str='fuzzy',language:str='',edition:str='',
+                include_reference:bool=False,order:str='relevance',commentary_assisted:bool=True):
+    # Exactly one retrieval under the supplied scope. Sparse exact/form results
+    # are not permission to add unrelated thematic candidates.
+    scope=dict(q=q,mode=mode,match=match,author=author,language=language,edition=edition,
+               include_reference=include_reference,order=order,commentary_assisted=commentary_assisted)
+    found=search(**scope,limit=limit,offset=0)
+    results=list(found['results'])
+    retrieved_count=len(results)
+    retrieval=found.get('method','Requested search candidates')
+    warnings=list(found.get('warnings',[]))
     matrix=None
     method='TF-IDF surface-vocabulary similarity, centered SVD projection to three dimensions.'
     try:
@@ -1312,14 +1311,22 @@ def usage_space(q:str='',author:str='',limit:int=Query(80,ge=3,le=150)):
         coords/=max(float(np.abs(coords).max()),1e-8)
     points=[]
     for record,coord in zip(results,coords):
-        point={key:record.get(key) for key in ('id','text','author','work','citation','source','source_url','license','edition','date_start','date_end','date_source','author_chronology','match_reason')}
+        point={key:record.get(key) for key in ('id','text','author','work','citation','source','source_url','license','edition','language','kind','quality','date_start','date_end','date_source','author_chronology','match_reason')}
         # Display/color identity only. Retain the source author label, and do
         # not substitute a linked parent or split a joint attribution.
         point['author_canonical']=canonical_author(record.get('author',''))
         point.update(zip(('x','y','z'),[float(v) for v in coord]))
         points.append(point)
+    omitted_count=retrieved_count-len(points)
+    if omitted_count:
+        warnings.append(f'{omitted_count} retrieved records omitted from the embedding projection because vectors were unavailable; the search scope was not broadened.')
+    warnings.extend(['Distances are a lossy similarity projection, not calibrated semantic change or evidence of influence.',
+                     'Author and passage dates are omitted unless supplied by a cited source.',
+                     f'This projection retrieves at most {limit} results from the requested search; it is not the complete corpus or a frozen list of previously displayed IDs.'])
     return {'points':points,'method':retrieval+'. '+method,'retrieval_method':retrieval,
-        'warnings':['Distances are a lossy similarity projection, not calibrated semantic change or evidence of influence.','Author and passage dates are omitted unless supplied by a cited source.']}
+        'scope':scope,'retrieved_count':retrieved_count,'plotted_count':len(points),'omitted_count':omitted_count,
+        'search_total':found.get('total'), 'candidate_limit':limit,
+        'warnings':list(dict.fromkeys(warnings))}
 
 
 @app.get('/api/sources')

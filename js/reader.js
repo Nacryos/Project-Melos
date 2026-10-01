@@ -20,7 +20,7 @@
   };
   const state = {
     authors: [], works: new Map(), selectedAuthor: '', selectedWork: '', passage: null,
-    search: null, searchSequence: 0, passageSequence: 0, wordSequence: 0, passageLoading: false,
+    search: null, displayedSearch: null, searchSequence: 0, passageSequence: 0, wordSequence: 0, passageLoading: false,
     selectedText: '', activeWord: null, semanticStatus: null, classifierStatus: null,
     dictionarySequence: 0, dictionaryCache: new Map()
   };
@@ -917,11 +917,28 @@
       order: ['relevance', 'chronological'].includes(ui.order.value) ? ui.order.value : 'relevance',
       include_reference: ui.reference.checked });
   }
+  function searchTransport(snapshot) {
+    return { q: snapshot.query, mode: ['forms', 'themes', 'hybrid'].includes(snapshot.mode) ? snapshot.mode : 'words',
+      match: snapshot.mode === 'exact' ? 'exact' : 'fuzzy', commentary_assisted: true,
+      author: snapshot.author, edition: snapshot.edition, language: snapshot.language,
+      order: snapshot.order, include_reference: snapshot.include_reference };
+  }
+  function usageSnapshot(query) {
+    const current = snapshotSearch(query, formMode());
+    if (!ui.results.hidden && state.displayedSearch) {
+      const saved = state.displayedSearch;
+      const changed = Object.keys(saved).some(key => saved[key] !== current[key]);
+      return { ...searchTransport(saved), scope_origin: 'Last successfully displayed search',
+        scope_notice: changed ? 'Current inputs differ; this view uses the displayed search filters, not the unsent changes.' : '' };
+    }
+    return { ...searchTransport(current), scope_origin: 'Current query and controls', scope_notice: '' };
+  }
   async function search(query, mode = formMode(), append = false) {
     query = String(query || '').trim();
     if (!query) { ui.searchInput.focus(); return; }
     if (!append) {
       state.search = { query, mode, filters: snapshotSearch(query, mode), offset: 0, total: 0 };
+      state.displayedSearch = null;
       clear(ui.resultsList);
       ui.results.hidden = false;
       ui.resultsHeading.textContent = `Results for “${query}”`;
@@ -939,13 +956,8 @@
       .filter(([select, label]) => Array.from(select.options).some(option => option.value === snapshot[label] && option.dataset.unavailable === 'true'))
       .map(([, label]) => `The saved ${label} “${snapshot[label]}” is unavailable in the current filter list. Its exact filter is retained; this search has not been broadened.`);
     const sequence = ++state.searchSequence;
-    const searchMode = ['forms', 'themes', 'hybrid'].includes(mode) ? mode : 'words';
     const params = {
-      q: query, mode: searchMode, match: mode === 'exact' ? 'exact' : 'fuzzy',
-      commentary_assisted: true,
-      author: snapshot.author, edition: snapshot.edition, language: snapshot.language,
-      order: snapshot.order,
-      include_reference: snapshot.include_reference, limit: 30, offset: append ? active.offset : 0
+      ...searchTransport(snapshot), limit: 30, offset: append ? active.offset : 0
     };
     try {
       const data = await api('/api/search', params);
@@ -989,6 +1001,7 @@
       appendWarnings(ui.resultsList, data.warnings);
       appendWarnings(ui.resultsList, scopeWarnings);
       ui.moreResults.hidden = count >= active.total || records.length === 0;
+      state.displayedSearch = snapshot;
       const url = writeSearchUrl(location.href, snapshot);
       history.replaceState(null, '', url);
     } catch (error) {
@@ -1779,12 +1792,13 @@
   });
   ui.usage.addEventListener('click', () => {
     const query = ui.searchInput.value.trim() || state.selectedText || state.activeWord?.textContent?.trim() || '';
-    if (!query) {
+    const snapshot = usageSnapshot(query);
+    if (!snapshot.q) {
       ui.searchInput.placeholder = 'Enter a word or theme to explore its usage…';
       ui.searchInput.focus();
       return;
     }
-    if (window.MelosUsageSpace?.open) window.MelosUsageSpace.open(query, ui.authorFilter.value);
+    if (window.MelosUsageSpace?.open) window.MelosUsageSpace.open(snapshot.q, snapshot.author, snapshot);
     else message(ui.inspector, 'The usage view is unavailable on this page.', 'warning error-message');
   });
   ui.lookupForm.addEventListener('click', () => {
