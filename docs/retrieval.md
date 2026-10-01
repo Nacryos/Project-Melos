@@ -104,3 +104,27 @@ The six frozen transliteration evaluation queries each produced terms present
 in their judged passage in a read-only vocabulary check. This demonstrates
 candidate reachability only; ranking must be measured again after server
 integration without rewriting the frozen baseline report.
+
+## English queries: bridges (2026-09-30)
+
+`scripts/lab_build_eval.py` builds judged queries from the index's own
+translation and commentary links (an English record names its Greek parent),
+and `scripts/lab_eval.py` scores search variants on them in-process, excluding
+the query's own record from every pool. On 195 such queries over the live
+index, Greek-vector similarity alone found the judged passage for an English
+query with Recall@10 0.11; the hybrid reached 0.385; adding a BM25 pass over
+linked English records 0.415. Cross-encoder reranking (a small multilingual
+model and BGE-reranker-v2-m3) lowered recall and the large model costs about
+1.3 s per pair on CPU, so no reranker is used. Greek phrase, accentless and
+transliterated fixtures score 1.0 in the hybrid.
+
+For a query without Greek letters, `hybrid_search` therefore fuses, in
+addition to the word, form and dense lists: BM25 over English translations
+and commentary that name a Greek parent (`backend.bridges.bm25_bridge_hits`),
+dense hits restricted to English records, and Greek passages sharing rare
+words with the top dense Greek hits (`prf_hits`, pseudo-relevance feedback).
+The Greek-vector list keeps half weight. Weights are in
+`backend.bridges.ENGLISH_QUERY_WEIGHTS`; change them only with a lab run.
+The remaining limit is coverage: with one translation per passage there is
+nothing to bridge on, which is why translation sources (Edmonds, Paton, the
+CGL anthology) count as retrieval improvements.
