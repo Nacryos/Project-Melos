@@ -1127,8 +1127,8 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
         if not greek and not exact_lexical and commentary_assisted:
             # English queries: Greek vectors alone find the judged passage about
             # one time in ten (retrieval lab, 2026-09-30). Linked English
-            # records and rare-word feedback from the top Greek hits are fused
-            # as further rank lists, one vote each.
+            # records supply one additional rank list. Rare-word feedback
+            # remains a lab experiment, not a production signal.
             from .bridges import ENGLISH_QUERY_WEIGHTS, bm25_bridge_hits
             extra['bm25_bridge']=bm25_bridge_hits(con,q,limit=pool)
             weights=ENGLISH_QUERY_WEIGHTS

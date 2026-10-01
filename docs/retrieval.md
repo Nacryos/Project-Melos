@@ -118,12 +118,13 @@ model and BGE-reranker-v2-m3) lowered recall and the large model costs about
 1.3 s per pair on CPU, so no reranker is used. Greek phrase, accentless and
 transliterated fixtures score 1.0 in the hybrid.
 
-For a query without Greek letters, `hybrid_search` therefore fuses, in
-addition to the word, form and dense lists: BM25 over English translations
-and commentary that name a Greek parent (`backend.bridges.bm25_bridge_hits`),
-dense hits restricted to English records, and Greek passages sharing rare
-words with the top dense Greek hits (`prf_hits`, pseudo-relevance feedback).
-The Greek-vector list keeps half weight. Weights are in
+For a query without Greek letters that has not already matched the exact
+wording path, `hybrid_search` adds BM25 over linked English translations and
+commentary (`backend.bridges.bm25_bridge_hits`) to the word, form and dense
+lists. Fusion projects supporting records only through explicit parent links.
+Both the dense and English-bridge lists keep weight 1.0. English-only dense
+retrieval and rare-word pseudo-relevance feedback (`prf_hits`) remain lab
+experiments, not production signals. Weights are in
 `backend.bridges.ENGLISH_QUERY_WEIGHTS`; change them only with a lab run.
 The remaining limit is coverage: with one translation per passage there is
 nothing to bridge on, which is why translation sources (Edmonds, Paton, the
