@@ -25,7 +25,7 @@ const context = vm.createContext({
   addInspectorSection(label, host) { const section = new Element('section', '', label); host.append(section); return section; },
   formatFeatures: () => 'Existing recorded feature display',
 });
-vm.runInContext(script.slice(script.indexOf('  function renderSourceGrammarAlternatives('),
+vm.runInContext(script.slice(script.indexOf('  function candidateEntrySenses('),
   script.indexOf('  function renderParallelContexts(')), context);
 const render = vm.runInContext('renderSourceGrammarAlternatives', context);
 const renderCandidates = vm.runInContext('renderContextualCandidates', context);

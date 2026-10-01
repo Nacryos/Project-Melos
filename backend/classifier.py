@@ -71,6 +71,22 @@ def _compact_packet(packet: dict[str, Any]) -> dict[str, Any]:
     options = [{key: value for key, value in candidate.items() if value is not None}
                for candidate in packet['candidates']]
     compact = {**packet, 'candidates': options}
+    # Several grammatical alternatives can belong to the same dictionary
+    # entry. Share literal sense payloads by exact claim ID, never by lemma.
+    # Candidate-specific IDs still state precisely which senses it owns.
+    sense_catalog = {sense['claim_id']: sense for candidate in options
+                     for sense in candidate.get('entry_senses') or []}
+    if sense_catalog:
+        factored_senses = {**compact, 'candidates': [
+            {key: value for key, value in candidate.items() if key != 'entry_senses'}
+            for candidate in options], 'entry_sense_catalog': sense_catalog,
+            'entry_sense_reference_format':
+                'Each candidate entry_sense_claim_ids resolves to literal general dictionary-entry '
+                'senses in entry_sense_catalog. Sharing a sense claim does not merge candidate IDs, '
+                'homographs, grammatical alternatives, or establish a contextual sense.'}
+        if len(_state_json(factored_senses)) < len(_state_json(compact)):
+            compact = factored_senses
+            options = compact['candidates']
     catalog: dict[str, dict[str, Any]] = {}
     index: dict[str, str] = {}
     factored = []
@@ -429,6 +445,8 @@ def build_evidence_packet(
         if dropped:
             warnings.append(f"{dropped} {name} record(s) excluded: not source-bearing accepted claims.")
     known_claim_ids = {row["id"] for rows in groups.values() for row in rows}
+    raw_claims = {str(row['id']): row for row in claims if _source_claim(row)}
+    incomplete_senses: list[dict[str, Any]] = []
     options: list[dict[str, Any]] = []
     seen: set[str] = set()
     for index, row in enumerate(candidates, 1):
@@ -458,6 +476,18 @@ def build_evidence_packet(
                                         "url": url, "scope": "candidate metadata; verify source scope"})
         linked = [str(claim_id) for claim_id in row.get("claim_ids") or ()
                   if str(claim_id) in known_claim_ids]
+        sense_ids = row.get('entry_sense_claim_ids') or []
+        senses = []
+        if sense_ids:
+            from .candidate_senses import project_entry_senses
+            anchor_ids = row.get('claim_ids') or []
+            anchor = raw_claims.get(anchor_ids[0]) if len(anchor_ids) == 1 else None
+            supplied = [raw_claims[sid] for sid in sense_ids if sid in raw_claims]
+            senses = project_entry_senses(row, anchor, supplied) if anchor else []
+            if (len(sense_ids) != len(set(sense_ids)) or
+                    set(sense_ids) != {sense['claim_id'] for sense in senses}):
+                incomplete_senses.append({'candidate_id': cid, 'entry_sense_claim_ids': sense_ids})
+                senses = []
         options.append({"id": cid, "candidate_kind": row.get("candidate_kind"),
                         "entry_headword": row.get("entry_headword"),
                         "lemma": row.get("lemma"),
@@ -485,6 +515,8 @@ def build_evidence_packet(
                         "source_projection_status": row.get("source_projection_status"),
                         "source_grammar_alternatives": row.get("source_grammar_alternatives"),
                         "source_projection_note": row.get("source_projection_note"),
+                        "entry_senses": senses or None,
+                        "entry_sense_claim_ids": sense_ids or None,
                         "evidence_refs": row.get("evidence_refs"),
                         "source_references": source_refs, "claim_ids": linked})
     # Preserve inventory-level incompleteness before grouping can consume a
@@ -524,6 +556,8 @@ def build_evidence_packet(
     }
     if incomplete_projections:
         packet['incomplete_source_projections'] = incomplete_projections
+    if incomplete_senses:
+        packet['incomplete_entry_sense_evidence'] = incomplete_senses
     return _compact_packet(packet)
 
 
@@ -550,6 +584,7 @@ class JevProvider:
             'dialect', 'gloss', 'matched_form', 'edit_distance', 'strength',
             'source_family', 'comparison_scope', 'source_passage_id',
             'decision_group',
+            'entry_senses', 'entry_sense_claim_ids',
         )
         choices = {str(item['id']): {
             'candidate_id': item['id'],
@@ -659,6 +694,10 @@ def classify_context(
                             'does not preserve all of those alternatives. Comparison was not run; '
                             'the original source claims and quoted alternatives remain available.')
         return result
+    if packet.get('incomplete_entry_sense_evidence'):
+        result['reason'] = ('Exact dictionary-entry sense evidence is incomplete or inconsistent. '
+                            'Comparison was not run; no partial homograph distinction was assumed.')
+        return result
     if not packet["candidates"]:
         result["reason"] = "No existing candidate is available."
         return result
@@ -714,6 +753,7 @@ def classify_context(
         return result
     evidence_ids = list(dict.fromkeys(
         selected["claim_ids"] +
+        (selected.get('entry_sense_claim_ids') or []) +
         [str(ref) for ref in selected.get("evidence_refs") or () if ref] +
         [r["id"] for r in selected["source_references"]]))
     if not evidence_ids:

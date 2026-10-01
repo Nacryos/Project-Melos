@@ -117,6 +117,14 @@
     return `hsl(${Math.round((index * 137.508 + 32) % 360)} 72% 68%)`;
   }
 
+  function colorAuthor(point) {
+    // The API owns alias identity. Original author labels remain untouched in
+    // passage details; no client heuristics merge scholia or joint authors.
+    const canonical = typeof point.author_canonical === 'string' ? point.author_canonical.trim() : '';
+    const original = typeof point.author === 'string' ? point.author.trim() : '';
+    return canonical || original || 'Unknown author';
+  }
+
   function preparePoints(raw) {
     if (!Array.isArray(raw)) return { points: [], rejected: 0 };
     const usableCoordinate = value =>
@@ -174,7 +182,7 @@
       ctx.fill();
       ctx.beginPath();
       ctx.arc(item.x, item.y, picked ? item.radius + 1 : item.radius, 0, Math.PI * 2);
-      ctx.fillStyle = state.colors.get(item.point.author || 'Unknown author');
+      ctx.fillStyle = state.colors.get(colorAuthor(item.point));
       ctx.globalAlpha = picked ? 1 : clamp(.58 + item.depth * .14, .35, .85);
       ctx.fill();
       ctx.globalAlpha = 1;
@@ -252,7 +260,7 @@
     const { points, rejected } = preparePoints(payload.points);
     state.points = points;
     if (points.length) setupGeometry(state);
-    const authors = [...new Set(points.map(point => point.author || 'Unknown author'))].sort((a, b) => a.localeCompare(b));
+    const authors = [...new Set(points.map(colorAuthor))].sort((a, b) => a.localeCompare(b));
     state.colors = new Map(authors.map((author, i) => [author, colorFor(i)]));
     state.status.textContent = points.length ? '' : 'No passages with usable coordinates were returned for this query.';
     state.count.textContent = `${points.length} passage${points.length === 1 ? '' : 's'}`;
@@ -279,7 +287,7 @@
       button.type = 'button'; button.dataset.id = String(point.id);
       const head = element('span', 'mus-item-head');
       const swatch = element('span', 'mus-swatch');
-      swatch.style.background = state.colors.get(point.author || 'Unknown author');
+      swatch.style.background = state.colors.get(colorAuthor(point));
       swatch.setAttribute('aria-hidden', 'true');
       head.append(swatch, element('span', '', point.author || 'Unknown author'));
       button.append(head, element('span', 'mus-item-cite', [point.work, point.citation].filter(Boolean).join(' · ') || 'Citation unavailable'));

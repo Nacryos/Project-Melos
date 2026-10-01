@@ -442,6 +442,37 @@ class EvidenceIndex:
                 "it is not a claim about the requested passage."
             )
             supporting_claims.append(sibling)
+        # Senses belong to exact dictionary records, never to a headword
+        # spelling shared by homographs. Keep semantic proof IDs separate from
+        # grammatical IDs so existing source-bridge identity tests are intact.
+        from .candidate_senses import candidate_entry_id, project_entry_senses
+        anchors = {claim['id']: claim for claim in found['claims']}
+        entry_ids = set()
+        for candidate in candidates:
+            ids = candidate.get('claim_ids') or []
+            anchor = anchors.get(ids[0]) if len(ids) == 1 else None
+            entry_id = candidate_entry_id(candidate, anchor) if anchor else None
+            if entry_id:
+                entry_ids.add(entry_id)
+        sense_claims = []
+        if entry_ids:
+            with closing(self._connect()) as con:
+                patterns = [entry + ':sense:*' for entry in sorted(entry_ids)]
+                query = "SELECT * FROM claims WHERE predicate='sense_gloss' AND (" + \
+                        ' OR '.join('id GLOB ?' for _ in patterns) + ') ORDER BY id'
+                sense_claims = [self._claim(row, strength='general_dictionary_entry',
+                    reason='Literal senses of this exact source entry; no contextual sense is asserted.')
+                    for row in con.execute(query, patterns)]
+        selected_sense_ids = set()
+        for candidate in candidates:
+            ids = candidate.get('claim_ids') or []
+            anchor = anchors.get(ids[0]) if len(ids) == 1 else None
+            senses = project_entry_senses(candidate, anchor, sense_claims) if anchor else []
+            if senses:
+                candidate['entry_senses'] = senses
+                candidate['entry_sense_claim_ids'] = [sense['claim_id'] for sense in senses]
+                selected_sense_ids.update(candidate['entry_sense_claim_ids'])
+        supporting_claims.extend(claim for claim in sense_claims if claim['id'] in selected_sense_ids)
         return {
             "form": form, "passage_id": passage_id,
             "candidates": candidates, "total_claims": found["total"],

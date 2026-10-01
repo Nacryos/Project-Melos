@@ -690,7 +690,7 @@ def word(form: str, passage_id: str=''):
         result['contextual_candidates'] = source_candidates.get('candidates',[])
         preview_ids={claim['id'] for claim in result['structured_evidence'].get('claims',[])}
         selected_ids=list(dict.fromkeys(claim_id for candidate in result['contextual_candidates']
-            for claim_id in candidate.get('claim_ids',[])))
+            for claim_id in [*candidate.get('claim_ids',[]), *candidate.get('entry_sense_claim_ids',[])]))
         supporting={claim['id']:claim for claim in source_candidates.get('supporting_claims',[])
                     if claim.get('id') in selected_ids}
         # The raw /api/word evidence preview is capped at 100 claims, while
@@ -784,7 +784,8 @@ def classify_context_request(request:ContextRequest,http_request:Request):
         # assigns stable per-request IDs and rejects duplicate explicit IDs.
         candidates=[*candidates,*comparison_candidates]
         candidate_origin += '_with_parallel_text_comparison'
-    selected_ids={identifier for candidate in candidates for identifier in candidate.get('claim_ids',[])}
+    selected_ids={identifier for candidate in candidates
+                  for identifier in [*candidate.get('claim_ids',[]), *candidate.get('entry_sense_claim_ids',[])]}
     all_claims=analysis.get('structured_evidence',{}).get('claims',[])
     sibling_proof=[claim for claim in analysis.get('contextual_supporting_claims',[])
                    if claim.get('id') in selected_ids]
@@ -1312,6 +1313,9 @@ def usage_space(q:str='',author:str='',limit:int=Query(80,ge=3,le=150)):
     points=[]
     for record,coord in zip(results,coords):
         point={key:record.get(key) for key in ('id','text','author','work','citation','source','source_url','license','edition','date_start','date_end','date_source','author_chronology','match_reason')}
+        # Display/color identity only. Retain the source author label, and do
+        # not substitute a linked parent or split a joint attribution.
+        point['author_canonical']=canonical_author(record.get('author',''))
         point.update(zip(('x','y','z'),[float(v) for v in coord]))
         points.append(point)
     return {'points':points,'method':retrieval+'. '+method,'retrieval_method':retrieval,

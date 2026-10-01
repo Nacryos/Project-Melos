@@ -70,9 +70,11 @@ def test_incomplete_flag_cannot_disappear_with_a_grouped_member_or_valid_other_c
     assert result['decision_stage'] == 'preflight' and provider.calls == 0
 
 
-def test_old_prompt_and_cache_version_remain_in_force_while_experiment_is_parked():
+def test_old_prompt_remains_while_source_sense_cache_namespace_is_separate():
     from backend.jev_gateway import CACHE_VERSION
     packet = build_evidence_packet('α', PASSAGE, [], [])
-    assert CACHE_VERSION == 'jev-contextual-parse-v4'
+    # v5 belongs to the parked prompt experiment; v6 only admits exact-entry
+    # sense evidence and must never reuse v4/v5 cached comparisons.
+    assert CACHE_VERSION == 'jev-contextual-parse-v6-entry-senses'
     assert 'Preserve conflicting interpretations; abstain if evidence does not resolve them.' in packet['constraints']
     assert not any('provisional contextual grammatical hypothesis' in value for value in packet['constraints'])

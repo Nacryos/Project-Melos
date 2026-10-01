@@ -1211,6 +1211,58 @@
     if (Number(data.total) > claims.length) section.append(node('p', 'candidate-reason', `${data.total} claims matched; ${claims.length} shown in this preview.`));
     appendWarnings(host, data.warnings);
   }
+  function candidateEntrySenses(candidate) {
+    return (Array.isArray(candidate?.entry_senses) ? candidate.entry_senses : []).filter(sense =>
+      sense?.scope === 'general_dictionary_entry' && typeof sense.entry_id === 'string' && sense.entry_id &&
+      typeof sense.claim_id === 'string' && sense.claim_id &&
+      [sense.raw_glosses, sense.glosses].some(values => Array.isArray(values) && values.some(value => typeof value === 'string' && value.trim())));
+  }
+  function packetCandidatesWithEntrySenses(packet) {
+    return (Array.isArray(packet?.candidates) ? packet.candidates : []).map(candidate => {
+      // Inline data remains authoritative, including an explicitly empty list.
+      if (!candidate || Object.prototype.hasOwnProperty.call(candidate, 'entry_senses')) return candidate;
+      const catalog = packet.entry_sense_catalog;
+      if (!catalog || typeof catalog !== 'object' || Array.isArray(catalog)) return candidate;
+      const ids = Array.isArray(candidate.entry_sense_claim_ids) ? candidate.entry_sense_claim_ids : [];
+      const senses = ids.filter(id => typeof id === 'string' && id && Object.prototype.hasOwnProperty.call(catalog, id))
+        .map(id => catalog[id]?.claim_id === id ? catalog[id] : null).filter(Boolean);
+      return { ...candidate, entry_senses: senses };
+    });
+  }
+  function entrySenseGlosses(sense) {
+    const strings = values => (Array.isArray(values) ? values : []).filter(value => typeof value === 'string' && value.trim());
+    const qualified = strings(sense.raw_glosses);
+    return qualified.length ? qualified : strings(sense.glosses);
+  }
+  function renderCandidateEntrySenses(host, candidate) {
+    const senses = candidateEntrySenses(candidate);
+    if (!senses.length) return false;
+    host.append(node('p', 'candidate-meta-label', 'Source entry meaning'),
+      node('p', 'candidate-gloss', entrySenseGlosses(senses[0])[0]));
+    const details = node('details', 'entry-details');
+    details.append(node('summary', '', `Dictionary senses and sources · ${senses.length}`),
+      node('p', 'candidate-reason', 'General dictionary entry; no passage-specific meaning is selected.'));
+    for (const sense of senses) {
+      const row = node('div', 'candidate-entry-sense');
+      for (const gloss of entrySenseGlosses(sense)) row.append(node('p', 'candidate-gloss', gloss));
+      // Raw qualified glosses lead; retain any separately supplied source gloss too.
+      for (const gloss of Array.isArray(sense.glosses) ? sense.glosses : []) {
+        if (typeof gloss === 'string' && gloss.trim() && !entrySenseGlosses(sense).includes(gloss)) row.append(node('p', 'candidate-analysis', gloss));
+      }
+      const qualifiers = [sense.tags, sense.raw_tags].flatMap(values => Array.isArray(values) ? values : []).filter(value => typeof value === 'string' && value);
+      if (qualifiers.length) row.append(node('p', 'candidate-reason', `Source labels: ${qualifiers.join(' · ')}`));
+      if (sense.source_quality) row.append(node('p', 'candidate-reason', `Source quality: ${String(sense.source_quality).replaceAll('_', ' ')}`));
+      const identity = [sense.entry_id, sense.claim_id, sense.source_sense_id, sense.locator].filter(value => typeof value === 'string' && value);
+      row.append(node('p', 'candidate-reason', identity.join(' · ')));
+      if (typeof sense.quote === 'string' && sense.quote) row.append(node('p', 'candidate-analysis', sense.quote));
+      if (typeof sense.license === 'string' && sense.license) row.append(node('p', 'candidate-reason', sense.license));
+      const link = safeLink(sense.source_url, 'Dictionary source ↗');
+      if (link) row.append(link);
+      details.append(row);
+    }
+    host.append(details);
+    return true;
+  }
   function renderSourceGrammarAlternatives(host, candidate) {
     const notices = {
       incomplete_explicit_alternatives: 'Not all source alternatives are indexed yet.',
@@ -1252,6 +1304,7 @@
       row.append(node('div', 'candidate-lemma', candidate.lemma || candidate.equivalent_form || candidate.matched_form || 'Unlabeled candidate'));
       if (candidate.analysis) row.append(node('p', 'candidate-analysis', String(candidate.analysis)));
       if (candidate.features) row.append(node('p', 'candidate-analysis', formatFeatures(candidate.features)));
+      renderCandidateEntrySenses(row, candidate);
       renderSourceGrammarAlternatives(row, candidate);
       if (candidate.equivalent_form) row.append(node('p', 'candidate-analysis', `Equivalent form: ${candidate.equivalent_form}`));
       row.append(node('p', 'candidate-reason', [candidate.strength?.replaceAll('_', ' '), candidate.source_family, candidate.match_reason].filter(Boolean).join(' · ')));
@@ -1285,6 +1338,8 @@
     if (candidate.features) parts.push(formatFeatures(candidate.features));
     if (candidate.equivalent_form) parts.push(`Equivalent form: ${candidate.equivalent_form}`);
     if (parts.length === 1) parts.push('No grammatical analysis supplied');
+    const senses = candidateEntrySenses(candidate);
+    if (senses.length) parts.push(`Source entry meaning: ${entrySenseGlosses(senses[0])[0]}`);
     return parts.filter(Boolean).join(' — ');
   }
   function addContextAction(host, form, passageId, sequence) {
@@ -1307,7 +1362,7 @@
         const result = await apiPost('/api/classify-context', { form, passage_id: passageId });
         if (sequence !== state.wordSequence) return;
         clear(output);
-        const options = Array.isArray(result.packet?.candidates) ? result.packet.candidates : [];
+        const options = packetCandidatesWithEntrySenses(result.packet);
         const chosen = options.find(candidate => candidate.id === result.candidate_id);
         if (result.status === 'proposed' && chosen) {
           const title = chosen.lemma || chosen.matched_form || form;
@@ -1315,6 +1370,7 @@
           output.append(node('p', 'candidate-lemma', title));
           const description = [chosen.analysis_text || chosen.analysis, chosen.features ? formatFeatures(chosen.features) : '', chosen.equivalent_form ? `Equivalent form: ${chosen.equivalent_form} (source relation, not a complete parse)` : '', chosen.gloss].filter(Boolean).join(' · ');
           if (description) output.append(node('p', 'candidate-analysis', description));
+          renderCandidateEntrySenses(output, chosen);
           if (chosen.match_reason) output.append(node('p', 'candidate-reason', chosen.match_reason));
           if (chosen.comparison_scope) output.append(node('p', 'warning', chosen.comparison_scope));
           output.append(node('p', 'candidate-reason', 'Other source candidates remain listed above. This proposal does not replace their source claims.'));
@@ -1347,6 +1403,7 @@
                 provenance.append(node('summary', '', 'Candidate identity and scope'));
                 provenance.append(node('p', 'candidate-reason', id));
                 provenance.append(node('p', 'candidate-reason', candidate.comparison_scope || candidate.match_reason || candidate.strength || 'Source scope not supplied'));
+                renderCandidateEntrySenses(provenance, candidate);
                 row.append(provenance);
               }
               details.append(row);

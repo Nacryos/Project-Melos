@@ -20,7 +20,7 @@ from typing import Any, Mapping
 
 ROOT = Path(__file__).resolve().parents[1]
 # Bump whenever the provider prompt, answer schema, or interpretation changes.
-CACHE_VERSION = "jev-contextual-parse-v4"
+CACHE_VERSION = "jev-contextual-parse-v6-entry-senses"
 CACHE_TTL = 30 * 86400
 CACHE_MAX_ENTRIES = 20000
 

@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 const source = readFileSync(new URL('../js/reader.js', import.meta.url), 'utf8');
 const context = vm.createContext({});
 vm.runInContext(source.slice(source.indexOf('  function formatFeatures('), source.indexOf('  function claimValue('))
+  + source.slice(source.indexOf('  function candidateEntrySenses('), source.indexOf('  function renderSourceGrammarAlternatives('))
   + source.slice(source.indexOf('  function candidatePreferenceLabel('), source.indexOf('  function addContextAction(')), context);
 const label = vm.runInContext('candidatePreferenceLabel', context);
 
