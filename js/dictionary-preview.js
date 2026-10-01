@@ -85,6 +85,28 @@
     const shortened = excerpt(value);
     return shortened && url ? { ...shortened, source, source_url: url, ...extra } : null;
   }
+  function sourcedDefinitionExcerpt(entry, url) {
+    // The API supplies this only after checking the accepted LSJ raw hash and
+    // extracting a bounded source clause. Keep the full gloss as fallback if
+    // the display projection cannot bind that clause to this exact entry.
+    const provenance = entry.definition_excerpt_provenance;
+    const locator = provenance?.source_locator;
+    if (!url || text(entry.source) !== 'PerseusDL LSJ TEI' || !text(entry.definition_excerpt) ||
+        !text(entry.entry_id) || text(provenance?.entry_id) !== text(entry.entry_id) ||
+        sourceUrl(provenance?.source_url) !== url ||
+        !/^[a-f0-9]{64}$/i.test(text(provenance?.raw_sha256)) ||
+        !text(provenance?.method) ||
+        locator?.offset_basis !== 'uncompacted Greek-span-rendered TEI entry' ||
+        !Number.isInteger(locator?.boundary_ordinal) || locator.boundary_ordinal < 1 ||
+        !Number.isInteger(locator?.rendered_start) ||
+        !Number.isInteger(locator?.rendered_end) ||
+        locator.rendered_start < 0 || locator.rendered_end <= locator.rendered_start) return null;
+    return { text: entry.definition_excerpt, provenance };
+  }
+  function definitionExcerpt(entry) {
+    if (!entry || typeof entry !== 'object' || rejected(entry)) return null;
+    return sourcedDefinitionExcerpt(entry, sourceUrl(entry.source_url));
+  }
   function unique(rows, key) {
     const seen = new Set();
     return rows.filter(row => { const value = key(row); if (seen.has(value)) return false; seen.add(value); return true; });
@@ -140,8 +162,10 @@
       if (!url || !matches.length) continue;
       // A prose LSJ/Autenrieth gloss is one excerpt. Never split commas or
       // semicolons into supposed senses that the source did not distinguish.
-      const meanings = [meaning(entry.gloss, source, url, {
-        provenance: [{ entry_id: id, source, source_url: url }]
+      const clause = definitionExcerpt(entry);
+      const meanings = [meaning(clause?.text || entry.gloss, source, url, {
+        provenance: [{ entry_id: id, source, source_url: url }],
+        ...(clause ? { definition_excerpt_provenance: clause.provenance } : {})
       })].filter(Boolean);
       if (!meanings.length) continue;
       const unresolvedEntry = matches.some(candidate => {
@@ -243,5 +267,6 @@
       truncated: distinct.some(entry => entry.truncated),
       label: ambiguous ? 'Dictionary alternatives — no contextual sense selected' : 'Dictionary preview — source excerpts' };
   }
-  window.MelosDictionaryPreview = Object.freeze({ isCandidateQuery, buildPreview, friendlySourceName });
+  window.MelosDictionaryPreview = Object.freeze({ isCandidateQuery, buildPreview, friendlySourceName,
+    definitionExcerpt });
 })();

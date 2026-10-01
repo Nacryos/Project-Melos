@@ -9,6 +9,7 @@ from __future__ import annotations
 from functools import lru_cache
 from html import unescape
 from html.entities import html5 as HTML5_ENTITIES
+import hashlib
 import mmap
 from pathlib import Path
 import re
@@ -145,15 +146,146 @@ def render_entry_text(raw_path: str | Path, entry_id: str) -> str:
     return SPACE.sub(" ", _render_node(entry, entities)).strip()
 
 
-def render_source_record(record: dict[str, Any]) -> dict[str, str | None]:
+def _render_spans(entry: etree._Element, entities: dict[str, str]):
+    """Render the existing source text while retaining exact node offsets."""
+    pieces, spans, length = [], {}, 0
+    def append(text):
+        nonlocal length
+        pieces.append(text)
+        length += len(text)
+    def visit(node, inherited=False):
+        start = length
+        if isinstance(node, etree._Entity):
+            append(_render_node(node, entities, inherited))
+        else:
+            language = node.get('lang') or node.get('{http://www.w3.org/XML/1998/namespace}lang')
+            greek = language.strip().lower() in GREEK_LANGS if language else inherited or node.tag == 'orth'
+            if node.text:
+                append(_render_text(node.text, greek, entities))
+            for child in node:
+                visit(child, greek)
+                if child.tail:
+                    append(_render_text(child.tail, greek, entities))
+        spans[node] = (start, length)
+    visit(entry)
+    return ''.join(pieces), spans
+
+
+def _comparative_definition(entry: etree._Element, entities: dict[str, str]) -> dict | None:
+    """A narrow source-layout correction, not a general LSJ sense classifier.
+
+    LSJ can open its first <sense> inside a comparative morphology note and
+    uses <tr> for Sanskrit forms too. Only the explicitly marked ``cf. Skt.``
+    parenthetical-preamble layout is supported here. Other layouts abstain.
+    Greek Beta Code is rendered first, so breathing signs are not parentheses.
+    """
+    text, spans = _render_spans(entry, entities)
+    trs = list(entry.iter('tr'))
+    for ordinal, boundary in enumerate(re.finditer(r':\s*\u2014', text), 1):
+        stack, parentheses, invalid = [], [], False
+        for index, char in enumerate(text[:boundary.start()]):
+            if char == '(':
+                stack.append(index)
+            elif char == ')':
+                if not stack:
+                    invalid = True
+                    break
+                parentheses.append((stack.pop(), index + 1))
+        if invalid or stack:
+            continue
+        previous = [node for node in trs if spans[node][0] < boundary.start()]
+        if not previous:
+            continue
+        # A mere parenthetical translation is not proof of an etymology. Its
+        # containing source note must explicitly identify the comparison.
+        if not all(any(start < spans[node][0] and spans[node][1] <= end
+                       and re.search(r'\bcf\.\s*Skt\.', text[start:spans[node][0]], re.I)
+                       for start, end in parentheses) for node in previous):
+            continue
+        senses = [node for node in entry.iter('sense')
+                  if spans[node][0] <= boundary.start() and spans[node][1] >= boundary.end()]
+        if not senses:
+            continue
+        sense = min(senses, key=lambda node: spans[node][1] - spans[node][0])
+        start, end = boundary.end(), spans[sense][1]
+        stops = [spans[node][0] for node in sense.iter()
+                 if node.tag in {'bibl', 'cit', 'sense'} and spans[node][0] >= start]
+        if stops:
+            end = min(end, *stops)
+        if not any(start <= spans[node][0] < spans[node][1] <= end for node in trs):
+            continue
+        # Keep all surrounding source words (not a bag of isolated <tr>s),
+        # especially contrasts such as "man, opp. woman" and their qualifiers.
+        excerpt = SPACE.sub(' ', text[start:end]).strip()
+        if not excerpt or len(excerpt) > 700 or re.search(r'\bcf\.\s*Skt\.', excerpt, re.I):
+            continue
+        depth, balanced = 0, True
+        for char in excerpt:
+            depth += (char == '(') - (char == ')')
+            if depth < 0:
+                balanced = False
+                break
+        if not balanced or depth:
+            # A citation can occur inside a meaning qualifier. Do not expose
+            # an excerpt that ends halfway through that parenthetical scope.
+            continue
+        if re.search(r'\b(?:esp|opp|viz|e\.g|i\.e)\.\s*$', excerpt, re.I):
+            # Some source <sense> starts divide a running clause immediately
+            # after a qualification marker. Do not publish that dangling lead-in.
+            continue
+        return {'definition_excerpt': excerpt,
+                'source_locator': {'sense_id': sense.get('id'), 'boundary_ordinal': ordinal,
+                                   'rendered_start': start, 'rendered_end': end,
+                                   'offset_basis': 'uncompacted Greek-span-rendered TEI entry'}}
+    return None
+
+
+@lru_cache(maxsize=32)
+def _raw_digest(path: Path, mtime_ns: int, size: int) -> str:
+    with path.open('rb') as handle:
+        return hashlib.file_digest(handle, 'sha256').hexdigest()
+
+
+def definition_excerpt(record: dict[str, Any]) -> dict[str, Any]:
+    """Return an optional hash-bound LSJ display excerpt, never replace gloss."""
+    if (record.get('source') != 'PerseusDL LSJ TEI' or not record.get('raw_sha256')
+            or not record.get('source_url')):
+        return {}
+    path = _source_path(record['raw_path'])
+    signature = path.stat()
+    if _raw_digest(path, signature.st_mtime_ns, signature.st_size) != record['raw_sha256']:
+        return {}
+    entry, entities = read_entry(record['raw_path'], record['entry_id'])
+    after = path.stat()
+    if (after.st_mtime_ns, after.st_size) != (signature.st_mtime_ns, signature.st_size):
+        return {}
+    found = _comparative_definition(entry, entities)
+    if not found:
+        return {}
+    return {'definition_excerpt': found['definition_excerpt'],
+            'definition_excerpt_provenance': {
+                'source_url': record.get('source_url'), 'entry_id': record['entry_id'],
+                'raw_sha256': record['raw_sha256'],
+                'method': 'Source definition clause after an explicit balanced Sanskrit comparative preamble; no contextual sense adjudication.',
+                'source_locator': found['source_locator']}}
+
+
+def render_source_record(record: dict[str, Any]) -> dict[str, Any]:
     """Add a rendered display field and explicit method/warning metadata."""
     try:
         rendered = render_entry_text(record["raw_path"], record["entry_id"])
     except (KeyError, ValueError, FileNotFoundError, etree.XMLSyntaxError) as exc:
         return {"rendered_entry_text": None, "rendering_method": METHOD,
                 "rendering_warning": str(exc)}
-    return {"rendered_entry_text": rendered, "rendering_method": METHOD,
-            "rendering_warning": None}
+    result = {"rendered_entry_text": rendered, "rendering_method": METHOD,
+              "rendering_warning": None}
+    try:
+        result.update(definition_excerpt(record))
+    except (KeyError, ValueError, OSError, etree.XMLSyntaxError):
+        # Optional compact display correction fails closed; the diplomatic
+        # stored gloss and full source rendering are still available.
+        pass
+    return result
 
 
 __all__ = ["read_entry", "render_entry_text", "render_source_record", "METHOD"]

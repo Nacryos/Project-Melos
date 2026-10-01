@@ -6,7 +6,7 @@ import { readFileSync } from 'node:fs';
 // Entirely synthetic entry/parse fixtures; these are not Greek corpus evidence.
 const context = vm.createContext({ window: {}, URL });
 vm.runInContext(readFileSync(new URL('../js/dictionary-preview.js', import.meta.url), 'utf8'), context);
-const { isCandidateQuery, buildPreview, friendlySourceName } = context.window.MelosDictionaryPreview;
+const { isCandidateQuery, buildPreview, friendlySourceName, definitionExcerpt } = context.window.MelosDictionaryPreview;
 function fixture() {
   return { form: 'λόγου', match_status: 'indexed_match',
     candidates: [{ lemma: 'λόγος', match_kind: 'indexed_form', edit_distance: 0,
@@ -102,6 +102,58 @@ test('long gloss is literal bounded prefix, never generative simplification', ()
   assert.equal(data.lexicon_entries[0].gloss.startsWith(meaning.text.slice(0, -1)), true);
   assert.ok(meaning.text.length <= 201);
   assert.equal(result.truncated, true);
+});
+
+test('verified LSJ definition clause is preferred without changing the source gloss', () => {
+  const data = fixture();
+  const entry = data.lexicon_entries[0];
+  entry.entry_id = 'lsj:fixture:1';
+  entry.source = 'PerseusDL LSJ TEI';
+  entry.gloss = 'Skt. comparative preamble; man, opp. woman; person.';
+  entry.definition_excerpt = 'man, opp. woman; person.';
+  entry.definition_excerpt_provenance = {
+    source_url: entry.source_url, entry_id: entry.entry_id, raw_sha256: 'a'.repeat(64),
+    method: 'Source definition clause after an explicit balanced Sanskrit comparative preamble; no contextual sense adjudication.',
+    source_locator: { sense_id: 'sense1', boundary_ordinal: 1, rendered_start: 27,
+      rendered_end: 51, offset_basis: 'uncompacted Greek-span-rendered TEI entry' }
+  };
+  const original = structuredClone(data);
+  const result = buildPreview(data);
+  assert.deepEqual(data, original);
+  assert.equal(definitionExcerpt(entry).text, 'man, opp. woman; person.');
+  assert.equal(result.entries[0].meanings[0].text, 'man, opp. woman; person.');
+  assert.equal(result.entries[0].meanings[0].definition_excerpt_provenance.entry_id, entry.entry_id);
+  assert.equal(entry.gloss, 'Skt. comparative preamble; man, opp. woman; person.');
+  entry.status = 'needs_review';
+  assert.equal(definitionExcerpt(entry), null);
+  delete entry.status;
+  entry.assertion_type = 'model_inference';
+  assert.equal(definitionExcerpt(entry), null);
+});
+
+test('unbound LSJ display clause falls back to the original gloss', () => {
+  const data = fixture();
+  const entry = data.lexicon_entries[0];
+  entry.entry_id = 'lsj:fixture:1';
+  entry.source = 'PerseusDL LSJ TEI';
+  entry.gloss = 'Original source gloss.';
+  entry.definition_excerpt = 'Unverified clause.';
+  entry.definition_excerpt_provenance = { source_url: entry.source_url, entry_id: 'different-entry',
+    raw_sha256: 'a'.repeat(64), method: 'Fixture source extraction.',
+    source_locator: { boundary_ordinal: 1, rendered_start: 0, rendered_end: 18,
+      offset_basis: 'uncompacted Greek-span-rendered TEI entry' } };
+  const result = buildPreview(data);
+  assert.equal(result.entries[0].meanings[0].text, 'Original source gloss.');
+  assert.equal(result.entries[0].meanings[0].definition_excerpt_provenance, undefined);
+  assert.equal(definitionExcerpt(entry), null);
+  assert.equal(definitionExcerpt(null), null);
+  entry.definition_excerpt_provenance.entry_id = entry.entry_id;
+  entry.definition_excerpt_provenance.source_locator.boundary_ordinal = 0;
+  assert.equal(definitionExcerpt(entry), null);
+  entry.definition_excerpt_provenance.source_locator.boundary_ordinal = 1;
+  entry.source_url = 'javascript:unsafe()';
+  entry.definition_excerpt_provenance.source_url = entry.source_url;
+  assert.equal(definitionExcerpt(entry), null);
 });
 
 test('missing actual gloss never falls back to generated candidate text or entire entry', () => {

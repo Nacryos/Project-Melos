@@ -708,6 +708,9 @@ class Morphology:
             entry = lexicon_entries.get(candidate.get("gloss_entry_id"))
             candidate["rendered_entry_text"] = entry.get("rendered_entry_text") if entry else None
             candidate["rendering_method"] = entry.get("rendering_method") if entry else None
+            if entry and entry.get('definition_excerpt'):
+                candidate['definition_excerpt'] = entry['definition_excerpt']
+                candidate['definition_excerpt_provenance'] = entry['definition_excerpt_provenance']
         observed_form_groups = self._observed_form_groups(candidates, len(query_identities) > 1)
         for candidate in all_candidates:
             candidate.pop('_inventory_identity_keys', None)

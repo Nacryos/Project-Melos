@@ -1412,6 +1412,12 @@
     if (evidence.entries_truncated || evidence.hits_truncated) section.append(node('p', 'candidate-reason', 'Only the bounded preview is shown; additional entries or quotations were not checked or displayed.'));
     return true;
   }
+  function candidateDictionaryExcerpt(candidate, entries) {
+    const linked = typeof candidate.gloss_entry_id === 'string' && candidate.gloss_entry_id
+      ? (Array.isArray(entries) ? entries : []).filter(entry => entry?.id === candidate.gloss_entry_id) : [];
+    const clause = linked.length === 1 ? window.MelosDictionaryPreview?.definitionExcerpt?.(linked[0]) : null;
+    return clause || { text: candidate.gloss, provenance: null };
+  }
   async function inspectWord(form, button = null, joined = false) {
     if (!form) return;
     if (button && (state.passageLoading || !state.passage?.id || !ui.text.contains(button))) return;
@@ -1474,7 +1480,8 @@
       for (const candidate of candidates) {
         const card = node('div', 'candidate');
         if (candidate.lemma) card.append(node('div', 'candidate-lemma', candidate.lemma));
-        if (candidate.gloss) card.append(node('span', 'candidate-meta-label', 'Dictionary excerpt'), node('p', 'candidate-gloss', candidate.gloss));
+        const definition = candidateDictionaryExcerpt(candidate, data.lexicon_entries);
+        if (definition.text) card.append(node('span', 'candidate-meta-label', definition.provenance ? 'Source definition excerpt' : 'Dictionary excerpt'), node('p', 'candidate-gloss', definition.text));
         if (candidate.analysis_text) {
           const parse = node('p', 'candidate-analysis', candidate.analysis_text);
           if (candidate.analysis) parse.title = `Source analysis: ${candidate.analysis}${candidate.analysis_format ? ` (${candidate.analysis_format})` : ''}`;
