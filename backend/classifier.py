@@ -11,6 +11,8 @@ from __future__ import annotations
 
 import json
 import os
+import sqlite3
+import unicodedata
 from typing import Any, Mapping, Protocol, Sequence
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -130,6 +132,278 @@ def _lexical_metadata_candidate(row: Mapping[str, Any]) -> bool:
     return False
 
 
+def _exact_source_form(value: Any) -> str | None:
+    """Canonical Unicode only; never fold accent, quantity, case, or homographs."""
+    return unicodedata.normalize('NFC', value) if isinstance(value, str) and value else None
+
+
+def _source_record_id(claim: Mapping[str, Any]) -> str | None:
+    records = {e.get('record_id') for e in claim.get('evidence') or ()
+               if isinstance(e, Mapping) and isinstance(e.get('record_id'), str)}
+    return next(iter(records)) if len(records) == 1 else None
+
+
+def _grammatical_tags(value: Any) -> tuple[str, ...] | None:
+    if not isinstance(value, list) or not value or not all(
+        isinstance(tag, str) and tag and tag == tag.strip() for tag in value
+    ):
+        return None
+    tags = tuple(sorted(value))
+    return tags if len(tags) == len(set(tags)) else None
+
+
+def _complete_morphology_claim(preview: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    """Read the accepted full claim only when a compact preview omits forms."""
+    obj = preview.get('object')
+    if isinstance(obj, Mapping) and isinstance(obj.get('forms'), list):
+        return preview
+    if not isinstance(obj, Mapping):
+        return None
+    try:
+        from .evidence import EvidenceIndex
+        full = EvidenceIndex().get_claim(str(preview['id']))
+    except (FileNotFoundError, OSError, RuntimeError, sqlite3.Error, KeyError):
+        return None
+    if not _source_claim(full) or not isinstance(full.get('object'), Mapping):
+        return None
+    forms = full['object'].get('forms')
+    compact = {key: value for key, value in full['object'].items() if key != 'forms'}
+    if not isinstance(forms, list):
+        return None
+    compact['listed_form_count'] = len(forms)
+    if (compact != obj or any(full.get(key) != preview.get(key) for key in
+        ('id', 'subject', 'predicate', 'source_family', 'evidence'))):
+        return None
+    return full
+
+
+def _source_bridged_pair(
+    form: str, relation: Mapping[str, Any], listed: Mapping[str, Any],
+    proofs: Mapping[str, Mapping[str, Any]],
+) -> bool:
+    """One Kaikki reading only when accepted source rows explicitly join it.
+
+    A diacritic-folded lookup match is never enough. The form-of target must
+    exactly match the canonical form in the listed entry, whose exact listed
+    row must link to the queried form. The inflected entry supplies matching
+    part of speech. All of this is general lexicon scope, not passage proof.
+    """
+    family = relation.get('source_family')
+    if (relation.get('candidate_kind') != 'explicit_form_of' or
+        listed.get('candidate_kind') != 'grammatical_analysis' or
+        not isinstance(family, str) or not family.startswith('enwiktionary-kaikki-') or
+        family != listed.get('source_family') or
+        relation.get('relation_raw') != 'form_of' or
+        any(_nearby_spelling(row) or row.get('features') or row.get('analysis_text') or
+            row.get('dialect') or row.get('gloss') for row in (relation, listed))):
+        return False
+    relation_ids, listed_ids = relation.get('claim_ids'), listed.get('claim_ids')
+    if (not isinstance(relation_ids, list) or len(relation_ids) != 1 or
+        relation.get('id') != relation_ids[0] or
+        not isinstance(listed_ids, list) or len(listed_ids) != 1):
+        return False
+    form_of, morphology = proofs.get(relation_ids[0]), proofs.get(listed_ids[0])
+    if not form_of or not morphology or any(
+        claim.get('source_family') != family or
+        not isinstance(claim.get('subject'), Mapping) or
+        claim['subject'].get('type') != 'form' or claim['subject'].get('passage_id')
+        for claim in (form_of, morphology)
+    ):
+        return False
+    if (_source_record_id(form_of) not in (relation.get('evidence_refs') or ()) or
+        _source_record_id(morphology) not in (listed.get('evidence_refs') or ())):
+        return False
+    relation_object, morphology_object = form_of.get('object'), morphology.get('object')
+    if (form_of.get('predicate') != 'lemma' or morphology.get('predicate') != 'morphology' or
+        not isinstance(relation_object, Mapping) or not isinstance(morphology_object, Mapping) or
+        relation_object.get('relation') != 'form_of' or
+        _exact_source_form(form_of['subject'].get('form')) != _exact_source_form(form) or
+        _exact_source_form(relation.get('matched_form')) != _exact_source_form(form) or
+        _exact_source_form(morphology['subject'].get('form')) !=
+            _exact_source_form(listed.get('lemma')) or
+        _exact_source_form(morphology_object.get('lemma')) !=
+            _exact_source_form(listed.get('lemma')) or
+        _exact_source_form(listed.get('entry_headword')) !=
+            _exact_source_form(listed.get('lemma'))):
+        return False
+    targets = relation_object.get('targets')
+    if not isinstance(targets, list) or len(targets) != 1 or not isinstance(targets[0], Mapping):
+        return False
+    if (set(targets[0]) - {'word', 'extra'} or relation_object.get('source_raw_tags') or
+        relation.get('source_raw_tags') or listed.get('source_raw_tags')):
+        return False
+    target = _exact_source_form(targets[0].get('word'))
+    if not target or target != _exact_source_form(relation.get('lemma')):
+        return False
+    if relation.get('lemma_targets') is not None and relation['lemma_targets'] != targets:
+        return False
+    extra = targets[0].get('extra')
+    if extra is not None:
+        full_morphology = _complete_morphology_claim(morphology)
+        forms_full = (full_morphology or {}).get('object', {}).get('forms')
+        if (not isinstance(extra, str) or not extra or not isinstance(forms_full, list) or
+            len([row for row in forms_full if isinstance(row, Mapping) and
+                 row.get('form') == extra and row.get('tags') == ['romanization']]) != 1):
+            return False
+        inflected_record = _source_record_id(form_of)
+        # The accepted sense must repeat the same source target and explicitly
+        # link its printed target to this root entry. The Latin-script label
+        # remains a source annotation, not an independently inferred identity.
+        if not any(
+            proof.get('source_family') == family and
+            proof.get('predicate') == 'sense_gloss' and
+            _source_record_id(proof) == inflected_record and
+            isinstance(proof.get('subject'), Mapping) and
+            proof['subject'].get('type') == 'form' and
+            not proof['subject'].get('passage_id') and
+            _exact_source_form(proof['subject'].get('form')) == _exact_source_form(form) and
+            isinstance(proof.get('object'), Mapping) and
+            isinstance(proof['object'].get('source_sense'), Mapping) and
+            proof['object']['source_sense'].get('form_of') == targets and
+            not proof['object']['source_sense'].get('raw_tags') and
+            any(isinstance(link, list) and len(link) == 2 and
+                _exact_source_form(link[0]) == target and
+                _exact_source_form(link[1]) == f"{_exact_source_form(listed.get('lemma'))}#Ancient_Greek"
+                for link in proof['object']['source_sense'].get('links') or ()) and
+            any(isinstance(gloss, str) and f'({extra})' in gloss
+                for gloss in proof['object']['source_sense'].get('glosses') or ())
+            for proof in proofs.values()
+        ):
+            return False
+    tags = _grammatical_tags(listed.get('analysis'))
+    source_tags = relation_object.get('source_tags')
+    if (not tags or tags != _grammatical_tags(relation.get('analysis')) or
+        not isinstance(source_tags, list) or source_tags.count('form-of') != 1 or
+        tags != _grammatical_tags([tag for tag in source_tags if tag != 'form-of'])):
+        return False
+    forms = morphology_object.get('forms')
+    suffix = str(listed.get('id') or '').removeprefix(f"{listed_ids[0]}#form:")
+    if (not str(listed.get('id') or '').startswith(f"{listed_ids[0]}#form:") or
+        not suffix.isdecimal()):
+        return False
+    ordinal = int(suffix)
+    if isinstance(forms, list):
+        canonical = [row for row in forms if isinstance(row, Mapping) and
+                     isinstance(row.get('tags'), list) and 'canonical' in row['tags']]
+        if (len(canonical) != 1 or target != _exact_source_form(canonical[0].get('form')) or
+            ordinal >= len(forms) or forms[ordinal] != listed.get('matched_object_form')):
+            return False
+    else:
+        # Word previews intentionally compact large form arrays. Their source
+        # claim still carries the canonical first-row quotation and template.
+        # Require the exact accepted EvidenceIndex form-edge row and ordinal,
+        # not merely the candidate's own claimed spelling/link. These are
+        # several fields of ONE dictionary source, not independent witnesses.
+        count = morphology_object.get('listed_form_count')
+        templates = morphology_object.get('inflection_templates')
+        projected_rows = morphology.get('matched_object_forms')
+        projected_ordinals = morphology.get('matched_object_form_ordinals')
+        quoted_canonical = []
+        for evidence in morphology.get('evidence') or ():
+            if not isinstance(evidence, Mapping) or evidence.get('locator') != '/entry/forms':
+                continue
+            try:
+                quoted = json.loads(evidence.get('quote') or '')
+            except (TypeError, ValueError):
+                continue
+            if isinstance(quoted, Mapping) and 'canonical' in (quoted.get('tags') or ()):
+                quoted_canonical.append(quoted.get('form'))
+        if (not isinstance(count, int) or isinstance(count, bool) or ordinal >= count or
+            not isinstance(projected_rows, list) or not isinstance(projected_ordinals, list) or
+            len(projected_rows) != len(projected_ordinals) or
+            (ordinal, listed.get('matched_object_form')) not in
+                list(zip(projected_ordinals, projected_rows)) or
+            len(quoted_canonical) != 1 or target != _exact_source_form(quoted_canonical[0]) or
+            not isinstance(templates, list) or not any(
+                isinstance(template, Mapping) and isinstance(template.get('args'), Mapping) and
+                _exact_source_form(template['args'].get('1')) == target
+                for template in templates)):
+            return False
+    source_row = listed.get('matched_object_form')
+    if (not isinstance(source_row, Mapping) or source_row.get('source') != 'declension' or
+        source_row.get('raw_tags') or
+        _grammatical_tags(source_row.get('tags')) != tags or
+        _exact_source_form(source_row.get('form')) != _exact_source_form(listed.get('matched_form'))):
+        return False
+    links = source_row.get('links')
+    if not isinstance(links, list) or not any(
+        isinstance(link, list) and len(link) == 2 and
+        _exact_source_form(link[0]) == _exact_source_form(source_row.get('form')) and
+        _exact_source_form(link[1]) == f'{_exact_source_form(form)}#Ancient_Greek'
+        for link in links
+    ):
+        return False
+    # The linked inflected entry explicitly marks itself as a noun form; an
+    # identical-looking form with a different POS must remain separate.
+    inflected_record = _source_record_id(form_of)
+    pos = morphology_object.get('pos')
+    return bool(pos and inflected_record and any(
+        proof.get('source_family') == family and
+        proof.get('predicate') == 'lemma' and
+        str(proof.get('id') or '').endswith(':lemma:entry') and
+        _source_record_id(proof) == inflected_record and
+        isinstance(proof.get('subject'), Mapping) and
+        proof['subject'].get('type') == 'form' and
+        not proof['subject'].get('passage_id') and
+        _exact_source_form(proof['subject'].get('form')) == _exact_source_form(form) and
+        isinstance(proof.get('object'), Mapping) and
+        proof['object'].get('pos') == pos and
+        isinstance(proof['object'].get('head_templates'), list) and
+        any(isinstance(template, Mapping) and
+            str(template.get('name') or '').startswith('grc-') and
+            str(template.get('name') or '').endswith(' form')
+            for template in proof['object']['head_templates'])
+        for proof in proofs.values()
+    ))
+
+
+def _group_source_bridged_options(
+    form: str, options: list[dict[str, Any]], claims: Sequence[Mapping[str, Any]],
+) -> tuple[list[dict[str, Any]], int]:
+    proofs = {str(claim['id']): claim for claim in claims}
+    # Resolve both directions against the entire input before consuming any
+    # option. A second form-of sense for one listed row is ambiguous even if
+    # a greedy first match would otherwise hide it.
+    relations: dict[int, list[int]] = {}
+    listed: dict[int, list[int]] = {}
+    for relation_index, relation in enumerate(options):
+        if relation.get('candidate_kind') != 'explicit_form_of':
+            continue
+        for listed_index, candidate in enumerate(options):
+            if relation_index == listed_index or not _source_bridged_pair(
+                form, relation, candidate, proofs
+            ):
+                continue
+            relations.setdefault(relation_index, []).append(listed_index)
+            listed.setdefault(listed_index, []).append(relation_index)
+    replacements: dict[int, dict[str, Any]] = {}
+    consumed: set[int] = set()
+    groups = 0
+    for first, matches in relations.items():
+        if len(matches) != 1 or len(listed[matches[0]]) != 1:
+            continue
+        second = matches[0]
+        relation, source_listed = options[first], options[second]
+        group = dict(source_listed)  # Existing listed-form ID remains the decision ID.
+        group['claim_ids'] = list(dict.fromkeys([*relation['claim_ids'], *source_listed['claim_ids']]))
+        group['evidence_refs'] = list(dict.fromkeys([
+            *(relation.get('evidence_refs') or ()), *(source_listed.get('evidence_refs') or ())]))
+        group['source_references'] = [*relation['source_references'], *source_listed['source_references']]
+        group['decision_group'] = {
+            'basis': 'accepted_exact_form_of_target_canonical_and_listed_form_link',
+            'member_candidate_ids': [relation['id'], source_listed['id']],
+            'source_lemma_spellings': [relation['lemma'], source_listed['lemma']],
+            'source_form_spellings': [relation['matched_form'], source_listed['matched_form']],
+            'source_form_of_target': proofs[relation['claim_ids'][0]]['object']['targets'],
+            'scope': 'One general dictionary reading; no passage attestation or independent witness.',
+        }
+        replacements[first] = group
+        consumed.update((first, second))
+        groups += 1
+    return [replacements[index] if index in replacements else option
+            for index, option in enumerate(options) if index not in consumed or index in replacements], groups
+
+
 def build_evidence_packet(
     form: str, passage: Mapping[str, Any] | None,
     candidates: Sequence[Mapping[str, Any]],
@@ -210,8 +484,25 @@ def build_evidence_packet(
                         "comparison_context": row.get("comparison_context"),
                         "evidence_refs": row.get("evidence_refs"),
                         "source_references": source_refs, "claim_ids": linked})
-    if len(options) > MAX_CANDIDATES:
+    original_option_count = len(options)
+    options, grouped_count = _group_source_bridged_options(
+        form, options, [row for row in claims if _source_claim(row)])
+    if original_option_count > MAX_CANDIDATES:
         warnings.append(f"More than {MAX_CANDIDATES} candidates; no subset was silently chosen.")
+    constraints = [
+        "Choose only an existing candidate ID or abstain.",
+        "Source claims and lexical candidates have distinct scopes; do not infer attestation from a dictionary listing.",
+        "Author context and literary dialect rules are defeasible, not exclusive dialect assignments.",
+        "A nearby spelling is a correction suggestion, not a parse of the queried form.",
+        "An equivalent form or listed entry is an alternative relation, not an attested parse in this passage.",
+        "A computationally matching context in another edition is a comparison only: its source claim belongs to the original source passage, not proof of edition identity or direct target-passage attestation.",
+        "The original passage preserves editorial signs and uncertainty. A search-only diacritic fold or explicit line-division join establishes a lookup match, not secure letters, restored text, or an attested editorial reading; respect the supplied quality and edition.",
+        "Preserve conflicting interpretations; abstain if evidence does not resolve them.",
+    ]
+    if grouped_count:
+        constraints.append(
+            "A source-bridged decision group contains alternative spellings and claim IDs for one grammatical reading from the same dictionary family, not independent witnesses or a passage-specific analysis."
+        )
     packet = {
         "form": form,
         "passage": {k: context.get(k) for k in
@@ -219,16 +510,7 @@ def build_evidence_packet(
                      "language", "kind", "quality", "edition", "source_url") if context.get(k) is not None},
         "candidates": options,
         **groups,
-        "constraints": [
-            "Choose only an existing candidate ID or abstain.",
-            "Source claims and lexical candidates have distinct scopes; do not infer attestation from a dictionary listing.",
-            "Author context and literary dialect rules are defeasible, not exclusive dialect assignments.",
-            "A nearby spelling is a correction suggestion, not a parse of the queried form.",
-            "An equivalent form or listed entry is an alternative relation, not an attested parse in this passage.",
-            "A computationally matching context in another edition is a comparison only: its source claim belongs to the original source passage, not proof of edition identity or direct target-passage attestation.",
-            "The original passage preserves editorial signs and uncertainty. A search-only diacritic fold or explicit line-division join establishes a lookup match, not secure letters, restored text, or an attested editorial reading; respect the supplied quality and edition.",
-            "Preserve conflicting interpretations; abstain if evidence does not resolve them.",
-        ],
+        "constraints": constraints,
         "warnings": warnings,
     }
     return _compact_packet(packet)
@@ -256,6 +538,7 @@ class JevProvider:
             'relation_raw', 'lemma_targets', 'source_tags', 'source_raw_tags',
             'dialect', 'gloss', 'matched_form', 'edit_distance', 'strength',
             'source_family', 'comparison_scope', 'source_passage_id',
+            'decision_group',
         )
         choices = {str(item['id']): {
             'candidate_id': item['id'],

@@ -6,11 +6,13 @@ import unicodedata
 from copy import deepcopy
 from unittest.mock import patch
 
+import pytest
 from fastapi.testclient import TestClient
 
 from backend.classifier import (JevProvider, build_evidence_packet, classify_context,
                                 configured_provider, provider_status,
                                 MAX_CANDIDATES, MAX_STATE_CHARS)
+from backend.jev_gateway import CachedJevProvider, GatewayUnavailable
 
 
 PASSAGE = {"id": "fixture:1", "text": "α β", "language": "grc", "kind": "text",
@@ -141,6 +143,257 @@ def test_grammar_choice_survives_metadata_filter_and_legacy_candidates_remain_el
     assert result["status"] == "abstained"
     assert result["candidate_id"] is None
     assert "outside the supplied candidate IDs" in result["reason"]
+
+
+def bridged_kaikki_fixture():
+    """Synthetic records shaped like a Kaikki source bridge; not corpus data."""
+    family = 'enwiktionary-kaikki-synthetic-fixture'
+    query, source_root, entry_root, source_form = 'αβασι', 'αβᾰ', 'ἄλφα', 'αβᾰσι'
+    form_of_id = 'wiktionary:kaikki:line:1:form_of:0'
+    morphology_id = 'wiktionary:kaikki:line:2:morphology:entry'
+    listed_id = f'{morphology_id}#form:1'
+    source_row = {'form': source_form, 'tags': ['dative', 'plural'],
+                  'source': 'declension', 'links': [[source_form, f'{query}#Ancient_Greek']]}
+    relation = {'id': form_of_id, 'candidate_kind': 'explicit_form_of',
+                'lemma': source_root, 'matched_form': query, 'analysis': ['dative', 'plural'],
+                'relation_raw': 'form_of', 'source_family': family,
+                'claim_ids': [form_of_id], 'evidence_refs': ['wiktionary:kaikki:line:1']}
+    listed = {'id': listed_id, 'candidate_kind': 'grammatical_analysis',
+              'lemma': entry_root, 'entry_headword': entry_root,
+              'matched_form': source_form, 'matched_object_form': source_row,
+              'analysis': ['dative', 'plural'], 'source_family': family,
+              'claim_ids': [morphology_id], 'evidence_refs': ['wiktionary:kaikki:line:2']}
+    def source_claim(identifier, subject, predicate, obj, record_id, quote, locator):
+        return {'id': identifier, 'subject': {'type': 'form', 'form': subject},
+                'predicate': predicate, 'object': obj, 'source_family': family,
+                'status': 'source_claim', 'assertion_type': 'extracted_annotation',
+                'evidence': [{'record_id': record_id, 'source_url': 'https://example.test/kaikki',
+                              'quote': quote, 'locator': locator}]}
+    form_of = source_claim(form_of_id, query, 'lemma',
+                           {'relation': 'form_of', 'targets': [{'word': source_root}],
+                            'source_tags': ['dative', 'form-of', 'plural']},
+                           'wiktionary:kaikki:line:1', '[{"word":"αβᾰ"}]',
+                           '/entry/senses/0/form_of')
+    inflected_entry = source_claim('wiktionary:kaikki:line:1:lemma:entry', query,
+                                   'lemma', {'lemma': query, 'pos': 'noun',
+                                             'head_templates': [{'name': 'grc-noun form'}]},
+                                   'wiktionary:kaikki:line:1', '"αβασι"', '/entry/word')
+    morphology = source_claim(morphology_id, entry_root, 'morphology',
+                              {'lemma': entry_root, 'pos': 'noun', 'listed_form_count': 2,
+                               'inflection_templates': [{'name': 'grc-decl',
+                                                         'args': {'1': source_root}}]},
+                              'wiktionary:kaikki:line:2',
+                              json.dumps({'form': source_root, 'tags': ['canonical', 'neuter']},
+                                         ensure_ascii=False), '/entry/forms')
+    morphology['matched_object_forms'] = [deepcopy(source_row)]
+    morphology['matched_object_form_ordinals'] = [1]
+    passage = {'id': 'fixture:source-bridge', 'text': query, 'language': 'grc',
+               'kind': 'text', 'author': 'Fixture only'}
+    return query, passage, [relation, listed], [form_of, inflected_entry, morphology]
+
+
+def test_explicit_source_bridge_groups_one_decision_option_but_preserves_raw_proofs():
+    form, passage, candidates, claims = bridged_kaikki_fixture()
+    original_candidates, original_claims = deepcopy(candidates), deepcopy(claims)
+    packet = build_evidence_packet(form, passage, candidates, claims)
+    assert candidates == original_candidates and claims == original_claims
+    assert len(candidates) == 2 and len(packet['claims']) == 3
+    assert [option['id'] for option in packet['candidates']] == [candidates[1]['id']]
+    option = packet['candidates'][0]
+    assert option['decision_group']['member_candidate_ids'] == [row['id'] for row in candidates]
+    assert option['decision_group']['source_lemma_spellings'] == [row['lemma'] for row in candidates]
+    assert option['claim_ids'] == [candidates[0]['id'], candidates[1]['claim_ids'][0]]
+    assert 'no passage attestation' in option['decision_group']['scope']
+    provider = StubProvider(candidates[1]['id'])
+    result = classify_context(form, passage, candidates, claims, provider=provider)
+    assert provider.called and result['status'] == 'proposed'
+    assert result['candidate_id'] == candidates[1]['id']  # Never a fabricated group ID.
+    assert set(result['evidence_ids']) >= set(option['claim_ids'])
+
+
+def test_source_bridge_changes_jev_choice_and_cache_key_without_a_paid_call():
+    form, passage, candidates, claims = bridged_kaikki_fixture()
+    packet = build_evidence_packet(form, passage, candidates, claims)
+    captured = {}
+
+    class Response(io.BytesIO):
+        def __enter__(self):
+            return self
+        def __exit__(self, *_):
+            self.close()
+
+    def fake_urlopen(request, timeout):
+        captured['body'] = json.loads(request.data)
+        return Response(json.dumps({'model': 'fixture-jev', 'answers': {
+            'contextual_parse': {'type': 'choice', 'choice': candidates[1]['id']}}}).encode())
+
+    with patch('backend.classifier.urlopen', fake_urlopen):
+        answer = JevProvider(api_key='fixture-secret').decide(packet)
+    criteria = captured['body']['questions']['contextual_parse']['criteria']
+    assert set(criteria) == {candidates[1]['id'], 'abstain'}
+    assert criteria[candidates[1]['id']]['decision_group']['member_candidate_ids'] == [
+        row['id'] for row in candidates]
+    assert {row['id'] for row in captured['body']['state']['claims']} == {
+        row['id'] for row in claims}
+    assert answer['choice'] == candidates[1]['id']
+    class CacheProvider:
+        model = 'fixture-jev'
+        timeout = 8
+    cache = CachedJevProvider(CacheProvider(), 'a' * 64)
+    assert cache._key(packet) == cache._key(build_evidence_packet(form, passage, candidates, claims))
+    assert cache._answer({'choice': candidates[1]['id'], 'model': 'fixture-jev'}, packet)['choice'] == candidates[1]['id']
+    with pytest.raises(GatewayUnavailable):
+        cache._answer({'choice': candidates[0]['id'], 'model': 'fixture-jev'}, packet)
+    ungrouped = deepcopy(candidates)
+    ungrouped[1]['matched_object_form']['links'] = []
+    assert cache._key(packet) != cache._key(build_evidence_packet(form, passage, ungrouped, claims))
+
+
+def test_source_bridge_never_merges_on_diacritic_folding_or_weak_proof():
+    form, passage, candidates, claims = bridged_kaikki_fixture()
+    def ungrouped(mutate):
+        options, proofs = deepcopy(candidates), deepcopy(claims)
+        mutate(options, proofs)
+        packet = build_evidence_packet(form, passage, options, proofs)
+        assert [row['id'] for row in packet['candidates']] == [row['id'] for row in options]
+        assert all('decision_group' not in row for row in packet['candidates'])
+    cases = [
+        lambda o, p: o[1]['matched_object_form'].update(links=[]),
+        lambda o, p: p[0]['object']['targets'][0].update(word='αβα'),
+        lambda o, p: p[0]['object']['targets'].append({'word': 'αβᾰ'}),
+        lambda o, p: p[2]['object'].update(pos='verb'),
+        lambda o, p: p[1]['object'].update(pos='verb'),
+        lambda o, p: o[1].update(analysis=['genitive', 'plural']),
+        lambda o, p: p[2].update(assertion_type='model_inference'),
+        lambda o, p: p[1].update(status='needs_review'),
+        lambda o, p: o[1].update(source_family='different-family'),
+        lambda o, p: o[1].update(evidence_refs=[]),
+        lambda o, p: p[2].update(matched_object_form_ordinals=[0]),
+        lambda o, p: p[2].update(matched_object_forms=[]),
+        lambda o, p: o[1]['matched_object_form'].update(links=[]),
+        lambda o, p: p[2]['object']['inflection_templates'][0]['args'].update({'1': 'αβα'}),
+        lambda o, p: p[2]['evidence'][0].update(quote='{"form":"αβα","tags":["canonical"]}'),
+        lambda o, p: p[0]['object'].update(source_raw_tags=['fixture restricted sense']),
+        lambda o, p: p[2]['matched_object_forms'][0].update(raw_tags=['fixture row qualifier']),
+        lambda o, p: p[1]['subject'].update(passage_id='fixture:other'),
+        lambda o, p: p[0]['object']['targets'][0].update(extra='distinct homograph'),
+        lambda o, p: p[0]['object']['targets'][0].update(sense='fixture:other'),
+    ]
+    for mutate in cases:
+        ungrouped(mutate)
+
+
+def test_full_source_form_array_can_verify_same_bridge_without_compacted_quote():
+    form, passage, candidates, claims = bridged_kaikki_fixture()
+    canonical = {'form': candidates[0]['lemma'], 'tags': ['canonical', 'neuter']}
+    claims[2]['object']['forms'] = [canonical, deepcopy(candidates[1]['matched_object_form'])]
+    claims[2]['object'].pop('listed_form_count')
+    claims[2]['evidence'][0]['quote'] = 'Full object test does not depend on preview quote'
+    packet = build_evidence_packet(form, passage, candidates, claims)
+    assert len(packet['candidates']) == 1
+
+
+def test_latin_target_annotation_requires_an_accepted_same_record_sense_link():
+    form, passage, candidates, claims = bridged_kaikki_fixture()
+    claims[0]['object']['targets'][0]['extra'] = 'abă'
+    listed_row = deepcopy(candidates[1]['matched_object_form'])
+    claims[2]['object']['forms'] = [
+        {'form': candidates[0]['lemma'], 'tags': ['canonical', 'neuter']},
+        {'form': 'abă', 'tags': ['romanization']}, listed_row,
+    ]
+    claims[2]['object'].pop('listed_form_count')
+    claims[2]['matched_object_form_ordinals'] = [2]
+    candidates[1]['id'] = candidates[1]['id'].replace('#form:1', '#form:2')
+    target = deepcopy(claims[0]['object']['targets'])
+    sense = deepcopy(claims[1])
+    sense['id'] = 'wiktionary:kaikki:line:1:sense:0'
+    sense['predicate'] = 'sense_gloss'
+    sense['object'] = {'source_sense': {
+        'form_of': target, 'links': [[target[0]['word'],
+                                     f"{candidates[1]['lemma']}#Ancient_Greek"]],
+        'glosses': ['synthetic form relation (abă)'], 'tags': ['dative', 'form-of', 'plural'],
+        'raw_tags': [],
+    }}
+    assert len(build_evidence_packet(form, passage, candidates, [*claims, sense])['candidates']) == 1
+    unlabelled = deepcopy(claims)
+    unlabelled[2]['object']['forms'][1]['tags'] = ['fixture unknown annotation']
+    assert len(build_evidence_packet(form, passage, candidates, [*unlabelled, sense])['candidates']) == 2
+    english_qualifier = deepcopy(claims)
+    english_qualifier[0]['object']['targets'][0]['extra'] = 'eye'
+    english_sense = deepcopy(sense)
+    english_sense['object']['source_sense']['form_of'] = deepcopy(english_qualifier[0]['object']['targets'])
+    english_sense['object']['source_sense']['glosses'] = ['synthetic form relation (eye)']
+    assert len(build_evidence_packet(form, passage, candidates,
+                                     [*english_qualifier, english_sense])['candidates']) == 2
+    for mutation in (
+        lambda row: row.update(assertion_type='model_inference'),
+        lambda row: row['object']['source_sense'].update(links=[]),
+        lambda row: row['object']['source_sense'].update(raw_tags=['fixture qualifier']),
+        lambda row: row['subject'].update(passage_id='fixture:other'),
+    ):
+        invalid = deepcopy(sense)
+        mutation(invalid)
+        assert len(build_evidence_packet(form, passage, candidates, [*claims, invalid])['candidates']) == 2
+
+
+def test_compact_source_claim_reopens_full_accepted_form_array_for_romanization(monkeypatch):
+    form, passage, candidates, claims = bridged_kaikki_fixture()
+    claims[0]['object']['targets'][0]['extra'] = 'abă'
+    target = deepcopy(claims[0]['object']['targets'])
+    sense = deepcopy(claims[1])
+    sense['id'] = 'wiktionary:kaikki:line:1:sense:0'
+    sense['predicate'] = 'sense_gloss'
+    sense['object'] = {'source_sense': {'form_of': target,
+        'links': [[target[0]['word'], f"{candidates[1]['lemma']}#Ancient_Greek"]],
+        'glosses': ['synthetic form relation (abă)'], 'raw_tags': []}}
+    full = deepcopy(claims[2])
+    full['object']['forms'] = [
+        {'form': candidates[0]['lemma'], 'tags': ['canonical', 'neuter']},
+        {'form': 'abă', 'tags': ['romanization']},
+        deepcopy(candidates[1]['matched_object_form']),
+    ]
+    full['object'].pop('listed_form_count')
+    compact = deepcopy(full)
+    compact['object'].pop('forms')
+    compact['object']['listed_form_count'] = 3
+    compact['matched_object_form_ordinals'] = [2]
+    candidates[1]['id'] = candidates[1]['id'].replace('#form:1', '#form:2')
+    rows = [*claims[:2], compact, sense]
+    with patch('backend.evidence.EvidenceIndex.get_claim', return_value=full):
+        packet = build_evidence_packet(form, passage, candidates, rows)
+    assert len(packet['candidates']) == 1
+    tampered = deepcopy(full)
+    tampered['object']['forms'][1]['tags'] = ['unverified']
+    with patch('backend.evidence.EvidenceIndex.get_claim', return_value=tampered):
+        packet = build_evidence_packet(form, passage, candidates, rows)
+    assert len(packet['candidates']) == 2
+
+
+def test_multiple_form_of_senses_do_not_greedily_group_one_listed_form():
+    form, passage, candidates, claims = bridged_kaikki_fixture()
+    second_candidate = deepcopy(candidates[0])
+    second_candidate['id'] = second_candidate['id'].replace('form_of:0', 'form_of:1')
+    second_candidate['claim_ids'] = [second_candidate['id']]
+    second_claim = deepcopy(claims[0])
+    second_claim['id'] = second_candidate['id']
+    for options in ([*candidates, second_candidate],
+                    [second_candidate, *candidates],
+                    [candidates[1], second_candidate, candidates[0]]):
+        packet = build_evidence_packet(form, passage, options, [*claims, second_claim])
+        assert [row['id'] for row in packet['candidates']] == [row['id'] for row in options]
+        assert all('decision_group' not in row for row in packet['candidates'])
+
+
+def test_source_bridge_keeps_ambiguous_multiple_listed_options_separate():
+    form, passage, candidates, claims = bridged_kaikki_fixture()
+    duplicate = deepcopy(candidates[1])
+    duplicate['id'] = duplicate['id'].replace('#form:1', '#form:2')
+    claims[2]['object']['listed_form_count'] = 3
+    claims[2]['matched_object_form_ordinals'].append(2)
+    claims[2]['matched_object_forms'].append(deepcopy(duplicate['matched_object_form']))
+    options = [*candidates, duplicate]
+    packet = build_evidence_packet(form, passage, options, claims)
+    assert [row['id'] for row in packet['candidates']] == [row['id'] for row in options]
 
 
 def test_api_packet_includes_accepted_sibling_form_of_proof_without_passage_promotion(monkeypatch):
