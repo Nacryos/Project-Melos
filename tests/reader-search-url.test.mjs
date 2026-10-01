@@ -47,6 +47,30 @@ function harness() {
 }
 const response = id => ({ results: [{ id }], total: 5, warnings: [] });
 
+test('search discloses supplied normalized Greek wording as text once, without inventing a transliteration', async () => {
+  const h = harness();
+  const first = h.search('eri men ai te kudoniai');
+  h.pending[0].resolve({ ...response('one'), transliteration_phrase: {
+    matched_greek_phrases: ['ηρι μεν αι τε κυδωνιαι', 'ηρι μεν αι τε κυδωνιαι', null, '']
+  } });
+  await first;
+  const notices = () => h.ui.resultsList.children.filter(item => item.cls.includes('transliteration-wording'));
+  assert.equal(notices().length, 1);
+  assert.match(notices()[0].textContent, /Matched Greek wording: ηρι μεν αι τε κυδωνιαι/);
+  assert.match(notices()[0].textContent, /normalized for matching, not the source's accents or spelling/);
+  const more = h.search('eri men ai te kudoniai', 'hybrid', true);
+  h.pending[1].resolve({ ...response('two'), transliteration_phrase: { matched_greek_phrases: ['ηρι μεν αι τε κυδωνιαι'] } });
+  await more;
+  assert.equal(notices().length, 1);
+  const ordinary = h.search('rose'); h.pending[2].resolve(response('three')); await ordinary;
+  assert.equal(notices().length, 0);
+  const markup = h.search('synthetic');
+  h.pending[3].resolve({ ...response('four'), transliteration_phrase: { matched_greek_phrases: ['<b>source text</b>'] } });
+  await markup;
+  assert.match(notices()[0].textContent, /<b>source text<\/b>/);
+  assert.equal(notices()[0].children.length, 0);
+});
+
 test('all executed search filters round-trip while passage id, unknown parameters and hash survive', () => {
   const h = harness();
   const original = { query: 'love like an old racehorse', mode: 'themes', author: 'Ibycus',

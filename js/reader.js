@@ -523,7 +523,11 @@
   }
   function renderRelated(related) {
     clear(ui.related);
-    if (!Array.isArray(related) || !related.length) { ui.related.hidden = true; return; }
+    const translations = passageTranslationPreviews(state.passage);
+    const promoted = new Set(translations.map(item => item.record_id));
+    related = (Array.isArray(related) ? related : []).filter(item => !promoted.has(item?.id));
+    if (translations.length) renderPublishedTranslations(ui.related, translations);
+    if (!related.length) { ui.related.hidden = !translations.length; return; }
     const heading = node('span', 'eyebrow', 'RELATED SOURCE MATERIAL');
     ui.related.append(heading);
     if (related.some(item => ['page', 'source_section'].includes(item?.metadata?.scope))) {
@@ -563,7 +567,48 @@
       }
       ui.related.append(article);
     }
-    ui.related.hidden = !ui.related.querySelector('.related-item');
+    ui.related.hidden = !translations.length && !ui.related.querySelector('.related-item');
+  }
+  function passageTranslationPreviews(record) {
+    if (record?.kind !== 'text' || record?.language !== 'grc') return [];
+    return (Array.isArray(record.translation_previews) ? record.translation_previews : []).filter(item =>
+      item?.parent_id === record.id && item.scope === 'whole_source_passage' &&
+      item.alignment === 'not_line_aligned' && typeof item.text_excerpt === 'string' && item.text_excerpt.trim());
+  }
+  function translationCredit(item) {
+    const language = ({ ell: 'Modern Greek', eng: 'English', lat: 'Latin', grc: 'Ancient Greek' })[item.language] || item.language;
+    const translator = typeof item.translator === 'string' ? item.translator.trim() : '';
+    return [language, translator ? `Translator: ${translator}` : 'Translator not recorded'].filter(Boolean).join(' · ');
+  }
+  function renderPublishedTranslations(host, translations) {
+    const section = node('section', 'published-translations');
+    section.append(node('span', 'eyebrow', 'PUBLISHED TRANSLATION'),
+      node('p', 'translation-scope', 'Of this complete source passage — not aligned to individual lines or a selected phrase.'));
+    function card(item, target) {
+      const article = node('div', 'published-translation');
+      article.append(node('p', 'translation-credit', translationCredit(item)),
+        node('p', 'translation-excerpt', item.text_excerpt));
+      const details = node('details', 'translation-full');
+      details.append(node('summary', '', 'Read full translation and source'));
+      if (item.source === 'perseus' && typeof item.scope_note === 'string' && item.scope_note.trim()) {
+        details.append(node('p', 'translation-scope', item.scope_note));
+      }
+      if (typeof item.text === 'string' && item.text.trim()) details.append(node('p', 'translation-text', item.text));
+      details.append(node('p', 'translation-edition', [item.edition, item.citation].filter(Boolean).join(' · ')));
+      const link = safeLink(item.source_url, 'Published source ↗');
+      if (link) details.append(link);
+      article.append(details); target.append(article);
+    }
+    card(translations[0], section);
+    if (translations.length > 1) {
+      const alternatives = node('details', 'translation-alternatives');
+      alternatives.append(node('summary', '', `${translations.length - 1} other published ${translations.length === 2 ? 'translation' : 'translations'}`));
+      for (const item of translations.slice(1)) card(item, alternatives);
+      section.append(alternatives);
+    }
+    if (state.passage?.translation_previews_truncated) section.append(node('p', 'translation-scope',
+      'Additional translations remain in the related source records below.'));
+    host.append(section);
   }
   function renderMirrors(mirrors) {
     if (!Array.isArray(mirrors) || !mirrors.length) return;
@@ -660,6 +705,14 @@
     const body = node('span', 'result-body');
     const excerpt = (record.text || '').replace(/\s+/g, ' ').trim();
     body.append(node('span', 'result-excerpt', excerpt || 'Text unavailable'));
+    const translation = passageTranslationPreviews(record)[0];
+    if (translation) {
+      const preview = node('span', 'result-translation');
+      preview.append(node('span', 'result-translation-excerpt', translation.text_excerpt),
+        node('span', 'result-translation-credit', translationCredit(translation)),
+        node('span', 'result-translation-scope', 'Published translation excerpt · covers this source passage · open for full text and source'));
+      body.append(preview);
+    }
     const dateClaim = chronologyClaim(record);
     const copies = Number(record.mirror_count) > 1 ? `${record.mirror_count - 1} identical ${record.mirror_count === 2 ? 'copy' : 'copies'} collapsed` : '';
     const quality = record.quality && record.quality !== 'source_text' ? qualityLabel(record.quality) : '';
@@ -860,6 +913,12 @@
       active.total = Number(data.total || 0);
       active.offset += records.length;
       if (!append) clear(ui.resultsList);
+      if (!append && Array.isArray(data.transliteration_phrase?.matched_greek_phrases)) {
+        const wording = [...new Set(data.transliteration_phrase.matched_greek_phrases
+          .filter(value => typeof value === 'string' && value.trim()).map(value => value.trim()))];
+        if (wording.length) ui.resultsList.append(node('p', 'candidate-reason transliteration-wording',
+          `Matched Greek wording: ${wording.join(' · ')} — normalized for matching, not the source's accents or spelling.`));
+      }
       for (const record of records) ui.resultsList.append(renderResult(record));
       const count = ui.resultsList.querySelectorAll('.result-button').length;
       const ranked = ['themes', 'hybrid'].includes(mode) && !String(data.method || '').includes('reference');
@@ -1476,6 +1535,25 @@
       if (sequence === state.wordSequence) message(morphologyHost, `Word lookup unavailable: ${errorText(error)}`, 'warning error-message');
     }
   }
+  function updateSelectionTranslationAction() {
+    let button = ui.selectionActions.querySelector('.selection-translation');
+    const available = passageTranslationPreviews(state.passage).length > 0;
+    if (!available) { if (button) button.hidden = true; return; }
+    if (!button) {
+      button = node('button', 'selection-translation', 'Containing passage translation');
+      button.type = 'button';
+      button.title = 'Read the published translation of the complete containing passage; it is not aligned to this selection.';
+      button.addEventListener('click', () => {
+        if (state.passageLoading || !state.selectedText || !passageTranslationPreviews(state.passage).length) return;
+        const section = ui.related.querySelector('.published-translations');
+        const full = section?.querySelector('.translation-full');
+        if (full) full.open = true;
+        section?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+      ui.selectionActions.append(button);
+    }
+    button.hidden = false;
+  }
   function updateSelection() {
     if (state.passageLoading || !state.passage) {
       state.selectedText = ''; ui.selectedPhrase.textContent = ''; ui.selectionActions.hidden = true;
@@ -1492,6 +1570,7 @@
     state.selectedText = phrase;
     ui.selectedPhrase.textContent = `“${phrase}”`;
     ui.selectionActions.hidden = false;
+    updateSelectionTranslationAction();
     for (const button of ui.selectionActions.querySelectorAll('[data-phrase-mode]')) button.disabled = false;
   }
   async function initialize() {

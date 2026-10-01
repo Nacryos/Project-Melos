@@ -146,6 +146,9 @@ def _from_beta(text: str) -> str:
 
 def _from_roman(text: str) -> str:
     value = unicodedata.normalize("NFD", text.translate(_APOSTROPHES).lower())
+    # ALA-LC explicitly distinguishes ē/ō from e/o. Preserve those supplied
+    # long-vowel identities before discarding other Latin accent marks.
+    value = value.replace('e\u0304', 'η').replace('o\u0304', 'ω')
     value = "".join(c for c in value if not unicodedata.category(c).startswith("M"))
     out: list[str] = []
     i = 0
@@ -154,6 +157,9 @@ def _from_roman(text: str) -> str:
         if pair in _ROMAN_DIGRAPHS:
             out.append(_ROMAN_DIGRAPHS[pair])
             i += 2
+        elif value[i] in 'ηω':
+            out.append(value[i])
+            i += 1
         elif value[i] in _ROMAN:
             out.append(_ROMAN[value[i]])
             i += 1

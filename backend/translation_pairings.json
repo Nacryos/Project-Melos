@@ -1,0 +1,2396 @@
+{
+  "generator": "scripts/build_translation_pairings.py",
+  "input_sha256": {
+    "archive": "b095eb19bfb9dede26b8a3bcb10e368a5b72a42e6b6bfc12e1177d01a5ba450f",
+    "database": "0c3ea08788999df75b7c5a378c81d7b9344c61f438ba94e345bea61559f5b4d6",
+    "generator": "159945a2750300a8a38504ba77e5c194e7704e21e02c43bc6e7c0066c5e7ca73",
+    "source_parser": "317bb3b1c128fdbd5803fced5a32775deea491bf3c820b3ba810ce8d07d1b683"
+  },
+  "pair_count": 41,
+  "pairs": [
+    {
+      "boundary_proof": {
+        "anchors": [
+          "778",
+          "779",
+          "780",
+          "781",
+          "782",
+          "783",
+          "784",
+          "785",
+          "786",
+          "787",
+          "788",
+          "789",
+          "790",
+          "791",
+          "792",
+          "793",
+          "794",
+          "795",
+          "796",
+          "797"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 806,
+          "next_anchor": "798",
+          "start_index": 786
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 865,
+          "next_anchor": "798",
+          "start_index": 845
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0006.tlg019.perseus-grc2",
+        "sha256": "420f5353a2a422933a225c08a5e1e2d0add751dd70ca088a0a5cea2f8703bdfd",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0006/tlg019/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0006.tlg019.perseus-eng4",
+        "work_urn": "urn:cts:greekLit:tlg0006.tlg019"
+      },
+      "parent": {
+        "citation": "778–797",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0006.tlg019.perseus-grc2",
+        "edition": "Euripides. Euripidis Fabulae, Vol. III. Murray, Gilbert, editor. Oxford: Clarendon Press, 1913. (Reprinted 1920-1978)",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "5963b7bd8be31588d4b47e2fd9ab73cadd3ba9eaddca663f1191b30218afd9a5",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0006/tlg019/tlg0006.tlg019.perseus-grc2.xml",
+        "text_sha256": "620b83fab1543de3639739af3a7f5d53beb5e0733cca6a8c9ec33ca5cfda8a52"
+      },
+      "parent_id": "perseus:tlg0006.tlg019.perseus-grc2:778–797:1",
+      "translation": {
+        "citation": "778–797",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0006.tlg019.perseus-eng4",
+        "edition": "Euripides. The Rhesus of Euripides. Murray, Gilbert, translator. London: George Allen and Company, Ltd., 1913.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "66c7d5bbb4944cafbab500c8f74725e898cc0f133ea7a60491b5441a7282d5c3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0006/tlg019/tlg0006.tlg019.perseus-eng4.xml",
+        "text_sha256": "bfe4e15f14685b83850eb3f6f46c9d6b4eddb0f3423482826e9137a25171cfa7",
+        "translators": [
+          "Gilbert Murray"
+        ]
+      },
+      "translation_id": "perseus:tlg0006.tlg019.perseus-eng4:778–797:1",
+      "work_urn": "urn:cts:greekLit:tlg0006.tlg019"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "1.1",
+          "1.2",
+          "1.3",
+          "1.4",
+          "1.5"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 5,
+          "next_anchor": "2.1",
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 5,
+          "next_anchor": "2.1",
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "1.1–1.5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "22d6f126631bc5503a14de2238a7f61be10a6bef5c460f5b0a117fe1dd2d9566"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:1.1–1.5:1",
+      "translation": {
+        "citation": "1.1–1.5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "5e0ae0b631469a2f62ee2a76ac4980ff98498aac78caebc3cb98b52b98cd95a8",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:1.1–1.5:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "10.1",
+          "10.2",
+          "10.3",
+          "10.4"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 53,
+          "next_anchor": "11.1",
+          "start_index": 49
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 53,
+          "next_anchor": "11.1",
+          "start_index": 49
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "10.1–10.4",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "134396b515d26d743f348b78f39620e9e01864175e0a147f96d2955bdafb7448"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:10.1–10.4:1",
+      "translation": {
+        "citation": "10.1–10.4",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "f6e135eea2c2df2e845c118423a0aa1eb4c1a264d95b8c076ab830111eb62513",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:10.1–10.4:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "11.1",
+          "11.2",
+          "11.3",
+          "11.4"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 57,
+          "next_anchor": "12.1",
+          "start_index": 53
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 57,
+          "next_anchor": "12.1",
+          "start_index": 53
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "11.1–11.4",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "41b5d696a11d02f23b8e667bd468c52aa4ad0ac0016572da90a7af457a056b86"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:11.1–11.4:1",
+      "translation": {
+        "citation": "11.1–11.4",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "d9841ed11467f04796e6b0b1326ac892ca4e55adf87c6bfb45fa788b4aec39a1",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:11.1–11.4:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "12.1",
+          "12.2",
+          "12.3",
+          "12.4"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 61,
+          "next_anchor": "13.1",
+          "start_index": 57
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 61,
+          "next_anchor": "13.1",
+          "start_index": 57
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "12.1–12.4",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "d02acb02becea6f2101b858afbeea8c7a938f368426cfc8330e817328585f658"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:12.1–12.4:1",
+      "translation": {
+        "citation": "12.1–12.4",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "5cae373716f2f87ac4764198c813950d6c09c62c3b8478a8a0c7c90d1bcab4f4",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:12.1–12.4:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "13.1",
+          "13.2",
+          "13.3",
+          "13.4",
+          "13.5",
+          "13.6"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 67,
+          "next_anchor": "14.1",
+          "start_index": 61
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 67,
+          "next_anchor": "14.1",
+          "start_index": 61
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "13.1–13.6",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "5eed2f3faa7f00f97f31e19fbd7367ac2a210ac305c294c313c608337ef18261"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:13.1–13.6:1",
+      "translation": {
+        "citation": "13.1–13.6",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "80606ed31ffcca6949fc64e6bcc0ab58e1a31930dc365702ba13524b2edee408",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:13.1–13.6:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "14.1",
+          "14.2",
+          "14.3",
+          "14.4",
+          "14.5",
+          "14.6",
+          "14.7",
+          "14.8",
+          "14.9",
+          "14.10",
+          "14.11",
+          "14.12",
+          "14.13",
+          "14.14",
+          "14.15",
+          "14.16",
+          "14.17",
+          "14.18",
+          "14.19",
+          "14.20"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 87,
+          "next_anchor": "14.21",
+          "start_index": 67
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 87,
+          "next_anchor": "14.21",
+          "start_index": 67
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "14.1–14.20",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "ada543f7d2e02ebb150bae13e4acbc87c1f5f1d77b0d5e4b9a9fb3a590f4a2ad"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:14.1–14.20:1",
+      "translation": {
+        "citation": "14.1–14.20",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "9a5cdea8109b3b61bc682ca76022a3850b253ca3e3c456ad7b3c544fc52902ec",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:14.1–14.20:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "14.21",
+          "14.22",
+          "14.23"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 90,
+          "next_anchor": "15.1",
+          "start_index": 87
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 90,
+          "next_anchor": "15.1",
+          "start_index": 87
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "14.21–14.23",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "d3a5304856d29301b892261b0fbb4dd3c33b5bfe332fff4354c0f0aa182b8040"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:14.21–14.23:1",
+      "translation": {
+        "citation": "14.21–14.23",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "73e093ee91bc6cd9a103642896e865af9fea52389c673b90b1cecd520a705701",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:14.21–14.23:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "16.1",
+          "16.2"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 105,
+          "next_anchor": "17.1",
+          "start_index": 103
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 105,
+          "next_anchor": "17.1",
+          "start_index": 103
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "16.1–16.2",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "9e595df7a3481427de259eae97b222753973fb05385242435bb4f04aac2096b0"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:16.1–16.2:1",
+      "translation": {
+        "citation": "16.1–16.2",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "3733e6acc084f1daf865c2eb5e171b5fbe9bf396f8cca2476af5d90bb1d109e8",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:16.1–16.2:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "17.1",
+          "17.2",
+          "17.3",
+          "17.4"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 109,
+          "next_anchor": null,
+          "start_index": 105
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 109,
+          "next_anchor": null,
+          "start_index": 105
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "17.1–17.4",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "3c5844114dbff935849a34647dce32102035506d9fc417b131f64461204c038c"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:17.1–17.4:1",
+      "translation": {
+        "citation": "17.1–17.4",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "38a22110b1d0ea1244c74d64ee9dcd2c39a2c2c41cbd634c1845cf1ea0465b03",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:17.1–17.4:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "2.1",
+          "2.2"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 7,
+          "next_anchor": "3.1",
+          "start_index": 5
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 7,
+          "next_anchor": "3.1",
+          "start_index": 5
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "2.1–2.2",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "4f9fe8dd96c1df945a9c8a7a82d2e71c9b88ca12f2c96a48104e46c2969773d7"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:2.1–2.2:1",
+      "translation": {
+        "citation": "2.1–2.2",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "5b42b78438aadd911912ab246c9abcfd77d6587a8ed7ea1f76269d9acbd7e44a",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:2.1–2.2:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "3.1",
+          "3.2",
+          "3.3",
+          "3.4",
+          "3.5",
+          "3.6"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 13,
+          "next_anchor": "4.1",
+          "start_index": 7
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 13,
+          "next_anchor": "4.1",
+          "start_index": 7
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "3.1–3.6",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "bf12fe9641fb479ec0bd035eb4e3350d13aceec50b73e9a397a8ceab75d97c61"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:3.1–3.6:1",
+      "translation": {
+        "citation": "3.1–3.6",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "40c3d8f93639ad7f98a54682497cd50bdac5d1a97198b8ff8be50471bb1aaba7",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:3.1–3.6:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "4.1",
+          "4.2",
+          "4.3",
+          "4.4",
+          "4.5",
+          "4.6",
+          "4.7",
+          "4.8",
+          "4.9",
+          "4.10",
+          "4.11",
+          "4.12",
+          "4.13",
+          "4.14",
+          "4.15",
+          "4.16",
+          "4.17"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 30,
+          "next_anchor": "5.1",
+          "start_index": 13
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 30,
+          "next_anchor": "5.1",
+          "start_index": 13
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "4.1–4.17",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "431f3186781f353ea5a102adc4646906e65926726fef10a28ab14b73b186c7e6"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:4.1–4.17:1",
+      "translation": {
+        "citation": "4.1–4.17",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "e5a61adf2233288d552f895f0b822079335df0904e4e5cfe60f6b0642a872445",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:4.1–4.17:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "5.1",
+          "5.2"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 32,
+          "next_anchor": "6.1",
+          "start_index": 30
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 32,
+          "next_anchor": "6.1",
+          "start_index": 30
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "5.1–5.2",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "bc21fd4d4d808c1d163251aa769279f12ed4afa5a6226b9f40919e4911e20d27"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:5.1–5.2:1",
+      "translation": {
+        "citation": "5.1–5.2",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "f95041706897bd43cc16459684ce36db59cf50df662de7e71992d35de8511033",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:5.1–5.2:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "6.1",
+          "6.2",
+          "6.3",
+          "6.4",
+          "6.5",
+          "6.6",
+          "6.7",
+          "6.8"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 40,
+          "next_anchor": "7.1",
+          "start_index": 32
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 40,
+          "next_anchor": "7.1",
+          "start_index": 32
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "6.1–6.8",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "87a0f5bd4fd9a08d275166b0ef9b9f86783a279d1e3a20acb243d0ea6db5f358"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:6.1–6.8:1",
+      "translation": {
+        "citation": "6.1–6.8",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "aac025418cd9ae3ad92ff663fbbe73995db6a2c0c483f24b94e2f1ee58149e0c",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:6.1–6.8:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "7.1",
+          "7.2",
+          "7.3"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 43,
+          "next_anchor": "8.1",
+          "start_index": 40
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 43,
+          "next_anchor": "8.1",
+          "start_index": 40
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "7.1–7.3",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "9bda8b4f92b0cb89ff2e8eb26ef0b4d037f327ad042a728a8eafa1aef46a4284"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:7.1–7.3:1",
+      "translation": {
+        "citation": "7.1–7.3",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "1613719d64980cc24944753c0ad53cf5b7d6862bffda2d9f5ca0eef891c6219d",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:7.1–7.3:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "8.1",
+          "8.2",
+          "8.3",
+          "8.4"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 47,
+          "next_anchor": "9.1",
+          "start_index": 43
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 47,
+          "next_anchor": "9.1",
+          "start_index": 43
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "8.1–8.4",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "be715e6a4369fc3bc7eeae3d799c7023cab1065e79d18f74b089157162011b51"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:8.1–8.4:1",
+      "translation": {
+        "citation": "8.1–8.4",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "972fcd613b135a39d1a5bd298ae827b212e71ab0211aae4381a6930d6510cb09",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:8.1–8.4:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "9.1",
+          "9.2"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 49,
+          "next_anchor": "10.1",
+          "start_index": 47
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 49,
+          "next_anchor": "10.1",
+          "start_index": 47
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-grc1",
+        "sha256": "8085c502c03a6d9f1985cc502f4e784d8b0edc0b173bf15bad44d90e2a7f4417",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0012.tlg003.perseus-eng1",
+        "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+      },
+      "parent": {
+        "citation": "9.1–9.2",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-grc1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "781c871cd3a9c184377881b486b6c957ae535b8580c2058718d8448f7b63544a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-grc1.xml",
+        "text_sha256": "775f9a851e4d6a30692e2738d872ad37f2ac95e7b616d22a00409df4faada58a"
+      },
+      "parent_id": "perseus:tlg0012.tlg003.perseus-grc1:9.1–9.2:1",
+      "translation": {
+        "citation": "9.1–9.2",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0012.tlg003.perseus-eng1",
+        "edition": "Homer. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G. (Hugh Gerard), editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ff13d940f1f999529bb6fea4684f88c8b0285bed6c3098b16fb626d280a2ca3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0012/tlg003/tlg0012.tlg003.perseus-eng1.xml",
+        "text_sha256": "6ed5ab7d349305a1609afdc0158c1aa88d4e60bce13d9e563364f7fef7cfc8df",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0012.tlg003.perseus-eng1:9.1–9.2:1",
+      "work_urn": "urn:cts:greekLit:tlg0012.tlg003"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 17,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 4,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg008.perseus-grc2",
+        "sha256": "1c5c292799ee7759dc3224a994303a0cf54bc369783152e7fcca869c69ff3ff4",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg008/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg008.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg008"
+      },
+      "parent": {
+        "citation": "1–17",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg008.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "cc4274f9ab670a4463a70087634122f53c0c757eafc5bcdc17b62b39a9641c73",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg008/tlg0013.tlg008.perseus-grc2.xml",
+        "text_sha256": "3ca61f0b35b42f0cd89cdc958c4213b3bbb843fc6f3badfe7404a6eb3db1faf1"
+      },
+      "parent_id": "perseus:tlg0013.tlg008.perseus-grc2:1–17:1",
+      "translation": {
+        "citation": "1–15",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg008.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "e9fd4b6a07eb4c88dae64f7d97c5eb4968b8682ae537de5d4b60851ca6b25726",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg008/tlg0013.tlg008.perseus-eng2.xml",
+        "text_sha256": "d42ebd1499140c3f7c8efc5809410a650c53fe3807eae9c050aa93b660e210d1",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg008.perseus-eng2:1–15:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg008"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 9,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg009.perseus-grc2",
+        "sha256": "94fbf0655dcd01d99d2b5ab49a86066c96879fd72e90c0d766f96f85820aeec9",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg009/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg009.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg009"
+      },
+      "parent": {
+        "citation": "1–9",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg009.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "8d8f38a9580d4a9de78f7b6274e8ed8c464c1a077440bb663149440a5e1a22b5",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg009/tlg0013.tlg009.perseus-grc2.xml",
+        "text_sha256": "41b7c25aaf8c5ac47b973759c8476ef00cb806356b96a59a1a5895f81051be5d"
+      },
+      "parent_id": "perseus:tlg0013.tlg009.perseus-grc2:1–9:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg009.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "24fae88b117ca09230971aa6adb337d22dcb14d72af3c20cd9c24587be4824ba",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg009/tlg0013.tlg009.perseus-eng2.xml",
+        "text_sha256": "b871c68c44cfc420a3466b5c4d00b164f22cf703e335dee75e364f3a319fc378",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg009.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg009"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 6,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg010.perseus-grc2",
+        "sha256": "cab40deafe2b588caa6fc7d8e32641a398e9f3fab1ec2fc1438dd10f53936bc4",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg010/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg010.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg010"
+      },
+      "parent": {
+        "citation": "1–6",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg010.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "fb879afee835ff29354cdc8c0da13c9770526240a3bf58cfc3a67b0ff33fd8c1",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg010/tlg0013.tlg010.perseus-grc2.xml",
+        "text_sha256": "658437dfb2febfe536ec40d4bf7227bfb90e5e6f3953596dffdd14e8327b1a64"
+      },
+      "parent_id": "perseus:tlg0013.tlg010.perseus-grc2:1–6:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg010.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "12b8777668c689f3b11b085c9d48ecdebc1733662236c0b9e3e1e744be9a8841",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg010/tlg0013.tlg010.perseus-eng2.xml",
+        "text_sha256": "716907c9805c657444b5946bc6bb3aa258cc94f56530292b95cd8e006517ff55",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg010.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg010"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 5,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg011.perseus-grc2",
+        "sha256": "588f0871b26390e7ef9124d0b2ceb0ad97cca8a0c04313bdc16029847a1438ef",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg011/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg011.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg011"
+      },
+      "parent": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg011.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "66920f814a176ed98522a4c370364d24fd76b2c8ebe32626f3ba1d338018cbe0",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg011/tlg0013.tlg011.perseus-grc2.xml",
+        "text_sha256": "10952e118773f89bebcba3b456535ea84f6463429a900934aab1f7155e6c9d66"
+      },
+      "parent_id": "perseus:tlg0013.tlg011.perseus-grc2:1–5:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg011.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "54015698d06b9c99c81a47bc98929c57c03456e842bbcfde91a857a914ebbc7f",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg011/tlg0013.tlg011.perseus-eng2.xml",
+        "text_sha256": "acbc867d09bd6b7c743902afe82984f12d2efa458044db2acc2da95131474ad0",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg011.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg011"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 5,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg012.perseus-grc2",
+        "sha256": "f0d419261270aa015e04753725b95e8f205f07e119756cfcbaa5713cd2006c59",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg012/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg012.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg012"
+      },
+      "parent": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg012.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "9b314ff85a103ea1569d067ae792d70cd52ff7680a4b3dd640dd1e64d2a19586",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg012/tlg0013.tlg012.perseus-grc2.xml",
+        "text_sha256": "5c1954565b7719b6260f1569be4d5a62808a5c1b9aeefb8bfe8fc81a8226ae91"
+      },
+      "parent_id": "perseus:tlg0013.tlg012.perseus-grc2:1–5:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg012.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "7df2402365adeedd66271edf3d03d8060901d563a6558ebb92356f9b7f1d9ce9",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg012/tlg0013.tlg012.perseus-eng2.xml",
+        "text_sha256": "7858c7b087ade6609b50157e83530df44d412e7f4cb730e4a0ee5ddeead38d72",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg012.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg012"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 6,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg014.perseus-grc2",
+        "sha256": "c53a47a4be93e99751a093c1f171f92bdceb135b77da42a50e601adf14b77ce9",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg014/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg014.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg014"
+      },
+      "parent": {
+        "citation": "1–6",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg014.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "d707e80abc168ea940cc73273d9fda4630fdb58c5c6470245a9bccc124d04db5",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg014/tlg0013.tlg014.perseus-grc2.xml",
+        "text_sha256": "be6bdb1f79c49353da391528b550c634465332b2ad34d16ca959399dd8e0a0d4"
+      },
+      "parent_id": "perseus:tlg0013.tlg014.perseus-grc2:1–6:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg014.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "1d92f222dc022a70a3f1122af3c0fb13377847d3a835a12cffa1ea0306110da5",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg014/tlg0013.tlg014.perseus-eng2.xml",
+        "text_sha256": "60182c8b256aae0aae0ea7f9ea0b9ba11ba4bb9d22c04c12f14fc20c471310d9",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg014.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg014"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 9,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg015.perseus-grc2",
+        "sha256": "76bbb1047c4043024004f432b44afe913adc9a7ed60a943b2a4d6fbaa239d59c",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg015/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg015.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg015"
+      },
+      "parent": {
+        "citation": "1–9",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg015.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "68b01fe3421da3dd4a82ab655011b063575c1b4ca3c1102a43cd282a76d07ef5",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg015/tlg0013.tlg015.perseus-grc2.xml",
+        "text_sha256": "b302c566d191c54f2a6cd3eff9440b83fadf61c656c1fa1552c35492496bfc33"
+      },
+      "parent_id": "perseus:tlg0013.tlg015.perseus-grc2:1–9:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg015.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "f6783697f146079e360d904b4c7eb64ef576348b5f8166ff69d08406b2e739f1",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg015/tlg0013.tlg015.perseus-eng2.xml",
+        "text_sha256": "33f0a69a75bfed247d1310dfed11a88d9c5a0210a74eeb6c7f44787408470fb9",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg015.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg015"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 5,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg016.perseus-grc2",
+        "sha256": "c909e3cf10dd3de0fd4f232c3a24a4adcd7893322a82f9a0ccd36664784775a8",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg016/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg016.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg016"
+      },
+      "parent": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg016.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "787cc5dc6fe0b2dd24321b1705b02d934ee37d3c940ddd0a6c8f420ee6f5c6f4",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg016/tlg0013.tlg016.perseus-grc2.xml",
+        "text_sha256": "2b96ea5f6596b46dd1b8d89c622441143210688f1346d12879039acf5071b98a"
+      },
+      "parent_id": "perseus:tlg0013.tlg016.perseus-grc2:1–5:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg016.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "9c6832848afe310893b8a6602f15963f68324c03870aa09d672fc1a040eba7c2",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg016/tlg0013.tlg016.perseus-eng2.xml",
+        "text_sha256": "74f27f1d201be159122fb5e167466d0af465a786510b1ce440180059974378fb",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg016.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg016"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 5,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg017.perseus-grc2",
+        "sha256": "02e2a2f462f159a46479fac49286b6bff52fbaba2a14d1359b13040ff8d50643",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg017/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg017.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg017"
+      },
+      "parent": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg017.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "c6df99fe0de30d862a18cb69e06e5f8a5ad743400da46a49ab50cc0bfedbd571",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg017/tlg0013.tlg017.perseus-grc2.xml",
+        "text_sha256": "4618f8b2f6040447ce89d8ba7505e3e39417db973b47f7dc628749050c530e88"
+      },
+      "parent_id": "perseus:tlg0013.tlg017.perseus-grc2:1–5:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg017.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "3ab78617b93fa49290469e2a554d92465fd05f02a63fc43324a56a41333dab77",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg017/tlg0013.tlg017.perseus-eng2.xml",
+        "text_sha256": "c51c63b60da206a03365b861bf4d8b9e7a9432bf592a68d466efe74adfbaa48d",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg017.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg017"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 8,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg020.perseus-grc2",
+        "sha256": "a6f1a31124ad1a60a7dbcd020174c61aa642e50b6ab2539c0c36104669dc14b9",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg020/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg020.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg020"
+      },
+      "parent": {
+        "citation": "1–8",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg020.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "4486aab703234cd2d6f03d71842a81e93cbf41d4422fcd898095ffd005164948",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg020/tlg0013.tlg020.perseus-grc2.xml",
+        "text_sha256": "ffab21cf63b3b0deb3684c9884fa6fea93bd08f85e297c7cc8c2ba462a8bf47b"
+      },
+      "parent_id": "perseus:tlg0013.tlg020.perseus-grc2:1–8:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg020.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "11c14937a5201555b9d16df55534d0a9a890a6f4b025382f34b23f386021a50e",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg020/tlg0013.tlg020.perseus-eng2.xml",
+        "text_sha256": "91b374335f68c125463155090664af4641072aa189def4ad5ae5ba548834e8db",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg020.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg020"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 5,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg021.perseus-grc2",
+        "sha256": "ad560e80384d524bf97857c1f987c6b77a3a5f69133df5918e69c541c8690cea",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg021/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg021.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg021"
+      },
+      "parent": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg021.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "952c1e41b4f6c7ad86654b76ebef6c78260cce4260c053d8f917e758b93a0731",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg021/tlg0013.tlg021.perseus-grc2.xml",
+        "text_sha256": "7a1ccc0ceec13ef930b885ad403ccd7fe153c350f21f9b193b4708d649ad27c2"
+      },
+      "parent_id": "perseus:tlg0013.tlg021.perseus-grc2:1–5:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg021.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "744b69ad5213bf1f56ef8c9f39a4564d73a38b14ea935cfacd065e96a8037d59",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg021/tlg0013.tlg021.perseus-eng2.xml",
+        "text_sha256": "df6a7b9bfcea5475403483b98fdbe5e8c486d6aca44a7a1b8a8e4c01724473aa",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg021.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg021"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 7,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg022.perseus-grc2",
+        "sha256": "aada187fb17d00c9cc2e938d524517c3a2437798c937686e787bd2244b5cd545",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg022/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg022.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg022"
+      },
+      "parent": {
+        "citation": "1–7",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg022.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "df2e9a1618958af18b7971c534add39f3c2d3e2c29df0a9b290ccaeb84bbe9ee",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg022/tlg0013.tlg022.perseus-grc2.xml",
+        "text_sha256": "a1ffcecd0f8459eb557fb0ce63e87f78ba0fd2567517fe2a068fc2ae23cc245c"
+      },
+      "parent_id": "perseus:tlg0013.tlg022.perseus-grc2:1–7:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg022.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "0764382dc230fac3ca26e8d81a6fd77092fde7ed106c116ddd3194822cdbc8d4",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg022/tlg0013.tlg022.perseus-eng2.xml",
+        "text_sha256": "9ca81b28cde3f24834aca0c98f056cebb632c35ad4d35d94fc95e2b2df7c2937",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg022.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg022"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 4,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 1,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg023.perseus-grc2",
+        "sha256": "7187cb00116285cf618cc1d74081fd83e399d5ad9654246784a8260b59aa0d51",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg023/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg023.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg023"
+      },
+      "parent": {
+        "citation": "1–4",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg023.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "d3dcfa0ec1a091ba8ab1a77daed944e28634cd2611ea9ec50c407ddb8950af21",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg023/tlg0013.tlg023.perseus-grc2.xml",
+        "text_sha256": "750fe22f9b683931cf5557b3cd8bfed78709b5ac9430e30db36811edb9124b6e"
+      },
+      "parent_id": "perseus:tlg0013.tlg023.perseus-grc2:1–4:1",
+      "translation": {
+        "citation": "1",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg023.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "65b926b46b6424002883c12b56b3a4056af12a5c43fd39687fa445eca5a90a3f",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg023/tlg0013.tlg023.perseus-eng2.xml",
+        "text_sha256": "10b4e6ef28c38fa5c6529ea5b558e7619d2804ded0df7a8a18b53248a9e38cc1",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg023.perseus-eng2:1:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg023"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 5,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg024.perseus-grc2",
+        "sha256": "d7551b4a26ec6c36f71ddd28f75c5fe5b9ec6c62a3350b527aa032a528eb544b",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg024/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg024.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg024"
+      },
+      "parent": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg024.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "ab72fa8b3832c571cd1c6db702140e7f6ef822ec4bbb70ec87db802d44540af3",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg024/tlg0013.tlg024.perseus-grc2.xml",
+        "text_sha256": "e45b7a78b7f7a45f939f157e2f991fc6fcf67e6dde32ed219a9ba5c59831556f"
+      },
+      "parent_id": "perseus:tlg0013.tlg024.perseus-grc2:1–5:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg024.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "50a5087c497de2aec4733cca3fa7af9ce4b9457e3614d7352a11318d25ab32a5",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg024/tlg0013.tlg024.perseus-eng2.xml",
+        "text_sha256": "4f10d6294bb5b663021eba57aaf4b5e6562bf625749b19724e5d5fe30064b0dd",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg024.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg024"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 7,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 2,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg025.perseus-grc2",
+        "sha256": "4cfb8b0bc838943926a1e249740a8754ae83dcc64880f748a582b666eefdfa3b",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg025/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg025.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg025"
+      },
+      "parent": {
+        "citation": "1–7",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg025.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "0c03e87a2533f64ce17f74912483de3241b1af7e36bce57e8ecad6eff1b2aa67",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg025/tlg0013.tlg025.perseus-grc2.xml",
+        "text_sha256": "e54c33a8fc871df7e2a5344d2b08140b04b75f19ee3afdab2f05004af5f6e308"
+      },
+      "parent_id": "perseus:tlg0013.tlg025.perseus-grc2:1–7:1",
+      "translation": {
+        "citation": "1–5",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg025.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "b44c89f13523322d7ada738ad918b6425f49f68b3c759ba5a8324ebefb9f818d",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg025/tlg0013.tlg025.perseus-eng2.xml",
+        "text_sha256": "de3502d38a21b3ca65f5be1635be987f485070c4e92d4573e2b92e5e409729d4",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg025.perseus-eng2:1–5:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg025"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 13,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 3,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg026.perseus-grc2",
+        "sha256": "e96ff061ed778971fc2f44b30ae22d1c0ef7d4a80c0e22b81a9c0394ee60151d",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg026/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg026.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg026"
+      },
+      "parent": {
+        "citation": "1–13",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg026.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "3571a5dec61ad0db799f3c5bf09f4ce06cdfedd4be47cf5c0142abcc98f2cb4f",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg026/tlg0013.tlg026.perseus-grc2.xml",
+        "text_sha256": "e1d624cba0a30ae4de7eb2ad41a13482211ec20de778b12dc521ab8f79959a78"
+      },
+      "parent_id": "perseus:tlg0013.tlg026.perseus-grc2:1–13:1",
+      "translation": {
+        "citation": "1–10",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg026.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "144f5624259549ce81a0bbdd11291257937b540507280d2ad34950392c4d9fa2",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg026/tlg0013.tlg026.perseus-eng2.xml",
+        "text_sha256": "6d71b70a1e0018fcdbfbec3d4b85dfade7f0104149de22e5629abe127cbbf5e8",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg026.perseus-eng2:1–10:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg026"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 18,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 4,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg028.perseus-grc2",
+        "sha256": "362dbe6d6287ba566afeee068069c4c200b199d6c3c6aafb06a99786c9585e1f",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg028/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg028.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg028"
+      },
+      "parent": {
+        "citation": "1–18",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg028.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "c7ec594e2999325487c7c196b0d7eba44f67d34493b798a99b2b2d43d3654460",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg028/tlg0013.tlg028.perseus-grc2.xml",
+        "text_sha256": "5c3474267d08e64ceaf23ec78b534a67723f95a07b3122b7e9a7db1b890c66eb"
+      },
+      "parent_id": "perseus:tlg0013.tlg028.perseus-grc2:1–18:1",
+      "translation": {
+        "citation": "1–15",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg028.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "a12cd7a4bde987e2d41692e9aa9edae5c764cee3ba5cd40dfd9085b65c63b937",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg028/tlg0013.tlg028.perseus-eng2.xml",
+        "text_sha256": "6a07d6d2ed5ac79f7510957464b4799a80a1b0f1a992ddf5c1120c54ae57e192",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg028.perseus-eng2:1–15:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg028"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 14,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 5,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg029.perseus-grc2",
+        "sha256": "1bbb2babaf350c699ab472bf645fd59b8918a5281c37cc2cca352926457efc17",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg029/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg029.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg029"
+      },
+      "parent": {
+        "citation": "1–14",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg029.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "94187d3e0acf47baba679d90295c90ddd9b6f786bc2fccc1c612aff9f9a968e8",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg029/tlg0013.tlg029.perseus-grc2.xml",
+        "text_sha256": "00ec2a8cfac9868d7d6a25726c9040535c3ca3a84811fdbb4be0e47d1619d4bb"
+      },
+      "parent_id": "perseus:tlg0013.tlg029.perseus-grc2:1–14:1",
+      "translation": {
+        "citation": "1–11",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg029.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "214f53af7f06a17f247972aba1c87230d7cc4b9196819f88fb0a6cf24aed3509",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg029/tlg0013.tlg029.perseus-eng2.xml",
+        "text_sha256": "111faccda393ecd99fb42fe64f6ddd15c36f8761121ee7d34da3620033308844",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg029.perseus-eng2:1–11:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg029"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 19,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 4,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg030.perseus-grc2",
+        "sha256": "9b4ee97813e39ef7c81e395ff4552f78080dbece6c7da32d27178c50aa3ff923",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg030/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg030.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg030"
+      },
+      "parent": {
+        "citation": "1–19",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg030.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "7adf1c16894738876723e2ab0ff500107ed55919b078cc92d14be318aaf394d5",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg030/tlg0013.tlg030.perseus-grc2.xml",
+        "text_sha256": "d9d074e98f8c7784600a76a66d80bfe5d92c4181f85475ebed88602bac98730b"
+      },
+      "parent_id": "perseus:tlg0013.tlg030.perseus-grc2:1–19:1",
+      "translation": {
+        "citation": "1–15",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg030.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "f4d63f6dccd0db8730e4a48b314500f0b99aedcffaabb8002be618fdcd16359d",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg030/tlg0013.tlg030.perseus-eng2.xml",
+        "text_sha256": "f70b2db01d0f85abfe4d454233845382b0f2fe8506e77e58b50b7bdd9e5ee57a",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg030.perseus-eng2:1–15:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg030"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 20,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 5,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg031.perseus-grc2",
+        "sha256": "233c1f11430c5237098a3e1a18f3ba0c2efd175da806c58a6f8a354fcc143f4a",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg031/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg031.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg031"
+      },
+      "parent": {
+        "citation": "1–19",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg031.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "e01792c69138903524ba6114b127efea29a1cdbefb548f44debcdd3baa0e2606",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg031/tlg0013.tlg031.perseus-grc2.xml",
+        "text_sha256": "609e05b79983dc3afd1394e5494d668c71bbab269200a67b562bed214f360de0"
+      },
+      "parent_id": "perseus:tlg0013.tlg031.perseus-grc2:1–19:1",
+      "translation": {
+        "citation": "1–15a",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg031.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "af2ec9b608130c9cac1bcb7587d402d6f2f73f22d46eb6b15cb58f02a5734872",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg031/tlg0013.tlg031.perseus-eng2.xml",
+        "text_sha256": "ecaee0b7b99a5cf72bfefc16f5d5af5eddb16f0681e5303c0cef9a5715afa42c",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg031.perseus-eng2:1–15a:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg031"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 20,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 5,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg032.perseus-grc2",
+        "sha256": "8e05f5f4bbcbdca4bf70910b6884116465892096e3fc7b2bb840a507212a7620",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg032/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg032.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg032"
+      },
+      "parent": {
+        "citation": "1–20",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg032.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "29960b1db72e7a2d4cfdaaf37cdc6c3bf88672f2a80c7ddf463641b2dd47b992",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg032/tlg0013.tlg032.perseus-grc2.xml",
+        "text_sha256": "12de7c8a9a1583002c093a5048e71d3fc899500dfa485218a1e6296d39d6c509"
+      },
+      "parent_id": "perseus:tlg0013.tlg032.perseus-grc2:1–20:1",
+      "translation": {
+        "citation": "1–20",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg032.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "44e7f854272959e2933a80c8f567ba7102f1f55152cd97dcf43581f25366f198",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg032/tlg0013.tlg032.perseus-eng2.xml",
+        "text_sha256": "0913a641d9eb422da28097a7bf2e3fd7ec35a392dd5cd9b5a9061a7e62ea5f97",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg032.perseus-eng2:1–20:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg032"
+    },
+    {
+      "boundary_proof": {
+        "method": "complete_source_bodies",
+        "parent_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 19,
+          "next_anchor": null,
+          "start_index": 0
+        },
+        "translation_span": {
+          "at_source_end": true,
+          "end_index_exclusive": 4,
+          "next_anchor": null,
+          "start_index": 0
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0013.tlg033.perseus-grc2",
+        "sha256": "1ccd07cead4abfd8fc38fb86043899a3ca797384e8ae7188fe551c6cf4b667b5",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg033/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0013.tlg033.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0013.tlg033"
+      },
+      "parent": {
+        "citation": "1–19",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg033.perseus-grc2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., editor. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "0def88b0c78f2ad55209758f503014e2a3fd985a6a6e9d918356b731b2bcbbab",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg033/tlg0013.tlg033.perseus-grc2.xml",
+        "text_sha256": "0cdb525129324d0feffdc772d3d782d78284aee8fc7c077f292ee71dc8ecb307"
+      },
+      "parent_id": "perseus:tlg0013.tlg033.perseus-grc2:1–19:1",
+      "translation": {
+        "citation": "1–15",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0013.tlg033.perseus-eng2",
+        "edition": "Anonymous. Hesiod, The Homeric Hymns and Homerica. Evelyn-White, Hugh G., translator. London: William Heinmann; New York: The Macmillan Co., 1914.",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "c84dc628878654ed71c0d1685a3d282ac05563711dd67bba3e8a380b4f24f08f",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0013/tlg033/tlg0013.tlg033.perseus-eng2.xml",
+        "text_sha256": "9f595eed9e08fcb4f8e78c585aad79d0f2ffa0f8e5ff607e66d5e437448c5f88",
+        "translators": [
+          "Hugh G. Evelyn-White"
+        ]
+      },
+      "translation_id": "perseus:tlg0013.tlg033.perseus-eng2:1–15:1",
+      "work_urn": "urn:cts:greekLit:tlg0013.tlg033"
+    },
+    {
+      "boundary_proof": {
+        "anchors": [
+          "7.1054",
+          "7.1055",
+          "7.1056",
+          "7.1057",
+          "7.1058",
+          "7.1059",
+          "7.1060",
+          "7.1061",
+          "7.1062",
+          "7.1063",
+          "7.1064",
+          "7.1065"
+        ],
+        "method": "identical_ordered_source_anchors_and_successor",
+        "parent_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 1054,
+          "next_anchor": "1066",
+          "start_index": 1042
+        },
+        "translation_span": {
+          "at_source_end": false,
+          "end_index_exclusive": 368,
+          "next_anchor": "1066",
+          "start_index": 356
+        }
+      },
+      "cts_proof": {
+        "edition_urn": "urn:cts:greekLit:tlg0085.tlg002.perseus-grc2",
+        "sha256": "95d074c85e2018ad257fd7a8b3e831ebecfd3c7a431a68a882b4999402594e14",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0085/tlg002/__cts__.xml",
+        "translation_urn": "urn:cts:greekLit:tlg0085.tlg002.perseus-eng2",
+        "work_urn": "urn:cts:greekLit:tlg0085.tlg002"
+      },
+      "parent": {
+        "citation": "7.1054–7.1065",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0085.tlg002.perseus-grc2",
+        "edition": "Aeschylus, Volume 1. Smyth, Herbert Weir, editor. London; New York: William Heinemann; G.P. Putnam's Sons, 1922.",
+        "kind": "text",
+        "language": "grc",
+        "quality": "source_text",
+        "raw_sha256": "723f31d90ebb227c764836b572143b7fff8afe70c5d3c80a3456f308c2c549fc",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0085/tlg002/tlg0085.tlg002.perseus-grc2.xml",
+        "text_sha256": "e92a245673dd8c6e14d9c4fe14d8967650e73ed9b758048ae245e8ad718787b9"
+      },
+      "parent_id": "perseus:tlg0085.tlg002.perseus-grc2:7.1054–7.1065:1",
+      "translation": {
+        "citation": "7.1054–7.1065",
+        "commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6",
+        "cts_urn": "tlg0085.tlg002.perseus-eng2",
+        "edition": "Aeschylus, Volume 1. Smyth, Herbert Weir, translator. London; New York: William Heinemann; G.P. Putnam's Sons, 1922. (Modernized by Perseus.)",
+        "kind": "translation",
+        "language": "eng",
+        "quality": "source_text",
+        "raw_sha256": "c5319fde0af5388d0f43a9f18182bbe324b29196d176a59af843123df43239d1",
+        "source_url": "https://raw.githubusercontent.com/PerseusDL/canonical-greekLit/bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6/data/tlg0085/tlg002/tlg0085.tlg002.perseus-eng2.xml",
+        "text_sha256": "abfc5139c77d5821e5e973943f205d2c4746c3db2926253f1557f7000b7684af",
+        "translators": [
+          "Herbert Weir Smyth"
+        ]
+      },
+      "translation_id": "perseus:tlg0085.tlg002.perseus-eng2:7.1054–7.1065:1",
+      "work_urn": "urn:cts:greekLit:tlg0085.tlg002"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "Source-bounded passage previews; not word or sentence alignment.",
+  "source_archive_sha256": "b095eb19bfb9dede26b8a3bcb10e368a5b72a42e6b6bfc12e1177d01a5ba450f",
+  "source_commit": "bcc5df0602f3b3fe6fefe1e1d575602a25ab1db6"
+}

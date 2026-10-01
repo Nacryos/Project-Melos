@@ -634,6 +634,8 @@ def passage(id: str):
     result['author_canonical']=canonical_author(row['author'])
     result['structured_evidence']=evidence_lookup(passage_id=id)
     result['author_profile']=author_profile(result.get('author',''))
+    from .translation_previews import project as translation_previews
+    result.update(translation_previews(result,result.get('related',[]),full_text=True))
     return result
 
 
@@ -866,6 +868,25 @@ def excluded_exact_matches(q,author='',language='',edition=''):
 
 
 @app.get('/api/search')
+def search_response(q:str='',mode:str='words',author:str='',language:str='',edition:str='',
+                    include_reference:bool=False,match:str='fuzzy',limit:int=Query(30,ge=1,le=100),order:str='relevance',offset:int=0,
+                    commentary_assisted:bool=True):
+    # Enrich only the final, paginated API response. Internal lexical/form
+    # ranking pools continue to call search() without any translation queries.
+    result=search(q=q,mode=mode,author=author,language=language,edition=edition,
+                  include_reference=include_reference,match=match,limit=limit,order=order,
+                  offset=offset,commentary_assisted=commentary_assisted)
+    from .translation_previews import enrich_results
+    if result.get('results'):
+        try:
+            with connect() as con:
+                result['results']=enrich_results(con,result['results'])
+        except (sqlite3.Error,ValueError,OSError):
+            result['warnings']=[*result.get('warnings',[]),
+                'Published translation previews are unavailable; passage search results are unchanged.']
+    return result
+
+
 def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='',
            include_reference:bool=False,match:str='fuzzy',limit:int=Query(30,ge=1,le=100),order:str='relevance',offset:int=0,
            commentary_assisted:bool=True):
@@ -968,6 +989,45 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
         exact_where='('+cond+')'+extra
         exact_count=con.execute('SELECT count(*) FROM passages p WHERE '+exact_where,exactparams+params).fetchone()[0]
         method='Accent-insensitive wording and citation search'
+        transliteration_matches={}
+        if exact_count==0 and mode=='words':
+            from .query_expansion import (phrase_token_options,indexed_phrase_plan,
+                                         confirm_source_phrases,MAX_PHRASE_PASSAGES)
+            options=phrase_token_options(q)
+            possible=list(dict.fromkeys(word for group in options for word,_ in group))
+            if possible:
+                marks=','.join('?' for _ in possible)
+                vocabulary=dict(con.execute('SELECT normalized,count FROM vocabulary WHERE normalized IN ('+marks+')',possible))
+                phrase_plan=indexed_phrase_plan(options,vocabulary)
+                if phrase_plan:
+                    anchors=phrase_plan['anchor_tokens']
+                    marks=','.join('?' for _ in anchors)
+                    # Token index -> passage IDs, not a scan of corpus text.
+                    anchored=con.execute('SELECT p.id,p.text FROM passages p WHERE p.id IN '
+                        '(SELECT passage_id FROM tokens WHERE normalized IN ('+marks+')) '
+                        "AND p.language='grc' AND p.kind='text'"+extra+' ORDER BY p.id LIMIT ?',
+                        [*anchors,*params,MAX_PHRASE_PASSAGES+1]).fetchall()
+                    if phrase_plan['phrases_truncated'] or len(anchored)>MAX_PHRASE_PASSAGES:
+                        warnings.append('Source-confirmed transliteration checked a bounded candidate window; additional phrase interpretations or indexed passages may exist.')
+                    for row in anchored[:MAX_PHRASE_PASSAGES]:
+                        confirmed=confirm_source_phrases(row['text'],phrase_plan['phrases'])
+                        if confirmed:
+                            transliteration_matches[row['id']]=confirmed
+                    if transliteration_matches:
+                        exactparams=list(transliteration_matches)
+                        exact_where='p.id IN ('+','.join('?' for _ in exactparams)+')'+extra
+                        exact_count=len(exactparams)
+                        method='Source-confirmed transliteration phrase'
+                        fallback_provenance['transliteration_phrase']={
+                            'original_query':q,
+                            'matched_greek_phrases':sorted({phrase for phrases in transliteration_matches.values() for phrase in phrases}),
+                            'candidate_phrases_checked':len(phrase_plan['phrases']),
+                            'phrase_limit':phrase_plan['phrase_limit'],'phrases_truncated':phrase_plan['phrases_truncated'],
+                            'candidate_passages_checked':min(len(anchored),MAX_PHRASE_PASSAGES),
+                            'passage_limit':MAX_PHRASE_PASSAGES,'passages_truncated':len(anchored)>MAX_PHRASE_PASSAGES,
+                            'max_vowel_ambiguities':2,
+                            'scope':'Indexed romanization interpretation confirmed as a complete source phrase; not a morphological identification.'}
+                        warnings.append('Latin input matched a source-confirmed Greek phrase after bounded vowel-identity interpretation; the matched Greek wording is disclosed separately. No source text was corrected.')
         token_keys=[]
         if mode=='forms':
             try:
@@ -1038,6 +1098,11 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
             total=count_search_groups(con,grouped,exactparams+params)
             rows=fetch_search_page(con,grouped,chronology+ordinary,exactparams+params,limit,offset)
             results=[mark_author_scope(with_mirrors(unpack(row)|{'match_reason':'Normalized wording / citation match','score':None},row)) for row in rows]
+        if transliteration_matches:
+            for item in results:
+                item['match_reason']='Source-confirmed transliteration phrase'
+                item['matched_transliteration_phrases']=sorted({phrase for identifier in [item['id'],*item.get('mirrored_ids',[])]
+                                                               for phrase in transliteration_matches.get(identifier,[])})
         if total==0 and match!='exact':
             terms=tokenize(basic_normalize(q))[:16]
             from .query_expansion import fallback_plan
@@ -1123,7 +1188,8 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
             return unpack(con.execute('SELECT data FROM passages WHERE id=?',(identifier,)).fetchone())
         # A Latin-script query that the exact wording path already matched is a
         # transliteration of Greek, not an English description.
-        exact_lexical=lexical.get('total',0)>0 and str(lexical.get('method','')).startswith('Accent-insensitive')
+        exact_lexical=lexical.get('total',0)>0 and (str(lexical.get('method','')).startswith('Accent-insensitive')
+                                                 or bool(lexical.get('transliteration_phrase')))
         if not greek and not exact_lexical and commentary_assisted:
             # English queries: Greek vectors alone find the judged passage about
             # one time in ten (retrieval lab, 2026-09-30). Linked English
@@ -1139,6 +1205,14 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
                    commentary_assisted=commentary_assisted,author_labels=author_labels(author) if author else (),
                    author_key=canonical_key,author_keys=component_keys,weights=weights,extra=extra)
     ranked=order_results(fused['results'],order)
+    if lexical.get('transliteration_phrase') and order=='relevance':
+        # A proved complete source phrase outranks an unrelated dense-only hit.
+        # Preserve RRF ordering inside each tier; scores remain RRF, not a
+        # fabricated probability or an amended similarity measurement.
+        ranked.sort(key=lambda item: not any(
+            evidence.get('signal')=='lexical'
+            and evidence.get('match_reason')=='Source-confirmed transliteration phrase'
+            for evidence in item.get('matched_evidence',[])))
     warnings+=fused['warnings']
     warnings.append('Counts cover a bounded pool of up to 400 word, 400 form and 1,000 dense candidates'+(', 400 English-bridge candidates' if extra else '')+', not every possible match.')
     if order=='chronological':
@@ -1147,6 +1221,10 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
     fallbacks={channel:payload['fallback_terms'] for channel,payload in
                (('lexical',lexical),('forms',forms)) if payload.get('fallback_terms')}
     provenance={'fallback_terms':fallbacks} if fallbacks else {}
+    if lexical.get('transliteration_phrase'):
+        provenance['transliteration_phrase']=dict(lexical['transliteration_phrase'],
+            ranking_policy=('Confirmed source phrases first; reciprocal-rank-fusion order within each tier.'
+                            if order=='relevance' else 'Requested chronology retained; no phrase-priority override.'))
     return {**fused,'results':ranked[offset:offset+limit],'mode':'hybrid',
             'commentary_assisted':commentary_assisted,'warnings':list(dict.fromkeys(warnings)),**excluded,**provenance}
 

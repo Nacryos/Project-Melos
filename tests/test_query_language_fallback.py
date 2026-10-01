@@ -34,20 +34,23 @@ def test_description_keeps_original_words_and_rejects_accidental_greek_fallback(
     {"id": "synthetic-original", "author": "Alpha", "work": "Notes", "citation": "native-control",
      "language": "eng", "kind": "commentary", "text": "Gygeo: synthetic explanatory note"},
 ]], indirect=True)
-def test_supported_transliteration_adds_greek_without_discarding_original_words(client, monkeypatch):
+def test_complete_source_phrase_precedes_incidental_shared_word_fallback(client, monkeypatch):
     result = client.get("/api/search", params={"q": "Gygeo tou polychrysou", "author": "Alpha",
                                                "mode": "words"}).json()
-    assert {row["id"] for row in result["results"]} == {"synthetic-greek", "synthetic-original"}
-    assert result["fallback_terms"]["original"] == ["gygeo", "tou", "polychrysou"]
-    assert set(result["fallback_terms"]["transliterated"]) == {"γυγεω", "του", "πολυχρυσου"}
-    assert any("original query words are retained" in warning for warning in result["warnings"])
+    # Complete, source-confirmed wording is stronger than the old OR fallback:
+    # an English note containing only Gygeo is no longer an equal phrase hit.
+    assert [row["id"] for row in result["results"]] == ["synthetic-greek"]
+    assert result["transliteration_phrase"]["original_query"] == "Gygeo tou polychrysou"
+    assert result["transliteration_phrase"]["matched_greek_phrases"] == ["γυγεω του πολυχρυσου"]
+    assert "fallback_terms" not in result
     class Sem:
         def search(self, *args, **kwargs):
             return []
     monkeypatch.setattr(server, "semantic_service", lambda: Sem())
     hybrid = client.get("/api/search", params={"q": "Gygeo tou polychrysou", "author": "Alpha",
                                                "mode": "hybrid"}).json()
-    assert hybrid["fallback_terms"] == {"lexical": result["fallback_terms"]}
+    assert all(hybrid["transliteration_phrase"][key] == value
+               for key, value in result["transliteration_phrase"].items())
 
 
 @pytest.mark.parametrize("client", [[
@@ -88,7 +91,7 @@ def test_curly_apostrophe_roman_phrase_uses_same_supported_fallback_as_ascii(cli
         result = client.get("/api/search", params={"q": f"Eudousin d{apostrophe} oreon koryphai",
                                                    "author": "Alpha", "mode": "words"}).json()
         assert result["results"][0]["id"] == "synthetic-curly-control"
-        assert set(result["fallback_terms"]["transliterated"]) == {"ευδουσιν", "ορεων", "κορυφαι"}
+        assert result["transliteration_phrase"]["matched_greek_phrases"] == ["ευδουσιν δ' ορεων κορυφαι"]
 
 
 def test_greek_spacing_sign_does_not_activate_morphology_for_latin_description(client, monkeypatch):
