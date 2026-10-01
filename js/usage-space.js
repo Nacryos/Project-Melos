@@ -58,9 +58,9 @@
       .mus-title { margin: 0; font: 400 clamp(1.5rem, 2.3vw, 2.25rem)/1.15 "GFS Didot", Georgia, serif; }
       .mus-subtitle { margin: .25rem 0 0; color: #4a5661; font-size: .9rem; }
       .mus-close { flex: none; border: 1px solid #aeb8bc; border-radius: 3px; background: transparent; padding: .35rem .65rem; }
-      .mus-main { min-height: 0; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(310px, .65fr); }
-      .mus-visual { min-width: 0; min-height: 0; display: grid; grid-template-rows: minmax(240px, 1fr) auto; background: #101d30; color: #ecf1ef; }
-      .mus-plot { position: relative; min-height: 240px; overflow: hidden; background: radial-gradient(circle at 50% 46%, #203650 0, #14253c 53%, #0c1727 100%); }
+      .mus-main { min-height: 0; display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(310px, .65fr); grid-template-rows: minmax(0, 1fr); overflow: auto; }
+      .mus-visual { min-width: 0; min-height: 0; display: grid; grid-template-rows: minmax(120px, 1fr) auto; background: #101d30; color: #ecf1ef; }
+      .mus-plot { position: relative; min-height: 0; overflow: hidden; background: radial-gradient(circle at 50% 46%, #203650 0, #14253c 53%, #0c1727 100%); }
       .mus-canvas { width: 100%; height: 100%; display: block; cursor: grab; touch-action: none; }
       .mus-canvas:active { cursor: grabbing; }
       .mus-plot-note { position: absolute; top: .8rem; left: 1rem; right: 1rem; margin: 0; color: #d7e0e2; font: .75rem/1.4 system-ui, sans-serif; pointer-events: none; text-shadow: 0 1px 6px #0c1727; }
@@ -101,7 +101,7 @@
         .mus-overlay { padding: 0; }
         .mus-dialog { width: 100%; height: 100%; border: 0; border-radius: 0; }
         .mus-head { padding: .7rem .8rem; }
-        .mus-main { grid-template-columns: 1fr; grid-template-rows: minmax(220px, 44%) minmax(0, 1fr); }
+        .mus-main { grid-template-columns: 1fr; grid-template-rows: minmax(280px, 44%) minmax(260px, 1fr); }
         .mus-side { grid-template-rows: minmax(0, 1fr) minmax(0, 1fr); border-left: 0; }
         .mus-detail, .mus-list-wrap { padding: .65rem .85rem; }
         .mus-foot { padding: .45rem .8rem; grid-template-columns: 1fr; }
