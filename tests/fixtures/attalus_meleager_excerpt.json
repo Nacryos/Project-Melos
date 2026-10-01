@@ -1,0 +1,16 @@
+{
+  "source_url": "https://www.attalus.org/poetry/meleager.html",
+  "retrieved_at_utc": "2026-10-01T07:15:54.959587+00:00",
+  "raw_path": "data/raw/attalus_parser_regression/meleager.html",
+  "raw_sha256": "689961413fbb72c8f5c049aeb5095e9d1485479ed177e25013c34b84e0f963eb",
+  "fixture_sha256": "3baf6fec12a207c60e5c83c082a4cbd2e874b854aa701cc515d7f6ed0e1c24d0",
+  "references": [
+    "5.179",
+    "5.182",
+    "5.184"
+  ],
+  "transform": "Declared-encoding decode; literal title and three reference sections; CRLF to LF; UTF-8 encode.",
+  "terms_url": "https://www.attalus.org/info/comments.html",
+  "scope": "Non-commercial parser regression only; no corpus admission.",
+  "regenerate": "python tests/test_attalus_parser.py --capture"
+}

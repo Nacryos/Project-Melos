@@ -148,7 +148,9 @@ def parse_page(page_html: str) -> dict:
         perseus = re.search(r'HREF="(http://www\.perseus\.tufts\.edu/hopper/text\?doc=[^"]+)"', chunk)
         # The translation starts at the first paragraph after the label line.
         paragraphs = [text_of(part) for part in re.split(r"<P>", chunk, flags=re.I)[1:]]
-        paragraphs = [part for part in paragraphs if part and not part.startswith("G")]
+        # The header's Greek-text "G" link precedes that first paragraph.
+        # Never discard prose by its initial: Meleager AP 5.182 starts "Give".
+        paragraphs = [part for part in paragraphs if part]
         text = "\n".join(paragraphs).strip()
         if not text:
             continue
