@@ -12,10 +12,34 @@ is rebuilt from collector JSONL; raw/processed files remain authoritative.
 - `GET /api/search?q=...&mode=words|forms|themes|hybrid&author=&language=&include_reference=false&offset=0&limit=30`: `{results:[passage + score + match_reason],total,mode,method,warnings}`. Lexical totals count all distinct filtered matches; theme totals count a fixed first-1,000 ranked-candidate pool. Hybrid uses bounded lexical/form/dense candidate pools and exposes `matched_evidence`; its total is not every potentially relevant corpus passage. `commentary_assisted=false` restricts hybrid to direct Greek-text evidence.
 - `GET /api/word?form=...&passage_id=...`: generic lexical candidates and occurrences plus `structured_evidence`, `contextual_candidates:[]`, `context_analysis_status` and `author_profile`. Source-linked claims and model judgements are separate; missing morphology or senses are not filled from memory.
 - `GET /api/evidence?form=&passage_id=&claim_id=&limit=20`: source claims at their declared scope, with exact quotations and locators. Large paradigms are compacted for lookup; `GET /api/claim?id=...` returns the full source claim.
-- `POST /api/classify-context`: JSON `{form,passage_id}` returns `status=proposed|abstained`, `decision_stage`, an existing `candidate_id` if selected, source evidence IDs, inspectable packet and raw uncalibrated provider signals. Jev is server-side and never changes corpus evidence. Public deployments require the explicit `MELOS_PUBLIC_CLASSIFIER=1` opt-in and use the durable quota/cache gateway described in `docs/deployment.md`; preflight rejection makes no provider request.
+- `POST /api/machine-analysis`: JSON `{form,passage_id?}` explicitly requests computational morphology for one intact Greek word (at most 80 characters). An optional `passage_id` must exist but does not make an engine analysis an annotation of that passage. The response has `status`, `form`, complete `machine_candidates` and `machine_entries`, `warnings`, and a raw-response `receipt` when one was stored. Candidates preserve separate literal dictionary and inflection fields, alternatives, and raw JSON pointers; they are not accepted source claims, attested forms, dictionary senses, or contextual decisions. This route does not call Jev or alter corpus/evidence indexes.
+- `POST /api/classify-context`: JSON `{form,passage_id}` defaults to the unchanged source-candidate comparison and returns `status=proposed|abstained`, `decision_stage`, an existing `candidate_id` if selected, source evidence IDs, inspectable packet and raw uncalibrated provider signals. An explicit `{candidate_basis:"machine",machine_receipt_id}` instead uses only a server-reloaded, rehashed and reparsed cached machine receipt for the exact form; client-supplied candidates, URLs or proof flags are not accepted. A selected machine option returns `status=machine_proposed`, `candidate_basis=machine`, `machine_evidence` (receipt and raw entry/inflection pointers), and no source `evidence_ids`. Source-claim and incomplete-source preflight guards remain in force. Supplying a receipt on the source path, or omitting one on the machine path, returns 422. Jev is server-side and never changes corpus evidence. Public deployments require the explicit `MELOS_PUBLIC_CLASSIFIER=1` opt-in and use the durable quota/cache gateway described in `docs/deployment.md`; preflight rejection makes no provider request.
 - `GET /api/wiktionary?form=...`: independently gated `{ready,query,results,total,warnings}` reference lookup. Entry, sense, and listed-form tags retain their separate scopes; listed forms do not assert corpus attestation or unattestation.
 - `GET /api/usage-space?q=...&author=&limit=80`: `{points:[{id,x,y,z,text,author,work,citation,source_url,date_start,date_end,match_reason}],method,retrieval_method,warnings}`. Coordinates derive from actual passage features and are not historical facts. Any thematic fallback is disclosed and need not contain the queried word.
 - `GET /api/sources`: collection reports and counts.
+
+Machine analysis is a separate, explicitly clicked service request, not a
+background fallback for an unmatched word. Its receipt records the exact NFC
+form, fixed upstream request URL, HTTP status, receipt time, raw SHA-256 and
+parser version. `engine_revision` is null when the hosted service does not
+supply it; no engine or stem-library revision is inferred. Cached raw bytes are
+rechecked and parsed again before machine candidates can enter a Jev packet.
+The cache is bounded (default 64 MiB and 10,000 receipts), with a 256 KiB
+response limit, eight-second request timeout, at most two in-flight misses,
+and durable default limits of 200 global/20 per visitor per day and 10
+global/3 per visitor per minute. A signed visitor cookie supports convenience
+throttling, not authentication; the global limit remains authoritative across
+cookie resets. Failed requests have a five-minute backoff and no automatic
+retry. Invalid forms or receipts return 422; busy requests 409, rate limits
+429, disabled/full cache 503, and upstream or invalid-response failures 502.
+The explicit lookup requires JSON with a body of at most 2,048 bytes (415 for
+another media type, 413 for a missing or oversized declared length).
+No error silently supplies a guessed analysis. These operational bounds and
+machine labels are not claims of morphological accuracy or complete coverage.
+The frontend groups only exact displayed headword, full feature object and
+dictionary-field matches. Every original candidate ID and raw inflection
+remains available in the disclosure and in the complete Jev inventory; a
+shared display is not an assertion that the underlying analyses are identical.
 
 All query values URL-encoded. Passage IDs opaque. `work_id` is a stable hash of
 source, author, work, edition, language. Text stays original; HTML is escaped in

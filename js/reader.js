@@ -62,12 +62,13 @@
     }
     return response.json();
   }
-  async function apiPost(path, body) {
-    const response = await fetch(window.melosApiUrl(path), { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+  async function apiPost(path, body, { signal } = {}) {
+    const response = await fetch(window.melosApiUrl(path), { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal });
     if (!response.ok) {
-      let detail = '';
-      try { const result = await response.json(); detail = result.detail || result.error || ''; } catch {}
-      throw new Error(detail ? `${response.status}: ${detail}` : `The corpus service returned ${response.status}.`);
+      let detail = '', failure = null;
+      try { failure = await response.json(); detail = failure.detail || failure.error || failure.status || ''; } catch {}
+      const error = new Error(detail ? `${response.status}: ${detail}` : `The corpus service returned ${response.status}.`);
+      error.status = response.status; error.response = failure; throw error;
     }
     return response.json();
   }
@@ -231,6 +232,7 @@
     }
   }
   function resetPassageContext(loading = false) {
+    state.machineAnalysisCancel?.();
     ++state.wordSequence;
     state.passage = null;
     state.passageLoading = loading;
@@ -1611,17 +1613,24 @@
       }
     }
     const passageId = button ? state.passage?.id : '';
+    state.machineAnalysisCancel?.();
     clear(ui.inspector);
     ui.inspector.append(node('span', 'eyebrow', 'SELECTED FORM'), node('div', 'word-title', form));
     if (joined) ui.inspector.append(node('p', 'word-normalized', 'Lookup joins an explicit printed line-end division. Both printed segments remain unchanged in the passage; no missing letters are supplied.'));
     if (form.includes('\u1fbf')) ui.inspector.append(node('p', 'word-normalized', 'Printed spacing mark retained; not silently treated as an apostrophe.'));
     if (!passageId) ui.inspector.append(node('p', 'word-normalized', 'Standalone form lookup · no passage context supplied.'));
+    const machineHost = node('div', 'machine-panel');
     const morphologyHost = node('div', 'morphology-panel');
     const wiktionaryHost = node('div', 'wiktionary-panel');
-    ui.inspector.append(morphologyHost, wiktionaryHost);
+    ui.inspector.append(machineHost, morphologyHost, wiktionaryHost);
     const pending = node('p', 'inspector-message', 'Looking up recorded analyses…');
     morphologyHost.append(pending);
     const sequence = ++state.wordSequence;
+    if (window.MelosMachineMorphology) state.machineAnalysisCancel = window.MelosMachineMorphology.mount({
+      host: machineHost, form, passageId, node, safeLink, post: apiPost,
+      current: () => sequence === state.wordSequence && !state.passageLoading && (!passageId || state.passage?.id === passageId),
+      classifierReady: () => Boolean(state.classifierStatus?.configured),
+    });
     const wikiPreview = loadWiktionary(form, sequence, wiktionaryHost);
     if (button && window.matchMedia('(max-width:1280px)').matches) {
       requestAnimationFrame(() => ui.inspector.closest('.inspector').scrollIntoView({ behavior: 'smooth', block: 'start' }));
@@ -1644,7 +1653,10 @@
       renderParallelContexts(morphologyHost, data.parallel_contexts);
       renderContextualCandidates(morphologyHost, data.contextual_candidates, data.contextual_candidate_method);
       if (passageId) renderRelatedCommentary(form, state.passage?.related, morphologyHost);
-      addContextAction(morphologyHost, form, passageId, sequence);
+      const onlyNearby = data.analysis_match_status === 'spelling_suggestions_only'
+        && !data.contextual_candidates?.length && !data.parallel_contexts?.some(item => item.candidates?.length);
+      if (onlyNearby) morphologyHost.append(node('p', 'candidate-reason', 'Only nearby spellings were found in the source lookup. Use Analyze this form for separate computational alternatives.'));
+      else addContextAction(morphologyHost, form, passageId, sequence);
       const candidates = Array.isArray(data.candidates) ? data.candidates : [];
       const analysisTitle = data.analysis_match_status === 'spelling_suggestions_only'
         ? 'Nearby spelling analyses'

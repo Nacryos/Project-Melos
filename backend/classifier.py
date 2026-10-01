@@ -29,6 +29,7 @@ _ENTRY_METADATA_TAGS = frozenset({
     'canonical', 'alternative', 'romanization', 'transliteration', 'form-of', 'alt-of',
 })
 _PARSE_CANDIDATE_KINDS = frozenset({'grammatical_analysis', 'explicit_form_of'})
+MACHINE_PACKET_SCHEMA = 'melos-machine-inflection-comparison-v1'
 
 
 def _state_json(value: Any) -> str:
@@ -146,6 +147,32 @@ def _lexical_metadata_candidate(row: Mapping[str, Any]) -> bool:
     ):
         return True
     return False
+
+
+def _machine_candidate(row: Any) -> bool:
+    return isinstance(row, Mapping) and (
+        row.get('candidate_kind') == 'machine_analysis' or
+        row.get('basis') == 'machine_analysis' or row.get('candidate_basis') == 'machine')
+
+
+def _validated_machine_inventory(form, candidates, validation):
+    """Reload raw operational evidence; no caller-supplied flag establishes trust."""
+    if validation is None and not any(_machine_candidate(row) for row in candidates):
+        return None, None
+    if not candidates or not all(_machine_candidate(row) for row in candidates):
+        return None, 'Machine comparison requires one complete, unmixed receipt inventory.'
+    receipt = validation.get('receipt') if isinstance(validation, Mapping) else None
+    receipt_id = receipt.get('id') if isinstance(receipt, Mapping) else None
+    if not isinstance(receipt_id, str) or not receipt_id:
+        return None, 'Machine candidates have no validated raw-analysis receipt.'
+    from .machine_morphology import validate_receipt_projection
+    try:
+        trusted = validate_receipt_projection(receipt_id, list(candidates), form)
+    except (ValueError, TypeError, RuntimeError, OSError):
+        trusted = None
+    if not trusted:
+        return None, 'Machine receipt or complete raw candidate projection could not be verified.'
+    return trusted, None
 
 
 def _exact_source_form(value: Any) -> str | None:
@@ -426,6 +453,8 @@ def build_evidence_packet(
     claims: Sequence[Mapping[str, Any]] = (),
     author_profile: Sequence[Mapping[str, Any]] = (),
     dialect_rules: Sequence[Mapping[str, Any]] = (),
+    *, machine_validation: Mapping[str, Any] | None = None,
+    source_guard_candidates: Sequence[Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Build a bounded, inspectable decision state from supplied evidence.
 
@@ -435,6 +464,15 @@ def build_evidence_packet(
     """
     context = passage or {}
     warnings: list[str] = []
+    machine, machine_error = _validated_machine_inventory(form, candidates, machine_validation)
+    source_guard_packet = None
+    if machine is not None:
+        if source_guard_candidates is None or any(_machine_candidate(row) for row in source_guard_candidates):
+            machine_error = 'Machine comparison requires the original source candidate safety inventory.'
+        else:
+            source_guard_packet = build_evidence_packet(form, passage, source_guard_candidates,
+                claims, author_profile, dialect_rules)
+            warnings.extend(source_guard_packet['warnings'])
     if sum(map(len, (claims, author_profile, dialect_rules))) > MAX_CLAIMS:
         warnings.append(f"More than {MAX_CLAIMS} claims; no subset was silently chosen.")
     groups: dict[str, list[dict[str, Any]]] = {}
@@ -454,13 +492,20 @@ def build_evidence_packet(
             warnings.append(f"Candidate {index} is not an object.")
             continue
         cid = str(row.get("id") or f"candidate_{index}")
-        if _lexical_metadata_candidate(row):
+        if not _machine_candidate(row) and _lexical_metadata_candidate(row):
             warnings.append(f"Candidate {cid} excluded: lexical entry metadata is not a grammatical choice.")
             continue
         if cid == "abstain" or cid in seen:
             warnings.append(f"Duplicate or reserved candidate ID: {cid}.")
             continue
         seen.add(cid)
+        if _machine_candidate(row):
+            if machine is not None:
+                options.append({**row, 'matched_form': form,
+                    'claim_ids': [], 'source_references': [], 'evidence_refs': []})
+            # An unverified machine row must never fall through to the legacy
+            # source-URL path. The inventory error below blocks the full call.
+            continue
         source_refs: list[dict[str, str]] = []
         for field in ("source_url", "gloss_source_url"):
             url = row.get(field)
@@ -544,6 +589,13 @@ def build_evidence_packet(
         constraints.append(
             "A source-bridged decision group contains alternative spellings and claim IDs for one grammatical reading from the same dictionary family, not independent witnesses or a passage-specific analysis."
         )
+    if machine is not None:
+        constraints.extend([
+            'Machine-analysis candidates are engine-derived grammatical hypotheses, not accepted source claims, dictionary senses, or attestation in this passage.',
+            'Each machine candidate retains separate literal dictionary_fields and inflection fields. Do not promote dictionary-level features into missing inflection features, split literal dialect labels, or complete absent grammar.',
+            'All returned machine inflections are supplied, but a returned inventory is not proof that every possible analysis exists. Abstain if context or preserved editorial uncertainty prevents a responsible choice.',
+            'The raw receipt identifies a response and parser, not a verified deployed engine or stem-library revision. Linked lexical URLs do not establish an exact accepted sense identity.',
+        ])
     packet = {
         "form": form,
         "passage": {k: context.get(k) for k in
@@ -558,6 +610,18 @@ def build_evidence_packet(
         packet['incomplete_source_projections'] = incomplete_projections
     if incomplete_senses:
         packet['incomplete_entry_sense_evidence'] = incomplete_senses
+    if source_guard_packet is not None:
+        for key in ('incomplete_source_projections', 'incomplete_entry_sense_evidence'):
+            if source_guard_packet.get(key):
+                packet[key] = source_guard_packet[key]
+    if machine_error:
+        packet['invalid_machine_inventory'] = machine_error
+    if machine is not None:
+        packet['candidate_basis'] = 'machine'
+        packet['machine_packet_schema'] = MACHINE_PACKET_SCHEMA
+        packet['machine_receipt'] = {key: machine['receipt'].get(key) for key in (
+            'id', 'request_form', 'url', 'http_status', 'received_utc',
+            'raw_sha256', 'parser_version', 'engine_revision')}
     return _compact_packet(packet)
 
 
@@ -591,6 +655,14 @@ class JevProvider:
             **{key: item[key] for key in summary_fields if key in item},
             'evidence': 'Use the complete candidate and its linked source claims in state. Missing fields remain unknown.'}
             for item in packet['candidates']}
+        for item in packet['candidates']:
+            if item.get('basis') == 'machine_analysis':
+                choices[str(item['id'])].update({key: item[key] for key in (
+                    'basis', 'dictionary_fields', 'inflection', 'entry_pointer',
+                    'inflection_pointer', 'receipt_id') if key in item})
+                choices[str(item['id'])]['evidence'] = (
+                    'Use this engine-derived inflection and the complete raw-receipt-bound '
+                    'candidate in state. This is machine analysis, not source-attested parsing.')
         choices["abstain"] = "The supplied context and source evidence do not support a responsible selection."
         body = {"model": self.model, "state": packet,
                 "questions": {"contextual_parse": {
@@ -666,13 +738,23 @@ def classify_context(
     author_profile: Sequence[Mapping[str, Any]] = (),
     dialect_rules: Sequence[Mapping[str, Any]] = (),
     provider: DecisionProvider | None = None,
+    *, machine_validation: Mapping[str, Any] | None = None,
+    source_guard_candidates: Sequence[Mapping[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """Return a model proposal or a reasoned abstention, never a corpus claim."""
+    kwargs = {'machine_validation': machine_validation} if machine_validation is not None else {}
+    if source_guard_candidates is not None:
+        kwargs['source_guard_candidates'] = source_guard_candidates
     packet = build_evidence_packet(form, passage, candidates, claims,
-                                   author_profile, dialect_rules)
+                                   author_profile, dialect_rules, **kwargs)
     result: dict[str, Any] = {"status": "abstained", "decision_stage": "preflight", "candidate_id": None,
                               "reason": "", "model": None, "evidence_ids": [],
                               "packet": packet, "warnings": list(packet["warnings"])}
+    if packet.get('candidate_basis') == 'machine':
+        result['candidate_basis'] = 'machine'
+    if packet.get('invalid_machine_inventory'):
+        result['reason'] = packet['invalid_machine_inventory']
+        return result
     if packet["warnings"] and any("silently chosen" in w or "candidate ID" in w
                                    for w in packet["warnings"]):
         result["reason"] = "Input exceeds safe bounds or has ambiguous candidate IDs."
@@ -705,7 +787,7 @@ def classify_context(
         result['reason'] = ('Only nearby-spelling suggestions are available, not parses of this form. '
                             'No model request was made; source-supported candidates for the exact form are needed.')
         return result
-    if not any(c["source_references"] or c["claim_ids"] for c in packet["candidates"]):
+    if packet.get('candidate_basis') != 'machine' and not any(c["source_references"] or c["claim_ids"] for c in packet["candidates"]):
         result["reason"] = "Candidates have no source references or accepted claim links."
         return result
     state_chars = len(_state_json(packet))
@@ -750,6 +832,14 @@ def classify_context(
         return result
     if _nearby_spelling(selected):
         result["reason"] = "Selected candidate is a nearby-spelling suggestion, not a parse of this form."
+        return result
+    if selected.get('basis') == 'machine_analysis':
+        result.update(status='machine_proposed', decision_stage='model_proposed',
+            candidate_id=choice,
+            reason='Model-ranked engine-derived analysis; machine hypothesis only, not a source claim or attested parse.',
+            machine_evidence={'receipt': packet['machine_receipt'],
+                'entry_pointer': selected['entry_pointer'],
+                'inflection_pointer': selected['inflection_pointer']})
         return result
     evidence_ids = list(dict.fromkeys(
         selected["claim_ids"] +

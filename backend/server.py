@@ -13,6 +13,7 @@ import secrets
 import sqlite3
 import threading
 import unicodedata
+from typing import Literal
 
 import numpy as np
 from fastapi import FastAPI, HTTPException, Query, Request
@@ -118,11 +119,33 @@ if cors_origins:
                        allow_credentials=False,allow_methods=['GET','POST'],
                        allow_headers=['Content-Type','Accept'])
 
+# A convenience throttle identity, not authentication. The machine service's
+# durable global budget remains authoritative across cookie resets/workers.
+_machine_cookie_key = secrets.token_bytes(32)
+
 
 @app.middleware('http')
 async def request_policy(request,call_next):
     from .jev_gateway import public_enabled
     visitor_cookie = None
+    machine_cookie = None
+    if request.url.path == '/api/machine-analysis' and request.method == 'POST':
+        try:
+            size = int(request.headers.get('content-length', '-1'))
+        except ValueError:
+            size = -1
+        if size < 0 or size > 2048:
+            return JSONResponse(status_code=413,content={'detail':'A JSON request of at most 2048 bytes is required.'})
+        if request.headers.get('content-type','').split(';')[0].strip() != 'application/json':
+            return JSONResponse(status_code=415,content={'detail':'Use application/json.'})
+        token, _, signature = request.cookies.get('melos_morph_visitor','').partition('.')
+        valid = (bool(re.fullmatch(r'[0-9a-f]{32}', token)) and
+                 bool(re.fullmatch(r'[0-9a-f]{64}', signature))) and hmac.compare_digest(
+            signature, hmac.new(_machine_cookie_key, token.encode(), hashlib.sha256).hexdigest())
+        if not valid:
+            token = secrets.token_hex(16)
+            machine_cookie = token + '.' + hmac.new(_machine_cookie_key, token.encode(), hashlib.sha256).hexdigest()
+        request.state.machine_visitor = hashlib.sha256(token.encode()).hexdigest()
     if request.url.path=='/api/classify-context' and request.method=='POST':
         client=request.client.host if request.client else ''
         if (public_deployment() or client not in ('127.0.0.1','::1','testclient')) and not public_enabled():
@@ -144,7 +167,8 @@ async def request_policy(request,call_next):
             key = (os.environ.get('TYPESAFE_API_KEY') or os.environ['JEV_API_KEY']).encode()
             cookie = request.cookies.get('melos_visitor','')
             token, _, signature = cookie.partition('.')
-            valid = bool(re.fullmatch(r'[0-9a-f]{32}', token)) and hmac.compare_digest(
+            valid = (bool(re.fullmatch(r'[0-9a-f]{32}', token)) and
+                     bool(re.fullmatch(r'[0-9a-f]{64}', signature))) and hmac.compare_digest(
                 signature, hmac.new(key, token.encode(), hashlib.sha256).hexdigest())
             if not valid:
                 token = secrets.token_hex(16)
@@ -153,6 +177,9 @@ async def request_policy(request,call_next):
     response=await call_next(request)
     if visitor_cookie:
         response.set_cookie('melos_visitor',visitor_cookie,max_age=2592000,
+                            httponly=True,secure=public_deployment(),samesite='lax',path='/api')
+    if machine_cookie:
+        response.set_cookie('melos_morph_visitor',machine_cookie,max_age=2592000,
                             httponly=True,secure=public_deployment(),samesite='lax',path='/api')
     if response.status_code==200 and re.fullmatch(r'/assets/paintings/[^/]+\.[0-9a-f]{8}\.(?:avif|webp)',request.url.path):
         response.headers['Cache-Control']='public, max-age=31536000, immutable'
@@ -757,16 +784,48 @@ def word(form: str, passage_id: str=''):
     return result
 
 
+class MachineAnalysisRequest(BaseModel):
+    model_config = {'extra': 'forbid'}
+    form: str = Field(min_length=1,max_length=80)
+    passage_id: str | None = Field(default=None,min_length=1,max_length=500)
+
+
+def _machine_response_status(result):
+    return {'ok':200, 'no_analyses':200, 'invalid_form':422,
+            'rate_limited':429, 'busy':409, 'cache_full':503,
+            'disabled':503, 'upstream_error':502, 'invalid_response':502,
+            'invalid_receipt':422, 'cache_miss':404}.get(result.get('status'),503)
+
+
+@app.post('/api/machine-analysis')
+def machine_analysis_request(request:MachineAnalysisRequest,http_request:Request):
+    """Explicit computational lookup; it never writes corpus/source evidence."""
+    from .machine_morphology import get_service
+    if request.passage_id:
+        with connect() as con:
+            found = con.execute('SELECT 1 FROM passages WHERE id=?',(request.passage_id,)).fetchone()
+        if not found:
+            raise HTTPException(404,'Passage not found')
+    result = get_service().analyze(request.form,http_request.state.machine_visitor,fetch=True)
+    code = _machine_response_status(result)
+    headers = {'Retry-After':'60'} if code in (409,429) else None
+    return JSONResponse(status_code=code,content=result,headers=headers)
+
+
 class ContextRequest(BaseModel):
     model_config = {'extra': 'forbid'}
     form: str = Field(min_length=1,max_length=200)
     passage_id: str = Field(min_length=1,max_length=500)
+    candidate_basis: Literal['source','machine'] = 'source'
+    machine_receipt_id: str | None = Field(default=None,min_length=1,max_length=200)
 
 
 @app.post('/api/classify-context')
 def classify_context_request(request:ContextRequest,http_request:Request):
     """Explicit, bounded inference action; it never modifies source evidence."""
     from .classifier import classify_context
+    if (request.candidate_basis == 'machine') != bool(request.machine_receipt_id):
+        raise HTTPException(422,'Machine comparison requires a machine receipt; source comparison must not supply one.')
     analysis=word(request.form,request.passage_id)
     if not analysis.get('context'):
         raise HTTPException(404,'Passage not found')
@@ -797,6 +856,9 @@ def classify_context_request(request:ContextRequest,http_request:Request):
         if claim.get('status')=='source_claim' and claim.get('assertion_type')!='model_inference'
         and any(isinstance(evidence,dict) and evidence.get('source_url') and evidence.get('quote')
                 for evidence in claim.get('evidence',[]))}
+    # Machine comparisons must retain inventory-level safety warnings even
+    # from a source candidate later excluded for missing bounded proof.
+    original_source_guard_candidates = list(candidates)
     unproven=[candidate['id'] for candidate in candidates if candidate.get('candidate_kind')
         and any(claim_id not in proven_ids for claim_id in candidate.get('claim_ids',[]))]
     if unproven:
@@ -813,6 +875,19 @@ def classify_context_request(request:ContextRequest,http_request:Request):
                 profile_claims.append(found)
         except (OSError,RuntimeError,sqlite3.Error):
             pass
+    machine_kwargs = {}
+    if request.candidate_basis == 'machine':
+        from .machine_morphology import get_service
+        machine = get_service().load_receipt(request.machine_receipt_id,form=request.form)
+        code = _machine_response_status(machine)
+        if code != 200:
+            return JSONResponse(status_code=code,content=machine)
+        # This receipt is read/reparsed again at the classifier boundary.
+        # Client-supplied candidates, URLs and purported proof are never used.
+        machine_kwargs = {'machine_validation':machine,
+                          'source_guard_candidates':original_source_guard_candidates}
+        candidates = machine['machine_candidates']
+        candidate_origin = 'machine_analysis_receipt'
     from .jev_gateway import CachedJevProvider, GatewayLimit, GatewayUnavailable, public_enabled
     from .classifier import configured_provider
     provider = None
@@ -823,7 +898,8 @@ def classify_context_request(request:ContextRequest,http_request:Request):
             raise HTTPException(503,'Classifier cache is unavailable; no paid request was made.')
     try:
         result=classify_context(request.form,analysis['context'],candidates=candidates,
-                                claims=claims,author_profile=profile_claims,provider=provider)
+                                claims=claims,author_profile=profile_claims,provider=provider,
+                                **machine_kwargs)
     except GatewayLimit as exc:
         raise HTTPException(429,str(exc),headers={'Retry-After':str(exc.retry_after)})
     except GatewayUnavailable:

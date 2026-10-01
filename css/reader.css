@@ -130,3 +130,9 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .mirror-list .mirror-copy{margin:6px 0;color:#465965;font-size:14px;line-height:1.45}.mirror-list .related-open{margin:0 0 0 10px;padding:3px 8px;font-size:12px}
 .occurrence-sources{min-width:0;max-width:100%;overflow-wrap:anywhere}
 .occurrence-source .related-open{box-sizing:border-box;max-width:100%;margin:9px 0 0;white-space:normal;overflow-wrap:anywhere}
+.machine-analysis{border-top:2px solid var(--gold)}
+.machine-analysis button{max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.machine-cancel{border:0;background:transparent;color:var(--sea);padding:6px 0;margin-left:10px;font-size:12px}
+.machine-provenance pre{font:11px/1.45 monospace;white-space:pre-wrap;overflow-wrap:anywhere;max-width:100%}
+.machine-comparison{padding-left:10px;border-left:2px solid var(--gold);margin-top:12px}
+.machine-attribution a{color:var(--sea);font-size:12px;text-underline-offset:3px}

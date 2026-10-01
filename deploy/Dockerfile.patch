@@ -5,3 +5,6 @@ ARG BASE_IMAGE
 FROM ${BASE_IMAGE}
 COPY backend /app/backend
 COPY js/reader.js /app/js/reader.js
+COPY js/machine-morphology.js /app/js/machine-morphology.js
+COPY reader.html /app/reader.html
+COPY css/reader.css /app/css/reader.css
