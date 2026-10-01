@@ -22,6 +22,39 @@ from backend.normalization_contract import NORMALIZATION_VERSION
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_DB = ROOT / "data/evidence.sqlite"
 
+# Kaikki/Wiktionary form arrays mix grammatical labels with entry metadata.
+# These are projection rules only: the accepted source tags remain intact in
+# lookup(), get_claim(), source_tags, and matched_object_form.
+_ENTRY_METADATA_TAGS = frozenset({
+    "canonical", "alternative", "romanization", "transliteration",
+    "form-of", "alt-of",
+})
+_WIKTIONARY_GRAMMAR_TAGS = frozenset({
+    "nominative", "genitive", "dative", "accusative", "vocative", "locative",
+    "instrumental", "singular", "dual", "plural", "masculine", "feminine",
+    "neuter", "first-person", "second-person", "third-person",
+    "present", "imperfect", "future", "aorist", "perfect", "pluperfect",
+    "future-perfect", "active", "middle", "passive", "mediopassive",
+    "indicative", "subjunctive", "optative", "imperative", "infinitive",
+    "participle", "positive", "comparative", "superlative",
+})
+
+
+def _grammatical_label(value: Any, *, wiktionary: bool) -> Any:
+    """Keep source-stated grammar, not entry-navigation or relation tags."""
+    if isinstance(value, list):
+        labels = [tag for tag in value if isinstance(tag, str) and tag.strip()]
+        labels = [tag for tag in labels if tag.casefold() not in _ENTRY_METADATA_TAGS]
+        if wiktionary:
+            labels = [tag for tag in labels if tag.casefold() in _WIKTIONARY_GRAMMAR_TAGS]
+        return labels or None
+    if isinstance(value, str):
+        label = value.strip()
+        if not label or label.casefold() in _ENTRY_METADATA_TAGS:
+            return None
+        return label if not wiktionary or label.casefold() in _WIKTIONARY_GRAMMAR_TAGS else None
+    return value if value else None
+
 
 class EvidenceIndex:
     """Retrieve claims without converting them into philological certainty.
@@ -97,7 +130,7 @@ class EvidenceIndex:
         ))
 
     def lookup(self, form: str, passage_id: str | None = None,
-               limit: int = 20) -> dict[str, Any]:
+               limit: int | None = 20) -> dict[str, Any]:
         """Find explicitly linked passage claims and source claims on a form.
 
         Lookup is accent/case folded for recall. Exact original spelling is
@@ -186,7 +219,8 @@ class EvidenceIndex:
         ordered = self._order(ranked)
         result["total"] = len(ordered)
         result["claims"] = []
-        for row, strength, reason, _ in ordered[:self._limit(limit)]:
+        selected = ordered if limit is None else ordered[:self._limit(limit)]
+        for row, strength, reason, _ in selected:
             claim = self._claim(row, strength=strength, reason=reason,
                                 compact_forms=row["id"] in listed_by_id)
             if row["id"] in listed_by_id:
@@ -206,57 +240,155 @@ class EvidenceIndex:
         return self._claim(row, strength="source_record",
                            reason="Complete accepted claim, fetched by stable ID.")
 
+    def _wiktionary_entry_context(self, claims: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
+        """Resolve page-headword versus form-of target from accepted sibling claims.
+
+        The extractor stores ``entry.word`` in an object field named ``lemma``
+        even for an inflected-form page. Only a source-stated form-of target may
+        replace that page title in a parse projection; no spelling equivalence
+        or inferred lemma is introduced here.
+        """
+        record_ids = {
+            (claim.get("metadata") or {}).get("source_record_id")
+            for claim in claims
+            if str(claim.get("source_family", "")).startswith("enwiktionary-kaikki-")
+        }
+        record_ids = {record_id for record_id in record_ids
+                      if isinstance(record_id, str) and
+                      re.fullmatch(r"wiktionary:kaikki:line:\d+", record_id)}
+        if not record_ids:
+            return {}
+        context: dict[str, dict[str, Any]] = {}
+        with closing(self._connect()) as con:
+            for record_id in record_ids:
+                entry = {"inflected_entry": False, "targets": [], "target_claim_ids": [],
+                         "target_evidence_refs": [], "headword_claim_seen": False}
+                for row in con.execute(
+                    "SELECT id,predicate,object_json,evidence_json,status,assertion_type "
+                    "FROM claims WHERE id GLOB ? ORDER BY id",
+                    (record_id + ":*",),
+                ):
+                    if (not row["id"].startswith(record_id + ":") or
+                            row["status"] != "source_claim" or
+                            row["assertion_type"] == "model_inference"):
+                        continue
+                    obj = json.loads(row["object_json"])
+                    if not isinstance(obj, dict):
+                        continue
+                    if row["id"] == record_id + ":lemma:entry":
+                        entry["headword_claim_seen"] = True
+                        entry["inflected_entry"] |= any(
+                            isinstance(template, dict) and
+                            str(template.get("name", "")).casefold().endswith(" form")
+                            for template in obj.get("head_templates") or []
+                        )
+                    if row["predicate"] == "lemma" and obj.get("relation") == "form_of":
+                        entry["inflected_entry"] = True
+                        entry["target_claim_ids"].append(row["id"])
+                        for evidence in json.loads(row["evidence_json"]):
+                            if isinstance(evidence, dict):
+                                entry["target_evidence_refs"].append(
+                                    evidence.get("record_id") or f"{row['id']}#evidence")
+                        for target in obj.get("targets") or []:
+                            if isinstance(target, dict) and isinstance(target.get("word"), str) and target["word"]:
+                                if target not in entry["targets"]:
+                                    entry["targets"].append(target)
+                context[record_id] = entry
+        return context
+
     def candidate_analyses(self, form: str, passage_id: str | None = None,
                            limit: int = 20) -> dict[str, Any]:
-        """Project explicit claim fields into candidate rows for word UI.
+        """Project source-stated grammar and form-of links, never page metadata.
 
-        This is a convenience view, not a merged parse. A source may supply
-        only a lemma, only a grammatical label, or a listed form's tags.
-        Missing pieces stay null and contradictory rows stay separate.
+        Raw claims remain available through lookup(). Candidates are separate
+        source alternatives, not merged parses or passage attestations.
         """
-        found = self.lookup(form, passage_id=passage_id, limit=limit)
+        limit = self._limit(limit)
+        # lookup() still caps public previews. Internally traverse the full
+        # source-claim set so metadata never consumes the candidate budget.
+        found = self.lookup(form, passage_id=passage_id, limit=None)
+        wiktionary_entries = self._wiktionary_entry_context(found["claims"])
         candidates: list[dict[str, Any]] = []
+        excluded = 0
         for claim in found["claims"]:
             predicate = claim["predicate"]
-            if predicate not in {"lemma", "morphology", "equivalent_form"}:
+            if predicate not in {"lemma", "morphology"}:
                 continue
             obj = claim["object"]
             if not isinstance(obj, dict):
-                obj = {}
+                excluded += 1
+                continue
+            wiktionary = str(claim.get("source_family", "")).startswith("enwiktionary-kaikki-")
+            if predicate == "lemma" and obj.get("relation") != "form_of" and wiktionary:
+                # /entry/word is a dictionary page headword, including on
+                # inflected-form pages; it is not a parse of the queried form.
+                excluded += 1
+                continue
+            record_id = (claim.get("metadata") or {}).get("source_record_id")
+            entry = wiktionary_entries.get(record_id) if wiktionary else None
             matched_forms = claim.get("matched_object_forms") or [None]
             for matched_index, listed in enumerate(matched_forms):
                 listed_obj = listed if isinstance(listed, dict) else ({"form": listed} if isinstance(listed, str) else {})
                 raw_label = listed_obj.get("raw_label", listed_obj.get("tags")) if listed is not None else obj.get("raw_label")
                 if raw_label is None and listed is None:
                     raw_label = obj.get("source_tags")
+                analysis = _grammatical_label(raw_label, wiktionary=wiktionary)
                 features = listed_obj.get("features") if listed is not None else obj.get("features")
-                lemma = obj.get("lemma")
-                lemma_targets = obj.get("targets") if predicate == "lemma" else None
                 if predicate == "lemma":
-                    lemma = obj.get("form", lemma)
-                    if lemma is None and isinstance(lemma_targets, list) and len(lemma_targets) == 1:
-                        target = lemma_targets[0]
-                        lemma = target.get("word") if isinstance(target, dict) else None
-                # Entry-level listed forms have the headword as their subject.
-                if lemma is None and listed is not None:
-                    lemma = claim["subject"].get("form")
+                    lemma_targets = obj.get("targets")
+                    words = {target.get("word") for target in lemma_targets or []
+                             if isinstance(target, dict) and isinstance(target.get("word"), str)
+                             and target["word"]}
+                    if obj.get("relation") == "form_of":
+                        lemma = next(iter(words)) if len(words) == 1 else None
+                        candidate_kind = "explicit_form_of"
+                    else:
+                        # Older non-Kaikki lemma claims are retained as
+                        # untyped source alternatives for API compatibility.
+                        lemma = obj.get("form", obj.get("lemma"))
+                        if lemma is None and len(words) == 1:
+                            lemma = next(iter(words))
+                        candidate_kind = None
+                    claim_ids = [claim["id"]]
+                else:
+                    if not analysis and not features:
+                        excluded += 1
+                        continue
+                    lemma_targets = None
+                    lemma = obj.get("lemma")
+                    claim_ids = [claim["id"]]
+                    candidate_kind = "grammatical_analysis"
+                    if wiktionary:
+                        # An inflected-entry page has its surface spelling in
+                        # object.lemma. Only an explicit sibling form-of claim
+                        # may provide a lemma for its listed grammatical form.
+                        if entry is None or entry["inflected_entry"] or not entry["headword_claim_seen"]:
+                            targets = entry["targets"] if entry else []
+                            words = {target["word"] for target in targets}
+                            lemma = next(iter(words)) if len(words) == 1 else None
+                            lemma_targets = targets or None
+                            claim_ids.extend(entry["target_claim_ids"] if entry else [])
                 ordinal = (claim.get("matched_object_form_ordinals") or [None])[matched_index]
+                evidence_refs = [
+                    evidence.get("record_id") or f"{claim['id']}#evidence:{i}"
+                    for i, evidence in enumerate(claim["evidence"])
+                ]
+                if predicate == "morphology" and entry and lemma_targets:
+                    evidence_refs.extend(entry["target_evidence_refs"])
                 candidates.append({
                     "id": f"{claim['id']}#form:{ordinal}" if ordinal is not None else claim["id"],
                     "matched_form": listed_obj.get("form") or claim["subject"].get("form"),
                     "lemma": lemma,
                     "lemma_targets": lemma_targets,
-                    "analysis": raw_label,
+                    "entry_headword": obj.get("lemma") if wiktionary else None,
+                    "candidate_kind": candidate_kind,
+                    "analysis": analysis,
                     "features": features,
-                    "equivalent_form": obj.get("form") if predicate == "equivalent_form" else None,
                     "relation_raw": obj.get("relation_raw", obj.get("relation")),
-                    "source_tags": obj.get("source_tags"),
-                    "source_raw_tags": obj.get("source_raw_tags"),
-                    "claim_ids": [claim["id"]],
-                    "evidence_refs": [
-                        evidence.get("record_id") or f"{claim['id']}#evidence:{i}"
-                        for i, evidence in enumerate(claim["evidence"])
-                    ],
+                    "source_tags": listed_obj.get("tags") if listed is not None else obj.get("source_tags"),
+                    "source_raw_tags": listed_obj.get("raw_tags") if listed is not None else obj.get("source_raw_tags"),
+                    "claim_ids": list(dict.fromkeys(claim_ids)),
+                    "evidence_refs": list(dict.fromkeys(evidence_refs)),
                     "status": claim["status"],
                     "assertion_type": claim["assertion_type"],
                     "strength": claim["strength"],
@@ -264,16 +396,73 @@ class EvidenceIndex:
                     "match_reason": claim["match_reason"],
                     "matched_object_form": listed,
                 })
-                if len(candidates) >= self._limit(limit):
+                if len(candidates) >= limit:
                     break
-            if len(candidates) >= self._limit(limit):
+            if len(candidates) >= limit:
                 break
+        # A listed spelling can differ from its entry headword, so its
+        # source-stated form-of target may not be among lookup(form)'s raw
+        # claims. Supply only accepted sibling proof used by these bounded
+        # candidates; never rewrite the queried form's raw lookup results.
+        fetched_ids = {claim["id"] for claim in found["claims"]}
+        required_ids = list(dict.fromkeys(
+            claim_id for candidate in candidates for claim_id in candidate["claim_ids"]
+            if claim_id not in fetched_ids
+        ))
+        supporting_claims = []
+        for claim_id in required_ids:
+            sibling = self.get_claim(claim_id)
+            if (not sibling or sibling["status"] != "source_claim" or
+                    sibling["assertion_type"] == "model_inference"):
+                continue
+            subject = sibling.get("subject") or {}
+            obj = sibling.get("object") or {}
+            if (sibling["predicate"] != "lemma" or not isinstance(subject, dict) or
+                    subject.get("passage_id") or not isinstance(obj, dict) or
+                    obj.get("relation") != "form_of"):
+                continue
+            sibling["strength"] = "general_entry_relation"
+            sibling["match_reason"] = (
+                "Accepted sibling entry form-of relation supports a listed-form lemma; "
+                "it is not a claim about the requested passage."
+            )
+            supporting_claims.append(sibling)
         return {
             "form": form, "passage_id": passage_id,
             "candidates": candidates, "total_claims": found["total"],
-            "method": "Fields explicitly present in accepted lemma, morphology, and equivalent-form claims",
-            "warnings": [],
+            "supporting_claims": supporting_claims,
+            "method": "Source-stated grammatical labels and explicit form-of links; lexical entry metadata remains in raw claims",
+            "warnings": ([f"{excluded} lexical metadata or non-grammatical claim projection(s) excluded."]
+                         if excluded else []),
         }
+
+    def equivalent_forms_for_form(self, form: str, limit: int = 500) -> list[str]:
+        """Source-stated lexical alternatives for retrieval, never parse choices.
+
+        Only general accepted source claims are used. Multiple source targets
+        remain alternatives; this does not decide equivalence in a passage.
+        """
+        found = self.lookup(form, limit=None)
+        alternatives: list[str] = []
+        seen: set[str] = set()
+        for claim in found["claims"]:
+            if (claim["predicate"] != "equivalent_form" or
+                    claim["status"] != "source_claim" or
+                    claim["assertion_type"] == "model_inference"):
+                continue
+            obj = claim["object"]
+            if not isinstance(obj, dict):
+                continue
+            values = [obj.get("form")]
+            values.extend(target.get("word") for target in obj.get("targets", [])
+                          if isinstance(target, dict))
+            for value in values:
+                if isinstance(value, str) and value.strip() and value not in seen:
+                    alternatives.append(value)
+                    seen.add(value)
+                    if len(alternatives) >= self._limit_form_expansion(limit):
+                        return alternatives
+        return alternatives
 
     def forms_for_lemma(self, headword: str, limit: int = 500) -> list[str]:
         """List only source-entry forms of a headword, for search expansion.

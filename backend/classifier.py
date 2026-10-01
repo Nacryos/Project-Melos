@@ -23,6 +23,10 @@ JEV_MODEL = 'jev-1.13.0'
 MAX_CANDIDATES = 32
 MAX_CLAIMS = 32
 MAX_STATE_CHARS = 32000
+_ENTRY_METADATA_TAGS = frozenset({
+    'canonical', 'alternative', 'romanization', 'transliteration', 'form-of', 'alt-of',
+})
+_PARSE_CANDIDATE_KINDS = frozenset({'grammatical_analysis', 'explicit_form_of'})
 
 
 def _state_json(value: Any) -> str:
@@ -96,6 +100,36 @@ def _nearby_spelling(candidate: Mapping[str, Any]) -> bool:
     return isinstance(distance, (int, float)) and distance > 0
 
 
+def _lexical_metadata_candidate(row: Mapping[str, Any]) -> bool:
+    """Reject typed metadata and old Kaikki projections without gating legacy parses.
+
+    Untyped morphology/treebank candidates from the existing lexicon index
+    remain eligible. The structural checks cover pre-fix evidence candidates
+    that may still arrive from a stale client or direct API caller.
+    """
+    kind = row.get('candidate_kind')
+    if kind is not None and kind not in _PARSE_CANDIDATE_KINDS:
+        return True
+    if not str(row.get('source_family') or '').startswith('enwiktionary-kaikki-'):
+        return False
+    if any(str(identifier).endswith(':lemma:entry') for identifier in row.get('claim_ids') or ()):
+        return True
+    listed = row.get('matched_object_form')
+    tags = listed.get('tags') if isinstance(listed, Mapping) else None
+    if isinstance(tags, list) and tags and all(
+        isinstance(tag, str) and tag.casefold() in _ENTRY_METADATA_TAGS for tag in tags
+    ) and not row.get('features') and row.get('relation_raw') != 'form_of':
+        return True
+    analysis = row.get('analysis')
+    if isinstance(analysis, str) and analysis.casefold() in _ENTRY_METADATA_TAGS:
+        return True
+    if isinstance(analysis, list) and any(
+        isinstance(tag, str) and tag.casefold() in _ENTRY_METADATA_TAGS for tag in analysis
+    ):
+        return True
+    return False
+
+
 def build_evidence_packet(
     form: str, passage: Mapping[str, Any] | None,
     candidates: Sequence[Mapping[str, Any]],
@@ -111,8 +145,6 @@ def build_evidence_packet(
     """
     context = passage or {}
     warnings: list[str] = []
-    if len(candidates) > MAX_CANDIDATES:
-        warnings.append(f"More than {MAX_CANDIDATES} candidates; no subset was silently chosen.")
     if sum(map(len, (claims, author_profile, dialect_rules))) > MAX_CLAIMS:
         warnings.append(f"More than {MAX_CLAIMS} claims; no subset was silently chosen.")
     groups: dict[str, list[dict[str, Any]]] = {}
@@ -130,6 +162,9 @@ def build_evidence_packet(
             warnings.append(f"Candidate {index} is not an object.")
             continue
         cid = str(row.get("id") or f"candidate_{index}")
+        if _lexical_metadata_candidate(row):
+            warnings.append(f"Candidate {cid} excluded: lexical entry metadata is not a grammatical choice.")
+            continue
         if cid == "abstain" or cid in seen:
             warnings.append(f"Duplicate or reserved candidate ID: {cid}.")
             continue
@@ -149,7 +184,9 @@ def build_evidence_packet(
                                         "url": url, "scope": "candidate metadata; verify source scope"})
         linked = [str(claim_id) for claim_id in row.get("claim_ids") or ()
                   if str(claim_id) in known_claim_ids]
-        options.append({"id": cid, "lemma": row.get("lemma"),
+        options.append({"id": cid, "candidate_kind": row.get("candidate_kind"),
+                        "entry_headword": row.get("entry_headword"),
+                        "lemma": row.get("lemma"),
                         "analysis": row.get("analysis"),
                         "analysis_text": row.get("analysis_text"),
                         "features": row.get("features"),
@@ -173,6 +210,8 @@ def build_evidence_packet(
                         "comparison_context": row.get("comparison_context"),
                         "evidence_refs": row.get("evidence_refs"),
                         "source_references": source_refs, "claim_ids": linked})
+    if len(options) > MAX_CANDIDATES:
+        warnings.append(f"More than {MAX_CANDIDATES} candidates; no subset was silently chosen.")
     packet = {
         "form": form,
         "passage": {k: context.get(k) for k in
@@ -212,7 +251,8 @@ class JevProvider:
         # state, rather than identical ID-lookup instructions for every option.
         # These are projections, not newly merged or completed interpretations.
         summary_fields = (
-            'lemma', 'analysis', 'analysis_text', 'features', 'equivalent_form',
+            'candidate_kind', 'entry_headword', 'lemma', 'analysis', 'analysis_text',
+            'features', 'equivalent_form',
             'relation_raw', 'lemma_targets', 'source_tags', 'source_raw_tags',
             'dialect', 'gloss', 'matched_form', 'edit_distance', 'strength',
             'source_family', 'comparison_scope', 'source_passage_id',

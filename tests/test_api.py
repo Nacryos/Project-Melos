@@ -220,6 +220,33 @@ def test_form_expansion_pages_deduplicate_exact_hits(client: TestClient, monkeyp
     assert pages[3]["results"] == []
 
 
+def test_equivalent_form_relation_still_expands_search_without_becoming_a_parse(
+        client: TestClient, monkeypatch: pytest.MonkeyPatch):
+    class FixtureMorphology:
+        def analyze(self, form, limit=6):
+            return {"candidates": [], "expansion_lemmas": [], "warnings": []}
+
+        def expansion_forms_for_lemma(self, lemma):
+            return []
+
+    class FixtureEvidence:
+        def forms_for_lemma(self, headword, limit=500):
+            return []
+
+        def candidate_analyses(self, form, limit=12):
+            return {"candidates": []}
+
+        def equivalent_forms_for_form(self, form, limit=500):
+            # Synthetic relation demonstrates retrieval expansion only.
+            return ["μοῖρα"] if form == "μοῦσα" else []
+
+    monkeypatch.setattr(server, "morph_service", lambda: FixtureMorphology())
+    monkeypatch.setattr(server, "evidence_service", lambda: FixtureEvidence())
+    result = client.get("/api/search", params={"q": "μοῦσα", "mode": "forms"}).json()
+    assert {row["id"] for row in result["results"]} == {"p1", "p2"}
+    assert result["total"] == 2
+
+
 def test_theme_pages_count_filtered_retrieval_window(client: TestClient, monkeypatch: pytest.MonkeyPatch):
     class FixtureSemantic:
         requested_limits = []

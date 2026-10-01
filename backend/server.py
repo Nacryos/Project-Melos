@@ -683,11 +683,41 @@ def word(form: str, passage_id: str=''):
             'A source-stated grammatical analysis is linked to this passage. General lexicon/treebank alternatives below remain separate.'
         ]
     try:
-        source_candidates=evidence_service().candidate_analyses(form,passage_id=passage_id or None,limit=100)
+        service=evidence_service()
+        source_candidates=service.candidate_analyses(form,passage_id=passage_id or None,limit=100)
         result['contextual_candidates'] = source_candidates.get('candidates',[])
+        preview_ids={claim['id'] for claim in result['structured_evidence'].get('claims',[])}
+        selected_ids=list(dict.fromkeys(claim_id for candidate in result['contextual_candidates']
+            for claim_id in candidate.get('claim_ids',[])))
+        supporting={claim['id']:claim for claim in source_candidates.get('supporting_claims',[])
+                    if claim.get('id') in selected_ids}
+        # The raw /api/word evidence preview is capped at 100 claims, while
+        # candidate projection filters metadata before its own limit. Close
+        # only selected source-claim proofs missing from the ACTUAL preview.
+        # Added records retain their source subject and general scope; they
+        # never become a claim about the requested passage.
+        if result['structured_evidence'].get('ready'):
+            for claim_id in selected_ids:
+                if claim_id in preview_ids or claim_id in supporting:
+                    continue
+                proof=service.get_claim(claim_id)
+                subject=(proof or {}).get('subject') or {}
+                if (not proof or proof.get('status')!='source_claim' or
+                    proof.get('assertion_type')=='model_inference' or
+                    not isinstance(subject,dict) or subject.get('passage_id')):
+                    continue
+                proof['strength']='general_source_record'
+                proof['match_reason']=('Accepted general source record supports a selected candidate; '
+                    'its original subject is retained and no passage attestation is asserted.')
+                supporting[claim_id]=proof
+        result['contextual_supporting_claims'] = list(supporting.values())
+        result['contextual_unresolved_claim_ids'] = [claim_id for claim_id in selected_ids
+            if claim_id not in preview_ids and claim_id not in supporting]
         result['contextual_candidate_method'] = source_candidates.get('method')
     except (ImportError,AttributeError,OSError,RuntimeError,sqlite3.Error):
         result['contextual_candidates'] = []
+        result['contextual_supporting_claims'] = []
+        result['contextual_unresolved_claim_ids'] = []
     result['parallel_contexts'] = []
     if context and context.get('author'):
         from .parallel_context import matching_texts, source_claim_matches
@@ -752,9 +782,20 @@ def classify_context_request(request:ContextRequest,http_request:Request):
         # assigns stable per-request IDs and rejects duplicate explicit IDs.
         candidates=[*candidates,*comparison_candidates]
         candidate_origin += '_with_parallel_text_comparison'
-    all_claims=analysis.get('structured_evidence',{}).get('claims',[])
-    all_claims=list({claim['id']:claim for claim in [*all_claims,*[claim for item in parallel for claim in item.get('claims',[])]]}.values())
     selected_ids={identifier for candidate in candidates for identifier in candidate.get('claim_ids',[])}
+    all_claims=analysis.get('structured_evidence',{}).get('claims',[])
+    sibling_proof=[claim for claim in analysis.get('contextual_supporting_claims',[])
+                   if claim.get('id') in selected_ids]
+    all_claims=list({claim['id']:claim for claim in [*all_claims,*sibling_proof,
+        *[claim for item in parallel for claim in item.get('claims',[])]]}.values())
+    proven_ids={claim['id'] for claim in all_claims
+        if claim.get('status')=='source_claim' and claim.get('assertion_type')!='model_inference'
+        and any(isinstance(evidence,dict) and evidence.get('source_url') and evidence.get('quote')
+                for evidence in claim.get('evidence',[]))}
+    unproven=[candidate['id'] for candidate in candidates if candidate.get('candidate_kind')
+        and any(claim_id not in proven_ids for claim_id in candidate.get('claim_ids',[]))]
+    if unproven:
+        candidates=[candidate for candidate in candidates if candidate.get('id') not in unproven]
     # Preserve retrieved alternatives; the classifier rejects oversized sets
     # rather than silently removing hypotheses to meet its request budget.
     claims=sorted(all_claims,key=lambda item:item['id'] not in selected_ids)
@@ -783,6 +824,11 @@ def classify_context_request(request:ContextRequest,http_request:Request):
     except GatewayUnavailable:
         raise HTTPException(503,'Classifier state is unavailable. Please try again later.')
     result['candidate_origin']=candidate_origin
+    if unproven:
+        result['warnings'].append(
+            f'{len(unproven)} structured candidate(s) excluded from Jev: accepted source proof was not in the bounded word preview or available as general source evidence.'
+        )
+        result['unproven_candidate_ids']=unproven
     return result
 
 
@@ -936,10 +982,10 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                         source_forms.extend(evidence_index.forms_for_lemma(token,limit=500))
                         candidate_rows=evidence_index.candidate_analyses(token,limit=12).get('candidates',[])
                         lemmas.extend(candidate['lemma'] for candidate in candidate_rows if candidate.get('lemma'))
-                        for candidate in candidate_rows:
-                            equivalent=candidate.get('equivalent_form')
-                            if isinstance(equivalent,str) and equivalent:
-                                expansion.update(variants(equivalent))
+                        # Lexical equivalent-form relations aid retrieval but
+                        # are not grammatical/Jev parse candidates.
+                        for equivalent in evidence_index.equivalent_forms_for_form(token,limit=500):
+                            expansion.update(variants(equivalent))
                     for lemma in dict.fromkeys(lemmas):
                         source_forms.extend(evidence_index.forms_for_lemma(lemma,limit=500))
                     expansion.update(basic_normalize(value) for value in source_forms)

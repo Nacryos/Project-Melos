@@ -6,6 +6,8 @@ import unicodedata
 from copy import deepcopy
 from unittest.mock import patch
 
+from fastapi.testclient import TestClient
+
 from backend.classifier import (JevProvider, build_evidence_packet, classify_context,
                                 configured_provider, provider_status,
                                 MAX_CANDIDATES, MAX_STATE_CHARS)
@@ -92,6 +94,86 @@ def test_accepted_claim_candidate_keeps_its_source_scope():
     assert result["status"] == "proposed"
     assert result["evidence_ids"] == ["claim:a", "record:a"]
     assert result["packet"]["candidates"][0]["strength"] == "general_form_claim"
+
+
+def test_lexical_metadata_cannot_be_a_jev_parse_choice_even_if_stale_projection_arrives():
+    canonical = {"id": "wiktionary:kaikki:line:1:morphology:entry#form:0",
+                 "lemma": "inflected", "analysis": ["canonical"],
+                 "source_family": "enwiktionary-kaikki-synthetic-fixture",
+                 "matched_object_form": {"form": "inflected", "tags": ["canonical"]},
+                 "claim_ids": ["fixture:canonical"]}
+    headword = {"id": "wiktionary:kaikki:line:1:lemma:entry",
+                "lemma": "inflected", "analysis": None,
+                "source_family": "enwiktionary-kaikki-synthetic-fixture",
+                "claim_ids": ["wiktionary:kaikki:line:1:lemma:entry"]}
+    typed_metadata = {**CANDIDATES[0], "id": "typed:metadata",
+                      "candidate_kind": "lexical_metadata"}
+    spoofed_grammar = {**canonical, "id": "typed:canonical",
+                       "candidate_kind": "grammatical_analysis"}
+    provider = StubProvider(canonical["id"])
+    result = classify_context("α", PASSAGE, [canonical, headword, typed_metadata, spoofed_grammar],
+                              [claim("fixture:canonical", "source metadata")], provider=provider)
+    assert not provider.called
+    assert result["status"] == "abstained"
+    assert result["packet"]["candidates"] == []
+    assert "No existing candidate" in result["reason"]
+    assert len([warning for warning in result["warnings"] if "lexical entry metadata" in warning]) == 4
+
+
+def test_grammar_choice_survives_metadata_filter_and_legacy_candidates_remain_eligible():
+    metadata = {"id": "wiktionary:kaikki:line:1:morphology:entry#form:0",
+                "lemma": "inflected", "analysis": ["canonical"],
+                "source_family": "enwiktionary-kaikki-synthetic-fixture",
+                "matched_object_form": {"form": "inflected", "tags": ["canonical"]},
+                "claim_ids": ["fixture:canonical"]}
+    grammar = {"id": "fixture:form-of", "candidate_kind": "explicit_form_of",
+               "lemma": "source-root", "entry_headword": "inflected",
+               "analysis": ["dative", "plural"], "relation_raw": "form_of",
+               "claim_ids": ["fixture:grammar"]}
+    rows = [claim("fixture:canonical", "metadata"), claim("fixture:grammar", "parse")]
+    packet = build_evidence_packet("α", PASSAGE, [metadata, grammar, CANDIDATES[0]], rows)
+    assert [candidate["id"] for candidate in packet["candidates"]] == ["fixture:form-of", "parse_a"]
+    assert packet["candidates"][0]["entry_headword"] == "inflected"
+    assert packet["candidates"][0]["candidate_kind"] == "explicit_form_of"
+    provider = StubProvider(metadata["id"])
+    result = classify_context("α", PASSAGE, [metadata, grammar], rows, provider=provider)
+    assert provider.called  # It saw one valid choice, but cannot choose the excluded ID.
+    assert result["status"] == "abstained"
+    assert result["candidate_id"] is None
+    assert "outside the supplied candidate IDs" in result["reason"]
+
+
+def test_api_packet_includes_accepted_sibling_form_of_proof_without_passage_promotion(monkeypatch):
+    from backend import classifier, server
+    from backend import jev_gateway
+
+    listed = claim("fixture:listed", {"forms": [{"form": "αβγ", "tags": ["dative"]}]})
+    sibling = claim("fixture:form-of", {"relation": "form_of", "targets": [{"word": "δ"}]})
+    sibling["subject"] = {"type": "form", "form": "αβ"}
+    sibling["strength"] = "general_entry_relation"
+    candidate = {"id": "fixture:listed#form:0", "candidate_kind": "grammatical_analysis",
+                 "lemma": "δ", "analysis": ["dative"], "matched_form": "αβγ",
+                 "claim_ids": ["fixture:listed", "fixture:form-of"]}
+    response = {
+        "context": {"id": "fixture:passage", "text": "αβγ", "language": "grc", "kind": "text"},
+        "contextual_candidates": [candidate], "contextual_supporting_claims": [sibling],
+        "structured_evidence": {"claims": [listed]}, "parallel_contexts": [],
+        "author_profile": None,
+    }
+    provider = StubProvider(candidate["id"])
+    monkeypatch.setattr(server, "word", lambda form, passage_id: response)
+    monkeypatch.setattr(jev_gateway, "public_enabled", lambda: False)
+    monkeypatch.setattr(classifier, "configured_provider", lambda: provider)
+    result = TestClient(server.app).post("/api/classify-context", json={
+        "form": "αβγ", "passage_id": "fixture:passage",
+    }).json()
+    assert result["status"] == "proposed"
+    assert provider.called
+    assert {row["id"] for row in result["packet"]["claims"]} == {"fixture:listed", "fixture:form-of"}
+    proof = next(row for row in result["packet"]["claims"] if row["id"] == "fixture:form-of")
+    assert proof["subject"] == {"type": "form", "form": "αβ"}
+    assert proof["strength"] == "general_entry_relation"
+    assert result["packet"]["candidates"][0]["claim_ids"] == ["fixture:listed", "fixture:form-of"]
 
 
 def test_shared_source_with_distinct_senses_still_invokes_contextual_provider():
