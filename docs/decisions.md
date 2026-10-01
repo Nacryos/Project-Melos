@@ -99,6 +99,17 @@ are unchanged.
   to a commit; archaic lyric, elegiac and iambic poets by default,
   `--all-poetry` for the whole domain. Edition unspecified by the source;
   scholia and testimonia are typed `commentary` and `reference`.
+- `scripts/ingest_p2_perseus_elegy.py`: Edmonds, *Elegy and Iambus* I-II
+  (Loeb 1931) from the Perseus open-source archive: Greek fragments, ancient
+  testimonia and Edmonds's English, linked fragment by fragment.
+- `scripts/ingest_p2_attalus_anthology.py`: Paton's Greek Anthology
+  translations from attalus.org, linked to the Perseus Greek epigram rows.
+- `scripts/ingest_lyric_web.py --source p2_wikisource_lyric --more`: further
+  Greek Wikisource author pages under a separate source name.
+
+English translations linked to Greek passages are what make English search
+reach Greek text (see the retrieval lab, `scripts/lab_eval.py`), so
+translation sources rank with text sources.
 
 ### Rebuild or upgrade required
 
