@@ -143,7 +143,7 @@
       option.value = edition;
       ui.edition.append(option);
     }
-    if (editions.includes(old)) ui.edition.value = old;
+    retainSearchOption(ui.edition, old, 'edition');
   }
   function updateAuthorOptions() {
     const selected = ui.authorFilter.value;
@@ -157,7 +157,7 @@
       option.value = entry.author;
       ui.authorFilter.append(option);
     }
-    if (state.authors.some(entry => entry.author === selected)) ui.authorFilter.value = selected;
+    retainSearchOption(ui.authorFilter, selected, 'author');
   }
   function allKnownWorks() { return [...state.works.values()].flat(); }
   async function ensureWorks(author) {
@@ -758,11 +758,74 @@
       // fill the space with generated definitions.
     }
   }
+  function readSearchUrl(params) {
+    const issues = [];
+    const value = (key, max = 500) => {
+      const raw = params.get(key) || '';
+      if (raw.length > max || /[\u0000-\u001f\u007f]/.test(raw)) {
+        issues.push(`The saved ${key} is invalid; choose it again before searching.`); return '';
+      }
+      return raw.trim();
+    };
+    const choice = (key, allowed, fallback) => {
+      const raw = value(key);
+      if (!raw) return fallback;
+      if (allowed.includes(raw)) return raw;
+      issues.push(`The saved ${key} is unsupported; choose it again before searching.`);
+      return fallback;
+    };
+    return { query: value('q', 1000),
+      mode: choice('mode', ['hybrid', 'exact', 'fuzzy', 'forms', 'themes'], 'hybrid'),
+      author: value('author'), edition: value('edition', 1000),
+      language: (() => { const language = value('lang', 16);
+        if (!language || /^[a-z]{2,8}(?:-[a-z]{2,8})?$/.test(language)) return language;
+        issues.push('The saved language is invalid; choose it again before searching.'); return '';
+      })(),
+      order: choice('order', ['relevance', 'chronological'], 'relevance'),
+      include_reference: choice('ref', ['0', '1'], '0') === '1', issues };
+  }
+  function writeSearchUrl(base, snapshot) {
+    const url = new URL(base);
+    const values = { q: snapshot.query, mode: snapshot.mode, author: snapshot.author,
+      edition: snapshot.edition, lang: snapshot.language, order: snapshot.order,
+      ref: snapshot.include_reference ? '1' : '0' };
+    for (const [key, value] of Object.entries(values)) {
+      if (value === '' || value == null) url.searchParams.delete(key);
+      else url.searchParams.set(key, String(value));
+    }
+    return url;
+  }
+  function retainSearchOption(select, value, label) {
+    if (value && !Array.from(select.options).some(option => option.value === value)) {
+      const option = node('option', '', `${value} — saved ${label}, unavailable in current list`);
+      option.value = value;
+      option.dataset.unavailable = 'true';
+      select.append(option);
+    }
+    select.value = value || '';
+  }
+  function restoreSearchUrl(params) {
+    const saved = readSearchUrl(params);
+    ui.searchInput.value = saved.query;
+    setFormMode(saved.mode);
+    retainSearchOption(ui.authorFilter, saved.author, 'author');
+    retainSearchOption(ui.edition, saved.edition, 'edition');
+    retainSearchOption(ui.language, saved.language, 'language');
+    ui.order.value = saved.order;
+    ui.reference.checked = saved.include_reference;
+    return saved;
+  }
+  function snapshotSearch(query, mode) {
+    return Object.freeze({ query, mode: ['hybrid', 'exact', 'fuzzy', 'forms', 'themes'].includes(mode) ? mode : 'fuzzy',
+      author: ui.authorFilter.value, edition: ui.edition.value, language: ui.language.value,
+      order: ['relevance', 'chronological'].includes(ui.order.value) ? ui.order.value : 'relevance',
+      include_reference: ui.reference.checked });
+  }
   async function search(query, mode = formMode(), append = false) {
     query = String(query || '').trim();
     if (!query) { ui.searchInput.focus(); return; }
     if (!append) {
-      state.search = { query, mode, offset: 0, total: 0 };
+      state.search = { query, mode, filters: snapshotSearch(query, mode), offset: 0, total: 0 };
       clear(ui.resultsList);
       ui.results.hidden = false;
       ui.resultsHeading.textContent = `Results for “${query}”`;
@@ -773,14 +836,20 @@
     }
     const active = state.search;
     if (!active) return;
+    const snapshot = active.filters;
+    query = snapshot.query;
+    mode = snapshot.mode;
+    const scopeWarnings = [[ui.authorFilter, 'author'], [ui.edition, 'edition'], [ui.language, 'language']]
+      .filter(([select, label]) => Array.from(select.options).some(option => option.value === snapshot[label] && option.dataset.unavailable === 'true'))
+      .map(([, label]) => `The saved ${label} “${snapshot[label]}” is unavailable in the current filter list. Its exact filter is retained; this search has not been broadened.`);
     const sequence = ++state.searchSequence;
     const searchMode = ['forms', 'themes', 'hybrid'].includes(mode) ? mode : 'words';
     const params = {
       q: query, mode: searchMode, match: mode === 'exact' ? 'exact' : 'fuzzy',
       commentary_assisted: true,
-      author: ui.authorFilter.value, edition: ui.edition.value, language: ui.language.value,
-      order: ui.order.value,
-      include_reference: ui.reference.checked, limit: 30, offset: append ? active.offset : 0
+      author: snapshot.author, edition: snapshot.edition, language: snapshot.language,
+      order: snapshot.order,
+      include_reference: snapshot.include_reference, limit: 30, offset: append ? active.offset : 0
     };
     try {
       const data = await api('/api/search', params);
@@ -793,7 +862,7 @@
       const count = ui.resultsList.querySelectorAll('.result-button').length;
       const ranked = ['themes', 'hybrid'].includes(mode) && !String(data.method || '').includes('reference');
       const method = ranked ? (mode === 'themes' ? ' · Thematic similarity' : ' · Words, forms and thematic links') : '';
-      const sortLabel = ui.order.value === 'chronological' ? ' · author chronology, where sourced' : '';
+      const sortLabel = snapshot.order === 'chronological' ? ' · author chronology, where sourced' : '';
       ui.resultsSummary.textContent = `${describeCount(active.total, ranked ? 'ranked result' : 'match')} · ${count} shown${method}${sortLabel}`;
       ui.resultsSummary.title = String(data.method || '').replaceAll('_', ' ');
       if (!count) ui.resultsList.append(node('p', 'inspector-message', mode === 'themes'
@@ -816,9 +885,9 @@
         ui.resultsList.append(notice);
       }
       appendWarnings(ui.resultsList, data.warnings);
+      appendWarnings(ui.resultsList, scopeWarnings);
       ui.moreResults.hidden = count >= active.total || records.length === 0;
-      const url = new URL(location.href);
-      url.searchParams.set('q', query);
+      const url = writeSearchUrl(location.href, snapshot);
       history.replaceState(null, '', url);
     } catch (error) {
       if (sequence !== state.searchSequence) return;
@@ -1249,6 +1318,38 @@
     }
     host.append(container);
   }
+  function renderLexicalEvidence(host, evidence, passageId) {
+    const hits = (Array.isArray(evidence?.hits) ? evidence.hits : []).filter(hit =>
+      hit.scope === 'dictionary_quotation_not_morphological_parse' &&
+      hit.passage_id === passageId && passageId && hit.quote);
+    if (!hits.length) return false;
+    const section = addInspectorSection('Dictionary quotations matching this passage', host);
+    section.append(node('p', 'candidate-reason', 'The dictionary quotes this wording. Its entry and sense are shown below; this does not identify every quoted word as a form of the headword.'));
+    for (const hit of hits) {
+      const card = node('div', 'candidate');
+      if (hit.lemma) card.append(node('div', 'candidate-lemma', hit.lemma));
+      if (hit.source_gloss) card.append(node('span', 'candidate-meta-label', 'Source sense excerpt'), node('p', 'candidate-gloss', hit.source_gloss));
+      card.append(node('blockquote', 'dictionary-quotation', hit.quote));
+      if (hit.citation) card.append(node('p', 'candidate-reason', hit.citation));
+      const source = safeLink(hit.entry_url || hit.source_url, 'Read dictionary source ↗');
+      if (source) card.append(source);
+      const provenance = node('details', 'entry-details');
+      provenance.append(node('summary', '', 'Quotation provenance'));
+      for (const [label, value] of [['Source', hit.source], ['Entry', hit.entry_id], ['Sense', hit.sense_id],
+        ['Source locator', hit.source_locator], ['Source SHA-256', hit.raw_sha256], ['Matching method', hit.match_method]]) {
+        if (value) provenance.append(node('p', 'candidate-reason', `${label}: ${value}`));
+      }
+      if (hit.raw_quote) provenance.append(node('p', 'candidate-reason', `Original encoding: ${hit.raw_quote}`));
+      card.append(provenance);
+      section.append(card);
+    }
+    if (evidence.coverage) section.append(node('p', 'candidate-reason', evidence.coverage));
+    for (const warning of (Array.isArray(evidence.warnings) ? evidence.warnings : [])) {
+      if (typeof warning === 'string') section.append(node('p', 'candidate-reason', warning));
+    }
+    if (evidence.entries_truncated || evidence.hits_truncated) section.append(node('p', 'candidate-reason', 'Only the bounded preview is shown; additional entries or quotations were not checked or displayed.'));
+    return true;
+  }
   async function inspectWord(form, button = null, joined = false) {
     if (!form) return;
     if (button && (state.passageLoading || !state.passage?.id || !ui.text.contains(button))) return;
@@ -1288,6 +1389,7 @@
         clear(glimpse);
         renderDictionaryPreview(glimpse, data, { openEntries: false, wiktionary });
       });
+      const hasQuotation = renderLexicalEvidence(morphologyHost, data.lexical_evidence, passageId);
       renderStructuredEvidence(morphologyHost, data.structured_evidence, passageId);
       renderParallelContexts(morphologyHost, data.parallel_contexts);
       renderContextualCandidates(morphologyHost, data.contextual_candidates, data.contextual_candidate_method);
@@ -1298,7 +1400,7 @@
         ? 'Nearby spelling analyses'
         : candidates.length === 1 ? 'Recorded analysis' : 'Possible analyses';
       const hasLinkedSource = (data.contextual_candidates || []).some(candidate => candidate.strength === 'explicit_passage_span' || candidate.strength === 'explicit_passage_link');
-      const collapseNearby = hasLinkedSource && data.analysis_match_status === 'spelling_suggestions_only';
+      const collapseNearby = (hasLinkedSource || hasQuotation) && data.analysis_match_status === 'spelling_suggestions_only';
       const analysisHost = collapseNearby ? node('details', 'entry-details nearby-analysis') : morphologyHost;
       if (collapseNearby) {
         analysisHost.append(node('summary', '', `Nearby spelling analyses · ${candidates.length} other forms`));
@@ -1423,8 +1525,15 @@
     updateAuthorOptions();
     renderAuthors();
     const params = new URL(location.href).searchParams;
-    if (params.get('q')) { ui.searchInput.value = params.get('q'); search(params.get('q')); }
+    const saved = restoreSearchUrl(params);
+    if (saved.issues.length) {
+      ui.results.hidden = false;
+      ui.resultsHeading.textContent = 'Search link needs attention';
+      ui.resultsSummary.textContent = saved.issues.join(' ');
+      ui.moreResults.hidden = true;
+    } else if (saved.query) search(saved.query, saved.mode);
     if (params.get('id')) { await openPassage(params.get('id'), false); return; }
+    if (saved.query || saved.issues.length) return;
     const preferred = state.authors.find(a => /sappho/i.test(a.author || ''))
       || state.authors.find(a => /pindar/i.test(a.author || ''))
       || state.authors.find(a => /bacchylides/i.test(a.author || ''))
