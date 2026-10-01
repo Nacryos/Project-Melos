@@ -110,6 +110,7 @@ def verify(origin, *, cgl=False):
     description = 'the wedding of Hector and Andromache'
     result = get('/api/search', q=description, mode='words', author='Sappho', limit=30)
     assert not result.get('fallback_terms'), 'English description must not be replaced by accidental Greek keys'
+    assert not result.get('transliteration_phrase'), 'English description must not activate the Roman phrase channel'
     assert result['results'] and 'fr44' in result['results'][0]['id']
     result = get('/api/search', q=description, mode='hybrid', limit=30)
     assert result['results'][0]['id'] == 'digital-sappho:fr44:1'
@@ -130,8 +131,24 @@ def verify(origin, *, cgl=False):
             assert parallel['language'] == 'grc' and 'Γύγεω τοῦ πολυχρύσου' in parallel['text']
         else:
             assert first_id == target, (query, first_id)
-        assert result['fallback_terms']['original']
-        assert result['results'][0]['query_term_coverage'] >= 3
+        phrase = result.get('transliteration_phrase')
+        if phrase:
+            expected_phrase = ('γυγεω του πολυχρυσου' if query == 'Gygeo tou polychrysou'
+                               else "ευδουσιν δ' ορεων κορυφαι")
+            assert query != 'ballon chrysokomes Eros'
+            assert phrase['original_query'] == query
+            assert phrase['matched_greek_phrases'] == [expected_phrase]
+            assert not phrase['phrases_truncated'] and not phrase['passages_truncated']
+            assert 'complete source phrase' in phrase['scope']
+            first = result['results'][0]
+            assert first['match_reason'] == 'Source-confirmed transliteration phrase'
+            assert first['matched_transliteration_phrases'] == [expected_phrase]
+            source_phrase = ('Γύγεω τοῦ πολυχρύσου' if query == 'Gygeo tou polychrysou'
+                             else "Εὕδουσιν δ' ὀρέων κορυφαί")
+            assert source_phrase in first['text']
+        else:
+            assert result['fallback_terms']['original']
+            assert result['results'][0]['query_term_coverage'] >= 3
     print('Romanized lyric phrase controls retain intended first results and explicit original-word coverage.', flush=True)
     wedding = get('/api/passage', id='digital-sappho:fr44:1')
     assert len(wedding['lines']) == 44, 'Source layout lines must stop at the explicit 44A heading'
