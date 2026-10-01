@@ -76,6 +76,8 @@ def fuse(
     commentary_assisted: bool = True,
     author_key: Callable[[Any], str] = _key,
     author_keys: Callable[[Any], Iterable[str]] | None = None,
+    weights: Mapping[str, float] | None = None,
+    extra: Mapping[str, Iterable[Mapping[str, Any]]] | None = None,
 ) -> dict[str, Any]:
     """Fuse ranked lists and return passage records with source-bearing hits.
 
@@ -130,7 +132,14 @@ def fuse(
 
     groups: dict[tuple[Any, ...], dict[str, Any]] = {}
     skipped_unresolved = 0
-    for signal, hits in zip(SIGNALS, (lexical, forms, semantic)):
+    # ``weights`` scales each signal's reciprocal-rank votes (default 1.0);
+    # ``extra`` adds further named ranked lists (for example a BM25 pass over
+    # linked English records). Both keep the fusion a rank method, never a
+    # sum of incomparable raw scores.
+    weights = dict(weights or {})
+    signal_lists = list(zip(SIGNALS, (lexical, forms, semantic))) + list((extra or {}).items())
+    signal_names = [name for name, _ in signal_lists]
+    for signal, hits in signal_lists:
         seen_this_signal: set[tuple[Any, ...]] = set()
         rank = 0
         for hit in hits:
@@ -206,7 +215,7 @@ def fuse(
                 rank += 1
                 seen_this_signal.add(group_key)
                 group["ranks"][signal] = rank
-                group["rrf"] += 1.0 / (K + rank)
+                group["rrf"] += float(weights.get(signal, 1.0)) / (K + rank)
 
     ranked = sorted(groups.values(), key=lambda group: (
         -group["rrf"],
@@ -222,7 +231,7 @@ def fuse(
         item["matched_evidence"] = group["matched_evidence"]
         item["mirrored_ids"] = sorted(group["mirror_ids"] - {item["id"]})
         item["mirror_count"] = len(group["mirror_ids"])
-        signals = [name for name in SIGNALS if name in group["ranks"]]
+        signals = [name for name in signal_names if name in group["ranks"]]
         bridged = any(e["id"] != item["id"] for e in group["matched_evidence"])
         item["match_reason"] = " + ".join(signals) + (
             "; linked translation/commentary evidence" if bridged else "; direct passage match")
