@@ -610,6 +610,44 @@
       'Additional translations remain in the related source records below.'));
     host.append(section);
   }
+  function renderOccurrencePreview(host, data) {
+    const raw = Array.isArray(data.occurrences) ? data.occurrences : [];
+    const groups = Array.isArray(data.occurrence_preview_groups)
+      ? data.occurrence_preview_groups
+      : raw.map(record => ({ representative_id: record.id, members: [record] }));
+    const preview = groups.filter(group => Array.isArray(group.members) && group.members.length).slice(0, 12);
+    const found = addInspectorSection(`Occurrence preview · ${preview.length} shown`, host);
+    if (!preview.length) found.append(node('p', 'inspector-message', 'No occurrence preview was returned. Search the full index for additional matches.'));
+    for (const group of preview) {
+      const occurrence = group.members.find(item => item.id === group.representative_id) || group.members[0];
+      const row = node('div', 'occurrence');
+      const label = [occurrence.author, occurrence.work, occurrence.citation].filter(Boolean).join(' · ') || 'Passage';
+      if (occurrence.id) {
+        const open = node('button', '', label);
+        open.type = 'button'; open.addEventListener('click', () => openPassage(occurrence.id));
+        row.append(open);
+      } else row.append(node('span', '', label));
+      const copies = node('details', 'occurrence-sources');
+      copies.append(node('summary', '', group.members.length > 1
+        ? `Same text · ${group.members.length} source records` : 'Source record'));
+      for (const member of group.members) {
+        const line = node('p', 'occurrence-source');
+        line.append(node('span', '', [member.author, member.work, member.citation,
+          member.edition, member.source, member.quality && qualityLabel(member.quality)].filter(Boolean).join(' · ')));
+        if (member.id) {
+          const open = node('button', 'related-open', `Open ${member.id}`);
+          open.type = 'button'; open.addEventListener('click', () => openPassage(member.id));
+          line.append(open);
+        }
+        const link = safeLink(member.source_url, ' Source ↗');
+        if (link) line.append(link);
+        copies.append(line);
+      }
+      row.append(copies);
+      found.append(row);
+    }
+    return found;
+  }
   function renderMirrors(mirrors) {
     if (!Array.isArray(mirrors) || !mirrors.length) return;
     ui.related.hidden = false;
@@ -1654,20 +1692,7 @@
         analysis.append(card);
       }
       renderFormInventories(morphologyHost, data);
-      const occurrences = Array.isArray(data.occurrences) ? data.occurrences : [];
-      const shown = Math.min(occurrences.length, 12);
-      const found = addInspectorSection(`Occurrence preview · ${shown} shown`, morphologyHost);
-      if (!occurrences.length) found.append(node('p', 'inspector-message', 'No occurrence preview was returned. Search the full index for additional matches.'));
-      for (const occurrence of occurrences.slice(0, 12)) {
-        const row = node('div', 'occurrence');
-        const label = [occurrence.author, occurrence.work, occurrence.citation].filter(Boolean).join(' · ') || 'Passage';
-        if (occurrence.id) {
-          const open = node('button', '', label);
-          open.type = 'button'; open.addEventListener('click', () => openPassage(occurrence.id));
-          row.append(open);
-        } else row.append(node('span', '', label));
-        found.append(row);
-      }
+      const found = renderOccurrencePreview(morphologyHost, data);
       const fullSearch = node('button', 'occurrence-search', 'Search all indexed occurrences ↗');
       fullSearch.type = 'button';
       fullSearch.title = 'Searches every indexed record, including reference material; clears the current author, edition, and language filters.';

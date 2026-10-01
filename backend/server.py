@@ -674,6 +674,8 @@ def word(form: str, passage_id: str=''):
     result['context'] = context
     result['author_profile'] = author_profile(context.get('author','')) if context else None
     result['occurrences'] = occurrences(variants(form),limit=30)
+    from .occurrence_preview import group_preview
+    result['occurrence_preview_groups'] = group_preview(result['occurrences'])
     result['structured_evidence'] = evidence_lookup(form,passage_id,limit=100)
     occurrence_parses=[claim for claim in result['structured_evidence'].get('claims',[])
                        if claim.get('predicate')=='morphology' and claim.get('status')=='source_claim'

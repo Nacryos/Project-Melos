@@ -128,3 +128,5 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .dictionary-quotation{margin:12px 0;padding-left:12px;border-left:2px solid var(--line);font:normal 19px/1.6 var(--greek);overflow-wrap:anywhere;color:var(--ink)}
 @media(max-width:600px){.dictionary-glimpse{padding:14px}.dictionary-glimpse-lemma{font-size:27px}}
 .mirror-list .mirror-copy{margin:6px 0;color:#465965;font-size:14px;line-height:1.45}.mirror-list .related-open{margin:0 0 0 10px;padding:3px 8px;font-size:12px}
+.occurrence-sources{min-width:0;max-width:100%;overflow-wrap:anywhere}
+.occurrence-source .related-open{box-sizing:border-box;max-width:100%;margin:9px 0 0;white-space:normal;overflow-wrap:anywhere}

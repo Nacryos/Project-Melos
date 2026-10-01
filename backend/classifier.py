@@ -595,7 +595,7 @@ class JevProvider:
         body = {"model": self.model, "state": packet,
                 "questions": {"contextual_parse": {
                     "type": "choice",
-                    "instructions": "Which supplied candidate best fits this exact Greek passage? Select abstain for unresolved ambiguity, conflicts, missing evidence, or inadequate context. Never create a new reading or assume the author's literary dialect makes every form exclusive.",
+                    "instructions": "Which supplied candidate best fits this exact Greek passage? Choose a provisional contextual grammatical hypothesis, not a certification of source-attested parsing. Lack of an explicit passage annotation alone does not require abstention when the supplied Greek context supports an existing candidate. Select abstain for unresolved ambiguity, conflicts, missing evidence, or inadequate context. Never create a new reading or assume the author's literary dialect makes every form exclusive.",
                     "criteria": choices}}}
         request = Request(JEV_ENDPOINT, data=_state_json(body).encode("utf-8"),
                           headers={"Authorization": f"Bearer {self.api_key}",

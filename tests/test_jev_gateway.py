@@ -80,6 +80,18 @@ def test_canonical_key_is_independent_of_object_key_order(tmp_path):
     assert provider.calls == 1
 
 
+def test_contextual_hypothesis_prompt_does_not_reuse_v6_answer(tmp_path, monkeypatch):
+    current = gateway.CACHE_VERSION
+    assert current == "jev-contextual-parse-v7-contextual-hypothesis"
+    provider = Provider(choice="abstain")
+    monkeypatch.setattr(gateway, "CACHE_VERSION", "jev-contextual-parse-v6-entry-senses")
+    assert wrapper(tmp_path, provider).decide(packet())["cache_hit"] is False
+    monkeypatch.setattr(gateway, "CACHE_VERSION", current)
+    assert wrapper(tmp_path, provider).decide(packet())["cache_hit"] is False
+    assert wrapper(tmp_path, provider).decide(packet())["cache_hit"] is True
+    assert provider.calls == 2
+
+
 def test_abstention_cached_but_raw_payload_never_saved(tmp_path):
     provider = Provider(choice="abstain")
     cache = wrapper(tmp_path, provider)
