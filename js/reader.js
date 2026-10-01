@@ -726,11 +726,19 @@
       hit.projection_scope === 'explicit_parent_id' &&
       typeof hit.parent_id === 'string' && readingIds.has(hit.parent_id) &&
       typeof hit.text_excerpt === 'string' && !!hit.text_excerpt.trim();
+    const comparableExcerpt = value => value.replace(/\s+/gu, ' ').trim();
+    const alreadyPreviewed = hit => translation && hasLinkedExcerpt(hit) && hit.kind === 'translation' &&
+      !!translation.record_id && hit.id === translation.record_id && hit.parent_id === translation.parent_id &&
+      (!hit.source_url || !translation.source_url || hit.source_url === translation.source_url) &&
+      comparableExcerpt(translation.text_excerpt).includes(comparableExcerpt(hit.text_excerpt));
+    // Only suppress an exact source-record repetition already covered by the
+    // visible preview. Different editions and additional excerpt text remain.
+    const remainingEvidence = evidence.filter(hit => !alreadyPreviewed(hit));
     // Put the actual supporting source text before generic signal labels.
     // Multiple retrieval signals for one source record are not new witnesses.
-    const linkedEvidence = evidence.filter(hasLinkedExcerpt);
+    const linkedEvidence = remainingEvidence.filter(hasLinkedExcerpt);
     const seenEvidence = new Set();
-    const displayedEvidence = [...linkedEvidence, ...evidence.filter(hit => hit && !hasLinkedExcerpt(hit))]
+    const displayedEvidence = [...linkedEvidence, ...remainingEvidence.filter(hit => hit && !hasLinkedExcerpt(hit))]
       .filter(hit => {
         if (!hit.id) return true;
         if (seenEvidence.has(hit.id)) return false;

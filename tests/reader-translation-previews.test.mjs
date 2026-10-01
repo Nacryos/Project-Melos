@@ -141,3 +141,68 @@ test('translation markup is only text and no generated or word-gloss fallback is
   delete record.translation_previews;
   assert.equal(descendants(h.render(record)).filter(element => element.cls === 'result-translation').length, 0);
 });
+
+function translationHit(record, overrides = {}) {
+  const preview = record.translation_previews[0];
+  return { id: preview.record_id, kind: 'translation', signal: 'semantic',
+    author: 'Fixture recorded source author', parent_id: preview.parent_id,
+    projection_scope: 'explicit_parent_id', source_url: preview.source_url,
+    text_excerpt: preview.text_excerpt, excerpt_truncated: false, ...overrides };
+}
+
+test('same source translation excerpt already covered by primary preview is shown only once', () => {
+  const record = fixture();
+  record.matched_evidence = [translationHit(record, { text_excerpt: 'Literal published fixture' })];
+  const before = structuredClone(record), h = harness(record), result = h.render(record);
+  assert.deepEqual(record, before);
+  assert.equal(descendants(result).filter(element => element.cls === 'result-translation').length, 1);
+  assert.equal(descendants(result).filter(element => element.cls === 'evidence-hit').length, 0);
+  assert.match(result.textContent, /Translator: Fixture credited translator/);
+  assert.doesNotMatch(result.textContent, /Matched source excerpts/);
+  result.handlers.click(); assert.deepEqual(h.opened, ['fixture:greek']);
+  h.related([]);
+  const full = h.ui.related.querySelector('.translation-full');
+  assert.match(full.textContent, /Entire second fixture line/);
+  assert.equal(descendants(full).find(element => element.tag === 'a').href,
+    record.translation_previews[0].source_url);
+});
+
+test('different source IDs remain distinct even with identical translation wording', () => {
+  const record = fixture();
+  record.matched_evidence = [translationHit(record),
+    translationHit(record, { id: 'fixture:second-source' }),
+    translationHit(record, { id: 'fixture:third-source' })];
+  const result = harness(record).render(record);
+  assert.equal(descendants(result).filter(element => element.cls === 'evidence-hit').length, 2);
+  assert.equal(result.textContent.split(record.translation_previews[0].text_excerpt).length - 1, 3);
+});
+
+test('additional matching text outside the preview survives even for the same source ID', () => {
+  for (const text_excerpt of ['A different literal window elsewhere in the source.',
+    fixture().translation_previews[0].text_excerpt + ' Additional source text.']) {
+    const record = fixture();
+    record.matched_evidence = [translationHit(record, { text_excerpt })];
+    const result = harness(record).render(record);
+    assert.equal(descendants(result).filter(element => element.cls === 'evidence-hit').length, 1);
+    assert.ok(result.textContent.includes(text_excerpt));
+  }
+  const record = fixture();
+  record.matched_evidence = [translationHit(record),
+    translationHit(record, { signal: 'lexical', text_excerpt: 'Different literal source window.' })];
+  assert.match(harness(record).render(record).textContent, /Different literal source window/);
+});
+
+test('duplicate comparison folds whitespace only and preserves conflicting source metadata', () => {
+  const record = fixture();
+  record.matched_evidence = [translationHit(record, { text_excerpt: 'Literal\n published\tfixture excerpt.' })];
+  assert.equal(descendants(harness(record).render(record)).filter(element => element.cls === 'evidence-hit').length, 0);
+  for (const change of [{ text_excerpt: 'literal published fixture excerpt.' },
+    { source_url: 'https://example.test/different-source' }, { parent_id: 'fixture:mirror' }]) {
+    const different = fixture(); different.mirrored_ids = ['fixture:mirror'];
+    different.matched_evidence = [translationHit(different, change)];
+    assert.equal(descendants(harness(different).render(different)).filter(element => element.cls === 'evidence-hit').length, 1);
+  }
+  const missingIdentity = fixture(); missingIdentity.translation_previews[0].record_id = '';
+  missingIdentity.matched_evidence = [translationHit(missingIdentity)];
+  assert.equal(descendants(harness(missingIdentity).render(missingIdentity)).filter(element => element.cls === 'evidence-hit').length, 1);
+});
