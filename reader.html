@@ -25,6 +25,11 @@
       <blockquote class="verse" id="verse" aria-live="polite"><p id="verse-gr" lang="grc"></p><footer><span id="verse-tr"></span> <cite id="verse-cite"></cite></footer></blockquote>
       <form class="search" id="search-form" role="search" autocomplete="off"><label class="sr" for="search-input">Search Greek, Latin, or English</label><input id="search-input" name="q" type="search" spellcheck="false" placeholder="Search Greek, Beta Code or English — try λύσιμελής, glukupikros, moon"><button type="submit">Search</button></form>
       <div class="search-options"><fieldset class="mode-picker"><legend>Search by</legend><label><input type="radio" name="search-mode" value="hybrid" checked><span>All evidence</span></label><label><input type="radio" name="search-mode" value="exact"><span>Exact words</span></label><label><input type="radio" name="search-mode" value="fuzzy"><span>Fuzzy words</span></label><label><input type="radio" name="search-mode" value="forms"><span>Forms</span></label><label><input type="radio" name="search-mode" value="themes"><span>Themes</span></label></fieldset><p class="bridge-note" id="bridge-note">English searches may use translations or commentary as a bridge. Results identify the indexed text.</p></div>
+      <div class="forms-options" id="forms-options" hidden>
+        <label for="forms-relation">Word relationship <select id="forms-relation" aria-describedby="forms-note"><option value="ordered">In this order</option><option value="proximity">Nearby, any order</option><option value="all_terms">All words in passage</option></select></label>
+        <label id="forms-slop-label" for="forms-slop">Extra words allowed <input id="forms-slop" type="number" min="0" max="50" step="1" value="0" inputmode="numeric" aria-describedby="forms-note"></label>
+        <p id="forms-note">For multiple words: keep this order. Zero extra words means adjacent. Single-word lookup is unchanged.</p>
+      </div>
     </div>
     <figure class="plate"><figcaption id="caption"></figcaption><div class="thumbs" id="thumbs" role="tablist" aria-label="Paintings"></div></figure>
     <button class="tune-toggle" id="tune-toggle" type="button" aria-expanded="false" aria-controls="tune">Adjust dither</button>

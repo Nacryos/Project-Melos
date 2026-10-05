@@ -4,6 +4,7 @@
   const $ = (id) => document.getElementById(id);
   const ui = {
     searchForm: $('search-form'), searchInput: $('search-input'), bridgeNote: $('bridge-note'),
+    formsOptions: $('forms-options'), formsRelation: $('forms-relation'), formsSlop: $('forms-slop'), formsSlopLabel: $('forms-slop-label'), formsNote: $('forms-note'),
     status: $('corpus-status'), authors: $('author-list'), authorCount: $('author-count'),
     browseToggle: $('browse-toggle'), browseBody: $('browse-body'),
     authorFilter: $('author-filter'), edition: $('edition-filter'), language: $('language-filter'),
@@ -57,7 +58,7 @@
     const response = await fetch(url, { headers: { Accept: 'application/json' } });
     if (!response.ok) {
       let detail = '';
-      try { const body = await response.json(); detail = body.detail || body.error || ''; } catch { /* HTTP status remains useful. */ }
+      try { const body = await response.json(); detail = [body?.detail, body?.error].find(value => typeof value === 'string' && value) || ''; } catch { /* HTTP status remains useful. */ }
       throw new Error(detail ? `${response.status}: ${detail}` : `The corpus service returned ${response.status}.`);
     }
     return response.json();
@@ -79,10 +80,13 @@
     updateBridgeNote();
   }
   function updateBridgeNote() {
+    updateFormsControls();
     ui.bridgeNote.textContent = formMode() === 'themes'
       ? 'Theme search may bridge through translations or commentary. Each result identifies the text that was indexed.'
       : formMode() === 'hybrid'
         ? 'All evidence combines word, form, and semantic candidates. Source links explain each result; ranking is not certainty or influence.'
+        : formMode() === 'forms'
+          ? 'Forms search uses source-recorded alternatives, not generated paradigms. A match does not select a meaning.'
         : 'English searches may use translations or commentary as a bridge. Results identify the indexed text.';
     if (state.semanticStatus) {
       const status = node('span', 'semantic-inline', ` ${state.semanticStatus.label}`);
@@ -753,13 +757,15 @@
     return { kind, interval, sourceUrl: selected?.statement_url || chronology.source_url,
       uncertainty: Array.isArray(selected?.uncertainty) ? selected.uncertainty : [] };
   }
-  function renderResult(record) {
+  function renderResult(record, searchContract = null) {
     const button = node('button', 'result-button');
     button.type = 'button';
     const source = node('span', 'result-source', record.author || 'Unattributed');
     source.append(node('small', '', [record.work, record.citation, record.kind && record.kind !== 'text' ? `indexed ${record.kind}` : record.language !== 'grc' ? record.language : 'Greek text'].filter(Boolean).join(' · ')));
     if (record.quality && record.quality !== 'source_text') source.append(node('span', 'quality-tag caution', qualityLabel(record.quality)));
     const body = node('span', 'result-body');
+    const sequenceProof = record.sequence_match ? sequenceMatchProof(record, searchContract) : null;
+    if (sequenceProof) body.append(node('span', 'result-reason', sequenceProof.label));
     const excerpt = (record.text || '').replace(/\s+/g, ' ').trim();
     body.append(node('span', 'result-excerpt', excerpt || 'Text unavailable'));
     body.append(node('span', 'result-edition', `Edition: ${record.edition || 'Not supplied'}`),
@@ -828,7 +834,73 @@
     if (record.retrieval_score_kind === 'reciprocal_rank_fusion') body.append(node('span', 'result-reason', 'Ranked by reciprocal rank fusion; rank is not confidence.'));
     button.append(source, body);
     button.addEventListener('click', () => openPassage(record.id));
+    if (sequenceProof) {
+      const item = node('div', 'result-with-proof');
+      item.append(button, sequenceProof.details);
+      return item;
+    }
     return button;
+  }
+  function sequenceMatchProof(record, searchContract = null) {
+    const proof = record.sequence_match;
+    if (!proof || !['ordered', 'proximity', 'all_terms'].includes(proof.relation) || !Array.isArray(proof.terms) || !proof.terms.length) return null;
+    if (!searchContract || searchContract.version !== 1 || searchContract.scope !== 'single_stored_passage' ||
+      searchContract.offset_basis !== 'Unicode codepoints in original passage.text' ||
+      !Number.isInteger(searchContract.slop) || searchContract.slop < 0 || searchContract.slop > 50 ||
+      !Number.isInteger(searchContract.query_term_count) || searchContract.query_term_count < 2) return null;
+    const source = [...String(record.text || '')];
+    const terms = proof.terms;
+    if (searchContract && (searchContract.query_term_count !== terms.length || searchContract.relation !== proof.relation || searchContract.slop !== proof.slop)) return null;
+    if (terms.some(term => !Number.isInteger(term?.query_index) || term.query_index < 0 ||
+      !Number.isInteger(term.token_index) || term.token_index < 0 || typeof term.query_term !== 'string' ||
+      !Array.isArray(term.source_spans) || !term.source_spans.length || term.source_spans.some(span =>
+        !Number.isInteger(span?.start) || !Number.isInteger(span.end) || span.start < 0 || span.end <= span.start ||
+        span.end > source.length || typeof span.text !== 'string' || source.slice(span.start, span.end).join('') !== span.text))) return null;
+    if (new Set(terms.map(term => term.query_index)).size !== terms.length || new Set(terms.map(term => term.token_index)).size !== terms.length ||
+      [...terms].sort((a, b) => a.query_index - b.query_index).some((term, index) => term.query_index !== index)) return null;
+    const orderedTerms = [...terms].sort((a, b) => a.query_index - b.query_index);
+    if (proof.relation === 'ordered' && orderedTerms.some((term, index) => index > 0 && term.token_index <= orderedTerms[index - 1].token_index)) return null;
+    const spans = terms.flatMap(term => term.source_spans).sort((a, b) => a.start - b.start);
+    if (spans.some((span, index) => index > 0 && span.start < spans[index - 1].end)) return null;
+    const positions = terms.map(term => term.token_index);
+    const extraWords = Math.max(...positions) - Math.min(...positions) + 1 - terms.length;
+    if (proof.relation === 'all_terms' ? proof.slop !== 0 || proof.extra_words !== null
+      : proof.extra_words !== extraWords || extraWords > proof.slop) return null;
+    const relationship = { ordered: 'in order', proximity: 'nearby, any order', all_terms: 'anywhere in passage' }[proof.relation];
+    const extra = proof.relation !== 'all_terms' && Number.isInteger(proof.extra_words) && proof.extra_words >= 0
+      ? ` · ${proof.extra_words} extra ${proof.extra_words === 1 ? 'word' : 'words'}` : '';
+    const label = `All ${terms.length} words · ${relationship}${extra}`;
+    const details = node('details', 'entry-details forms-match-proof');
+    details.append(node('summary', '', 'Matched words'));
+    details.append(node('p', 'candidate-reason', proof.relation === 'all_terms'
+      ? 'Every query word has a separate position in this passage. This is not a phrase match.'
+      : 'Source-backed word matches in this passage. Printed segments below remain separate; they are not a reconstructed quotation.'));
+    for (const term of [...terms].sort((a, b) => a.query_index - b.query_index)) {
+      const row = node('div', 'forms-matched-word');
+      row.append(node('p', 'candidate-reason', `Query word ${term.query_index + 1}: ${term.query_term} · source word position ${term.token_index + 1}`));
+      for (const span of term.source_spans) {
+        row.append(node('span', 'forms-proof-segment', span.text),
+          node('span', 'candidate-reason', ` (source character offsets ${span.start}–${span.end})`));
+      }
+      for (const ref of Array.isArray(term.expansion_refs) ? term.expansion_refs : []) {
+        if (!ref || typeof ref !== 'object') continue;
+        const kind = { literal_query: 'Query spelling', source_lemma_link: 'Source lemma link',
+          source_indexed_form: 'Indexed source form', dictionary_listed_form: 'Dictionary-listed form', equivalent_form: 'Source equivalent form' }[ref.kind];
+        const fields = [kind, ref.source, ref.lemma, ref.form, ref.claim_id,
+          typeof ref.document_id === 'string' ? `Document ${ref.document_id}` : '',
+          typeof ref.sentence_id === 'string' ? `Sentence ${ref.sentence_id}` : '',
+          typeof ref.token_id === 'string' ? `Token ${ref.token_id}` : ''].filter(value => typeof value === 'string' && value);
+        if (fields.length) row.append(node('p', 'candidate-reason', fields.join(' · ')));
+        const link = safeLink(ref.source_url, 'Form source ↗');
+        if (link) row.append(link);
+      }
+      if (term.expansion_refs_complete === false) row.append(node('p', 'candidate-reason', 'Some source references shown.'));
+      details.append(row);
+    }
+    details.append(node('p', 'candidate-reason', 'Offsets count Unicode characters from zero in this stored passage; the end offset is excluded. They are not verse or manuscript line numbers.'));
+    const link = safeLink(record.source_url, 'Passage source ↗');
+    if (link) details.append(link);
+    return { label, details };
   }
   function renderDictionaryPreview(host, data, { openEntries = true, wiktionary = null } = {}) {
     const preview = window.MelosDictionaryPreview?.buildPreview(data, wiktionary);
@@ -937,6 +1009,13 @@
       issues.push(`The saved ${key} is unsupported; choose it again before searching.`);
       return fallback;
     };
+    const formsRelation = choice('forms_relation', ['ordered', 'proximity', 'all_terms'], 'ordered');
+    const rawSlop = value('slop');
+    let slop = 0;
+    if (params.has('slop') && (!/^(?:0|[1-9][0-9]?)$/.test(rawSlop) || Number(rawSlop) > 50)) {
+      issues.push('The saved extra-word allowance must be a whole number from 0 to 50; choose it again before searching.');
+    } else if (rawSlop) slop = Number(rawSlop);
+    if (formsRelation === 'all_terms' && slop !== 0) issues.push('All words in passage has no gap allowance; the saved slop must be 0. Choose the relationship again before searching.');
     return { query: value('q', 1000),
       mode: choice('mode', ['hybrid', 'exact', 'fuzzy', 'forms', 'themes'], 'hybrid'),
       author: value('author'), edition: value('edition', 1000),
@@ -945,13 +1024,15 @@
         issues.push('The saved language is invalid; choose it again before searching.'); return '';
       })(),
       order: choice('order', ['relevance', 'chronological'], 'relevance'),
-      include_reference: choice('ref', ['0', '1'], '0') === '1', issues };
+      include_reference: choice('ref', ['0', '1'], '0') === '1', forms_relation: formsRelation, slop: formsRelation === 'all_terms' ? 0 : slop, issues };
   }
   function writeSearchUrl(base, snapshot) {
     const url = new URL(base);
     const values = { q: snapshot.query, mode: snapshot.mode, author: snapshot.author,
       edition: snapshot.edition, lang: snapshot.language, order: snapshot.order,
-      ref: snapshot.include_reference ? '1' : '0' };
+      ref: snapshot.include_reference ? '1' : '0',
+      forms_relation: snapshot.mode === 'forms' ? snapshot.forms_relation || 'ordered' : null,
+      slop: snapshot.mode === 'forms' ? snapshot.slop ?? 0 : null };
     for (const [key, value] of Object.entries(values)) {
       if (value === '' || value == null) url.searchParams.delete(key);
       else url.searchParams.set(key, String(value));
@@ -971,6 +1052,8 @@
     const saved = readSearchUrl(params);
     ui.searchInput.value = saved.query;
     showSearchQueryIssue(searchQueryIssue(saved.query));
+    if (ui.formsRelation) ui.formsRelation.value = saved.forms_relation;
+    if (ui.formsSlop) ui.formsSlop.value = String(saved.slop);
     setFormMode(saved.mode);
     retainSearchOption(ui.authorFilter, saved.author, 'author');
     retainSearchOption(ui.edition, saved.edition, 'edition');
@@ -983,23 +1066,48 @@
     return Object.freeze({ query, mode: ['hybrid', 'exact', 'fuzzy', 'forms', 'themes'].includes(mode) ? mode : 'fuzzy',
       author: ui.authorFilter.value, edition: ui.edition.value, language: ui.language.value,
       order: ['relevance', 'chronological'].includes(ui.order.value) ? ui.order.value : 'relevance',
-      include_reference: ui.reference.checked });
+      include_reference: ui.reference.checked,
+      forms_relation: mode === 'forms' ? ui.formsRelation?.value || 'ordered' : 'ordered',
+      slop: mode === 'forms' && ui.formsRelation?.value !== 'all_terms' ? Number(ui.formsSlop?.value ?? 0) : 0 });
   }
   function searchTransport(snapshot) {
     return { q: snapshot.query, mode: ['forms', 'themes', 'hybrid'].includes(snapshot.mode) ? snapshot.mode : 'words',
       match: snapshot.mode === 'exact' ? 'exact' : 'fuzzy', commentary_assisted: true,
       author: snapshot.author, edition: snapshot.edition, language: snapshot.language,
-      order: snapshot.order, include_reference: snapshot.include_reference };
+      order: snapshot.order, include_reference: snapshot.include_reference,
+      ...(snapshot.mode === 'forms' ? { forms_relation: snapshot.forms_relation || 'ordered', slop: snapshot.slop ?? 0 } : {}) };
+  }
+  function updateFormsControls() {
+    if (!ui.formsOptions) return;
+    ui.formsOptions.hidden = formMode() !== 'forms';
+    const allTerms = ui.formsRelation.value === 'all_terms';
+    ui.formsSlopLabel.hidden = allTerms;
+    ui.formsSlop.disabled = allTerms;
+    ui.formsNote.textContent = allTerms
+      ? 'Every word must occur somewhere in the same passage. Order and distance are unrestricted; this is not a phrase match.'
+      : ui.formsRelation.value === 'proximity'
+        ? 'For multiple words: any order within one span. The allowance is the total extra words in that span; zero means adjacent.'
+        : 'For multiple words: keep this order. The allowance is the total extra words in the span; zero means adjacent. Single-word lookup is unchanged.';
+  }
+  function formsControlIssue(mode) {
+    if (mode !== 'forms') return '';
+    if (!['ordered', 'proximity', 'all_terms'].includes(ui.formsRelation?.value || 'ordered')) return 'Choose a supported word relationship before searching.';
+    if (ui.formsRelation?.value === 'all_terms') return '';
+    const raw = String(ui.formsSlop?.value ?? '0');
+    return /^(?:0|[1-9][0-9]?)$/.test(raw) && Number(raw) <= 50 ? ''
+      : 'Extra words allowed must be a whole number from 0 to 50. Nothing has been searched.';
   }
   function usageSnapshot(query) {
     const current = snapshotSearch(query, formMode());
+    const controlIssue = formsControlIssue(formMode());
     if (!ui.results.hidden && state.displayedSearch) {
       const saved = state.displayedSearch;
       const changed = Object.keys(saved).some(key => saved[key] !== current[key]);
       return { ...searchTransport(saved), scope_origin: 'Last successfully displayed search',
-        scope_notice: changed ? 'Current inputs differ; this view uses the displayed search filters, not the unsent changes.' : '' };
+        scope_notice: controlIssue ? 'Current Forms controls are invalid; this view keeps the last successfully displayed search settings.'
+          : changed ? 'Current inputs differ; this view uses the displayed search filters, not the unsent changes.' : '' };
     }
-    return { ...searchTransport(current), scope_origin: 'Current query and controls', scope_notice: '' };
+    return { ...searchTransport(current), scope_origin: 'Current query and controls', scope_notice: '', scope_issue: controlIssue };
   }
   function trimSearchQuery(query) {
     // Match Python str.strip used by the API, rather than JS trim: notably,
@@ -1030,7 +1138,7 @@
     if (issue) ui.searchInput.setAttribute('aria-invalid', 'true');
     else ui.searchInput.removeAttribute('aria-invalid');
   }
-  function rejectSearchQuery(query, issue) {
+  function rejectSearchQuery(query, issue, heading = 'Query exceeds the search limit') {
     // Invalidate both pending result and dictionary-preview rendering. Earlier
     // requests may still finish, but cannot replace this error or promote a URL.
     ++state.searchSequence;
@@ -1040,7 +1148,7 @@
     clear(ui.resultsList);
     if (ui.dictionaryPreview) { clear(ui.dictionaryPreview); ui.dictionaryPreview.hidden = true; }
     ui.results.hidden = false;
-    ui.resultsHeading.textContent = 'Query exceeds the search limit';
+    ui.resultsHeading.textContent = heading;
     ui.resultsSummary.textContent = issue;
     ui.moreResults.hidden = true;
     showSearchQueryIssue(issue);
@@ -1049,8 +1157,18 @@
   async function search(query, mode = formMode(), append = false) {
     const supplied = String(query || '');
     const effective = append && state.search?.filters ? state.search.filters.query : supplied;
-    const issue = searchQueryIssue(effective);
-    if (issue) { rejectSearchQuery(effective, issue); return; }
+    const controlIssue = !append ? formsControlIssue(mode) : '';
+    const issue = searchQueryIssue(effective) || controlIssue;
+    if (issue) {
+      rejectSearchQuery(effective, issue, controlIssue && !searchQueryIssue(effective) ? 'Check Forms search controls' : undefined);
+      if (controlIssue && !searchQueryIssue(effective)) {
+        ui.searchInput.removeAttribute('aria-invalid');
+        ui.formsSlop?.setAttribute('aria-invalid', 'true');
+        ui.formsSlop?.focus();
+      }
+      return;
+    }
+    ui.formsSlop?.removeAttribute('aria-invalid');
     showSearchQueryIssue('');
     query = trimSearchQuery(query);
     if (!query) { ui.searchInput.focus(); return; }
@@ -1090,14 +1208,18 @@
         if (wording.length) ui.resultsList.append(node('p', 'candidate-reason transliteration-wording',
           `Matched Greek wording: ${wording.join(' · ')} — normalized for matching, not the source's accents or spelling.`));
       }
-      for (const record of records) ui.resultsList.append(renderResult(record));
+      for (const record of records) ui.resultsList.append(renderResult(record, data.search_contract));
       const count = ui.resultsList.querySelectorAll('.result-button').length;
       const ranked = ['themes', 'hybrid'].includes(mode) && !String(data.method || '').includes('reference');
-      const method = ranked ? (mode === 'themes' ? ' · Thematic similarity' : ' · Words, forms and thematic links') : '';
+      const contract = data.search_contract;
+      const relation = mode === 'forms' && contract?.query_term_count > 1 &&
+        { ordered: 'in this order', proximity: 'nearby, any order', all_terms: 'all words in passage; not a phrase match' }[contract.relation];
+      const method = ranked ? (mode === 'themes' ? ' · Thematic similarity' : ' · Words, forms and thematic links') : relation ? ` · ${relation}` : '';
+      const incomplete = contract && (contract.complete === false || contract.expansion_complete === false);
       const sortLabel = snapshot.order === 'chronological' ? ' · author chronology, where sourced' : '';
-      ui.resultsSummary.textContent = `${describeCount(active.total, ranked ? 'ranked result' : 'match')} · ${count} shown${method}${sortLabel}`;
+      ui.resultsSummary.textContent = `${describeCount(active.total, ranked ? 'ranked result' : 'match')}${incomplete ? ' in this incomplete search' : ''} · ${count} shown${method}${sortLabel}`;
       ui.resultsSummary.title = String(data.method || '').replaceAll('_', ' ');
-      if (!count) ui.resultsList.append(node('p', 'inspector-message', mode === 'themes'
+      if (!count) ui.resultsList.append(node('p', 'inspector-message', incomplete ? 'No matches in the returned partial search. This does not establish absence from the indexed corpus.' : mode === 'themes'
         ? 'No ranked passage candidates were returned for this query and filters.'
         : 'No indexed passage matches these terms and filters. This does not establish absence from the author’s work. Try another spelling, mode, or edition.'));
       if (!append && data.excluded_exact_matches?.total > 0) {
@@ -1929,6 +2051,7 @@
 
   ui.searchForm.addEventListener('submit', event => { event.preventDefault(); search(ui.searchInput.value); });
   for (const radio of document.querySelectorAll('input[name="search-mode"]')) radio.addEventListener('change', updateBridgeNote);
+  ui.formsRelation.addEventListener('change', updateFormsControls);
   ui.browseToggle.addEventListener('click', () => {
     const open = ui.browseToggle.getAttribute('aria-expanded') !== 'true';
     ui.browseToggle.setAttribute('aria-expanded', String(open));
@@ -1944,6 +2067,13 @@
   ui.usage.addEventListener('click', () => {
     const query = trimSearchQuery(ui.searchInput.value) || state.selectedText || state.activeWord?.textContent?.trim() || '';
     const snapshot = usageSnapshot(query);
+    if (snapshot.scope_issue) {
+      rejectSearchQuery(query, snapshot.scope_issue, 'Check Forms search controls');
+      ui.searchInput.removeAttribute('aria-invalid');
+      ui.formsSlop?.setAttribute('aria-invalid', 'true');
+      ui.formsSlop?.focus();
+      return;
+    }
     const issue = searchQueryIssue(snapshot.q);
     if (issue) { rejectSearchQuery(snapshot.q, issue); return; }
     if (!snapshot.q) {
@@ -1979,6 +2109,7 @@
   for (const button of ui.selectionActions.querySelectorAll('[data-phrase-mode]')) button.addEventListener('click', () => {
     if (state.passageLoading || !state.passage || !state.selectedText) return;
     const mode = button.dataset.phraseMode;
+    if (mode === 'forms') { ui.formsRelation.value = 'ordered'; ui.formsSlop.value = '0'; }
     ui.searchInput.value = state.selectedText;
     setFormMode(mode);
     search(state.selectedText, mode);

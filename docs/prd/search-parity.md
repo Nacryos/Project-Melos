@@ -40,6 +40,7 @@ Acceptance:
 
 ## Stage 2: sequence comparison and chronology
 
+- Add explicit spelling controls (diacritic/case sensitivity and bounded wildcards), and test their semantics against the TLG baseline. Keep tolerant normalization as a labelled option rather than conflate it with literal spelling identity.
 - Add a versioned derived positional index only if candidate verification proves too slow; do not rebuild the corpus merely to add positions.
 - Support cross-record sequences only within explicitly established work/edition order. Never join separate fragments or editions by numeric-looking citation guesses.
 - Add inspectable lexical/lemma sequence alignment, matching coverage, gaps and parallel passage display. Distinguish exact reuse, inflected reuse and weaker vocabulary resemblance.

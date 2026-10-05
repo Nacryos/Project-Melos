@@ -949,12 +949,12 @@ def excluded_exact_matches(q,author='',language='',edition=''):
 @app.get('/api/search')
 def search_response(q:str='',mode:str='words',author:str='',language:str='',edition:str='',
                     include_reference:bool=False,match:str='fuzzy',limit:int=Query(30,ge=1,le=100),order:str='relevance',offset:int=0,
-                    commentary_assisted:bool=True):
+                    commentary_assisted:bool=True,forms_relation:str='ordered',slop:int=0):
     # Enrich only the final, paginated API response. Internal lexical/form
     # ranking pools continue to call search() without any translation queries.
     result=search(q=q,mode=mode,author=author,language=language,edition=edition,
                   include_reference=include_reference,match=match,limit=limit,order=order,
-                  offset=offset,commentary_assisted=commentary_assisted)
+                  offset=offset,commentary_assisted=commentary_assisted,forms_relation=forms_relation,slop=slop)
     from .translation_previews import enrich_results
     if result.get('results'):
         try:
@@ -968,12 +968,16 @@ def search_response(q:str='',mode:str='words',author:str='',language:str='',edit
 
 def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='',
            include_reference:bool=False,match:str='fuzzy',limit:int=Query(30,ge=1,le=100),order:str='relevance',offset:int=0,
-           commentary_assisted:bool=True):
+           commentary_assisted:bool=True,forms_relation:str='ordered',slop:int=0,_legacy_multiword_forms:bool=False):
     if offset<0 or offset>100000:
         raise HTTPException(422,'offset must be between 0 and 100000')
     q = q.strip()
     if len(q) > 1000:
         raise HTTPException(422,'Search accepts at most 1000 Unicode characters; the query was not shortened or searched.')
+    if forms_relation not in {'ordered','proximity','all_terms'} or not isinstance(slop,int) or not 0<=slop<=50:
+        raise HTTPException(422,'Forms relation must be ordered, proximity, or all_terms; slop must be an integer from 0 to 50.')
+    if forms_relation=='all_terms' and slop:
+        raise HTTPException(422,'All words anywhere has no gap limit; set slop to 0.')
     if not q:
         return {'results':[],'total':0,'mode':mode,'method':'Enter a word, citation, or description.','warnings':[]}
     if mode not in ('words','forms','themes','hybrid'):
@@ -1013,6 +1017,59 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
             item['author_scope_reason']=reason
             item['match_reason']=item.get('match_reason','')+'; '+reason
         return item
+    from .sequence_search import query_terms
+    query_words=query_terms(q)
+    if mode=='forms' and len(query_words)>1 and not _legacy_multiword_forms:
+        from .expansion import build_groups,SequenceLimit
+        from .sequence_search import find_matches,MAX_CANDIDATES,MAX_SOURCE_CHARACTERS
+        try:
+            if match=='exact':
+                groups=[{'query_index':i,'query_term':word,'alternatives':{
+                    key:[{'kind':'literal_query','form':word}] for key in variants(word)}}
+                    for i,word in enumerate(query_words)]
+            else:
+                groups=build_groups(query_words,morph_service(),evidence_service())
+            with connect() as con:
+                proofs,checked=find_matches(con,groups,extra,params,forms_relation,slop)
+                chronology=''
+                if order=='chronological':
+                    con.create_function('author_year',1,lambda name:
+                        ((author_chronology(name) or {}).get('sort_year')
+                         if (author_chronology(name) or {}).get('sort_year') is not None else 99999))
+                    chronology=f'author_year(author),{canonical_expr()},'
+                    warnings.append('Retrieved matches are ordered by sourced author biography, not secure composition dates. Undated authors appear last.')
+                ordinary=f"CASE WHEN language='grc' THEN 0 ELSE 1 END,{canonical_expr()},author,work,sequence,id"
+                grouped=('WITH matched AS (SELECT '+search_row_columns()+
+                         ' FROM passages p WHERE p.id IN (SELECT value FROM json_each(?))), '
+                         'grouped AS (SELECT matched.*,'+grouping('mirror_pref(source,quality),sequence,id')+' FROM matched) ')
+                values=[json.dumps(list(proofs))]
+                total=count_search_groups(con,grouped,values)
+                rows=fetch_search_page(con,grouped,chronology+ordinary,values,limit,offset)
+                results=[]
+                for row in rows:
+                    item=with_mirrors(unpack(row),row)
+                    # This exact selected primary's proof, never a mirror's
+                    # offsets or a canonicalized substitute text.
+                    item.update(sequence_match=proofs[item['id']],match_reason='Every query word has a distinct source-token witness',score=None)
+                    results.append(mark_author_scope(item))
+            warnings.append('Source-listed form alternatives are retrieval links, not a complete historical paradigm or a contextual parsing decision. No semantic or one-word fallback is used.')
+            warnings.append('Strict witnesses exclude bracketed/restored, underdotted, and broken line-division tokens. Editorial gaps block ordered/proximity matches. Unmatched brackets are bounded to their printed line without resolving the source editorial scope; exclusion is not evidence of absence.')
+            if any(item.get('mirror_count',1)>1 for item in results):
+                warnings.append('Identical copies are grouped; each displayed positional proof belongs to the returned primary text only.')
+            return {'results':results,'total':total,'mode':'forms','method':'Verified multiword source-token '+forms_relation,
+                    'warnings':warnings,'search_contract':{
+                        'version':1,'relation':forms_relation,'slop':slop,'query_term_count':len(groups),
+                        'complete':True,'expansion_complete':True,'candidate_passages_checked':checked,
+                        'scope':'single_stored_passage','offset_basis':'Unicode codepoints in original passage.text',
+                        'expansion_policy':'literal_only' if match=='exact' else 'accepted_source_links_no_generated_paradigms',
+                        'limits':{'candidate_passages':MAX_CANDIDATES,'source_characters':MAX_SOURCE_CHARACTERS},
+                        'punctuation_policy':'Ordinary punctuation separates words; editorial damage blocks ordered/proximity matching.',
+                        'editorial_policy':'Bracketed/restored spans, unbalanced bracket regions, underdotted tokens, and broken divisions are ineligible as intact-form witnesses.',
+                        'witness_policy':'One complete witness per passage; not all occurrences.'}}
+        except SequenceLimit as exc:
+            raise HTTPException(422,str(exc)) from exc
+        except (ImportError,OSError,RuntimeError,sqlite3.Error) as exc:
+            raise HTTPException(503,'Strict form search is unavailable because its source indexes could not be read; no partial or approximate fallback was searched.') from exc
     if mode=='themes':
         try:
             semantic=semantic_service()
@@ -1289,7 +1346,7 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
     lexical=search(q=q,mode='words',**common)
     # Long descriptions are not sequences of Greek morphological queries.
     greek=any(c.isalpha() and ('\u0370'<=c<='\u03ff' or '\u1f00'<=c<='\u1fff') for c in q)
-    forms=search(q=q,mode='forms',**common) if greek or len(tokenize(q))<=2 else {'results':[],'warnings':[]}
+    forms=search(q=q,mode='forms',_legacy_multiword_forms=True,**common) if greek or len(tokenize(q))<=2 else {'results':[],'warnings':[]}
     warnings=lexical.get('warnings',[])+forms.get('warnings',[])
     try:
         dense=semantic_service().search(q,limit=1000,author=author_labels(author) if author else None,
@@ -1349,11 +1406,13 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
 @app.get('/api/usage-space')
 def usage_space(q:str='',author:str='',limit:int=Query(80,ge=3,le=150),
                 mode:str='forms',match:str='fuzzy',language:str='',edition:str='',
-                include_reference:bool=False,order:str='relevance',commentary_assisted:bool=True):
+                include_reference:bool=False,order:str='relevance',commentary_assisted:bool=True,
+                forms_relation:str='ordered',slop:int=0):
     # Exactly one retrieval under the supplied scope. Sparse exact/form results
     # are not permission to add unrelated thematic candidates.
     scope=dict(q=q,mode=mode,match=match,author=author,language=language,edition=edition,
-               include_reference=include_reference,order=order,commentary_assisted=commentary_assisted)
+               include_reference=include_reference,order=order,commentary_assisted=commentary_assisted,
+               forms_relation=forms_relation,slop=slop)
     found=search(**scope,limit=limit,offset=0)
     results=list(found['results'])
     retrieved_count=len(results)
@@ -1391,7 +1450,7 @@ def usage_space(q:str='',author:str='',limit:int=Query(80,ge=3,le=150),
         coords/=max(float(np.abs(coords).max()),1e-8)
     points=[]
     for record,coord in zip(results,coords):
-        point={key:record.get(key) for key in ('id','text','author','work','citation','source','source_url','license','edition','language','kind','quality','date_start','date_end','date_source','author_chronology','match_reason')}
+        point={key:record.get(key) for key in ('id','text','author','work','citation','source','source_url','license','edition','language','kind','quality','date_start','date_end','date_source','author_chronology','match_reason','sequence_match')}
         # Display/color identity only. Retain the source author label, and do
         # not substitute a linked parent or split a joint attribution.
         point['author_canonical']=canonical_author(record.get('author',''))
@@ -1405,7 +1464,7 @@ def usage_space(q:str='',author:str='',limit:int=Query(80,ge=3,le=150),
                      f'This projection retrieves at most {limit} results from the requested search; it is not the complete corpus or a frozen list of previously displayed IDs.'])
     return {'points':points,'method':retrieval+'. '+method,'retrieval_method':retrieval,
         'scope':scope,'retrieved_count':retrieved_count,'plotted_count':len(points),'omitted_count':omitted_count,
-        'search_total':found.get('total'), 'candidate_limit':limit,
+        'search_total':found.get('total'), 'candidate_limit':limit,'search_contract':found.get('search_contract'),
         'warnings':list(dict.fromkeys(warnings))}
 
 

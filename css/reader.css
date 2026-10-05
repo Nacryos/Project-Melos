@@ -45,6 +45,18 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .reader-hero .mode-picker input:checked+span{background:var(--on-dark);color:var(--ink);border-color:var(--on-dark)}
 .reader-hero .bridge-note{max-width:240px;margin:3px 0 0;color:var(--on-dark);opacity:.88;text-shadow:0 1px 10px #000}
 .reader-hero .semantic-inline{color:#f1d18d}
+.reader-hero .forms-options{display:flex;align-items:flex-start;flex-wrap:wrap;gap:8px 18px;margin-top:12px;color:var(--on-dark);font-size:13px}
+.reader-hero .forms-options[hidden],.reader-hero .forms-options [hidden]{display:none}
+.reader-hero .forms-options label{display:flex;align-items:center;flex-wrap:wrap;gap:6px}
+.reader-hero .forms-options select,.reader-hero .forms-options input{min-height:32px;border:1px solid rgb(244 246 245 / .45);border-radius:2px;padding:4px 7px;background:rgb(20 34 58 / .7);color:var(--on-dark);font:inherit;color-scheme:dark}
+.reader-hero .forms-options input{width:4.5rem}
+.reader-hero .forms-options :focus-visible{outline:2px solid var(--on-dark);outline-offset:3px}
+.reader-hero .forms-options p{flex-basis:100%;margin:0;max-width:44rem;line-height:1.4;text-shadow:0 1px 10px #000}
+.forms-match-proof{display:block;margin-top:8px;border-top:1px solid var(--line);padding-top:7px;white-space:normal}
+.forms-proof-segment{white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink)}
+.forms-matched-word{margin-top:8px}
+.result-with-proof{border-bottom:1px solid var(--line);padding-bottom:10px}
+.result-with-proof>.result-button{width:100%}
 .reader-hero .search input{font-size:var(--step-1)}
 .reader-hero .search button{font-size:var(--step-0)}
 .utility-bar{background:var(--marble-2)}
@@ -83,6 +95,13 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 @media(max-width:820px){.reader-hero .plate{top:76px}.reader-hero .search-options{display:block}.reader-hero .mode-picker legend{float:none;width:100%;padding:0 0 6px}.reader-hero .bridge-note{max-width:34rem;margin-top:10px}.reader-hero .hero-copy{bottom:26px}.reader-hero .search input{font-size:1.05rem}}
 @media(max-width:780px){.browse-body{max-height:min(60svh,560px)}}
 @media(max-width:520px){.reader-hero .verse p{font-size:clamp(2rem,8vw,3rem)}.reader-hero .mode-picker span{font-size:11px;padding:4px 7px}.reader-hero .bridge-note{font-size:11px}.reader-hero .search button{font-size:14px}}
+/* Forms controls add intrinsic content: flow below the painting thumbnails
+   instead of lifting the bottom-anchored quote into them on small screens. */
+@media(max-width:820px),(max-height:600px){
+  .reader-hero:has(.forms-options:not([hidden])){display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto;align-content:end;row-gap:20px;padding:76px var(--gutter) 26px}
+  .reader-hero:has(.forms-options:not([hidden])) .plate{position:relative;grid-column:1;grid-row:1;inset:auto;justify-self:start}
+  .reader-hero:has(.forms-options:not([hidden])) .hero-copy{position:relative;grid-column:1;grid-row:2;inset:auto;width:100%;max-width:52rem}
+}
 
 /* Source links share the ink colour, including visited links; icons are drawn
    as paths, not OS-dependent arrow glyphs. Dark surfaces retain white contrast. */

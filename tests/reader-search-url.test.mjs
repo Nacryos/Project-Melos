@@ -24,6 +24,7 @@ class Element {
 }
 function harness() {
   const ui = Object.fromEntries(['authorFilter', 'edition', 'language', 'order', 'reference', 'searchInput', 'searchForm', 'dictionaryPreview',
+    'formsOptions', 'formsRelation', 'formsSlop', 'formsSlopLabel', 'formsNote',
     'results', 'resultsList', 'resultsHeading', 'resultsSummary', 'moreResults'].map(key => [key, new Element()]));
   for (const [name, values] of Object.entries({ authorFilter: ['', 'Ibycus', 'Sappho'], edition: ['', 'Fixture edition'],
     language: ['', 'grc', 'eng'], order: ['relevance', 'chronological'] })) {
@@ -31,6 +32,7 @@ function harness() {
     ui[name].value = values[0];
   }
   const state = { search: null, searchSequence: 0 }, pending = [], visited = [], previews = [];
+  ui.formsRelation.value = 'ordered'; ui.formsSlop.value = '0';
   const location = { href: 'https://example.test/?id=fragment-old&campaign=keep#reader' };
   let mode = 'hybrid';
   const context = vm.createContext({
@@ -272,4 +274,121 @@ test('query trimming matches API whitespace rather than JS BOM trimming', async 
   assert.equal(h.read(new URLSearchParams({ q: `\u0085${body}` })).issues.length, 0);
   assert.equal(h.read(new URLSearchParams({ q: `\ufeff${body}` })).issues.length, 1);
   assert.equal(vm.runInContext('trimSearchQuery("\\u001cx\\u001f")', h.context), 'x');
+});
+
+test('Forms relation and total gap round-trip and survive pagination and unsent changes', async () => {
+  const h = harness(), saved = h.restore(new URLSearchParams('q=first+second&mode=forms&forms_relation=proximity&slop=3'));
+  assert.equal(h.ui.formsRelation.value, 'proximity'); assert.equal(h.ui.formsSlop.value, '3');
+  const first = h.search(saved.query, saved.mode);
+  assert.equal(h.pending[0].params.forms_relation, 'proximity'); assert.equal(h.pending[0].params.slop, 3);
+  h.ui.formsRelation.value = 'all_terms'; h.ui.formsSlop.value = '49';
+  h.pending[0].resolve(response('first')); await first;
+  assert.equal(new URL(h.location.href).searchParams.get('forms_relation'), 'proximity');
+  assert.equal(new URL(h.location.href).searchParams.get('slop'), '3');
+  const page = h.search(saved.query, saved.mode, true);
+  assert.equal(h.pending[1].params.forms_relation, 'proximity'); assert.equal(h.pending[1].params.slop, 3);
+  h.pending[1].resolve(response('second')); await page;
+  const scope = vm.runInContext('usageSnapshot("edited query")', h.context);
+  assert.equal(scope.forms_relation, 'proximity'); assert.equal(scope.slop, 3);
+  assert.match(scope.scope_notice, /Current inputs differ/);
+});
+
+test('Forms defaults preserve single-word lookup and all-terms requests send zero gap without a phrase claim', async () => {
+  const h = harness();
+  assert.equal(h.read(new URLSearchParams('q=word&mode=forms')).forms_relation, 'ordered');
+  const first = h.search('word', 'forms');
+  assert.equal(h.pending[0].params.forms_relation, 'ordered'); assert.equal(h.pending[0].params.slop, 0);
+  h.pending[0].resolve(response('single')); await first;
+  h.ui.formsRelation.value = 'all_terms'; h.ui.formsSlop.value = '9';
+  const next = h.search('first second', 'forms');
+  assert.equal(h.pending[1].params.slop, 0);
+  h.pending[1].resolve({ ...response('both'), search_contract: { relation: 'all_terms', query_term_count: 2, slop: 0, complete: true } }); await next;
+  assert.match(h.ui.resultsSummary.textContent, /not a phrase match/);
+  const url = h.write(h.location.href, { query: 'word', mode: 'exact' });
+  assert.equal(url.searchParams.has('forms_relation'), false); assert.equal(url.searchParams.has('slop'), false);
+});
+
+test('invalid saved Forms settings block reload instead of silently broadening the search', () => {
+  const h = harness();
+  for (const value of ['-1', '51', '1.5', 'NaN', '1e1', '', '  ']) {
+    const saved = h.read(new URLSearchParams({ q: 'first second', mode: 'forms', slop: value }));
+    assert.ok(saved.issues.length, value);
+  }
+  assert.match(h.read(new URLSearchParams('forms_relation=unsupported')).issues[0], /unsupported/);
+  assert.match(h.read(new URLSearchParams('forms_relation=all_terms&slop=4')).issues[0], /no gap allowance/);
+  for (const value of ['0', '50']) assert.equal(h.read(new URLSearchParams({ slop: value })).issues.length, 0);
+});
+
+test('Forms controls are mode-specific, all-terms hides gap, invalid gap sends no request', async () => {
+  const h = harness(), update = vm.runInContext('updateFormsControls', h.context);
+  update(); assert.equal(h.ui.formsOptions.hidden, true);
+  h.restore(new URLSearchParams('mode=forms&forms_relation=all_terms'));
+  update(); assert.equal(h.ui.formsOptions.hidden, false);
+  assert.equal(h.ui.formsSlopLabel.hidden, true); assert.equal(h.ui.formsSlop.disabled, true);
+  assert.match(h.ui.formsNote.textContent, /not a phrase match/);
+  h.ui.formsRelation.value = 'proximity'; update();
+  assert.equal(h.ui.formsSlopLabel.hidden, false); assert.equal(h.ui.formsSlop.disabled, false);
+  assert.match(h.ui.formsNote.textContent, /total extra words/);
+  h.ui.formsSlop.value = '3.5'; await h.search('first second', 'forms');
+  assert.equal(h.pending.length, 0);
+  assert.equal(h.ui.resultsHeading.textContent, 'Check Forms search controls');
+  assert.equal(h.ui.formsSlop.getAttribute('aria-invalid'), 'true');
+  assert.equal(h.ui.searchInput.getAttribute('aria-invalid'), null);
+});
+
+test('partial Forms response counts are expressly incomplete, never a corpus-wide absence claim', async () => {
+  const h = harness(), first = h.search('first second', 'forms');
+  h.pending[0].resolve({ results: [], total: 0, search_contract: { relation: 'ordered', query_term_count: 2, complete: false } });
+  await first;
+  assert.match(h.ui.resultsSummary.textContent, /in this incomplete search/);
+  assert.match(h.ui.resultsList.textContent, /does not establish absence from the indexed corpus/);
+});
+
+test('selected Related word forms explicitly resets order and gap before search', () => {
+  const start = script.indexOf("  for (const button of ui.selectionActions.querySelectorAll('[data-phrase-mode]')) button.addEventListener('click'");
+  const selection = script.slice(start, script.indexOf("  document.addEventListener('selectionchange'", start));
+  const h = harness(); let click;
+  const button = { dataset: { phraseMode: 'forms' }, addEventListener(event, handler) { click = handler; } };
+  h.ui.selectionActions = { querySelectorAll: () => [button] };
+  h.state.passage = { id: 'fixture' }; h.state.selectedText = 'first second';
+  h.ui.formsRelation.value = 'all_terms'; h.ui.formsSlop.value = '9';
+  const calls = []; h.context.search = (...args) => calls.push(args);
+  vm.runInContext(selection, h.context); click();
+  assert.equal(h.ui.formsRelation.value, 'ordered'); assert.equal(h.ui.formsSlop.value, '0');
+  assert.equal(h.mode(), 'forms'); assert.equal(calls[0][0], 'first second');
+});
+
+test('usage click rejects invalid current Forms input before numeric coercion', () => {
+  for (const raw of ['', '1e1', '3.5', '51', 'invalid']) {
+    const h = harness(), calls = [];
+    h.restore(new URLSearchParams('q=first+second&mode=forms'));
+    h.ui.formsSlop.value = raw;
+    h.ui.usage = { addEventListener(event, callback) { this.click = callback; } };
+    h.context.window = { MelosUsageSpace: { open: (...args) => calls.push(args) } };
+    const start = script.indexOf("  ui.usage.addEventListener('click', () => {");
+    vm.runInContext(script.slice(start, script.indexOf('\n  });', start) + '\n  });'.length), h.context);
+    h.ui.usage.click();
+    assert.equal(calls.length, 0, raw);
+    assert.match(h.ui.resultsSummary.textContent, /whole number from 0 to 50/);
+    assert.equal(h.ui.formsSlop.value, raw);
+    assert.equal(h.ui.formsSlop.getAttribute('aria-invalid'), 'true');
+  }
+});
+
+test('usage retains a valid displayed Forms snapshot but explicitly reports invalid unsent controls', async () => {
+  const h = harness(), calls = [];
+  h.restore(new URLSearchParams('q=first+second&mode=forms&slop=0'));
+  const search = h.search('first second', 'forms'); h.pending[0].resolve(response('valid')); await search;
+  h.ui.usage = { addEventListener(event, callback) { this.click = callback; } };
+  h.context.window = { MelosUsageSpace: { open: (...args) => calls.push(args) } };
+  const start = script.indexOf("  ui.usage.addEventListener('click', () => {");
+  vm.runInContext(script.slice(start, script.indexOf('\n  });', start) + '\n  });'.length), h.context);
+  for (const raw of ['', '1e1', 'invalid']) {
+    h.ui.formsSlop.value = raw; h.ui.usage.click();
+    const [query, , scope] = calls.at(-1);
+    assert.equal(query, 'first second'); assert.equal(scope.forms_relation, 'ordered'); assert.equal(scope.slop, 0);
+    assert.match(scope.scope_notice, /controls are invalid.*last successfully displayed/);
+    assert.equal(h.state.displayedSearch.slop, 0);
+  }
+  assert.equal(calls.length, 3);
 });

@@ -132,19 +132,32 @@
     return [language, point.kind, quality].filter(Boolean).join(' · ');
   }
 
+  async function usageResponse(response) {
+    if (!response.ok) {
+      let detail = '';
+      try { const body = await response.json(); if (typeof body?.detail === 'string') detail = body.detail; } catch { /* Keep the status fallback. */ }
+      throw new Error(detail || `The server returned ${response.status}.`);
+    }
+    return response.json();
+  }
+
   function usageRequest(query, author, scope = {}) {
     return new URLSearchParams({ q: String(query), author: String(author || ''), limit: '80',
       mode: scope.mode || 'forms', match: scope.match || 'fuzzy', language: scope.language || '',
       edition: scope.edition || '', include_reference: String(scope.include_reference === true),
-      order: scope.order || 'relevance', commentary_assisted: String(scope.commentary_assisted !== false) });
+      order: scope.order || 'relevance', commentary_assisted: String(scope.commentary_assisted !== false),
+      ...(!scope.mode || scope.mode === 'forms' ? { forms_relation: scope.forms_relation || 'ordered', slop: String(scope.slop ?? 0) } : {}) });
   }
 
   function scopeLabel(scope) {
     const mode = { forms: 'Forms', themes: 'Themes', hybrid: 'All evidence', words: scope.match === 'exact' ? 'Exact words' : 'Fuzzy words' }[scope.mode] || scope.mode || 'Forms';
     const language = { grc: 'Ancient Greek', ell: 'Modern Greek', eng: 'English', lat: 'Latin' }[scope.language] || scope.language || 'Any language';
-    return [scope.scope_origin || 'Requested search', mode, scope.author || 'All authors', language,
+    const relation = !scope.mode || scope.mode === 'forms'
+      ? scope.forms_relation === 'all_terms' ? 'All words in passage; not a phrase match'
+        : `${scope.forms_relation === 'proximity' ? 'Nearby, any order' : 'In this order'} (multiple words) · ${scope.slop ?? 0} extra words allowed` : '';
+    return [scope.scope_origin || 'Requested search', mode, relation, scope.author || 'All authors', language,
       scope.edition || 'All editions', scope.include_reference ? 'Reference/uncertain records included' : 'Default quality/reference filter',
-      scope.order === 'chronological' ? 'Chronological order' : 'Relevance order'].join(' · ');
+      scope.order === 'chronological' ? 'Chronological order' : 'Relevance order'].filter(Boolean).join(' · ');
   }
 
   function preparePoints(raw) {
@@ -450,10 +463,7 @@
 
     const params = usageRequest(query, author, scope);
     fetch(window.melosApiUrl(`/api/usage-space?${params}`), { signal: state.controller.signal, headers: { Accept: 'application/json' } })
-      .then(async response => {
-        if (!response.ok) throw new Error(`The server returned ${response.status}.`);
-        return response.json();
-      })
+      .then(usageResponse)
       .then(payload => { if (active === state) populate(state, payload && typeof payload === 'object' ? payload : {}); })
       .catch(error => {
         if (active !== state || error.name === 'AbortError') return;

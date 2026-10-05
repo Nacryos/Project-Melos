@@ -22,7 +22,8 @@ def test_exact_scope_is_forwarded_once_without_sparse_theme_expansion(monkeypatc
     monkeypatch.setattr(server, 'search', search)
     monkeypatch.setattr(server, 'semantic_service', lambda: NoVectors())
     scope = dict(q='αβ', author='Ibycus', mode='words', match='exact', language='ell',
-                 edition='Synthetic edition', include_reference=True, order='chronological', commentary_assisted=False)
+                     edition='Synthetic edition', include_reference=True, order='chronological', commentary_assisted=False,
+                     forms_relation='ordered', slop=0)
     result = server.usage_space(**scope, limit=80)
     assert calls == [{**scope, 'limit': 80, 'offset': 0}]
     assert result['scope'] == scope

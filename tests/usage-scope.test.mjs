@@ -64,3 +64,29 @@ test('a genuine zero-result search is distinguished from unusable projected coor
   populate(state, { points: [{ id: 'invalid', x: null, y: 0, z: 0 }], retrieved_count: 1 });
   assert.equal(state.status.textContent, 'No passages with usable coordinates were returned for this query.');
 });
+
+test('usage forwards Forms sequence constraints and labels all-terms without a phrase claim', () => {
+  for (const relation of ['ordered', 'proximity', 'all_terms']) {
+    const scope = { mode: 'forms', forms_relation: relation, slop: relation === 'all_terms' ? 0 : 4 };
+    const params = request('first second', 'Fixture author', scope);
+    assert.equal(params.get('forms_relation'), relation); assert.equal(params.get('slop'), String(scope.slop));
+    const description = label(scope);
+    assert.match(description, relation === 'all_terms' ? /not a phrase match/ : /4 extra words allowed/);
+  }
+  assert.equal(request('word', '', { mode: 'forms' }).get('forms_relation'), 'ordered');
+  assert.equal(request('word', '', { mode: 'forms' }).get('slop'), '0');
+  assert.equal(request('phrase', '', { mode: 'themes', forms_relation: 'proximity', slop: 4 }).has('forms_relation'), false);
+});
+
+test('usage limit errors retain literal API detail and use a status fallback for malformed errors', async () => {
+  const read = vm.runInContext('usageResponse', context);
+  await assert.rejects(read({ ok: false, status: 422, json: async () => ({ detail: 'Fixture limit: <b>shorten the sequence</b>.' }) }),
+    /Fixture limit: <b>shorten the sequence<\/b>\./);
+  for (const body of [{ detail: ['validation object'] }, null, {}]) {
+    await assert.rejects(read({ ok: false, status: 422, json: async () => body }), /The server returned 422\./);
+  }
+  await assert.rejects(read({ ok: false, status: 503, json: async () => { throw Error('Malformed JSON'); } }), /The server returned 503\./);
+  const success = { points: [] };
+  assert.equal(await read({ ok: true, json: async () => success }), success);
+  assert.match(source, /state\.method\.textContent = error\.message/);
+});

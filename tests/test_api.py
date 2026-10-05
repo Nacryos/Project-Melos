@@ -141,6 +141,60 @@ def test_maximum_search_query_accepted_without_utf16_counting(client, query):
     assert result.json()["results"] == []
 
 
+@pytest.mark.parametrize("client", [[
+    {"id":"sequence-forward","author":"Alpha","work":"Synthetic sequence","citation":"10","text":"άλφα βήτα"},
+    {"id":"sequence-reverse","author":"Alpha","work":"Synthetic sequence","citation":"11","text":"βήτα άλφα"},
+    {"id":"sequence-gap","author":"Alpha","work":"Synthetic sequence","citation":"12","text":"άλφα άλλη βήτα"},
+    {"id":"sequence-one","author":"Alpha","work":"Synthetic sequence","citation":"13","text":"βήτα"},
+    {"id":"sequence-reference","author":"Alpha","work":"Synthetic sequence","citation":"14","text":"άλφα βήτα","quality":"needs_review"},
+    {"id":"sequence-commentary","author":"Alpha","work":"Synthetic notes","citation":"15","text":"άλφα βήτα","kind":"commentary"},
+    {"id":"sequence-copy","author":"Alpha","work":"Synthetic sequence","citation":"10","text":"α\u0301λφα  βήτα"},
+]], indirect=True)
+def test_strict_sequence_api_relation_filters_proofs_and_pagination(client):
+    params={"q":"άλφα βήτα","mode":"forms","match":"exact","author":"Alpha","edition":"Synthetic test edition"}
+    ordered=client.get('/api/search',params=params).json()
+    assert ordered['search_contract']['relation']=='ordered'
+    assert ordered['search_contract']['complete'] is True
+    ids={row['id'] for row in ordered['results']}
+    assert 'sequence-forward' in ids or 'sequence-copy' in ids
+    assert 'sequence-reverse' not in ids and 'sequence-one' not in ids and 'sequence-reference' not in ids
+    assert 'sequence-commentary' in ids  # No token rows, but still checked.
+    for row in ordered['results']:
+        proof=row['sequence_match']
+        assert proof['text_sha256']==hashlib.sha256(row['text'].encode()).hexdigest()
+        for term in proof['terms']:
+            for span in term['source_spans']:
+                assert row['text'][span['start']:span['end']]==span['text']
+    proximity=client.get('/api/search',params=params|{'forms_relation':'proximity'}).json()
+    assert 'sequence-reverse' in {row['id'] for row in proximity['results']}
+    gap=client.get('/api/search',params=params|{'slop':1}).json()
+    assert 'sequence-gap' in {row['id'] for row in gap['results']}
+    allterms=client.get('/api/search',params=params|{'forms_relation':'all_terms'}).json()
+    assert all(row['sequence_match']['extra_words'] is None for row in allterms['results'])
+    assert client.get('/api/search',params=params|{'forms_relation':'all_terms','slop':1}).status_code==422
+    included=client.get('/api/search',params=params|{'include_reference':True}).json()
+    assert 'sequence-reference' in {row['id'] for row in included['results']}
+    wrong=client.get('/api/search',params=params|{'author':'Beta'}).json()
+    assert wrong['total']==0
+    first=client.get('/api/search',params=params|{'limit':1}).json()
+    second=client.get('/api/search',params=params|{'limit':1,'offset':1}).json()
+    assert first['total']==second['total']==ordered['total']
+    assert first['results'][0]['id']!=second['results'][0]['id']
+
+
+def test_strict_sequence_usage_passes_constraints_and_has_no_fallback(client,monkeypatch):
+    def unavailable(): raise RuntimeError('synthetic no semantic index')
+    monkeypatch.setattr(server,'semantic_service',unavailable)
+    params={'q':'μοῦσα φωνή','mode':'forms','match':'exact','forms_relation':'proximity','slop':2}
+    response=client.get('/api/usage-space',params=params)
+    assert response.status_code==200
+    data=response.json()
+    assert data['scope']['forms_relation']=='proximity' and data['scope']['slop']==2
+    assert data['search_contract']['relation']=='proximity'
+    assert all(point['sequence_match'] for point in data['points'])
+    assert client.get('/api/search',params=params|{'slop':51}).status_code==422
+
+
 def test_sources_hide_internal_paths(client: TestClient, tmp_path: Path):
     response = client.get("/api/sources")
     assert response.status_code == 200
