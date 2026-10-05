@@ -971,7 +971,9 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
            commentary_assisted:bool=True):
     if offset<0 or offset>100000:
         raise HTTPException(422,'offset must be between 0 and 100000')
-    q = q.strip()[:1000]
+    q = q.strip()
+    if len(q) > 1000:
+        raise HTTPException(422,'Search accepts at most 1000 Unicode characters; the query was not shortened or searched.')
     if not q:
         return {'results':[],'total':0,'mode':mode,'method':'Enter a word, citation, or description.','warnings':[]}
     if mode not in ('words','forms','themes','hybrid'):

@@ -9,6 +9,10 @@ class Element {
     Object.assign(this, { tag, cls, content, children: [], value: '', dataset: {}, checked: false });
   }
   append(...children) { this.children.push(...children); }
+  after(element) { this.afterElement = element; }
+  setAttribute(key, value) { (this.attributes ||= {})[key] = value; }
+  getAttribute(key) { return this.attributes?.[key] ?? null; }
+  removeAttribute(key) { delete (this.attributes ||= {})[key]; }
   replaceChildren() { this.children = []; this.content = ''; }
   querySelectorAll(selector) { return this.children.filter(child => child.cls === selector.slice(1)); }
   scrollIntoView() {}
@@ -19,14 +23,14 @@ class Element {
   set textContent(value) { this.content = value; this.children = []; }
 }
 function harness() {
-  const ui = Object.fromEntries(['authorFilter', 'edition', 'language', 'order', 'reference', 'searchInput',
+  const ui = Object.fromEntries(['authorFilter', 'edition', 'language', 'order', 'reference', 'searchInput', 'searchForm', 'dictionaryPreview',
     'results', 'resultsList', 'resultsHeading', 'resultsSummary', 'moreResults'].map(key => [key, new Element()]));
   for (const [name, values] of Object.entries({ authorFilter: ['', 'Ibycus', 'Sappho'], edition: ['', 'Fixture edition'],
     language: ['', 'grc', 'eng'], order: ['relevance', 'chronological'] })) {
     for (const value of values) { const option = new Element('option', '', value); option.value = value; ui[name].append(option); }
     ui[name].value = values[0];
   }
-  const state = { search: null, searchSequence: 0 }, pending = [], visited = [];
+  const state = { search: null, searchSequence: 0 }, pending = [], visited = [], previews = [];
   const location = { href: 'https://example.test/?id=fragment-old&campaign=keep#reader' };
   let mode = 'hybrid';
   const context = vm.createContext({
@@ -34,14 +38,14 @@ function harness() {
     history: { replaceState(a, b, url) { location.href = String(url); visited.push(String(url)); } },
     formMode: () => mode, setFormMode: value => { mode = value; },
     node: (tag, cls, content) => new Element(tag, cls, content), clear: element => element.replaceChildren(),
-    loadDictionaryPreview() {}, describeCount: (number, label) => `${number} ${label}`,
+    loadDictionaryPreview(query) { previews.push(query); }, describeCount: (number, label) => `${number} ${label}`,
     renderResult: record => new Element('button', 'result-button', record.id),
     appendWarnings: (host, warnings) => { for (const warning of warnings || []) host.append(new Element('p', '', warning)); },
     errorText: error => error.message,
     api: (path, params) => new Promise((resolve, reject) => pending.push({ path, params, resolve, reject }))
   });
   vm.runInContext(script.slice(script.indexOf('  function readSearchUrl('), script.indexOf('  function addInspectorSection(')), context);
-  return { ui, state, pending, visited, location, mode: () => mode,
+  return { ui, state, pending, visited, previews, location, mode: () => mode,
     read: vm.runInContext('readSearchUrl', context), write: vm.runInContext('writeSearchUrl', context),
     restore: vm.runInContext('restoreSearchUrl', context), search: vm.runInContext('search', context), context };
 }
@@ -164,4 +168,108 @@ test('startup restores saved state only after asynchronous option populations an
   assert.match(init, /if \(saved\.issues\.length\)/);
   assert.match(init, /else if \(saved\.query\) search\(saved\.query, saved\.mode\)/);
   assert.match(init, /if \(saved\.query \|\| saved\.issues\.length\) return/);
+});
+
+test('search limit uses trimmed Unicode codepoints, never shortened request payloads', async () => {
+  for (const character of ['x', '\u{1f600}']) {
+    const h = harness(), query = character.repeat(1000);
+    const valid = h.search(`  ${query}  `, 'exact');
+    assert.equal(h.pending.length, 1);
+    assert.equal(h.pending[0].params.q, query);
+    h.pending[0].resolve(response('valid')); await valid;
+    const url = h.location.href;
+    await h.search(character.repeat(1001), 'themes');
+    assert.equal(h.pending.length, 1);
+    assert.equal(h.previews.length, 1);
+    assert.equal(h.location.href, url);
+    assert.equal(h.state.displayedSearch, null);
+    assert.equal(h.ui.searchInput.value, character.repeat(1001));
+    assert.match(h.ui.searchQueryError.textContent, /1,001/);
+  }
+});
+
+test('oversize input is retained with inline accessible error, cancels stale rendering and recovers', async () => {
+  const h = harness();
+  h.ui.searchInput.setAttribute('aria-describedby', 'existing-help');
+  const old = h.search('pending', 'exact');
+  h.state.dictionarySequence = 10;
+  h.ui.dictionaryPreview.append(new Element('p', '', 'old preview'));
+  const query = '  ' + 'x'.repeat(1302) + '  ';
+  await h.search(query, 'exact');
+  assert.equal(h.ui.searchInput.value, query);
+  assert.equal(h.pending.length, 1);
+  assert.equal(h.previews.length, 1);
+  assert.equal(h.state.dictionarySequence, 11);
+  assert.equal(h.ui.dictionaryPreview.hidden, true);
+  assert.equal(h.ui.dictionaryPreview.children.length, 0);
+  assert.equal(h.ui.searchForm.afterElement, h.ui.searchQueryError);
+  assert.equal(h.ui.searchQueryError.getAttribute('role'), 'alert');
+  assert.equal(h.ui.searchQueryError.hidden, false);
+  assert.match(h.ui.searchQueryError.textContent, /1,302.*full input is retained/);
+  assert.equal(h.ui.searchInput.getAttribute('aria-invalid'), 'true');
+  assert.equal(h.ui.searchInput.getAttribute('aria-describedby'), 'existing-help search-query-error');
+  h.pending[0].resolve(response('outdated')); await old;
+  assert.equal(h.visited.length, 0);
+  assert.equal(h.ui.resultsList.children.length, 0);
+  assert.equal(h.ui.resultsHeading.textContent, 'Query exceeds the search limit');
+  const valid = h.search('recovered', 'exact');
+  assert.equal(h.ui.searchQueryError.hidden, true);
+  assert.equal(h.ui.searchInput.getAttribute('aria-invalid'), null);
+  assert.equal(h.ui.searchInput.getAttribute('aria-describedby'), 'existing-help');
+  h.pending[1].resolve(response('recovered')); await valid;
+  assert.equal(h.state.displayedSearch.query, 'recovered');
+  assert.equal(new URL(h.location.href).searchParams.get('q'), 'recovered');
+});
+
+test('saved query uses the same codepoint limit, retains oversize value, and still rejects controls', () => {
+  const h = harness();
+  const valid = '\u{1f600}'.repeat(1000);
+  assert.equal(h.restore(new URLSearchParams({ q: `  ${valid}  ` })).issues.length, 0);
+  const invalid = '\u{1f600}'.repeat(1001);
+  const saved = h.restore(new URLSearchParams({ q: invalid }));
+  assert.equal(saved.query, invalid);
+  assert.equal(h.ui.searchInput.value, invalid);
+  assert.match(saved.issues[0], /Saved query: Search accepts up to 1,000/);
+  assert.equal(h.ui.searchQueryError.hidden, false);
+  assert.equal(h.pending.length, 0);
+  const controls = h.restore(new URLSearchParams({ q: 'x\u0000y' }));
+  assert.equal(controls.query, '');
+  assert.match(controls.issues[0], /invalid/);
+  assert.equal(h.ui.searchQueryError.hidden, true);
+});
+
+test('oversize form and current usage query are gated before their downstream actions', () => {
+  for (const key of ['usage', 'lookupForm']) {
+    const h = harness(), calls = [];
+    const start = script.indexOf(`  ui.${key}.addEventListener('click', () => {`);
+    const end = script.indexOf('\n  });', start) + '\n  });'.length;
+    h.ui[key] = { addEventListener(event, callback) { this.click = callback; } };
+    Object.assign(h.context, { window: { MelosUsageSpace: { open: (...args) => calls.push(args) } },
+      inspectWord: (...args) => calls.push(args), message: (...args) => calls.push(args) });
+    h.ui.searchInput.value = 'x'.repeat(1302);
+    vm.runInContext(script.slice(start, end), h.context);
+    h.ui[key].click();
+    assert.equal(calls.length, 0);
+    assert.equal(h.pending.length, 0);
+    assert.equal(h.ui.searchQueryError.hidden, false);
+  }
+});
+
+test('inline limit notice is scoped and can wrap across the search area', () => {
+  const css = readFileSync(new URL('../css/reader.css', import.meta.url), 'utf8');
+  assert.match(css, /\.reader-hero \.search-query-error\{max-width:55rem;margin:10px 0 0;overflow-wrap:anywhere\}/);
+});
+
+test('query trimming matches API whitespace rather than JS BOM trimming', async () => {
+  const h = harness(), body = 'x'.repeat(1000);
+  const valid = h.search(`\u0085${body}\u0085`, 'exact');
+  assert.equal(h.pending[0].params.q, body);
+  h.pending[0].resolve(response('valid')); await valid;
+  await h.search(`\ufeff${body}`, 'exact');
+  assert.equal(h.pending.length, 1);
+  assert.equal(h.ui.searchInput.value, `\ufeff${body}`);
+  assert.match(h.ui.searchQueryError.textContent, /1,001/);
+  assert.equal(h.read(new URLSearchParams({ q: `\u0085${body}` })).issues.length, 0);
+  assert.equal(h.read(new URLSearchParams({ q: `\ufeff${body}` })).issues.length, 1);
+  assert.equal(vm.runInContext('trimSearchQuery("\\u001cx\\u001f")', h.context), 'x');
 });

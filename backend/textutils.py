@@ -10,14 +10,103 @@ import unicodedata
 def search_text(text):
     """Join explicit Greek line-end word divisions in a search-only copy.
 
-    No lacunae, editorial brackets, spaces within a line, or uncertain letters
-    are supplied. The source's printed text remains untouched. Only a hyphen
-    immediately between Greek letters across one newline is removed; this is
-    layout normalization, not a proposed reconstruction or dialect conversion.
+    A maximal chain is checked as a whole before removing any divisions. A
+    damaged outer component or uncertain letter rejects the entire chain; a
+    plausible-looking suffix is not salvaged. Printed terminal elision/psili
+    stays literal. This is layout normalization, never a reconstruction.
+
+    Only a search copy changes. The lexer and disjoint chain/edge scans are
+    linear in source length; no per-word copies of the whole prefix/suffix.
     """
     text = unicodedata.normalize('NFC', str(text))
-    greek = r'[\u0370-\u03ff\u1f00-\u1fff]'
-    return re.sub(r'(' + greek + r')[-\u2010\u00ad][ \t]*\r?\n[ \t]*(?=' + greek + r')', r'\1', text)
+    if '\n' not in text or not any(sign in text for sign in _DIVISION_SIGNS):
+        return text
+    words = _literal_greek_spans(text)
+    removals = []
+    index = 0
+    while index < len(words):
+        end = index
+        while end + 1 < len(words) and _LINE_DIVISION.fullmatch(text, words[end][1], words[end + 1][0]):
+            end += 1
+        if end > index:
+            first, last = words[index][0], words[end][1]
+            before = first
+            while before and not text[before - 1].isspace():
+                before -= 1
+            after = last
+            while after < len(text) and not text[after].isspace():
+                after += 1
+            safe = (not _EDITORIAL_EDGE.search(text, before, first)
+                    and not _EDITORIAL_EDGE.search(text, last, after)
+                    and not _DOTTED_GAP.match(text, last)
+                    and not _orphan_division_before(text, first)
+                    and all('\u0323' not in text[start:stop] for start, stop in words[index:end + 1])
+                    and all(_greek_letter(text[words[i][1] - 1]) for i in range(index, end)))
+            if safe:
+                removals.extend((words[i][1], words[i + 1][0]) for i in range(index, end))
+        # Advance on rejection too: never retry the same chain's clean suffix.
+        index = end + 1
+    result, previous = [], 0
+    for start, stop in removals:
+        result.append(text[previous:start])
+        previous = stop
+    result.append(text[previous:])
+    return ''.join(result)
+
+
+_DIVISION_SIGNS = '-\u2010\u00ad'
+_LINE_DIVISION = re.compile(r'[-\u2010\u00ad][ \t]*\r?\n[ \t]*')
+_EDITORIAL_EDGE = re.compile(r'[\[\]<>\{\}⟨⟩〈〉‹›⟦⟧⸢⸣⸤⸥†‡…\u0323\u2010\u00ad-]|\.{2,}')
+_DOTTED_GAP = re.compile(r'\.(?:[ \t]*\.)+')
+_JOIN_SIGNS = "'\u2019\u1fbd\u02bc\u1fbf"
+
+
+def _greek_letter(char):
+    return unicodedata.category(char).startswith('L') and 'GREEK' in unicodedata.name(char, '')
+
+
+def _literal_greek_spans(text):
+    """Literal word spans; mixed-script units cannot donate a Greek suffix."""
+    spans, start, end, mixed = [], None, 0, False
+    for offset, char in enumerate(text):
+        if char in _JOIN_SIGNS:
+            if start is not None:
+                end = offset + 1
+                following = text[end:end + 1]
+                if not following or following in _JOIN_SIGNS or not unicodedata.category(following).startswith('L'):
+                    if not mixed:
+                        spans.append((start, end))
+                    start, mixed = None, False
+        elif unicodedata.category(char).startswith('L'):
+            if start is None:
+                start = offset
+            end = offset + 1
+            mixed = mixed or not _greek_letter(char)
+        elif unicodedata.category(char).startswith('M'):
+            if start is not None:
+                end = offset + 1
+        elif start is not None:
+            if not mixed:
+                spans.append((start, end))
+            start, mixed = None, False
+    if start is not None and not mixed:
+        spans.append((start, end))
+    return spans
+
+
+def _orphan_division_before(text, start):
+    """A skipped non-Greek/damaged component must not enable suffix salvage."""
+    cursor = start
+    while cursor and text[cursor - 1] in ' \t':
+        cursor -= 1
+    if not cursor or text[cursor - 1] != '\n':
+        return False
+    cursor -= 1
+    if cursor and text[cursor - 1] == '\r':
+        cursor -= 1
+    while cursor and text[cursor - 1] in ' \t':
+        cursor -= 1
+    return bool(cursor and text[cursor - 1] in _DIVISION_SIGNS)
 
 
 def normalize(text):

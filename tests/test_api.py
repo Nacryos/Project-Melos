@@ -112,12 +112,33 @@ def test_literal_syntax_and_url_paths(client: TestClient):
     assert client.get("/api/search", params={"q": "%_\\'\"", "match": "exact"}).status_code == 200
     assert client.get("/api/search", params={"q": "<script>", "match": "exact"}).status_code == 200
     assert client.get("/api/search", params={"q": "alert", "match": "exact"}).json()["results"][0]["id"] == "p6"
-    assert client.get("/api/search", params={"q": "x" * 10000}).status_code == 200
+    assert client.get("/api/search", params={"q": "x" * 10000}).status_code == 422
     assert client.get("/api/search", params={"q": "muse", "mode": "bad"}).status_code == 400
     assert client.get("/api/search", params={"q": "muse", "limit": 1000}).status_code == 422
     assert client.get("/api/../backend/server.py").status_code == 404
     assert client.get("/data/raw/synthetic.txt").status_code == 404
     assert client.get("/data/corpus.sqlite").status_code == 404
+
+
+@pytest.mark.parametrize("route", ["/api/search", "/api/usage-space"])
+@pytest.mark.parametrize("query", ["x" * 1001, "x" * 1302, "\U0001f600" * 1001, "\ufeff" + "x" * 1000], ids=["1001", "1302", "astral-1001", "retained-bom"])
+def test_oversize_search_rejected_before_services(client, monkeypatch, route, query):
+    def unexpected(*args, **kwargs):
+        raise AssertionError("Oversize query must not reach corpus, semantic or morphology services")
+    monkeypatch.setattr(server, "connect", unexpected)
+    monkeypatch.setattr(server, "semantic_service", unexpected)
+    monkeypatch.setattr(server, "morph_service", unexpected)
+    result = client.get(route, params={"q": f"  {query}  ", "mode": "hybrid"})
+    assert result.status_code == 422
+    assert "1000 Unicode characters" in result.json()["detail"]
+    assert "not shortened or searched" in result.json()["detail"]
+
+
+@pytest.mark.parametrize("query", ["x" * 1000, "\U0001f600" * 1000, "\u0085" + "x" * 1000 + "\u0085"], ids=["1000", "astral-1000", "trimmed-next-line"])
+def test_maximum_search_query_accepted_without_utf16_counting(client, query):
+    result = client.get("/api/search", params={"q": f"  {query}  ", "mode": "words", "match": "exact"})
+    assert result.status_code == 200
+    assert result.json()["results"] == []
 
 
 def test_sources_hide_internal_paths(client: TestClient, tmp_path: Path):

@@ -894,7 +894,7 @@
     const sequence = ++state.dictionarySequence;
     clear(ui.dictionaryPreview);
     ui.dictionaryPreview.hidden = true;
-    if (!window.MelosDictionaryPreview?.isCandidateQuery(query) || ui.language.value === 'ell') return;
+    if (searchQueryIssue(query) || !window.MelosDictionaryPreview?.isCandidateQuery(query) || ui.language.value === 'ell') return;
     try {
       let evidence = state.dictionaryCache.get(query);
       if (!evidence) {
@@ -917,7 +917,15 @@
     const issues = [];
     const value = (key, max = 500) => {
       const raw = params.get(key) || '';
-      if (raw.length > max || /[\u0000-\u001f\u007f]/.test(raw)) {
+      if (/[\u0000-\u001f\u007f]/.test(raw)) {
+        issues.push(`The saved ${key} is invalid; choose it again before searching.`); return '';
+      }
+      if (key === 'q') {
+        const issue = searchQueryIssue(raw);
+        if (issue) issues.push(`Saved query: ${issue}`);
+        return trimSearchQuery(raw);
+      }
+      if ([...raw].length > max) {
         issues.push(`The saved ${key} is invalid; choose it again before searching.`); return '';
       }
       return raw.trim();
@@ -962,6 +970,7 @@
   function restoreSearchUrl(params) {
     const saved = readSearchUrl(params);
     ui.searchInput.value = saved.query;
+    showSearchQueryIssue(searchQueryIssue(saved.query));
     setFormMode(saved.mode);
     retainSearchOption(ui.authorFilter, saved.author, 'author');
     retainSearchOption(ui.edition, saved.edition, 'edition');
@@ -992,8 +1001,58 @@
     }
     return { ...searchTransport(current), scope_origin: 'Current query and controls', scope_notice: '' };
   }
+  function trimSearchQuery(query) {
+    // Match Python str.strip used by the API, rather than JS trim: notably,
+    // U+0085 is whitespace there, while U+FEFF is retained as query content.
+    return String(query || '').replace(/^[\p{White_Space}\u001c-\u001f]+|[\p{White_Space}\u001c-\u001f]+$/gu, '');
+  }
+  function searchQueryIssue(query) {
+    const length = [...trimSearchQuery(query)].length;
+    return length > 1000
+      ? `Search accepts up to 1,000 characters; this query has ${length.toLocaleString()}. Your full input is retained. Shorten it to search; nothing has been searched.`
+      : '';
+  }
+  function showSearchQueryIssue(issue) {
+    if (issue && !ui.searchQueryError) {
+      ui.searchQueryError = node('p', 'bridge-note search-query-error');
+      ui.searchQueryError.id = 'search-query-error';
+      ui.searchQueryError.setAttribute('role', 'alert');
+      ui.searchForm.after(ui.searchQueryError);
+    }
+    if (!ui.searchQueryError) return;
+    ui.searchQueryError.textContent = issue;
+    ui.searchQueryError.hidden = !issue;
+    const descriptions = (ui.searchInput.getAttribute('aria-describedby') || '').split(/\s+/)
+      .filter(value => value && value !== 'search-query-error');
+    if (issue) descriptions.push('search-query-error');
+    if (descriptions.length) ui.searchInput.setAttribute('aria-describedby', descriptions.join(' '));
+    else ui.searchInput.removeAttribute('aria-describedby');
+    if (issue) ui.searchInput.setAttribute('aria-invalid', 'true');
+    else ui.searchInput.removeAttribute('aria-invalid');
+  }
+  function rejectSearchQuery(query, issue) {
+    // Invalidate both pending result and dictionary-preview rendering. Earlier
+    // requests may still finish, but cannot replace this error or promote a URL.
+    ++state.searchSequence;
+    state.dictionarySequence = (state.dictionarySequence || 0) + 1;
+    state.search = null; state.displayedSearch = null;
+    ui.searchInput.value = String(query || '');
+    clear(ui.resultsList);
+    if (ui.dictionaryPreview) { clear(ui.dictionaryPreview); ui.dictionaryPreview.hidden = true; }
+    ui.results.hidden = false;
+    ui.resultsHeading.textContent = 'Query exceeds the search limit';
+    ui.resultsSummary.textContent = issue;
+    ui.moreResults.hidden = true;
+    showSearchQueryIssue(issue);
+    ui.searchInput.focus();
+  }
   async function search(query, mode = formMode(), append = false) {
-    query = String(query || '').trim();
+    const supplied = String(query || '');
+    const effective = append && state.search?.filters ? state.search.filters.query : supplied;
+    const issue = searchQueryIssue(effective);
+    if (issue) { rejectSearchQuery(effective, issue); return; }
+    showSearchQueryIssue('');
+    query = trimSearchQuery(query);
     if (!query) { ui.searchInput.focus(); return; }
     if (!append) {
       state.search = { query, mode, filters: snapshotSearch(query, mode), offset: 0, total: 0 };
@@ -1883,8 +1942,10 @@
     if (state.search && !ui.results.hidden) search(state.search.query, state.search.mode);
   });
   ui.usage.addEventListener('click', () => {
-    const query = ui.searchInput.value.trim() || state.selectedText || state.activeWord?.textContent?.trim() || '';
+    const query = trimSearchQuery(ui.searchInput.value) || state.selectedText || state.activeWord?.textContent?.trim() || '';
     const snapshot = usageSnapshot(query);
+    const issue = searchQueryIssue(snapshot.q);
+    if (issue) { rejectSearchQuery(snapshot.q, issue); return; }
     if (!snapshot.q) {
       ui.searchInput.placeholder = 'Enter a word or theme to explore its usage…';
       ui.searchInput.focus();
@@ -1894,7 +1955,9 @@
     else message(ui.inspector, 'The usage view is unavailable on this page.', 'warning error-message');
   });
   ui.lookupForm.addEventListener('click', () => {
-    const form = ui.searchInput.value.trim();
+    const form = trimSearchQuery(ui.searchInput.value);
+    const issue = searchQueryIssue(form);
+    if (issue) { rejectSearchQuery(ui.searchInput.value, issue); return; }
     if (!form) {
       ui.searchInput.placeholder = 'Enter a Greek form or transliteration to look up…';
       ui.searchInput.focus();
