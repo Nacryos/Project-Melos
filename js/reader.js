@@ -73,6 +73,10 @@
     }
     return response.json();
   }
+  state.passageAnalysis = window.MelosPassageAnalysis?.mount({
+    root: ui.text, toolbar: ui.selectionActions, getPassage: () => state.passage,
+    post: apiPost, node, safeLink, inspectWord: form => inspectWord(form)
+  });
   function formMode() { return document.querySelector('input[name="search-mode"]:checked')?.value || 'hybrid'; }
   function setFormMode(mode) {
     const radio = document.querySelector(`input[name="search-mode"][value="${mode}"]`);
@@ -237,6 +241,7 @@
   }
   function resetPassageContext(loading = false) {
     state.machineAnalysisCancel?.();
+    state.passageAnalysis?.reset();
     ui.selectionActions.classList.remove('selection-too-long');
     ++state.wordSequence;
     state.passage = null;
@@ -443,7 +448,7 @@
       message(ui.text, 'This record has no passage text.', 'loading-line');
     }
     ui.readingHint.textContent = passage.language === 'grc' && passage.kind === 'text'
-      ? 'Select a phrase to trace it, or choose a Greek word to inspect it.'
+      ? 'Select text, then choose Analyze selection. For keyboard or touch: choose a word, choose “Choose end word”, then choose the last word. Word lookup stays available.'
       : passage.kind === 'translation'
         ? passage.language === 'ell'
           ? 'Modern Greek translation. Open the linked Ancient Greek passage below to inspect its word forms.'
@@ -713,6 +718,7 @@
       ui.title.textContent = [passage.author, passage.work].filter(Boolean).join(' · ') || 'Unattributed passage';
       ui.subtitle.textContent = passage.citation || 'Citation not supplied by source';
       renderPassageText(passage);
+      state.passageAnalysis?.bind(passage);
       renderRelated(passage.related);
       renderMirrors(passage.mirrors);
       renderProvenance(passage);
@@ -1808,6 +1814,9 @@
     for (const active of ui.text.querySelectorAll('.word.active')) active.classList.remove('active');
     state.activeWord = button;
     if (button) {
+      const selection = window.getSelection?.();
+      if (selection?.rangeCount && !selection.getRangeAt(0).collapsed && ui.text.contains(selection.anchorNode)) state.passageAnalysis?.selectionChanged(selection);
+      else state.passageAnalysis?.chooseWord(button);
       for (const part of ui.text.querySelectorAll('.word')) {
         if (part.dataset.lookupGroup === button.dataset.lookupGroup) part.classList.add('active');
       }
@@ -1970,6 +1979,7 @@
     return pieces.join('');
   }
   function updateSelection() {
+    state.passageAnalysis?.selectionChanged(window.getSelection());
     ui.selectionActions.classList.remove('selection-too-long');
     if (state.passageLoading || !state.passage) {
       state.selectedText = ''; ui.selectedPhrase.textContent = ''; ui.selectionActions.hidden = true;
@@ -1981,7 +1991,15 @@
     const inside = anchor && focus && ui.text.contains(anchor) && ui.text.contains(focus);
     const phrase = inside ? selectedPassageText(selection, ui.text).replace(/\s+/g, ' ').trim() : '';
     const length = [...phrase].length; // Match the backend's Unicode-codepoint query limit.
-    if (!inside || length < 2) {
+    const wordSelection = state.passageAnalysis?.wordSelection();
+    if (wordSelection) {
+      state.selectedText = wordSelection.selected_text;
+      ui.selectedPhrase.textContent = `“${state.selectedText}”`; ui.selectionActions.hidden = false;
+      for (const button of ui.selectionActions.querySelectorAll('button')) button.disabled = false;
+      state.passageAnalysis.refreshAction();
+      return;
+    }
+    if (!inside || (length < 2 && !state.passageAnalysis?.hasSelection())) {
       state.selectedText = ''; ui.selectedPhrase.textContent = ''; ui.selectionActions.hidden = true; return;
     }
     if (length > 1000) {
@@ -1990,6 +2008,7 @@
       ui.selectedPhrase.textContent = 'Select up to 1,000 characters to search a passage. This selection has not been shortened or sent.';
       ui.selectionActions.hidden = false;
       for (const button of ui.selectionActions.querySelectorAll('button')) button.disabled = true;
+      state.passageAnalysis?.refreshAction();
       return;
     }
     state.selectedText = phrase;
@@ -1997,6 +2016,7 @@
     ui.selectionActions.hidden = false;
     updateSelectionTranslationAction();
     for (const button of ui.selectionActions.querySelectorAll('button')) button.disabled = false;
+    state.passageAnalysis?.refreshAction();
   }
   async function initialize() {
     if (window.MELOS_FRONTEND_ONLY === true) {

@@ -129,13 +129,15 @@ async def request_policy(request,call_next):
     from .jev_gateway import public_enabled
     visitor_cookie = None
     machine_cookie = None
-    if request.url.path == '/api/machine-analysis' and request.method == 'POST':
+    passage_action = request.url.path in ('/api/analyze-passage', '/api/passage-analysis')
+    if (request.url.path == '/api/machine-analysis' or passage_action) and request.method == 'POST':
+        max_body = 16384 if passage_action else 2048
         try:
             size = int(request.headers.get('content-length', '-1'))
         except ValueError:
             size = -1
-        if size < 0 or size > 2048:
-            return JSONResponse(status_code=413,content={'detail':'A JSON request of at most 2048 bytes is required.'})
+        if size < 0 or size > max_body:
+            return JSONResponse(status_code=413,content={'detail':f'A JSON request of at most {max_body} bytes is required.'})
         if request.headers.get('content-type','').split(';')[0].strip() != 'application/json':
             return JSONResponse(status_code=415,content={'detail':'Use application/json.'})
         token, _, signature = request.cookies.get('melos_morph_visitor','').partition('.')
@@ -146,6 +148,10 @@ async def request_policy(request,call_next):
             token = secrets.token_hex(16)
             machine_cookie = token + '.' + hmac.new(_machine_cookie_key, token.encode(), hashlib.sha256).hexdigest()
         request.state.machine_visitor = hashlib.sha256(token.encode()).hexdigest()
+        if passage_action:
+            # The same convenience identity bounds span-level paid requests;
+            # the durable gateway's global quota remains authoritative.
+            request.state.classifier_visitor = request.state.machine_visitor
     if request.url.path=='/api/classify-context' and request.method=='POST':
         client=request.client.host if request.client else ''
         if (public_deployment() or client not in ('127.0.0.1','::1','testclient')) and not public_enabled():
@@ -823,6 +829,11 @@ class ContextRequest(BaseModel):
 @app.post('/api/classify-context')
 def classify_context_request(request:ContextRequest,http_request:Request):
     """Explicit, bounded inference action; it never modifies source evidence."""
+    return _classify_context_request(request,http_request)
+
+
+def _classify_context_request(request:ContextRequest,http_request:Request,*,provider_override=None):
+    """Shared proof checks; provider overrides are internal, never HTTP input."""
     from .classifier import classify_context
     if (request.candidate_basis == 'machine') != bool(request.machine_receipt_id):
         raise HTTPException(422,'Machine comparison requires a machine receipt; source comparison must not supply one.')
@@ -890,8 +901,8 @@ def classify_context_request(request:ContextRequest,http_request:Request):
         candidate_origin = 'machine_analysis_receipt'
     from .jev_gateway import CachedJevProvider, GatewayLimit, GatewayUnavailable, public_enabled
     from .classifier import configured_provider
-    provider = None
-    if public_enabled():
+    provider = provider_override
+    if provider is None and public_enabled():
         try:
             provider = CachedJevProvider(configured_provider(), http_request.state.classifier_visitor)
         except (GatewayUnavailable, OSError, ValueError):
@@ -911,6 +922,48 @@ def classify_context_request(request:ContextRequest,http_request:Request):
         )
         result['unproven_candidate_ids']=unproven
     return result
+
+
+class _PassageMachineAdapter:
+    def analyze(self, *args, **kwargs):
+        from .machine_morphology import get_service
+        return get_service().analyze(*args, **kwargs)
+
+
+def _passage_classify(form, passage_id, *, provider, candidate_basis='source', machine_receipt_id=None):
+    from types import SimpleNamespace
+    payload = ContextRequest(form=form, passage_id=passage_id,
+                             candidate_basis=candidate_basis, machine_receipt_id=machine_receipt_id)
+    return _classify_context_request(payload, SimpleNamespace(state=SimpleNamespace()),
+                                     provider_override=provider)
+
+
+def _passage_provider(visitor_id):
+    from .classifier import configured_provider, JevProvider
+    from .jev_gateway import CachedJevProvider, GatewayUnavailable
+    provider = configured_provider()
+    if not isinstance(provider, JevProvider):
+        raise GatewayUnavailable('Jev is not configured on this server.')
+    return CachedJevProvider(provider, visitor_id)
+
+
+def _passage_rerank_allowed(request):
+    from .jev_gateway import public_enabled
+    client = request.client.host if request.client else ''
+    return public_enabled() or (not public_deployment() and client in ('127.0.0.1', '::1', 'testclient'))
+
+
+# Providers are lazy: importing the API never downloads or loads model weights.
+from . import syntax_provider as _passage_syntax
+from .passage_ranker import PassageRanker
+from .passage_routes import create_router as _passage_router
+
+app.include_router(_passage_router(
+    lambda identifier: passage(identifier), lambda form, identifier: word(form, identifier),
+    machine_service=_PassageMachineAdapter(), syntax_provider=_passage_syntax,
+    ranker=PassageRanker(lambda identifier: passage(identifier), _passage_classify, _passage_provider),
+    rerank_allowed=_passage_rerank_allowed,
+))
 
 
 def wording_condition(keys):
