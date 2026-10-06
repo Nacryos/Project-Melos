@@ -14,6 +14,10 @@ Keep Melos's white, dark-blue, serif, square frosted-glass visual language.
 - Dedicated author route: expand the preserved vertical chronology/floruit
   design, retain uncertainty and source provenance, improve portrait crops and
   selections, and link authors to their actual works and passages.
+- Expanded author profiles: place a sourced biography beneath the enlarged
+  portrait, with Wikipedia revision/license attribution and separately cited
+  online commentary excerpts where available. Do not fill missing biographies
+  or historical likenesses from model memory.
 - Dedicated themes route, opening in a new tab from the home entry: vertical
   artwork-backed nature categories plus literary discovery prompts (love,
   politics, sympotic song, and related categories). Search results must
