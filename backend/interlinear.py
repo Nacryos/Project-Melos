@@ -678,7 +678,7 @@ def _choose(token, syntax, rank):
         features = canonical_features(row)
         # Lemma spellings with macrons or accents (ἴφθῑμος / ἴφθιμος) are the
         # same headword for this purpose.
-        if any(_lemma_letters(row.get('lemma')) == _lemma_letters(other.get('lemma')) and key[1:3] == other_key[1:3]
+        if any(_lemma_letters(row.get('lemma')) == _lemma_letters(other.get('lemma')) and key[1] == other_key[1]
                and features.items() < canonical_features(other).items()
                for other_key, other in identities.items() if other_key != key):
             identities.pop(key)
