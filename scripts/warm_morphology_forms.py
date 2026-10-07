@@ -126,10 +126,12 @@ def main():
         print(f"{index + 1}/{len(forms)} {form} {status} candidates={results[form]['candidates']}", flush=True)
     # Forms the parser does not know: warm their labelled Aeolic spelling
     # normalisations too, so the reader can serve those parses cache-only.
-    from backend.aeolic_variants import variants
+    from backend.aeolic_variants import LEXICAL, variants
     variant_counts = {}
     for form, record in list(results.items()):
-        if record["status"] != "no_analyses":
+        # Lexical-table forms (τὼ → τῶ) are queried even when the printed form
+        # has analyses of its own, as the reader does.
+        if record["status"] != "no_analyses" and form not in LEXICAL:
             continue
         record["normalised"] = []
         for variant in [*variants(form), *EDGE_VARIANTS.get(form, [])]:

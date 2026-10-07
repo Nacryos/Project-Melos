@@ -634,7 +634,11 @@ class PassageAnalysisService:
             # Two surviving letters beside a lacuna count as a word only when
             # the parser gives them exactly one reading (ις → ἴς); several
             # readings of a two-letter scrap are not evidence of any of them.
-            if token.get("lacuna_boundary_uncertain") and (letters <= 1 or (letters == 2 and not (len(exact_identities) == 1 or has_source_parse))):
+            source_identities = {(row.get("lemma"), tuple(sorted(canonical_features(row).items())))
+                                 for row in source_rows if canonical_features(row)}
+            unique_scrap_reading = (len(exact_identities) == 1 and len(source_identities) <= 1) or \
+                                   (not exact_identities and len(source_identities) == 1)
+            if token.get("lacuna_boundary_uncertain") and (letters <= 1 or (letters == 2 and not unique_scrap_reading)):
                 token["damaged_piece"] = True
                 token["warnings"].append("Surviving letters beside a lacuna, not a complete word; no analysis is asserted.")
                 continue

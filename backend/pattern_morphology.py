@@ -92,6 +92,13 @@ def pattern_candidates(form, predicted_pos=None, limit=6):
     use_nominal = predicted_pos in NOMINAL_POS or predicted_pos is None
     use_verbal = predicted_pos in VERBAL_POS or predicted_pos is None
     found, seen = [], set()
+    capitalised = form[:1] != form[:1].lower()
+    if use_nominal and capitalised and bare.endswith("ιδα") and len(bare) > 5:
+        # A capitalised patronymic in -ίδας: Lesbian/Doric genitive -ίδα
+        # (Ὦγεσιλαΐδα "of Agesilaidas"); a vocative is the other possibility.
+        for case in ("Gen", "Voc"):
+            found.append(_candidate(form, "ιδα", {"case": case, "num": "Sing", "gend": "Masc"}, "NOUN"))
+        return found
     if use_nominal:
         for ending, readings in NOMINAL:
             if bare.endswith(ending) and len(bare) > len(ending) + 1:

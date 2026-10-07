@@ -116,9 +116,11 @@ def _feature_agrees(key, candidate_value, predicted_value):
     # https://universaldependencies.org/u/feat/Tense.html
     if candidate_value == predicted_value:
         return True
-    if key == 'POS' and {candidate_value, predicted_value} <= _FUNCTION_WORD_POS:
+    if key == 'POS' and ({candidate_value, predicted_value} <= _FUNCTION_WORD_POS
+                         or {candidate_value, predicted_value} == {'DET', 'PRON'}):
         # Taggers and dictionaries split adverbs, prepositions, conjunctions
-        # and particles differently (ἐκτός ADP/ADV, ἀλλά CCONJ/ADV, δέ PART).
+        # and particles differently (ἐκτός ADP/ADV, ἀλλά CCONJ/ADV, δέ PART),
+        # and the article ὁ is tagged DET or PRON depending on its use.
         return True
     return key == 'Tense' and predicted_value == 'Past' and candidate_value in {'Aor', 'Imp', 'Pqp'}
 
@@ -309,17 +311,28 @@ def _fullest_reading(ranked, syntax, informative, everything=None):
     """
     top = ranked[0]['candidate']
     top_features = canonical_features(top)
-    best, best_size = None, len(top_features)
     predicted = canonical_features(syntax) if syntax else {}
+    scores = {id(item['candidate']): item.get('score', 0.0) for item in ranked}
+    fuller = []
     for row in [item['candidate'] for item in ranked[1:]] + list(everything or []):
         features = canonical_features(row)
-        if not _fuller_row_of_same_lemma(row, top) or features == top_features or len(features) <= best_size:
+        if not _fuller_row_of_same_lemma(row, top) or features == top_features:
             continue
         if informative and any(key in top_features and not _feature_agrees(key, features[key], predicted[key])
                                for key in set(features) & set(predicted)):
             continue
-        best, best_size = row, len(features)
-    return best or top
+        if not any(canonical_features(other) == features for other in fuller):
+            fuller.append(row)
+    if not fuller:
+        return top
+    # Several fuller rows that disagree with each other (τὼ: dual, genitive
+    # masculine, genitive neuter) do not complete a bare "article" row; only a
+    # single fuller reading, or one clearly ahead in the ranking, does.
+    if len(fuller) == 1:
+        return fuller[0]
+    fuller.sort(key=lambda row: -scores.get(id(row), float('-inf')))
+    first, second = scores.get(id(fuller[0]), float('-inf')), scores.get(id(fuller[1]), float('-inf'))
+    return fuller[0] if first - second >= 0.5 else top
 
 
 def rank_candidates(candidates, syntax):
@@ -1076,6 +1089,11 @@ def interlinear_reading(result):
                            if canonical_features(item['candidate']).get('Case') == 'Nom']
             top = [item for item in top if not (canonical_features(item['candidate']).get('Case') == 'Voc'
                    and {**canonical_features(item['candidate']), 'Case': 'Nom'} in nominatives)]
+            # Unless the prediction itself is vocative, a vocative member yields
+            # to any other case in the group (Ὦγεσιλαΐδα: genitive over vocative).
+            if canonical_features(predicted).get('Case') != 'Voc' and \
+                    any(canonical_features(item['candidate']).get('Case') not in (None, 'Voc') for item in top):
+                top = [item for item in top if canonical_features(item['candidate']).get('Case') != 'Voc']
             parses = [canonical_features(item['candidate']) for item in top]
             maximal = [parse for parse in parses if parse and all(other.items() <= parse.items() for other in parses)]
             if maximal:
@@ -1184,7 +1202,10 @@ def interlinear_reading(result):
     # ἄχω as nominative), which are better evidence than the model's guesses.
     words_only = [entry for entry in pending if entry[0].get('kind') == 'word']
     for index, (row, token, predicted, partial) in enumerate(words_only):
-        if partial or row.get('status') == 'selected' or row.get('lacuna_boundary_uncertain'):
+        features = row.get('features') or {}
+        settled = row.get('status') == 'selected' and not (
+            features.get('POS') in _NOMINAL_POS and not all(key in features for key in ('Case', 'Number')))
+        if partial or settled or row.get('lacuna_boundary_uncertain'):
             continue
         neighbours = []
         for offset in (-1, 1):
@@ -1196,8 +1217,10 @@ def interlinear_reading(result):
                                        'features': {key: other['features'][key] for key in ('Case', 'Number', 'Gender') if key in other['features']}})
         if not neighbours:
             continue
-        base = predicted if predicted and canonical_features(predicted) else {'agreement_partners': []}
-        augmented = {**base, 'agreement_partners': [*(base.get('agreement_partners') or []), *neighbours]}
+        # The first pass already showed the model's own guess for this word did
+        # not settle it; in the second pass only the neighbours' chosen parses
+        # count (τὼ ξίφεος: the article follows its noun, not the model's "dative").
+        augmented = {'agreement_partners': neighbours}
         chosen, basis, count = _choose(token, augmented, None)
         if not chosen:
             continue
