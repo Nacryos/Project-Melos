@@ -27,8 +27,9 @@ _BRACKETS = frozenset("[]⟦⟧⟨⟩<>")
 
 def _adjacent_material(value):
     """Horizontal typesetting space/editorial brackets, never another word/line."""
+    # A combining mark printed on a dot (".́") is part of the dot run's typesetting.
     return all(char == "\t" or unicodedata.category(char) == "Zs"
-               or char in _BRACKETS for char in value)
+               or unicodedata.category(char).startswith("M") or char in _BRACKETS for char in value)
 
 
 def annotate_lacuna_boundaries(text, tokens, *, source_critical):

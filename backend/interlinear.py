@@ -268,7 +268,8 @@ def _affinity(candidate, syntax):
         score -= 2.0
     elif candidate.get('basis') != 'machine_analysis' and candidate.get('candidate_kind') != 'machine_analysis':
         # An exact-form attestation recorded by a dictionary (LSJ, Wiktionary)
-        # outranks a parser hypothesis of the same fit.
+        # outranks a parser hypothesis of the same fit, when it states a full
+        # analysis; a row giving only "pl." must not outrank "nom. masc. pl.".
         score += 0.6
     if features.get('Case') == 'Voc' and predicted.get('Case') != 'Voc':
         # Vocative forms coincide with nominatives (participles, feminines);
@@ -283,6 +284,33 @@ def candidate_basis(item):
     if item.get('basis') == 'machine_analysis' or item.get('candidate_kind') == 'machine_analysis':
         return 'machine_analysis'
     return 'source_alternative'
+
+
+def _fuller_row_of_same_lemma(top, second):
+    """True when `top` restates `second`'s lemma and parse with extra features.
+
+    Only then may a small margin decide: dat. masc. 1st sg. over dat. masc. sg.
+    A nominative against an accusative of the same lemma stays ambiguous.
+    """
+    if _lemma_letters(top.get('lemma')) != _lemma_letters(second.get('lemma')):
+        return False
+    return canonical_features(second).items() <= canonical_features(top).items()
+
+
+def _fullest_reading(ranked, syntax, informative):
+    """The top row, or a same-lemma row that restates it with more features.
+
+    A dictionary row giving only "pl." may outrank the parser's "nom. masc. pl."
+    through attestation; the fuller row is the one to show when it is compatible
+    with the prediction (ἴφθιμοι).
+    """
+    top = ranked[0]['candidate']
+    for item in ranked[1:]:
+        row = item['candidate']
+        if (_fuller_row_of_same_lemma(row, top) and canonical_features(row) != canonical_features(top)
+                and (not informative or _compatible(row, syntax))):
+            return row
+    return top
 
 
 def rank_candidates(candidates, syntax):
@@ -612,6 +640,10 @@ def sense_form_compatible(sense, token, *, candidate=None):
 
 
 def _choose(token, syntax, rank):
+    if syntax and not canonical_features(syntax) and not syntax.get('agreement_partners'):
+        # A prediction with no grammatical content (X, INTJ, punctuation-like)
+        # is no prediction: the candidates are weighed on their own.
+        syntax = None
     source = [row for row in [*(token.get('source_candidates') or []), *(token.get('contextual_candidates') or [])] if _exact(row, token)]
     machine = [row for row in (token.get('machine') or {}).get('machine_candidates') or [] if _exact(row, token, True)]
     candidates = [{**row, 'id': candidate_identity(row), 'generated_candidate_identity':
@@ -668,11 +700,23 @@ def _choose(token, syntax, rank):
                 return chosen, basis, len(identities)
     if len(identities) == 1:
         return next(iter(identities.values())), 'unique_compatible_candidate' if syntax else 'unique_candidate', 1
-    if syntax and candidates:
+    if candidates:
         # Rank the full parses by their fit to the contextual prediction. When
         # nothing is compatible the prediction is contradicted on some feature;
         # the parses still rank, and the best one is shown as a ranked proposal.
+        # Without a usable prediction the ranking rests on attestation and
+        # completeness alone (the fuller source row of one lemma, ἔοι → εἰμί).
+        # A prediction without grammatical features (X, INTJ) asserts nothing
+        # that a parse could contradict; partners alone still rank below.
+        informative = bool(syntax) and bool(canonical_features(syntax))
         pool = list(identities.values()) if identities else candidates
+        if not informative:
+            ranked = rank_candidates(pool, syntax)
+            margin = ranked[0]['score'] - (ranked[1]['score'] if len(ranked) > 1 else float('-inf'))
+            if canonical_features(ranked[0]['candidate']) and (len(ranked) == 1 or margin >= 0.5
+                                                                or (margin > 0 and _fuller_row_of_same_lemma(ranked[0]['candidate'], ranked[1]['candidate']))):
+                return _fullest_reading(ranked, syntax, False), 'morphology_ranked_without_syntax', len(pool)
+            return None, 'ambiguous', len(identities) or len(candidates)
         if not identities:
             distinct = {(_identity(row.get('lemma_raw') or row.get('lemma')), str(row.get('homograph_id') or ''),
                          str(row.get('lemma_identity') or ''), tuple(sorted(canonical_features(row).items()))) for row in pool}
@@ -688,11 +732,11 @@ def _choose(token, syntax, rank):
         # pick the fuller row of the *same* lemma, but never resolve a homograph
         # (ἦλθον / ἔρχομαι for ἦλθες): different lemmas need a real margin.
         margin = ranked[0]['score'] - (ranked[1]['score'] if len(ranked) > 1 else float('-inf'))
-        same_lemma = len(ranked) > 1 and _identity(ranked[0]['candidate'].get('lemma')) == _identity(ranked[1]['candidate'].get('lemma'))
-        decisive = ranked[0]['score'] > 0 and (len(ranked) == 1 or margin >= 0.5 or (same_lemma and margin > 0))
+        fuller = len(ranked) > 1 and _fuller_row_of_same_lemma(ranked[0]['candidate'], ranked[1]['candidate'])
+        decisive = ranked[0]['score'] > 0 and (len(ranked) == 1 or margin >= 0.5 or (fuller and margin > 0))
         if decisive and (identities or _agreements(ranked[0]['candidate'], syntax) >= 1):
             basis = 'morphology_ranked_by_syntax' if identities else 'morphology_ranked_despite_syntax_conflict'
-            return ranked[0]['candidate'], basis, len(pool)
+            return _fullest_reading(ranked, syntax, True), basis, len(pool)
     return None, 'ambiguous' if candidates else 'unavailable', len(identities) or len(candidates)
 
 
@@ -1031,6 +1075,15 @@ def interlinear_reading(result):
         lexical_conflict = _lexical_prediction_conflict(token, predicted) if not chosen and not consensus and not partial else None
         conflict = conflict or bool(lexical_conflict)
         features = canonical_features(chosen) if chosen else consensus or (canonical_features(predicted or {}) if not partial and not conflict else {})
+        if features and 'POS' not in features and predicted:
+            # A source row may state case/number/gender without a part of speech;
+            # the prediction's class fills it only when it fits the parse's shape.
+            predicted_pos = canonical_features(predicted).get('POS')
+            nominal = any(key in features for key in ('Case', 'Gender')) and not any(key in features for key in ('Tense', 'Mood', 'Person'))
+            verbal = any(key in features for key in ('Tense', 'Mood', 'Person', 'VerbForm'))
+            if predicted_pos and ((nominal and predicted_pos in _NOMINAL_POS) or (verbal and predicted_pos == 'VERB')):
+                features = {**features, 'POS': predicted_pos}
+                row['pos_from_prediction'] = True
         # An unresolved candidate set must not inherit an arbitrary dictionary
         # sense; a standalone model morphology remains explicitly a prediction.
         row.update(lemma=chosen.get('lemma') if chosen else None, features=features,

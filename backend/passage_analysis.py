@@ -535,7 +535,7 @@ class PassageAnalysisService:
                     candidate["id"] = candidate_identity(candidate)
                     candidate["generated_candidate_identity"] = True
         syntax = self._syntax(selected, text, start, end)
-        self._last_tier(tokens, syntax)
+        self._last_tier(tokens, syntax, text)
         syntax_text = text[syntax["context_start"]:syntax["context_end"]] if syntax.get("scope") in {"whole_passage", "bounded_context_window"} else selected
         editorial = any(char in EDITORIAL for char in syntax_text) or any(token.get("lacuna_boundary_uncertain") for token in tokens)
         result = {"version": VERSION, "status": "ok",
@@ -595,7 +595,7 @@ class PassageAnalysisService:
         return result
 
     @staticmethod
-    def _last_tier(tokens, syntax):
+    def _last_tier(tokens, syntax, text=""):
         """Ending-based analyses for unrecognised words; damaged-piece labels.
 
         Runs after the lexicon, parser and normalisation tiers. A word that no
@@ -614,6 +614,14 @@ class PassageAnalysisService:
                 continue
             form = analysis_form(token)
             letters = sum(1 for char in unicodedata.normalize("NFD", form) if unicodedata.category(char).startswith("L"))
+            printed = token.get("text") or ""
+            after = text[token["end"]:token["end"] + 1] if text else ""
+            if "[" in printed and "]" not in printed[printed.rindex("["):] and after in ("", "\n", "\r"):
+                # Μύρσιλ̣[ο at a line end: the editor's supplement runs past the
+                # line, so the printed letters are not a complete word.
+                token["damaged_piece"] = True
+                token["warnings"].append("The editor's supplement continues beyond the line; the printed letters are not a complete word.")
+                continue
             machine = token.get("machine") or {}
             has_machine = bool(machine.get("machine_candidates"))
             # For a short run of letters beside a lacuna only an analysis of the
@@ -627,7 +635,7 @@ class PassageAnalysisService:
             # A bare headword match (the letter α as a dictionary entry) is not
             # a grammatical analysis of one or two surviving letters.
             has_source_parse = any(canonical_features(row) for row in source_rows)
-            if token.get("lacuna_boundary_uncertain") and letters <= 2 and not (has_exact_machine or has_source_parse):
+            if token.get("lacuna_boundary_uncertain") and (letters <= 1 or (letters == 2 and not (has_exact_machine or has_source_parse))):
                 token["damaged_piece"] = True
                 token["warnings"].append("Surviving letters beside a lacuna, not a complete word; no analysis is asserted.")
                 continue

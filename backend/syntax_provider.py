@@ -193,6 +193,10 @@ class SyntaxProvider:
                 # Source offsets: the span from the first to the last retained
                 # character, so dropped brackets inside a word stay inside it.
                 start, end = view_index[view_start], view_index[view_end - 1] + 1
+                # A dropped underdot after the last letter belongs to that letter
+                # (ἄγνοις̣): keep it inside the span so it matches the reader's token.
+                while end < len(text) and text[end] == "̣":
+                    end += 1
                 tokens.append({"id": token.i, "text": text[start:end], "start": start, "end": end,
                                "lemma": token.lemma_ or None, "upos": token.pos_, "xpos": token.tag_,
                                "features": token.morph.to_dict(), "head": None if token.head.i == token.i else token.head.i,
