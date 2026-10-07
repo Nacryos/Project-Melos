@@ -277,6 +277,8 @@ def _affinity(candidate, syntax):
         # Vocative forms coincide with nominatives (participles, feminines);
         # unless the prediction says vocative, the nominative reading leads.
         score -= 0.2
+    if _precedent_agrees(candidate):
+        score += 0.6
     return score
 
 
@@ -286,6 +288,28 @@ def candidate_basis(item):
     if item.get('basis') == 'machine_analysis' or item.get('candidate_kind') == 'machine_analysis':
         return 'machine_analysis'
     return 'source_alternative'
+
+
+# Readings settled with strong evidence earlier in this process, by printed
+# form: the same form in the same dialect corpus is usually the same lexeme
+# (νᾶϊ settled as ναῦς by μελαίνᾳ in 34a carries to νᾶϊ in 326). A precedent
+# is a ranking signal and may stand in for missing contextual evidence; it is
+# labelled when it decides, and never overrides contextual agreement.
+_PRECEDENTS = {}
+_STRONG_BASES = {'unique_compatible_candidate', 'morphology_ranked_by_syntax', 'morphology_ranked_by_neighbour_parse'}
+
+
+def record_precedent(form, chosen):
+    if form and chosen and chosen.get('lemma') and canonical_features(chosen):
+        _PRECEDENTS[_identity(form)] = {'lemma': _lemma_letters(chosen.get('lemma')), 'features': canonical_features(chosen)}
+
+
+_CURRENT_FORM = [None]
+
+
+def _precedent_agrees(candidate, syntax=None):
+    precedent = _PRECEDENTS.get(_identity(_CURRENT_FORM[0] or ''))
+    return bool(precedent and candidate.get('lemma') and _lemma_letters(candidate['lemma']) == precedent['lemma'])
 
 
 def _fuller_row_of_same_lemma(top, second):
@@ -662,6 +686,7 @@ def sense_form_compatible(sense, token, *, candidate=None):
 
 
 def _choose(token, syntax, rank):
+    _CURRENT_FORM[0] = _form(token)
     if syntax and not canonical_features(syntax) and not syntax.get('agreement_partners'):
         # A prediction with no grammatical content (X, INTJ, punctuation-like)
         # is no prediction: the candidates are weighed on their own.
@@ -762,8 +787,11 @@ def _choose(token, syntax, rank):
         margin = ranked[0]['score'] - (ranked[1]['score'] if len(ranked) > 1 else float('-inf'))
         fuller = len(ranked) > 1 and _fuller_row_of_same_lemma(ranked[0]['candidate'], ranked[1]['candidate'])
         decisive = ranked[0]['score'] > 0 and (len(ranked) == 1 or margin >= 0.5 or (fuller and margin > 0))
-        if decisive and (identities or _agreements(ranked[0]['candidate'], syntax) >= 1):
-            basis = 'morphology_ranked_by_syntax' if identities else 'morphology_ranked_despite_syntax_conflict'
+        precedent = _precedent_agrees(ranked[0]['candidate'])
+        if decisive and (identities or _agreements(ranked[0]['candidate'], syntax) >= 1 or precedent):
+            basis = ('morphology_ranked_by_syntax' if identities else
+                     'morphology_ranked_despite_syntax_conflict' if _agreements(ranked[0]['candidate'], syntax) >= 1 else
+                     'morphology_ranked_by_precedent')
             return _fullest_reading(ranked, syntax, True, candidates), basis, len(pool)
     return None, 'ambiguous' if candidates else 'unavailable', len(identities) or len(candidates)
 
@@ -1123,6 +1151,8 @@ def interlinear_reading(result):
             # gender; the prediction's gender is taken, and labelled as such.
             features = {**features, 'Gender': canonical_features(predicted)['Gender']}
             row['gender_from_prediction'] = True
+        if chosen and basis in _STRONG_BASES and not boundary_uncertain:
+            record_precedent(_form(token), chosen)
         # An unresolved candidate set must not inherit an arbitrary dictionary
         # sense; a standalone model morphology remains explicitly a prediction.
         row.update(lemma=chosen.get('lemma') if chosen else None, features=features,
@@ -1230,6 +1260,7 @@ def interlinear_reading(result):
                    candidate_id=chosen.get('id'), alternative_count=count, source_candidate=deepcopy(chosen),
                    neighbour_evidence=[{'text': n['text'], 'features': n['features']} for n in neighbours])
         row.pop('supporting_parse_candidate_ids', None)
+        record_precedent(_form(token), chosen)
     edges = []
     for row, predicted in linked.values():
         pair = linked.get((predicted.get('sentence_id'), predicted.get('head')))
