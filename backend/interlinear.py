@@ -787,8 +787,10 @@ def _choose(token, syntax, rank):
         # (ἦλθον / ἔρχομαι for ἦλθες): different lemmas need a real margin.
         margin = ranked[0]['score'] - (ranked[1]['score'] if len(ranked) > 1 else float('-inf'))
         fuller = len(ranked) > 1 and _fuller_row_of_same_lemma(ranked[0]['candidate'], ranked[1]['candidate'])
-        decisive = ranked[0]['score'] > 0 and (len(ranked) == 1 or margin >= 0.5 or (fuller and margin > 0))
         precedent = _precedent_agrees(ranked[0]['candidate'])
+        # A wrong part-of-speech guess (ADV for νᾶϊ) drives every score below
+        # zero; a precedent for the same form still carries the reading.
+        decisive = (ranked[0]['score'] > 0 or precedent) and (len(ranked) == 1 or margin >= 0.5 or (fuller and margin > 0))
         if decisive and (identities or _agreements(ranked[0]['candidate'], syntax) >= 1 or precedent):
             basis = ('morphology_ranked_by_syntax' if identities else
                      'morphology_ranked_despite_syntax_conflict' if _agreements(ranked[0]['candidate'], syntax) >= 1 else
