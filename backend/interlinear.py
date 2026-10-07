@@ -676,7 +676,10 @@ def _choose(token, syntax, rank):
     # parse by combining mutually exclusive features from different rows.
     for key, row in list(identities.items()):
         features = canonical_features(row)
-        if any(key[:3] == other_key[:3] and features.items() < canonical_features(other).items()
+        # Lemma spellings with macrons or accents (ἴφθῑμος / ἴφθιμος) are the
+        # same headword for this purpose.
+        if any(_lemma_letters(row.get('lemma')) == _lemma_letters(other.get('lemma')) and key[1:3] == other_key[1:3]
+               and features.items() < canonical_features(other).items()
                for other_key, other in identities.items() if other_key != key):
             identities.pop(key)
     decision = (rank or {}).get('decision') or {}
