@@ -27,8 +27,13 @@ their predictions to `provider_busy`).
 
 Dev audit 8 (`runtime/dev/audit-8`): 298 of 306 intact words complete, 15 damaged
 pieces labelled, 194 words with a selected gloss (109 at K). Backend tests: 1880
-pass, 1 expected frozen-manifest failure. A production audit
-(`runtime/dev/audit-9-production`) was started after promotion.
+pass, 1 expected frozen-manifest failure. Production audit after promotion
+(`runtime/dev/audit-9-production`, through https://greeklyric.com): 299 of 306
+intact words complete, 15 damaged pieces labelled, 195 words with a selected
+gloss. The seven residual words: Ὦγεσιλαΐδα and τυνδέων (ending-pattern parses
+without a determinable gender), γλαύκας and τὼ (genuine ties left as consensus),
+Μύρσιλ̣[ο and ἄχω (model prediction only), ον̣ beside a lacuna, νᾶϊ and ἄεθλον
+(prediction conflicts in the 80-word audit window).
 
 ## Historical: full parses for every printed word, release K (2026-10-07)
 
