@@ -1,5 +1,25 @@
 # Deployment handoff
 
+## Current: release K3 — every intact word fully parsed (2026-10-07, night)
+
+Public backend: image `melos-api:20261007k3`, same recipe and mounts as K
+(`MELOS_K_TAG=k3 sh /home/alvin/melos-k/src/deploy/release_k.sh …`, source tarball
+sha256 `e602bef35e4e0796e41fa020cf9279ec65955367b63cf5c9ec46d4cd0fbc66ee`). K2 kept
+stopped as `melos-api-before-lexical-20261007k3`; canary as `melos-api-lexical-canary-k3`.
+Adds over K2: second ranking pass from neighbours' resolved parses (τὼ ξίφεος,
+ἄχω θεσπεσία), precedents from settled readings of the same form (νᾶϊ), fullest
+same-lemma row across a wrongly predicted feature (ἄεθλον acc. neut. sg.), genitive
+patronymics, labelled top-ranked proposals for tied nominals (γλαύκας), open
+supplements at a line end labelled conditional (Μύρσιλ̣[ο).
+
+Verified on https://greeklyric.com:
+- Production audit (`runtime/dev/audit-13-production`): **305 of 305 intact words
+  with complete parse fields**, 16 damaged letter-runs labelled, 201 words with a
+  selected gloss.
+- `scripts/check_span_parses.py --random 30`: every printed line plus 150 random
+  2–5 word spans across the five poems, 227 multi-word selections, 821 word rows,
+  **0 failures**.
+
 ## Current: release K2 — last tier, damaged pieces, ranking refinements (2026-10-07, later)
 
 Public backend: image `melos-api:20261007k2` (`sha256:6f6086d02cd5…`), built on
