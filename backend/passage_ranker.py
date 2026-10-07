@@ -15,6 +15,7 @@ from typing import Mapping
 
 from .classifier import MAX_STATE_CHARS
 from .jev_gateway import GatewayLimit, GatewayUnavailable
+from .translation_languages import is_english_translation
 
 MAX_TOKEN_OCCURRENCES = 3
 MAX_TRANSLATIONS = 2
@@ -30,7 +31,7 @@ def _translations(passage):
     """Project only translation previews admitted by the corpus lookup."""
     rows = []
     for translation in passage.get("translation_previews") or []:
-        if not isinstance(translation, Mapping) or not isinstance(translation.get("text"), str):
+        if not is_english_translation(translation) or not isinstance(translation.get("text"), str):
             continue
         if not translation.get("record_id") or translation.get("parent_id") != passage["id"]:
             continue
@@ -88,6 +89,7 @@ def _syntax_context(result):
             "A null head with unresolved attachment status is not a predicted root. "
             + ("Only the selected span was parsed; heads outside it cannot be resolved." if scope == "selected_span" else
                "The whole bounded source passage was parsed; this does not restore missing material." if scope == "whole_passage" else
+               "A bounded source context window containing the selection and neighboring words was parsed; heads outside that window cannot be resolved. This does not restore missing material." if scope == "bounded_context_window" else
                "The parsed context scope was not supplied; do not assume whole-passage coverage."))}
 
 
@@ -193,9 +195,12 @@ class PassageRanker:
             return output
         blocked = None
         for token in words:
-            item = {"token_id": token["id"], "form": token["text"], "start": token["start"],
+            item = {"token_id": token["id"], "form": token.get("form") or token["text"], "start": token["start"],
                     "end": token["end"], "status": "not_available", "ranked_candidates": []}
             output["items"].append(item)
+            if token.get("lacuna_boundary_uncertain"):
+                item.update(status="boundary_uncertain", reason="The source word boundary is uncertain beside printed dots; literal analyses remain conditional and no occurrence ranking was requested.")
+                continue
             if token.get("editorial_fragment"):
                 item.update(status="editorial_fragment", reason="Editorial boundaries split this word; no reconstructed form was ranked.")
                 continue
@@ -229,7 +234,7 @@ class PassageRanker:
             output["attempted_occurrences"] += 1
             wrapper = OccurrenceProvider(provider, passage, token, result)
             try:
-                decision = self.classify_callback(token["text"], passage_id, provider=wrapper,
+                decision = self.classify_callback(token.get("form") or token["text"], passage_id, provider=wrapper,
                     candidate_basis=basis, machine_receipt_id=receipt_id)
                 if not isinstance(decision, Mapping):
                     raise GatewayUnavailable("Classifier did not return a decision.")

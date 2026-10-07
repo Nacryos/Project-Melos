@@ -12,10 +12,53 @@ import hashlib
 from threading import BoundedSemaphore
 import unicodedata
 
+from .phrase_meaning import phrase_meaning
+from .interlinear import candidate_identity, interlinear_reading, join_machine_dictionary, catalog_machine_subentries
+from .translation_languages import is_english_translation
+from .lacuna_boundaries import annotate_lacuna_boundaries
+
 VERSION = 1
 MAX_CHARACTERS = 2000
 MAX_WORDS = 80
 MAX_MACHINE_FETCHES = 3
+MAX_DICTIONARY_LEMMA_LOOKUPS = 24
+MAX_MACHINE_SUBENTRY_LOOKUPS = 24
+
+
+def machine_dictionary_lookup(form, *, machine_lookup, subentry_lookup):
+    """Standalone query envelope using the same receipt/catalog proof as spans.
+
+    Offsets describe the query string only, never an occurrence in a poem.
+    The caller supplies cache-only machine lookup; no syntax or sense ranking
+    is requested and definitions remain under their exact parser hypotheses.
+    """
+    result = {'version': 1, 'scope': 'standalone_form_query', 'status': 'unavailable',
+              'query_form': form, 'tokens': [], 'ranking_status': 'unsupported_source_type'}
+    try:
+        machine = machine_lookup(form)
+        if machine.get('status') != 'ok' or machine.get('form') != form:
+            result['status'] = machine.get('status', 'unavailable') if machine.get('form') == form else 'unavailable'
+            return result
+        length_utf16 = len(form.encode('utf-16-le')) // 2
+        token = {'id': 'query:' + hashlib.sha256(form.encode('utf8')).hexdigest(),
+                 'text': form, 'kind': 'word', 'start': 0, 'end': len(form),
+                 'start_utf16': 0, 'end_utf16': length_utf16,
+                 'machine': deepcopy(machine), 'source_candidates': [], 'contextual_candidates': []}
+        catalog = {'version': 1, 'ranking_status': 'unsupported_source_type'}
+        token['machine_subentries'] = catalog_machine_subentries(catalog, subentry_lookup(deepcopy(token)))
+        result.update(status=token['machine_subentries']['status'], tokens=[token],
+                      selection={'text': form, 'start': 0, 'end': len(form),
+                                 'start_utf16': 0, 'end_utf16': length_utf16},
+                      machine_subentry_evidence=catalog)
+        result['interlinear'] = interlinear_reading(result)
+        return result
+    except Exception:
+        result.update(status='unavailable', tokens=[],
+                      warning='Source-subentry evidence could not be verified; no meaning was inferred.')
+        result.pop('machine_subentry_evidence', None)
+        result.pop('interlinear', None)
+        return result
+MAX_EDITORIAL_LOOKUPS = 16
 APOSTROPHES = "'’ʼ᾽"
 EDITORIAL = frozenset("[]⟦⟧⟨⟩<>…†‡̣")
 
@@ -53,23 +96,87 @@ def _letter(char):
     return bool(char) and unicodedata.category(char)[0] in "LM"
 
 
+RECONSTRUCTION_MARKS = "[]"
+UNCERTAIN_MARK = "̣"
+
+
+def analysis_form(token):
+    """The editor's printed reading of a word, used for every lookup.
+
+    Square brackets mark letters the editor supplied; an underdot marks a
+    doubtfully read letter. Both are kept verbatim in ``text`` and removed
+    only here, so the lookup form is exactly the edition's reading.
+    """
+    form = token.get("form")
+    if form:
+        return form
+    return printed_reading(token.get("text") or "")
+
+
+def printed_reading(text):
+    stripped = "".join(char for char in unicodedata.normalize("NFD", text)
+                       if char not in RECONSTRUCTION_MARKS and char != UNCERTAIN_MARK)
+    return unicodedata.normalize("NFC", stripped)
+
+
+def supplied_letters(text):
+    """Letters the editor supplied inside square brackets, in printed order."""
+    runs, current, inside = [], [], False
+    seen_bracket = False
+    for char in text:
+        if char == "[":
+            # Letters before an opening bracket are attested, not supplied.
+            inside, seen_bracket, current = True, True, []
+        elif char == "]":
+            if not seen_bracket and current:
+                # The word began inside a lacuna opened on an earlier line.
+                runs.append("".join(current))
+            elif inside and current:
+                runs.append("".join(current))
+            current, inside, seen_bracket = [], False, True
+        elif inside or not seen_bracket:
+            current.append(char)
+        else:
+            continue
+    if inside and current:
+        runs.append("".join(current))
+    return [run for run in runs if run]
+
+
 def tokenize_span(text, start, end):
-    """Lossless segments, including spaces and every editorial character."""
+    """Lossless segments, including spaces and every editorial character.
+
+    A printed word interrupted by square brackets (νᾶ̣]σον, Δ[ίος, θύ[μ]ῳ) is one
+    word token whose ``form`` is the editor's reading; brackets at the edges of a
+    word stay separate editorial tokens.
+    """
     tokens, cursor = [], start
     while cursor < end:
         begin, char = cursor, text[cursor]
-        if _letter(char):
+        # Combining accents without a base letter are source editorial marks,
+        # not independently look-up-able words. Marks still attach after letters.
+        if unicodedata.category(char).startswith("L") and char not in APOSTROPHES:
             kind = "word"
             cursor += 1
-            while cursor < end and (_letter(text[cursor]) or text[cursor] in APOSTROPHES):
-                cursor += 1
+            while cursor < end:
+                if _letter(text[cursor]) or text[cursor] in APOSTROPHES:
+                    cursor += 1
+                    continue
+                if text[cursor] in RECONSTRUCTION_MARKS:
+                    ahead = cursor
+                    while ahead < end and text[ahead] in RECONSTRUCTION_MARKS:
+                        ahead += 1
+                    if ahead < end and unicodedata.category(text[ahead]).startswith("L") and text[ahead] not in APOSTROPHES:
+                        cursor = ahead
+                        continue
+                break
         elif char.isspace():
             kind = "space"
             cursor += 1
             while cursor < end and text[cursor].isspace():
                 cursor += 1
         else:
-            kind = "editorial" if char in EDITORIAL else "punctuation"
+            kind = "editorial" if char in EDITORIAL or unicodedata.category(char).startswith("M") else "punctuation"
             cursor += 1
         original = text[begin:cursor]
         partial = kind == "word" and ((begin == start and begin > 0 and
@@ -80,8 +187,27 @@ def tokenize_span(text, start, end):
                        "start": begin, "end": cursor,
                        "start_utf16": utf16_offset(text, begin), "end_utf16": utf16_offset(text, cursor),
                        "partial_word": bool(partial), "warnings": []})
-    # An interruption inside printed wording (α[β]γ, α[…]β) must not become
-    # three independently asserted complete words, or an invented repaired one.
+        if kind == "word":
+            token = tokens[-1]
+            token["form"] = printed_reading(original)
+            if UNCERTAIN_MARK in unicodedata.normalize("NFD", original):
+                token["uncertain_letters"] = True
+            opened_before = begin > 0 and text[begin - 1] == "["
+            closed_after = cursor < len(text) and text[cursor] == "]"
+            supplied = supplied_letters(original)
+            if opened_before and "[" not in original:
+                # [σον] or [ίος: the whole printed word, up to its first
+                # closing bracket, was supplied by the editor.
+                head = printed_reading(original.split("]", 1)[0])
+                supplied = [head] + [run for run in supplied if run != head]
+            elif closed_after and "[" not in original and "]" not in original:
+                supplied = [printed_reading(original)]
+            if supplied or any(mark in original for mark in RECONSTRUCTION_MARKS):
+                token["editorial_reconstruction"] = True
+                token["supplied_letters"] = [printed_reading(run) for run in supplied if printed_reading(run)]
+                token["supplied_whole_word"] = bool(supplied) and printed_reading("".join(supplied)) == token["form"]
+    # An interruption inside printed wording by anything other than brackets
+    # (α…β, α†β) is a damaged span; its pieces are preserved, not repaired.
     previous_word, only_editorial = None, False
     for token in tokens:
         if token["kind"] == "word":
@@ -90,6 +216,8 @@ def tokenize_span(text, start, end):
                 token["editorial_fragment"] = True
             previous_word, only_editorial = token, False
         elif token["kind"] == "editorial":
+            # Brackets between letters were absorbed into the word above, so an
+            # editorial run here is a lacuna or damage sign (α[…]β, α†β).
             only_editorial = previous_word is not None
         else:
             previous_word, only_editorial = None, False
@@ -125,12 +253,14 @@ def lint_syntax(syntax, *, editorial=False):
     if editorial:
         warnings.append({"code": "editorial_uncertainty", "token_ids": [], "severity": "uncertain",
             "evidence_type": "conditional_model_check",
-            "message": "Editorial marks or uncertain letters occur in this selection. Dependency predictions do not restore missing material."})
+            "message": "Editorial marks or uncertain letters occur in the analyzed source context. Dependency predictions do not restore missing material."})
     return {"status": "conditional", "warnings": warnings}
 
 
 def _context(passage):
-    translations = deepcopy(passage.get("translation_previews") or [])
+    translations = [deepcopy(row) for row in (passage.get("translation_previews") or [])
+                    if is_english_translation(row) and row.get("record_id")
+                    and row.get("parent_id") == passage["id"]]
     for row in translations:
         row["evidence_type"] = "published_translation"
         row["selection_aligned"] = False
@@ -140,6 +270,8 @@ def _context(passage):
         if row.get("kind") in {"commentary", "comment", "scholion", "scholia", "note"} and row.get("parent_id") == passage["id"]:
             commentary.append({**deepcopy(row), "evidence_type": "published_commentary", "scope": "whole_passage", "selection_aligned": False})
     return {"published_translations": translations, "commentary": commentary,
+            "published_commentary": deepcopy(passage.get("published_commentary")),
+            "translation_comparisons": deepcopy(passage.get("translation_comparisons")),
             "translation_scope": "whole_passage", "translation_status": "available" if translations else "unavailable",
             "commentary_status": "available" if commentary else "unavailable",
             "structured_evidence": deepcopy(passage.get("structured_evidence") or {"ready": False, "claims": []}),
@@ -148,9 +280,14 @@ def _context(passage):
 
 
 class PassageAnalysisService:
-    def __init__(self, passage_lookup, word_lookup, *, machine_service=None, syntax_provider=None, ranker=None):
+    def __init__(self, passage_lookup, word_lookup, *, machine_service=None, syntax_provider=None, ranker=None, sense_ranker=None,
+                 machine_subentry_lookup=None):
         self.passage_lookup, self.word_lookup = passage_lookup, word_lookup
         self.machine_service, self.syntax_provider, self.ranker = machine_service, syntax_provider, ranker
+        self.sense_ranker = sense_ranker
+        # Explicit deployment dependency only. The callback must wrap the
+        # approved resolver with a trusted cache-only receipt loader.
+        self.machine_subentry_lookup = machine_subentry_lookup
         self._slots = BoundedSemaphore(2)
 
     def analyze(self, request, *, visitor_id=None, ranker_visitor_id=None):
@@ -189,14 +326,67 @@ class PassageAnalysisService:
         if text[start:end] != selected:
             raise PassageAnalysisError("stale_selection", "Selected text no longer matches the stored passage at these offsets. Reload and select again.", 409)
         tokens = tokenize_span(text, start, end)
+        # The source's freshly verified identity, not a request flag or an
+        # attached commentary status, opts in to critical dot-run handling.
+        # Spaced dots are not universally physical lacunae in arbitrary prose.
+        boundary_policy = {"status": "not_applicable"}
+        if passage.get("source") == "campbell_assignment":
+            from .edition_commentary import for_passage as approved_commentary
+            approval = approved_commentary(passage)
+            if approval and approval.get("status") == "available":
+                tokens = annotate_lacuna_boundaries(text, tokens, source_critical=True)
+                boundary_policy = {"status": "applied", "basis": "approved_critical_edition_dot_notation",
+                    "source_pdf_sha256": approval["source_pdf_sha256"],
+                    "source_text_sha256": hashlib.sha256(text.encode()).hexdigest(),
+                    "scope_note": "Dot adjacency leaves a word boundary uncertain; it does not prove an incomplete or invalid word."}
+                for token in tokens:
+                    if token.get("lacuna_boundary_uncertain"):
+                        token.update(word_attestation=False, occurrence_verified=False,
+                                     analysis_scope="conditional_on_word_boundary")
+            else:
+                boundary_policy = {"status": "source_unverified",
+                    "reason": "Approved Campbell source identity could not be revalidated; no dot-boundary annotation was inferred."}
         word_count = sum(token["kind"] == "word" for token in tokens)
         if not 1 <= word_count <= MAX_WORDS:
             raise PassageAnalysisError("invalid_word_count", f"Select between 1 and {MAX_WORDS} words.")
         source_cache, machine_cache, fetch_count = {}, {}, 0
+        dictionary_cache = {}
+        subentry_cache, subentry_catalog = {}, {'version': 1, 'ranking_status': 'unsupported_source_type'}
+
+        def subentry_lookup(token):
+            if token['machine'].get('status') != 'ok':
+                return {'status': 'machine_unavailable', 'candidate_refs': []}
+            form = analysis_form(token)
+            if form not in subentry_cache:
+                if len(subentry_cache) >= MAX_MACHINE_SUBENTRY_LOOKUPS:
+                    return {'status': 'request_limit', 'candidate_refs': [],
+                            'limit': MAX_MACHINE_SUBENTRY_LOOKUPS}
+                try:
+                    payload = self.machine_subentry_lookup(deepcopy(token))
+                    if not isinstance(payload, dict) or not payload.get('inventory_sha256'):
+                        raise ValueError('Unverified machine-subentry callback result')
+                    subentry_cache[form] = catalog_machine_subentries(subentry_catalog, payload)
+                except Exception:
+                    subentry_cache[form] = {'status': 'unavailable', 'candidate_refs': [],
+                        'warning': 'Source-subentry evidence could not be verified; no meaning was inferred.'}
+            return deepcopy(subentry_cache[form])
+
+        def dictionary_lookup(lemma):
+            key = unicodedata.normalize('NFC', lemma).casefold()
+            if key not in dictionary_cache:
+                if len(dictionary_cache) >= MAX_DICTIONARY_LEMMA_LOOKUPS:
+                    return {'dictionary_lookup_status': 'request_limit'}
+                try:
+                    # Only dictionary records are copied from this bare-headword
+                    # lookup, never another occurrence's morphological claims.
+                    dictionary_cache[key] = self.word_lookup(lemma, '') or {}
+                except Exception:
+                    dictionary_cache[key] = {'dictionary_lookup_status': 'unavailable'}
+            return dictionary_cache[key]
         for token in tokens:
             if token["kind"] != "word":
                 continue
-            form = token["text"]
+            form = analysis_form(token)
             if token["partial_word"] or token.get("editorial_fragment"):
                 token.update({"source_candidates": [], "contextual_candidates": [],
                               "machine": {"status": "editorial_fragment" if token.get("editorial_fragment") else "partial_word", "machine_candidates": [], "receipt": None}})
@@ -204,6 +394,11 @@ class PassageAnalysisService:
                                          if token.get("editorial_fragment") else
                                          "Selection cuts through a word; select the complete word for morphological alternatives.")
                 continue
+            reading_notes = []
+            if token.get("editorial_reconstruction"):
+                reading_notes.append(f"Letters in square brackets were supplied by the editor; the analysis follows the printed reading {form}.")
+            if token.get("uncertain_letters"):
+                reading_notes.append("Underdots mark doubtfully read letters; the analysis follows the printed reading.")
             if form not in source_cache:
                 try:
                     source_cache[form] = self.word_lookup(form, passage_id) or {}
@@ -215,11 +410,14 @@ class PassageAnalysisService:
                           "structured_evidence": deepcopy(source.get("structured_evidence", {"ready": False, "claims": []})),
                           "source_status": source.get("status", "available"),
                           "candidate_scope": "General-form and passage-level alternatives, not a resolved analysis of this occurrence. Only exact_token_span claim applications bind to this token; ordering is not a probability.",
-                          "warnings": list(source.get("warnings", []))})
-            for field in ("contextual_supporting_claims", "contextual_unresolved_claim_ids", "parallel_contexts", "lexicon_entries", "lexical_evidence", "quarantined_source_analyses", "context_analysis_status", "analysis_match_status", "match_status"):
+                          "warnings": [*reading_notes, *source.get("warnings", [])]})
+            if token.get("lacuna_boundary_uncertain"):
+                token["candidate_scope"] = "Literal-string alternatives conditional on a complete word boundary; neither an intact attestation nor a resolved occurrence meaning."
+                token["warnings"].append("Printed dots leave this word boundary uncertain. Literal dictionary alternatives and parser hypotheses remain available conditionally; no missing letters or invalidity are inferred.")
+            for field in ("contextual_supporting_claims", "contextual_unresolved_claim_ids", "parallel_contexts", "lexicon_entries", "lexical_evidence", "lexical_variants", "dictionary_crossreferences", "lexical_variant_supporting_claims", "lexical_variant_status", "linked_dictionary", "linked_dictionary_status", "quarantined_source_analyses", "context_analysis_status", "analysis_match_status", "match_status"):
                 if field in source:
                     token[field] = deepcopy(source[field])
-            claims = [*token["structured_evidence"].get("claims", []), *token.get("contextual_supporting_claims", [])]
+            claims = [*token["structured_evidence"].get("claims", []), *token.get("contextual_supporting_claims", []), *token.get("lexical_variant_supporting_claims", [])]
             token["claim_applications"] = {}
             for claim in claims:
                 subject = claim.get("subject") or {}
@@ -232,6 +430,10 @@ class PassageAnalysisService:
                 elif subject.get("passage_id"):
                     scope = "other_passage"
                 token["claim_applications"][claim.get("id", "")] = {"scope": scope, "source_start": subject.get("start"), "source_end": subject.get("end")}
+                if token.get("lacuna_boundary_uncertain"):
+                    token["claim_applications"][claim.get("id", "")].update(
+                        word_boundary_status="uncertain", word_attestation=False,
+                        application_scope="conditional_literal_string")
             if form not in machine_cache:
                 machine = {"status": "unavailable", "machine_candidates": [], "receipt": None}
                 if self.machine_service is not None:
@@ -245,21 +447,71 @@ class PassageAnalysisService:
                                 machine = {**machine, "status": "request_limit", "warnings": ["At most three uncached computational forms are fetched per explicit passage request."]}
                     except Exception:
                         machine["warnings"] = ["Computational morphology is unavailable; source alternatives remain available."]
+                if machine.get("status") == "no_analyses" and self.machine_service is not None:
+                    # The exact printed form is unknown to the parser. Query a few
+                    # labelled Aeolic spelling normalisations; each resulting parse
+                    # carries its rule and never outranks an exact-form analysis.
+                    machine = {**machine, "machine_candidates": list(machine.get("machine_candidates") or []),
+                               "normalised_queries": []}
+                    from .aeolic_variants import variants
+                    for variant in variants(form):
+                        try:
+                            result = self.machine_service.analyze(variant["form"], visitor_id, fetch=False)
+                            if (result.get("status") == "cache_miss" and request.get("fetch_machine")
+                                    and fetch_count < MAX_MACHINE_FETCHES):
+                                fetch_count += 1
+                                result = self.machine_service.analyze(variant["form"], visitor_id, fetch=True)
+                        except Exception:
+                            result = {"status": "unavailable", "machine_candidates": []}
+                        entry = {**variant, "status": result.get("status"),
+                                 "candidate_count": len(result.get("machine_candidates") or []),
+                                 "receipt_id": (result.get("receipt") or {}).get("id")}
+                        machine["normalised_queries"].append(entry)
+                        for candidate in result.get("machine_candidates") or []:
+                            machine["machine_candidates"].append({
+                                **candidate, "basis": "machine_analysis", "candidate_kind": "machine_analysis",
+                                "normalised_query": variant["form"], "normalisation_rule": variant["rule"],
+                                "normalisation_note": variant["note"], "tier": variant["tier"]})
+                    if machine["machine_candidates"]:
+                        machine["status"] = "ok_normalised"
+                        machine.setdefault("warnings", []).append(
+                            "No analysis of the exact printed form; the parses shown come from labelled Aeolic spelling normalisations.")
                 machine_cache[form] = machine
             token["machine"] = deepcopy(machine_cache[form])
+            if token.get("lacuna_boundary_uncertain"):
+                token["machine"].update(occurrence_scope="conditional_on_word_boundary",
+                                        word_attestation=False, occurrence_verified=False)
+            if self.machine_subentry_lookup is not None:
+                token['machine_subentries'] = subentry_lookup(token)
+            join_machine_dictionary(token, dictionary_lookup)
+            # Give legacy rows stable transport identities, without promoting
+            # those generated IDs into evidence of source provenance.
+            for candidate in [*token["source_candidates"], *token["contextual_candidates"],
+                              *token["machine"].get("machine_candidates", [])]:
+                if not candidate.get("id"):
+                    candidate["id"] = candidate_identity(candidate)
+                    candidate["generated_candidate_identity"] = True
         syntax = self._syntax(selected, text, start, end)
-        editorial = any(char in EDITORIAL for char in (text if syntax.get("scope") == "whole_passage" else selected))
+        syntax_text = text[syntax["context_start"]:syntax["context_end"]] if syntax.get("scope") in {"whole_passage", "bounded_context_window"} else selected
+        editorial = any(char in EDITORIAL for char in syntax_text) or any(token.get("lacuna_boundary_uncertain") for token in tokens)
         result = {"version": VERSION, "status": "ok",
             "passage": {**{key: passage.get(key) for key in ("id", "author", "work", "citation", "source", "source_url", "edition", "license")},
                         "text_sha256": hashlib.sha256(text.encode()).hexdigest()},
             "selection": {"text": selected, "start": start, "end": end, "start_utf16": utf16_offset(text, start),
                           "end_utf16": utf16_offset(text, end), "offset_unit": "codepoint"},
             "tokens": tokens, "syntax": syntax, "lint": lint_syntax(syntax, editorial=editorial),
+            "lacuna_boundary_policy": boundary_policy,
             "context": _context(passage), "ranking": {"status": "not_requested"},
             "limits": {"max_characters": MAX_CHARACTERS, "max_words": MAX_WORDS,
-                       "max_machine_fetches": MAX_MACHINE_FETCHES, "machine_fetches": fetch_count},
+                       "max_machine_fetches": MAX_MACHINE_FETCHES, "machine_fetches": fetch_count,
+                       "max_dictionary_lemma_lookups": MAX_DICTIONARY_LEMMA_LOOKUPS,
+                       "dictionary_lemma_lookups": len(dictionary_cache)},
             "warnings": ["Morphological alternatives and dependency predictions are not verified readings of this occurrence.",
                          "Source lookups are bounded; absence is not evidence of linguistic impossibility."]}
+        if self.machine_subentry_lookup is not None:
+            result['machine_subentry_evidence'] = subentry_catalog
+            result['limits'].update(max_machine_subentry_lookups=MAX_MACHINE_SUBENTRY_LOOKUPS,
+                                    machine_subentry_lookups=len(subentry_cache))
         if request.get("rerank"):
             if self.ranker is None:
                 result["ranking"] = {"status": "unavailable", "warnings": ["Context reranking is not configured."]}
@@ -268,27 +520,56 @@ class PassageAnalysisService:
                     result["ranking"] = self.ranker(deepcopy(result), visitor_id=ranker_visitor_id)
                 except Exception:
                     result["ranking"] = {"status": "unavailable", "warnings": ["Context reranking failed; all original alternatives are retained."]}
+        result["meaning"] = phrase_meaning(passage, result)
+        result["interlinear"] = interlinear_reading(result)
+        result["sense_ranking"] = {"status": "not_requested"}
+        if request.get('rerank') and self.sense_ranker is not None:
+            from .sense_ranker import apply_sense_ranking
+            try:
+                result['sense_ranking'] = self.sense_ranker(deepcopy(result), visitor_id=ranker_visitor_id)
+                apply_sense_ranking(result['interlinear'], result['sense_ranking'], source_result=result)
+            except Exception:
+                result['sense_ranking'] = {'status': 'unavailable', 'warnings': ['Sense comparison failed; literal dictionary alternatives remain available.']}
+        # Re-derive conditional printed-letter projections from the exact
+        # accepted poem only after all rankers have run. This separate reader
+        # result never becomes a raw token, source claim, or model packet.
+        if passage.get('source') == 'campbell_assignment' and passage.get('kind') == 'text' and passage.get('language') == 'grc':
+            commentary = passage.get('published_commentary') or {}
+            if isinstance(commentary, dict) and commentary.get('status') == 'available':
+                try:
+                    from .editorial_analysis import analyze_editorial_readings
+                    result['editorial_analysis'] = analyze_editorial_readings(
+                        passage, start, end, self.word_lookup, max_lookups=MAX_EDITORIAL_LOOKUPS)
+                except (ImportError,OSError,RuntimeError,ValueError,TypeError,KeyError):
+                    result['editorial_analysis'] = {'version':1,'status':'unavailable','rows':[],
+                        'selection_expansion_hints':[],
+                        'reason':'Conditional editorial analysis could not verify its source projection.'}
+            else:
+                result['editorial_analysis'] = {'version':1,'status':'unavailable','rows':[],
+                    'selection_expansion_hints':[],
+                    'reason':'Approved Campbell source identity is unavailable.'}
         return result
 
     def _syntax(self, selected, full_text, start, selection_end):
         if self.syntax_provider is None:
             return {"status": "unavailable", "state": "unavailable", "tokens": [], "evidence_type": "contextual_prediction", "reason": "Local syntax provider is not configured."}
+        from .syntax_context import project_syntax_tokens, syntax_context_window
         try:
-            use_full = len(full_text) <= MAX_CHARACTERS and sum(token["kind"] == "word" for token in tokenize_span(full_text, 0, len(full_text))) <= MAX_WORDS
-            context, context_start = (full_text, 0) if use_full else (selected, start)
-            result = deepcopy(self.syntax_provider.analyze(context))
+            window = syntax_context_window(full_text, start, selection_end,
+                                           max_words=MAX_WORDS, max_characters=MAX_CHARACTERS)
+            if full_text[start:selection_end] != selected:
+                raise ValueError("Selected source text does not match its offsets")
+        except (ValueError, TypeError):
+            return {"status": "unavailable", "state": "unavailable", "tokens": [], "evidence_type": "contextual_prediction",
+                    "code": "context_window_invalid", "reason": "The exact source selection could not fit a valid bounded syntax context."}
+        try:
+            result = deepcopy(self.syntax_provider.analyze(window["text"]))
             result["status"] = result.get("state", result.get("status", "unavailable"))
-            result.update({"scope": "whole_passage" if use_full else "selected_span", "context_start": context_start,
-                           "context_end": context_start + len(context)})
-            if not use_full:
-                result.setdefault("warnings", []).append("Only the bounded selection was parsed; attachments to words outside it cannot be resolved.")
-            for token in result.get("tokens", []):
-                begin, end = token.get("start"), token.get("end")
-                if type(begin) is not int or type(end) is not int or not 0 <= begin < end <= len(context) or context[begin:end] != token.get("text"):
-                    raise ValueError("Parser offsets did not match the original selection.")
-                token.update({"absolute_start": context_start + begin, "absolute_end": context_start + end,
-                    "selected": context_start + begin < selection_end and context_start + end > start,
-                    "start_utf16": utf16_offset(full_text, context_start + begin), "end_utf16": utf16_offset(full_text, context_start + end)})
+            result.update({key: window[key] for key in ("scope", "context_start", "context_end",
+                           "context_start_utf16", "context_end_utf16", "partial_start_word", "partial_end_word")})
+            result["context_strategy"] = window["strategy"]
+            result.setdefault("warnings", []).extend(window["warnings"])
+            result["tokens"] = project_syntax_tokens(result.get("tokens", []), window, full_text)
             result["evidence_type"] = "contextual_prediction"
             return result
         except Exception as exc:

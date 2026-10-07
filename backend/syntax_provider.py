@@ -30,6 +30,11 @@ LIMITATIONS = [
 ]
 
 
+# Editorial signs removed from the parser's view of the text. They never
+# change a letter; the parser simply sees the editor's printed reading.
+EDITORIAL_VIEW_DROPPED = frozenset("[]̣")
+
+
 def _token_kind(text: str) -> str:
     if text.isspace():
         return "whitespace"
@@ -149,14 +154,26 @@ class SyntaxProvider:
                 raise SyntaxProviderError("provider_failed", self._failure)
             if self._nlp is None:
                 self._nlp = self._load(receipt)
-            # Position-preserving analysis view: every source character still
-            # occupies exactly one codepoint. No Greek letter, combining mark,
-            # punctuation or editorial sign is changed or restored.
-            model_text = text.translate(str.maketrans({"\r": " ", "\n": " ", "\t": " "})) if normalize_whitespace else text
+            # Analysis view: ASCII whitespace becomes a space, and the editor's
+            # square brackets and underdots are dropped so an interrupted printed
+            # word (νᾶ̣]σον, θύ[μ]ῳ) reaches the parser as the editor's reading.
+            # `view_index` maps every view codepoint back to its source offset;
+            # no Greek letter is changed or restored.
+            spaced = text.translate(str.maketrans({"\r": " ", "\n": " ", "\t": " "})) if normalize_whitespace else text
+            view_chars, view_index = [], []
+            for position, char in enumerate(spaced):
+                if char in EDITORIAL_VIEW_DROPPED:
+                    continue
+                view_chars.append(char)
+                view_index.append(position)
+            model_text = "".join(view_chars)
+            if not model_text.strip():
+                raise SyntaxProviderError("invalid_text", "Syntax input holds no analysable text.")
             preprocessing = {
-                "name": "ascii_whitespace_to_space_v1" if normalize_whitespace else "identity",
-                "position_preserving": True,
-                "characters_replaced": sum(a != b for a, b in zip(text, model_text)),
+                "name": "ascii_whitespace_to_space_editorial_brackets_dropped_v2" if normalize_whitespace else "editorial_brackets_dropped_v2",
+                "position_preserving": len(model_text) == len(text),
+                "characters_replaced": sum(a != b for a, b in zip(text, spaced)),
+                "characters_dropped": len(text) - len(model_text),
                 "model_input_sha256": hashlib.sha256(model_text.encode("utf-8")).hexdigest(),
             }
             doc = self._nlp.make_doc(model_text)
@@ -170,9 +187,12 @@ class SyntaxProvider:
             for token in doc:
                 if token.is_sent_start:
                     sentence_id += 1
-                start, end = token.idx, token.idx + len(token.text)
-                if model_text[start:end] != token.text:
+                view_start, view_end = token.idx, token.idx + len(token.text)
+                if model_text[view_start:view_end] != token.text:
                     raise SyntaxProviderError("offset_mismatch", "Syntax prediction cannot be aligned to the unchanged source.")
+                # Source offsets: the span from the first to the last retained
+                # character, so dropped brackets inside a word stay inside it.
+                start, end = view_index[view_start], view_index[view_end - 1] + 1
                 tokens.append({"id": token.i, "text": text[start:end], "start": start, "end": end,
                                "lemma": token.lemma_ or None, "upos": token.pos_, "xpos": token.tag_,
                                "features": token.morph.to_dict(), "head": None if token.head.i == token.i else token.head.i,

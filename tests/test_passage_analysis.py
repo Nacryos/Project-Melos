@@ -90,14 +90,19 @@ def test_partial_words_are_not_looked_up_as_real_words():
     assert not calls
 
 
-def test_editorial_interruptions_never_create_repaired_words_or_complete_fragments():
+def test_bracketed_words_are_read_as_printed_and_lacunae_stay_fragments():
     service, passage, calls = setup("α[β]γ α[…]β [γ]")
     result = service.analyze(request(passage))
     assert "".join(token["text"] for token in result["tokens"]) == passage["text"]
-    assert calls == [("γ", "synthetic:test")]
+    # α[β]γ is the editor's reading αβγ; [γ] is a wholly supplied word; the
+    # pieces around a lacuna of unknown length are never joined.
+    assert calls == [("αβγ", "synthetic:test"), ("γ", "synthetic:test")]
     fragments = [token for token in result["tokens"] if token.get("editorial_fragment")]
-    assert len(fragments) == 5
+    assert [token["text"] for token in fragments] == ["α", "β"]
     assert all(not token["source_candidates"] for token in fragments)
+    reconstructed = [token for token in result["tokens"] if token.get("editorial_reconstruction")]
+    assert [(token["text"], token["form"], token["supplied_letters"]) for token in reconstructed] == [
+        ("α[β]γ", "αβγ", ["β"]), ("γ", "γ", ["γ"])]
 
 
 def test_all_candidate_identities_and_proofs_survive_without_merging():
@@ -111,11 +116,19 @@ def test_all_candidate_identities_and_proofs_survive_without_merging():
     service, passage, _ = setup("α α", word=source)
     result = service.analyze(request(passage))
     for token in (result["tokens"][0], result["tokens"][2]):
-        assert token["source_candidates"] == alternatives
+        assert [{key: value for key, value in row.items()
+                 if key not in {"id", "generated_candidate_identity"}}
+                for row in token["source_candidates"]] == alternatives
+        assert all(row["generated_candidate_identity"] for row in token["source_candidates"])
+        assert len({row["id"] for row in token["source_candidates"]}) == len(alternatives)
         assert token["contextual_candidates"] == contextual
         assert token["contextual_supporting_claims"] == source["contextual_supporting_claims"]
+    assert [row["id"] for row in result["tokens"][0]["source_candidates"]] == [
+        row["id"] for row in result["tokens"][2]["source_candidates"]]
+    assert all("id" not in row for row in alternatives)
+    preserved = deepcopy(result["tokens"][2]["source_candidates"])
     result["tokens"][0]["source_candidates"].clear()
-    assert result["tokens"][2]["source_candidates"] == alternatives
+    assert result["tokens"][2]["source_candidates"] == preserved
 
 
 class Machine:
@@ -187,7 +200,7 @@ def test_lint_is_conditional_and_only_checks_predicted_relations():
 
 def test_translations_remain_whole_passage_and_commentary_requires_real_link():
     service, passage, _ = setup()
-    passage["translation_previews"] = [{"record_id": "synthetic:translation", "scope": "whole_source_passage", "text": "Synthetic fixture"}]
+    passage["translation_previews"] = [{"record_id": "synthetic:translation", "parent_id": passage["id"], "language": "eng", "scope": "whole_source_passage", "text": "Synthetic fixture"}]
     passage["related"] = [{"id": "synthetic:comment", "kind": "commentary", "parent_id": passage["id"], "text": "Synthetic fixture"},
                           {"id": "synthetic:unlinked", "kind": "commentary", "text": "Unlinked fixture"}]
     result = service.analyze(request(passage, 0, 5))
@@ -240,14 +253,91 @@ def test_same_form_source_annotation_is_not_promoted_to_other_occurrence():
     assert second["claim_applications"]["synthetic:passage"]["scope"] == "whole_passage_not_token_aligned"
 
 
-def test_large_passage_parses_only_selection_and_warns_about_lost_context():
+def test_large_passage_parses_bounded_context_and_warns_about_outside_attachments():
     class Parser:
         def analyze(self, text):
-            assert text == "β"
-            return {"state": "ready", "tokens": [{"id": 0, "text": text, "start": 0, "end": 1, "head": None}]}
+            assert text == "α " * 79 + "β"
+            return {"state": "ready", "tokens": [{"id": 0, "text": "β", "start": len(text)-1, "end": len(text), "head": None}]}
     text = "α " * 81 + "β"
     service, passage, _ = setup(text, parser=Parser())
     result = service.analyze(request(passage, len(text) - 1, len(text)))
-    assert result["syntax"]["scope"] == "selected_span"
+    assert result["syntax"]["scope"] == "bounded_context_window"
     assert result["syntax"]["warnings"]
     assert result["syntax"]["tokens"][0]["absolute_start"] == len(text) - 1
+
+
+def test_phrase_meaning_projects_whole_selection_english_only_without_false_ranks():
+    service, passage, _ = setup("  α β  ")
+    base = {"parent_id": passage["id"], "language": "eng", "scope": "whole_source_passage",
+            "pairing_proof": {"translation_of": passage["id"]}}
+    passage["translation_previews"] = [
+        {**base, "record_id": "fixture:one", "text": "Synthetic translation."},
+        {**base, "record_id": "fixture:duplicate", "text": "Synthetic  translation."},
+        {**base, "record_id": "fixture:other", "text": "Alternative synthetic translation."},
+        {**base, "record_id": "fixture:greek", "language": "ell", "text": "Νέα ελληνικά"},
+        {**base, "record_id": "fixture:unknown", "language": None, "text": "Unknown language"},
+    ]
+    result = service.analyze(request(passage, 2, 5))
+    meaning = result["meaning"]
+    assert meaning["status"] == "available"
+    assert meaning["selection_kind"] == "phrase"
+    assert len(meaning["interpretations"]) == 2
+    assert len(meaning["interpretations"][0]["sources"]) == 2
+    assert all(row["rank"] is None and row["confidence"] is None for row in meaning["interpretations"])
+    assert all(row["language"] == "eng" for row in result["context"]["published_translations"])
+    assert meaning["context_translations"] == []
+
+
+def test_partial_selection_never_uses_whole_passage_translation_as_phrase_meaning():
+    service, passage, _ = setup("α β γ")
+    passage["translation_previews"] = [{"parent_id": passage["id"], "record_id": "fixture:one",
+        "language": "eng", "text": "Synthetic complete translation."}]
+    result = service.analyze(request(passage, 0, 3))
+    assert result["meaning"]["interpretations"] == []
+    assert result["meaning"]["context_translations"][0]["selection_aligned"] is False
+    assert result["meaning"]["status"] == "unavailable"
+
+
+def test_no_joined_glosses_or_excerpt_or_unpaired_translation_in_phrase_meaning():
+    service, passage, _ = setup("α β", word={"candidates": [{"lemma": "α", "gloss": "Synthetic gloss"}]})
+    passage["translation_previews"] = [
+        {"parent_id": passage["id"], "record_id": "fixture:excerpt", "language": "eng", "text_excerpt": "Incomplete…"},
+        {"parent_id": "different:passage", "record_id": "fixture:wrong", "language": "eng", "text": "Other passage"},
+    ]
+    result = service.analyze(request(passage))
+    assert result["meaning"]["interpretations"] == []
+    assert len(result["context"]["published_translations"]) == 1
+
+
+def test_relationships_preserve_outside_selection_heads_without_joint_reading_claim():
+    class Parser:
+        def analyze(self, text):
+            return {"state": "ready", "tokens": [
+                {"id": 0, "text": "α", "start": 0, "end": 1, "head": None, "deprel": "root"},
+                {"id": 1, "text": "β", "start": 2, "end": 3, "head": 0, "deprel": "amod"},
+                {"id": 2, "text": "γ", "start": 4, "end": 5, "head": 1, "deprel": "conj"},
+            ]}
+    service, passage, _ = setup("α β γ", parser=Parser())
+    meaning = service.analyze(request(passage, 2, 5))["meaning"]
+    assert len(meaning["relationships"]) == 2
+    assert meaning["relationships"][0]["head_in_selection"] is False
+    assert meaning["relationships"][1]["head_in_selection"] is True
+    assert meaning["joint_alternatives_status"] == "unavailable"
+    assert meaning["interpretations"] == []
+
+
+@pytest.mark.parametrize("override", [
+    {"scope": "whole_poem"}, {"pairing_proof": {}},
+    {"pairing_proof": {"translation_of": "different:source"}},
+    {"pairing_proof": {"translation_of": "synthetic:test", "parent_raw_sha256": "stale"}},
+])
+def test_whole_selection_requires_admitted_matching_passage_scope_and_receipt(override):
+    service, passage, _ = setup("α β")
+    passage["raw_sha256"] = "synthetic-receipt"
+    passage["translation_previews"] = [{
+        "parent_id": passage["id"], "record_id": "fixture:one", "language": "eng",
+        "text": "Synthetic translation.", "scope": "whole_source_passage",
+        "pairing_proof": {"translation_of": passage["id"], "parent_raw_sha256": passage["raw_sha256"]},
+        **override,
+    }]
+    assert service.analyze(request(passage))["meaning"]["interpretations"] == []

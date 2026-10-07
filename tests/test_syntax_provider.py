@@ -56,7 +56,9 @@ def test_status_does_not_load(provider, monkeypatch):
 
 def test_exact_offsets_repeats_brackets_combining_marks(provider, monkeypatch):
     text = "🙂 α\u0301 [λόγος] … λόγος!"
-    spans = [(0, 1), (2, 4), (5, 6), (6, 11), (11, 12), (13, 14), (15, 20), (20, 21)]
+    # The parser sees the view without the editor's brackets; spans are view
+    # offsets and come back mapped onto the unchanged source text.
+    spans = [(0, 1), (2, 4), (5, 10), (11, 12), (13, 18), (18, 19)]
     monkeypatch.setattr(provider, "_load", lambda receipt: FakeNlp(spans))
     monkeypatch.setattr("backend.syntax_provider.importlib.metadata.version", lambda name: "test-version")
     result = provider.analyze(text)
@@ -66,6 +68,20 @@ def test_exact_offsets_repeats_brackets_combining_marks(provider, monkeypatch):
     assert [t["start"] for t in result["tokens"] if t["text"] == "λόγος"] == [6, 15]
     assert all(text[t["start"]:t["end"]] == t["text"] for t in result["tokens"])
     assert result["tokens"][1]["features"] == {"Case": "Nom"}
+    assert result["parser_input_preprocessing"]["characters_dropped"] == 2
+
+
+def test_bracket_interrupted_word_maps_to_one_source_span(provider, monkeypatch):
+    text = "να\u0323]σον Δ[ίος]"
+    # View "νασον Δίος": one token per printed word, brackets inside the span.
+    spans = [(0, 5), (5, 6), (6, 10)]
+    monkeypatch.setattr(provider, "_load", lambda receipt: FakeNlp(spans))
+    monkeypatch.setattr("backend.syntax_provider.importlib.metadata.version", lambda name: "test-version")
+    result = provider.analyze(text)
+    words = [t for t in result["tokens"] if t["token_kind"] == "lexical"]
+    assert [t["text"] for t in words] == ["να\u0323]σον", "Δ[ίος"]
+    assert [t["model_text"] for t in words] == ["νασον", "Δίος"]
+    assert all(text[t["start"]:t["end"]] == t["text"] for t in result["tokens"])
 
 
 @pytest.mark.parametrize("text,code", [("", "invalid_text"), (" \n", "invalid_text"), (None, "invalid_text"), ("α" * (MAX_CHARS+1), "span_too_large")])
@@ -143,7 +159,7 @@ def test_editorial_and_whitespace_predictions_are_explicitly_inapplicable():
 
 def test_whitespace_analysis_view_preserves_original_spans(provider, monkeypatch):
     text = "α\r\n\t[β]"
-    spans = [(0, 1), (1, 4), (4, 5), (5, 6), (6, 7)]
+    spans = [(0, 1), (1, 4), (4, 5)]
     seen = []
     class RecordsInput(FakeNlp):
         def make_doc(self, value):
@@ -152,7 +168,7 @@ def test_whitespace_analysis_view_preserves_original_spans(provider, monkeypatch
     monkeypatch.setattr(provider, "_load", lambda receipt: RecordsInput(spans))
     monkeypatch.setattr("backend.syntax_provider.importlib.metadata.version", lambda name: "test-version")
     result = provider.analyze(text)
-    assert seen == ["α   [β]"]
+    assert seen == ["α   β"]
     assert result["tokens"][1]["text"] == "\r\n\t"
     assert result["tokens"][1]["model_text"] == "   "
     assert result["tokens"][1]["prediction_status"] == "not_applicable"
@@ -160,7 +176,9 @@ def test_whitespace_analysis_view_preserves_original_spans(provider, monkeypatch
     assert result["source_text_unchanged"] is True
     assert result["model_input_identical"] is False
     assert result["parser_input_preprocessing"]["characters_replaced"] == 3
-    assert result["parser_input_preprocessing"]["position_preserving"] is True
+    assert result["parser_input_preprocessing"]["position_preserving"] is False
+    assert result["parser_input_preprocessing"]["characters_dropped"] == 2
     original = provider.analyze(text, normalize_whitespace=False)
-    assert seen[-1] == text
-    assert original["parser_input_preprocessing"]["name"] == "identity"
+    # Without whitespace normalisation only the editor's brackets are dropped.
+    assert seen[-1] == text.replace("[", "").replace("]", "")
+    assert original["parser_input_preprocessing"]["name"] == "editorial_brackets_dropped_v2"

@@ -125,3 +125,50 @@ query is never assigned a nearby form's grammatical parse.
 The two JSONL files are authoritative. `data/lexicon.json` is an old visual
 sample and is intentionally excluded. The reader should state missing form
 coverage and show all plausible readings to the user.
+
+## Full parses for every printed word (2026-10-07)
+
+**Editor's reading.** `tokenize_span` keeps one word token for a printed word
+interrupted by square brackets (νᾶ̣]σον, θύ[μ]ῳ, λίποντε[ς). `token.text` is
+the lossless printed span; `token.form` is the editor's reading with brackets
+and underdots removed, and every lookup (dictionary, Morpheus, Jev, subentries)
+uses `form`. `editorial_reconstruction`, `supplied_letters`,
+`supplied_whole_word` and `uncertain_letters` label what the editor supplied or
+doubted. Pieces around a lacuna of unknown length (α…β, α†β) stay
+`editorial_fragment` and are never joined. The syntax provider drops the same
+brackets from its analysis view and maps its offsets back to the source, so the
+prediction covers the whole printed word.
+
+**Parser coverage.** `scripts/warm_morphology_forms.py` fetches Morpheus
+receipts for every word of given passages (plus the normalisations below) into
+a cache database that `deploy/sync_morphology_receipts.py` can export and
+import. `POST /api/passage-morphology/warm {passage_id, max_fetches≤10}` does
+the same progressively for an opened passage under a server-side visitor
+identity; the reader calls it once per opened Greek text, and single-word
+clicks request a fetch for the clicked form.
+
+**Aeolic normalisations** (`backend/aeolic_variants.py`). When the exact printed
+form has no analysis, a few labelled spelling rules produce query variants:
+psilotic rho and psilosis (ῤήα→ῥήα, ὐπ’→ὑπ’), apocope of ἀνα-/κατα-/μετα-
+(ὀντρέχοντες→ἀνατρέχοντες), the Lesbian recessive accent (τήλοθεν→τηλόθεν),
+gemination (Ἐρίννυς→Ἐρίνυς), -ζω for -σσω, and ὄνυμα for ὄνομα. Every parse
+obtained this way carries `normalised_query`, `normalisation_rule` and
+`normalisation_note`, is labelled `machine_analysis_normalised`, and ranks
+below any analysis of the exact printed form.
+
+**Ranking by morphology** (`backend/interlinear.py`). Candidate parses are
+ranked by `_affinity`: +1 per grammatical feature agreeing with the contextual
+prediction, −1.5 per stated disagreement, +1 for lemma agreement, +0.1 per
+additional feature the candidate states (a full parse beats a partial one),
+±0.75 per case/number/gender agreement with the predicted head noun or
+modifiers (`_agreement_partners`), +0.25 for an Aeolic dialect label, −0.5 for
+a normalised query. A differing predicted lemma is a ranking signal and a
+flagged `syntax_conflict`, never a veto (the model mislemmatises dialect
+spellings). Selection bases: `unique_compatible_candidate`,
+`morphology_ranked_by_syntax`, `morphology_ranked_despite_syntax_conflict`
+(best parse still agrees on something), `single_candidate_despite_syntax_conflict`
+(only one full parse exists), `morphology_ranked_parse_consensus` (tied
+candidates share a parse, lemma left open), then the older consensus and
+prediction fallbacks. Every word row carries `morphology_ranking`, the ordered
+list with scores, which the reader shows as "Parses ranked by fit to the
+context".
