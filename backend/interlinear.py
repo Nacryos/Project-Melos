@@ -214,7 +214,14 @@ def _affinity(candidate, syntax):
     features, predicted = canonical_features(candidate), canonical_features(syntax or {})
     score = 0.0
     for key in set(features) & set(predicted):
-        score += 1.0 if _feature_agrees(key, features[key], predicted[key]) else -1.5
+        if features[key] == predicted[key]:
+            score += 1.0
+        elif _feature_agrees(key, features[key], predicted[key]):
+            # Soft matches (Past~Aor, ADV~CCONJ) count, but an exact match
+            # still leads: καί the conjunction over καί the adverb.
+            score += 0.5
+        else:
+            score -= 1.5
     # A fuller parse that is not contradicted outranks a partial one of the
     # same fit (dat. masc. 1st sg. over dat. masc. sg.), so person, tense and
     # mood stated by the source are never dropped in favour of a vaguer row.
@@ -955,7 +962,7 @@ def interlinear_reading(result):
         conflict = bool(predicted and (chosen and disagrees(chosen)
                         or not chosen and candidates and all(disagrees(item) for item in candidates)))
         consensus, parse_support = _morphology_consensus(candidates, predicted) if not chosen and not partial else ({}, [])
-        consensus_basis = 'source_morphology_consensus'
+        consensus_basis, consensus_group = 'source_morphology_consensus', None
         if not chosen and not consensus and not partial and predicted and candidates:
             # Several lemma entries can tie for the best fit while stating the
             # same full parse (ἐγώ / ἐμέ for μοι). The parse is then settled
@@ -981,6 +988,7 @@ def interlinear_reading(result):
             if shared and _agreements(top[0]['candidate'], predicted) >= 1:
                 consensus, parse_support = shared, [candidate_identity(item['candidate']) for item in top]
                 consensus_basis = 'morphology_ranked_parse_consensus'
+                consensus_group = [item['candidate'] for item in top]
         lexical_conflict = _lexical_prediction_conflict(token, predicted) if not chosen and not consensus and not partial else None
         conflict = conflict or bool(lexical_conflict)
         features = canonical_features(chosen) if chosen else consensus or (canonical_features(predicted or {}) if not partial and not conflict else {})
@@ -1036,7 +1044,9 @@ def interlinear_reading(result):
                           'alternatives': deepcopy(item['senses']),
                           'selection_basis': 'source_linked_alternatives_not_contextual'}})
         if not chosen and not partial:
-            shared = _shared_dictionary_sense(candidates, token)
+            # When the parse came from a ranked tie group, a sense shared by
+            # that group (καί "and" across its dictionary rows) is enough.
+            shared = _shared_dictionary_sense(consensus_group or candidates, token)
             if shared:
                 row['gloss'] = shared
         if boundary_uncertain:

@@ -144,3 +144,29 @@ checked against the current live version." Next step was the J canary → approv
 4. Then attack the real gap: contextual sense selection + parser coverage on the five Alcaeus poems,
    measured by the full-poem audit script (search `docs/audits/` and `deploy/` for the 269-segment audit).
 5. Mobile fullscreen background + touch selection (owner-requested Oct 6, unverified on Safari).
+
+## Outcome of the Claude session (2026-10-07, later the same day)
+
+Done and live as **release K** (backend image `melos-api:20261007k`, Vercel reader
+aliased to greeklyric.com); details at the top of `docs/deployment.md`, design in
+`docs/morphology.md`:
+
+- Bracket-interrupted words are single tokens analysed as the editor's reading
+  (119 fragments → 0); underdotted words analysed and labelled.
+- Morpheus receipts for every word of the five poems plus Aeolic normalisations
+  (331 receipts in production, was 26); `scripts/warm_morphology_forms.py`,
+  `POST /api/passage-morphology/warm`, single-word clicks fetch.
+- Labelled Aeolic normalisation rules (`backend/aeolic_variants.py`).
+- Morphology ranking with contextual prediction and head/modifier agreement; every
+  word row carries `morphology_ranking`; the reader shows it.
+- Five-poem audit: 301/321 words with complete parse fields (baseline 227/269).
+- Commits `81bd8d0` (Codex-era work) and `65ea1de` (this session) plus the
+  deployment commit; nothing pushed to GitHub.
+
+Still open: contextual **meaning** selection (212 words without a selected gloss;
+Jev ranking unchanged), the 20 words without full parses (damaged pieces beside
+lacunae; proper names/hapax such as Αἰολήαν, Ὕρραον, ἤπειτα, τυνδέων, λυκαιμίαις,
+ἄχω, ἄγκονναι), the mobile fullscreen/touch request, the J subentry release
+(its code ships in K but `MELOS_MACHINE_SUBENTRIES_ENABLED` stays unset), the
+root-owned `releases/` directory on Basecamp (K lives in `/home/alvin/melos-k`),
+Basecamp disk at 98 %, and the stale `deploy/qa_regressions.py` expectation.

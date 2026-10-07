@@ -1,6 +1,57 @@
 # Deployment handoff
 
-## Current: gzip backend and grouped reader I (2026-10-07)
+## Current: full parses for every printed word, release K (2026-10-07)
+
+Public backend: image `melos-api:20261007k`
+(`sha256:f441cca71f37bc12d4d523a5b40b379494918dd90f2da92ac40a1577e319d90c`), built
+on Basecamp with `deploy/Dockerfile.patch` atop the verified QA29 base
+`melos-api:20261005-qa29` from the K source tarball (sha256
+`ab0007aa1c353b0d92ba27dc39aa7ad2ea73a0462694038f58549bfe4266c7f0`, unpacked in
+`/home/alvin/melos-k/src`; `releases/` is root-owned). Unlike E–I, K carries the
+whole `backend/` package in the image with **no per-module bind overlays**; the
+data, models, syntax-model, runtime, corpus (`campbell-20261007b`) and secrets
+mounts are the live I mounts. New environment: `MELOS_MACHINE_GLOBAL_DAILY=1000`,
+`MELOS_MACHINE_GLOBAL_MINUTE=30`, `MELOS_MACHINE_VISITOR_DAILY=100`,
+`MELOS_MACHINE_VISITOR_MINUTE=10`. Recipe and rollback:
+`deploy/release_k.sh build|receipts|canary|promote|rollback`.
+
+Promotion path: canary `melos-api-canary` on 8792 passed
+`deploy/smoke_backend.py --expected-passages 288589` and the five-poem probes;
+`qa_regressions.py` fails identically against I (stale "Ibycus 286" expectation
+without `--cgl`), so it is not a K regression. I is retained stopped as
+`melos-api-before-lexical-20261007k`; the K canary is retained stopped as
+`melos-api-lexical-canary-k`. Verified through the public origin after
+promotion: ἦλθες `2nd sg. aor. ind. act.`, νᾶ̣]σον `acc. fem. sg.` (νῆσος),
+λίποντε[ς `nom. masc. pl. aor. act. ptcp.`, εὐρύσαο `2nd sg. aor. ind. mid.`
+(via ἐρρύσαο), ῤήα adv. (via ῥήα).
+
+Morpheus cache: 331 receipts in `runtime/machine_morphology.sqlite` (was 26):
+every printed word of Alcaeus 34a, 129, 130b, 326, 350 plus the labelled
+Aeolic normalisations, imported with `deploy/sync_morphology_receipts.py import
+--apply` from `runtime/dev/receipts-bundle.json` (sha256
+`0c10830a0ee0fe00bf3016907e08b9f757131248e2569a12199de8d2abf4b48f`; empty-result
+receipts are now exported too).
+
+Frontend: Vercel production `project-melos-nfdrtedjl-nacryos-projects.vercel.app`,
+aliased to https://greeklyric.com (`vercel deploy --prod --yes --build-env
+MELOS_READER_ONLY=1`). The reader now opens each Greek text with a
+`POST /api/passage-morphology/warm` call, requests a parser fetch on single-word
+clicks, shows the editor's reading of bracketed words and "Parses ranked by fit
+to the context".
+
+Local five-poem audit (`scripts/audit_alcaeus_occurrences.py` against the dev
+server, `runtime/dev/audit-4`): 301 of 321 printed words have complete parse
+fields (baseline: 227 of 269 intact segments, with 119 bracket fragments
+unparsed); the 20 remaining are damaged pieces beside lacunae (labelled
+conditional) and a few proper names/hapax forms the parser does not know. Design
+and ranking rules: `docs/morphology.md`, "Full parses for every printed word".
+
+Backend tests at promotion: 1876 pass; the only failure left is
+`tests/test_run_commentary_relevance.py` (its frozen manifest pins the previous
+`sense_ranker.py` hash; the commentary-relevance cues are now gated behind
+`MELOS_COMMENTARY_RELEVANCE=1`, off in production).
+
+## Historical: gzip backend and grouped reader I (2026-10-07)
 
 Public backend: `f888ab8692593446a2495b3543be2ce7274bfcd672cc0d5f8379083af8f50a19`,
 release `/home/alvin/services/melos/releases/lexical-20261007i`, unchanged QA29 image.

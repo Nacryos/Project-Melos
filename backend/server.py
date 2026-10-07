@@ -29,10 +29,15 @@ from .author_aliases import (canonical as canonical_author, canonical_key, compo
                              profile as alias_record)
 from .textutils import text_key as passage_text_key
 from .translation_languages import is_english_language
+from .large_json_gzip import LargeJSONGZipMiddleware
 
 ROOT = Path(__file__).resolve().parents[1]
 DB = ROOT / 'data/corpus.sqlite'
 app = FastAPI(title='Melos Greek Lyric Lexicon',version='0.4.0')
+# Keep this inner to CORS and @app.middleware('http'): a policy wrapper emits
+# ordinary JSON in streaming frames, which must not be buffered/compressed.
+# Live since release I (2026-10-07); it was patched into the release artifact only.
+app.add_middleware(LargeJSONGZipMiddleware, minimum_size=4096, compresslevel=1)
 # Quality labels searched by default; the reference toggle adds the rest.
 SEARCHABLE_QUALITIES = ('source_text','machine_corrected_ocr')
 QUALITY_SQL = "('source_text','machine_corrected_ocr')"

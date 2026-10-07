@@ -8,6 +8,7 @@ from copy import deepcopy
 import hashlib
 import json
 import math
+import os
 
 from .interlinear import gloss_from_sense, interlinear_reading, sense_form_compatible
 from .jev_gateway import GatewayLimit, GatewayUnavailable
@@ -305,7 +306,10 @@ def sense_packet(passage, result, token):
             commentary, ensure_ascii=False, sort_keys=True, separators=(',', ':')).encode('utf-8')).hexdigest()
         packet['constraints'].append(
             'Use these notes as fallible whole-poem context. Do not assert exact occurrence alignment from their placement. Choose a supplied sense when the combined evidence supports it; otherwise abstain.')
-    add_context_relevance(packet, passage, token, commentary=commentary)
+    if os.environ.get('MELOS_COMMENTARY_RELEVANCE') == '1':
+        # Experimental retrieval cues (tested 2026-10-07 without improvement);
+        # off by default so production packets stay within the model bound.
+        add_context_relevance(packet, passage, token, commentary=commentary)
     _compact_evidence(packet)
     if commentary is not None:
         _hoist_common_commentary_candidate_fields(packet)

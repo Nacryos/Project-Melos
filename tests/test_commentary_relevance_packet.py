@@ -52,7 +52,9 @@ def test_wrong_packet_source_or_target_is_rejected_before_mutation(change):
     assert packet == before
 
 
-def test_production_packet_integrates_cues_without_changing_source_inventory():
+def test_production_packet_integrates_cues_without_changing_source_inventory(monkeypatch):
+    # The cues are an experiment, enabled explicitly; production leaves them off.
+    monkeypatch.setenv('MELOS_COMMENTARY_RELEVANCE', '1')
     passage, result = real_result('350', '350-c381678e548a.response.json')
     token = result['interlinear']['readings'][0]['tokens'][0]
     before = deepcopy(result)

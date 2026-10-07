@@ -57,9 +57,12 @@ def validate(connection, key, receipt_id, metadata, raw):
     if key != expected:
         raise ValueError("Cache key does not bind the exact source form/parser")
     result = _Validator(connection).load_receipt(receipt_id, form=form)
-    if result["status"] != "ok" or not result["machine_candidates"]:
+    # A verified empty-result envelope (no_analyses) is a successful upstream
+    # answer too: it lets the reader try labelled spelling normalisations
+    # instead of treating the form as never looked up.
+    if result["status"] not in ("ok", "no_analyses") or (result["status"] == "ok" and not result["machine_candidates"]):
         raise ValueError("Receipt is not a verified successful analysis")
-    return {"form": form, "candidates": len(result["machine_candidates"])}
+    return {"form": form, "candidates": len(result["machine_candidates"]), "status": result["status"]}
 
 
 def export_bundle(database, output):
