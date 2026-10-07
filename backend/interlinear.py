@@ -1164,6 +1164,21 @@ def interlinear_reading(result):
                    candidate_id=chosen.get('id') if chosen else None, agreement_group_id=None,
                    alternative_count=count, source_candidate=deepcopy(chosen) if chosen else None,
                    syntax_token_id=predicted.get('id') if predicted else None)
+        if consensus and candidates and predicted is not None:
+            # A consensus that leaves a nominal without case or number (γλαύκας:
+            # only "fem." shared) is not a full parse. Show the top-ranked full
+            # candidate as an explicitly labelled proposal; alternatives stay listed.
+            pos = consensus.get('POS') or canonical_features(predicted).get('POS')
+            if pos in _NOMINAL_POS and not all(key in consensus for key in ('Case', 'Number')):
+                top = rank_candidates(candidates, predicted)[0]['candidate']
+                full = canonical_features(top)
+                if all(key in full for key in ('Case', 'Number')):
+                    features = full
+                    row.update(features=full, parse_short=compact_parse(full), lemma=top.get('lemma'),
+                               candidate_id=candidate_identity(top), status='proposed',
+                               gloss=_gloss(top, token), proposal_note=
+                               'Top-ranked full parse among tied alternatives; not settled by context.')
+                    consensus_basis = 'morphology_top_ranked_proposal'
         if consensus:
             row['selection_basis'] = consensus_basis
             row['supporting_parse_candidate_ids'] = parse_support

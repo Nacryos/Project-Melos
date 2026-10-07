@@ -616,6 +616,19 @@ class PassageAnalysisService:
             form = analysis_form(token)
             letters = sum(1 for char in unicodedata.normalize("NFD", form) if unicodedata.category(char).startswith("L"))
             machine = token.get("machine") or {}
+            printed = token.get("text") or ""
+            after = text[token["end"]:token["end"] + 1] if text else ""
+            if ("[" in printed and "]" not in printed[printed.rindex("["):] and after in ("", "\n", "\r")
+                    and not machine.get("machine_candidates")):
+                # Μύρσιλ̣[ο: the editor's supplement is still open at the line
+                # end and no analysis fits the printed letters, so the word may
+                # continue. Conditional, not settled.
+                token["lacuna_boundary_uncertain"] = True
+                token["open_supplement"] = True
+                token.setdefault("lacuna_boundary_evidence", []).append(
+                    {"start": token["end"], "end": token["end"], "side": "after", "offset_unit": "codepoint",
+                     "basis": "open_supplement_at_line_end"})
+                token["warnings"].append("The editor's supplement is open at the line end; the word may continue.")
             has_machine = bool(machine.get("machine_candidates"))
             # For a short run of letters beside a lacuna only an analysis of the
             # exact printed letters counts; a normalised spelling of one or two
@@ -644,7 +657,7 @@ class PassageAnalysisService:
                 continue
             if has_machine or has_source:
                 continue
-            if token.get("lacuna_boundary_uncertain"):
+            if token.get("lacuna_boundary_uncertain") and not token.get("open_supplement"):
                 token["damaged_piece"] = True
                 token["warnings"].append("Surviving letters beside a lacuna that no analysis fits; not a complete word.")
                 continue
@@ -658,7 +671,7 @@ class PassageAnalysisService:
                                                  "No dictionary or parser used here knows this word; the analyses shown read only its ending."]}
                 token["pattern_analysis"] = {"status": "ending_pattern_only", "ending": candidates[0]["pattern_ending"],
                                              "candidate_count": len(candidates)}
-            elif token.get("lacuna_boundary_uncertain"):
+            elif token.get("lacuna_boundary_uncertain") and not token.get("open_supplement"):
                 token["damaged_piece"] = True
                 token["warnings"].append("Surviving letters beside a lacuna that no analysis fits; not a complete word.")
 
