@@ -152,20 +152,37 @@ def _agreement_partners(predicted, syntax_rows):
                 and row.get('upos') in _NOMINAL_POS):
             partners.append({'text': row.get('text'), 'relation': str(row.get('deprel')).split(':')[0], 'role': 'dependent',
                              'features': canonical_features(row)})
+    # Immediate nominal neighbours in the same sentence (νᾶϊ μελαίνᾳ) count as
+    # weaker, positive-only partners: the model may have mis-attached them.
+    ordered = sorted((row for row in syntax_rows if row.get('sentence_id') == sentence and row.get('upos')
+                      and row.get('prediction_status') != 'not_applicable'), key=lambda row: row.get('absolute_start') or 0)
+    for index, row in enumerate(ordered):
+        if row is predicted or row.get('id') == identifier:
+            for neighbour in (ordered[index - 1] if index else None, ordered[index + 1] if index + 1 < len(ordered) else None):
+                if neighbour and neighbour.get('upos') in _NOMINAL_POS and not any(p['text'] == neighbour.get('text') and p['role'] != 'neighbour' for p in partners):
+                    partners.append({'text': neighbour.get('text'), 'relation': 'adjacent', 'role': 'neighbour',
+                                     'features': canonical_features(neighbour)})
+            break
     return [partner for partner in partners if partner['features']]
 
 
 def _partner_scores(candidate, syntax):
-    """(agreeing, disagreeing) counts of Case/Number/Gender against partners."""
+    """(agreeing, disagreeing) counts of Case/Number/Gender against partners.
+
+    Dependency partners count both ways. A merely adjacent nominal counts only
+    when it agrees on every shared feature and at least two of them.
+    """
     features = canonical_features(candidate)
     agreeing = disagreeing = 0
     for partner in (syntax or {}).get('agreement_partners') or []:
-        for key in ('Case', 'Number', 'Gender'):
-            if key in features and key in partner['features']:
-                if features[key] == partner['features'][key]:
-                    agreeing += 1
-                else:
-                    disagreeing += 1
+        shared = [key for key in ('Case', 'Number', 'Gender') if key in features and key in partner['features']]
+        matches = [features[key] == partner['features'][key] for key in shared]
+        if partner.get('role') == 'neighbour':
+            if len(shared) >= 2 and all(matches):
+                agreeing += len(shared)
+            continue
+        agreeing += sum(matches)
+        disagreeing += len(matches) - sum(matches)
     return agreeing, disagreeing
 
 
@@ -246,6 +263,9 @@ def _affinity(candidate, syntax):
     if candidate.get('candidate_kind') == 'pattern_analysis':
         # Ending-based analyses rank below every lexicon-backed parse.
         score -= 1.0
+    elif not features:
+        # A bare headword match states no grammar; it is listed last.
+        score -= 2.0
     elif candidate.get('basis') != 'machine_analysis' and candidate.get('candidate_kind') != 'machine_analysis':
         # An exact-form attestation recorded by a dictionary (LSJ, Wiktionary)
         # outranks a parser hypothesis of the same fit.
@@ -604,6 +624,13 @@ def _choose(token, syntax, rank):
         if row['id'] in by_id and by_id[row['id']] != signature:
             return None, 'ambiguous', len(candidates)
         by_id[row['id']] = signature
+    # A vocative that differs from a nominative of the same lemma only in case
+    # is the same form (participles, feminines); fold it so a nom./voc. pair
+    # counts as one reading rather than an unresolved ambiguity.
+    nominatives = {(_identity(row.get('lemma_raw') or row.get('lemma')), tuple(sorted({**canonical_features(row), 'Case': 'Nom'}.items())))
+                   for row in candidates if canonical_features(row).get('Case') == 'Nom'}
+    candidates = [row for row in candidates if not (canonical_features(row).get('Case') == 'Voc' and
+                  (_identity(row.get('lemma_raw') or row.get('lemma')), tuple(sorted({**canonical_features(row), 'Case': 'Nom'}.items()))) in nominatives)]
     compatible = [row for row in candidates if syntax and _compatible(row, syntax)]
     # Preserve source-local homograph suffixes. Duplicate evidence for the same
     # analysis need not create duplicate presentation alternatives.

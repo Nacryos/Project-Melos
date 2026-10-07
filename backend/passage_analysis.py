@@ -603,7 +603,7 @@ class PassageAnalysisService:
         (never a lemma or a gloss). Letters surviving beside a lacuna that do
         not form a word are labelled a damaged piece rather than parsed.
         """
-        from .interlinear import _exact as exact_candidate
+        from .interlinear import _exact as exact_candidate, canonical_features
         from .pattern_morphology import pattern_candidates
         ready = syntax.get("state", syntax.get("status")) == "ready"
         rows = syntax.get("tokens") or [] if ready else []
@@ -621,9 +621,13 @@ class PassageAnalysisService:
             # surviving letters (ἀ → ἁ) is not evidence of a word.
             has_exact_machine = any(not row.get("normalised_query") and row.get("candidate_kind") != "pattern_analysis"
                                     for row in machine.get("machine_candidates") or [])
-            has_source = any(exact_candidate(row, token) for row in
-                             [*(token.get("source_candidates") or []), *(token.get("contextual_candidates") or [])])
-            if token.get("lacuna_boundary_uncertain") and letters <= 2 and not (has_exact_machine or has_source):
+            source_rows = [row for row in [*(token.get("source_candidates") or []), *(token.get("contextual_candidates") or [])]
+                           if exact_candidate(row, token)]
+            has_source = bool(source_rows)
+            # A bare headword match (the letter α as a dictionary entry) is not
+            # a grammatical analysis of one or two surviving letters.
+            has_source_parse = any(canonical_features(row) for row in source_rows)
+            if token.get("lacuna_boundary_uncertain") and letters <= 2 and not (has_exact_machine or has_source_parse):
                 token["damaged_piece"] = True
                 token["warnings"].append("Surviving letters beside a lacuna, not a complete word; no analysis is asserted.")
                 continue
