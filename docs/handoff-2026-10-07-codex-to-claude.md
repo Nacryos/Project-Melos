@@ -163,7 +163,20 @@ aliased to greeklyric.com); details at the top of `docs/deployment.md`, design i
 - Commits `81bd8d0` (Codex-era work) and `65ea1de` (this session) plus the
   deployment commit; nothing pushed to GitHub.
 
-Still open: contextual **meaning** selection (212 words without a selected gloss;
+**Release K2 (same evening):** last tier for unrecognised words (ending-pattern
+analyses, `backend/pattern_morphology.py`), damaged-piece labels for letters beside
+lacunae, more Aeolic rules and a Lesbian lexical table, ranking refinements, and a
+bounded wait in the syntax provider. Dev audit 8: 298/306 intact words complete,
+15 damaged pieces labelled, 194 words with a selected gloss. Word document of the
+five fragments: `output/Alcaeus_political_songs_Campbell.docx` (verified
+character-for-character against the accepted texts). Owner directions received
+2026-10-07 evening: ingest the other Perseus lexica (Middle Liddell, Slater,
+Cunliffe) to match Protagoras; design a hybrid retriever/reranker and modernise
+embedding search (two Opus design docs requested under `docs/plans/`); buy a 1 TB
+Hetzner Storage Box (owner approved < $15/month; needs a Cloud API token or a
+Brave session); consider Aeolic→Attic normalisation of the parser's input view.
+
+Still open: contextual **meaning** selection (originally 212 words without a selected gloss, 194 selected after K2;
 Jev ranking unchanged), the 20 words without full parses (damaged pieces beside
 lacunae; proper names/hapax such as Αἰολήαν, Ὕρραον, ἤπειτα, τυνδέων, λυκαιμίαις,
 ἄχω, ἄγκονναι), the mobile fullscreen/touch request, the J subentry release

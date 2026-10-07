@@ -1,6 +1,36 @@
 # Deployment handoff
 
-## Current: full parses for every printed word, release K (2026-10-07)
+## Current: release K2 — last tier, damaged pieces, ranking refinements (2026-10-07, later)
+
+Public backend: image `melos-api:20261007k2` (`sha256:6f6086d02cd5…`), built on
+Basecamp from the K2 source tarball (sha256
+`0414035862ce771454d2cfbeaea80c22de93e3625b01a16957fdf58c079a9091`) with the same
+recipe and mounts as K (`MELOS_K_TAG=k2 sh /home/alvin/melos-k/src/deploy/release_k.sh …`).
+K is retained stopped as `melos-api-before-lexical-20261007k2`; the K2 canary as
+`melos-api-lexical-canary-k2`. Canary passed `smoke_backend.py --expected-passages 288589`
+and the probes; public origin verified after promotion (ἴφθ]ιμοι voc. masc. pl.,
+Ὕρραον acc. masc. sg. by ending pattern, ἔοι̣ 3rd sg. pres. opt. act. conditional,
+ς̣βιότοις̣ dat. masc. pl. of βίοτος conditional, ἤπειτα adv. via ἔπειτα).
+Morpheus cache: 350 receipts (empty-result receipts and the new normalisation
+variants imported). Frontend: Vercel `project-melos-39qawr5j0` aliased to
+greeklyric.com (labels for damaged pieces and ending-only analyses).
+
+What K2 adds over K (`docs/morphology.md`, "Last tier"): ending-based pattern
+analyses for words no lexicon knows; `damaged_piece` labels for letter-runs beside
+lacunae (excluded from word counts); uncertain-edge-letter variants; more Aeolic
+rules and a Lesbian lexical table; ranking: nom./voc. folding except under a
+vocative prediction, adjacent-nominal agreement, featureless predictions treated as
+none, fuller same-lemma rows win, exact attestations outrank parser guesses,
+POS filled from the prediction; the syntax provider now waits up to 20 s for a
+concurrent analysis instead of dropping the prediction (audit chunks had lost
+their predictions to `provider_busy`).
+
+Dev audit 8 (`runtime/dev/audit-8`): 298 of 306 intact words complete, 15 damaged
+pieces labelled, 194 words with a selected gloss (109 at K). Backend tests: 1880
+pass, 1 expected frozen-manifest failure. A production audit
+(`runtime/dev/audit-9-production`) was started after promotion.
+
+## Historical: full parses for every printed word, release K (2026-10-07)
 
 Public backend: image `melos-api:20261007k`
 (`sha256:f441cca71f37bc12d4d523a5b40b379494918dd90f2da92ac40a1577e319d90c`), built
