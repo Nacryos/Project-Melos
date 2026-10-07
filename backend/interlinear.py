@@ -297,20 +297,29 @@ def _fuller_row_of_same_lemma(top, second):
     return canonical_features(second).items() <= canonical_features(top).items()
 
 
-def _fullest_reading(ranked, syntax, informative):
+def _fullest_reading(ranked, syntax, informative, everything=None):
     """The top row, or a same-lemma row that restates it with more features.
 
-    A dictionary row giving only "pl." may outrank the parser's "nom. masc. pl."
-    through attestation; the fuller row is the one to show when it is compatible
-    with the prediction (ἴφθιμοι).
+    A dictionary row giving only "acc. sg." may be the only one compatible with
+    a prediction that guessed the gender wrong (ἄεθλον: predicted masculine, the
+    lexicon's full row is neuter). The fuller row of the same headword is the
+    same reading with more information, so it is shown instead, provided it
+    disagrees with the prediction only on features the partial row did not
+    state. Among several, the one stating most features wins.
     """
     top = ranked[0]['candidate']
-    for item in ranked[1:]:
-        row = item['candidate']
-        if (_fuller_row_of_same_lemma(row, top) and canonical_features(row) != canonical_features(top)
-                and (not informative or _compatible(row, syntax))):
-            return row
-    return top
+    top_features = canonical_features(top)
+    best, best_size = None, len(top_features)
+    predicted = canonical_features(syntax) if syntax else {}
+    for row in [item['candidate'] for item in ranked[1:]] + list(everything or []):
+        features = canonical_features(row)
+        if not _fuller_row_of_same_lemma(row, top) or features == top_features or len(features) <= best_size:
+            continue
+        if informative and any(key in top_features and not _feature_agrees(key, features[key], predicted[key])
+                               for key in set(features) & set(predicted)):
+            continue
+        best, best_size = row, len(features)
+    return best or top
 
 
 def rank_candidates(candidates, syntax):
@@ -703,7 +712,9 @@ def _choose(token, syntax, rank):
                 basis = 'jev_syntax_compatible' if syntax and _compatible(chosen, syntax) else 'jev_contextual_candidate'
                 return chosen, basis, len(identities)
     if len(identities) == 1:
-        return next(iter(identities.values())), 'unique_compatible_candidate' if syntax else 'unique_candidate', 1
+        only = next(iter(identities.values()))
+        return (_fullest_reading([{'candidate': only}], syntax, bool(syntax), candidates),
+                'unique_compatible_candidate' if syntax else 'unique_candidate', 1)
     if candidates:
         # Rank the full parses by their fit to the contextual prediction. When
         # nothing is compatible the prediction is contradicted on some feature;
@@ -719,7 +730,7 @@ def _choose(token, syntax, rank):
             margin = ranked[0]['score'] - (ranked[1]['score'] if len(ranked) > 1 else float('-inf'))
             if canonical_features(ranked[0]['candidate']) and (len(ranked) == 1 or margin >= 0.5
                                                                 or (margin > 0 and _fuller_row_of_same_lemma(ranked[0]['candidate'], ranked[1]['candidate']))):
-                return _fullest_reading(ranked, syntax, False), 'morphology_ranked_without_syntax', len(pool)
+                return _fullest_reading(ranked, syntax, False, candidates), 'morphology_ranked_without_syntax', len(pool)
             return None, 'ambiguous', len(identities) or len(candidates)
         if not identities:
             distinct = {(_identity(row.get('lemma_raw') or row.get('lemma')), str(row.get('homograph_id') or ''),
@@ -740,7 +751,7 @@ def _choose(token, syntax, rank):
         decisive = ranked[0]['score'] > 0 and (len(ranked) == 1 or margin >= 0.5 or (fuller and margin > 0))
         if decisive and (identities or _agreements(ranked[0]['candidate'], syntax) >= 1):
             basis = 'morphology_ranked_by_syntax' if identities else 'morphology_ranked_despite_syntax_conflict'
-            return _fullest_reading(ranked, syntax, True), basis, len(pool)
+            return _fullest_reading(ranked, syntax, True, candidates), basis, len(pool)
     return None, 'ambiguous' if candidates else 'unavailable', len(identities) or len(candidates)
 
 
@@ -1015,7 +1026,7 @@ def interlinear_reading(result):
     by_span = {(row.get('absolute_start'), row.get('absolute_end')): row for row in syntax_rows
                if row.get('prediction_status') != 'not_applicable'}
     ranks = {row.get('token_id'): row for row in (result.get('ranking') or {}).get('items') or []}
-    projected, linked = [], {}
+    projected, linked, pending = [], {}, []
     for token in original:
         row = {key: deepcopy(token.get(key)) for key in ('id', 'text', 'kind', 'start', 'end', 'start_utf16', 'end_utf16')}
         row['token_id'] = token['id']
@@ -1088,6 +1099,12 @@ def interlinear_reading(result):
             if predicted_pos and ((nominal and predicted_pos in _NOMINAL_POS) or (verbal and predicted_pos == 'VERB')):
                 features = {**features, 'POS': predicted_pos}
                 row['pos_from_prediction'] = True
+        if (features and chosen and chosen.get('candidate_kind') == 'pattern_analysis' and 'Gender' not in features
+                and 'Case' in features and predicted and canonical_features(predicted).get('Gender')):
+            # An ending-only analysis of an unknown word (a name) cannot state
+            # gender; the prediction's gender is taken, and labelled as such.
+            features = {**features, 'Gender': canonical_features(predicted)['Gender']}
+            row['gender_from_prediction'] = True
         # An unresolved candidate set must not inherit an arbitrary dictionary
         # sense; a standalone model morphology remains explicitly a prediction.
         row.update(lemma=chosen.get('lemma') if chosen else None, features=features,
@@ -1159,8 +1176,37 @@ def interlinear_reading(result):
                 meaning.update(status='conditional_alternative', word_attestation=False,
                                occurrence_verified=False, analysis_scope='conditional_on_word_boundary')
         projected.append(row)
+        pending.append((row, token, predicted, partial))
         if predicted and not partial and not conflict and not boundary_uncertain:
             linked[(predicted.get('sentence_id'), predicted['id'])] = (row, predicted)
+    # Second pass: a word left unresolved by the prediction can be settled by
+    # the *chosen* parses of its adjacent words (θεσπεσία nom. fem. sg. settles
+    # ἄχω as nominative), which are better evidence than the model's guesses.
+    words_only = [entry for entry in pending if entry[0].get('kind') == 'word']
+    for index, (row, token, predicted, partial) in enumerate(words_only):
+        if partial or row.get('status') == 'selected' or row.get('lacuna_boundary_uncertain'):
+            continue
+        neighbours = []
+        for offset in (-1, 1):
+            if 0 <= index + offset < len(words_only):
+                other = words_only[index + offset][0]
+                if other.get('status') == 'selected' and other['features'].get('POS') in _NOMINAL_POS \
+                        and any(key in other['features'] for key in ('Case', 'Number', 'Gender')):
+                    neighbours.append({'text': other.get('text'), 'relation': 'adjacent', 'role': 'resolved_neighbour',
+                                       'features': {key: other['features'][key] for key in ('Case', 'Number', 'Gender') if key in other['features']}})
+        if not neighbours:
+            continue
+        base = predicted if predicted and canonical_features(predicted) else {'agreement_partners': []}
+        augmented = {**base, 'agreement_partners': [*(base.get('agreement_partners') or []), *neighbours]}
+        chosen, basis, count = _choose(token, augmented, None)
+        if not chosen:
+            continue
+        features = canonical_features(chosen)
+        row.update(lemma=chosen.get('lemma'), features=features, parse_short=compact_parse(features),
+                   gloss=_gloss(chosen, token), status='selected', selection_basis='morphology_ranked_by_neighbour_parse',
+                   candidate_id=chosen.get('id'), alternative_count=count, source_candidate=deepcopy(chosen),
+                   neighbour_evidence=[{'text': n['text'], 'features': n['features']} for n in neighbours])
+        row.pop('supporting_parse_candidate_ids', None)
     edges = []
     for row, predicted in linked.values():
         pair = linked.get((predicted.get('sentence_id'), predicted.get('head')))

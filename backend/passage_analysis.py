@@ -490,7 +490,8 @@ class PassageAnalysisService:
                                 machine = {**machine, "status": "request_limit", "warnings": ["At most three uncached computational forms are fetched per explicit passage request."]}
                     except Exception:
                         machine["warnings"] = ["Computational morphology is unavailable; source alternatives remain available."]
-                if machine.get("status") == "no_analyses" and self.machine_service is not None:
+                from .aeolic_variants import LEXICAL
+                if (machine.get("status") == "no_analyses" or (form in LEXICAL and machine.get("status") == "ok")) and self.machine_service is not None:
                     # The exact printed form is unknown to the parser. Query a few
                     # labelled Aeolic spelling normalisations; each resulting parse
                     # carries its rule and never outranks an exact-form analysis.
@@ -515,7 +516,7 @@ class PassageAnalysisService:
                                 **candidate, "basis": "machine_analysis", "candidate_kind": "machine_analysis",
                                 "normalised_query": variant["form"], "normalisation_rule": variant["rule"],
                                 "normalisation_note": variant["note"], "tier": variant["tier"]})
-                    if machine["machine_candidates"]:
+                    if machine["machine_candidates"] and machine.get("status") != "ok":
                         machine["status"] = "ok_normalised"
                         machine.setdefault("warnings", []).append(
                             "No analysis of the exact printed form; the parses shown come from labelled Aeolic spelling normalisations.")
@@ -627,7 +628,13 @@ class PassageAnalysisService:
             # A bare headword match (the letter α as a dictionary entry) is not
             # a grammatical analysis of one or two surviving letters.
             has_source_parse = any(canonical_features(row) for row in source_rows)
-            if token.get("lacuna_boundary_uncertain") and (letters <= 1 or (letters == 2 and not (has_exact_machine or has_source_parse))):
+            exact_identities = {(row.get("lemma"), tuple(sorted(canonical_features(row).items())))
+                                for row in machine.get("machine_candidates") or []
+                                if not row.get("normalised_query") and row.get("candidate_kind") != "pattern_analysis"}
+            # Two surviving letters beside a lacuna count as a word only when
+            # the parser gives them exactly one reading (ις → ἴς); several
+            # readings of a two-letter scrap are not evidence of any of them.
+            if token.get("lacuna_boundary_uncertain") and (letters <= 1 or (letters == 2 and not (len(exact_identities) == 1 or has_source_parse))):
                 token["damaged_piece"] = True
                 token["warnings"].append("Surviving letters beside a lacuna, not a complete word; no analysis is asserted.")
                 continue

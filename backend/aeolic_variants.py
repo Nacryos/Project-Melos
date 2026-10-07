@@ -55,6 +55,8 @@ LEXICAL = {
     "ὄνυμα": ("ὄνομα", "Lesbian ὄνυμα for ὄνομα"),
     "αἴ": ("εἰ", "Lesbian αἴ for εἰ"),
     "ἔγων": ("ἐγών", "Lesbian ἔγων (recessive accent) for epic ἐγών"),
+    "τὼ": ("τῶ", "Lesbian τὼ (grave in context) for the genitive article τῶ, Attic τοῦ"),
+    "τῶ": ("τοῦ", "Lesbian/Doric genitive article τῶ for Attic τοῦ"),
 }
 
 
