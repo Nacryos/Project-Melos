@@ -33,6 +33,7 @@ LIMITATIONS = [
 # Editorial signs removed from the parser's view of the text. They never
 # change a letter; the parser simply sees the editor's printed reading.
 EDITORIAL_VIEW_DROPPED = frozenset("[]̣")
+LOCK_WAIT_SECONDS = float(os.environ.get("MELOS_SYNTAX_LOCK_WAIT", "20"))
 
 
 def _token_kind(text: str) -> str:
@@ -146,7 +147,9 @@ class SyntaxProvider:
             raise SyntaxProviderError("invalid_text", "Syntax input must be a nonempty string.")
         if len(text) > MAX_CHARS:
             raise SyntaxProviderError("span_too_large", f"Syntax input exceeds {MAX_CHARS} codepoints.")
-        if not self._lock.acquire(blocking=False):
+        # Wait a bounded time for a concurrent analysis rather than dropping the
+        # prediction: one model, several readers.
+        if not self._lock.acquire(timeout=LOCK_WAIT_SECONDS):
             raise SyntaxProviderError("provider_busy", "Syntax provider is busy; retry shortly.")
         try:
             receipt = self._receipt()

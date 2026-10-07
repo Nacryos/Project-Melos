@@ -614,14 +614,6 @@ class PassageAnalysisService:
                 continue
             form = analysis_form(token)
             letters = sum(1 for char in unicodedata.normalize("NFD", form) if unicodedata.category(char).startswith("L"))
-            printed = token.get("text") or ""
-            after = text[token["end"]:token["end"] + 1] if text else ""
-            if "[" in printed and "]" not in printed[printed.rindex("["):] and after in ("", "\n", "\r"):
-                # Μύρσιλ̣[ο at a line end: the editor's supplement runs past the
-                # line, so the printed letters are not a complete word.
-                token["damaged_piece"] = True
-                token["warnings"].append("The editor's supplement continues beyond the line; the printed letters are not a complete word.")
-                continue
             machine = token.get("machine") or {}
             has_machine = bool(machine.get("machine_candidates"))
             # For a short run of letters beside a lacuna only an analysis of the

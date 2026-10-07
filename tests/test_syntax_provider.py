@@ -91,7 +91,8 @@ def test_input_limits_before_loading(provider, text, code):
     assert exc.value.code == code
 
 
-def test_single_concurrent_inference(provider):
+def test_single_concurrent_inference(provider, monkeypatch):
+    monkeypatch.setattr("backend.syntax_provider.LOCK_WAIT_SECONDS", 0.1)
     provider._lock.acquire()
     try:
         with pytest.raises(SyntaxProviderError) as exc:
