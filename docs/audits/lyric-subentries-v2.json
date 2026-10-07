@@ -1,0 +1,42 @@
+{
+  "audit": "Independent re-audit of staged LSJ subentries v2",
+  "date": "2026-10-06",
+  "auditor": "subentry_evidence_audit",
+  "verdict": "PASS",
+  "blocking": false,
+  "scope": "Literal dictionary evidence only; not a validation of morphology, spelling correctness, or passage attestation",
+  "artifact": "data/staging/lyric-subentries-20261006-v2/subentries.sqlite",
+  "artifact_sha256": "33f9a798232948baa3efa13f402ffd8e278414b987a2230f63b5fff89fafcb81",
+  "input_sha256": "ca2e64c5bace58fe58f44cd111884b0362b4f83480702077f526f14f13ae546e",
+  "version": "lsj-explicit-subentry-v2",
+  "counts": {"records": 716, "lookup_keys": 689, "parent_entries": 688, "entries_examined": 116497},
+  "prior_audit": "docs/audits/lyric-subentries.json",
+  "prior_artifact_sha256": "05a8eaf9cb242858e63cddff573544ec985a30fb72bfde1b7f9da46ee1b2c87d",
+  "checks": [
+    "All 716 surviving records have identical source-derived content to the previously audited v1 records; only version identity and explicit spelling/morphology scope metadata changed.",
+    "Exactly the incomplete Κορινθόθι record was removed. No records or replacement meanings were added.",
+    "All 23 archived XML hashes were rechecked and match record provenance.",
+    "Regenerating every participating parent entry from current extractor code reproduces all 716 records exactly.",
+    "All records explicitly state literal_source_spelling_not_independently_validated_full_form and morphology_status=not_supplied.",
+    "The generic incomplete-definition guard rejects the actual archived preposition-plus-mistagged-place-complement layout without writing any replacement gloss.",
+    "The previous all-row source, byte-offset, node-offset, citation-scope and qualifier-scope checks remain applicable because those fields are unchanged.",
+    "All eight subentry unit tests pass, including incomplete-gloss exclusion and distinct ἀσυνετέω/ἀσυνέτημι meanings.",
+    "No record has lookup_key ἀσυννέτημμι."
+  ],
+  "resolved_finding": {
+    "prior_id": "incomplete_definition_from_mistagged_source",
+    "removed_record_id": "lsj:11:n59120:lsj-explicit-subentry-v1:/entryFree/sense[3]/orth[1]",
+    "resolution": "Fail closed; the bare 'at' meaning and associated false Corinth citation are not emitted as a subentry. The archived source remains untouched."
+  },
+  "retained_constraints": [
+    "Internal hyphen removal is a retrieval operation. Source extent=suff spellings can be malformed; do not silently repair or assert independently validated full forms.",
+    "Containing-sense qualifiers and citations nested under dictionary_senses have broader scope than top-level subentry qualifiers/citations. Preserve their declared scope.",
+    "This pass verifies emitted rows and the concrete fix, not exhaustive semantic correctness of all LSJ markup or extraction recall.",
+    "Production integration and deployment remain outside this audit."
+  ],
+  "code_sha256": {
+    "backend/lexicon_subentries.py": "eed39de3d3de1d48dbff2c5c004e3f145d9619af7f3f4a3d558d8a8e4317f626",
+    "tests/test_lexicon_subentries.py": "f83a200e8279057a62b0235adf009ca3c4500a499a1b92b7a08bf6c1313a73e2"
+  },
+  "mutations": "Audit report only; no runtime code, datasets, integration or deployment changed by auditor."
+}

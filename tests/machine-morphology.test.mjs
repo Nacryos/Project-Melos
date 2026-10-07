@@ -44,7 +44,8 @@ test('no automatic call; literal alternatives, dialect scope and provenance rema
   assert.match(ui.host.textContent, /Case: nominative/); assert.match(ui.host.textContent, /Case: accusative/);
   assert.match(ui.host.textContent, /Engine dialect: Aeolic/); assert.match(ui.host.textContent, /not exclusive attribution/);
   assert.match(ui.host.textContent, /Case: nominative · Engine dialect: Aeolic/);
-  assert.match(ui.host.textContent, /No meaning is inferred/); assert.match(ui.host.textContent, /Engine revision: not supplied/);
+  assert.match(ui.host.textContent, /No meaning is inferred/); assert.match(ui.host.textContent, /"engine_revision": null/);
+  assert.ok(descendants(ui.host).some(item => item.tag === 'details' && item.cls.includes('notice-details') && /No meaning is inferred/.test(item.textContent)));
   assert.match(ui.host.textContent, /raw synthetic entry/); assert.match(ui.host.textContent, /synthetic-hash/);
   assert.ok(descendants(ui.host).some(item => item.href === 'https://example.test/api'));
 });
@@ -70,6 +71,21 @@ test('standalone or unconfigured lookup does not offer paid contextual compariso
     const ui = setup(async () => result(), overrides); await ui.button('Analyze this form').handlers.click();
     assert.equal(ui.button('Compare these analyses with Jev'), undefined);
   }
+});
+
+test('all source-supplied verb inflection fields render without Jev or tense inference', async () => {
+  const payload = result();
+  payload.machine_candidates = [{ id: 'complete', lemma: 'Synthetic headword', features: {
+    pers: '2nd', num: 'singular', tense: 'aorist', mood: 'indicative', voice: 'active' } }];
+  const ui = setup(async () => payload);
+  await ui.button('Analyze this form').handlers.click();
+  assert.match(ui.host.textContent, /Person: 2nd · Number: singular · Tense: aorist · Mood: indicative · Voice: active/);
+  assert.equal(ui.requests.length, 1);
+  assert.equal(ui.requests[0][0], '/api/machine-analysis');
+  payload.machine_candidates[0].features.tense = 'past';
+  const coarse = setup(async () => payload); await coarse.button('Analyze this form').handlers.click();
+  assert.match(coarse.host.textContent, /Tense: past/);
+  assert.doesNotMatch(coarse.host.textContent, /Tense: aorist/);
 });
 
 test('duplicate clicks, cancellation and ignored abort completion cannot publish stale results', async () => {
@@ -125,8 +141,8 @@ test('ordinary source proposal status and unknown candidate IDs never promote a 
 });
 
 test('no analyses differs from failure and rate limit; unsafe strings stay literal', async () => {
-  for (const [status, expected] of [['no_analyses', /does not establish that the form is invalid/],
-    ['upstream_error', /unavailable/], ['rate_limited', /rate-limited/]]) {
+  for (const [status, expected] of [['no_analyses', /No additional parses found/],
+    ['upstream_error', /Could not load additional parses. Try again/], ['rate_limited', /rate-limited/]]) {
     const ui = setup(async () => ({ status, machine_candidates: [], warnings: [] }));
     await ui.button('Analyze this form').handlers.click(); assert.match(ui.host.textContent, expected);
   }

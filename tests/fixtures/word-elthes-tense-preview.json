@@ -1,0 +1,3141 @@
+{
+  "form": "ἦλθες",
+  "candidates": [
+    {
+      "lemma": "ἔρχομαι",
+      "lemma_raw": "ἔρχομαι1",
+      "analysis": "v2saia---",
+      "analysis_format": "Perseus treebank 1.6 postag",
+      "analysis_text": "verb · second person · singular · aorist · indicative · active",
+      "matched_form": "ἦλθες",
+      "matched_form_variants": [
+        "ἦλθες"
+      ],
+      "match_kind": "indexed_form",
+      "edit_distance": 0,
+      "gloss_entry_id": "lsj:5:n42827",
+      "lexicon_entry_ids": [
+        "lsj:5:n42827",
+        "autenrieth:n3825"
+      ],
+      "source": "PerseusDL Greek Dependency Treebank v1.6",
+      "source_url": "https://raw.githubusercontent.com/PerseusDL/treebank_data/bf4334f0af5e13d16b04c1cccd6237e683ac6f5f/v1.6/greek/data/tlg0011.tlg003.perseus-grc1.tb.xml",
+      "quality": "annotated_treebank_token",
+      "lemma_link_status": "single_indexed_lemma"
+    }
+  ],
+  "lexicon_entries": [
+    {
+      "id": "lsj:5:n42827",
+      "entry_id": "n42827",
+      "lemma": "ἔρχομαι",
+      "source": "PerseusDL LSJ TEI",
+      "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+      "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29%2Frxomai",
+      "rendered_entry_text": "ἔρχομαι Il. 13.256 , etc. ( Act. ἔρχω as barbarism, Tim. Pers. 167 ): impf. ἠρχόμην Hp. Epid. 7.59 , Arat. 102 , (δι‐) Pi. O. 9.93 ; freq. in later Prose, LXX Ge. 48.7 , Ev.Marc. 1.45 , Luc. Jud.Voc. 4 , Paus. 5.8.5 , etc.; in Att. rare even in compds., ἐπ‐ηρχόμην Th. 4.120 (perh. fr. ἐπάρχομαι), προς‐ ib. 121 (perh. fr. προσάρχομαι), περι‐ Ar. Th. 504 cod.: from ἐλυθ‐ (cf. ἐλεύθω) come fut. ἐλεύσομαι, Hom. , Ion. , Trag. ( A. Pr. 854 , Supp. 522 , S. OC 1206 , Tr. 595 ), in Att. Prose only in Lys. 22.11 , freq. later, D.H. 3.15 , etc.: aor., Ep. and Lyr. ἤλυ^θον Il. 1.152 , Pi. P. 3.99 , etc., used by E. (not A. or S. ) in dialogue ( Rh. 660 , El. 598 , Tr. 374 , cf. Neophr. 1.1 ); but ἦλθον is more freq. even in Hom. , and is the only form used in obl. moods, ἐλθέ, ἔλθω, ἔλθοιμι, ἐλθεῖν, ἐλθών; Ep. inf. ἐλθέμεναι, ‐έμεν, Il. 1.151 , 15.146 (indic. never ἐλυθ‐ unaugmented unless ἐξ‐ελύθη Il. 5.293 has replaced ἐξ‐έλυθε); Dor. ἦνθον Epich. 180 , Sophr. 144 , Theoc. 2.118 ; imper. ἐνθέ Aristonous 1.9 ; part. ἐνθών IG 9(1).867 (Corc., vi B.C.), (κατ‐) Schwyzer 657.4 ( Arc. , iv B.C.); subj. ἔνθῃ Berl.Sitzb. 1927.164 (Cyrene); Lacon. ἔλσῃ, ἔλσοιμι, ἐλσών, Ar. Lys. 105 , 118 , 1081 ; later ἦλθα LXX 2 Ki. 24.7 , Ev.Matt. 25.36 , BGU 530.11 (i A.D.), IG 14.1320 , etc.; 3 pl. ἤλθοσαν LXX Jo. 2.22 , al., PTeb. 179 (ii B.C.), etc.; ἤλυθα IG 14.1971 , Nonn. D. 37.424 , (ἐπ‐) AP 14.44 : pf. ἐλήλυ^θα (not in Hom. ) A. Pr. 943 , etc.; sync. pl. ἐλήλυ^μεν, ‐υτε, Cratin. 235 , Achae. 24 , 43 ; Ep. εἰλήλουθα, whence I pl. εἰλήλουθμεν Il. 9.49 , Od. 3.81 , part. εἰληλουθώς 19.28 , 20.360 ; once ἐληλουθώς Il. 15.81 , part. κατ‐εληλευθυῖα Berl.Sitzb. 1927.166 (Cyrene); Cret. pf. inf. ἀμφ‐εληλεύθεν, v. ἀμφέρχομαι : Boeot. pf. διεσς‐είλθεικε Schwyzer 485.2 (Thesp., iii B.C.), part. κατηνθηκότι ib. 657.39 ( Arc. , iv B.C.): plpf. ἐληλύθειν Ar. Eq. 1306 ; Ion. ἐληλύθεε Hdt. 5.98 ; Ep. εἰληλούθει Il. 4.520 , εἰληλούθειν Call. Fr. 532 .—In Att. the obl. moods of pres., as well as the impf. and fut. were replaced by forms of εἶμι ibo (q.v.): in LXX and Hellenistic Greek the place of the compounds, esp. ἐξ‐, εἰς‐έρχομαι, is commonly taken by ἐκ‐, εἰς‐πορεύομαι, etc., the fut., aor., and pf. being supplied as before by ἐλυθ‐ (ἐλθ‐): start, set out, ἦ μέν μοι μάλα πολλὰ..Λυκάων ἐρχομένῳ ἐπέτελλε when I was setting out, Il. 5.198 , cf. 150 ; τύχησε γὰρ ἐρχομένη νηῦς a ship was just starting, Od. 14.334 ; ἐς πλόον ἐρχομένοις ( v.l. ἀρχ‐ ) Pi. P. 1.34 . walk,= περιπατέω, χαμαὶ ἐρχομένων ἀνθρώπων Il. 5.442 ; σὲ δ’ ἐρχόμενον ἐν δίκᾳ πολὺς ὄλβος ἀμφινέμεται walking in justice, Pi. P. 5.14 : the two foreg. rare signfs. belong only to the pres. ἔρχομαι. (much more freq.) come or go (the latter esp. in Ep. and Lyr.), ἦλθες thou art come, Od. 16.461 , etc.; χαίροισ’ ἔρχεο go and fare thee well, Sapph. Supp. 23.7 , cf. Il. 9.43 , Od. 10.320 , 1.281 ; ἀγγελίην στρατοῦ.. ἐρχομένοιο 2.30 , cf. 10.267 ; πάλιν ἐλθέμεν, αὖτε εἰλήλουθα, 19.533 , 549 ; οἶκον ἐλεύσεται ib. 313 ; οἴκαδε 5.220 ; ἐς οἴκους A. Pers. 833 : as a hortatory exclamation, ἀλλ’ ἔρχευ, λέκτρονδ’ ἴομεν Od. 23.254 , cf. 17.529 . c. acc. cogn., ὁδὸν ἐλθέμεναι to go a journey, Il. 1.151 ; ἄλλην ὁδόν, ἄλλα κέλευθα ἤλθομεν Od. 9.262 ; τηϋσίην ὁδὸν ἔλθῃς 3.316 : freq. in Trag., A. Pr. 962 , Th. 714 (also κατὰ τὴν αὐτὴν ὁδόν Pl. Lg. 707d ); νόστιμον ἐλθεῖν πόδα ( v.l. δόμον ) E. Alc. 1153 ; ἀγγε‐ λίην, ἐξεσίην ἐλθεῖν, go on an embassy, Il. 11.140 , Od. 21.20 . c. acc. loci, come to, arrive at, rare in Hom. , Ἀΐδαο δόμους ἔρχεαι Il. 22.483 ; ἔρχεσθον κλισίην 1.322 : freq. in later Poets, Pi. P. 4.52 , S. Tr. 259 , etc. ; traverse, ὁ ἥλιος ἔρχεται τῆς Λιβύης τὰ ἄνω Hdt. 2.24 : c. acc. pers., αι^ κέν τι νέκυς (acc. pl.) ὴ|σχυμμένος ἔλθῃ Il. 18.180 ; σὲ δ’, ὦ τέκνον, τόδ’ ἐλήλυθεν πᾶν κράτος S. Ph. 141 (lyr.). c. gen. loci, ἔρχονται πεδίοιο through or across the plain, Il. 2.801 ; but also, from a place, γῆς τινος S. OC 572 . c. dat. pers., come to, i.e. come to aid or relieve one, rare in Hom. , Od. 16.453 ; freq. later, Pi. O. 1.100 , Th. 1.13 . etc. ; ἀποροῦντι αὐτῷ ἔρχεται Προμηθεὺς ἐπισκεψόμενος τὴν νομήν Pl. Prt. 321c ; also in hostile sense, ἔρχομαί σοι Apoc. 2.5 . c. fut. part., to denote the object, ἔρχομαι ἔγχος οίσόμενος I go to fetch.., Il. 13.256 ; ἔρχομαι ὀψομένη 14.301 : freq. in Trag., μαρτυρήσων ἦλθον A. Eu. 576 ; ἐκσώσων E. Med. 1303 . in Hdt. like an auxiliary Verb, ἔρχομαι ἐρέων, φράσων, I am going to tell, 1.5 , 3.6 , al. ; σημανέων 4.99 ; μηκυνέων 2.35 : rare in Att. , ἔ. κατηγορήσων, ἀποθανούμενος, Pl. Euthphr. 2c , Thg. 129a ; ἔρχομαι ἐπιχειρῶν ‐σοι ἐπιδείξασθαι, for ἔ. σοι ἐπιδειξόμενος, Id. Phd. 100b ; οὐ τοῦτο λέξων ἔρχομαι, ὡς.. X. Ages. 2.7 . c. part. pres., aor., or pf., in Hom. , to show the manner of moving, ἄγγελος ἦλθε θέουσα she came running, Il. 11.715 , al. ; μὴ πεφοβημένος ἔλθῃς lest thou come thither in full flight, 10.510 ; ἦλθε φθάμενος he came first, 23.779 ; κεχαρισμένος ἔλθυι Od. 2.54 . aor, part. ἐλθών added to Verbs, οὐ δύναμαι..μάχεσθαι ἐλθών go and fight, Il. 16.521 ; κάθηρον ἐλθών come and cleanse, ib. 668 ; λέγοιμ’ ἂν ἐλθών A. Supp. 928 ; δρᾶ νυν τάδ’ ἐλθών S. Ant. 1107 . of any kind of motion, ἐξ ἁλὸς ἐλθεῖν to rise out of the sea, Od. 4.448 , al. ; ἐπὶ πόντον to go over it, 2.265 ; with qualifying phrase, πόδεσσιν ἔ. to go on foot, 6.40 (but πεζὸς εἰλήλουθα have come as a foot-soldier, Il. 5.204 ) ; of birds, 17.755 , etc. ; of ships, 15.549 , Od. 14.334 ; of spears or javelins, freq. in Il. ; of natural phenomena, as rivers, 5.91 ; wind and storm, 9.6 , Od. 12.288 ; clouds, Il. 4.276 , 16.364 ; stars, rise, Od. 13.94 ; time, είς ὅ κεν ἔλθῃ νύξ Il. 14.77 , cf. 24.351 ; ἐπὴν ἔλθῃσι θέρος Od. 11.192 ; ἔτος ἦλθε 1.16 ; of events and conditions, είς ὅ κε γῆρας ἔλθῃ καὶ θάνατος 13.59 , cf. 11.135 ; of feelings, go, ἦ κέ μοι αίνὸν ἀπὸ πραπίδων ἄχος ἔλθοι Il. 22.43 ; ἀπὸ πραπίδων ἦλθ’ ἵμερος 24.514 ; of sounds, etc., τὸν..περὶ φρένας ἤλυθ’ ίωή 10.139 ; Κύκλωπα περὶ φρένας ἤλυθεν οἶνος Od. 9.362 ; without φρένας, περὶ δέ σφεας ἤλυθ’ ι>ωή 17.261 , cf. 16.6 ; of battle, ὁμόσ’ ἦλθε μάχη Il. 13.337 ; of things sent or taken, ὄφρα κε δῶρα ἐκ κλισίης ἔλθῃσι 19.191 , cf. 1.120 ; so later, esp. of danger or evil, c. dat., εἰ πάλιν ἔλθοι τῇ Ἑλλάδι κίνδυνος ὑπὸ βαρβάρων X. HG 6.5.43 ; ἦλθεν αὐτῷ Ζηνὸς βέλος A. Pr. 360 ; μηδ’ ὑπ’ ἀνάγκας γάμος ἔλθοι Id. Supp. 1032 (lyr.), cf. Pers. 436 ; of reports, commands, etc., Id. Pr. 663 , Th. 8.19 ; τοῖς Ἀθηναίοις ὡς ἦλθε τὰ γεγενημένα came to their ears, ib. 96 ; τὰ ἐρχόμενα ἐπ’ αὐτόν that which was about to happen to him, Ev.Jo. 18.4 ; of property, which comes or passes to a person by bequest, conveyance, gift, etc., τὰ ἐληλυθότα εἴς με ἀπὸ κληρονομίας BGU 919.7 (ii A. D.) ; ἐ. εἴς τινα ἀπὸ παραχωρήσεως, κατὰ δωρεάν, PLond. 3.1164e6 (iii A. D.), PMasp. 96.22 (vi A. D.) : —Geom., pass, fall, ἔ. ἐπὶ τὸ αὐτὸ σαμεῖον pass through the same point, Archim. Aequil. 1.15 ; ὅπου ἂν ἔρχηται τὸ ἕτερον σαμεῖον wherever the other point falls, ib. 2.10 . Post-Homeric phrases : ἐς λόγους ἔρχεσθαί τινι come to speech with, Hdt. 6.86 .ᾱ, S. OC 1164 codd. ; so ἐς ὄψιν τινὶ ἐλθεῖν Hdt. 3.42 . εἰς χεῖρας ἐλθεῖν τινι (v. χείρ) ; so ἐς μάχην ἐλθεῖν τινι Id. 7.9 . γ/ ; είς ὸργάς τισιν Pl. R. 572a . ἐπὶ μεῖζον ἔ. increase, S. Ph. 259 ; ἐπὶ μηδέν Id. Fr. 871.8 , El. 1000 ; ἐπὶ πᾶν ἐλθεῖν try everything, X. An. 3.1.18 . ἐς τὸ δεινόν, ἐς τὰ ἀλγεινὰ ἐλθεῖν, come into danger, etc., Th. 3.45 , 2.39 ; είς τοσοῦτον αίσχύνης ἐληλύθατον ὥστε.. Pl. Grg. 487b , etc. ; εἰς τὸ ἔσχατον ἀδικίας Id. R. 361d ; ἐπ’ ἔσχατον ἐλθεῖν ἀηδίας Id Phdr. 240d ; ὅσοι ἐνταῦθα ἦλθον ἡλικίας arrived at that time of life, Id. R. 329b ; ἐς ἀσθενὲς ἔ. come to an impotent conclusion, Hdt. 1.120 ; ἐς ἀριθμὸν ἐλθεῖν to be numbered, Th. 2.72 ; εἰς ἔρωτά τινος ἐλθεῖν Anaxil. 21.6 ; εἰς ἔλεγχον Philem. 93.3 , etc. ; εἰς ἑαυτὸν ἐλθεῖν come to oneself, Ev.Luc. 15.17 , Arr. Epict. 3.1.15 . παρὰ μικρὸν ἐλθεῖν c. inf., come within a little of, be near a thing, E. Heracl. 296 (anap.) ; παρ’ ὀλίγον ἐλθεῖν Plu. Pyrrh. 10 ; παρὰ τοσοῦτον ἡ Μυτιλήνη ἦλθε κινδύνου so narrow was her escape, Th. 3.49 ; παρ’ οὐδὲν ἐλθόντες τοῦ ἀποβαλεῖν Plb. 1.45.14 ; παρ’ οὐδὲν ἐλθ. ἀπολέσθαι Plu. Cam. 8 . with διά and gen., periphr. for a Verb, e.g. διὰ μάχης τινὶ ἐλθεῖν for μάχεσθαί τινι Hdt. 6.9 , E. Hel. 978 , Th. 4.92 ; διὰ πυρὸς ἐλθεῖν τινι rage furiously against.., E. Andr. 488 (lyr.) ; but οί διὰ πάντων τῶν καλῶν ἐληλυθότες who have gone through the whole circle of duties, have fulfilled them all, X. Cyr. 1.2.15 ; διὰ πολλῶν κινδύνων ἐλθόντες Pl. Alc. 2.142a . ἔ. παρὰ τὴν γυναῖκα, παρὰ Ἀρίστωνα, of sexual intercourse, go in to her, to him, Hdt. 2.115 , 6.68 ; πρός τινα, of marriage, X. Oec. 7.5 . ἔ. ἐπὶ πόλιν attack, Th. 2.11 . ἔ. ἐς depend upon or be concerned with, τό γ’ εἰς ἀνθρώπους ἐλθόν Aristid. 1.149 J. ; τοῖς λογισμοῖς εἰς ἑαυτοὺς ἐρχόμενοι D.S. 13.95 ; ὅσα εἰς ἀρετὴν ἔρχεται Lib. Or. 22.18 ; τῶν πραττομένων οὐκ όλίγον εἰς ἐκεῖνον ἤρχετο ib. 14.31 .",
+      "rendering_method": "Greek TEI spans rendered from Perseus Beta Code; source text retained",
+      "dictionary_senses": [
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[2]/tr[1]:9339:9353",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "start, set out",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.1",
+              "n": "I",
+              "level": "2"
+            }
+          ],
+          "scope_text": "LXX and Hellenistic Greek the place of the compounds, esp. ἐξ‐, εἰς‐έρχομαι, is commonly taken by ἐκ‐, εἰς‐πορεύομαι, etc., the fut., aor., and pf. being supplied as before by ἐλυθ‐ (ἐλθ‐): start, set out, ἦ μέν μοι μάλα πολλὰ..Λυκάων ἐρχομένῳ ἐπέτελλε when I was setting out, Il. 5.198 , cf. 150 ; τύχησ",
+          "scope_locator": {
+            "rendered_start": 9079,
+            "rendered_end": 9593,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [
+            {
+              "text": "v.l.",
+              "type": "lbl",
+              "source_locator": {
+                "node_path": "/entryFree/sense[2]/xr/lbl",
+                "rendered_start": 9777,
+                "rendered_end": 9781,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "citations": [
+            {
+              "text": "Il. 5.198",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:5:198",
+              "source_locator": {
+                "node_path": "/entryFree/sense[2]/bibl[1]",
+                "rendered_start": 9464,
+                "rendered_end": 9535,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "150",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:150",
+              "source_locator": {
+                "node_path": "/entryFree/sense[2]/bibl[2]",
+                "rendered_start": 9541,
+                "rendered_end": 9585,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 14.334",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:14:334",
+              "source_locator": {
+                "node_path": "/entryFree/sense[2]/bibl[3]",
+                "rendered_start": 9658,
+                "rendered_end": 9731,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pi. P. 1.34",
+              "reference": "urn:cts:greekLit:tlg0033.tlg002.perseus-grc1:1:34",
+              "source_locator": {
+                "node_path": "/entryFree/sense[2]/bibl[4]",
+                "rendered_start": 9829,
+                "rendered_end": 9923,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[2]/tr[1]",
+            "rendered_start": 9339,
+            "rendered_end": 9353,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          },
+          "morphology_restrictions": [
+            {
+              "kind": "source_tense_only",
+              "feature": "Tense",
+              "allowed_values": [
+                "Pres"
+              ],
+              "source_text": "the two foreg. rare signfs. belong only to the pres. ἔρχομαι.",
+              "source_locator": {
+                "node_path": "/entryFree/sense[3]",
+                "rendered_start": 10334,
+                "rendered_end": 10414,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              },
+              "tense_source_locator": {
+                "node_path": "/entryFree/sense[3]/tns",
+                "rendered_start": 10381,
+                "rendered_end": 10386,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              },
+              "scope": {
+                "kind": "preceding_meaning_units",
+                "count": 2,
+                "target_source_sense_ids": [
+                  "n42827.1",
+                  "n42827.2"
+                ]
+              },
+              "extraction_rule": "explicit_terminal_two_foregoing_present_senses_v1",
+              "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+              "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+              "lexicon_entry_id": "lsj:5:n42827",
+              "entry_id": "n42827",
+              "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+              "source": "PerseusDL LSJ TEI"
+            }
+          ]
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[3]/tr[1]:9961:9965",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "walk",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.2",
+              "n": "2",
+              "level": "3"
+            }
+          ],
+          "scope_text": "14.334 ; ἐς πλόον ἐρχομένοις ( v.l. ἀρχ‐ ) Pi. P. 1.34 . walk,= περιπατέω, χαμαὶ ἐρχομένων ἀνθρώπων Il. 5.442 ; σὲ δ’ ἐρχόμενον ἐν δίκᾳ πολὺς ὄλβος ἀμφινέμεται",
+          "scope_locator": {
+            "rendered_start": 9701,
+            "rendered_end": 10205,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [],
+          "citations": [
+            {
+              "text": "Il. 5.442",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:5:442",
+              "source_locator": {
+                "node_path": "/entryFree/sense[3]/cit/bibl",
+                "rendered_start": 10048,
+                "rendered_end": 10128,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pi. P. 5.14",
+              "reference": "urn:cts:greekLit:tlg0033.tlg002.perseus-grc1:5:14",
+              "source_locator": {
+                "node_path": "/entryFree/sense[3]/bibl",
+                "rendered_start": 10237,
+                "rendered_end": 10331,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[3]/tr[1]",
+            "rendered_start": 9961,
+            "rendered_end": 9965,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          },
+          "morphology_restrictions": [
+            {
+              "kind": "source_tense_only",
+              "feature": "Tense",
+              "allowed_values": [
+                "Pres"
+              ],
+              "source_text": "the two foreg. rare signfs. belong only to the pres. ἔρχομαι.",
+              "source_locator": {
+                "node_path": "/entryFree/sense[3]",
+                "rendered_start": 10334,
+                "rendered_end": 10414,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              },
+              "tense_source_locator": {
+                "node_path": "/entryFree/sense[3]/tns",
+                "rendered_start": 10381,
+                "rendered_end": 10386,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              },
+              "scope": {
+                "kind": "preceding_meaning_units",
+                "count": 2,
+                "target_source_sense_ids": [
+                  "n42827.1",
+                  "n42827.2"
+                ]
+              },
+              "extraction_rule": "explicit_terminal_two_foregoing_present_senses_v1",
+              "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+              "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+              "lexicon_entry_id": "lsj:5:n42827",
+              "entry_id": "n42827",
+              "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+              "source": "PerseusDL LSJ TEI"
+            }
+          ]
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[4]/tr[1]:10466:10476",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "come or go",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.3",
+              "n": "II",
+              "level": "2"
+            }
+          ],
+          "scope_text": "walking in justice, Pi. P. 5.14 : the two foreg. rare signfs. belong only to the pres. ἔρχομαι. (much more freq.) come or go (the latter esp. in Ep. and Lyr.), ἦλθες thou art come, Od. 16.461 , etc.; χαίροισ’ ἔρχεο go and fa",
+          "scope_locator": {
+            "rendered_start": 10206,
+            "rendered_end": 10716,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [
+            {
+              "text": "Ep.",
+              "type": "dialect",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/gramGrp/gram",
+                "rendered_start": 10519,
+                "rendered_end": 10522,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "citations": [
+            {
+              "text": "Od. 16.461",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:16:461",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/bibl[1]",
+                "rendered_start": 10593,
+                "rendered_end": 10665,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Sapph. Supp. 23.7",
+              "reference": "urn:cts:greekLit:tlg0009.tlg001:23:7",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/bibl[2]",
+                "rendered_start": 10730,
+                "rendered_end": 10830,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 9.43",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:9:43",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/bibl[3]",
+                "rendered_start": 10836,
+                "rendered_end": 10906,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 10.320",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:10:320",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/bibl[4]",
+                "rendered_start": 10908,
+                "rendered_end": 10980,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "1.281",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:1:281",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/bibl[5]",
+                "rendered_start": 10982,
+                "rendered_end": 11028,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "2.30",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:2:30",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/cit[1]/bibl",
+                "rendered_start": 11105,
+                "rendered_end": 11156,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "10.267",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:10:267",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/bibl[6]",
+                "rendered_start": 11181,
+                "rendered_end": 11228,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "19.533",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:19:533",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/bibl[7]",
+                "rendered_start": 11281,
+                "rendered_end": 11328,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "549",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:549",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/bibl[8]",
+                "rendered_start": 11330,
+                "rendered_end": 11374,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "313",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:313",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/bibl[9]",
+                "rendered_start": 11396,
+                "rendered_end": 11440,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "5.220",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:5:220",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/cit[2]/bibl",
+                "rendered_start": 11494,
+                "rendered_end": 11546,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "A. Pers. 833",
+              "reference": "urn:cts:greekLit:tlg0085.tlg002.perseus-grc1:833",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/cit[3]/bibl",
+                "rendered_start": 11622,
+                "rendered_end": 11729,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 23.254",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:23:254",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/cit[4]/bibl",
+                "rendered_start": 11851,
+                "rendered_end": 11932,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "17.529",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:17:529",
+              "source_locator": {
+                "node_path": "/entryFree/sense[4]/bibl[10]",
+                "rendered_start": 11957,
+                "rendered_end": 12004,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[4]/tr[1]",
+            "rendered_start": 10466,
+            "rendered_end": 10476,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          },
+          "component_node_paths": [
+            "/entryFree/sense[4]/tr[1]",
+            "/entryFree/sense[4]/tr[2]"
+          ]
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[5]/tr[1]:12072:12087",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "to go a journey",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.4",
+              "n": "III",
+              "level": "2"
+            }
+          ],
+          "scope_text": "λέκτρονδ’ ἴομεν Od. 23.254 , cf. 17.529 . c. acc. cogn., ὁδὸν ἐλθέμεναι to go a journey, Il. 1.151 ; ἄλλην ὁδόν, ἄλλα κέλευθα ἤλθομεν Od. 9.262",
+          "scope_locator": {
+            "rendered_start": 11812,
+            "rendered_end": 12327,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [
+            {
+              "text": "v.l.",
+              "type": "lbl",
+              "source_locator": {
+                "node_path": "/entryFree/sense[5]/xr/lbl",
+                "rendered_start": 12903,
+                "rendered_end": 12907,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "citations": [
+            {
+              "text": "Il. 1.151",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:1:151",
+              "source_locator": {
+                "node_path": "/entryFree/sense[5]/bibl[1]",
+                "rendered_start": 12089,
+                "rendered_end": 12160,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 9.262",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:9:262",
+              "source_locator": {
+                "node_path": "/entryFree/sense[5]/cit[1]/bibl",
+                "rendered_start": 12240,
+                "rendered_end": 12320,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "3.316",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:3:316",
+              "source_locator": {
+                "node_path": "/entryFree/sense[5]/cit[2]/bibl",
+                "rendered_start": 12405,
+                "rendered_end": 12457,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "A. Pr. 962",
+              "reference": "urn:cts:greekLit:tlg0085.tlg003.perseus-grc1:962",
+              "source_locator": {
+                "node_path": "/entryFree/sense[5]/bibl[2]",
+                "rendered_start": 12495,
+                "rendered_end": 12588,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Th. 714",
+              "reference": "urn:cts:greekLit:tlg0085.tlg004.perseus-grc1:714",
+              "source_locator": {
+                "node_path": "/entryFree/sense[5]/bibl[3]",
+                "rendered_start": 12590,
+                "rendered_end": 12659,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pl. Lg. 707d",
+              "reference": "urn:cts:greekLit:tlg0059.tlg034.perseus-grc1:707d",
+              "source_locator": {
+                "node_path": "/entryFree/sense[5]/cit[3]/bibl",
+                "rendered_start": 12730,
+                "rendered_end": 12837,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "E. Alc. 1153",
+              "reference": "urn:cts:greekLit:tlg0006.tlg002.perseus-grc1:1153",
+              "source_locator": {
+                "node_path": "/entryFree/sense[5]/bibl[4]",
+                "rendered_start": 12956,
+                "rendered_end": 13051,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 11.140",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:11:140",
+              "source_locator": {
+                "node_path": "/entryFree/sense[5]/bibl[5]",
+                "rendered_start": 13159,
+                "rendered_end": 13231,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 21.20",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:21:20",
+              "source_locator": {
+                "node_path": "/entryFree/sense[5]/bibl[6]",
+                "rendered_start": 13233,
+                "rendered_end": 13304,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[5]/tr[1]",
+            "rendered_start": 12072,
+            "rendered_end": 12087,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          }
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[6]/tr[1]:13337:13355",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "come to, arrive at",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.5",
+              "n": "2",
+              "level": "3"
+            }
+          ],
+          "scope_text": "λίην, ἐξεσίην ἐλθεῖν, go on an embassy, Il. 11.140 , Od. 21.20 . c. acc. loci, come to, arrive at, rare in Hom. , Ἀΐδαο δόμους ἔρχεαι Il. 22.483 ;",
+          "scope_locator": {
+            "rendered_start": 13077,
+            "rendered_end": 13595,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [],
+          "citations": [
+            {
+              "text": "Hom.",
+              "reference": null,
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/bibl[1]",
+                "rendered_start": 13365,
+                "rendered_end": 13410,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 22.483",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:22:483",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/cit[1]/bibl",
+                "rendered_start": 13476,
+                "rendered_end": 13558,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "1.322",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:1:322",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/cit[2]/bibl",
+                "rendered_start": 13641,
+                "rendered_end": 13693,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pi. P. 4.52",
+              "reference": "urn:cts:greekLit:tlg0033.tlg002.perseus-grc1:4:52",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/bibl[2]",
+                "rendered_start": 13737,
+                "rendered_end": 13831,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "S. Tr. 259",
+              "reference": "urn:cts:greekLit:tlg0011.tlg001.perseus-grc1:259",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/bibl[3]",
+                "rendered_start": 13833,
+                "rendered_end": 13927,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Hdt. 2.24",
+              "reference": "urn:cts:greekLit:tlg0016.tlg001.perseus-grc1:2:24",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/cit[3]/bibl",
+                "rendered_start": 14043,
+                "rendered_end": 14123,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 18.180",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:18:180",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/cit[4]/bibl",
+                "rendered_start": 14249,
+                "rendered_end": 14330,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "S. Ph. 141",
+              "reference": "urn:cts:greekLit:tlg0011.tlg006.perseus-grc1:141",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/cit[5]/bibl",
+                "rendered_start": 14438,
+                "rendered_end": 14543,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[6]/tr[1]",
+            "rendered_start": 13337,
+            "rendered_end": 13355,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          }
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[6]/tr[2]:13936:13944",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "traverse",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.5",
+              "n": "2",
+              "level": "3"
+            }
+          ],
+          "scope_text": "Il. 22.483 ; ἔρχεσθον κλισίην 1.322 : freq. in later Poets, Pi. P. 4.52 , S. Tr. 259 , etc. ; traverse, ὁ ἥλιος ἔρχεται τῆς Λιβύης τὰ ἄνω Hdt. 2.24 : c. acc. pers., αι^ κέν τι νέκυς (acc. p",
+          "scope_locator": {
+            "rendered_start": 13456,
+            "rendered_end": 14184,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [],
+          "citations": [
+            {
+              "text": "Hom.",
+              "reference": null,
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/bibl[1]",
+                "rendered_start": 13365,
+                "rendered_end": 13410,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 22.483",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:22:483",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/cit[1]/bibl",
+                "rendered_start": 13476,
+                "rendered_end": 13558,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "1.322",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:1:322",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/cit[2]/bibl",
+                "rendered_start": 13641,
+                "rendered_end": 13693,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pi. P. 4.52",
+              "reference": "urn:cts:greekLit:tlg0033.tlg002.perseus-grc1:4:52",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/bibl[2]",
+                "rendered_start": 13737,
+                "rendered_end": 13831,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "S. Tr. 259",
+              "reference": "urn:cts:greekLit:tlg0011.tlg001.perseus-grc1:259",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/bibl[3]",
+                "rendered_start": 13833,
+                "rendered_end": 13927,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Hdt. 2.24",
+              "reference": "urn:cts:greekLit:tlg0016.tlg001.perseus-grc1:2:24",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/cit[3]/bibl",
+                "rendered_start": 14043,
+                "rendered_end": 14123,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 18.180",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:18:180",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/cit[4]/bibl",
+                "rendered_start": 14249,
+                "rendered_end": 14330,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "S. Ph. 141",
+              "reference": "urn:cts:greekLit:tlg0011.tlg006.perseus-grc1:141",
+              "source_locator": {
+                "node_path": "/entryFree/sense[6]/cit[5]/bibl",
+                "rendered_start": 14438,
+                "rendered_end": 14543,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[6]/tr[2]",
+            "rendered_start": 13936,
+            "rendered_end": 13944,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          }
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[7]/tr[1]:14638:14665",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "through or across the plain",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.6",
+              "n": "3",
+              "level": "3"
+            }
+          ],
+          "scope_text": "’, ὦ τέκνον, τόδ’ ἐλήλυθεν πᾶν κράτος S. Ph. 141 (lyr.). c. gen. loci, ἔρχονται πεδίοιο through or across the plain, Il. 2.801 ; but also, from a place, γῆς τινος S. OC 572",
+          "scope_locator": {
+            "rendered_start": 14378,
+            "rendered_end": 14905,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [],
+          "citations": [
+            {
+              "text": "Il. 2.801",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:2:801",
+              "source_locator": {
+                "node_path": "/entryFree/sense[7]/bibl",
+                "rendered_start": 14667,
+                "rendered_end": 14738,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "S. OC 572",
+              "reference": "urn:cts:greekLit:tlg0011.tlg007.perseus-grc1:572",
+              "source_locator": {
+                "node_path": "/entryFree/sense[7]/cit/bibl",
+                "rendered_start": 14819,
+                "rendered_end": 14923,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[7]/tr[1]",
+            "rendered_start": 14638,
+            "rendered_end": 14665,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          },
+          "component_node_paths": [
+            "/entryFree/sense[7]/tr[1]",
+            "/entryFree/sense[7]/tr[2]"
+          ]
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[7]/tr[3]:14751:14763",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "from a place",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.6",
+              "n": "3",
+              "level": "3"
+            }
+          ],
+          "scope_text": "h. 141 (lyr.). c. gen. loci, ἔρχονται πεδίοιο through or across the plain, Il. 2.801 ; but also, from a place, γῆς τινος S. OC 572 .",
+          "scope_locator": {
+            "rendered_start": 14491,
+            "rendered_end": 14944,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [],
+          "citations": [
+            {
+              "text": "Il. 2.801",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:2:801",
+              "source_locator": {
+                "node_path": "/entryFree/sense[7]/bibl",
+                "rendered_start": 14667,
+                "rendered_end": 14738,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "S. OC 572",
+              "reference": "urn:cts:greekLit:tlg0011.tlg007.perseus-grc1:572",
+              "source_locator": {
+                "node_path": "/entryFree/sense[7]/cit/bibl",
+                "rendered_start": 14819,
+                "rendered_end": 14923,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[7]/tr[3]",
+            "rendered_start": 14751,
+            "rendered_end": 14763,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          }
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[8]/tr[1]:14976:14983",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "come to",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.7",
+              "n": "4",
+              "level": "3"
+            }
+          ],
+          "scope_text": "801 ; but also, from a place, γῆς τινος S. OC 572 . c. dat. pers., come to, i.e. come to aid or relieve one, rare in Hom. , Od. 16.453 ; freq. later, Pi. O.",
+          "scope_locator": {
+            "rendered_start": 14716,
+            "rendered_end": 15223,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [],
+          "citations": [
+            {
+              "text": "Hom.",
+              "reference": null,
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/bibl[1]",
+                "rendered_start": 15026,
+                "rendered_end": 15071,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 16.453",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:16:453",
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/bibl[2]",
+                "rendered_start": 15073,
+                "rendered_end": 15145,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pi. O. 1.100",
+              "reference": "urn:cts:greekLit:tlg0033.tlg001.perseus-grc1:1:100",
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/bibl[3]",
+                "rendered_start": 15161,
+                "rendered_end": 15256,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Th. 1.13",
+              "reference": "urn:cts:greekLit:tlg0003.tlg001.perseus-grc1:1:13",
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/bibl[4]",
+                "rendered_start": 15258,
+                "rendered_end": 15328,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pl. Prt. 321c",
+              "reference": "urn:cts:greekLit:tlg0059.tlg022:321c",
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/cit[1]/bibl",
+                "rendered_start": 15438,
+                "rendered_end": 15546,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Apoc. 2.5",
+              "reference": "urn:cts:greekLit:tlg0031.tlg027.perseus-grc1:2:5",
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/cit[2]/bibl",
+                "rendered_start": 15647,
+                "rendered_end": 15727,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[8]/tr[1]",
+            "rendered_start": 14976,
+            "rendered_end": 14983,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          }
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[8]/tr[2]:14990:15016",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "come to aid or relieve one",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.7",
+              "n": "4",
+              "level": "3"
+            }
+          ],
+          "scope_text": "; but also, from a place, γῆς τινος S. OC 572 . c. dat. pers., come to, i.e. come to aid or relieve one, rare in Hom. , Od. 16.453 ; freq. later, Pi. O. 1.100",
+          "scope_locator": {
+            "rendered_start": 14730,
+            "rendered_end": 15256,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [],
+          "citations": [
+            {
+              "text": "Hom.",
+              "reference": null,
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/bibl[1]",
+                "rendered_start": 15026,
+                "rendered_end": 15071,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 16.453",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:16:453",
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/bibl[2]",
+                "rendered_start": 15073,
+                "rendered_end": 15145,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pi. O. 1.100",
+              "reference": "urn:cts:greekLit:tlg0033.tlg001.perseus-grc1:1:100",
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/bibl[3]",
+                "rendered_start": 15161,
+                "rendered_end": 15256,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Th. 1.13",
+              "reference": "urn:cts:greekLit:tlg0003.tlg001.perseus-grc1:1:13",
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/bibl[4]",
+                "rendered_start": 15258,
+                "rendered_end": 15328,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pl. Prt. 321c",
+              "reference": "urn:cts:greekLit:tlg0059.tlg022:321c",
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/cit[1]/bibl",
+                "rendered_start": 15438,
+                "rendered_end": 15546,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Apoc. 2.5",
+              "reference": "urn:cts:greekLit:tlg0031.tlg027.perseus-grc1:2:5",
+              "source_locator": {
+                "node_path": "/entryFree/sense[8]/cit[2]/bibl",
+                "rendered_start": 15647,
+                "rendered_end": 15727,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[8]/tr[2]",
+            "rendered_start": 14990,
+            "rendered_end": 15016,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          },
+          "component_node_paths": [
+            "/entryFree/sense[8]/tr[2]",
+            "/entryFree/sense[8]/tr[3]"
+          ]
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[13]/tr[5]:20066:20070",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "rise",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.12",
+              "n": "V",
+              "level": "2"
+            }
+          ],
+          "scope_text": "14.334 ; of spears or javelins, freq. in Il. ; of natural phenomena, as rivers, 5.91 ; wind and storm, 9.6 , Od. 12.288 ; clouds, Il. 4.276 , 16.364 ; stars, rise, Od. 13.94 ; time, είς ὅ κεν ἔλθῃ νύξ Il. 14.77",
+          "scope_locator": {
+            "rendered_start": 19586,
+            "rendered_end": 20310,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [],
+          "citations": [
+            {
+              "text": "Od. 4.448",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:4:448",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[1]",
+                "rendered_start": 18998,
+                "rendered_end": 19069,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "2.265",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:2:265",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[2]",
+                "rendered_start": 19122,
+                "rendered_end": 19168,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "6.40",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:6:40",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[3]",
+                "rendered_start": 19241,
+                "rendered_end": 19286,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 5.204",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:5:204",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[4]",
+                "rendered_start": 19356,
+                "rendered_end": 19428,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "17.755",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:17:755",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[5]",
+                "rendered_start": 19442,
+                "rendered_end": 19489,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "15.549",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:15:549",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[6]",
+                "rendered_start": 19508,
+                "rendered_end": 19555,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 14.334",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:14:334",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[7]",
+                "rendered_start": 19557,
+                "rendered_end": 19629,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il.",
+              "reference": null,
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[8]",
+                "rendered_start": 19664,
+                "rendered_end": 19708,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "5.91",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:5:91",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[9]",
+                "rendered_start": 19744,
+                "rendered_end": 19789,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "9.6",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:9:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[10]",
+                "rendered_start": 19808,
+                "rendered_end": 19852,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 12.288",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:12:288",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[11]",
+                "rendered_start": 19854,
+                "rendered_end": 19926,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 4.276",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:4:276",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[12]",
+                "rendered_start": 19937,
+                "rendered_end": 20008,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "16.364",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:16:364",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[13]",
+                "rendered_start": 20009,
+                "rendered_end": 20056,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 13.94",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:13:94",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[14]",
+                "rendered_start": 20091,
+                "rendered_end": 20163,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 14.77",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:14:77",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[1]/bibl",
+                "rendered_start": 20235,
+                "rendered_end": 20315,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "24.351",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:24:351",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[15]",
+                "rendered_start": 20340,
+                "rendered_end": 20387,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 11.192",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:11:192",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[2]/bibl",
+                "rendered_start": 20452,
+                "rendered_end": 20533,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "1.16",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:1:16",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[3]/bibl",
+                "rendered_start": 20609,
+                "rendered_end": 20660,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "13.59",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:13:59",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[4]/bibl",
+                "rendered_start": 20784,
+                "rendered_end": 20836,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "11.135",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:11:135",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[16]",
+                "rendered_start": 20861,
+                "rendered_end": 20908,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 22.43",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:22:43",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[5]/bibl",
+                "rendered_start": 21030,
+                "rendered_end": 21110,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "24.514",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:24:514",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[6]/bibl",
+                "rendered_start": 21201,
+                "rendered_end": 21254,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "10.139",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:10:139",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[7]/bibl",
+                "rendered_start": 21364,
+                "rendered_end": 21417,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 9.362",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:9:362",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[8]/bibl",
+                "rendered_start": 21516,
+                "rendered_end": 21596,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "17.261",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:17:261",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[17]",
+                "rendered_start": 21697,
+                "rendered_end": 21744,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "16.6",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:16:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[18]",
+                "rendered_start": 21750,
+                "rendered_end": 21795,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 13.337",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:13:337",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[9]/bibl",
+                "rendered_start": 21869,
+                "rendered_end": 21950,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "19.191",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:19:191",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[10]/bibl",
+                "rendered_start": 22072,
+                "rendered_end": 22125,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "1.120",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:1:120",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[19]",
+                "rendered_start": 22150,
+                "rendered_end": 22196,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "X. HG 6.5.43",
+              "reference": "urn:cts:greekLit:tlg0032.tlg001.perseus-grc1:6:5:43",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[11]/bibl",
+                "rendered_start": 22333,
+                "rendered_end": 22440,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "A. Pr. 360",
+              "reference": "urn:cts:greekLit:tlg0085.tlg003.perseus-grc1:360",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[12]/bibl",
+                "rendered_start": 22529,
+                "rendered_end": 22634,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Id. Supp. 1032",
+              "reference": "urn:cts:greekLit:tlg0085.tlg001.perseus-grc1:1032",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[13]/bibl",
+                "rendered_start": 22729,
+                "rendered_end": 22838,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pers. 436",
+              "reference": "urn:cts:greekLit:tlg0085.tlg002.perseus-grc1:436",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[20]",
+                "rendered_start": 22869,
+                "rendered_end": 22940,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Id. Pr. 663",
+              "reference": "urn:cts:greekLit:tlg0085.tlg003.perseus-grc1:663",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[21]",
+                "rendered_start": 22971,
+                "rendered_end": 23065,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Th. 8.19",
+              "reference": "urn:cts:greekLit:tlg0003.tlg001.perseus-grc1:8:19",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[22]",
+                "rendered_start": 23067,
+                "rendered_end": 23137,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "96",
+              "reference": "urn:cts:greekLit:tlg0003.tlg001.perseus-grc1:96",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[23]",
+                "rendered_start": 23219,
+                "rendered_end": 23262,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Ev.Jo. 18.4",
+              "reference": "urn:cts:greekLit:tlg0031.tlg004.perseus-grc1:18:4",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[24]",
+                "rendered_start": 23326,
+                "rendered_end": 23399,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "BGU 919.7",
+              "reference": "Perseus:abo:pap,BGU:919:7",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[14]/bibl",
+                "rendered_start": 23565,
+                "rendered_end": 23645,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "PLond. 3.1164e6",
+              "reference": "Perseus:abo:pap,P.Lond.:3:1164e:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[25]",
+                "rendered_start": 23759,
+                "rendered_end": 23836,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "PMasp. 96.22",
+              "reference": "Perseus:abo:pap,P.Cair.Masp.:96:22",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[26]",
+                "rendered_start": 23869,
+                "rendered_end": 23943,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Archim. Aequil. 1.15",
+              "reference": "urn:cts:greekLit:tlg0552.tlg005:1:15",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[27]",
+                "rendered_start": 24086,
+                "rendered_end": 24189,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "2.10",
+              "reference": "urn:cts:greekLit:tlg0552.tlg005:2:10",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[28]",
+                "rendered_start": 24261,
+                "rendered_end": 24306,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[13]/tr[5]",
+            "rendered_start": 20066,
+            "rendered_end": 20070,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          }
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[13]/tr[6]:20924:20926",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "go",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.12",
+              "n": "V",
+              "level": "2"
+            }
+          ],
+          "scope_text": "Od. 11.192 ; ἔτος ἦλθε 1.16 ; of events and conditions, είς ὅ κε γῆρας ἔλθῃ καὶ θάνατος 13.59 , cf. 11.135 ; of feelings, go, ἦ κέ μοι αίνὸν ἀπὸ πραπίδων ἄχος ἔλθοι Il. 22.43 ; ἀπὸ πραπίδων",
+          "scope_locator": {
+            "rendered_start": 20444,
+            "rendered_end": 21166,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [],
+          "citations": [
+            {
+              "text": "Od. 4.448",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:4:448",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[1]",
+                "rendered_start": 18998,
+                "rendered_end": 19069,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "2.265",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:2:265",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[2]",
+                "rendered_start": 19122,
+                "rendered_end": 19168,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "6.40",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:6:40",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[3]",
+                "rendered_start": 19241,
+                "rendered_end": 19286,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 5.204",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:5:204",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[4]",
+                "rendered_start": 19356,
+                "rendered_end": 19428,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "17.755",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:17:755",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[5]",
+                "rendered_start": 19442,
+                "rendered_end": 19489,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "15.549",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:15:549",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[6]",
+                "rendered_start": 19508,
+                "rendered_end": 19555,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 14.334",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:14:334",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[7]",
+                "rendered_start": 19557,
+                "rendered_end": 19629,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il.",
+              "reference": null,
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[8]",
+                "rendered_start": 19664,
+                "rendered_end": 19708,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "5.91",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:5:91",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[9]",
+                "rendered_start": 19744,
+                "rendered_end": 19789,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "9.6",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:9:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[10]",
+                "rendered_start": 19808,
+                "rendered_end": 19852,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 12.288",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:12:288",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[11]",
+                "rendered_start": 19854,
+                "rendered_end": 19926,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 4.276",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:4:276",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[12]",
+                "rendered_start": 19937,
+                "rendered_end": 20008,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "16.364",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:16:364",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[13]",
+                "rendered_start": 20009,
+                "rendered_end": 20056,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 13.94",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:13:94",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[14]",
+                "rendered_start": 20091,
+                "rendered_end": 20163,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 14.77",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:14:77",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[1]/bibl",
+                "rendered_start": 20235,
+                "rendered_end": 20315,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "24.351",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:24:351",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[15]",
+                "rendered_start": 20340,
+                "rendered_end": 20387,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 11.192",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:11:192",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[2]/bibl",
+                "rendered_start": 20452,
+                "rendered_end": 20533,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "1.16",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:1:16",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[3]/bibl",
+                "rendered_start": 20609,
+                "rendered_end": 20660,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "13.59",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:13:59",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[4]/bibl",
+                "rendered_start": 20784,
+                "rendered_end": 20836,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "11.135",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:11:135",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[16]",
+                "rendered_start": 20861,
+                "rendered_end": 20908,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 22.43",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:22:43",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[5]/bibl",
+                "rendered_start": 21030,
+                "rendered_end": 21110,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "24.514",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:24:514",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[6]/bibl",
+                "rendered_start": 21201,
+                "rendered_end": 21254,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "10.139",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:10:139",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[7]/bibl",
+                "rendered_start": 21364,
+                "rendered_end": 21417,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 9.362",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:9:362",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[8]/bibl",
+                "rendered_start": 21516,
+                "rendered_end": 21596,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "17.261",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:17:261",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[17]",
+                "rendered_start": 21697,
+                "rendered_end": 21744,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "16.6",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:16:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[18]",
+                "rendered_start": 21750,
+                "rendered_end": 21795,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 13.337",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:13:337",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[9]/bibl",
+                "rendered_start": 21869,
+                "rendered_end": 21950,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "19.191",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:19:191",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[10]/bibl",
+                "rendered_start": 22072,
+                "rendered_end": 22125,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "1.120",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:1:120",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[19]",
+                "rendered_start": 22150,
+                "rendered_end": 22196,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "X. HG 6.5.43",
+              "reference": "urn:cts:greekLit:tlg0032.tlg001.perseus-grc1:6:5:43",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[11]/bibl",
+                "rendered_start": 22333,
+                "rendered_end": 22440,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "A. Pr. 360",
+              "reference": "urn:cts:greekLit:tlg0085.tlg003.perseus-grc1:360",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[12]/bibl",
+                "rendered_start": 22529,
+                "rendered_end": 22634,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Id. Supp. 1032",
+              "reference": "urn:cts:greekLit:tlg0085.tlg001.perseus-grc1:1032",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[13]/bibl",
+                "rendered_start": 22729,
+                "rendered_end": 22838,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pers. 436",
+              "reference": "urn:cts:greekLit:tlg0085.tlg002.perseus-grc1:436",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[20]",
+                "rendered_start": 22869,
+                "rendered_end": 22940,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Id. Pr. 663",
+              "reference": "urn:cts:greekLit:tlg0085.tlg003.perseus-grc1:663",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[21]",
+                "rendered_start": 22971,
+                "rendered_end": 23065,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Th. 8.19",
+              "reference": "urn:cts:greekLit:tlg0003.tlg001.perseus-grc1:8:19",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[22]",
+                "rendered_start": 23067,
+                "rendered_end": 23137,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "96",
+              "reference": "urn:cts:greekLit:tlg0003.tlg001.perseus-grc1:96",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[23]",
+                "rendered_start": 23219,
+                "rendered_end": 23262,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Ev.Jo. 18.4",
+              "reference": "urn:cts:greekLit:tlg0031.tlg004.perseus-grc1:18:4",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[24]",
+                "rendered_start": 23326,
+                "rendered_end": 23399,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "BGU 919.7",
+              "reference": "Perseus:abo:pap,BGU:919:7",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[14]/bibl",
+                "rendered_start": 23565,
+                "rendered_end": 23645,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "PLond. 3.1164e6",
+              "reference": "Perseus:abo:pap,P.Lond.:3:1164e:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[25]",
+                "rendered_start": 23759,
+                "rendered_end": 23836,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "PMasp. 96.22",
+              "reference": "Perseus:abo:pap,P.Cair.Masp.:96:22",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[26]",
+                "rendered_start": 23869,
+                "rendered_end": 23943,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Archim. Aequil. 1.15",
+              "reference": "urn:cts:greekLit:tlg0552.tlg005:1:15",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[27]",
+                "rendered_start": 24086,
+                "rendered_end": 24189,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "2.10",
+              "reference": "urn:cts:greekLit:tlg0552.tlg005:2:10",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[28]",
+                "rendered_start": 24261,
+                "rendered_end": 24306,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[13]/tr[6]",
+            "rendered_start": 20924,
+            "rendered_end": 20926,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          }
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[13]/tr[10]:23421:23459",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "comes or passes to a person by bequest",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.12",
+              "n": "V",
+              "level": "2"
+            }
+          ],
+          "scope_text": "; of reports, commands, etc., Id. Pr. 663 , Th. 8.19 ; τοῖς Ἀθηναίοις ὡς ἦλθε τὰ γεγενημένα came to their ears, ib. 96 ; τὰ ἐρχόμενα ἐπ’ αὐτόν that which was about to happen to him, Ev.Jo. 18.4 ; of property, which comes or passes to a person by bequest, conveyance, gift, etc., τὰ ἐληλυθότα εἴς με ἀπὸ κληρονομίας BGU 919.7 (ii A. D.) ; ἐ.",
+          "scope_locator": {
+            "rendered_start": 22941,
+            "rendered_end": 23699,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [],
+          "citations": [
+            {
+              "text": "Od. 4.448",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:4:448",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[1]",
+                "rendered_start": 18998,
+                "rendered_end": 19069,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "2.265",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:2:265",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[2]",
+                "rendered_start": 19122,
+                "rendered_end": 19168,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "6.40",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:6:40",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[3]",
+                "rendered_start": 19241,
+                "rendered_end": 19286,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 5.204",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:5:204",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[4]",
+                "rendered_start": 19356,
+                "rendered_end": 19428,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "17.755",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:17:755",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[5]",
+                "rendered_start": 19442,
+                "rendered_end": 19489,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "15.549",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:15:549",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[6]",
+                "rendered_start": 19508,
+                "rendered_end": 19555,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 14.334",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:14:334",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[7]",
+                "rendered_start": 19557,
+                "rendered_end": 19629,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il.",
+              "reference": null,
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[8]",
+                "rendered_start": 19664,
+                "rendered_end": 19708,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "5.91",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:5:91",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[9]",
+                "rendered_start": 19744,
+                "rendered_end": 19789,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "9.6",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:9:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[10]",
+                "rendered_start": 19808,
+                "rendered_end": 19852,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 12.288",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:12:288",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[11]",
+                "rendered_start": 19854,
+                "rendered_end": 19926,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 4.276",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:4:276",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[12]",
+                "rendered_start": 19937,
+                "rendered_end": 20008,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "16.364",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:16:364",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[13]",
+                "rendered_start": 20009,
+                "rendered_end": 20056,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 13.94",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:13:94",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[14]",
+                "rendered_start": 20091,
+                "rendered_end": 20163,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 14.77",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:14:77",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[1]/bibl",
+                "rendered_start": 20235,
+                "rendered_end": 20315,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "24.351",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:24:351",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[15]",
+                "rendered_start": 20340,
+                "rendered_end": 20387,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 11.192",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:11:192",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[2]/bibl",
+                "rendered_start": 20452,
+                "rendered_end": 20533,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "1.16",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:1:16",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[3]/bibl",
+                "rendered_start": 20609,
+                "rendered_end": 20660,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "13.59",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:13:59",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[4]/bibl",
+                "rendered_start": 20784,
+                "rendered_end": 20836,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "11.135",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:11:135",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[16]",
+                "rendered_start": 20861,
+                "rendered_end": 20908,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 22.43",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:22:43",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[5]/bibl",
+                "rendered_start": 21030,
+                "rendered_end": 21110,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "24.514",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:24:514",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[6]/bibl",
+                "rendered_start": 21201,
+                "rendered_end": 21254,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "10.139",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:10:139",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[7]/bibl",
+                "rendered_start": 21364,
+                "rendered_end": 21417,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 9.362",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:9:362",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[8]/bibl",
+                "rendered_start": 21516,
+                "rendered_end": 21596,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "17.261",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:17:261",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[17]",
+                "rendered_start": 21697,
+                "rendered_end": 21744,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "16.6",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:16:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[18]",
+                "rendered_start": 21750,
+                "rendered_end": 21795,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 13.337",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:13:337",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[9]/bibl",
+                "rendered_start": 21869,
+                "rendered_end": 21950,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "19.191",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:19:191",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[10]/bibl",
+                "rendered_start": 22072,
+                "rendered_end": 22125,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "1.120",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:1:120",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[19]",
+                "rendered_start": 22150,
+                "rendered_end": 22196,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "X. HG 6.5.43",
+              "reference": "urn:cts:greekLit:tlg0032.tlg001.perseus-grc1:6:5:43",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[11]/bibl",
+                "rendered_start": 22333,
+                "rendered_end": 22440,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "A. Pr. 360",
+              "reference": "urn:cts:greekLit:tlg0085.tlg003.perseus-grc1:360",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[12]/bibl",
+                "rendered_start": 22529,
+                "rendered_end": 22634,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Id. Supp. 1032",
+              "reference": "urn:cts:greekLit:tlg0085.tlg001.perseus-grc1:1032",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[13]/bibl",
+                "rendered_start": 22729,
+                "rendered_end": 22838,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pers. 436",
+              "reference": "urn:cts:greekLit:tlg0085.tlg002.perseus-grc1:436",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[20]",
+                "rendered_start": 22869,
+                "rendered_end": 22940,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Id. Pr. 663",
+              "reference": "urn:cts:greekLit:tlg0085.tlg003.perseus-grc1:663",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[21]",
+                "rendered_start": 22971,
+                "rendered_end": 23065,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Th. 8.19",
+              "reference": "urn:cts:greekLit:tlg0003.tlg001.perseus-grc1:8:19",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[22]",
+                "rendered_start": 23067,
+                "rendered_end": 23137,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "96",
+              "reference": "urn:cts:greekLit:tlg0003.tlg001.perseus-grc1:96",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[23]",
+                "rendered_start": 23219,
+                "rendered_end": 23262,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Ev.Jo. 18.4",
+              "reference": "urn:cts:greekLit:tlg0031.tlg004.perseus-grc1:18:4",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[24]",
+                "rendered_start": 23326,
+                "rendered_end": 23399,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "BGU 919.7",
+              "reference": "Perseus:abo:pap,BGU:919:7",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[14]/bibl",
+                "rendered_start": 23565,
+                "rendered_end": 23645,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "PLond. 3.1164e6",
+              "reference": "Perseus:abo:pap,P.Lond.:3:1164e:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[25]",
+                "rendered_start": 23759,
+                "rendered_end": 23836,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "PMasp. 96.22",
+              "reference": "Perseus:abo:pap,P.Cair.Masp.:96:22",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[26]",
+                "rendered_start": 23869,
+                "rendered_end": 23943,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Archim. Aequil. 1.15",
+              "reference": "urn:cts:greekLit:tlg0552.tlg005:1:15",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[27]",
+                "rendered_start": 24086,
+                "rendered_end": 24189,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "2.10",
+              "reference": "urn:cts:greekLit:tlg0552.tlg005:2:10",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[28]",
+                "rendered_start": 24261,
+                "rendered_end": 24306,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[13]/tr[10]",
+            "rendered_start": 23421,
+            "rendered_end": 23459,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          },
+          "component_node_paths": [
+            "/entryFree/sense[13]/tr[10]",
+            "/entryFree/sense[13]/tr[11]"
+          ]
+        },
+        {
+          "id": "lsj:5:n42827:tei-definition-spans-v4:/entryFree/sense[13]/tr[12]:23984:23994",
+          "entry_id": "n42827",
+          "lexicon_entry_id": "lsj:5:n42827",
+          "text": "pass, fall",
+          "language": "en",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+          "evidence_type": "dictionary_sense",
+          "definition_kind": "explicit_definition_markup",
+          "sense_path": [
+            {
+              "id": "n42827.12",
+              "n": "V",
+              "level": "2"
+            }
+          ],
+          "scope_text": "τὰ ἐληλυθότα εἴς με ἀπὸ κληρονομίας BGU 919.7 (ii A. D.) ; ἐ. εἴς τινα ἀπὸ παραχωρήσεως, κατὰ δωρεάν, PLond. 3.1164e6 (iii A. D.), PMasp. 96.22 (vi A. D.) : —Geom., pass, fall, ἔ. ἐπὶ τὸ αὐτὸ σαμεῖον pass through the same point, Archim. Aequil. 1.15 ; ὅπου ἂν ἔρχηται τὸ ἕτερον σαμεῖον wherever",
+          "scope_locator": {
+            "rendered_start": 23504,
+            "rendered_end": 24234,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "qualifiers": [],
+          "citations": [
+            {
+              "text": "Od. 4.448",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:4:448",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[1]",
+                "rendered_start": 18998,
+                "rendered_end": 19069,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "2.265",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:2:265",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[2]",
+                "rendered_start": 19122,
+                "rendered_end": 19168,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "6.40",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:6:40",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[3]",
+                "rendered_start": 19241,
+                "rendered_end": 19286,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 5.204",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:5:204",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[4]",
+                "rendered_start": 19356,
+                "rendered_end": 19428,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "17.755",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:17:755",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[5]",
+                "rendered_start": 19442,
+                "rendered_end": 19489,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "15.549",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:15:549",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[6]",
+                "rendered_start": 19508,
+                "rendered_end": 19555,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 14.334",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:14:334",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[7]",
+                "rendered_start": 19557,
+                "rendered_end": 19629,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il.",
+              "reference": null,
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[8]",
+                "rendered_start": 19664,
+                "rendered_end": 19708,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "5.91",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:5:91",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[9]",
+                "rendered_start": 19744,
+                "rendered_end": 19789,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "9.6",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:9:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[10]",
+                "rendered_start": 19808,
+                "rendered_end": 19852,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 12.288",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:12:288",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[11]",
+                "rendered_start": 19854,
+                "rendered_end": 19926,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 4.276",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:4:276",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[12]",
+                "rendered_start": 19937,
+                "rendered_end": 20008,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "16.364",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:16:364",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[13]",
+                "rendered_start": 20009,
+                "rendered_end": 20056,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 13.94",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:13:94",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[14]",
+                "rendered_start": 20091,
+                "rendered_end": 20163,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 14.77",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:14:77",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[1]/bibl",
+                "rendered_start": 20235,
+                "rendered_end": 20315,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "24.351",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:24:351",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[15]",
+                "rendered_start": 20340,
+                "rendered_end": 20387,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 11.192",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:11:192",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[2]/bibl",
+                "rendered_start": 20452,
+                "rendered_end": 20533,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "1.16",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:1:16",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[3]/bibl",
+                "rendered_start": 20609,
+                "rendered_end": 20660,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "13.59",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:13:59",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[4]/bibl",
+                "rendered_start": 20784,
+                "rendered_end": 20836,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "11.135",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:11:135",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[16]",
+                "rendered_start": 20861,
+                "rendered_end": 20908,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 22.43",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:22:43",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[5]/bibl",
+                "rendered_start": 21030,
+                "rendered_end": 21110,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "24.514",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:24:514",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[6]/bibl",
+                "rendered_start": 21201,
+                "rendered_end": 21254,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "10.139",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:10:139",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[7]/bibl",
+                "rendered_start": 21364,
+                "rendered_end": 21417,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Od. 9.362",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:9:362",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[8]/bibl",
+                "rendered_start": 21516,
+                "rendered_end": 21596,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "17.261",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:17:261",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[17]",
+                "rendered_start": 21697,
+                "rendered_end": 21744,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "16.6",
+              "reference": "urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:16:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[18]",
+                "rendered_start": 21750,
+                "rendered_end": 21795,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Il. 13.337",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:13:337",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[9]/bibl",
+                "rendered_start": 21869,
+                "rendered_end": 21950,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "19.191",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:19:191",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[10]/bibl",
+                "rendered_start": 22072,
+                "rendered_end": 22125,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "1.120",
+              "reference": "urn:cts:greekLit:tlg0012.tlg001.perseus-grc1:1:120",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[19]",
+                "rendered_start": 22150,
+                "rendered_end": 22196,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "X. HG 6.5.43",
+              "reference": "urn:cts:greekLit:tlg0032.tlg001.perseus-grc1:6:5:43",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[11]/bibl",
+                "rendered_start": 22333,
+                "rendered_end": 22440,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "A. Pr. 360",
+              "reference": "urn:cts:greekLit:tlg0085.tlg003.perseus-grc1:360",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[12]/bibl",
+                "rendered_start": 22529,
+                "rendered_end": 22634,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Id. Supp. 1032",
+              "reference": "urn:cts:greekLit:tlg0085.tlg001.perseus-grc1:1032",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[13]/bibl",
+                "rendered_start": 22729,
+                "rendered_end": 22838,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Pers. 436",
+              "reference": "urn:cts:greekLit:tlg0085.tlg002.perseus-grc1:436",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[20]",
+                "rendered_start": 22869,
+                "rendered_end": 22940,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Id. Pr. 663",
+              "reference": "urn:cts:greekLit:tlg0085.tlg003.perseus-grc1:663",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[21]",
+                "rendered_start": 22971,
+                "rendered_end": 23065,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Th. 8.19",
+              "reference": "urn:cts:greekLit:tlg0003.tlg001.perseus-grc1:8:19",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[22]",
+                "rendered_start": 23067,
+                "rendered_end": 23137,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "96",
+              "reference": "urn:cts:greekLit:tlg0003.tlg001.perseus-grc1:96",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[23]",
+                "rendered_start": 23219,
+                "rendered_end": 23262,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Ev.Jo. 18.4",
+              "reference": "urn:cts:greekLit:tlg0031.tlg004.perseus-grc1:18:4",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[24]",
+                "rendered_start": 23326,
+                "rendered_end": 23399,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "BGU 919.7",
+              "reference": "Perseus:abo:pap,BGU:919:7",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/cit[14]/bibl",
+                "rendered_start": 23565,
+                "rendered_end": 23645,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "PLond. 3.1164e6",
+              "reference": "Perseus:abo:pap,P.Lond.:3:1164e:6",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[25]",
+                "rendered_start": 23759,
+                "rendered_end": 23836,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "PMasp. 96.22",
+              "reference": "Perseus:abo:pap,P.Cair.Masp.:96:22",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[26]",
+                "rendered_start": 23869,
+                "rendered_end": 23943,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "Archim. Aequil. 1.15",
+              "reference": "urn:cts:greekLit:tlg0552.tlg005:1:15",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[27]",
+                "rendered_start": 24086,
+                "rendered_end": 24189,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "2.10",
+              "reference": "urn:cts:greekLit:tlg0552.tlg005:2:10",
+              "source_locator": {
+                "node_path": "/entryFree/sense[13]/bibl[28]",
+                "rendered_start": 24261,
+                "rendered_end": 24306,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "qualifier_scope": "containing_source_sense_not_individual_definition",
+          "citation_scope": "containing_source_sense_not_individual_definition",
+          "source_locator": {
+            "node_path": "/entryFree/sense[13]/tr[12]",
+            "rendered_start": 23984,
+            "rendered_end": 23994,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "extraction_method": "tei-definition-spans-v4",
+          "form_scope": {
+            "text": "ἔρχομαι",
+            "relation": "headword",
+            "source_locator": {
+              "node_path": "/entryFree/orth",
+              "rendered_start": 16,
+              "rendered_end": 23,
+              "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+            }
+          }
+        }
+      ],
+      "dictionary_senses_status": "source_structured",
+      "dictionary_senses_method": "tei-definition-spans-v4"
+    },
+    {
+      "id": "autenrieth:n3825",
+      "entry_id": "n3825",
+      "lemma": "ἔρχομαι",
+      "source": "Perseus Autenrieth TEI via Homerica",
+      "source_url": "https://raw.githubusercontent.com/gregorycrane/Homerica/d71ed43cc912d3e053cbb0dd6341f798ea058378/autenrieth.xml",
+      "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0073%3Aentry%3De%29%2Frxomai",
+      "rendered_entry_text": "ἔρχομαι, fut. ἐλεύσομαι, aor. ἦλθον and ἤλυθον, perf. εἰλήλουθα, εἰλήλουθμεν, part. εἰληλουθώς and ἐληλυθώς, plup. εἰληλούθει: come, go; the word needs no special illustration, as there is nothing peculiar in its numerous applications. The part. ἐλθών is often employed for amplification, οὐ δύναμαι.. μάχεσθαι | ἐλθὼν δυσμενέεσσιν, ‘to go and fight,’ Il. 16.521.",
+      "rendering_method": "Greek TEI spans rendered from Perseus Beta Code; source text retained",
+      "dictionary_senses": [],
+      "dictionary_senses_status": "no_safe_definition_spans",
+      "dictionary_senses_method": "tei-definition-spans-v4"
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "audit_date": "2026-10-06",
+  "auditor": "dictionary_sense_audit",
+  "verdict": "GO",
+  "blocking": false,
+  "scope": "Isolated read-only machine-lemma to explicit dictionary-subentry evidence helper; consumer integration and deployment require separate review.",
+  "reviewed_files_sha256": {
+    "backend/machine_subentries.py": "c5bc6b81953738043ad76abed000d894152dc969b8596a6b970b634e3365659a",
+    "tests/test_machine_subentries.py": "b7c76db6d0d839c4112dfefd161a853f2cffcf40cb2e18a853aed9146ea7685f",
+    "data/staging/lyric-subentries-20261006-v2/subentries.sqlite": "33f9a798232948baa3efa13f402ffd8e278414b987a2230f63b5fff89fafcb81",
+    "data/lexica/entries.jsonl": "ca2e64c5bace58fe58f44cd111884b0362b4f83480702077f526f14f13ae546e"
+  },
+  "modular_checks": {
+    "source_index_discovery": {
+      "verdict": "PASS",
+      "index_version": "lsj-explicit-subentry-v2",
+      "rows": 716,
+      "distinct_keys": 689,
+      "distinct_parents": 688,
+      "manifest_entries_examined": 116497,
+      "input_manifest_hash_verified": true,
+      "all_index_rows_parent_identity_and_source_receipts_verified": true,
+      "referenced_raw_xml_hashes_verified": 23
+    },
+    "initial_source_parsing": {
+      "verdict": "PASS",
+      "random_seed": 202610062,
+      "sampled_rows": 10,
+      "literal_orthography_offsets_verified": true,
+      "current_source_reextraction_verified": true
+    },
+    "final_helper_cross_validation": {
+      "verdict": "PASS",
+      "random_seed": 202610063,
+      "sampled_keys": 20,
+      "literal_definition_spans_verified": 20,
+      "sense_extractor_version": "tei-definition-spans-v4",
+      "source_offsets_hashes_and_urls_verified": true,
+      "staged_sense_payloads_not_used_as_authority": true
+    },
+    "identity_and_transport": {
+      "verdict": "PASS",
+      "trusted_cache_only_receipt_replay_required": true,
+      "candidate_payload_tampering_rejected": true,
+      "no_accent_case_or_dialect_folding": true,
+      "no_surface_equivalence_inference": true,
+      "matching_source_identities_retained": true,
+      "candidate_overflow_not_silently_truncated": true,
+      "readonly_sqlite_uri_enforced": true,
+      "unavailable_distinct_from_no_match": true,
+      "compact_source_and_receipt_links_verified": true,
+      "absolute_dependency_paths_not_exposed": true
+    },
+    "preview_eligibility": {
+      "verdict": "PASS",
+      "single_letter_or_unverified_partial_extent_withheld": true,
+      "glossary_only_unverified_language_withheld": true,
+      "original_evidence_retained": true
+    }
+  },
+  "target_check": {
+    "parent_lexicon_entry_id": "lsj:1:n16814",
+    "exact_existing_parser_lemma_bound_to_own_subentry": true,
+    "neighboring_aeolic_subentry_not_borrowed": true,
+    "occurrence_attestation_not_claimed": true,
+    "contextual_selection_not_claimed": true
+  },
+  "tests": {
+    "command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_machine_subentries.py tests/test_lexicon_subentries.py -q",
+    "passed": 23,
+    "failed": 0
+  },
+  "paid_calls": 0,
+  "corpus_writes": 0,
+  "runtime_or_api_integration_reviewed": false,
+  "deployment_authorized_by_this_receipt": false,
+  "limitations": [
+    "Evidence remains conditional on the replayed parser hypothesis; the helper does not validate that morphology independently.",
+    "Conservative preview eligibility does not certify every dictionary gloss as English or contextually appropriate.",
+    "Consumer use must preserve source identities, ambiguity, eligibility exclusions and unavailable states."
+  ]
+}

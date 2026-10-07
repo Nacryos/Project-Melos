@@ -1,0 +1,97 @@
+{
+  "schema": "melos-independent-commentary-relevance-results-v1",
+  "reviewer": "/root/context_pipeline_review/review_prompt_semantics",
+  "artifact_role": "evaluation_metadata_not_corpus_or_new_gold",
+  "scope": "Independent inspection of the two already executed relevance-comparison-03 answers against original case-0 and case-2 commentary_only answers. No new provider calls, source edits, corpus edits or experiment reruns.",
+  "comparison_limits": [
+    "Two previously observed purposeful diagnostic cases, not random, held-out or a new blind experiment.",
+    "The prior independent semantic judgments were frozen before the original answer inspection and remain the comparison reference, not a newly certified gold dataset.",
+    "Literal commentary-heading cues and heuristic-preview demotion were combined; their effects cannot be isolated.",
+    "Uncalibrated distribution changes do not establish accuracy or causality. No confidence or accuracy certification is made."
+  ],
+  "evidence_sha256": {
+    "docs/audits/commentary-prompt-semantics-g.json": "a0d04202b71a071e22ca06e33c39b1402dd671c5be90eed82b4d80d159d39767",
+    "runtime/lexical-relevance-comparison-03/manifest.json": "7049457b7dbc1d638a53fc7a757f9ecf5d80aa3a03dc033fa412aadd4452add0",
+    "runtime/lexical-relevance-comparison-lifetime.sqlite": "6151a99ca6edcca88965699d3261bfee7259e9dd26413f802f91126b7985257a",
+    "runtime/lexical-relevance-comparison-03/gateway.sqlite": "92442e33e376f3c5ebc840edd87ee15e52c250db0f7e7f43e05e70febf589c16",
+    "runtime/lexical-relevance-comparison-03/0-relevance.answer.json": "f3d1cd5307025d2c9c2b5eec09768b7556d71f4d5d899f5d248c61b53c03f87a",
+    "runtime/lexical-relevance-comparison-03/2-relevance.answer.json": "352792649f4ecc15d33142a3d456c306f12d131674a03db1a4d17cb004095f2b",
+    "runtime/lexical-relevance-comparison-03/0-relevance.packet.json": "38b040e444c837c56d17f90613e112cf4577fb9f33288fd8d8e6758e29c5cada",
+    "runtime/lexical-relevance-comparison-03/2-relevance.packet.json": "253f1335dd0ab0859892998a71ed809b495f1cee868ecb9e11aa016039685b5e",
+    "runtime/lexical-release-g/commentary-ablation-02/0-commentary_only.answer.json": "6524b513d63a4d7eb6988baa2798aecffd5d6c8f51d7f144192f638821925642",
+    "runtime/lexical-release-g/commentary-ablation-02/2-commentary_only.answer.json": "b75c5794db7c337300e67ee9177f035d780e1ae95750dbe92fa6548809ff3ac4"
+  },
+  "integrity_checks": {
+    "source_candidate_arrays_equal_to_original": true,
+    "shared_source_evidence_equal_to_original": true,
+    "full_commentary_equal_to_original": true,
+    "full_greek_equal_to_original": true,
+    "source_contexts_equal_to_original": true,
+    "all_four_answer_vectors_complete": true,
+    "all_four_vector_sums": 1.0,
+    "case_0_vector_size_including_abstain": 16,
+    "case_2_vector_size_including_abstain": 8,
+    "lifetime_ledger": "Exactly case IDs 0 and 2, both completed, both bound to the recorded comparison-03 manifest hash.",
+    "gateway_counts": {"attempts": 2, "cached_answers": 2, "active_leases": 0},
+    "manifest_note": "The frozen preparation manifest retains execution_authorized=false and token_usage=null. Actual completed execution is recorded by the lifetime ledger and answer usage; the manifest was not rewritten to represent a post-execution report."
+  },
+  "operational_gate": {
+    "source": "backend/sense_ranker.py:398",
+    "score_minimum": 0.75,
+    "margin_minimum": 0.20,
+    "complete_vector_including_abstain_required": true,
+    "thresholds_changed": false,
+    "score_basis": "model_probabilities for the emitted choice; margin subtracts the largest competing entry including abstain. model_confidence is a separate field and is not used by this gate.",
+    "all_four_result_status": "uncertain",
+    "all_four_selected_sense_id": null,
+    "status_note": "All four emitted choices are real supplied sense IDs, so the failed gate yields uncertain, not the explicit-choice status abstained."
+  },
+  "cases": [
+    {
+      "case": 0,
+      "occurrence": "παχέων",
+      "passage_id": "campbell-glp:alcaeus:350",
+      "prior_semantic_judgment": "The cubit definition is supportable from the measurement construction, the explicit πᾶχυς to πῆχυς source path and Campbell's explanation. Preserve the editorial caveat that this portion is reconstructed from Strabo's paraphrase.",
+      "choice_both_arms": "linked-sense:4786b913426c4639b9561b9892a36b260de20517f8b6f92f6ccbf8e45e2243a8",
+      "source_claim_id": "wiktionary:kaikki:line:7510:sense:4",
+      "literal_definition": "cubit (the distance from the point of the elbow to that of the little finger)",
+      "competing_adjective_id": "linked-sense:e78a613d71a618277208f97cea60979a278287338b7b5a8a274860248bdccc2d",
+      "competing_adjective_source_claim_id": "wiktionary:kaikki:line:3880:sense:0",
+      "competing_adjective_definition": "thick; large; stout",
+      "original_commentary_only": {"choice_score": 0.64, "margin": 0.50, "model_confidence": 0.60, "competing_adjective_score": 0.13, "abstain_score": 0.14, "status": "uncertain"},
+      "relevance": {"choice_score": 0.41, "margin": 0.03, "model_confidence": 0.37, "competing_adjective_score": 0.38, "abstain_score": 0.15, "status": "uncertain", "usage": {"input_tokens": 18161, "output_tokens": 1105}},
+      "retrieval_scope": "Neighbor headings ἴαν and πέμπων retrieve Campbell paragraph group 6–9; these cues do not establish exact target alignment. Full commentary remains present.",
+      "finding": "No improvement. The same supportable cubit sense remains first but loses 0.23 distribution score while the less-supported adjective gains 0.25. The failed gate protects against forcing a decision; it leaves a source-supported reading unresolved."
+    },
+    {
+      "case": 2,
+      "occurrence": "ἀνέμων",
+      "passage_id": "campbell-glp:alcaeus:326",
+      "prior_semantic_judgment": "Meteorological wind is substantively supported by the storm and ship imagery; the exact-ID rule still warrants abstention among three synonymous source definitions. Campbell's direction/strife discussion concerns στάσιν and does not force a direction sense for ἀνέμων.",
+      "choice_both_arms": "lsj:1:n8238:tei-definition-spans-v2:/entryFree/sense[1]/tr[1]:67:71",
+      "literal_definition": "wind",
+      "meteorological_ids": [
+        "lsj:1:n8238:tei-definition-spans-v2:/entryFree/sense[1]/tr[1]:67:71",
+        "autenrieth:n975:tei-definition-spans-v2:/entryFree/gloss:31:35",
+        "linked-sense:db7bc0889c9075fde4e230787ffa3f38f4cb2a90ccc8c7930fc0b16bd7f877dc"
+      ],
+      "direction_ids": [
+        "lsj:1:n8238:tei-definition-spans-v2:/entryFree/sense[2]/tr:3638:3661",
+        "linked-sense:cce5e4846eb9c79f712a8a2f82fe0a64f7a9f4c944c42af25b295eb2039be75c"
+      ],
+      "original_commentary_only": {"choice_score": 0.38, "margin": 0.19, "model_confidence": 0.29, "meteorological_family_score_sum": 0.49, "direction_family_score_sum": 0.32, "abstain_score": 0.19, "status": "uncertain"},
+      "relevance": {"choice_score": 0.31, "margin": 0.08, "model_confidence": 0.21, "meteorological_family_score_sum": 0.39, "direction_family_score_sum": 0.45, "abstain_score": 0.16, "status": "uncertain", "usage": {"input_tokens": 15213, "output_tokens": 416}},
+      "retrieval_scope": "Neighbor headings ἀσυννέτημμι, στάσιν and κῦμα κυλίνδεται retrieve Campbell paragraphs 4–6. These are explicitly marked neighbor matches, not target attestation.",
+      "finding": "No improvement. The same substantive wind definition remains the highest individual ID, but score moves toward cardinal directions across two IDs. Synonymous-ID competition is real but does not explain away the semantic-family drift. Family sums describe the observed vector only; they are not a calibrated probability, new gold label or replacement gate."
+    }
+  ],
+  "new_execution_usage": {
+    "model": "jev-1.13.0",
+    "provider_calls_recorded": 2,
+    "input_tokens": 33374,
+    "output_tokens": 1521,
+    "total_tokens": 34895,
+    "reviewer_provider_calls": 0
+  },
+  "recommendation": "Keep the unchanged 0.75/0.20 complete-vector gate. These two outputs provide no support for promoting the combined optional retrieval-cue and heuristic-preview intervention. Preserve the experiment locally and exclude that optional change from release J as directed. Do not force confidence, substitute family score sums for the gate, broaden translation eligibility, or claim an accuracy gain."
+}

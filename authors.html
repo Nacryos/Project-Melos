@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#14223a">
+  <meta name="description" content="Explore the authors in Melos through a sourced chronology, portraits, biographies and their indexed works.">
+  <title>Authors · Melos</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/branding/melos-favicon-white.svg?v=white-1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/authors-page.css">
+  <script src="/js/config.js"></script>
+  <script src="/js/api.js" defer></script>
+  <script src="/js/authors-page.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#authors">Skip to authors</a>
+  <header class="masthead">
+    <a class="wordmark" href="/" aria-label="Melos, home"><span lang="grc">Μέλος</span><small>A Greek Lyric Lexicon</small></a>
+    <nav aria-label="Main navigation"><a href="/lexicon">Lexicon</a><a href="/authors" aria-current="page">Authors</a><a href="/themes">Themes</a><a href="/reader.html">Reader</a></nav>
+  </header>
+  <main>
+    <section class="introduction" aria-labelledby="page-title">
+      <div><p class="eyebrow">Lives behind the language</p><h1 id="page-title">The authors,<br><em>in time.</em></h1></div>
+      <div class="intro-aside"><p class="intro-copy">A voice, a life, a surviving line.<br>Open an author and begin reading.</p><form id="author-search" role="search"><label for="author-query" class="sr-only">Find an author</label><div class="search-line"><input id="author-query" name="q" type="search" placeholder="Find an author" autocomplete="off" maxlength="200"><button type="submit" aria-label="Find author"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button></div></form></div>
+    </section>
+    <section id="authors" class="collection" aria-labelledby="collection-title">
+      <div class="collection-heading"><h2 id="collection-title">Authors in the collection</h2><span id="author-count" role="status" aria-live="polite">Loading authors…</span></div>
+      <p id="page-status" class="page-status" role="status"></p>
+      <button id="retry-authors" class="glass-button" type="button" hidden>Try again</button>
+      <ol id="author-timeline" class="author-timeline" aria-label="Author chronology" aria-busy="true"></ol>
+      <button id="show-more-authors" class="glass-button show-more" type="button" hidden>Show more authors</button>
+    </section>
+    <footer class="page-footer"><p>Read closely. Follow the language.</p><a href="/reader.html">Enter the reading room <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a><details><summary>About the chronology &amp; images</summary><p>Dates identify a sourced birth or period of activity, where available. They are biographical claims, not dates of composition. Authors without a supported date follow the chronology alphabetically. Source details and uncertainty accompany each author.</p><p>Portraits are historical depictions, attributions or later imaginings, not verified likenesses. Images are cropped for this presentation; original files and image credits are retained. Counts refer to indexed source records, including separate editions and translations, rather than unique poems.</p></details></footer>
+    <noscript><p>JavaScript is needed to browse this live author index. <a href="/reader.html">Open the reader</a>.</p></noscript>
+  </main>
+</body>
+</html>

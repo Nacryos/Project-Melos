@@ -1,0 +1,100 @@
+/* Shared Melos controls. Layout, artwork and meaningful analysis colours stay intact. */
+:root {
+  --ink: #14223a;
+  --ink-2: #263d50;
+  --sea: #2b5a87;
+  --gold: var(--sea);
+  --saffron: var(--sea);
+  --marble: #fff;
+  --paper: #fff;
+  --marble-2: #eef3f7;
+  --mist: #f1f5f8;
+  --line: #d7e1e9;
+  --glass: rgb(255 255 255 / .76);
+  --glass-blue: rgb(43 90 135 / .09);
+  --glass-edge: rgb(43 90 135 / .25);
+}
+body { background: #fff; }
+body :is(button, select, input, textarea, .search, .search-form, .mode-picker span, .tune, .quality-tag) { border-radius: 0; }
+body :focus-visible { outline-color: var(--sea); }
+body ::selection { color: var(--ink); background: rgb(43 90 135 / .18); }
+body a { color: var(--sea); }
+body :is(.bar, .reader-footer, .colophon) a { color: #fff; }
+
+/* Action controls, not Greek words, search-result cards or author list rows. */
+body :is(.text-action, .quiet-button, .more-button, .retry-button,
+ .lookup-action, .back-to-passage, .occurrence-search, .mobile-toggle,
+ .passage-fullscreen-toggle, .passage-fullscreen-exit,
+ .selection-actions button, .passage-nav button, .passage-analysis button,
+ .machine-analysis button, .classifier-action, .related-open, .mus-close) {
+  color: var(--sea);
+  border: 1px solid var(--glass-edge);
+  background: var(--glass);
+  backdrop-filter: blur(16px) saturate(120%);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / .5);
+  padding: 7px 10px;
+  text-decoration: none;
+}
+body :is(.text-action, .quiet-button, .more-button, .retry-button,
+ .lookup-action, .back-to-passage, .occurrence-search, .mobile-toggle,
+ .passage-fullscreen-toggle, .passage-fullscreen-exit,
+ .selection-actions button, .passage-nav button, .passage-analysis button,
+ .machine-analysis button, .classifier-action, .related-open, .mus-close):not(:disabled):hover {
+  background: var(--glass-blue); border-color: var(--sea); color: var(--sea);
+  text-decoration: none;
+}
+body button:disabled { cursor: default; }
+body :is(.selection-actions button, .passage-analysis button)[aria-pressed="true"] {
+  color: var(--sea); background: rgb(43 90 135 / .15); border-color: var(--sea);
+}
+body :is(.filter-controls select, .interlinear-reading-picker select, .forms-options select, .forms-options input) {
+  color: var(--sea); border: 1px solid var(--glass-edge); background-color: var(--glass);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+}
+body :is(select, input) { accent-color: var(--sea); }
+body :is(.utility-bar, .provenance, .selection-actions, .wiktionary-listed-form) {
+  background: rgb(241 246 250 / .78); border-color: var(--glass-edge);
+  backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+}
+body :is(.work-button:hover, .work-button[aria-current="true"], .result-button:hover, .results button:hover, .results button[aria-current="true"]) {
+  color: var(--sea); background: var(--glass-blue);
+}
+body :is(.warning, .error-message, .notice-details, .quality-tag.caution) { color: var(--sea); background: #fff; border-color: var(--glass-edge); }
+body :is(.semantic-inline, .author-button .chevron, .tiny-asterisk) { color: var(--sea); }
+body mark { background: rgb(43 90 135 / .13); color: var(--ink); }
+
+/* White-on-navy glass over artwork, with no yellow selected/focus states. */
+body .hero .search { background: rgb(255 255 255 / .8); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); }
+body .hero .search button { color: var(--sea); background: rgb(255 255 255 / .65); border-left: 1px solid var(--glass-edge); }
+body .hero .search button:hover { background: rgb(220 234 245 / .9); }
+body .hero .search:focus-within { outline-color: #fff; }
+body .hero .mode-picker span { background: rgb(14 24 41 / .32); color: #fff; border-color: rgb(255 255 255 / .38); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+body .hero .mode-picker input:checked+span { background: rgb(255 255 255 / .88); color: var(--sea); border-color: #fff; }
+body .hero .mode-picker input:focus-visible+span { outline-color: #fff; }
+body .thumbs button[aria-selected="true"] { border-color: #fff; box-shadow: 0 0 0 1px #fff; }
+body :is(.tune, .tune-toggle) { background: rgb(14 24 41 / .48); color: #fff; border-color: rgb(255 255 255 / .3); }
+body .tune :is(button, select) { color: #fff; background: rgb(255 255 255 / .07); border: 1px solid rgb(255 255 255 / .3); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+body .tune button:hover { background: rgb(255 255 255 / .16); border-color: #fff; }
+body .tune input { accent-color: #fff; }
+body .tune :focus-visible, body .tune-toggle:focus-visible { outline-color: #fff; }
+body .tune input[type="range"]::-webkit-slider-thumb { border-radius: 0; }
+body .tune input[type="range"]::-moz-range-thumb { border-radius: 0; }
+
+/* This dialog injects its layout stylesheet later; theme specificity is explicit. */
+body .mus-dialog { background: rgb(255 255 255 / .94); border-radius: 0; border-color: var(--glass-edge); }
+body .mus-dialog :focus-visible { outline-color: var(--sea); }
+body .mus-dialog .mus-reason { border-color: var(--sea); }
+body .mus-dialog :is(button, select) { border-radius: 0; }
+body .mus-dialog .mus-controls button { background: rgb(255 255 255 / .1); border-color: rgb(255 255 255 / .4); color: #fff; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+body .mus-dialog .mus-controls button:hover { background: rgb(255 255 255 / .2); border-color: #fff; }
+body .passage-fullscreen-toolbar { background: var(--glass); }
+body .reader-hero .semantic-inline { color: #fff; }
+body .reader-hero .search button .melos-icon { color: var(--sea); }
+body .reader-hero .forms-options :is(select, input) { border-radius: 0; color-scheme: light; color: var(--sea); background: var(--glass); border-color: var(--glass-edge); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+body .selection-actions .selection-extend[aria-pressed="true"] { color: var(--sea); background: rgb(43 90 135 / .15); border-color: var(--sea); }
+body .claim-card .claim-status, body .dictionary-glimpse-source, body .mus-dialog .mus-source, body .mus-dialog .mus-source:visited { color: var(--sea); }
+@supports not (backdrop-filter: blur(1px)) {
+  :root { --glass: #fff; }
+  body :is(.tune, .tune-toggle) { background: rgb(14 24 41 / .93); }
+}

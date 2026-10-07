@@ -1,0 +1,55 @@
+{
+  "audit": "Independent same-entry noun gender metadata audit",
+  "date": "2026-10-06",
+  "auditor": "subentry_evidence_audit",
+  "verdict": "PASS",
+  "blocking": false,
+  "scope": "Isolated literal noun-entry metadata projection only; no occurrence-level gender completion, consumer integration or deployment approval",
+  "version": "same-entry-noun-gender-v1",
+  "code_sha256": {
+    "backend/noun_entry_features.py": "f76b06f93709dd7024cbaa370d5bf9082c049b6eb7eff0ac0e7bfb56b5d98dfd",
+    "tests/test_noun_entry_features.py": "aa094bd8573eecaec2e17d9e9180e61ddd39e6e5d965d543441ecd8419b14e60",
+    "backend/dictionary_crossrefs.py": "24296bb371d3271d3551ece513253b8ab2d0e4bdab51c38e0e31f27a23f017f2",
+    "backend/lexical_variants.py": "e6271e256b982e94d955078910339fcfebf67f91952ce53f3ceb6d038918a53f"
+  },
+  "accepted_claims": {"path": "data/claims/p2_wiktionary.jsonl", "sha256": "42b022848f10329603078090adb7d955a794c080cda546bf70cc812336724514", "changed": false},
+  "source_snapshot": {"path": "data/raw/wiktionary/kaikki.org-dictionary-AncientGreek.jsonl", "sha256": "69d7185819de51cc746d96f8033eb6c3f3e2016a314c2ee640ec09ce80623029"},
+  "coverage": {"actual_entries_checked": 39, "canonical_or_sense_gender_conflicts_found_in_raw_scan": 24, "paradigm_conflict_examples_checked": 3},
+  "checks": [
+    "All projected positive metadata and conflict evidence trace to the exact same source entry identity. Complete parent wrappers, raw line hashes, source sense objects and literal tag locators were checked against downloaded records.",
+    "Gender options come only from explicit English masculine/feminine/neuter tags on Greek canonical noun forms or proven owned senses. No noun endings, template m/f/n values, crossreference targets or same-spelling entries supply gender.",
+    "All 24 canonical/sense gender-conflict entries discovered in the raw snapshot abstain from unambiguous_entry_gender. Distinct same-spelling πόσις entries preserve their independent masculine/feminine metadata.",
+    "Missing gender-bearing sense proof, changed canonical/sense tags, changed parent data, duplicate head identity and changed source URL prevent unique gender. Adding another noun's valid packet does not affect the selected entry.",
+    "Raw form-page markers are checked in the fully hash-bound source before gender projection, independently of whether a caller supplies the corresponding sense/form_of claims.",
+    "Explicit differing gender in source-labelled declension/inflection cells vetoes unique entry gender and is retained separately with exact row, locator and morphology claim ID. Such cells are not relabelled as inherent gender options.",
+    "features remains null throughout. An explicit application note prohibits overriding source form gender or treating metadata as contextual gender selection.",
+    "python -m pytest tests/test_noun_entry_features.py -q: 16 passed. Backend reference search found no production importer/caller of this isolated helper."
+  ],
+  "examples": [
+    {"entry_id": "wiktionary:kaikki:line:11786", "headword": "πᾶχυς", "gender": "masculine", "source_locator": "/entry/forms/0/tags", "source_tags": ["canonical", "masculine"], "crossreference_target_used": false},
+    {"entry_id": "wiktionary:kaikki:line:9399", "headword": "δᾶμος", "gender": "masculine", "source_locator": "/entry/senses/0/tags", "crossreference_target_used": false},
+    {"entry_id": "wiktionary:kaikki:line:6188", "headword": "πάχος", "gender": "neuter"},
+    {"entry_id": "wiktionary:kaikki:line:87", "headword": "παῖς", "gender_options": ["feminine", "masculine"], "unambiguous_entry_gender": null},
+    {"entry_id": "wiktionary:kaikki:line:4036", "headword": "πόσις", "gender": "masculine"},
+    {"entry_id": "wiktionary:kaikki:line:4037", "headword": "πόσις", "gender": "feminine"},
+    {"entry_id": "wiktionary:kaikki:line:3880", "headword": "παχύς", "status": "not_a_noun_entry"},
+    {"entry_id": "wiktionary:kaikki:line:3626", "headword": "κρύος", "gender_options": ["masculine", "neuter"], "unambiguous_entry_gender": null},
+    {"entry_id": "wiktionary:kaikki:line:4052", "headword": "λαγῷος", "status": "explicit_paradigm_gender_conflict", "inherent_options": ["masculine"], "literal_conflict_rows": 30},
+    {"entry_id": "wiktionary:kaikki:line:33016", "headword": "πενθικός", "status": "explicit_paradigm_gender_conflict", "inherent_options": ["masculine"], "literal_conflict_rows": 30},
+    {"entry_id": "wiktionary:kaikki:line:43646", "headword": "ὀνειρόπολος", "status": "explicit_paradigm_gender_conflict", "inherent_options": ["masculine"], "literal_conflict_rows": 36}
+  ],
+  "resolved_during_audit": {
+    "finding": "Initial form-page rejection depended on supplied sense/form_of claims. With only valid headword and morphology claims plus the unchanged complete wrapper, γεννάσεως (899) and αἵματος (1398) incorrectly returned unique gender despite raw form-of source markers.",
+    "resolution": "New-helper-only guard checks raw form_of/form-of markers and the literal head-template noun-form category before projection. Both incomplete packets now remain form_page_not_lexical_noun. Frozen helper modules were not edited.",
+    "regression_status": "PASS"
+  },
+  "audited_raw_line_ids": [29, 59, 87, 899, 1398, 3626, 3664, 3880, 3897, 3984, 4036, 4037, 4046, 4052, 4106, 4505, 4655, 6081, 6188, 6945, 8658, 9115, 9117, 9396, 9399, 9758, 11248, 11786, 12074, 12561, 13463, 20808, 25589, 30520, 33016, 37467, 43646, 43870, 59058],
+  "limitations": [
+    "unambiguous_entry_gender means one explicitly supported entry-metadata gender after these guards; it does not establish the gender of a particular occurrence or authorize overwriting literal form tags.",
+    "Canonical metadata can cover an entry, while sense-only metadata requires every source sense to be covered before the helper reports a unique entry gender. The two raw partial-sense examples found (12074 and 20808) were form pages and remained rejected.",
+    "Paradigm conflict detection is restricted to explicitly source-labelled declension/inflection rows. Lexical counterpart header rows are not automatically interpreted as paradigm cells.",
+    "Conservative form-page and conflicting-scope guards can reduce recall. This is source consistency validation, not a scholarly correction of the upstream dictionary.",
+    "No application of these tags to linked-form, machine, interlinear or contextual candidates was audited or authorized here."
+  ],
+  "mutations": "Only this new audit report was written by auditor. F and other frozen helpers, prior audits, source data and deployment were not modified."
+}

@@ -1,0 +1,48 @@
+{
+  "audit": "Generic critical-text lacuna boundary uncertainty helper",
+  "reviewer": "/root/campbell_tokenizer_fix/lacuna_audit",
+  "verdict": "PASS",
+  "blocking": false,
+  "scope": "Independent source-image review and helper/unit mechanics only. This does not certify integration, lexical adjudication, corpus completeness, or deployment.",
+  "reviewed_files": [
+    {
+      "path": "backend/lacuna_boundaries.py",
+      "sha256": "e3d5f8bec3596aef183af9121a2d1a0a7da914f97501befc9bec003dbe1636c2"
+    },
+    {
+      "path": "tests/test_lacuna_boundaries.py",
+      "sha256": "fa72e00483b717dcdad0d81f4df209218abf706c57adfd788e1c616826092c43"
+    }
+  ],
+  "source_evidence": [
+    {
+      "citation": "Campbell, Greek Lyric Poetry, Alcaeus 130b opening, printed page 57; PDF page 89",
+      "artifact": "runtime/campbell-assignment/alcaeus-130b-p89-verse-a.png",
+      "sha256": "af72e07016a98d6a4e2c6e52982e9b7bbf21268d31a889db33da63a1120970f6",
+      "method": "Visual inspection of supplied rendered crop",
+      "observation": "Opening survivors are separated by spaced printed dot runs. The scan does not warrant treating every survivor beside a gap as a secure complete lexical item."
+    },
+    {
+      "citation": "Campbell, Greek Lyric Poetry, Alcaeus 130 commentary, printed page 296, note 16; PDF page 328",
+      "artifact": "runtime/campbell-commentary/alcaeus-130b-p328-retry-half1.png",
+      "sha256": "76fe2868faa1322a7a875f82775b7e7ee4cb35821150092fa089962557eb583c",
+      "method": "Visual inspection of supplied rendered crop",
+      "observation": "Commentary explicitly presents the opening words as unrecoverable with confidence. It does not prove every adjacent survivor is incomplete or lexically invalid."
+    }
+  ],
+  "checks": [
+    {"check": "Existing 16 unit cases rerun independently", "result": "PASS", "command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_lacuna_boundaries.py -q"},
+    {"check": "Twelve additional in-memory adversarial cases", "result": "PASS", "coverage": ["LF, CR, CRLF and Unicode line/paragraph separators", "Comma, semicolon, Greek ano teleia, and zero-width separator barriers", "Multiple independent gaps only affect nearest eligible neighbors", "Two-sided evidence on a word between gaps", "Deep-copy preservation of nested lexical candidates and input immutability"]},
+    {"check": "Explicit opt-in requires source_critical is True", "result": "PASS"},
+    {"check": "Full unchanged source offsets validated; selection edges do not conceal nearby source gaps", "result": "PASS"},
+    {"check": "Literal Greek, partial-word status, editorial-fragment status, and lexical candidates remain unchanged", "result": "PASS"},
+    {"check": "No form blacklist, author-specific exception, restoration, or invented dictionary content", "result": "PASS"},
+    {"check": "intact_word_eligible excludes lacuna-boundary uncertainty without declaring lexical invalidity", "result": "PASS"}
+  ],
+  "limits": [
+    "The helper recognizes runs of at least two ASCII dots separated by its declared horizontal-spacing set; it is not a universal critical-edition notation parser.",
+    "Caller source metadata must distinguish genuine printed loss conventions from prose ellipses. Being a critical edition alone does not prove every ellipsis is physical loss.",
+    "Consumer integration must preserve conditional literal lookup while withholding assured-intact coverage and definitive contextual adjudication for flagged tokens.",
+    "No corpus records, passage-analysis integration, dictionary content, or deployment state were changed by this review."
+  ]
+}

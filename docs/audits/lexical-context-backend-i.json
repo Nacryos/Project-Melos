@@ -1,0 +1,69 @@
+{
+  "verdict": "PASS",
+  "approval_scope": "upload_and_private_loopback_canary_only",
+  "auditor": "/root/campbell_integrate/release_c_audit",
+  "reviewed_date_utc": "2026-10-07",
+  "base_container_id": "e37c1e216b508388caa8d9260298390b59edc9b5bf07b3d825fc5d3fb3b68eda",
+  "image": "sha256:2f60b62520d88098663fa79e2cb76cdeae8b7540e24752d586df042fc09d1777",
+  "candidate_directory": "runtime/lexical-release-i/candidate-code",
+  "files": {
+    "server.py": {
+      "verdict": "PASS",
+      "sha256": "1d12ab817e2a92bd9fb663ecf9b375ce47a5a7de0da2234c1158a8513e9c4f57",
+      "baseline_sha256": "6b8c808fb0a1d875c657463d4d3d23a9b442c93038a65a8b78ea72f553efd534",
+      "scoped_live_baseline_patch": true
+    },
+    "large_json_gzip.py": {
+      "verdict": "PASS",
+      "sha256": "95b5804db12e0eee91844e313c0c6edc06a7c55e8e429a8d7f38da7aa180e5eb",
+      "baseline_sha256": null,
+      "baseline_absent": true
+    }
+  },
+  "evidence_and_helper_hashes": {
+    "docs/audits/large-json-gzip-independent-review.json": "e260fa6323afa791f3b73b666d43a9279be6920ba07075ba4068201abbc2c91a",
+    "runtime/lexical-release-g/large-json-gzip-insertion.patch": "a5b1728b0b072b9d0791a83d69a99c78a08edd36d8d5889229e7ca607fb6f346",
+    "runtime/lexical-release-i/staging.json": "780a7215121fd9fa1dfdf45b4de745bfb3a8f3590e61b4ca4494c4d102013058",
+    ".benchmarks/lexical-i-baseline/e37c1e216b508388caa8d9260298390b59edc9b5bf07b3d825fc5d3fb3b68eda/baseline.json": "318bc0281ae31386c753e2879069386b8efbf0fa0a9ad980d2c9404041d4a1d0",
+    "deploy/lexical_release_i.py": "ca9799352a358ae1cb10258c5c0cbc0916b2993082cf4672b499e0b83f6ecd63",
+    "deploy/lexical_transport_i.py": "ebc7c58579bd957e7c563dfce2b77ec4e64a9c95914c374b0d998cebc06ecc07",
+    "deploy/lexical_baseline_i.py": "d698b899f8cc8d9fef87eda1e04153e9078b71f92e5b7754cc11bf2cc20556d4",
+    "tests/test_lexical_release_i.py": "670c699ea83e425b0d215a005c2a13323f267debe67f204eb20ae06bc01cae86",
+    "tests/test_large_json_gzip.py": "ca75e2dfa0c116c5e5d8d59e9d5d6b4a2195ac94efdb188cf0bf9e3215ccf8c3"
+  },
+  "review": [
+    "All baseline files/absence and both staged candidate hashes reverified against exact current H snapshot. New gzip module was absent from baseline.",
+    "Effective server diff is exactly one import, two explanatory comments and one middleware registration immediately after FastAPI construction. No routes, queries, scholarly annotations, dictionaries, indexes or classifier changes.",
+    "Stager binds exact source patch SHA, adapts only known path headers for existing unique-context patcher and matches one hunk at line 30. Existing staged artifacts cannot be overwritten with different bytes.",
+    "Thin release adapter preserves all 27 H mounts before overlays, original shared runtime, model/data/secrets/resource contract and existing route guards. Precisely server.py and large_json_gzip.py admitted; no cache import or private-runtime replacement path.",
+    "Transport allowlist includes only exact two candidates, approved manifests and required historical guards. I/H helper-specific upload handler enforces immutable existing bytes and verifies transfer equality. Prior H/G configuration remains isolated.",
+    "Gzip applies only to successful large single-frame application/json responses when negotiation permits. Explicit refusal wins over wildcard/duplicate acceptance. Identity clients retain exact payload bytes.",
+    "Small bodies, streamed JSON, SSE, existing encodings, no-transform, ETag/digest/content-range and trailer-declared responses remain uncompressed. Multiple Vary/Cache-Control fields preserved; Accept-Encoding is appended only where needed.",
+    "Known-ineligible starts and ASGI extensions retain ordering. No collection of later streamed frames occurs. Compression replaces a body only when smaller and updates compressed Content-Length.",
+    "Registration is inner to existing CORS/request policy. Exact staged-server local integration verified negotiated encoding, identical decoded JSON and retained outer policy headers."
+  ],
+  "verification": {
+    "relevant_exact_staged_tests_passed": 79,
+    "duration_seconds": 2.72,
+    "warnings": "One nonfunctional pytest anyio import-rewrite warning.",
+    "additional_probe": "Exact staged server plus frozen H dependencies, synthetic 42KB-class JSON route: gzip/identity responses equal after decode; status, CORS, cache policy and fixture headers preserved.",
+    "method": "Import hook loaded both exact I candidates and inventoried dependencies from saved H baseline with normal source-relative paths. Adjacent sidecar hashes checked. No dirty backend server used.",
+    "test_groups": [
+      "large JSON gzip synthetic ASGI tests",
+      "passage server integration",
+      "publication policy",
+      "editorial transport",
+      "translation comparison transport",
+      "all I-through-B release guards"
+    ],
+    "paid_calls": 0,
+    "auditor_remote_mutations": 0,
+    "corpus_or_index_writes": 0
+  },
+  "limitations": [
+    "Private canary still must verify actual hosted raw gzip bytes, decompression equality and relevant policy headers before public promotion is considered.",
+    "Compression reduces transferred bytes, not dictionary lookup work, server payload construction, decoded browser memory, JSON parsing or rendering cost.",
+    "Potentially eligible headers wait for the first body frame to distinguish single-body JSON from streams. Gzip is synchronous; actual large-response CPU/latency remains an operational measurement.",
+    "This receipt permits upload/private canary only, not public promotion, new model requests or data changes."
+  ]
+}

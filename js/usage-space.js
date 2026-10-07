@@ -86,14 +86,17 @@
       .mus-list { list-style: none; margin: 0; padding: 0; }
       .mus-list li { border-top: 1px solid #d6dcdd; }
       .mus-list button { display: block; width: 100%; padding: .5rem .3rem; border: 0; border-left: 3px solid transparent; background: transparent; text-align: left; }
-      .mus-list button:hover, .mus-list button[aria-current="true"] { background: #dfe6e5; border-left-color: #d39a2c; }
+      .mus-list button:hover, .mus-list button[aria-current="true"] { background: #edf2f6; border-left-color: #225581; }
       .mus-item-head { display: flex; align-items: baseline; gap: .4rem; font-size: .94rem; }
       .mus-swatch { flex: none; width: .64rem; height: .64rem; display: inline-block; border-radius: 50%; }
       .mus-item-cite { display: block; margin-left: 1.04rem; color: #58646e; font-size: .81rem; }
       .mus-item-excerpt { display: block; margin-left: 1.04rem; overflow: hidden; color: #354555; font-size: .91rem; white-space: nowrap; text-overflow: ellipsis; }
       .mus-foot { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .65rem 1.5rem; align-items: start; max-height: 9rem; overflow: auto; padding: .65rem 1.25rem .8rem; border-top: 1px solid #cbd3d4; color: #3f4e5a; font-size: .82rem; line-height: 1.35; }
       .mus-foot p { margin: 0; }
-      .mus-warnings { grid-column: 1 / -1; color: #715121; }
+      .mus-warnings { margin-top: .5rem !important; color: #225581; }
+      .mus-notes { color: #225581; background: #fff; }
+      .mus-notes summary { cursor: pointer; }
+      .mus-notes[open] summary { margin-bottom: .5rem; }
       .mus-legend { display: flex; gap: .35rem .7rem; flex-wrap: wrap; max-width: 25rem; justify-content: end; }
       .mus-legend span { white-space: nowrap; }
       .mus-legend i { display: inline-block; width: .55rem; height: .55rem; margin-right: .25rem; border-radius: 50%; }
@@ -391,7 +394,9 @@
     const method = element('p', '', 'Loading projection method…');
     const legend = element('div', 'mus-legend'); legend.setAttribute('aria-label', 'Author colors');
     const warnings = element('p', 'mus-warnings'); warnings.hidden = true;
-    foot.append(method, legend, warnings);
+    const notes = element('details', 'mus-notes');
+    notes.append(element('summary', '', 'Projection details'), method, warnings);
+    foot.append(notes, legend);
     dialog.append(head, main, foot); root.append(dialog); document.body.append(root);
     document.body.style.overflow = 'hidden';
 

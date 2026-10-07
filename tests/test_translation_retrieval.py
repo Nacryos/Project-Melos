@@ -69,7 +69,7 @@ def test_ell_embedding_scope_requires_explicit_eligible_greek_parent(client, tmp
 
 
 @pytest.mark.parametrize("language,edition,expected", [
-    ("", "", "g"), ("grc", "", "g"), ("ell", "", "t"),
+    ("", "", None), ("grc", "", None), ("ell", "", "t"),
     ("ell", "Translation edition", "t"), ("ell", "Greek edition", None),
     ("eng", "", None), ("grc", "Translation edition", None),
 ])

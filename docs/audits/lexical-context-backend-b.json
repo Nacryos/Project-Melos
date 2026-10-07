@@ -1,0 +1,108 @@
+{
+  "verdict": "PASS",
+  "approval_scope": "canary_only",
+  "auditor": "/root/lexical_backend_review",
+  "reviewed_at": "2026-10-07T01:21:45.150555+00:00",
+  "base_container_id": "99ac41bf357439a2e07bb69cde3f279b6bf8ae8b89690c8cc7d9ee28be517460",
+  "image": "sha256:2f60b62520d88098663fa79e2cb76cdeae8b7540e24752d586df042fc09d1777",
+  "files": {
+    "classifier.py": {
+      "verdict": "PASS",
+      "sha256": "35af1e3d4d145d603f94b330867d3f6e4fcfc14c6bbb0bdb1a4b12a67cb5983f",
+      "baseline_sha256": "77f810c73649b2b858790e87d30a0c3ec1bd4fd1240d807839a34a56357f29e0"
+    },
+    "interlinear.py": {
+      "verdict": "PASS",
+      "sha256": "b93fd82bfc202460e03491c1aaadce03faed4c736bd6dba9353d0d6e2d8966cf",
+      "baseline_sha256": "f4bb41431a260c66de516bd31c903b80af0352cdee4b573f2c6eb64579d28d58"
+    },
+    "lexicon_senses.py": {
+      "verdict": "PASS",
+      "sha256": "0653b2b6c0561b440185fc44fba4d8d3c5110450093e19e346c1a3ac186324f5",
+      "baseline_sha256": "df0e15b7005743c06d895ab17147c4f8a32782f9fe7ddf2668a6c8fb87df50ea"
+    },
+    "passage_analysis.py": {
+      "verdict": "PASS",
+      "sha256": "2924541c268a194b78faf01e95b31dc28ac832a4a5471c05ee4b999b8fa389ec",
+      "baseline_sha256": "a91f126eeb4617cc97b104f5fc81b81ca011e518a0c066ca2fd731c65252e8a8"
+    },
+    "sense_ranker.py": {
+      "verdict": "PASS",
+      "sha256": "6e3b90dc3e467509b6acb9adee3da5eaa3f1e09a76f64f928a0f203eaa1fd34a",
+      "baseline_sha256": "09981938e663af7e32dccd9f153b303fb7470a1dc5d0b1b848155f0e135d902f"
+    }
+  },
+  "prior_audit": {
+    "path": "docs/audits/lexical-context-backend.json",
+    "sha256": "cdc158fa04ffb332427dfae0b24c90e35959167edb386835e0c9999c5bcb69af",
+    "preserved": true
+  },
+  "change": "Replace model-facing shared context/evidence hash references with short packet-local ctx-N/ev-N identifiers deduplicated by exact canonical JSON. The full inventory SHA-256 and source records are unchanged.",
+  "verification": {
+    "hashes_derived_programmatically_from_bytes": true,
+    "all_candidate_and_baseline_hash_lengths_64": true,
+    "four_other_modules_identical_to_prior_audit": true,
+    "wire_reference_only_diff_verified": true,
+    "wire_diff_proof": "Reversing exactly the added context_keys/evidence_keys initialization and the two reference-assignment replacements recreates the prior audited sense_ranker.py SHA-256.",
+    "pytest_command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_sense_ranker.py tests/test_contextual_lemma_senses.py tests/test_interlinear.py tests/test_campbell_meanings.py tests/test_classifier.py tests/test_passage_analysis.py tests/test_lexicon_senses.py tests/test_lyric_dictionary_gaps.py tests/test_lexical_release.py tests/test_candidate_senses.py tests/test_lexicon_render.py tests/test_passage_ranker.py tests/test_classifier_prompt_eval.py tests/test_classifier_prompt_eval_runner.py -q",
+    "pytest_result": "274 passed in 5.86s",
+    "checks": [
+      "Replayed all four actual saved canary responses, using exact matching retained source passage records.",
+      "Every supplied sense ID survives; all literal definitions, source restrictions, qualifiers, citation references/text, scope text, sense hierarchy, and supporting morphology IDs round-trip through short references exactly.",
+      "Only the already audited extraction coordinates/file paths/method labels and duplicate gloss representation are omitted from model-facing packets. No additional semantic field is removed.",
+      "All four packets fit the existing 32000-character bound, including the actual 23-sense stasis inventory.",
+      "The original result and source inventory remain deeply unchanged after packet construction.",
+      "The full 64-character inventory digest remains bound to original senses and morphology; compact reference keys are not treated as integrity digests.",
+      "Pinned lexicon_senses.py remains unchanged from its independent retained-source audit."
+    ],
+    "paid_model_calls": 0,
+    "network_calls": 0,
+    "corpus_or_dictionary_data_writes": 0,
+    "deployment_actions": 0
+  },
+  "replay": [
+    {
+      "path": "runtime/lyric-context-eval/canary-326/0.response.json",
+      "sha256": "756d8672d0b06b6f540c58f8c04b7e021da05f5ef707ef26d763d7d990642bee",
+      "form": "στάσιν",
+      "sense_choices": 23,
+      "packet_characters": 30708,
+      "semantic_compaction_round_trip": "PASS",
+      "source_inventory_unchanged": true
+    },
+    {
+      "path": "runtime/lyric-context-eval/canary-326/1.response.json",
+      "sha256": "f316e63177a4df1c87cfe6f0259b6bdd79640cb8c42de1def416c71451353568",
+      "form": "ἀνέμων",
+      "sense_choices": 4,
+      "packet_characters": 11499,
+      "semantic_compaction_round_trip": "PASS",
+      "source_inventory_unchanged": true
+    },
+    {
+      "path": "runtime/lyric-context-eval/canary-326/2.response.json",
+      "sha256": "f9d913f9cd3d2773d013cb7752f21668dafc625c2d27802be1f4360c4f58dd7d",
+      "form": "κῦμα",
+      "sense_choices": 7,
+      "packet_characters": 12328,
+      "semantic_compaction_round_trip": "PASS",
+      "source_inventory_unchanged": true
+    },
+    {
+      "path": "runtime/lyric-context-eval/canary-350/0.response.json",
+      "sha256": "b840dad13f5938fd6585b6b0400f8410ef8e998ee614ef54c746079a719e6ce4",
+      "form": "ἦλθες",
+      "sense_choices": 14,
+      "packet_characters": 28926,
+      "semantic_compaction_round_trip": "PASS",
+      "source_inventory_unchanged": true
+    }
+  ],
+  "limits": [
+    "Approval applies only to these exact five module hashes on the pinned baseline for private canary B; no public promotion is certified.",
+    "Offline replay verifies evidence preservation and packet readiness, not model correctness or general philological accuracy.",
+    "Saved canary responses were produced by earlier authorized work; this auditor issued no new model or network calls.",
+    "The canary-only scope is a review restriction; the deployment module-hash schema does not itself enforce promotion policy."
+  ],
+  "philological_accuracy_claim": false
+}

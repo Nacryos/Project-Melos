@@ -272,11 +272,12 @@ def definition_excerpt(record: dict[str, Any]) -> dict[str, Any]:
 
 def render_source_record(record: dict[str, Any]) -> dict[str, Any]:
     """Add a rendered display field and explicit method/warning metadata."""
+    from .lexicon_senses import dictionary_senses
     try:
         rendered = render_entry_text(record["raw_path"], record["entry_id"])
     except (KeyError, ValueError, FileNotFoundError, etree.XMLSyntaxError) as exc:
         return {"rendered_entry_text": None, "rendering_method": METHOD,
-                "rendering_warning": str(exc)}
+                "rendering_warning": str(exc), **dictionary_senses(record)}
     result = {"rendered_entry_text": rendered, "rendering_method": METHOD,
               "rendering_warning": None}
     try:
@@ -285,6 +286,9 @@ def render_source_record(record: dict[str, Any]) -> dict[str, Any]:
         # Optional compact display correction fails closed; the diplomatic
         # stored gloss and full source rendering are still available.
         pass
+    # Import locally to keep the source reader independent of its optional
+    # structured-definition projection.
+    result.update(dictionary_senses(record))
     return result
 
 

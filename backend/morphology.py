@@ -683,6 +683,12 @@ class Morphology:
                 candidate['edit_distance'] == 0 and candidate['lemma'] in expansion_lemmas)
         lexicon_entries: dict[str, dict[str, Any]] = {}
         quotation_entries: list[dict[str, Any]] = []
+        # Several distinct parsing candidates can refer to the same indexed
+        # source object. Render it once for this request, without conflating
+        # different source records that happen to share an entry identifier.
+        # This deliberately is not a persistent cache: later requests still
+        # perform the renderer's source-file validation.
+        rendered_sources: dict[int, dict[str, Any]] = {}
         try:
             from .lexicon_render import render_source_record
         except ImportError:
@@ -695,10 +701,13 @@ class Morphology:
                     continue
                 quotation_entries.append(entry)
                 display_entry = {field: entry.get(field) for field in
-                                             ("id", "entry_id", "lemma", "gloss", "entry_text",
+                                             ("id", "entry_id", "lemma", "lemma_beta", "lemma_raw", "homograph_id", "lemma_identity", "gloss", "entry_text",
                                               "source", "source_url", "entry_url")}
                 if render_source_record:
-                    display_entry.update(render_source_record(entry))
+                    source_identity = id(entry)
+                    if source_identity not in rendered_sources:
+                        rendered_sources[source_identity] = render_source_record(entry)
+                    display_entry.update(rendered_sources[source_identity])
                 else:
                     display_entry.update({"rendered_entry_text": None,
                                           "rendering_method": None,
@@ -708,6 +717,10 @@ class Morphology:
             entry = lexicon_entries.get(candidate.get("gloss_entry_id"))
             candidate["rendered_entry_text"] = entry.get("rendered_entry_text") if entry else None
             candidate["rendering_method"] = entry.get("rendering_method") if entry else None
+            if entry and "dictionary_senses" in entry:
+                for field in ("dictionary_senses", "dictionary_senses_status",
+                              "dictionary_senses_warning", "dictionary_senses_method"):
+                    candidate[field] = entry.get(field)
             if entry and entry.get('definition_excerpt'):
                 candidate['definition_excerpt'] = entry['definition_excerpt']
                 candidate['definition_excerpt_provenance'] = entry['definition_excerpt_provenance']

@@ -1,0 +1,22 @@
+/* The dock starts above the poem so it remains reachable as the poem scrolls. */
+.selection-start{display:inline-flex;align-items:center;justify-content:center;min-height:44px;margin-top:14px;padding:8px 14px;border:1px solid #243c5260;border-radius:0;background:#fff;color:#243c52;font:600 14px/1.2 var(--text);cursor:pointer}
+.selection-start[aria-pressed=true]{background:#243c52;color:#fff}
+.selection-start:disabled{opacity:.5;cursor:default}
+.selection-actions{position:sticky;top:8px;z-index:8;margin:0 0 18px;padding:10px;gap:8px;border:1px solid #243c5240;border-radius:0;background:rgb(255 255 255 / .94);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 4px 16px #152b4015}
+.selection-actions[hidden]{display:none}
+.selection-actions>span{flex-basis:100%;font-size:18px}
+.selection-actions button{min-height:44px;padding:8px 11px;border:1px solid #243c5250;border-radius:0;background:#fff;color:#243c52;cursor:pointer}
+.selection-actions button:hover{background:#eaf0f6}
+.selection-actions .selection-analyze,.selection-actions .selection-extend[aria-pressed=true]{background:#243c52;color:#fff}
+.selection-actions button:disabled{opacity:.5;cursor:default}
+.selection-actions .selection-analysis-note{flex-basis:100%;font:13px/1.4 var(--text);color:var(--ink)}
+.selection-actions button:focus-visible,.selection-start:focus-visible{outline:2px solid #243c52;outline-offset:3px}
+.greek-text .word{-webkit-user-select:text;user-select:text;touch-action:auto}
+.greek-text .word.phrase-selected{background:rgb(70 117 170 / .2);color:#142b42;box-shadow:inset 0 -2px #466e99;border-radius:0}
+.passage-analysis{scroll-margin-top:180px}
+.passage-fullscreen .selection-actions{top:var(--selection-dock-top,58px)}
+.passage-fullscreen .selection-start{background:rgb(255 255 255 / .94);color:#243c52;border-color:rgb(255 255 255 / .7)}
+.passage-fullscreen .selection-start[aria-pressed=true]{background:#dce7f2}
+/* A landscape phone needs its limited vertical space for the poem itself. */
+@media(max-height:500px){.selection-actions{position:static}.greek-text .word{scroll-margin-top:80px}}
+@media(max-width:600px){.selection-actions{gap:6px;padding:8px}.selection-actions button{font-size:12px}.selection-actions .selection-extend{display:none}.selection-actions>span{font-size:16px;max-height:2.6em}.selection-actions .selection-analysis-note{font-size:12px}}

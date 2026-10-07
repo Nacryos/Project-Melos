@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lexicon — Melos</title>
+  <meta name="description" content="Explore Greek headwords, source-backed dictionary meanings, recorded forms and their contexts in Melos.">
+  <link rel="icon" type="image/svg+xml" href="/assets/branding/melos-favicon-white.svg?v=white-1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/lexicon-page.css">
+  <script src="/js/config.js" defer></script>
+  <script src="/js/api.js" defer></script>
+  <script src="/js/dictionary-preview.js" defer></script>
+  <script src="/js/lexicon-page.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#lexicon-main">Skip to lexicon</a>
+  <header class="discovery-masthead">
+    <a class="discovery-mark" href="/" aria-label="Melos, home"><span lang="grc">Μέλος</span><small>A Greek Lyric Lexicon</small></a>
+    <nav aria-label="Main navigation"><a href="/">Home</a><a href="/lexicon" aria-current="page">Lexicon</a><a href="/authors">Authors</a><a href="/themes">Themes</a></nav>
+  </header>
+  <main id="lexicon-main" class="lexicon-shell">
+    <div class="lexicon-heading"><div><p class="eyebrow">Words &amp; their sources</p><h1>Lexicon</h1></div><p>From a word to its meanings.<br>From a meaning to its context.</p></div>
+    <form id="lexicon-search" class="lexicon-search" role="search">
+      <label for="lexicon-query">Find a Greek word or English meaning</label>
+      <div class="search-line"><input id="lexicon-query" name="q" type="search" maxlength="100" autocomplete="off" spellcheck="false" placeholder="Greek, transliteration, or English…" aria-describedby="search-help"><button type="submit">Look up <span data-lexicon-arrow="right" aria-hidden="true"></span></button></div>
+      <div class="search-options"><p id="search-help">Headwords, inflected forms, and source dictionary meanings.</p><label for="lexicon-mode">Search in <select id="lexicon-mode" name="mode"><option value="auto">Greek &amp; English</option><option value="greek">Greek / transliteration</option><option value="english">English meanings</option></select></label></div>
+    </form>
+    <div class="lexicon-layout">
+      <aside class="lexicon-browser" aria-label="Headword browser">
+        <details id="headword-browser" open><summary>Browse headwords <span id="headword-count"></span></summary>
+          <div class="browser-body"><nav id="lexicon-alphabet" class="lexicon-alphabet" aria-label="Greek initial letter"></nav>
+            <p id="browse-status" class="subtle" role="status" aria-live="polite"></p>
+            <ul id="headword-list" class="headword-list" aria-label="Headwords"></ul>
+            <div class="browse-pagination"><button type="button" id="headword-prev" disabled><span data-lexicon-arrow="left" aria-hidden="true"></span> Previous</button><span id="headword-page"></span><button type="button" id="headword-next" disabled>Next <span data-lexicon-arrow="right" aria-hidden="true"></span></button></div>
+            <p id="browse-note" class="fine-print"></p>
+          </div>
+        </details>
+      </aside>
+      <section class="lexicon-entry" aria-labelledby="entry-heading" id="entry-panel">
+        <div class="entry-heading-line"><p class="eyebrow">Dictionary &amp; recorded forms</p><span id="entry-status" role="status" aria-live="polite"></span></div>
+        <h2 id="entry-heading">A place to begin</h2>
+        <div id="entry-body"><p class="entry-introduction">Choose a headword on the left, or look up a word above.</p><p class="subtle">Each meaning leads back to a dictionary source. Recorded analyses remain separate, so alternative readings stay visible.</p></div>
+      </section>
+    </div>
+    <footer class="lexicon-footer"><span>Melos · A Greek Lyric Lexicon</span><a href="/">Return to the reader <span data-lexicon-arrow="right" aria-hidden="true"></span></a></footer>
+  </main>
+  <noscript><p class="noscript">Enable JavaScript to browse the lexicon and retrieve source entries.</p></noscript>
+</body>
+</html>

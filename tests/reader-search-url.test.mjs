@@ -7,6 +7,8 @@ const script = readFileSync(new URL('../js/reader.js', import.meta.url), 'utf8')
 class Element {
   constructor(tag = 'div', cls = '', content = '') {
     Object.assign(this, { tag, cls, content, children: [], value: '', dataset: {}, checked: false });
+    const classes = new Set(cls.split(/\s+/).filter(Boolean));
+    this.classList = { add: name => classes.add(name), remove: name => classes.delete(name), contains: name => classes.has(name) };
   }
   append(...children) { this.children.push(...children); }
   after(element) { this.afterElement = element; }
@@ -145,6 +147,23 @@ test('inflight search persists its request snapshot rather than subsequently cha
   assert.equal(url.searchParams.get('ref'), '1');
   assert.equal(url.searchParams.get('id'), 'new-passage');
   assert.match(h.ui.resultsSummary.textContent, /author chronology/);
+});
+
+test('search spinner follows current request completion, failure and invalidation', async () => {
+  const h = harness();
+  const first = h.search('first'), second = h.search('second');
+  assert.equal(h.ui.resultsSummary.classList.contains('melos-loading'), true);
+  h.pending[0].resolve(response('first')); await first;
+  assert.equal(h.ui.resultsSummary.classList.contains('melos-loading'), true);
+  h.pending[1].resolve({ results: [], total: 0 }); await second;
+  assert.equal(h.ui.resultsSummary.classList.contains('melos-loading'), false);
+  const failed = h.search('failure'); h.pending[2].reject(new Error('offline')); await failed;
+  assert.equal(h.ui.resultsSummary.classList.contains('melos-loading'), false);
+  const outdated = h.search('outdated');
+  await h.search('x'.repeat(1001));
+  assert.equal(h.ui.resultsSummary.classList.contains('melos-loading'), false);
+  h.pending[3].resolve(response('old')); await outdated;
+  assert.equal(h.ui.resultsSummary.classList.contains('melos-loading'), false);
 });
 
 test('old search responses cannot overwrite a newer filtered URL and pagination keeps its original filters', async () => {

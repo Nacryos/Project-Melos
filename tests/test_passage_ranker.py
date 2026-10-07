@@ -90,7 +90,7 @@ def test_stale_or_invalid_occurrences_fail_before_provider_construction(change):
 
 def test_trusted_translation_and_predicted_syntax_have_distinct_scopes():
     passage = {**PASSAGE, "text": "α", "translation_previews": [
-        {"record_id": "synthetic:translation", "parent_id": PASSAGE["id"], "text": "synthetic translation " * 200,
+        {"record_id": "synthetic:translation", "parent_id": PASSAGE["id"], "language": "eng", "text": "synthetic translation " * 200,
          "source_url": "https://example.test/translation", "pairing_proof": {"translation_of": PASSAGE["id"]}},
         {"record_id": "synthetic:wrong-parent", "parent_id": "other", "text": "must not be supplied"}]}
     fake = FakeJev()

@@ -1,0 +1,34 @@
+{
+  "audit": "Independent G ranked-sense alternatives projection review",
+  "reviewed_date_utc": "2026-10-07",
+  "auditor": "/root/context_pipeline_review/audit_linked_adapter",
+  "verdict": "PASS",
+  "blocking": false,
+  "approval_scope": "Offline apply_sense_ranking projection of complete uncertain, abstained and proposed sense rankings; not a live accuracy, source-metadata, frontend or deployment approval",
+  "code_sha256": {
+    "backend/sense_ranker.py": "d1240700886b68a7b73a312e436c6d7ca9fc188ea85326560e9133ec86538c5f"
+  },
+  "prior_audit_dependency": "docs/audits/linked-dictionary-f.json",
+  "tests": {
+    "command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_ranked_sense_alternatives.py tests/test_sense_ranker.py tests/test_linked_sense_integration.py tests/test_interlinear.py -q",
+    "passed": 90,
+    "failed": 0
+  },
+  "checks": [
+    "Ranking exposure reconstructs literal sense payloads and supporting candidate IDs from the trusted interlinear inventory, after matching occurrence fields and inventory digest. Caller/model ranked_senses labels and evidence do not supply displayed wording.",
+    "Every inventory sense and abstention must have a finite numeric score in [0,1]; omitted or foreign IDs, boolean values, NaN and invalid score domains fail closed.",
+    "Uncertain and abstained decisions expose sorted complete alternatives with explicitly uncalibrated scores, without changing the original gloss, grammatical parse or source alternatives.",
+    "The displayed proposed status is not accepted directly. Proposed is initially downgraded to uncertain and upgraded only after the selected source ID, supporting candidates, threshold, margin, form compatibility and final gloss application checks succeed.",
+    "Prior ranked presentation fields are removed before each token revalidation, so a formerly valid projection is not retained when a subsequent supplied ranking fails its digest or identity checks; the added stale-projection regression passes.",
+    "Existing decisive linked-sense behavior and removal of incompatible morphology/agreement groups remain covered by the focused regression suite.",
+    "Independent additional probes rejected negative, greater-than-one, positive/negative infinity, None, string and boolean scores.",
+    "Independent probes confirmed forged model wording/support payloads are ignored, projected alternatives are deep copies that cannot mutate source tokens, and abstention cannot change a parse even when a selected_sense_id is supplied."
+  ],
+  "resolved_audit_finding": "Initial implementation exposed sense_ranking_status=proposed before validating whether the proposal could actually apply. The frozen revision downgrades it until successful source-bound application, and the new regression plus independent replay confirmed the correction.",
+  "limitations": [
+    "No paid calls, live canary or production deployment was performed. Mocked ranking probabilities test software contracts, not model accuracy or calibration.",
+    "This receipt does not audit concurrent G changes to linked_dictionary noun metadata or any browser rendering of these projected fields.",
+    "Source quality, partial coverage and provenance qualifications in the earlier source-helper and F consumer audits remain applicable."
+  ],
+  "mutations": "Only this audit receipt was authored by reviewer. No production module or corpus data was edited."
+}

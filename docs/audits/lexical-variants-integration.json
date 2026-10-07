@@ -1,0 +1,32 @@
+{
+  "audit": "Independent narrow backend integration audit for lexical variant evidence",
+  "date": "2026-10-06",
+  "auditor": "subentry_evidence_audit",
+  "verdict": "PASS",
+  "blocking": false,
+  "scope": "Only the new lexical evidence block in server.word and the four-field passthrough/supporting-claim addition in PassageAnalysisService. Unrelated existing changes in these modules are outside this verdict.",
+  "source_projection_audit": "docs/audits/lexical-variants.json",
+  "code_sha256": {
+    "backend/server.py": "0bcd9479b5f12a5c0b90071fadcac4fdc28348fda3618dfc74fd8267cf59fd4b",
+    "backend/passage_analysis.py": "5ce0cab91fbadb78bff0f0660f77c3ae37082d7302d7c49a83c327787f620315",
+    "backend/lexical_variants.py": "aa7d8ca247019bf1af08100deec3f52ee61e22e49ff5387530781a4f1f24ff4c",
+    "tests/test_lexical_variants_integration.py": "80109bf2aab84c4cef9a9b4be12eb2a9220638823a592a9cb6269f71dd1398a8"
+  },
+  "transport_fields": ["lexical_variants", "dictionary_crossreferences", "lexical_variant_supporting_claims", "lexical_variant_status"],
+  "checks": [
+    "The word endpoint obtains lexical evidence from the local accepted index, attaches distinct fields, and does not append lexical variants to morphological or contextual candidate inventories.",
+    "Expected index/import/runtime errors yield explicit lexical_variant_status=unavailable and empty lexical fields while preserving source candidates.",
+    "Passage analysis deep-copies all four fields and includes supporting claims in claim_applications using their original subjects. Accepted lexical claims have no passage subject and remain general_source_record.",
+    "The new code adds no paid provider calls, machine fetch request, contextual ranking request, target-sense resolution, or occurrence-level grammatical assertion.",
+    "Independent end-to-end plumbing check used real accepted evidence for τάλαις, ὄππᾳ and δᾶμον in a four-token synthetic transport-only passage with repeated τάλαις. All lexical payloads survived exactly, all supporting-claim scopes stayed general, unresolved crossreference and exact query anchor survived, input payloads stayed unchanged, and repeated-token copies were independent.",
+    "A recording machine stub saw only three existing cache reads with fetch=false; the repeated word reused cached lookup and no paid fetch was triggered.",
+    "Follow-up helper-only change excludes whole multiline/Greek-contaminated sense previews without altering accepted claims; projection audit refreshed. Server and passage-analysis hashes are unchanged.",
+    "python -m pytest tests/test_lexical_variants_integration.py tests/test_lexical_variants.py tests/test_lexicon_subentries.py -q: 20 passed."
+  ],
+  "limitations": [
+    "No frontend display behavior or production deployment was examined.",
+    "This integration transports general source dictionary evidence. It does not resolve these words morphologically or select a contextual sense.",
+    "The LSJ staged subentry database remains separate and was not integrated by this change."
+  ],
+  "mutations": "Auditor wrote only this report; no runtime code, source data or deployment changed."
+}

@@ -29,6 +29,10 @@ TIMEOUT = 8
 FAILURE_BACKOFF = 300
 WARNINGS = ["Machine-generated alternatives, not occurrence-attested or contextually adjudicated morphology.",
             "The deployed engine and stem-library revisions are unknown; dialect labels are not exhaustive."]
+ELISION_MARKS = "\u2019\u1fbd"
+ELISION_CONVENTION = ("https://github.com/alpheios-project/alpheios-core/blob/"
+                     "a27dc27afa166998c15335295a63233219a16741/"
+                     "packages/data-models/src/greek_language_model.js#L153-L158")
 
 
 def _json(value):
@@ -40,27 +44,43 @@ def _sha(value):
 
 
 def validate_form(value):
-    """NFC only. One Greek word, accents/case retained; no editorial repairs."""
+    """One Greek word with an optional final elision mark; no letter repairs."""
     if not isinstance(value, str) or not 1 <= len(value) <= 80:
         raise ValueError("Expected one Greek word (maximum 80 characters)")
     value = unicodedata.normalize("NFC", value)
     has_letter = False
-    for char in value:
+    letters = value[:-1] if value[-1] in ELISION_MARKS else value
+    for char in letters:
         category = unicodedata.category(char)
         if category.startswith("L") and "GREEK" in unicodedata.name(char, ""):
             has_letter = True
         elif category.startswith("M") and has_letter and char in "\u0300\u0301\u0304\u0306\u0308\u0313\u0314\u0342\u0345":
             continue
         else:
-            raise ValueError("Only intact Greek letters and accent marks are accepted")
+            raise ValueError("Only Greek letters, accent marks, and one final elision mark are accepted")
     if not has_letter:
         raise ValueError("Expected Greek letters")
     return value
 
 
+def transport_form(form):
+    """Documented Alpheios spelling, kept separate from the source spelling.
+
+    GreekLanguageModel.normalizeText at ELISION_CONVENTION maps final U+2019
+    to U+1FBD. No ASCII apostrophe, accent folding, or restored letters.
+    """
+    return form[:-1] + "\u1fbd" if form.endswith("\u2019") else form
+
+
 def request_url(form):
-    return ENDPOINT + "?" + urllib.parse.urlencode({"word": form, "engine": "morpheusgrc",
-                                                   "lang": "grc", "clientId": CLIENT})
+    parameters = {"word": transport_form(form), "engine": "morpheusgrc",
+                  "lang": "grc", "clientId": CLIENT}
+    if form.endswith(tuple(ELISION_MARKS)):
+        # Disable the documented service-side apostrophe-stripping retry:
+        # morphsvc 264ad78feae7efcb23255736f7ed624f673db1e4,
+        # morphsvc/lib/engines/MorpheusLocalEngine.py lines 123-132.
+        parameters["noAposRetry"] = "1"
+    return ENDPOINT + "?" + urllib.parse.urlencode(parameters)
 
 
 def _items(value, pointer):
@@ -96,15 +116,16 @@ def project(raw, form, receipt):
     if not annotations:
         raise ValueError("Missing response target")
     candidates, entries = [], []
+    query_form = transport_form(form)
     for annotation, ap in annotations:
         target = _object(_object(annotation["hasTarget"])["Description"])["about"]
-        if not isinstance(target, str) or unicodedata.normalize("NFC", target) != "urn:word:" + unicodedata.normalize("NFC", form):
+        if not isinstance(target, str) or unicodedata.normalize("NFC", target) != "urn:word:" + unicodedata.normalize("NFC", query_form):
             raise ValueError("Response target mismatch")
         if "Body" not in annotation and "hasBody" not in annotation:
             # Audited QA23 negative control: complete service annotation with
             # both body fields ABSENT. Null/empty/mismatched present fields are
             # not this envelope and must not silently become "no analyses".
-            expected = "urn:TuftsMorphologyService:" + unicodedata.normalize("NFC", form) + ":morpheusgrc"
+            expected = "urn:TuftsMorphologyService:" + unicodedata.normalize("NFC", query_form) + ":morpheusgrc"
             about = annotation["about"]
             creator = _object(_object(annotation["creator"])["Agent"])["about"]
             created = _object(annotation["created"])["$"]
@@ -259,8 +280,15 @@ class MachineMorphologyService:
             metadata = json.loads(row["metadata"])
             if _sha(row["metadata"].encode()) != receipt_id:
                 raise ValueError("Receipt metadata integrity failure")
-            if metadata["request_form"] != form or metadata["url"] != request_url(form) or metadata["parser_version"] != PARSER_VERSION:
+            source_form = metadata.get("source_form", metadata["request_form"])
+            if (source_form != form or metadata["request_form"] != transport_form(form)
+                    or metadata["url"] != request_url(form) or metadata["parser_version"] != PARSER_VERSION):
                 raise ValueError("Receipt request/parser mismatch")
+            if form.endswith(tuple(ELISION_MARKS)):
+                if (validate_form(metadata["input_form"]) != form
+                        or metadata["input_transformation"] != "NFC; final U+2019 to U+1FBD for transport only"
+                        or metadata["input_convention"] != ELISION_CONVENTION):
+                    raise ValueError("Receipt elision provenance mismatch")
             receipt = {"id": receipt_id, **metadata}
             if _sha(row["raw"]) != metadata["raw_sha256"]:
                 raise ValueError("Receipt raw integrity failure")
@@ -273,6 +301,7 @@ class MachineMorphologyService:
             return self._result("invalid_receipt", form, "Cached response could not be verified; no analysis was used.")
 
     def analyze(self, form, visitor_id, fetch=True):
+        input_form = form
         try:
             form = validate_form(form)
         except ValueError as exc:
@@ -326,9 +355,13 @@ class MachineMorphologyService:
                 status, raw, headers = self.transport(url)
                 if not isinstance(raw, bytes) or len(raw) > MAX_RESPONSE:
                     raise ValueError("Invalid or oversized response")
-                metadata = {"request_form": form, "url": url, "http_status": status,
+                metadata = {"request_form": transport_form(form), "url": url, "http_status": status,
                             "received_utc": datetime.now(timezone.utc).isoformat(), "raw_sha256": _sha(raw),
                             "parser_version": PARSER_VERSION, "engine_revision": None, "response_headers": headers}
+                if form.endswith(tuple(ELISION_MARKS)):
+                    metadata.update(input_form=input_form, source_form=form,
+                                    input_transformation="NFC; final U+2019 to U+1FBD for transport only",
+                                    input_convention=ELISION_CONVENTION)
                 encoded = _json(metadata)
                 if len(encoded.encode()) > 4096:
                     raise ValueError("Oversized response metadata")

@@ -491,7 +491,8 @@ def build_evidence_packet(
         if not isinstance(row, Mapping):
             warnings.append(f"Candidate {index} is not an object.")
             continue
-        cid = str(row.get("id") or f"candidate_{index}")
+        from .interlinear import candidate_identity
+        cid = candidate_identity(row)
         if not _machine_candidate(row) and _lexical_metadata_candidate(row):
             warnings.append(f"Candidate {cid} excluded: lexical entry metadata is not a grammatical choice.")
             continue
@@ -622,6 +623,9 @@ def build_evidence_packet(
         packet['machine_receipt'] = {key: machine['receipt'].get(key) for key in (
             'id', 'request_form', 'url', 'http_status', 'received_utc',
             'raw_sha256', 'parser_version', 'engine_revision')}
+        packet['machine_receipt'].update({key: machine['receipt'][key] for key in (
+            'source_form', 'input_form', 'input_transformation', 'input_convention')
+            if key in machine['receipt']})
     return _compact_packet(packet)
 
 
@@ -649,6 +653,7 @@ class JevProvider:
             'source_family', 'comparison_scope', 'source_passage_id',
             'decision_group',
             'entry_senses', 'entry_sense_claim_ids',
+            'entry_id', 'text', 'sense_path', 'scope_text', 'qualifiers', 'form_scope', 'definition_kind',
         )
         choices = {str(item['id']): {
             'candidate_id': item['id'],
@@ -669,6 +674,14 @@ class JevProvider:
                     "type": "choice",
                     "instructions": "Which supplied candidate best fits this exact Greek passage? Choose a provisional contextual grammatical hypothesis, not a certification of source-attested parsing. Lack of an explicit passage annotation alone does not require abstention when the supplied Greek context supports an existing candidate. Select abstain for unresolved ambiguity, conflicts, missing evidence, or inadequate context. Never create a new reading or assume the author's literary dialect makes every form exclusive.",
                     "criteria": choices}}}
+        if packet.get('task_schema') in {'melos-contextual-dictionary-sense-v1', 'melos-contextual-dictionary-sense-v2'}:
+            body['questions']['contextual_parse']['instructions'] = (
+                'Which supplied dictionary sense best fits the exact target occurrence and its supplied morphology alternatives? '
+                'Select only an existing sense ID or abstain; do not generate or rewrite definitions. Respect source sense hierarchy, '
+                'qualifiers, and form-specific restrictions. Translations, author identity, and predicted syntax are defeasible context, '
+                'not proof. A meaning may fit several unresolved parses: choosing that sense does not select case, number, tense, '
+                'or a complete parse. This is a provisional semantic interpretation, not grammatical classification or scholarly certainty. '
+                'Abstain for unresolved semantic ambiguity, inadequate sense coverage, unsupported morphology, or equally plausible senses.')
         request = Request(JEV_ENDPOINT, data=_state_json(body).encode("utf-8"),
                           headers={"Authorization": f"Bearer {self.api_key}",
                                    "Content-Type": "application/json"}, method="POST")

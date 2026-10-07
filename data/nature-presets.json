@@ -1,0 +1,203 @@
+{
+  "version": 1,
+  "default_preset_id": "garden_grove",
+  "generator": {
+    "script": "tools/build_nature_presets.py",
+    "pillow": "12.2.0",
+    "libwebp": "1.6.0",
+    "resize": "LANCZOS; preserve complete landscape; no crop or overlay",
+    "webp_method": 6
+  },
+  "presets": [
+    {
+      "id": "sea_coast",
+      "title": "Sea & Coast",
+      "url": "/assets/nature-presets/sea_coast-960.42fc4d304db0.webp",
+      "width": 960,
+      "height": 640,
+      "quality": 72,
+      "sha256": "42fc4d304db0bf7292352c942147b52a38e2b4d197d3937c7b05da63544a2028",
+      "bytes": 116082,
+      "variants": [
+        {
+          "url": "/assets/nature-presets/sea_coast-960.42fc4d304db0.webp",
+          "width": 960,
+          "height": 640,
+          "quality": 72,
+          "sha256": "42fc4d304db0bf7292352c942147b52a38e2b4d197d3937c7b05da63544a2028",
+          "bytes": 116082
+        },
+        {
+          "url": "/assets/nature-presets/sea_coast-480.5cbeee8d44de.webp",
+          "width": 480,
+          "height": 320,
+          "quality": 68,
+          "sha256": "5cbeee8d44de0e0f5c858adfb0536ebe732e3106ee4040c655b2e9a3cf9d68f8",
+          "bytes": 31452
+        }
+      ],
+      "provenance": {
+        "source_image_id": "sea_coast-retry-f8e7ecc07804",
+        "source_path": "output/imagegen/nature-gallery/landscape/images/sea_coast-retry-f8e7ecc07804.png",
+        "source_sha256": "7caa4c3705cf714f1a71d541cb8de9af290c89592db6d7a08e67016bfb79ede7",
+        "source_width": 1536,
+        "source_height": 1024,
+        "parent_image_id": "sea_coast-landscape-01",
+        "source_model": "gpt-image-2.5-sunburst",
+        "approval": "User-selected landscape favourite"
+      }
+    },
+    {
+      "id": "garden_grove",
+      "title": "Garden & Grove",
+      "url": "/assets/nature-presets/garden_grove-960.591f04eebb61.webp",
+      "width": 960,
+      "height": 640,
+      "quality": 72,
+      "sha256": "591f04eebb61adcebbd81cd6b47912084f368d57f44d1879964074b0c76c9098",
+      "bytes": 134076,
+      "variants": [
+        {
+          "url": "/assets/nature-presets/garden_grove-960.591f04eebb61.webp",
+          "width": 960,
+          "height": 640,
+          "quality": 72,
+          "sha256": "591f04eebb61adcebbd81cd6b47912084f368d57f44d1879964074b0c76c9098",
+          "bytes": 134076
+        },
+        {
+          "url": "/assets/nature-presets/garden_grove-480.fed357ce96fd.webp",
+          "width": 480,
+          "height": 320,
+          "quality": 68,
+          "sha256": "fed357ce96fd96cb708f37ecc166d4975000b0bd7e42a9816b6f09bc3778c319",
+          "bytes": 35270
+        }
+      ],
+      "provenance": {
+        "source_image_id": "garden_grove-landscape-01",
+        "source_path": "output/imagegen/nature-gallery/landscape/images/garden_grove-landscape-01.png",
+        "source_sha256": "50518ee6c2801c5752049e24bd2030455a1241742bf80ca638f9bf5ea185c77b",
+        "source_width": 1536,
+        "source_height": 1024,
+        "parent_image_id": "garden_grove-02",
+        "source_model": "gpt-image-2.5-sunburst",
+        "approval": "User-selected landscape favourite"
+      }
+    },
+    {
+      "id": "meadow_pasture",
+      "title": "Meadow & Pasture",
+      "url": "/assets/nature-presets/meadow_pasture-960.ea63532f096c.webp",
+      "width": 960,
+      "height": 640,
+      "quality": 72,
+      "sha256": "ea63532f096c525407d8bd8325e6603a8ab3dbe2b8a7d4c85df10df7b35efe2b",
+      "bytes": 129460,
+      "variants": [
+        {
+          "url": "/assets/nature-presets/meadow_pasture-960.ea63532f096c.webp",
+          "width": 960,
+          "height": 640,
+          "quality": 72,
+          "sha256": "ea63532f096c525407d8bd8325e6603a8ab3dbe2b8a7d4c85df10df7b35efe2b",
+          "bytes": 129460
+        },
+        {
+          "url": "/assets/nature-presets/meadow_pasture-480.7d7a52a08310.webp",
+          "width": 480,
+          "height": 320,
+          "quality": 68,
+          "sha256": "7d7a52a08310aadf06f6c634696d861577e4f9a1eee7a9a004cede426f1e70b4",
+          "bytes": 31170
+        }
+      ],
+      "provenance": {
+        "source_image_id": "meadow_pasture-landscape-01",
+        "source_path": "output/imagegen/nature-gallery/landscape/images/meadow_pasture-landscape-01.png",
+        "source_sha256": "1a0bf06089f21d7aa77dd3b79a75ea53e514fd559544db627ad94c41f6b439c9",
+        "source_width": 1536,
+        "source_height": 1024,
+        "parent_image_id": "meadow_pasture-01",
+        "source_model": "gpt-image-2.5-sunburst",
+        "approval": "User-selected landscape favourite"
+      }
+    },
+    {
+      "id": "mountain_woodland",
+      "title": "Mountain & Woodland",
+      "url": "/assets/nature-presets/mountain_woodland-960.aaca986020a7.webp",
+      "width": 960,
+      "height": 640,
+      "quality": 72,
+      "sha256": "aaca986020a739a929a0061f792fe136021bce9dfeed79f6befbc6fa0e9b88d2",
+      "bytes": 115126,
+      "variants": [
+        {
+          "url": "/assets/nature-presets/mountain_woodland-960.aaca986020a7.webp",
+          "width": 960,
+          "height": 640,
+          "quality": 72,
+          "sha256": "aaca986020a739a929a0061f792fe136021bce9dfeed79f6befbc6fa0e9b88d2",
+          "bytes": 115126
+        },
+        {
+          "url": "/assets/nature-presets/mountain_woodland-480.432306ca0826.webp",
+          "width": 480,
+          "height": 320,
+          "quality": 68,
+          "sha256": "432306ca0826d5907fe17ce4aa4a6b996236602739306760c51704a96b791a96",
+          "bytes": 28790
+        }
+      ],
+      "provenance": {
+        "source_image_id": "mountain_woodland-landscape-01",
+        "source_path": "output/imagegen/nature-gallery/landscape/images/mountain_woodland-landscape-01.png",
+        "source_sha256": "fc313131db064d2052e01e2c71e7893961f07acf7162e12dd2154c41d1b330ab",
+        "source_width": 1536,
+        "source_height": 1024,
+        "parent_image_id": "mountain_woodland-03",
+        "source_model": "gpt-image-2.5-sunburst",
+        "approval": "User-selected landscape favourite"
+      }
+    },
+    {
+      "id": "river_spring",
+      "title": "River & Spring",
+      "url": "/assets/nature-presets/river_spring-960.210db30175f4.webp",
+      "width": 960,
+      "height": 640,
+      "quality": 72,
+      "sha256": "210db30175f46b14492e83256fa86846980ce60bf92f3d357b6d2e7b69f012bb",
+      "bytes": 153092,
+      "variants": [
+        {
+          "url": "/assets/nature-presets/river_spring-960.210db30175f4.webp",
+          "width": 960,
+          "height": 640,
+          "quality": 72,
+          "sha256": "210db30175f46b14492e83256fa86846980ce60bf92f3d357b6d2e7b69f012bb",
+          "bytes": 153092
+        },
+        {
+          "url": "/assets/nature-presets/river_spring-480.ccd3402a5ac4.webp",
+          "width": 480,
+          "height": 320,
+          "quality": 68,
+          "sha256": "ccd3402a5ac4c89de45f6097c76273f39f8e948f3f08d9221c521e5b66601911",
+          "bytes": 41762
+        }
+      ],
+      "provenance": {
+        "source_image_id": "river_spring-retry-9198a60e6c8a",
+        "source_path": "output/imagegen/nature-gallery/landscape/images/river_spring-retry-9198a60e6c8a.png",
+        "source_sha256": "901e73d49f87c9dec9ec70b4ac980166320e74e5ce61d0d099e87fa1acd63974",
+        "source_width": 1536,
+        "source_height": 1024,
+        "parent_image_id": "river_spring-landscape-01",
+        "source_model": "gpt-image-2.5-sunburst",
+        "approval": "User-selected landscape favourite"
+      }
+    }
+  ]
+}

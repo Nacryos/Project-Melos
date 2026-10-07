@@ -1,0 +1,89 @@
+{
+  "verdict": "PASS",
+  "approval_scope": "upload_and_private_loopback_canary_only",
+  "auditor": "/root/campbell_integrate/release_c_audit",
+  "reviewed_date_utc": "2026-10-07",
+  "base_container_id": "ec2cdc5176ed0f747cb03de0037d7bfb1bc00e93644fae7fbf761822e6eb6aa5",
+  "image": "sha256:2f60b62520d88098663fa79e2cb76cdeae8b7540e24752d586df042fc09d1777",
+  "candidate_directory": "runtime/lexical-release-c/candidate-code",
+  "files": {
+    "interlinear.py": {
+      "verdict": "PASS",
+      "sha256": "58e507315621f32afefe43830a4fa02029b5d8216c1d4e90506e5dca81dab722",
+      "baseline_sha256": "b93fd82bfc202460e03491c1aaadce03faed4c736bd6dba9353d0d6e2d8966cf"
+    },
+    "lexicon_senses.py": {
+      "verdict": "PASS",
+      "sha256": "00d2fe4ed17066a1f7ba211b723cc56e074ce43b563c5d6e07c8e9deebd3dde9",
+      "baseline_sha256": "0653b2b6c0561b440185fc44fba4d8d3c5110450093e19e346c1a3ac186324f5"
+    },
+    "passage_analysis.py": {
+      "verdict": "PASS",
+      "sha256": "5ce0cab91fbadb78bff0f0660f77c3ae37082d7302d7c49a83c327787f620315",
+      "baseline_sha256": "2924541c268a194b78faf01e95b31dc28ac832a4a5471c05ee4b999b8fa389ec"
+    },
+    "server.py": {
+      "verdict": "PASS",
+      "sha256": "88e5cbdee71a2a388e9ffb199be2d069923be6fefa985e2365cd6db2043e5f97",
+      "baseline_sha256": "16ffa671afc26a25480000648811118b2d1daf7d851179ea09b25968d9776c7e",
+      "scoped_live_baseline_patch": true
+    },
+    "lexical_variants.py": {
+      "verdict": "PASS",
+      "sha256": "aa7d8ca247019bf1af08100deec3f52ee61e22e49ff5387530781a4f1f24ff4c",
+      "baseline_sha256": null,
+      "baseline_absent": true
+    }
+  },
+  "helper_review": {
+    "verdict": "PASS",
+    "sha256": {
+      "deploy/lexical_release_c.py": "ff2b4ba30ae3229b6afdac5b11fd379d274b85981c9c5991c7fd00c7d2595476",
+      "deploy/lexical_transport_c.py": "3623a9bd6d4f19fef2a293b27f35d853a6504ff129773bb2e8f2e3cd77fd39fa",
+      "deploy/stage_lexical_c.py": "191922dcc4a9f8e28b743cdbe0a8941642088e923cc687f85acdd332686661e8",
+      "deploy/lexical_release.py": "64e7164712087270d7adbbb32e22e56227db48b4df4faba4e93eeb88288e6494",
+      "deploy/release_qa29.py": "b55d51d3e7df35d5f0d0dd2e41d7a043bd974425e24eabeb9888c6f866f5888e",
+      "tests/test_lexical_release_c.py": "064767efb0d6b0ba14b8286ea1b63bfd81ad31fd96f83083b899eb224701277a"
+    },
+    "checks": [
+      "Exact new release directory, container names, pinned image and live B identity are required; the old B helpers and receipts are not rewritten.",
+      "Exactly five C application modules may be overlaid; lexical_variants has explicit absent-baseline proof and server requires scoped-live-baseline approval.",
+      "Transport requires an explicit frozen candidate directory, rejects the dirty backend directory, verifies hashes and refuses differing existing remote artifacts.",
+      "Existing B classifier and sense-ranker mounts remain unchanged; corpus, manifest, models, runtime and secret mounts are inherited unchanged.",
+      "All other HostConfig fields, runtime user/command/environment, effective mounts and loopback port binding are checked against the snapshot.",
+      "Dependency hashes, including candidate_senses.py and evidence.py, are checked after candidate startup.",
+      "Public/private routes are checked before and after private canary startup; no route switch is part of the canary action.",
+      "SIGTERM triggers KeyboardInterrupt as in the previous helper, preserving inherited cleanup/rollback handling.",
+      "Canary startup performs existing no-rerank/no-machine-fetch warm checks; this audit does not authorize promote."
+    ]
+  },
+  "source_and_scope_checks": [
+    "Independently inspected all five frozen candidates and their baseline diffs; every recorded baseline file hash matches its downloaded bytes.",
+    "server.py differs from exact live baseline by only the reviewed 14-line lexical-variant block. Unrelated local discovery changes are absent.",
+    "passage_analysis.py has only four lexical-field passthrough additions and supporting-claim inclusion; claims retain their original source scope.",
+    "lexical_variants.py exactly matches the independently source-audited helper in lexical-variants.json and its integration audit. It supplies dictionary evidence separately from morphological candidates, not new occurrence parses or contextual meanings.",
+    "The candidate_senses dependency matches its accepted audit hash c0442d19a4fd4931d1958e04a1b2a7b99b4ee7f4a92c430c5d87e65e7a47743a. All eight checked dependency modules match exact downloaded live bytes.",
+    "lexicon_senses v3 admits a narrowly constrained entry-level grammatical-counterpart preamble before the first lexical sense. Tests reproduce the retained LSJ definition and extraction offsets; source wording is not authored.",
+    "interlinear shared meaning requires the same single eligible sourced dictionary sense across all exact alternatives, preserves unresolved grammar and records a noncontextual selection basis.",
+    "Legacy spelling-suggestion status no longer suppresses an independently source-linked exact contextual form. Suggestions without such source links and literal matches remain excluded.",
+    "No corpus, vector, dictionary, source-claim database or staged LSJ subentry artifact is included in this code-only release."
+  ],
+  "verification": {
+    "staged_application_suite": "277 passed, 1 nonfunctional pytest import-rewrite warning in 7.45s",
+    "guard_suite": "17 passed in 0.68s",
+    "staged_test_method": "Loaded exact candidate bytes into backend module identities while retaining normal backend __file__ paths, so file-relative static/data roots reproduce the deployment layout. Remaining dependency bytes were independently checked against live snapshots.",
+    "tests": ["test_interlinear.py", "test_lexicon_senses.py", "test_lexical_variants.py", "test_lexical_variants_integration.py", "test_passage_analysis.py", "test_candidate_senses.py", "test_sense_ranker.py", "test_contextual_lemma_senses.py", "test_campbell_meanings.py", "test_classifier.py", "test_lyric_dictionary_gaps.py", "test_lexicon_render.py", "test_passage_ranker.py", "test_lexical_release_c.py", "test_lexical_release.py"],
+    "initial_test_harness_issue": "Direct package-path injection changed server __file__-relative static roots, causing three import-only failures; the corrected in-memory deployment-layout loader passed the full suite without candidate edits.",
+    "paid_model_calls": 0,
+    "auditor_remote_mutations": 0,
+    "auditor_corpus_or_dictionary_writes": 0
+  },
+  "limits": [
+    "PASS permits only upload and private loopback canary testing of these exact bytes, not public route changes or production promotion.",
+    "Public promotion still requires separate parent operational approval and a canary-specific receipt; the inherited promote schema does not itself enforce this audit's scope text.",
+    "Unit/source-projection checks are not a measured general philological accuracy claim. Unresolved parses, incomplete source coverage and dictionary-vs-context distinctions remain.",
+    "Archived source acceptance is inherited from the separate lexical-variants audits; this review performs no fresh external source download.",
+    "Runtime source-proof availability must be checked in the private canary. Parent reports the unchanged evidence.sqlite hash f2b960a4f136b435f541e146df4dc7d7306006dfd378c8451f9f6b1be6492755; this auditor did not issue that remote hash command."
+  ],
+  "philological_accuracy_claim": false
+}

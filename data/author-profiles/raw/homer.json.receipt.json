@@ -1,0 +1,6 @@
+{
+  "url": "https://en.wikipedia.org/api/rest_v1/page/summary/Homer",
+  "fetched_at": "2026-10-06T07:00:30.148351+00:00",
+  "status": 200,
+  "sha256": "d9aac2ed5fdf911a14fc2bf759e697aa05665c82c8143f25c8e235377db140a7"
+}

@@ -1,0 +1,80 @@
+{
+  "verdict": "PASS",
+  "approval_scope": "upload_and_private_loopback_canary_only",
+  "auditor": "/root/campbell_integrate/release_c_audit",
+  "reviewed_date_utc": "2026-10-07",
+  "base_container_id": "0acc39cfe31fb883bedf3cbf4818f05a5f46c400a58e111f494315301e3116f5",
+  "image": "sha256:2f60b62520d88098663fa79e2cb76cdeae8b7540e24752d586df042fc09d1777",
+  "candidate_directory": "runtime/lexical-release-f/candidate-code",
+  "files": {
+    "dictionary_crossrefs.py": {"verdict": "PASS", "sha256": "24296bb371d3271d3551ece513253b8ab2d0e4bdab51c38e0e31f27a23f017f2", "baseline_sha256": null, "baseline_absent": true},
+    "source_link_aliases.py": {"verdict": "PASS", "sha256": "70a5e9c157be50558240cdb4dc439d8419006eb433d43577b6bc512aa6db6507", "baseline_sha256": null, "baseline_absent": true},
+    "linked_dictionary.py": {"verdict": "PASS", "sha256": "8fe4afbf8f34acf96dc07c7566b2ace1d59066614bccfbe3dcfe3a14e56223ee", "baseline_sha256": null, "baseline_absent": true},
+    "translation_comparisons.py": {"verdict": "PASS", "sha256": "efd866b9d2fa28238b0c9b8fcb09853af4d0490dafb86fbad6a803109bcbcc0d", "baseline_sha256": null, "baseline_absent": true},
+    "translation_comparisons_data.json": {"verdict": "PASS", "sha256": "416e44b50208d1d68688b846770d9d928f8f19299226dd3c4cd88c333c00a16e", "baseline_sha256": null, "baseline_absent": true, "source_projection_audit": "PASS"},
+    "interlinear.py": {"verdict": "PASS", "sha256": "5e093a96302df53fcca2133b1eaee127ee204f78b061f24dcf1973e71804caff", "baseline_sha256": "f376a30a3f48ddfb74f81dde5b826baf9d9cc11245e95d22231469eb09ff3c0a"},
+    "sense_ranker.py": {"verdict": "PASS", "sha256": "f4433c3c21a0fcdb8a0bf85d4750965c87f8ec6f16818d1b27041647f9133c56", "baseline_sha256": "5254982e48a3eaafcff6ff0299897023ce012f0cb6a733400f5a49f80bbcc7f6"},
+    "passage_analysis.py": {"verdict": "PASS", "sha256": "2b66484df027e342f0be29c8b0cff0d7dc2b15e2c1fd83dd7f12a8980f09d497", "baseline_sha256": "7ab1e6bf411226e2d46ec4308ceef13290c3c7b57f1b517a0afaa08fe1615801"},
+    "server.py": {"verdict": "PASS", "sha256": "878e1f8b6e82a89ada99b038a885d9458141e267e69c7dba8c9fe06be6ddc74a", "baseline_sha256": "1239019021307013e15cdc80664a1e9c879670b0ca1efe816e37734b49f7a709", "scoped_live_baseline_patch": true}
+  },
+  "evidence_receipts": {
+    ".benchmarks/lexical-f-baseline/0acc39cfe31fb883bedf3cbf4818f05a5f46c400a58e111f494315301e3116f5/baseline.json": "3022976472d28cb2736dda7ae28b0ee73b003366d22f37ca409a9f06c3191470",
+    "docs/audits/dictionary-crossrefs.json": "ad0c3a7b448f33d90dabd5057bccfaf09b08d1571c29ffc9782c18da41a5fdad",
+    "docs/audits/source-link-aliases.json": "e18d1f3579ad11d41fb06e5e550ffba1c6a6ff9ad86b56419cf54d207f0e632d",
+    "runtime/alcaeus-translations/f-backend-integration-audit.json": "6a89769d18793e8c1faf894875d68adadde5bd5209763d1feefac7fcc1eb27dc",
+    "runtime/lexical-release-f/source-index-probe-runtime-binding.json": "b345af818999aec2907102894aba8da1aa57f1dba0fc635320f7ffcf0bf5e73d"
+  },
+  "helper_review": {
+    "verdict": "PASS",
+    "sha256": {
+      "deploy/lexical_release_f.py": "1eb50f5026589504eae095f2117395e988b2932290024d2b3a08b42e9ff2b2d0",
+      "deploy/lexical_transport_f.py": "4730d7e30d4941a6f6896ab0f541cfd1f493c5341b8dfd0eeb571306efa64a84",
+      "deploy/stage_lexical_f.py": "18d8d9d6f9cbab6d6905e1ab6c884f6e91700eb2a1057995955aa3485a1e31e6",
+      "deploy/lexical_baseline_f.py": "1effe9f4c2f8afb9e26717d8dc6c99b62b682e8b9a9fdf3883f32a8931aa6d46",
+      "tests/test_lexical_release_f.py": "99b8454e68c560bb71a561cc52896ccb18201505f1586d5d1e61390ad19843f2"
+    },
+    "checks": [
+      "Fresh F release/container targets and exact current E identity; baseline mount contract reproduces all 18 live E mounts.",
+      "Exactly nine artifacts admitted; five require explicit baseline absence. Comparison sidecar requires pinned source-approved SHA256 and independent projection PASS.",
+      "Classifier, morphology and candidate_senses are not overlaid. Existing commentary, syntax, source databases, corpus, vectors, secret/runtime/model mounts and resource/environment contract remain unchanged.",
+      "Stager applies only two pinned narrow patches to live E server/passages. Full old context must match exactly once; only declared line-number displacement is permitted, not fuzzy text matching.",
+      "Effective server diff is three comparison lines and ten separate linked-dictionary lines; passage diff only carries those distinct fields. Dirty discovery changes are absent.",
+      "Immutable transport rejects changed existing release artifacts; inherited candidate guards check module bytes, preserved dependency hashes, effective mounts, private loopback ports and unchanged routes."
+    ]
+  },
+  "combined_application_review": [
+    "Independent source audits bind exact dictionary_crossrefs and source_link_aliases helpers to accepted archived source records. One explicit dictionary relation is followed; source and target entry identities and homonyms remain distinct.",
+    "Runtime entry proof checks complete archived wrapper hash, source headword/POS/forms and full source sense/link objects. No global accent/quantity stripping, reconstructed form, target morphology inheritance or invented gloss is introduced.",
+    "Compact linked inventory maps only source-anchor grammatical tags and source POS through the existing canonical-feature adapter. Target entry contributes literal sense text and full gloss-chain scope, not case, number or gender.",
+    "Supplied linked inventory is compared with a locally rebuilt source inventory before interlinear use; the caller's digest is not accepted as proof. Partial/editorial tokens, forged paths and missing candidate subsets do not become trusted linked alternatives.",
+    "Word and passage endpoints carry the linked inventory separately from ordinary morphological/contextual candidate arrays and source claims. Index failure leaves ordinary alternatives intact and reports unavailable.",
+    "Interlinear preserves linked candidates as unresolved alternatives. Sense packets retain every linked target/source identity, path, POS disagreement and source restriction; factored shared path fields round-trip exactly.",
+    "A decisive source-linked sense selection requires the existing complete probability-vector, inventory-hash and source-identity checks. It can clear incompatible displayed morphology and agreement groups, but cannot invent or select a complete linked parse; raw alternatives and syntax remain available.",
+    "Translation sidecar attaches only to exact approved Campbell record identity/text and remains whole-poem other-edition comparison. It is not fed into translation previews, morphology, source claims or model context.",
+    "Translator, edition, citation, license, reuse status, non-unrestricted reuse labels and withheld failed-OCR Greek status are preserved exactly."
+  ],
+  "source_database_boundary": {
+    "whole_database_equivalence_claim": false,
+    "checked_record_count": 7,
+    "scope": "The integrator's retained live/local probe hashes the seven closure records needed for two target forms using exact runtime _entry_proof serialization. All seven match; this does not prove entire database equality or all-form coverage.",
+    "runtime_requirement": "Private F must prove these source-linked paths survive actual live database reconstruction before promotion is considered."
+  },
+  "verification": {
+    "bounded_staged_suite": "265 passed; one test-fixture compatibility failure, subsequently resolved and rerun successfully.",
+    "followup_staged_suite": "50 passed, 1 nonfunctional pytest import-rewrite warning in 3.75s. Includes the previously failing comparison endpoint, real linked-sense roundtrip/selection tests, live-probe verifier tests and all 38 deployment guards.",
+    "fixture_resolution": "The comparison endpoint test assumed a dirty-development-only with_visual_themes attribute. Exact staged server correctly lacks it; an in-memory test-only inert attribute allowed the test's existing monkeypatch and all original endpoint assertions to run. No candidate byte was changed and production has no caller of that attribute.",
+    "method": "Exact staged bytes loaded under backend identities with normal file-relative roots; comparison loader uses exact staged adjacent JSON. Every non-overlaid local dependency in the baseline inventory was checked byte-identical to downloaded live E modules.",
+    "core_tests": ["test_dictionary_crossrefs.py", "test_source_link_aliases.py", "test_linked_dictionary.py", "test_linked_dictionary_transport.py", "test_linked_sense_integration.py", "test_linked_dictionary_live_probe.py", "test_translation_comparisons.py", "test_translation_comparisons_integration.py", "test_interlinear.py", "test_sense_ranker.py", "test_contextual_lemma_senses.py", "test_passage_analysis.py", "test_passage_ranker.py", "test_edition_commentary_integration.py", "test_passage_commentary_context.py", "test_syntax_context_integration.py", "test_lexical_release_f.py", "test_lexical_release_e.py", "test_lexical_release_d.py", "test_lexical_release_c.py", "test_lexical_release.py"],
+    "paid_model_calls": 0,
+    "auditor_remote_mutations": 0,
+    "auditor_corpus_or_dictionary_writes": 0
+  },
+  "limits": [
+    "This PASS permits exact-artifact upload and private loopback canary only. Public promotion and route changes remain separately gated by the parent.",
+    "Live source closure, API/phrase inventory delivery, packet limits and actual model outcomes still require private canary validation. Offline integrity is not general philological accuracy.",
+    "Translation comparison rights labels are not overridden by this integrity review. The source audit marks the CHS 129/130b material staging-only under CC BY-NC-ND conditions; public exposure is outside this approval.",
+    "Linked page/form evidence is candidate retrieval, not exact printed-surface or occurrence attestation. Source recall limits and ambiguous target entries remain visible.",
+    "The inherited promote command does not itself enforce this textual private-only scope; a separate operational approval is required."
+  ],
+  "philological_accuracy_claim": false
+}

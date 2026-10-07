@@ -5,6 +5,7 @@ from pathlib import Path
 from tempfile import TemporaryDirectory
 import unittest
 import unicodedata
+from unittest.mock import patch
 
 from backend.morphology import Morphology, describe_postag, normalize, query_variants, tokenize
 
@@ -44,6 +45,38 @@ class MorphologyTests(unittest.TestCase):
         self.assertEqual(normalize("Ἔρως ῥόδων ς ϲ"), "ερωσ ροδων σ σ")
         self.assertEqual(normalize("μ’ ἔφη"), "μ' εφη")
         self.assertEqual(tokenize("μ’ ἔφη, λόγον."), ["μ’", "ἔφη", "λόγον"])
+
+    def test_source_rendering_is_once_per_object_per_request(self):
+        seen = []
+        def render(entry):
+            seen.append(id(entry))
+            return {'rendered_entry_text': 'synthetic rendered definition',
+                    'rendering_method': 'fixture'}
+        with patch('backend.lexicon_render.render_source_record', side_effect=render):
+            first = self.service.analyze('θεός')
+            first_seen = list(seen)
+            self.assertGreater(len(first['candidates']), len(first_seen))
+            self.assertEqual(len(first_seen), len(set(first_seen)))
+            seen.clear()
+            second = self.service.analyze('θεός')
+        self.assertEqual(seen, first_seen)
+        self.assertEqual(first, second)
+
+    def test_render_memo_does_not_merge_distinct_records_with_same_id(self):
+        self.service.analyze('θεός')  # Load the explicitly synthetic index.
+        entries = self.service._entries[normalize('θεός')]
+        self.assertGreaterEqual(len(entries), 2)
+        # Collision handling is not changed by the rendering optimization.
+        for entry in entries:
+            entry['id'] = 'synthetic-colliding-id'
+        seen = []
+        def render(entry):
+            seen.append(id(entry))
+            return {'rendered_entry_text': entry.get('gloss'), 'rendering_method': 'fixture'}
+        with patch('backend.lexicon_render.render_source_record', side_effect=render):
+            self.service.analyze('θεός')
+        self.assertEqual(set(seen), {id(entry) for entry in entries})
+        self.assertEqual(len(seen), len(entries))
 
     def test_ascii_query_conventions(self):
         self.assertEqual(query_variants("QEO/S")[0], "θεοσ")

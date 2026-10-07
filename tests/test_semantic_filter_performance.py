@@ -65,6 +65,8 @@ def test_filter_matches_exhaustive_reference_with_stable_ties(tmp_path, author, 
             continue
         if language and row["language"] != language:
             continue
+        if not language and row['kind'] == 'translation' and row['language'] not in {'eng', 'en'}:
+            continue
         if not include_reference and row["kind"] in {"reference", "apparatus"}:
             continue
         expected.append(row["id"])

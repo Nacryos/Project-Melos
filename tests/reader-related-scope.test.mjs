@@ -40,7 +40,7 @@ test('source-section notes disclose source labels and remain collapsed and nonal
 });
 
 test('page notes stay collapsed and a nonaligned scope never gets a directly linked reading button', () => {
-  const host = show([{ id: 'page-note', parent_id: 'selected-record', kind: 'translation', text: 'Fixture page text', metadata: { scope: 'page' } }]);
+  const host = show([{ id: 'page-note', parent_id: 'selected-record', kind: 'translation', language: 'eng', text: 'Fixture page text', metadata: { scope: 'page' } }]);
   assert.match(host.textContent, /Page-wide note/);
   assert.match(host.textContent, /Read translation from this source page/);
   assert.equal(descendants(host).filter(element => element.tag === 'details').length, 1);
@@ -56,13 +56,10 @@ test('passage-linked material retains its ordinary inline display and reading co
   assert.equal(opened.at(-1), 'linked-translation');
 });
 
-test('linked Modern Greek translations show their own source credit and language', () => {
+test('linked Modern Greek translations are excluded from default English translation surfaces', () => {
   const host = show([{ id: 'modern-translation', parent_id: 'selected-record', author: 'Fixture author', kind: 'translation', language: 'ell', text: 'Synthetic translation fixture', metadata: { translator: 'Source credit <literal>' } }]);
-  assert.match(host.textContent, /Modern Greek · Translator: Source credit <literal>/);
-  assert.ok(!host.textContent.includes('Fixture author'));
-  const button = descendants(host).find(element => element.tag === 'button');
-  assert.ok(button); button.handlers.click();
-  assert.equal(opened.at(-1), 'modern-translation');
+  assert.doesNotMatch(host.textContent, /Synthetic translation fixture|Modern Greek|Source credit/);
+  assert.equal(descendants(host).filter(element => element.tag === 'button').length, 0);
 });
 
 test('a Perseus record ancient author is not relabelled as its translator', () => {
@@ -78,9 +75,9 @@ test('a Perseus record ancient author is not relabelled as its translator', () =
 
 test('missing or nontext translator metadata stays explicitly unknown', () => {
   for (const translator of [undefined, null, '', '   ', { name: 'Not a source string' }]) {
-    const host = show([{ id: 'fixture:translation', kind: 'translation', language: 'ell',
+    const host = show([{ id: 'fixture:translation', kind: 'translation', language: 'eng',
       author: 'Ancient author', text: 'Synthetic text.', metadata: { translator } }]);
-    assert.match(host.textContent, /Modern Greek · Translator not recorded/);
+    assert.match(host.textContent, /English · Translator not recorded/);
     assert.ok(!host.textContent.includes('Translator:'));
   }
 });

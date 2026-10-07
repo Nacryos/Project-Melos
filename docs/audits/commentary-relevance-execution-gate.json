@@ -1,0 +1,60 @@
+{
+  "audit": "Independent comparison-03 preparation and bounded runner gate audit",
+  "reviewed_date_utc": "2026-10-07",
+  "auditor": "/root/context_pipeline_review/audit_linked_adapter",
+  "verdict": "PASS",
+  "blocking": false,
+  "approval_scope": "Artifact integrity and runner safety gate only; root must separately authorize the exact manifest and runner hashes before any paid execution",
+  "execution_authorized_by_auditor": false,
+  "manifest": {
+    "path": "runtime/lexical-relevance-comparison-03/manifest.json",
+    "sha256": "7049457b7dbc1d638a53fc7a757f9ecf5d80aa3a03dc033fa412aadd4452add0",
+    "baseline_arm": "commentary_only",
+    "cases": [0, 2],
+    "source_choices": [15, 7],
+    "model": "jev-1.13.0",
+    "maximum_new_provider_calls": 2,
+    "maximum_attempts_per_case": 1,
+    "retries_permitted": false
+  },
+  "code_sha256": {
+    "scripts/run_commentary_relevance.py": "175be57af1258ee48d96d97985226fdb9a15bc3e1e6664ba29498446bb1ae35f",
+    "scripts/prepare_commentary_relevance.py": "0051fc889fa903c063893d2590b7de694f45bff04279f0c134ee12eb57c982ff",
+    "backend/sense_ranker.py": "c5925064d85bc3d49b00b61e8974a8a024d92823898ad35d4dbd8fc464767833",
+    "backend/commentary_retrieval.py": "1efd54840f3c6734714e6e6429dae6f7ae63a4489e037d9792015c65bd0c6318"
+  },
+  "dependencies": [
+    "docs/audits/commentary-retrieval.json",
+    "docs/audits/commentary-retrieval-integration.json",
+    "docs/audits/commentary-relevance-preparation.json"
+  ],
+  "tests": {
+    "command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_run_commentary_relevance.py tests/test_prepare_commentary_relevance.py -q",
+    "passed": 11,
+    "failed": 0,
+    "network_mode": "Mocked providers and intercepted serialization only"
+  },
+  "preparation_checks": [
+    "Comparison-03 uses exactly the retained case-0 and case-2 commentary_only packets and answers, whose hashes match. The current REVISED commentary instruction occurs once in both old and new packets; the obsolete ORIGINAL instruction is absent.",
+    "All source choices, IDs, candidate inventory hashes, complete Greek and commentary remain unchanged. Exact reversible comparison permits only source-heading cues, the three heuristic-preview flags where applicable and two appended constraints.",
+    "Rebuilding the source-backed intervention reproduces both saved packet byte streams exactly. Recapturing each provider request from its saved packet reproduces the saved request bytes exactly; baseline and new requests are identical outside state, including model and questions.",
+    "Every preparation dependency hash, source record hash, original answer hash, packet hash and request hash matches the frozen manifest."
+  ],
+  "runner_checks": [
+    "The CLI requires both the fixed approved manifest hash and exact runner-file hash. The runner pins comparison-03 output, commentary_only baseline, two cases, model, no-retry policy and unchanged score/margin thresholds.",
+    "All dependency and artifact hashes, bounded packet differences and provider request bytes are verified before credentials are read or the real provider is constructed. Existing answer files prohibit repetition.",
+    "A fixed lifetime ledger at runtime/lexical-relevance-comparison-lifetime.sqlite is shared across output preparations. BEGIN IMMEDIATE atomically reserves both unique case IDs before the first provider attempt; any existing row blocks retry, resume or budget reset.",
+    "Exclusive-create answer writes cannot overwrite prior results. First failure stops execution; failed or indeterminate attempts remain counted and unused reservations remain blocked.",
+    "The existing durable CachedJevProvider is used without new retry logic. Credentials are read only into memory from existing environment/local dotenv configuration and are not printed by the runner.",
+    "Independent concurrent mocked execution of the unchanged reservation engine yielded exactly two calls and two completed ledger rows, with one runner blocked. An independent second-call failure retained the first answer, marked the second failed_or_indeterminate and suppressed the injected secret exception text.",
+    "The actual frozen comparison-03 preflight passed with external networking and credential reads explicitly forbidden. No lifetime ledger or comparison-01/02/03 answers existed at audit time."
+  ],
+  "supersession": "Comparison-01 and comparison-02 remain preserved and unexecuted. They are superseded by comparison-03 because the comparator must retain the current commentary_only instruction. No older artifact was edited or executed by reviewer.",
+  "limitations": [
+    "This receipt is not permission to spend. Root must separately authorize the exact manifest and runner hashes and the two-attempt budget.",
+    "These are previously observed diagnostic cases, not random, blind or held-out examples. Higher confidence does not demonstrate higher accuracy.",
+    "The combined retrieval-cue and heuristic-preview intervention cannot isolate the effect of either component alone.",
+    "The lifetime guarantee assumes the fixed ledger is retained; privileged manual deletion of audit state is outside the runtime guard."
+  ],
+  "mutations": "Only audit receipts and temporary mocked test artifacts were authored. No production module, source data, real experiment ledger or deployed service was changed, and no paid call occurred."
+}

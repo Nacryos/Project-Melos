@@ -1,0 +1,59 @@
+{
+  "verdict": "PASS",
+  "scope": "Retained-source parser and bounded interlinear delta audit; not deployment approval or general philological accuracy",
+  "auditor": "/root/lexical_backend_review",
+  "files": {
+    "backend/lexicon_senses.py": "00d2fe4ed17066a1f7ba211b723cc56e074ce43b563c5d6e07c8e9deebd3dde9",
+    "backend/interlinear.py": "58e507315621f32afefe43830a4fa02029b5d8216c1d4e90506e5dca81dab722"
+  },
+  "sample": {
+    "source": "data/lexica/entries.jsonl; source == PerseusDL LSJ TEI",
+    "selection": "File-order records; random.Random(242362026).sample(lsj_records, 1000), union every record whose entry_text matches case-insensitive word-boundary (sg|pl|dual) followed by a period, whitespace, of, word-boundary",
+    "seed": 242362026,
+    "random_sample": 1000,
+    "counterpart_label_records": 117,
+    "union_records": 1117,
+    "raw_source_files_hash_verified": 24,
+    "baseline_method": "In-memory reconstruction: current parser with counterpart exemption disabled and method version restored to v2. No historical snapshot is claimed for this comparison.",
+    "before_sense_count": 1657,
+    "after_sense_count": 1662,
+    "definition_offset_checks": 3319,
+    "unchanged_record_projections_excluding_version_ids": 1112,
+    "removed_senses": 0,
+    "checks": "Every old/new accepted span equals the whitespace-normalized rendered source slice, has a resolvable node path, and retains the archived record source URL and verified raw SHA-256. Complete projected results were compared after omitting method-version IDs."
+  },
+  "added_literal_spans": [
+    {"record": "lsj:1:n4357", "text": "otheruise", "node_path": "/entryFree/sense[1]/tr", "start": 74, "end": 83, "note": "Source typo preserved literally", "raw_sha256": "15b1b7ca0a6c88e5a14e97f2339a0c7a7dfae71c028bdfb45fcee04c79a754f7"},
+    {"record": "lsj:10:n49651", "text": "arrow", "node_path": "/entryFree/sense/tr", "start": 86, "end": 91, "raw_sha256": "a754c36f74bd4d5c42bdb477fa339611c099fff801d65be3febe2d3e01efc89c"},
+    {"record": "lsj:10:n49652", "text": "violet", "node_path": "/entryFree/sense/tr", "start": 76, "end": 82, "raw_sha256": "a754c36f74bd4d5c42bdb477fa339611c099fff801d65be3febe2d3e01efc89c"},
+    {"record": "lsj:21:n101711", "text": "very much, exceedingly", "node_path": "/entryFree/sense[1]/tr", "start": 82, "end": 104, "raw_sha256": "c377dcf36490493b05a0543112b77bdc286855448b0903381eb4869d0806805c"},
+    {"record": "lsj:4:n24236", "text": "come hither!", "node_path": "/entryFree/sense/tr", "start": 81, "end": 93, "raw_sha256": "abad8d625fd91a196a259c1242a9523715593f88f5c8a945ecdaa069b3c95d17"}
+  ],
+  "source_chain": "Each record points to data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-engN.xml, where N is the second ID component. Archived source_url pins PerseusDL/lexica revision 56061ca127f4a2844980baffc5f2b6d1332897b3. Offsets use uncompacted Greek-span-rendered TEI entry text.",
+  "negative_boundaries": {
+    "tests": "tests/test_lexicon_counterpart_audit.py",
+    "count": 13,
+    "finding_fixed": "Initial counterpart exception overrode explicit e.g. example markers; final guard retains exclusion using the actual preamble window.",
+    "coverage": "Explicit e.g./E. G. before counterpart labels, absent relation label, punctuation gap, prior citation or sense, nested foreign, quote node, and relation inside a sense all remain excluded. Three first-preamble counterpart variants remain literal."
+  },
+  "interlinear_replay": {
+    "source": "runtime/alcaeus-occurrences/baseline/responses",
+    "analysis_responses": 7,
+    "baseline_method": "Current interlinear module with shared-sense helper/use and contextual spelling-status exception removed in memory",
+    "input_deep_immutability": true,
+    "only_changes": [
+      "Leda occurrence gains its identical single sourced dictionary sense across all exact alternatives; no morphology candidate is selected.",
+      "pacheon occurrence changes syntax gen. masc. pl. to exact contextual source gen. pl.; no gloss added.",
+      "damon occurrence changes syntax acc. masc. sg. to exact contextual source acc. sg.; no gloss added."
+    ]
+  },
+  "pytest": {
+    "command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_lexicon_counterpart_audit.py tests/test_lexicon_senses.py tests/test_lyric_dictionary_gaps.py tests/test_interlinear.py tests/test_contextual_lemma_senses.py tests/test_sense_ranker.py tests/test_campbell_meanings.py tests/test_classifier.py tests/test_passage_analysis.py -q",
+    "result": "202 passed in 5.95s"
+  },
+  "network_calls": 0,
+  "paid_model_calls": 0,
+  "dictionary_or_corpus_writes": 0,
+  "invented_definitions": 0,
+  "philological_accuracy_claim": false
+}

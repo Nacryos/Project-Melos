@@ -1,0 +1,112 @@
+{
+  "verdict": "PASS",
+  "approval_scope": "upload_and_private_loopback_canary_only",
+  "auditor": "/root/campbell_integrate/release_c_audit",
+  "reviewed_date_utc": "2026-10-07",
+  "base_container_id": "71c6555a265f83a01f781e3673a815a073c2ed9bc7f8153d36297b8f6797b0c0",
+  "image": "sha256:2f60b62520d88098663fa79e2cb76cdeae8b7540e24752d586df042fc09d1777",
+  "candidate_directory": "runtime/lexical-release-e/candidate-code",
+  "files": {
+    "syntax_context.py": {
+      "verdict": "PASS",
+      "sha256": "a4322f31ab10e6f4d49de0863c083893647212a16120fc5339feb2684c1c7834",
+      "baseline_sha256": null,
+      "baseline_absent": true
+    },
+    "edition_commentary.py": {
+      "verdict": "PASS",
+      "sha256": "ab1c18501b5794de98e4a51ae5b1636d43b3e5af85de8deaa8614c5d66bc04d7",
+      "baseline_sha256": null,
+      "baseline_absent": true
+    },
+    "edition_commentary_data.json": {
+      "verdict": "PASS",
+      "sha256": "9b551021b8dfceb0fcd9efc28e7aac66783dfef65cd495ae43f22cf5678db099",
+      "baseline_sha256": null,
+      "baseline_absent": true,
+      "source_projection_audit": "PASS"
+    },
+    "passage_analysis.py": {
+      "verdict": "PASS",
+      "sha256": "7ab1e6bf411226e2d46ec4308ceef13290c3c7b57f1b517a0afaa08fe1615801",
+      "baseline_sha256": "5ce0cab91fbadb78bff0f0660f77c3ae37082d7302d7c49a83c327787f620315"
+    },
+    "passage_ranker.py": {
+      "verdict": "PASS",
+      "sha256": "4df8089c9b3672143ea5c92cac0f7f789d21e9ea668295446052c4db8110f6b5",
+      "baseline_sha256": "b474c3c03a17f7c3b534a9281a6ce249c28eb57e02a80aab9ddcc8e752967eba"
+    },
+    "sense_ranker.py": {
+      "verdict": "PASS",
+      "sha256": "5254982e48a3eaafcff6ff0299897023ce012f0cb6a733400f5a49f80bbcc7f6",
+      "baseline_sha256": "6e3b90dc3e467509b6acb9adee3da5eaa3f1e09a76f64f928a0f203eaa1fd34a"
+    },
+    "server.py": {
+      "verdict": "PASS",
+      "sha256": "1239019021307013e15cdc80664a1e9c879670b0ca1efe816e37734b49f7a709",
+      "baseline_sha256": "88e5cbdee71a2a388e9ffb199be2d069923be6fefa985e2365cd6db2043e5f97",
+      "scoped_live_baseline_patch": true
+    }
+  },
+  "baseline_receipt": {
+    "path": ".benchmarks/lexical-e-baseline/71c6555a265f83a01f781e3673a815a073c2ed9bc7f8153d36297b8f6797b0c0/baseline.json",
+    "sha256": "f9c2482a43e19e3a5b826cbfb753c67ed5850090ae562425d01c57abd7ecfbd1",
+    "checks": "All recorded existing file hashes independently recomputed from exact downloaded bytes; three new artifacts have absent-baseline records."
+  },
+  "source_projection_review": {
+    "path": "runtime/campbell-commentary/audits/edition-integration-approval.json",
+    "sha256": "7f4eadabc3b04b9fa734862acff5aaf8ceef19c5c2deefd3a627dfb24fff0221",
+    "verdict": "PASS",
+    "scope": "Independent source/data-integrity and local integration acceptance only; does not confer public redistribution authorization.",
+    "checks": "Exact final commentary helper, sidecar and sense-ranker hashes match the independent receipt; all 88 paragraphs trace to the accepted OCR/source package, 87 are model-eligible."
+  },
+  "helper_review": {
+    "verdict": "PASS",
+    "sha256": {
+      "deploy/lexical_release_e.py": "1e0699035db93d4e79226d8df4631de1b4e66efc3747a2bb5a9dcd62bff7f309",
+      "deploy/lexical_transport_e.py": "82b0832ae1f076701abdf3f84dd5dc071e4c71d121a30fcb6be2c8ed66549d7d",
+      "deploy/stage_lexical_e.py": "f2dbd91ca9216d2d20b27dcfc1edc980a7b4f7d233b804a324e0ed7e8b86c90c",
+      "deploy/lexical_baseline_e.py": "585cabe799c673d5128225f3c8f0433e244bcf0b2bab6e816b15654ba74a2e87",
+      "tests/test_lexical_release_e.py": "0c02e4b194f3209bcbe19f1254ba7036ea980ab7cddb0cc97bd18bc16264f74c"
+    },
+    "checks": [
+      "Fresh E release/container targets use exact current D production identity, not the earlier B baseline.",
+      "Exactly seven artifacts are admitted; three require explicit absence proof and the commentary data requires its pinned hash plus independent source-projection PASS.",
+      "Translation-comparison modules, dirty discovery changes, new lexical entries, corpus replacements and vector changes are outside the allowlist.",
+      "Staging applies hash-bound syntax/commentary patches to exact live-D passage modules and inserts only three source-approved server lines. Untouched bytes are preserved.",
+      "D interlinear, lexical-variant and lexicon-sense overlays and B classifier remain at their original mounts. Other data/model/runtime/secret mounts, environment and resource/security configuration are preserved.",
+      "Inherited startup checks exact effective mounts, unchanged dependency hashes and private loopback port; private canary does not change Funnel routes or expose Basecamp 80/443.",
+      "Transport isolates E destinations, requires exact staged approval, verifies transferred bytes and refuses differing existing release artifacts."
+    ]
+  },
+  "application_review": [
+    "Syntax helper selects a source-exact enclosing passage/stanza or bounded neighboring-word window, at most 80 word segments and 2000 characters. It preserves selection and editorial text without normalization or reconstruction.",
+    "Provider token offsets must reproduce the exact source substring; absolute codepoint and UTF-16 offsets are projected arithmetically. Invalid offsets fail the complete syntax projection, not a guessed matching occurrence.",
+    "Only selected tokens are looked up; expanded syntax context remains a defeasible prediction, not new source morphology. Partial words and context boundaries remain explicit.",
+    "Commentary loader validates fixed sidecar hash and exact accepted passage identity, edition/source metadata and Greek text hash. Wrong or changed passage data cannot acquire notes.",
+    "Reader commentary is kept separate from translations, source claims, grammatical candidates and dictionary-sense evidence. One retained uncertain OCR paragraph is excluded from model input.",
+    "Compact model commentary preserves every eligible paragraph's prose, printed lemma, note label, anchor method and printed page. Repeated extraction/citation boilerplate is factored out; whole-poem interpretation is not promoted to occurrence evidence.",
+    "Campbell-only common candidate fields are hoisted only when identical across all choices. Their values remain in model state with an explicit applicability rule; all sense IDs, literal definitions, restrictions, unique scope and supporting references reconstruct exactly.",
+    "Missing, changed or oversized commentary/evidence prevents provider creation/request. The 32000-character limit is retained and no choices are silently dropped."
+  ],
+  "verification": {
+    "exact_staged_application_and_guard_suite": "360 passed, 1 nonfunctional pytest import-rewrite warning in 17.72s",
+    "separate_guard_suite": "31 passed in 2.17s",
+    "method": "Loaded exact frozen E module bytes under backend identities. Normal file-relative roots were retained except commentary loader used its staged directory to read the exact adjacent staged JSON. No runtime source edits were required.",
+    "resolved_test_issue": "Initial run had 356 passes and four old roundtrip tests failing because their decoder omitted new candidate_common_fields. The test-only expansion was updated before existing exact semantic equality assertions; frozen runtime hashes stayed unchanged.",
+    "test_decoder_sha256": "da18f8a555eb65dc016e192234122d4443264ec0f2106a0ad44d6eb1ffd1fdd8",
+    "newest_archived_stasis": {"source_choices": 23, "state_characters": 30817, "limit": 32000},
+    "context_check": "For fragment 326 the E window is still whole_passage: 49 source word segments, 292 characters, matching the prior saved context. Other passages need private running-candidate probes.",
+    "resolved_packet_issue": "This auditor found that the earlier 31914-character claim used a legacy 21-sense packet: the newer 23-sense packet was 33358 and correctly blocked. Final lossless shared-field compaction reduces the newer packet to 30817 without discarding senses or eligible commentary.",
+    "paid_model_calls": 0,
+    "auditor_remote_mutations": 0,
+    "auditor_corpus_or_dictionary_writes": 0
+  },
+  "limits": [
+    "Approval permits only exact-artifact upload and private loopback canary testing. No production promotion or public route changes are authorized.",
+    "Private E must be checked with actual model/context responses, packet sizes and exact current source records; offline readiness does not establish model accuracy.",
+    "The supplied edition's source audit records no open redistribution license. This receipt is data-integrity/deployment-isolation review, not a public-redistribution determination.",
+    "The inherited promote implementation does not enforce this textual private-only scope; parent operational approval remains separately required."
+  ],
+  "philological_accuracy_claim": false
+}

@@ -1,0 +1,15 @@
+/* Only explicit request states receive this decorative, text-free indicator. */
+.melos-loading::before {
+  content: "";
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  margin-inline-end: 10px;
+  vertical-align: middle;
+  background: url("../assets/branding/melos-loading.svg?v=clockwise-24") center / contain no-repeat;
+}
+@media (prefers-reduced-motion: reduce) {
+  .melos-loading::before {
+    background-image: url("../assets/branding/melos-loading-still.svg");
+  }
+}

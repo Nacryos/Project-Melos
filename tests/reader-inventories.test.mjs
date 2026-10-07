@@ -18,6 +18,7 @@ const context = vm.createContext({
     const link = new Element('a', '', label); link.href = url; return link;
   },
 });
+vm.runInContext(source.slice(source.indexOf('  function appendWarnings('), source.indexOf('  function chronologyClaim(')), context);
 vm.runInContext(source.slice(source.indexOf('  function renderFormInventories('), source.indexOf('  async function inspectWord(')), context);
 const render = vm.runInContext('renderFormInventories', context);
 function inventory(data) { const host = new Element('aside'); render(host, data); return host; }
@@ -34,7 +35,7 @@ function group(overrides = {}) {
 
 test('fuzzy inventories advertise nearby-spelling scope even while collapsed', () => {
   const host = inventory({ observed_form_groups: [group()] });
-  const summary = descendants(host, 'summary')[0].textContent;
+  const summary = descendants(host, 'summary').find(item => /Nearby spelling:/.test(item.textContent)).textContent;
   assert.match(summary, /Nearby spelling: fixture lemma A \[fixture lemma A1\] · Source A · 1 of 8 forms shown/);
   assert.match(host.textContent, /not an analysis of the selected form/);
   assert.match(host.textContent, /not a complete or dialect-specific paradigm/);
@@ -46,7 +47,7 @@ test('group-specific forms and provenance never merge across lemma or source gro
   const second = group({ lemma: 'fixture lemma B', source: 'Source B', query_relation: 'exact_or_folded_match',
     forms: [{ form: 'fixture form B', source_refs: [{ source: 'Source B', source_url: 'https://example.org/b' }], source_ref_total: 1 }], total_forms: 1, truncated: false });
   const host = inventory({ observed_form_groups: [group(), second] });
-  const groups = host.children[0].children.filter(child => child.tag === 'details');
+  const groups = host.children[0].children.filter(child => child.tag === 'details' && !child.cls.includes('notice-details'));
   assert.equal(groups.length, 2);
   assert.ok(groups[0].textContent.includes('fixture form A'));
   assert.ok(!groups[0].textContent.includes('fixture form B'));
@@ -66,7 +67,7 @@ test('inventory and provenance truncation counts remain distinct and count displ
   const unknown = inventory({ observed_form_groups: [group({ total_forms: undefined, truncated: false, identity_status: 'unnumbered_homograph_ambiguous', query_relation: 'unknown' })] });
   assert.match(unknown.textContent, /1 forms shown; total not supplied/);
   assert.match(unknown.textContent, /identity is ambiguous between homographs/);
-  assert.match(descendants(unknown, 'summary')[0].textContent, /Relationship unknown/);
+  assert.ok(descendants(unknown, 'summary').some(item => /Relationship unknown/.test(item.textContent)));
 });
 
 test('legacy ungrouped forms are never presented as a query-form paradigm', () => {
@@ -83,7 +84,7 @@ test('numbered homograph groups remain distinct before expansion and query ambig
   const first = group({ query_lemma_ambiguous: true });
   const second = group({ lemma_raw: 'fixture lemma A2', query_lemma_ambiguous: true });
   const host = inventory({ observed_form_groups: [first, second] });
-  const groups = host.children[0].children.filter(child => child.tag === 'details');
+  const groups = host.children[0].children.filter(child => child.tag === 'details' && !child.cls.includes('notice-details'));
   const summaries = groups.map(details => details.children[0].textContent);
   assert.notEqual(summaries[0], summaries[1]);
   assert.match(summaries[0], /\[fixture lemma A1\]/);

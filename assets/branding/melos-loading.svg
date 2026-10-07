@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 76" width="80" height="76">
+  <style>
+    /* 24 poses / 2.4 seconds = 10 fps, three times the original cadence. */
+    .lyre{transform-origin:40px 39px;animation:turn 2.4s steps(24,end) infinite}
+    .note{opacity:0;transform-box:fill-box;transform-origin:center;animation:drift 2.4s steps(24,end) infinite}
+    .note-one{--dx:9px;--dy:-5px}
+    .note-two{--dx:-10px;--dy:-8px;animation-delay:-.48s}
+    .note-three{--dx:9px;--dy:-2px;animation-delay:-.96s}
+    .note-four{--dx:-9px;--dy:8px;animation-delay:-1.44s}
+    .note-five{--dx:2px;--dy:-10px;animation-delay:-1.92s}
+    @keyframes turn{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    @keyframes drift{
+      from{opacity:.65;transform:translate(0,0) rotate(-8deg)}
+      to{opacity:0;transform:translate(var(--dx),var(--dy)) rotate(14deg)}
+    }
+    @media(prefers-reduced-motion:reduce){.lyre,.note{animation:none}.note-one{opacity:.45}}
+  </style>
+  <g class="lyre" fill="#243c52">
+    <path d="M25 12C16 10 12 20 18 24c4 3 8-1 6-4-1-2-3-2-4-1-1-5 5-6 8-2 5 8 0 17-5 25-4 8 0 17 17 17s21-9 17-17c-5-8-10-17-5-25 3-4 9-3 8 2-1-1-3-1-4 1-2 3 2 7 6 4 6-4 2-14-7-12-12 3-12 15-7 28 4 10 8 16-8 16s-12-6-8-16c5-13 5-25-7-28Z"/>
+    <path d="M27 24h26v2H27zm5 2h1.4v29H32zm5 0h1.4v30H37zm5 0h1.4v30H42zm5 0h1.4v29H47zM31 60h18l-2 3 4 3H29l4-3z"/>
+    <circle cx="27" cy="25" r="2.3"/><circle cx="53" cy="25" r="2.3"/>
+  </g>
+  <g class="note note-one" fill="#243c52">
+    <path d="M58 18V9l5-1v3l-3 .7V18c0 3-5 4-5 1.7 0-1.4 1.5-2.2 3-1.7Z"/>
+  </g>
+  <g class="note note-two" fill="#243c52">
+    <path d="M17 33v-8l5-1v2.5l-3 .7V33c0 2.7-5 3.7-5 1.5 0-1.3 1.6-2 3-1.5Z"/>
+  </g>
+  <g class="note note-three" fill="#243c52">
+    <path d="M62 53v-8l5-1v2.5l-3 .7V53c0 2.7-5 3.7-5 1.5 0-1.3 1.6-2 3-1.5Z"/>
+  </g>
+  <g class="note note-four" fill="#243c52">
+    <path d="M23 58v-8l5-1v2.5l-3 .7V58c0 2.7-5 3.7-5 1.5 0-1.3 1.6-2 3-1.5Z"/>
+  </g>
+  <g class="note note-five" fill="#243c52">
+    <path d="M45 24v-8l5-1v2.5l-3 .7V24c0 2.7-5 3.7-5 1.5 0-1.3 1.6-2 3-1.5Z"/>
+  </g>
+</svg>

@@ -1,0 +1,95 @@
+{
+  "source_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+  "auditor": "/root/campbell_audit",
+  "status": "package_approved_with_recorded_transformations_and_glyph_uncertainty",
+  "package": {
+    "path": "runtime/campbell-assignment/campbell_assignment.jsonl",
+    "sha256": "afe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b",
+    "verdict": "PASS",
+    "records": 5,
+    "display_lines": 78,
+    "structural_blank_lines": 1,
+    "separate_prose_lines": 2,
+    "scope": "Source identity, excerpt boundaries, lexical transcription with explicit 34a glyph uncertainty, exact hash-gated extraction trace, schema, printed margin labels, and preserved prose separation. Live integration pending."
+  },
+  "files": {
+    "campbell_assignment.jsonl": {
+      "verdict": "PASS",
+      "sha256": "afe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b",
+      "records": 5
+    }
+  },
+  "chunks": {
+    "alcaeus-129-p89-verse-b.vision.parsed.json": {
+      "verdict": "PASS",
+      "sha256": "9f70b82f6a170c3e6afe5ace6befe6884e97e671849922030cf7152f2a96766c",
+      "replace_line_from_candidate": [
+        {
+          "line_index": 11,
+          "candidate_file": "detail-129-p89-line24.vision.parsed.json",
+          "candidate_line_index": 0,
+          "sha256": "ad0814d0a7459af9915ce5a37b1669932bf9d168d754856f8177f7a113f08070"
+        }
+      ],
+      "reason": "Sixteen lines accepted only after required source-image retry for printed line 24. Detail retry resolves the visible accented iota and preserves uncertain-letter underdots; original U+FFFD is rejected. Retain original receipts and transformation ledger."
+    },
+    "alcaeus-130b-p90-verse-b.vision.parsed.json": {
+      "verdict": "PASS",
+      "sha256": "a1880edb7f7468d9ba4a6165a09d3f33ee9a427767e6a1d767b388c712685bf3",
+      "replace_line_from_candidate": [
+        {
+          "line_index": 11,
+          "candidate_file": "detail-130b-p90-line31.vision.parsed.json",
+          "candidate_line_index": 0,
+          "sha256": "221a1351ec8fb0b34cddecd2744969753cfbb5fa3047528c3bc61adb7594ad6b"
+        }
+      ],
+      "reason": "Sixteen lines accepted only after required source-image retry replacement for printed line 31. Detail retry matches visible iota; main OCR upsilon is rejected. Original receipts and transformation ledger must be retained."
+    },
+    "alcaeus-350-p93-verse-b.vision.parsed.json": {
+      "verdict": "PASS",
+      "sha256": "80b713b06ae06b14ad1327dd9ddd56205a6bfd05e5fd43b1e619825e0049c487",
+      "exclude_noncontent_line_indices": [0],
+      "reason": "Four verse lines and printed margin label 5 visually matched. Candidate line index 0 contains only replacement characters for clipped descenders of the preceding prose line; exclude that geometrically out-of-scope artifact, retain original receipt and exclusion metadata."
+    },
+    "alcaeus-350-p93-verse-a.vision.parsed.json": {
+      "verdict": "PASS",
+      "sha256": "1d9e9be5134159619c6a2f4d5c595f2342f980ea2d3cf8f3e04bbb6acb5cf39d",
+      "reason": "Two displayed verse lines visually matched; no invented line labels."
+    },
+    "alcaeus-350-p93-quotation-prose.vision.parsed.json": {
+      "verdict": "PASS",
+      "sha256": "66e75e34e547d3ae15783d8ad20abfe920842080dcb612a67da66cb14ad04149",
+      "reason": "Two prose quotation display lines visually matched; must remain prose, not verse, in output."
+    },
+    "alcaeus-326-p91-verse.vision.parsed.json": {
+      "verdict": "PASS",
+      "sha256": "73cbd71191b3264fe45e80bb1e47b04fedc8a01dd46538550144cbea2d48e13c",
+      "reason": "All nine displayed verse lines, terminal lacuna dots, and margin label 5 checked against source pixels; eighth line correctly retained."
+    },
+    "alcaeus-34a-p86-verse-b.vision.parsed.json": {
+      "verdict": "PASS",
+      "sha256": "c6c6f7b1ca732957f35a3bcc408e0d72d5c479e295debf8b80e25df5dbcaa472",
+      "reason": "Six verse lines plus five terminal lacuna dots checked against crop and full page; label 10 retained."
+    },
+    "alcaeus-130b-p89-verse-a.vision.parsed.json": {
+      "verdict": "PASS",
+      "sha256": "6337224e7cf2c6347feb4d0b60971b4f496db48aac80c5c0f1274bce2fdcdaa6",
+      "reason": "Four displayed source lines checked against original crop and 8x final-line detail; compound initial capital-omega diacritic verified."
+    },
+    "alcaeus-129-p88-verse-a.vision.parsed.json": {
+      "verdict": "PASS",
+      "sha256": "13d84fef5503d14d63839fb321deb5e9c8e7ad83586f1285e18930d9c162eae4",
+      "reason": "Twelve lines and labels 5/10 visually matched. Initial breathing concern resolved by independent parent comparison of same-line smooth alpha/rho marks. Initial OCR retained; retry with wrong vowel rejected."
+    },
+    "alcaeus-34a-p85-verse-a.vision.parsed.json": {
+      "verdict": "PASS",
+      "sha256": "916122a5b2690c1261c7b119c242f4ce796cfe72d52b4bc341f4b069e80cfa41",
+      "scope": "lexical_text_brackets_and_lines_with_explicit_glyph_uncertainty",
+      "glyph_fidelity": "WARN",
+      "reason": "Lexical text and brackets match. Tiny possible marks under mu/phi cannot reliably be distinguished from ink or scan speckling; independent parent visual review agrees uncertainty. Initial OCR retained without invented correction. Not certified exact-diplomatic at every glyph.",
+      "required_uncertainty": "Line 3: possible underdots beneath mu and phi are unresolved in the scan; retained OCR omits them. The first-line alpha underdot is faint. Consult the source crop.",
+      "required_facsimile": "alcaeus-34a-p85-verse-a.png"
+    }
+  }
+}

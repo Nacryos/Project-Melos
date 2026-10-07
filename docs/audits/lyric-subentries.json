@@ -1,0 +1,100 @@
+{
+  "audit": "Independent staged LSJ subentry source and scope audit",
+  "date": "2026-10-06",
+  "auditor": "subentry_evidence_audit",
+  "artifact": "data/staging/lyric-subentries-20261006/subentries.sqlite",
+  "artifact_sha256": "05a8eaf9cb242858e63cddff573544ec985a30fb72bfde1b7f9da46ee1b2c87d",
+  "input": "data/lexica/entries.jsonl",
+  "input_sha256": "ca2e64c5bace58fe58f44cd111884b0362b4f83480702077f526f14f13ae546e",
+  "version": "lsj-explicit-subentry-v1",
+  "verdict": "FAIL",
+  "blocking": true,
+  "blocking_scope": "Promotion of this candidate as safe complete dictionary meanings; no bearing on unrelated releases. Retention as staged source evidence is acceptable.",
+  "source_integrity_verdict": "PASS",
+  "counts": {
+    "records": 717,
+    "lookup_keys": 690,
+    "parent_entries": 688,
+    "builder_entries_examined": 116497,
+    "raw_xml_files": 23,
+    "orth_extent_full": 360,
+    "orth_extent_suff": 357
+  },
+  "checks": [
+    {"check": "All 23 raw XML SHA-256 values and all 717 provenance records match retained source files and manifest", "verdict": "PASS"},
+    {"check": "All 717 entry byte ranges, orth node paths, raw Beta Code strings and rendered orthography offsets resolve exactly", "verdict": "PASS"},
+    {"check": "All 717 lookup keys equal NFC orthography with only internal printed hyphens removed; no generated morphology or Campbell spelling bridge", "verdict": "PASS"},
+    {"check": "All 717 definition texts equal their rendered source spans and immediately follow their explicit orthography with only whitespace/comma between", "verdict": "PASS"},
+    {"check": "All 3365 top-level citations and 287 qualifiers match source nodes and declared orthography-block/immediately-preceding-gramGrp scope", "verdict": "PASS"},
+    {"check": "All 3375 nested sense citations and 462 nested sense qualifiers match source text and node spans", "verdict": "PASS"},
+    {"check": "Regeneration from all 688 participating parent entries equals every stored JSON record", "verdict": "PASS"},
+    {"check": "Fresh HTTP requests for pinned eng1, eng4, eng11, eng13 and eng25 XML return 200 and byte-for-byte SHA-256 matches to archived files", "verdict": "PASS"},
+    {"check": "python -m unittest discover -s tests -p test_lexicon_subentries.py -v", "verdict": "PASS", "tests": 6},
+    {"check": "Twenty deterministic random records reviewed in source context, seed 20261006, ordered by id", "verdict": "FAIL", "reason": "One incomplete definition and a false citation label caused by source TEI markup"}
+  ],
+  "blocking_findings": [
+    {
+      "id": "incomplete_definition_from_mistagged_source",
+      "record_id": "lsj:11:n59120:lsj-explicit-subentry-v1:/entryFree/sense[3]/orth[1]",
+      "lookup_key": "Κορινθόθι",
+      "actual_definition": "at",
+      "source_context": "Κορινθόθι, at Corinth, Il. 13.664",
+      "definition_locator": {"node_path": "/entryFree/sense[3]/tr[1]", "rendered_start": 1607, "rendered_end": 1609},
+      "misclassified_citation_locator": {"node_path": "/entryFree/sense[3]/bibl[1]", "rendered_start": 1629, "rendered_end": 1677},
+      "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng11.xml",
+      "source_markup": "<tr>at</tr> <bibl><author>Corinth</author></bibl>",
+      "explanation": "The stored bytes are source-faithful, but the TEI tags split a necessary place-name complement into a bibliographic node. The candidate asserts an incomplete dictionary sense and labels Corinth as a citation. No source data was invented.",
+      "required_resolution": "Fail closed or retain an explicitly incomplete excerpt for this source layout; alternatively implement a source-supported, audited contiguous-clause correction. Rebuild and re-audit the resulting artifact before promotion. Do not author a replacement row manually.",
+      "reproduction": "Read record_json where id equals the record_id above from subentries; inspect dictionary_senses[0].text and citations[0].text; compare the two indicated nodes in archived LSJ entry n59120."
+    }
+  ],
+  "use_constraints": [
+    "Source orthography evidence is not validation of a complete lexical form. Source extent=suff occurs in 357 rows; malformed-looking source strings such as a)pallotri-oia/w (n11312) and diaprakt-prh/ssw (n25630) are preserved literally. Do not silently repair them or promote their normalized keys as independently verified morphology.",
+    "Nested dictionary_senses retain containing-source-sense citations and qualifiers. In 277 rows these include qualifiers outside the top-level subentry scope. Consumers must honor qualifier_scope and citation_scope rather than flattening them into subentry or passage claims.",
+    "Citations are source-block evidence, not verified passage alignment or evidence that the selected spelling occurs in the cited passage.",
+    "This audit verifies all emitted rows, not completeness of extraction across all 116497 LSJ input entries. The existing upstream source audit supplies discovery/license context; this audit rechecked five pinned source downloads."
+  ],
+  "asunetemi_regression": {
+    "parent_id": "lsj:1:n16814",
+    "first_key": "ἀσυνετέω",
+    "first_definition": "to be without understanding",
+    "first_qualifiers": [],
+    "second_key": "ἀσυνέτημι",
+    "second_definition": "fail to understand",
+    "second_qualifiers": ["Aeol."],
+    "second_citations": ["Alc. 18"],
+    "campbell_key": "ἀσυννέτημμι",
+    "campbell_key_record_count": 0,
+    "verdict": "PASS"
+  },
+  "sample20_ids": [
+    "lsj:10:n50176:lsj-explicit-subentry-v1:/entryFree/sense/orth",
+    "lsj:11:n53109:lsj-explicit-subentry-v1:/entryFree/sense/orth",
+    "lsj:11:n59120:lsj-explicit-subentry-v1:/entryFree/sense[3]/orth[1]",
+    "lsj:11:n59120:lsj-explicit-subentry-v1:/entryFree/sense[3]/orth[2]",
+    "lsj:12:n63370:lsj-explicit-subentry-v1:/entryFree/orth[2]",
+    "lsj:13:n64875:lsj-explicit-subentry-v1:/entryFree/sense/orth[3]",
+    "lsj:17:n80311:lsj-explicit-subentry-v1:/entryFree/sense/orth",
+    "lsj:17:n86187:lsj-explicit-subentry-v1:/entryFree/sense[6]/orth[1]",
+    "lsj:17:n86607:lsj-explicit-subentry-v1:/entryFree/orth[2]",
+    "lsj:17:n89070:lsj-explicit-subentry-v1:/entryFree/orth[2]",
+    "lsj:1:n11312:lsj-explicit-subentry-v1:/entryFree/orth[2]",
+    "lsj:1:n11684:lsj-explicit-subentry-v1:/entryFree/sense/orth",
+    "lsj:24:n110194:lsj-explicit-subentry-v1:/entryFree/sense/orth[3]",
+    "lsj:25:n114247:lsj-explicit-subentry-v1:/entryFree/orth[2]",
+    "lsj:2:n20475:lsj-explicit-subentry-v1:/entryFree/sense/orth[4]",
+    "lsj:2:n20693:lsj-explicit-subentry-v1:/entryFree/sense/orth",
+    "lsj:4:n25630:lsj-explicit-subentry-v1:/entryFree/orth[3]",
+    "lsj:4:n27831:lsj-explicit-subentry-v1:/entryFree/orth[2]",
+    "lsj:5:n38131:lsj-explicit-subentry-v1:/entryFree/orth[2]",
+    "lsj:7:n46131:lsj-explicit-subentry-v1:/entryFree/sense[2]/orth"
+  ],
+  "code_sha256": {
+    "backend/lexicon_subentries.py": "049cd4b2f20b895d50b2c6312b5e5be564d58439d945f3f1e03dfce594332052",
+    "backend/lexicon_senses.py": "0653b2b6c0561b440185fc44fba4d8d3c5110450093e19e346c1a3ac186324f5",
+    "backend/lexicon_render.py": "b03b4867194822f567667949bd08df0b2a6ad4c573ba622a6d4094d0c6932619",
+    "scripts/build_lexicon_subentries.py": "04e46f2989ac3d78e4b880a120d3b17c07df2d49a7348408d86dff88cac8cdab",
+    "tests/test_lexicon_subentries.py": "66e4bb10efe6cfddce2ced5008e4464c872375840a6ec8ed4c13adceacd7d6a7"
+  },
+  "mutations": "Only this audit report was written; no runtime code, source data, staged SQLite, integration or deployment was changed."
+}

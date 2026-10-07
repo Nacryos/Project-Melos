@@ -1,0 +1,4 @@
+ARG BASE_IMAGE=sha256:2f60b62520d88098663fa79e2cb76cdeae8b7540e24752d586df042fc09d1777
+FROM ${BASE_IMAGE}
+COPY --chown=1000:1000 backend/ /app/backend/
+COPY --chown=1000:1000 discovery-data/ /app/discovery-data/

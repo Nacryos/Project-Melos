@@ -25,6 +25,7 @@ function candidate(id, gloss) {
 }
 function harness(result = {}) {
   const context = vm.createContext({
+    window: {},
     node: (tag, cls, text) => new Element(tag, cls, text),
     safeLink(url, label) {
       try { const parsed = new URL(url); if (!['http:', 'https:'].includes(parsed.protocol)) return null;
@@ -37,7 +38,8 @@ function harness(result = {}) {
     message(host, text) { host.text = text; },
     clear(host) { host.text = ''; host.children = []; }, appendWarnings() {}, errorText: error => error.message
   });
-  vm.runInContext(script.slice(script.indexOf('  function candidateEntrySenses('), script.indexOf('  function renderParallelContexts(')) +
+  vm.runInContext(script.slice(script.indexOf('  function candidateDictionaryExcerpt('), script.indexOf('  async function inspectWord(')) +
+    script.slice(script.indexOf('  function candidateEntrySenses('), script.indexOf('  function renderParallelContexts(')) +
     script.slice(script.indexOf('  function candidatePreferenceLabel('), script.indexOf('  function renderFormInventories(')), context);
   return name => vm.runInContext(name, context);
 }

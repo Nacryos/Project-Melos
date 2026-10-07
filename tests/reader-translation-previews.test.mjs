@@ -20,7 +20,7 @@ function descendants(root) { return root.children.flatMap(child => [child, ...de
 function fixture() {
   return { id: 'fixture:greek', kind: 'text', language: 'grc', author: 'Fixture poet', text: 'Literal Greek fixture',
     translation_previews: [{ record_id: 'fixture:translation', parent_id: 'fixture:greek', scope: 'whole_source_passage',
-      alignment: 'not_line_aligned', language: 'ell', translator: 'Fixture credited translator',
+      alignment: 'not_line_aligned', language: 'eng', translator: 'Fixture credited translator',
       text_excerpt: 'Literal published fixture excerpt.', text: 'Literal published fixture excerpt.\nEntire second fixture line.',
       source_url: 'https://example.test/translation#pane', edition: 'Fixture edition', citation: 'Fixture source passage' }] };
 }
@@ -44,7 +44,7 @@ test('result card uses a literal credited whole-passage excerpt, without nested 
   const h = harness(), result = h.render(h.state.passage);
   assert.equal(result.tag, 'button');
   assert.match(result.textContent, /Literal published fixture excerpt/);
-  assert.match(result.textContent, /Modern Greek · Translator: Fixture credited translator/);
+  assert.match(result.textContent, /English · Translator: Fixture credited translator/);
   assert.match(result.textContent, /Published translation excerpt · covers this source passage/);
   assert.equal(descendants(result).filter(element => ['a', 'button', 'summary'].includes(element.tag)).length, 0);
   result.handlers.click(); assert.equal(h.opened[0], 'fixture:greek');
@@ -144,7 +144,7 @@ test('translation markup is only text and no generated or word-gloss fallback is
 
 function translationHit(record, overrides = {}) {
   const preview = record.translation_previews[0];
-  return { id: preview.record_id, kind: 'translation', signal: 'semantic',
+  return { id: preview.record_id, kind: 'translation', language: preview.language, signal: 'semantic',
     author: 'Fixture recorded source author', parent_id: preview.parent_id,
     projection_scope: 'explicit_parent_id', source_url: preview.source_url,
     text_excerpt: preview.text_excerpt, excerpt_truncated: false, ...overrides };

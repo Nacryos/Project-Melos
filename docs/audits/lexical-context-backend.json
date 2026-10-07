@@ -1,0 +1,104 @@
+{
+  "verdict": "PASS",
+  "approval_scope": "canary_only",
+  "auditor": "/root/lexical_backend_review",
+  "reviewed_at": "2026-10-07T01:14:55Z",
+  "base_container_id": "99ac41bf357439a2e07bb69cde3f279b6bf8ae8b89690c8cc7d9ee28be517460",
+  "image": "sha256:2f60b62520d88098663fa79e2cb76cdeae8b7540e24752d586df042fc09d1777",
+  "files": {
+    "classifier.py": {
+      "verdict": "PASS",
+      "baseline_sha256": "77f810c73649b2b858790e87d30a0c3ec1bd4fd1240d807839a34a56357f29e0",
+      "sha256": "35af1e3d4d145d603f94b330867d3f6e4fcfc14c6bbb0bdb1a4b12a67cb5983f"
+    },
+    "interlinear.py": {
+      "verdict": "PASS",
+      "baseline_sha256": "f4bb41431a260c66de516bd31c903b80af0352cdee4b573f2c6eb64579d28d58",
+      "sha256": "b93fd82bfc202460e03491c1aaadce03faed4c736bd6dba9353d0d6e2d8966cf"
+    },
+    "lexicon_senses.py": {
+      "verdict": "PASS",
+      "baseline_sha256": "df0e15b7005743c06d895ab17147c4f8a32782f9fe7ddf2668a6c8fb87df50ea",
+      "sha256": "0653b2b6c0561b440185fc44fba4d8d3c5110450093e19e346c1a3ac186324f5",
+      "prior_independent_audit": "docs/audits/lyric-dictionary-gaps.md",
+      "unchanged_since_prior_audit": true
+    },
+    "passage_analysis.py": {
+      "verdict": "PASS",
+      "baseline_sha256": "a91f126eeb4617cc97b104f5fc81b81ca011e518a0c066ca2fd731c65252e8a8",
+      "sha256": "2924541c268a194b78faf01e95b31dc28ac832a4a5471c05ee4b999b8fa389ec"
+    },
+    "sense_ranker.py": {
+      "verdict": "PASS",
+      "baseline_sha256": "09981938e663af7e32dccd9f153b303fb7470a1dc5d0b1b848155f0e135d902f",
+      "sha256": "0e9c15f741c2bdc61f7ddeb5fe290e568c7d462074b0a41997c9e7fab6bbe74c"
+    }
+  },
+  "verification": {
+    "baseline_files_rehashed": true,
+    "pytest_command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_sense_ranker.py tests/test_contextual_lemma_senses.py tests/test_interlinear.py tests/test_campbell_meanings.py tests/test_classifier.py tests/test_passage_analysis.py tests/test_lexicon_senses.py tests/test_lyric_dictionary_gaps.py tests/test_lexical_release.py tests/test_candidate_senses.py tests/test_lexicon_render.py tests/test_passage_ranker.py tests/test_classifier_prompt_eval.py tests/test_classifier_prompt_eval_runner.py -q",
+    "pytest_result": "270 passed in 5.50s",
+    "paid_model_calls": 0,
+    "network_calls": 0,
+    "corpus_or_dictionary_data_writes": 0,
+    "deployment_actions": 0,
+    "checks": [
+      "All five saved live-baseline module bytes match baseline.json.",
+      "Retained-source lexicon_senses module is identical to its prior independent accepted audit hash.",
+      "Legacy candidate identities bind the complete original payload; generated identifiers do not become gloss provenance.",
+      "Divergent explicit candidate IDs fail closed for selection or contextual sense inventories.",
+      "Numbered or source-marked unbound homographs do not acquire meanings through shared spelling.",
+      "Sense proposals use original source payloads, complete finite probability vectors, occurrence bounds, inventory digests, and exact supporting candidate IDs.",
+      "Morphology changes invalidate earlier contextual sense decisions; independently reproduced after the fix.",
+      "Contextual sense selection does not resolve an ambiguous parse or apply another candidate's meaning below a selected parse.",
+      "Source hyphenated person labels and explicit aorist features survive projection; coarse syntax Past does not manufacture a specific tense.",
+      "Complete existing source feature supersets may support a parse-only consensus without selecting a lexical homograph.",
+      "All compact sense packets round-trip every retained literal semantic/source restriction field and supporting candidate binding. Only documented extraction coordinates, file paths, method labels, and duplicate gloss fields are removed from the model-facing packet. Original coordinates remain bound server-side.",
+      "The model-facing syntax context is explicitly capped at twelve target/head/dependent predictions; complete source Greek remains in passage.text."
+    ]
+  },
+  "replay": [
+    {
+      "path": "runtime/lyric-context-eval/baseline/0.response.json",
+      "sha256": "6fc99857fda33dbbfbec0d8a82f19c5eadbe4e93466e4cdeac029165008b5e5f",
+      "sense_choices": 21,
+      "packet_characters": 31162,
+      "semantic_compaction_round_trip": "PASS"
+    },
+    {
+      "path": "runtime/lyric-context-eval/baseline/1.response.json",
+      "sha256": "8b891719a3088cd3ecce8df42c5f1916c2732eb2fa16f6f4afd414cbc6e8ab1b",
+      "sense_choices": 4,
+      "packet_characters": 11853,
+      "semantic_compaction_round_trip": "PASS"
+    },
+    {
+      "path": "runtime/lyric-context-eval/baseline/2.response.json",
+      "sha256": "78db1aabe060595ad3b2d8e12cbb66a108d1b06a06776c8758e3df2c9af42583",
+      "sense_choices": 7,
+      "packet_characters": 12800,
+      "semantic_compaction_round_trip": "PASS"
+    },
+    {
+      "path": "runtime/lyric-context-eval/elthes-baseline/0.response.json",
+      "sha256": "f6e8729ffb38c912fa3d13ecc5f4b81fc550478d6bca166e7dbc212b825b9306",
+      "before_parse_short": "sg. ind. act.",
+      "after_parse_short": "2nd sg. aor. ind. act.",
+      "selection_basis": "source_morphology_consensus",
+      "candidate_id": null,
+      "gloss_text": null
+    }
+  ],
+  "blocking_findings_resolved": [
+    "Initial generated identities omitted source_tags and collapsed distinct grammatical alternatives. The final full-payload identity produces distinct IDs in the independent singular/plural reproduction.",
+    "Initial sense inventory digest omitted morphology features and accepted a stale decision after a source feature change. The final digest changes and refuses that decision in the independent reproduction."
+  ],
+  "limits": [
+    "Approval applies only to these exact five module hashes on the pinned baseline for a private canary. It does not authorize or certify public promotion.",
+    "No live canary, deployment, external-source download, model performance, or general philological accuracy audit is claimed.",
+    "Synthetic tests verify safety and projection behavior; saved-response replay verifies retained evidence handling, not the correctness of all contextual interpretations.",
+    "Dictionary alternatives remain conservative and incomplete where source extraction or homograph binding cannot establish an exact sense inventory.",
+    "This receipt's canary-only scope is a review restriction; the deploy helper's module hash schema does not itself enforce promotion policy."
+  ],
+  "philological_accuracy_claim": false
+}

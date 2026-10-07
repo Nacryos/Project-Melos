@@ -1,0 +1,54 @@
+{
+  "scope": "Bounded isolated source-only Morpheus experiment, not a production integration",
+  "overall_status": "blocked_before_parser_evaluation",
+  "production_unchanged": true,
+  "hosted_morphology_requests": 0,
+  "offline_forms_executed": 0,
+  "source_forms_prepared": 115,
+  "input_plan": "runtime/morpheus-offline-eval/input-plan.json",
+  "input_plan_sha256": "9fc46d45b5970eb49ee160d62661245b624ffc79113248762127bb66cbbbab46",
+  "input_scope": "20 previously received hosted results plus 95 additional unique source forms; 113 forms qualify under the conservative whole-damaged-line exclusion rule. No corpus reconstruction or invented morphology.",
+  "experiments": [
+    {
+      "repository": "https://github.com/alpheios-project/morpheus",
+      "revision": "2f1a30d65ed7ae9c6120dbf64d730b863be412e4",
+      "archive_sha256": "bdb3d653e5236850bc66b61f27b4102b6f46b9f163f876f72d0f5053e50daee0",
+      "status": "clean_build_failed",
+      "build_seconds": 26.182197332382202,
+      "exit_code": 2,
+      "reason": "GROUP_NAME, MEDIEV, APO_TO_APU and LACONIAN are referenced but not defined in the pinned source archive. Independent audit found no omitted generation rule or documented bootstrap supplying them.",
+      "audit": "runtime/morpheus-offline-eval/audit/build-result.json",
+      "audit_sha256": "b87a385d4a844b7ce2c480bd623f12bcb4737f3ffeb176d9b8e1452b3fbc3379",
+      "containment": "PASS: build stopped, zero retries, no OOM, no runtime image, no parser execution; stopped containers and failure evidence retained.",
+      "limitation": "This is a finding about this exact source revision, not every Morpheus distribution. The pinned archive contains historical objects and the published workflow does not run make clean. Historical objects could conceal missing definitions; that explanation is an inference, not a replayed historical result."
+    },
+    {
+      "repository": "https://github.com/perseids-tools/morpheus",
+      "revision": "ab6898ffed335fc6169fa02c9940657a9b5a78e0",
+      "archive_sha256": "1bbd436396fb1c8a08364698acc0e1ff8c98dec43cbed82a10631531a5aac610",
+      "status": "runtime_gate_vetoed_before_build",
+      "source_acquisition": "Raw archive, manifest, notices and own stem library saved in runtime/perseids-offline-eval. No Alpheios data substituted.",
+      "acquisition_audit": "runtime/perseids-offline-eval/audit/acquisition.json",
+      "acquisition_audit_sha256": "f3cd2f4d5bcf59fe380c564cc4f0dd5f66b488fa8b41849251d1d7c9c40952b9",
+      "runtime_veto_audit": "runtime/perseids-offline-eval/audit/source-memory-safety.json",
+      "runtime_veto_audit_sha256": "dc1d7ce53ae5b67ffb0c8f70959e468cd04233f2da3f35c03098ddc61003c742",
+      "reason": "GROUP_NAME=110 maps to morphology flag array index 13, but MorphFlags arrays have 12 elements. Is_group_name is read from the ordinary ending-retrieval path, so out-of-bounds access can alter analyses without crashing. Independent auditor vetoed accepting unsanitized parser output.",
+      "source_locations": [
+        "src/includes/morphflags.h",
+        "src/includes/gkstring.h",
+        "src/morphlib/morphflags.c",
+        "src/gkends/retrends.c"
+      ],
+      "build_executed": false,
+      "parser_executed": false,
+      "limitation": "A successful build or sanitizer run would not by itself prove morphological integrity; an intra-struct array overrun may evade address sanitization. No constants or layouts have been changed."
+    }
+  ],
+  "conclusion": "No offline coverage or candidate-parity result is available yet. Do not claim universal parsing or import any outputs from these experiments. A next experiment requires a separately reviewed source revision or a documented, independently reviewed upstream fix and compatible dictionary layout.",
+  "preserved_guarantees": [
+    "No live API, corpus or cache was mounted or modified; no ports were exposed and no application secrets were passed into build/parser containers. Existing pinned SSH credentials were used only to transport and run the isolated lab workflow.",
+    "No hosted-parser fallback, quota override or ledger reset.",
+    "No reuse of historical compiled objects.",
+    "No invented lexical definitions, morphological candidates or reconstruction of damaged source words."
+  ]
+}

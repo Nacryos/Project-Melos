@@ -1,0 +1,60 @@
+{
+  "audit": "Independent offline G commentary-instruction experiment harness review",
+  "reviewed_date_utc": "2026-10-07",
+  "auditor": "/root/context_pipeline_review/audit_linked_adapter",
+  "verdict": "PASS",
+  "blocking": false,
+  "approval_scope": "Experiment code bounds/isolation and prepare02 artifact integrity; root retains authority for any paid execution, budget allocation or production change",
+  "code_sha256": {
+    "scripts/experiment_commentary_prompt.py": "90d28579146b4e5e930c64cf618dd144b882f43f6794d5992d1942010bacccde",
+    "backend/classifier.py": "35af1e3d4d145d603f94b330867d3f6e4fcfc14c6bbb0bdb1a4b12a67cb5983f",
+    "backend/jev_gateway.py": "fcec0f7fab46e040f6d397100e20351452204e93ecca6f9407340e2ef3097c57"
+  },
+  "tests": {
+    "command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_commentary_prompt_experiment.py -q",
+    "passed": 7,
+    "failed": 0,
+    "provider_mode": "Mocked providers only; no network or paid call"
+  },
+  "checks": [
+    "Preparation permits one through six explicit distinct single-word occurrence responses. Each baseline packet is source-bound by sense_packet and has at least two source sense choices.",
+    "The experimental arm changes exactly one required commentary constraint string. Runtime compares the complete arm objects against that sole transformation; literal choices and all other packet fields remain identical.",
+    "Runtime requires an exact reviewed manifest hash, matching provider, gateway and script hashes, the manifest-bound model, unchanged packet hashes, and the exact approved absolute output directory before provider construction.",
+    "The approved-directory binding rejects a copied approved manifest rather than granting it a fresh ledger budget elsewhere.",
+    "SQLite BEGIN IMMEDIATE reserves each case/arm before provider execution, with a durable unique key and lifetime count bounded by the lesser of twelve and the manifest's two-per-case count.",
+    "An attempted experiment cannot be implicitly rerun or resumed. A provider failure stops the run, records failed_or_indeterminate, retains the charged reservation and does not retry.",
+    "Independent concurrent mocked execution of two runs against the same six-case ledger resulted in one completed runner and one blocked runner, exactly twelve calls and twelve durable attempts. A test-harness-only Windows temporary-file cleanup issue occurred after these assertions; the temporary directory was subsequently removed after handles closed.",
+    "Independent gateway-code-change simulation rejected the run before constructing the provider or creating an attempts ledger.",
+    "The harness writes only experiment artifacts and uses an isolated gateway database. No production prompt, source corpus or live service is changed."
+  ],
+  "resolved_findings": [
+    "The initial script pinned classifier code but not its durable gateway wrapper; the approved script pins both.",
+    "The initial script allowed copied approved manifests to start a fresh directory-local budget; the approved script pins its output directory in the reviewed manifest."
+  ],
+  "prepared_manifest_review": {
+    "verdict": "PASS",
+    "path": "runtime/lexical-release-g/commentary-ablation-02/manifest.json",
+    "sha256": "10c0118500840e9234ae5aa029e2e02ddee23765811d9297d26e0d84961dc718",
+    "cases": 4,
+    "frozen_arms": 8,
+    "maximum_provider_calls": 8,
+    "lifetime_hard_cap": 12,
+    "model": "jev-1.13.0",
+    "source_sense_choices_per_case": [15, 11, 7, 14],
+    "checks": [
+      "Exact manifest hash, all eight packet hashes and character counts, provider/gateway/script code pins, model and absolute output-directory binding verified.",
+      "Source response hashes and records JSONL hash verified. Each single-word occurrence matches its exact Greek form and start/end offsets in the complete source poem, and every baseline packet retains that complete poem text.",
+      "All four baseline packets rebuilt offline from the retained source responses and current accepted local dictionary evidence, matching the frozen packet objects exactly after JSON serialization. Each alternate arm equals the baseline with only the one declared commentary constraint replaced.",
+      "No gold labels or prior sense-ranking outcomes are supplied. Three retained responses do contain completed prior morphology ranking used by interlinear reconstruction; that fixed context is identical across the two arms. The experiment is not a blind or held-out model evaluation.",
+      "No attempts ledger, gateway state database or answer artifacts were present at review time. No paid call was made by reviewer."
+    ],
+    "authority": "Artifact integrity approval only; the root agent must separately authorize any provider execution and its bounded budget."
+  },
+  "limitations": [
+    "Any modified or newly prepared manifest requires fresh review. Earlier prepare01 is stale after the script hash change. Paid execution still requires separate root authorization.",
+    "The lifetime cap assumes the approved ledger is retained; deliberate deletion or editing of audit files by a privileged operator is outside this runtime guard.",
+    "This small explicit diagnostic sample is neither random nor blind, and has no gold labels in the manifest. Higher model confidence is not evidence of higher accuracy.",
+    "No provider accuracy, calibration, experiment result or production promotion is evaluated by this receipt."
+  ],
+  "mutations": "Reviewer authored only audit receipts and temporary mocked test artifacts. No production code or data was changed and no paid execution occurred."
+}

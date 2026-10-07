@@ -1,0 +1,48 @@
+{
+  "audit": "Independent isolated one-hop dictionary crossreference candidate audit",
+  "date": "2026-10-06",
+  "auditor": "subentry_evidence_audit",
+  "verdict": "PASS",
+  "blocking": false,
+  "scope": "Isolated candidate resolver and its tests only; no production integration, contextual ranking, frontend behavior or deployment approval",
+  "version": "source-linked-dictionary-crossreferences-v1",
+  "code_sha256": {
+    "backend/dictionary_crossrefs.py": "24296bb371d3271d3551ece513253b8ab2d0e4bdab51c38e0e31f27a23f017f2",
+    "tests/test_dictionary_crossrefs.py": "673273f4e67ed653ce2f4fcf33d262325c183f3688340c789bc7052d08a55626",
+    "backend/lexical_variants.py": "e6271e256b982e94d955078910339fcfebf67f91952ce53f3ceb6d038918a53f",
+    "backend/candidate_senses.py": "c0442d19a4fd4931d1958e04a1b2a7b99b4ee7f4a92c430c5d87e65e7a47743a"
+  },
+  "source_sha256": {
+    "data/raw/wiktionary/kaikki.org-dictionary-AncientGreek.jsonl": "69d7185819de51cc746d96f8033eb6c3f3e2016a314c2ee640ec09ce80623029",
+    "data/lexica/wiktionary-entries.jsonl": "202f59461ababa9e36737b9857632947d12fd4825ffa4e6df52db67e3f1810a8",
+    "data/claims/p2_wiktionary.jsonl": "42b022848f10329603078090adb7d955a794c080cda546bf70cc812336724514"
+  },
+  "coverage": {"requested_forms": 6, "source_and_target_records": 16, "supporting_claims": 64, "literal_meaning_candidates": 25},
+  "checks": [
+    "All 16 supporting source and target entry objects equal the corresponding original downloaded JSONL objects; every original raw line hash matches.",
+    "All 64 returned supporting claims bind a complete wrapper whose SHA-256 matches the accepted parent hash after the original json.dumps(record, ensure_ascii=False) serialization. Final source relation claims must share the headword/morphology binding, including source URL and hashes.",
+    "Complete source sense objects, including links, match their hash-bound raw parent senses. Source form arrays, headwords, POS and head templates match the same parent record.",
+    "All 25 candidate gloss arrays equal literal accepted target sense quotes. No generated gloss, target morphological analysis, contextual selection or inferred source spelling was observed.",
+    "Exact NFC target-headword matches retain distinct entry IDs, etymology numbers, POS labels and source-target pair identities. Case, accents and letters are not folded.",
+    "Form-page targets stop at one hop. Source relations and terminal/no-safe-sense states remain inspectable instead of receiving invented definitions.",
+    "Independent adversarial checks rejected changed source-relation parent hash, source URL and wrapper hash; coordinated target gloss/source-sense/quote tampering could not override the retained parent record; a duplicate target wrapper removed only that target.",
+    "python -m pytest tests/test_dictionary_crossrefs.py -q: 16 passed, including source form/link tampering, missing proof, target headword tampering, duplicate identity, no accent folding, nonrecursive termination and no network requirement.",
+    "Backend reference search found no production importer/caller of lookup_crossreference_meanings. The adapter uses local indexes and a read-only source SQLite connection; no paid or network call is added."
+  ],
+  "examples": [
+    {"query": "δᾶμον", "source_entry": "wiktionary:kaikki:line:9399", "target_headword": "δῆμος", "target_entries": ["wiktionary:kaikki:line:894", "wiktionary:kaikki:line:895"], "candidate_count": 11, "identity_status": "ambiguous_page_target", "note": "Both territory/people senses and the separate plant etymology remain distinct unselected alternatives."},
+    {"query": "γᾶς", "target_headword": "γῆ", "target_entries": ["wiktionary:kaikki:line:52"], "candidate_count": 3},
+    {"query": "πέμπων", "target_headword": "πέντε", "target_entries": ["wiktionary:kaikki:line:73"], "candidate_count": 1, "literal_glosses": ["five"], "note": "This is a dictionary candidate for the source-listed numeral form, not adjudication of a particular πέμπων occurrence."},
+    {"query": "μέσσον", "target_headword": "μέσος", "target_entries": ["wiktionary:kaikki:line:629", "wiktionary:kaikki:line:630"], "candidate_count": 6, "literal_pos_agreement_count": 3, "note": "Adjective and noun target entries stay separate; POS disagreement is disclosed."},
+    {"query": "δ’", "source_entries": ["wiktionary:kaikki:line:1135", "wiktionary:kaikki:line:1136"], "target_headword": "δέ", "target_entries": ["wiktionary:kaikki:line:751", "wiktionary:kaikki:line:752"], "candidate_count": 4, "note": "Four source-target pair identities retained despite identical gloss text."},
+    {"query": "ἔρχεσθ’", "target_headword": "ἔρχεσθε", "target_entries": ["wiktionary:kaikki:line:19316"], "candidate_count": 0, "terminal_status": "terminal_form_page"}
+  ],
+  "limitations": [
+    "A page link does not choose an etymology, POS section or sense. Candidates must remain alternatives unless separately adjudicated; this PASS does not validate the plant interpretation for a δᾶμον occurrence.",
+    "Source retrieval inherits the existing 20-source-entry bound. All exact target entries retrieved by the local adapter are retained; this does not establish unlimited source recall.",
+    "Whole-sense English-preview exclusions from the lexical variant helper can omit mixed-language or multiline source material.",
+    "The projection trusts accepted claim hashes as the local provenance root. This audit reverified the retained source bytes; the runtime adapter does not rehash entire upstream files on every query.",
+    "Upstream machine-extracted-unreviewed quality and licensing qualifications remain unchanged."
+  ],
+  "mutations": "Only this new audit report was written; frozen C/D/E artifacts and previous audits were not modified. No runtime code, source data, integration or deployment changed by auditor."
+}

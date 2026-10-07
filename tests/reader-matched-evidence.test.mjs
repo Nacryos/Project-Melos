@@ -54,13 +54,22 @@ test('Greek result shows literal credited commentary separately and opens only t
 });
 
 test('matched translation remains search evidence, without inventing translator credit', () => {
-  const card = harness().render(poem([hit({ kind: 'translation', author: 'Recorded source author',
+  const card = harness().render(poem([hit({ kind: 'translation', language: 'eng', author: 'Recorded source author',
     text_excerpt: '<b>Literal translation fixture</b>', excerpt_truncated: true })]));
   assert.match(card.textContent, /Translation excerpt · Recorded source author/);
   assert.match(card.textContent, /<b>Literal translation fixture<\/b>/);
   assert.match(card.textContent, /Excerpt shortened/);
   assert.doesNotMatch(card.textContent, /Translator:|Published translation excerpt/);
   assert.equal(descendants(card).filter(item => item.tag === 'b').length, 0);
+});
+
+test('non-English and unlabelled translation snippets are not shown as English meaning', () => {
+  for (const language of ['ell', 'el', 'grc', '', undefined]) {
+    const card = harness().render(poem([hit({ kind: 'translation', language, text_excerpt: 'NON_ENGLISH_FIXTURE' })]));
+    assert.doesNotMatch(card.textContent, /NON_ENGLISH_FIXTURE|Translation excerpt/);
+    assert.match(card.textContent, /Original fixture reading/);
+  }
+  assert.match(harness().render(poem([hit({ kind: 'translation', language: 'en-GB', text_excerpt: 'English regional fixture' })])).textContent, /English regional fixture/);
 });
 
 test('unproven, pagewide, wrong-parent and non-Greek result snippets do not get projected', () => {

@@ -1,0 +1,44 @@
+{
+  "audit": "Independent literal commentary-heading retrieval association audit",
+  "reviewed_date_utc": "2026-10-07",
+  "auditor": "/root/context_pipeline_review/audit_linked_adapter",
+  "verdict": "PASS",
+  "blocking": false,
+  "approval_scope": "Isolated deterministic retrieval helper and accepted-source associations; not sense-packet integration, semantic relevance, model accuracy or deployment approval",
+  "code_sha256": {
+    "backend/commentary_retrieval.py": "1efd54840f3c6734714e6e6429dae6f7ae63a4489e037d9792015c65bd0c6318"
+  },
+  "source_dependency": {
+    "loader": "backend/edition_commentary.py",
+    "projection": "backend/edition_commentary_data.json",
+    "approved_projection_sha256": "9b551021b8dfceb0fcd9efc28e7aac66783dfef65cd495ae43f22cf5678db099",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "greek_package_sha256": "afe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b"
+  },
+  "tests": {
+    "command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_commentary_retrieval.py tests/test_edition_commentary.py -q",
+    "passed": 22,
+    "failed": 0,
+    "independent_source_word_segments_checked": 388,
+    "independent_literal_cue_projections_traced": 400
+  },
+  "checks": [
+    "The helper reloads the approved hash-bound commentary projection and exact parent passage identity. An optional caller commentary view must equal the reloaded model-eligible source; it cannot manufacture headings.",
+    "Every returned match in the independent five-poem sweep equals both the literal approved paragraph lemma and the exact source Greek substring at its original codepoint offsets. Citation and printed page equal the same source paragraph.",
+    "Matching uses exact codepoint strings with letter, mark, digit and editorial-joiner boundary checks. It neither normalizes nor strips accents, quantity or diaeresis and does not match a substring inside a longer word or a bracketed/elided fragment.",
+    "The bounded search window is the target nonempty source line and one neighboring nonempty source line on either side. Every checked window contains its target occurrence.",
+    "Exact target matches, a target contained inside a heading phrase, and neighboring surface matches remain distinct relations. All 400 returned relation labels were independently reconstructed from source offsets.",
+    "Printed-note groups preserve contiguous source ordinals and an unchanged nonempty printed anchor label. Changed labels, blank anchors and missing source ordinals break groups; omitted OCR paragraphs cannot silently bridge a group.",
+    "Only source model-eligible paragraphs enter matching. Literal association does not assert selection alignment, word attestation or line attestation, and the scope note requires retention of complete commentary and lexical alternatives.",
+    "Forged heading/source/offset and editorial-target tests pass. Independent additional mutations of author, edition, quality and source URL reject with unavailable status.",
+    "Independent zero-bound simulations for maximum match count and window size return unavailable with no selected subset, matches or note groups. Source records remain unchanged and returned data do not mutate the approved commentary."
+  ],
+  "limitations": [
+    "Literal heading overlap is a retrieval cue, not proof that commentary concerns the target word, supplies its meaning or aligns exactly to an occurrence.",
+    "A printed anchor group can contain notes about several words or lines. Group membership is preserved source layout, not inferred line-span coverage.",
+    "Strict codepoint equality intentionally misses canonically equivalent or differently accented spellings. No recall guarantee is made.",
+    "The helper's full-commentary retention requirement must be verified separately when integrated into a consumer.",
+    "The audited source's OCR, edition, quality and licensing qualifications remain unchanged."
+  ],
+  "mutations": "Only this audit receipt was authored. No corpus row, commentary paragraph, runtime module, paid service or deployed service was modified by reviewer."
+}

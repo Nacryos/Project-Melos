@@ -1,0 +1,37 @@
+{
+  "audit": "Independent source-heading cue and heuristic-preview sense-packet integration review",
+  "reviewed_date_utc": "2026-10-07",
+  "auditor": "/root/context_pipeline_review/audit_linked_adapter",
+  "verdict": "PASS",
+  "blocking": false,
+  "approval_scope": "add_context_relevance and its sense_packet integration only; not other concurrent packet-size/wire-choice changes, semantic accuracy, a paid experiment or deployment approval",
+  "code_sha256": {
+    "backend/sense_ranker.py": "c5925064d85bc3d49b00b61e8974a8a024d92823898ad35d4dbd8fc464767833",
+    "backend/commentary_retrieval.py": "1efd54840f3c6734714e6e6429dae6f7ae63a4489e037d9792015c65bd0c6318"
+  },
+  "dependency": "docs/audits/commentary-retrieval.json",
+  "tests": {
+    "command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_commentary_relevance_packet.py tests/test_commentary_retrieval.py tests/test_edition_commentary.py tests/test_sense_ranker.py tests/test_ranked_sense_alternatives.py -q",
+    "passed": 77,
+    "failed": 0,
+    "independent_additional_fail_closed_cases": 6
+  },
+  "checks": [
+    "The consumer compares packet source ID/full Greek and target text/offsets with its supplied passage and occurrence. It compares the complete compact commentary view canonically before adding cues.",
+    "The source helper independently reloads approved commentary and verifies source identity and literal occurrence. The consumer now requires helper status available before any packet mutation; unavailable, malformed or unsupported source context raises CommentaryContextUnavailable.",
+    "Four frozen real packets regain byte-equivalent semantic JSON after removing only the new retrieval-cue field, three heuristic-preview annotations and two interpretation constraints. Candidate inventories, bindings, complete commentary and original source context remain unchanged.",
+    "Selected morphology is explicitly marked current_heuristic_preview, selection_is_source_adjudication=false and constrains_sense_candidates=false. No parse or meaning is generated or selected by this metadata.",
+    "The appended guidance distinguishes neighboring headings from the target, retains whole-poem commentary and every source alternative, and disclaims occurrence alignment and attestation.",
+    "Independent coordinated mutations of both source commentary and packet commentary were rejected for forged heading and forged prose. Coordinated passage-text and target-offset changes were also rejected.",
+    "Independent simulated cue-bound failure and missing local source rejected before mutation. All six independent rejection probes verified the complete packet remained unchanged.",
+    "Production packet regression confirms the genuine Alcaeus 350 neighboring heading cues and preservation of the original result object."
+  ],
+  "resolved_audit_finding": "Initial code retained coordinated forged caller commentary when helper revalidation returned unavailable. The approved code requires an available revalidated result and raises before modifying the packet, with a new coordinated-forgery regression and independent heading/prose/source/offset replays.",
+  "limitations": [
+    "Retrieval relevance remains a hypothesis. No heading match or source-layout group is certified as explaining the target word's sense.",
+    "All model commentary must continue to satisfy the existing edition loader's source identity, OCR eligibility, scope and licensing restrictions.",
+    "The reviewed exported transformation is used with supplied source commentary for commentary-bearing packets. Production sense_packet independently obtains that commentary through its existing accepted loader.",
+    "No paid model call, prompt-effect accuracy measurement, new experiment-manifest approval or deployment occurred during this review."
+  ],
+  "mutations": "Only this requested audit receipt was written by reviewer. Runtime modules, source data and deployed services were not edited."
+}

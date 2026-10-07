@@ -1,0 +1,8 @@
+{
+  "url": "https://greeklyric.com/api/wiktionary?form=%E1%BC%A6%CE%BB%CE%B8%CE%B5%CF%82&limit=8",
+  "captured_at": "2026-10-07T01:48:04.661Z",
+  "http_status": 200,
+  "sha256": "2e1b947dc4d9d0654e41413f7b5288489f1788032f5c5d4e56bc8c385b30f1bd",
+  "bytes": 6139,
+  "purpose": "Raw API regression fixture, not scholarly gold or corpus additions"
+}

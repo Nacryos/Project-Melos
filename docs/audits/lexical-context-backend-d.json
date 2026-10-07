@@ -1,0 +1,95 @@
+{
+  "verdict": "PASS",
+  "approval_scope": "upload_and_private_loopback_canary_only",
+  "auditor": "/root/campbell_integrate/release_c_audit",
+  "reviewed_date_utc": "2026-10-07",
+  "base_container_id": "ec2cdc5176ed0f747cb03de0037d7bfb1bc00e93644fae7fbf761822e6eb6aa5",
+  "image": "sha256:2f60b62520d88098663fa79e2cb76cdeae8b7540e24752d586df042fc09d1777",
+  "candidate_directory": "runtime/lexical-release-d/candidate-code",
+  "files": {
+    "interlinear.py": {
+      "verdict": "PASS",
+      "sha256": "f376a30a3f48ddfb74f81dde5b826baf9d9cc11245e95d22231469eb09ff3c0a",
+      "baseline_sha256": "b93fd82bfc202460e03491c1aaadce03faed4c736bd6dba9353d0d6e2d8966cf"
+    },
+    "lexicon_senses.py": {
+      "verdict": "PASS",
+      "sha256": "00d2fe4ed17066a1f7ba211b723cc56e074ce43b563c5d6e07c8e9deebd3dde9",
+      "baseline_sha256": "0653b2b6c0561b440185fc44fba4d8d3c5110450093e19e346c1a3ac186324f5"
+    },
+    "passage_analysis.py": {
+      "verdict": "PASS",
+      "sha256": "5ce0cab91fbadb78bff0f0660f77c3ae37082d7302d7c49a83c327787f620315",
+      "baseline_sha256": "2924541c268a194b78faf01e95b31dc28ac832a4a5471c05ee4b999b8fa389ec"
+    },
+    "server.py": {
+      "verdict": "PASS",
+      "sha256": "88e5cbdee71a2a388e9ffb199be2d069923be6fefa985e2365cd6db2043e5f97",
+      "baseline_sha256": "16ffa671afc26a25480000648811118b2d1daf7d851179ea09b25968d9776c7e",
+      "scoped_live_baseline_patch": true
+    },
+    "lexical_variants.py": {
+      "verdict": "PASS",
+      "sha256": "e6271e256b982e94d955078910339fcfebf67f91952ce53f3ceb6d038918a53f",
+      "baseline_sha256": null,
+      "baseline_absent": true
+    }
+  },
+  "prior_review": {
+    "path": "docs/audits/lexical-context-backend-c.json",
+    "sha256": "926640f293d2cb177b49c68848586c76e1ad4491471ce408991078b213389c9a",
+    "scope": "Inherit exact live-B baseline, unchanged dependencies and code-only preservation proofs. Three unchanged C modules and all C helper hashes were rechecked; no C artifact was overwritten."
+  },
+  "source_pos_review": {
+    "path": "docs/audits/lexical-variants-pos-d.json",
+    "sha256": "da74c9015a3480c92250122c3ade7149d12a389c12dc9cdf832575a1d16511f1",
+    "scope": "Literal source POS projection only; not occurrence morphology or contextual sense adjudication."
+  },
+  "helper_review": {
+    "verdict": "PASS",
+    "sha256": {
+      "deploy/lexical_release_d.py": "8da6bef87ae71e6521f7b915e9e5f1baf7f22ffc854347faebac4a822522e5a3",
+      "deploy/lexical_transport_d.py": "ca9702486f0f443758c7e1132933650180bfae4e1b4c1c383d23697c799ad491",
+      "deploy/stage_lexical_d.py": "f0e6f96538aa03be2a5ff48d49d0f241b4a740f7d3fbed04e99dd312c018cb53",
+      "tests/test_lexical_release_d.py": "24c2c006a3096d2dfe54ee1b89b9c381aeca9c38b302f9c6cb64c62734e0f912"
+    },
+    "checks": [
+      "D uses fresh release/container/retained-container targets and the same exact live B baseline; C remains immutable and is not treated as production baseline.",
+      "Private module aliases isolate D adapter constants and transport destination from C helpers.",
+      "D staging replaces only the two explicitly frozen delta modules and checks all inherited C candidate hashes before retaining their bytes.",
+      "All C guard checks for module approval, exact mounts/dependencies, data/config/environment preservation, private ports and unchanged routes remain in force.",
+      "No remote operation or public promotion was executed by this audit. Stopping the exact owned C canary to release port 8792 is a separately authorized parent operation."
+    ]
+  },
+  "delta_review": {
+    "checks": [
+      "lexical_variants changes only its extraction version and optional literal POS fields, requiring agreement of accepted same-source headword and morphology claims and retaining their proof IDs.",
+      "Interlinear reconstructs lexical variants from supporting claims rather than trusting the supplied POS label. Incomplete, inconsistent, unbound and partial-token evidence does not establish the veto.",
+      "A conflicting standalone syntax prediction is suppressed without creating a source occurrence parse, importing case/number/tense from dictionary POS, or selecting a contextual gloss.",
+      "The lexical check is explicitly not an exhaustive analysis inventory or scholarly certainty claim. Matching syntax remains labeled a prediction.",
+      "An exact source-feature consensus can survive contradictory syntax, while retaining conflict and unresolved candidate identity. Final maximal features must be supported by an actual non-machine row and fallback support IDs are source-only.",
+      "No syntax window, model, dictionary/corpus artifact, source data, provider prompt, ranking model or public route change is included."
+    ],
+    "resolved_blocker": {
+      "finding": "Initial D fallback retained all candidate rows and could promote machine-only case/number as source_morphology_consensus. Independently reproduced with source ADJ-only, same-lemma machine ADJ/Nom/Sing and contradictory VERB syntax.",
+      "resolution": "Final f376a30a module retains machine rows in ambiguity checks but requires maximal fallback features to equal a real non-machine source row; support IDs exclude machines. If only a machine supports the extra features, it returns no consensus.",
+      "regression": "Tests cover machine-only added features, equivalent real-source support, and a disagreeing machine alternative."
+    }
+  },
+  "verification": {
+    "staged_application_and_guard_suite": "301 passed, 1 nonfunctional pytest import-rewrite warning in 6.72s",
+    "separate_guard_suite": "23 passed in 0.73s",
+    "method": "Loaded exact frozen D bytes into normal backend module identities with deployment-equivalent __file__ roots; all three non-delta modules were verified byte-identical to approved C artifacts.",
+    "tests": ["test_interlinear.py", "test_lexicon_senses.py", "test_lexical_variants.py", "test_lexical_variants_integration.py", "test_passage_analysis.py", "test_candidate_senses.py", "test_sense_ranker.py", "test_contextual_lemma_senses.py", "test_campbell_meanings.py", "test_classifier.py", "test_lyric_dictionary_gaps.py", "test_lexicon_render.py", "test_passage_ranker.py", "test_lexical_release_d.py", "test_lexical_release_c.py", "test_lexical_release.py"],
+    "paid_model_calls": 0,
+    "auditor_remote_mutations": 0,
+    "auditor_corpus_or_dictionary_writes": 0
+  },
+  "limits": [
+    "PASS permits exact-byte upload and private loopback canary testing only, not production promotion or public route changes.",
+    "Operational D responses must verify the observed source-adverb versus syntax-verb conflict is suppressed in the running candidate and source proof remains available.",
+    "This is a bounded presentation/data-integrity fix, not a general philological accuracy certification.",
+    "Public promotion remains a separate parent decision with a candidate-specific receipt; inherited promote code does not itself enforce this textual scope restriction."
+  ],
+  "philological_accuracy_claim": false
+}

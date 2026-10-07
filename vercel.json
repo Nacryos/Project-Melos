@@ -5,10 +5,21 @@
   "rewrites": [
     { "source": "/api/:path*", "destination": "https://basecamp.taila44c41.ts.net:8443/api/:path*" },
     { "source": "/reader.html", "destination": "/index.html" },
+    { "source": "/lexicon", "destination": "/lexicon.html" },
+    { "source": "/authors", "destination": "/authors.html" },
+    { "source": "/themes", "destination": "/themes.html" },
     { "source": "/legacy", "destination": "/design-studio.html" },
     { "source": "/design-studio", "destination": "/design-studio.html" }
   ],
   "headers": [
+    {
+      "source": "/assets/edition-excerpts/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
+    {
+      "source": "/assets/nature-presets/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
+    },
     {
       "source": "/api/(.*)",
       "headers": [{ "key": "Cache-Control", "value": "no-store" }]

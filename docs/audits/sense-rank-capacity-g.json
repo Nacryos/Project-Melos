@@ -1,0 +1,75 @@
+{
+  "audit": "Independent G sense ranking capacity and evidence-preservation review",
+  "auditor": "/root/context_pipeline_review/audit_rank_capacity",
+  "verdict": "PASS",
+  "blocking": false,
+  "scope": "Offline integrity, transport capacity, source reconstruction and tests; not model semantic accuracy or production deployment approval",
+  "files": {
+    "backend/sense_ranker.py": "76b8d63b782ecb028a32ef1506bddf3a5e141f794de07c64763928128c063fe3",
+    "tests/test_sense_ranker.py": "4b57adb4c525e457dcea8044d16e1e5d4366b4852b391cbf9f6b22483ee8a835",
+    "tests/test_contextual_lemma_senses.py": "0756b7e9b1a788599d4bc8abd3b25dcbc48126939613d8db5bb9262f2fe445e2"
+  },
+  "replay": {
+    "poem_file": "runtime/campbell-assignment/campbell_assignment.jsonl",
+    "poem_id": "campbell-glp:alcaeus:326",
+    "method": "Read saved responses; inject current lookup_linked_dictionary for each word token; rebuild interlinear_reading; construct sense_packet for first reading token. Reconstruct every source sense semantic payload and every morphology path, expanding shared relation and noun metadata references, and compare exactly against original inventories. Source extraction coordinates intentionally omitted by the existing wire projection were excluded only from the sense comparison. Original response was unchanged.",
+    "serialization": "json.dumps(value, ensure_ascii=False, separators=(',', ':')) character length",
+    "network_interception": "Replace backend.classifier.urlopen with in-memory request capture and raise a local exception before transport; no provider call",
+    "cases": [
+      {
+        "response": "runtime/lyric-context-eval/canary-326/0.response.json",
+        "form": "στάσιν",
+        "sense_choices": 37,
+        "state_characters": 44016,
+        "questions_object_characters": 16549,
+        "http_body_characters": 60609,
+        "request_proxy_characters": 82553,
+        "full_sense_and_morphology_path_reconstruction": "PASS"
+      },
+      {
+        "response": "runtime/lyric-context-eval/canary-326/2.response.json",
+        "form": "κῦμα",
+        "sense_choices": 13,
+        "state_characters": 28712,
+        "questions_object_characters": 5299,
+        "http_body_characters": 34055,
+        "request_proxy_characters": 42960,
+        "full_sense_and_morphology_path_reconstruction": "PASS"
+      }
+    ]
+  },
+  "tests": {
+    "commands": [
+      "python -m pytest tests/test_sense_ranker.py tests/test_contextual_lemma_senses.py tests/test_jev_gateway.py -q",
+      "python -m pytest tests/test_ranked_sense_alternatives.py -q"
+    ],
+    "passed_by_command": [75, 12],
+    "total_passed": 87
+  },
+  "checks": {
+    "all_source_senses_and_homonyms_preserved": "PASS",
+    "all_linked_morphology_paths_and_noun_metadata_preserved": "PASS",
+    "254_source_choices_plus_abstain_limit": "PASS by code inspection",
+    "separate_32_morphology_alternatives_limit": "PASS by code inspection",
+    "short_wire_ids_map_back_to_original_source_ids": "PASS",
+    "incomplete_score_vector_cannot_make_decisive_proposal": "PASS",
+    "complete_packet_and_id_mapping_bound_in_cache_key": "PASS",
+    "nondecisive_ranked_alternatives_rebuilt_from_source_inventory": "PASS",
+    "full_request_character_proxy_exceeds_measured_requests": "PASS",
+    "character_proxy_not_misrepresented_as_exact_provider_token_count": "PASS"
+  },
+  "commentary_instruction": "Use these notes as fallible whole-poem context. Do not assert exact occurrence alignment from their placement. Choose a supplied sense when the combined evidence supports it; otherwise abstain.",
+  "commentary_assessment": "Removes the previous unconditional abstention instruction while retaining fallibility and no exact occurrence alignment claim. Changed instruction is part of the cache-bound packet.",
+  "official_sources": [
+    "https://docs.typesafe.ai/primitives/choice",
+    "https://docs.typesafe.ai/models"
+  ],
+  "limitations": [
+    "No paid Jev calls; fixture and offline replay success do not establish semantic accuracy.",
+    "Character limits are local guards, not guaranteed Jev tokenizer limits.",
+    "Recommended follow-up: explicit committed 254/255 boundary and short-ID cached-replay tests; nonblocking for this inspected change."
+  ],
+  "runtime_changes": false,
+  "deployment_performed": false,
+  "paid_calls": 0
+}

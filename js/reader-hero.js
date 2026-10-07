@@ -135,7 +135,10 @@ if (dither) {
 }
 new ResizeObserver(() => { applyFocus(); if (current >= 0) sharpen(current).catch(() => {}); }).observe(hero);
 if (matchMedia('(max-width: 640px)').matches) $('#search-input').placeholder = 'Greek, Beta Code or English';
-go(0, true).then(warm).catch(() => {});
+go(0, true).then(warm).catch(() => {}).finally(() => {
+  window.MelosHeroAssetsReady = true;
+  window.dispatchEvent(new Event('melos:hero-assets-ready'));
+});
 const freezeAt = parseFloat(new URLSearchParams(location.search).get('freeze'));
 if (dither && freezeAt >= 0) previews[0].then(() => preview(1)).then(slot => { clearInterval(autoTimer); dither.freeze(slot, freezeAt); });
 scheduleAuto();

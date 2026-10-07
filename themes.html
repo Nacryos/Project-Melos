@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#14223a">
+  <title>Explore themes · Melos</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/branding/melos-favicon-white.svg?v=white-1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/themes-page.css">
+  <script defer src="/js/config.js"></script>
+  <script defer src="/js/api.js"></script>
+  <script defer src="/js/nature-preset-data.js"></script>
+  <script defer src="/js/themes-page.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to themes</a>
+  <header class="discovery-bar">
+    <a class="brand" href="/" aria-label="Melos, home"><span lang="grc">Μέλος</span><small>A Greek Lyric Lexicon</small></a>
+    <nav aria-label="Main navigation"><a href="/lexicon">Lexicon</a><a href="/authors">Authors</a><a href="/themes" aria-current="page">Themes</a><a href="/">Reader</a></nav>
+  </header>
+  <main id="main">
+    <section class="themes-intro" aria-labelledby="page-title">
+      <p class="eyebrow">Discover the corpus</p>
+      <h1 id="page-title">Explore themes</h1>
+      <p class="intro-copy">Follow a landscape, a feeling, a turn of thought.<br>Find a passage, then look closely at its words.</p>
+    </section>
+    <section class="search-panel" aria-label="Search themes">
+      <form id="theme-search" role="search">
+        <label class="search-label" for="theme-query">What would you like to find?</label>
+        <div class="search-line"><input id="theme-query" name="q" type="search" maxlength="200" placeholder="Try unrequited love, the sea, or a Greek word" autocomplete="off"><button type="submit">Search</button></div>
+        <div class="filters">
+          <label>Theme<select id="theme-filter" name="theme"><option value="">All themes</option></select></label>
+          <label>Author<input id="theme-author" name="author" list="theme-authors" maxlength="200" placeholder="All authors" autocomplete="off"><datalist id="theme-authors"></datalist></label>
+          <label>Look within<select id="theme-unit" name="unit"><option value="passage">Passage</option><option value="stanza">Stanza</option><option value="line">Line</option><option value="sentence">Sentence</option><option value="phrase">Phrase</option><option value="word">Word</option></select></label>
+          <button id="theme-reset" class="text-button" type="button">Clear search</button>
+        </div>
+      </form>
+      <details class="method-details"><summary>About themes and search units</summary><p>Nature categories use existing aesthetic annotations. Their paintings are visual interpretations. “Explore ideas” starts a thematic search; its prompts are not certified literary classifications.</p><p>Smaller units are exact source spans within retrieved passages. For a query, the local semantic model can rank a bounded sample of these spans on demand. There is no independently stored index of child embeddings. If that model is unavailable, results retain literal or annotation evidence and parent relevance; each search reports its method below.</p><p>Stanzas are typographic blocks, and punctuation determines sentences and phrases; these divisions are not editorial certifications.</p><p id="catalog-note"></p></details>
+    </section>
+    <section id="theme-results-section" class="result-section" aria-labelledby="results-heading" hidden>
+      <div class="section-heading"><h2 id="results-heading" tabindex="-1">Search results</h2><a href="#landscapes">Browse landscapes</a></div>
+      <p id="theme-status" role="status" aria-live="polite"></p>
+      <div id="theme-results" aria-busy="false"></div>
+      <details id="search-evidence" class="method-details" hidden><summary>How these results were found</summary><div id="search-evidence-body"></div></details>
+      <nav id="theme-pagination" class="pagination" aria-label="Search result pages" hidden><button id="theme-previous" type="button">Previous</button><span id="theme-page"></span><button id="theme-next" type="button">Next</button></nav>
+      <button id="theme-retry" type="button" hidden>Try again</button>
+    </section>
+    <section id="landscapes" class="landscapes" aria-labelledby="landscapes-heading">
+      <div class="section-heading"><div><p class="eyebrow">Nature in the text</p><h2 id="landscapes-heading">Enter a landscape</h2></div><p>Landscapes in lyric<br>Art from the Melos collection</p></div>
+      <div id="nature-categories" class="nature-categories"></div>
+    </section>
+    <section class="ideas" aria-labelledby="ideas-heading"><p class="eyebrow">Literary discovery</p><h2 id="ideas-heading">Explore ideas</h2><p>A few starting points. Follow a question into the poetry.</p><div id="idea-categories" class="idea-categories"></div></section>
+    <noscript><p>Theme search needs JavaScript. <a href="/">Open the Melos reader</a>.</p></noscript>
+  </main>
+  <footer class="discovery-footer"><a href="/">Melos</a><p>Read the words. Return to the source.</p></footer>
+</body>
+</html>

@@ -14,6 +14,8 @@ from backend import machine_morphology as mm
 
 FIXTURES = Path(__file__).parent / "fixtures/machine_morphology"
 MANIFEST = json.loads((FIXTURES / "manifest.json").read_bytes())
+ELISION_FIXTURES = FIXTURES / "elision"
+ELISION_MANIFEST = json.loads((ELISION_FIXTURES / "manifest.json").read_bytes())
 VISITOR = "a" * 64
 
 
@@ -61,7 +63,8 @@ def test_audited_raw_fixtures_lossless_cached_reprojection(tmp_path, index, coun
     assert len(calls) == 1
 
 
-@pytest.mark.parametrize("word", ["word", "ἄνθρωπος λόγος", "[λόγος]", "λόγος†", "λόγ̣ος", "λόγος…", "<λόγος>", "λ\nόγος", "τακέρ᾽", "", "α"*81, "\u0301α"])
+@pytest.mark.parametrize("word", ["word", "ἄνθρωπος λόγος", "[λόγος]", "λόγος†", "λόγ̣ος", "λόγος…", "<λόγος>", "λ\nόγος", "", "α"*81, "\u0301α",
+                                 "᾽", "’", "’δ", "δ’δ", "δ’’", "δ᾽’", "δ’\u0301", "δ'", "δʼ", "δ‘"])
 def test_reject_unsafe_or_nonword_input_without_network(tmp_path, word):
     service = mm.MachineMorphologyService(tmp_path / "x.sqlite", transport=lambda _: pytest.fail("Network forbidden"))
     assert service.analyze(word, VISITOR)["status"] == "invalid_form"
@@ -71,6 +74,98 @@ def test_nfc_preserves_accents_and_case():
     assert mm.validate_form("Μοισάων") == "Μοισάων"
     assert mm.validate_form(unicodedata.normalize("NFD", "θέοισιν")) == unicodedata.normalize("NFC", "θέοισιν")
     assert mm.validate_form("ἴσος") != mm.validate_form("ἰσός")
+
+
+@pytest.mark.parametrize("mark", ["\u2019", "\u1fbd"])
+def test_elision_input_and_documented_transport_are_separate(mark):
+    # Synthetic spelling for protocol behavior, not an authored analysis.
+    word = "Δ" + mark
+    assert mm.validate_form(word) == word
+    assert mm.transport_form(word) == "Δ\u1fbd"
+    parameters = urllib.parse.parse_qs(urllib.parse.urlsplit(mm.request_url(word)).query)
+    assert parameters["word"] == ["Δ\u1fbd"]
+    assert parameters["noAposRetry"] == ["1"]
+    assert "noAposRetry" not in urllib.parse.parse_qs(urllib.parse.urlsplit(mm.request_url("λόγος")).query)
+
+
+def test_elision_keeps_nfc_accents_and_letter_sequence():
+    word = "ἔρχεσθ’"
+    assert mm.validate_form(unicodedata.normalize("NFD", word)) == word
+    assert mm.transport_form(word)[:-1] == word[:-1]
+
+
+@pytest.mark.parametrize("target", ["δ’", "δ", "δ'", "δʼ"])
+def test_elision_does_not_relax_response_target_binding(tmp_path, target):
+    # Synthetic alteration of an audited negative envelope tests target guards;
+    # it is not a lexical fixture or an assertion that delta is an unknown word.
+    sample = MANIFEST["negative_control"]
+    data = json.loads((FIXTURES / sample["file"]).read_bytes())
+    annotation = data["RDF"]["Annotation"]
+    annotation["hasTarget"]["Description"]["about"] = "urn:word:" + target
+    annotation["about"] = "urn:TuftsMorphologyService:δ᾽:morpheusgrc"
+    raw = json.dumps(data).encode()
+    service = mm.MachineMorphologyService(tmp_path / "wrong-elision.sqlite", transport=lambda _: (201, raw, {}))
+    assert service.analyze("δ’", VISITOR)["status"] == "invalid_response"
+
+
+@pytest.mark.parametrize("index,count", [(0, 4), (1, 1), (2, 1)])
+def test_audited_elision_raw_replay_keeps_source_and_request_spelling(tmp_path, index, count):
+    sample = ELISION_MANIFEST["samples"][index]
+    raw = (ELISION_FIXTURES / sample["raw_file"]).read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == sample["receipt"]["raw_sha256"]
+    calls = []
+    def transport(url):
+        calls.append(url)
+        assert url == sample["receipt"]["url"]
+        return sample["receipt"]["http_status"], raw, sample["receipt"]["response_headers"]
+    service = mm.MachineMorphologyService(tmp_path / "elision.sqlite", transport=transport)
+    result = service.analyze(sample["text"], VISITOR)
+    assert result["status"] == "ok" and len(result["machine_candidates"]) == count
+    assert result["form"] == sample["text"]
+    assert result["receipt"]["input_form"] == sample["text"]
+    assert result["receipt"]["source_form"] == sample["text"]
+    assert result["receipt"]["request_form"] == sample["receipt"]["request_form"]
+    assert result["receipt"]["input_convention"] == mm.ELISION_CONVENTION
+    data = json.loads(raw)
+    for candidate in result["machine_candidates"]:
+        value = data
+        for key in candidate["inflection_pointer"].split("/")[1:]:
+            value = value[int(key)] if isinstance(value, list) else value[key]
+        assert candidate["inflection"] == value
+        assert candidate["features"] == {k: v["$"] for k, v in value.items() if isinstance(v, dict) and "$" in v}
+        assert candidate["basis"] == "machine_analysis"
+    rid = result["receipt"]["id"]
+    assert service.analyze(sample["text"], VISITOR, fetch=False) == result
+    assert service.load_receipt(rid, form=sample["text"]) == result
+    different_mark = sample["text"][:-1] + ("᾽" if sample["text"].endswith("’") else "’")
+    assert service.load_receipt(rid, form=different_mark)["status"] == "invalid_receipt"
+    assert len(calls) == 1
+
+
+def test_elision_receipt_retains_original_decomposed_input(tmp_path):
+    sample = ELISION_MANIFEST["samples"][0]
+    raw = (ELISION_FIXTURES / sample["raw_file"]).read_bytes()
+    word = unicodedata.normalize("NFD", sample["text"])
+    service = mm.MachineMorphologyService(tmp_path / "nfd-elision.sqlite", transport=lambda _: (201, raw, {}))
+    result = service.analyze(word, VISITOR)
+    assert result["status"] == "ok"
+    assert result["receipt"]["input_form"] == word
+    assert result["receipt"]["source_form"] == sample["text"]
+    assert result["receipt"]["request_form"] == sample["receipt"]["request_form"]
+
+
+@pytest.mark.parametrize("field", ["source_form", "input_form", "input_transformation", "input_convention", "request_form", "url"])
+def test_elision_receipt_forged_provenance_rejected(tmp_path, field):
+    sample = ELISION_MANIFEST["samples"][0]
+    raw = (ELISION_FIXTURES / sample["raw_file"]).read_bytes()
+    metadata = {k: v for k, v in sample["receipt"].items() if k != "id"}
+    metadata[field] = "SYNTHETIC invalid binding"
+    encoded = mm._json(metadata)
+    rid = hashlib.sha256(encoded.encode()).hexdigest()
+    service = mm.MachineMorphologyService(tmp_path / "forged-elision.sqlite", transport=lambda _: pytest.fail("No fetch"))
+    with service._connect() as conn:
+        conn.execute("INSERT INTO receipts VALUES (?,?,?)", (rid, encoded, raw))
+    assert service.load_receipt(rid, form=sample["text"])["status"] == "invalid_receipt"
 
 
 def test_receipt_wrong_form_and_tamper_fail_closed(tmp_path):

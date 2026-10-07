@@ -1,0 +1,32 @@
+/* The normal reader is deliberately plain; artwork is opt-in. */
+.poem-header-art{display:none}
+.passage-fullscreen:not([open]){display:none}
+.passage-fullscreen.is-fallback[open]{display:block;z-index:2147483000}
+.passage-card .passage-heading{background:#fff;color:#353b42;padding:22px 0;min-height:0;border-bottom:1px solid var(--line)}
+.passage-heading>div{min-width:0}
+.passage-heading #passage-title{color:#353b42;text-transform:none;font-size:clamp(32px,3.1vw,48px);line-height:1.12;letter-spacing:-.025em;overflow-wrap:anywhere}
+.passage-heading .eyebrow,.passage-heading .passage-subtitle{color:var(--sea)}
+.passage-card .passage-body{background:#fff}
+.passage-fullscreen-toggle,.passage-fullscreen-exit{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex:none;color:#243c52;border:1px solid #243c5230;background:transparent;padding:9px;border-radius:3px;cursor:pointer}
+.passage-fullscreen-toggle{width:40px;height:40px}
+.passage-fullscreen-toggle:hover,.passage-fullscreen-exit:hover{background:#243c520a}
+.passage-fullscreen-toggle svg,.passage-fullscreen-exit svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.passage-fullscreen{position:fixed;inset:0;width:100%;height:100%;height:100dvh;max-width:none;max-height:none;margin:0;padding:0;border:0;background:#fff;color:var(--ink);overflow:auto;overscroll-behavior:contain}
+.passage-fullscreen::backdrop{background:#14223a80}
+.passage-fullscreen-toolbar{position:sticky;top:0;z-index:5;display:flex;justify-content:flex-end;padding:10px max(18px,env(safe-area-inset-right));background:rgb(255 255 255 / .95);border-bottom:1px solid var(--line);backdrop-filter:blur(12px)}
+.passage-fullscreen-exit{font:14px/1.2 var(--text);padding:8px 12px}
+.passage-fullscreen-layout{display:grid;grid-template-columns:minmax(0,1fr) 270px;max-width:1360px;margin:auto;padding:24px clamp(16px,3vw,48px) 48px;gap:28px}
+.passage-fullscreen .reading-column{padding:0;min-width:0;grid-column:auto;grid-row:auto}
+.passage-fullscreen .passage-card{max-width:960px}
+.passage-fullscreen .inspector{padding:0;min-width:0;grid-column:auto;grid-row:auto;align-self:start}
+.passage-fullscreen .inspector-sticky{position:static}
+.passage-fullscreen .passage-fullscreen-toggle{display:none}
+.passage-fullscreen .passage-card .passage-heading{padding:30px clamp(20px,3vw,36px);min-height:220px;box-sizing:border-box;border:0;background:#14223a;background-image:linear-gradient(rgb(12 27 45 / .76),rgb(12 27 45 / .76)),var(--poem-header-image,none);background-size:cover;background-position:center 48%;color:#fff}
+.passage-fullscreen .passage-heading #passage-title{color:#fff}
+.passage-fullscreen .passage-heading .eyebrow,.passage-fullscreen .passage-heading .passage-subtitle{color:rgb(255 255 255 / .88)}
+@media(max-width:900px){.passage-fullscreen-layout{display:block}.passage-fullscreen .inspector{padding:24px 0}.passage-fullscreen .passage-card .passage-heading{padding:24px 18px;min-height:190px}.passage-heading #passage-title{font-size:30px}}
+.passage-fullscreen .passage-card .passage-heading{position:relative;isolation:isolate;overflow:hidden;background-image:var(--poem-header-image,none)}
+.passage-fullscreen .passage-heading .poem-header-art{display:block;position:absolute;top:0;right:0;bottom:0;left:0;width:100%;height:100%;max-width:none;object-fit:cover;object-position:center 48%;z-index:0;pointer-events:none;-webkit-user-select:none;user-select:none}
+.passage-fullscreen .passage-heading:before{content:"";position:absolute;top:0;right:0;bottom:0;left:0;background:rgba(12,27,45,.76);z-index:1;pointer-events:none}
+.passage-fullscreen .passage-heading>div,.passage-fullscreen .passage-heading>button{position:relative;z-index:2}
+.passage-fullscreen-toolbar{z-index:12;padding-top:max(10px,env(safe-area-inset-top));-webkit-backdrop-filter:blur(12px)}

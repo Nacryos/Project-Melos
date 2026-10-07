@@ -13,6 +13,7 @@ class Element {
 }
 const clicks = [];
 const context = vm.createContext({
+  window: { getSelection: () => null }, state: {},
   node: (tag, cls, text) => new Element(tag, cls, text),
   document: { createTextNode: text => new Element('text', '', text) },
   inspectWord: (...args) => clicks.push(args),
@@ -40,6 +41,47 @@ test('both printed segments inspect the same joined word without altering source
     assert.match(first.attributes['aria-label'], /divided across source lines/);
     offset += line.length + 1;
   }
+});
+
+test('a drag-ending click keeps the full phrase instead of inspecting the clicked word', () => {
+  const host = new Element('span'), prior = clicks.length; let updates = 0;
+  const leaf = { data: 'α β' };
+  context.ui = { text: { contains: value => value === leaf } };
+  context.updateSelection = () => updates++;
+  context.window.getSelection = () => ({ rangeCount: 1, getRangeAt: () => ({ collapsed: false, startContainer: leaf, endContainer: leaf }) });
+  render(host, 'α β', words('α β'));
+  host.children.find(child => child.tag === 'button').handlers.click();
+  assert.equal(clicks.length, prior); assert.equal(updates, 1);
+  context.window.getSelection = () => null;
+});
+
+test('choosing the phrase endpoint never launches a single-word lookup', () => {
+  const host = new Element('span'), prior = clicks.length; let chosen = null, updates = 0;
+  context.state.passageAnalysis = { isExtending: () => true, chooseWord: button => { chosen = button; } };
+  // Entering endpoint mode clears the old native highlight. A new native drag
+  // still has precedence, as it does in ordinary word inspection mode.
+  context.window.getSelection = () => null;
+  context.updateSelection = () => updates++;
+  render(host, 'α β', words('α β'));
+  const last = host.children.filter(child => child.tag === 'button').at(-1);
+  last.handlers.click();
+  assert.equal(chosen, last); assert.equal(clicks.length, prior); assert.equal(updates, 1);
+  delete context.state.passageAnalysis;
+  context.window.getSelection = () => null;
+});
+
+test('phrase mode consumes taps without lookup, while moved pointer gestures do nothing', () => {
+  const host = new Element('span'), prior = clicks.length; let chosen = 0;
+  context.state.passageAnalysis = { isChoosingPhrase: () => true, chooseWord: () => chosen++, ignoreClick: event => event?.moved };
+  context.window.getSelection = () => null; context.updateSelection = () => {};
+  render(host, 'α β', words('α β'));
+  const first = host.children.find(child => child.tag === 'button');
+  first.handlers.click({ detail: 1, moved: true }); assert.equal(chosen, 0);
+  first.handlers.click({ detail: 1 }); assert.equal(chosen, 1); assert.equal(clicks.length, prior);
+  const leaf = { data: 'α β' }; context.ui = { text: { contains: value => value === leaf } };
+  context.window.getSelection = () => ({ rangeCount: 1, getRangeAt: () => ({ collapsed: false, startContainer: leaf, endContainer: leaf }) });
+  first.handlers.click({ detail: 1 }); assert.equal(chosen, 1); assert.equal(clicks.length, prior);
+  delete context.state.passageAnalysis; context.window.getSelection = () => null;
 });
 
 test('ordinary space, digits, brackets, lacunae, blank lines and punctuation block joins', () => {

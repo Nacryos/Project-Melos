@@ -2,6 +2,7 @@
 from copy import deepcopy
 import hashlib
 import json
+from pathlib import Path
 import sys
 from types import SimpleNamespace
 
@@ -259,3 +260,30 @@ def test_machine_criteria_use_raw_machine_proof_without_dictionary_sense_claim(r
         assert criteria[row['id']]['dictionary_fields'] == row['dictionary_fields']
         assert 'machine analysis, not source-attested parsing' in criteria[row['id']]['evidence']
     assert packet['claims'] == []
+
+
+def test_audited_elision_packet_preserves_trusted_transport_provenance(tmp_path, monkeypatch):
+    from backend import machine_morphology
+    fixtures = Path(__file__).parent / 'fixtures/machine_morphology/elision'
+    sample = json.loads((fixtures / 'manifest.json').read_bytes())['samples'][0]
+    raw = (fixtures / sample['raw_file']).read_bytes()
+    assert hashlib.sha256(raw).hexdigest() == sample['receipt']['raw_sha256']
+    service = machine_morphology.MachineMorphologyService(tmp_path / 'elision.sqlite',
+        transport=lambda _: (201, raw, {}))
+    validation = service.analyze(sample['text'], 'a' * 64)
+    assert validation['status'] == 'ok'
+    monkeypatch.setattr(machine_morphology, 'get_service', lambda: service)
+    supplied = deepcopy(validation)
+    fields = ('source_form', 'input_form', 'input_transformation', 'input_convention')
+    for field in fields:
+        supplied['receipt'][field] = 'SYNTHETIC forged client metadata'
+    packet = classifier.build_evidence_packet(sample['text'],
+        {'id': sample['passage_id'], 'text': sample['text'], 'language': 'grc'},
+        validation['machine_candidates'], machine_validation=supplied, source_guard_candidates=[])
+    for field in fields:
+        assert packet['machine_receipt'][field] == validation['receipt'][field]
+    assert packet['machine_receipt']['source_form'] == sample['text']
+    assert packet['machine_receipt']['request_form'] == sample['receipt']['request_form']
+    assert packet['machine_receipt']['source_form'] != packet['machine_receipt']['request_form']
+    assert packet['claims'] == []
+    assert len(packet['candidates']) == sample['candidate_count']

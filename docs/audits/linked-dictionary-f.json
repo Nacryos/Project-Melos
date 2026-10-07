@@ -1,0 +1,60 @@
+{
+  "audit": "Independent F source-linked dictionary adapter and consumer audit",
+  "reviewed_date_utc": "2026-10-07",
+  "auditor": "/root/context_pipeline_review/audit_linked_adapter",
+  "verdict": "PASS",
+  "blocking": false,
+  "approval_scope": "Offline adapter and interlinear/sense-ranking integration integrity only; not demonstrated model accuracy, production endpoint wiring, live canary or deployment approval",
+  "code_sha256": {
+    "backend/linked_dictionary.py": "8fe4afbf8f34acf96dc07c7566b2ace1d59066614bccfbe3dcfe3a14e56223ee",
+    "backend/interlinear.py": "5e093a96302df53fcca2133b1eaee127ee204f78b061f24dcf1973e71804caff",
+    "backend/sense_ranker.py": "f4433c3c21a0fcdb8a0bf85d4750965c87f8ec6f16818d1b27041647f9133c56"
+  },
+  "source_helper_audit_dependencies": [
+    {
+      "receipt": "docs/audits/dictionary-crossrefs.json",
+      "verdict": "PASS",
+      "module": "backend/dictionary_crossrefs.py",
+      "sha256": "24296bb371d3271d3551ece513253b8ab2d0e4bdab51c38e0e31f27a23f017f2"
+    },
+    {
+      "receipt": "docs/audits/source-link-aliases.json",
+      "verdict": "PASS",
+      "module": "backend/source_link_aliases.py",
+      "sha256": "70a5e9c157be50558240cdb4dc439d8419006eb433d43577b6bc512aa6db6507"
+    }
+  ],
+  "tests": {
+    "command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_linked_sense_integration.py tests/test_linked_dictionary.py tests/test_sense_ranker.py tests/test_interlinear.py tests/test_dictionary_crossrefs.py tests/test_source_link_aliases.py -q",
+    "passed": 110,
+    "failed": 0,
+    "reported_duration_seconds": 7.72,
+    "independent_probes": "Additional read-only Python probes executed directly through stdin; no production data or modules authored by reviewer"
+  },
+  "adapter_checks": [
+    "Traced 116 projected path/sense combinations across the actual accepted-source results for παχέων, δᾶμον and μέσσον to literal helper gloss text, complete gloss chain, tags and source locator. All distinct helper sense claim identities remained in the adapter inventory.",
+    "παχέων retains eight source grammar paths and fifteen distinct sense choices; δᾶμον retains two target-homonym paths and eleven sense choices.",
+    "μέσσον retains twenty paths and six distinct senses, including ten paths with source/target dictionary POS disagreement. Literal Epic/Doric relation wording and target POS remain disclosed; no mismatching target was filtered out.",
+    "Canonical grammatical features derive only from source-anchor tags and source dictionary POS. Target-entry senses do not add case, number, gender or tense.",
+    "Recomputed caller digests cannot authorize forged gloss text, invented features, swapped target entry identities, omitted paths, omitted senses or duplicate paths. Mismatched query and caller validated flag also failed exact local reconstruction comparison.",
+    "Partial-word and editorial-fragment guards reject linked alternatives. Mutating a returned inventory does not mutate cached results. SQLite/source unavailability fails closed. Network-disabled probe succeeded."
+  ],
+  "consumer_checks": [
+    "Linked paths enter candidate_meanings separately from normal exact morphological candidates. The existing statistical POS compatibility filter cannot remove them from the sense inventory.",
+    "The actual saved παχέων response retained all fifteen linked senses in the model packet, including the noun cubit path despite the adjective prediction. Source/target identities, grammar paths, relation context and POS disagreements remain present.",
+    "Seven independent forged/stale source-inventory cases were rejected during apply: changed literal sense, omitted path, omitted sense, invented grammar, changed inventory digest, swapped target identity and partial-word status.",
+    "Seven independent invalid decision cases were rejected: changed digest, changed supporting candidates, omitted abstention probability, NaN score, boolean score, higher abstention score and invented selected sense identifier.",
+    "A mocked decisive cubit sense applied only its existing literal source wording and cleared unsupported selected morphology rather than selecting a complete noun parse. Regression coverage also checks unresolved standalone syntax features.",
+    "Independent group-cleanup probe removed the entire agreement group containing the cleared token and cleared its peers' group pointers, while preserving an unrelated group. All raw alternatives and the source_result remained unchanged.",
+    "Simulated unavailable local source reconstruction prevented a formerly valid linked decision from applying."
+  ],
+  "resolved_audit_finding": "Initial compact adapter omitted target POS and literal relation context. The approved version retains target_dictionary_pos, literal_pos_agreement and relation_context in both grammatical and lexical path payloads; the reviewer reran source projections and adversarial checks after correction.",
+  "limitations": [
+    "No paid model calls or live deployment were performed by this auditor. Mocked decisive decisions test application integrity, not Jev accuracy or calibration.",
+    "Cached runtime reconstruction trusts the accepted local evidence/source indexes and invalidates on database/WAL path, mtime and size changes; it does not rehash complete source databases on every request.",
+    "Source retrieval retains the inherited twenty-source-entry crossreference bound; PASS does not establish universal recall or universal parsing accuracy.",
+    "A dictionary form/page link supports a candidate path, not exact printed-spelling identity or occurrence attestation. A selected linked sense does not establish its complete morphology.",
+    "Source-helper audit quality and licensing qualifications remain unchanged. Runtime endpoint attachment, live source database equivalence and release promotion need their own checks."
+  ],
+  "mutations": "Reviewer wrote only this requested audit receipt. No production module, source record, paid service, network source or deployed service was modified."
+}

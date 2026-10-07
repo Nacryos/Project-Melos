@@ -170,11 +170,11 @@ def test_verified_raw_author_spelling_includes_primary_and_linked_translations()
                row('scholia', 'fr. 286 Page', author='Ibycus Scholia'),
                row('other-author', 'fr. 286 Page', author='Other named author')]
     records.extend(row(f'tr{n}', '\u03b1\u03c0. 286 Page', author='Translator',
-                       kind='translation', language='ell', parent_id='primary') for n in range(3))
+                       kind='translation', language='eng', parent_id='primary') for n in range(3))
     result = rank_reference_records(intent, records)
     assert [r['id'] for r in result['results']] == ['primary', 'tr0', 'tr1', 'tr2', 'pointer']
     assert all(r['author'] == 'Translator' for r in result['results'][1:4])
-    assert rank_reference_records(intent, records, language='ell')['total'] == 3
+    assert rank_reference_records(intent, records, language='eng')['total'] == 3
     assert rank_reference_records(intent, records, edition='nonexistent')['total'] == 0
 
 

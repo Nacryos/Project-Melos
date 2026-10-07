@@ -1,0 +1,48 @@
+{
+  "audit": "Independent G integration audit of owned noun gender on source-linked candidates",
+  "date": "2026-10-06",
+  "auditor": "subentry_evidence_audit",
+  "verdict": "PASS",
+  "blocking": false,
+  "scope": "Narrow linked_dictionary v2 integration of separately audited same-entry noun metadata; no deployment or approval of unrelated existing behavior",
+  "version": "source-linked-dictionary-inventory-v2",
+  "code_sha256": {
+    "backend/linked_dictionary.py": "8bc98545f4ec4efd8da0ce9b0beaa33e7da199092241802265af8e495ec604c6",
+    "tests/test_linked_dictionary.py": "c53fc53ab0e8cedf03b440cdf315dbc6847f2a808dc921aa025a7dd18144ac87",
+    "backend/noun_entry_features.py": "f76b06f93709dd7024cbaa370d5bf9082c049b6eb7eff0ac0e7bfb56b5d98dfd",
+    "backend/interlinear.py": "5e093a96302df53fcca2133b1eaee127ee204f78b061f24dcf1973e71804caff"
+  },
+  "frozen_f_reference": {
+    "path": "runtime/lexical-release-f/candidate-code/linked_dictionary.py",
+    "sha256": "8fe4afbf8f34acf96dc07c7566b2ace1d59066614bccfbe3dcfe3a14e56223ee",
+    "modified": false
+  },
+  "source_projection_audits": ["docs/audits/noun-entry-features.json", "docs/audits/source-link-aliases.json", "docs/audits/dictionary-crossrefs.json"],
+  "comparison_coverage": {"actual_query_forms": 27, "candidate_paths": 126, "paths_with_source_noun_metadata": 27, "paths_with_owned_gender_added": 20},
+  "checks": [
+    "Diff against frozen F contains the version increment, source-only noun metadata retrieval, full metadata-packet replay, optional missing-gender application and explicit provenance view. Target retrieval and sense extraction are unchanged.",
+    "Metadata is fetched only for source anchor entry IDs with literal source POS noun. Supplied metadata must reproduce exactly from its complete claims and hash-bound source wrapper; entry identity, source headword and noun POS must match the candidate source.",
+    "Gender is added only for single_source_gender when the source form's normalized features do not already supply gender. It is copied through an explicit schema-label mapping; case, number and other features remain source-anchor values.",
+    "27 queries compared against frozen F produce the same 126 source/target/anchor paths. All existing linked-path fields and all sense payloads are identical after removing the new metadata view; feature differences are exclusively the 20 independently source-verified missing-gender additions.",
+    "Every metadata source_record_proof equals the headword proof returned by the audited noun helper for that exact source entry. Metadata views retain evidence-group locators, literal source tags, scope, claim IDs, status, application basis and contextually_selected=false.",
+    "Actual λαγῴα paths preserve explicit feminine gender despite the source noun's conflicting paradigm metadata. Actual παισί paths retain masculine/feminine entry alternatives without adding a gender.",
+    "Target-entry metadata mapped under a source key, tampered metadata output, and altered public parent-hash proof are rejected. Public validated_candidates rebuilds local expected inventory, rather than trusting the supplied digest.",
+    "Distinct δῆμος etymologies remain separate target entries. παχύς masculine/neuter adjective candidates and the distinct πάχος noun candidate remain available.",
+    "No contextual selection or paid provider request is added. Source cache stamps and the new version distinguish inventories; returned cached inventories are deep copies.",
+    "python -m pytest tests/test_linked_dictionary.py tests/test_noun_entry_features.py tests/test_interlinear.py tests/test_sense_ranker.py -q: 98 passed."
+  ],
+  "examples": [
+    {"query": "παχέων", "source_entry": "wiktionary:kaikki:line:11786", "source_headword": "πᾶχυς", "target_entry": "wiktionary:kaikki:line:7510", "candidate_features": {"Case": "Gen", "Number": "Plur", "POS": "NOUN", "Gender": "Masc"}, "added_gender_source_locator": "/entry/forms/0/tags", "contextually_selected": false},
+    {"query": "δᾶμον", "source_entry": "wiktionary:kaikki:line:9399", "source_headword": "δᾶμος", "target_entries": ["wiktionary:kaikki:line:894", "wiktionary:kaikki:line:895"], "candidate_features": {"Case": "Acc", "Number": "Sing", "POS": "NOUN", "Gender": "Masc"}, "added_gender_source_locator": "/entry/senses/0/tags", "contextually_selected": false},
+    {"query": "λαγῴα", "source_headword": "λαγῷος", "gender_status": "explicit_paradigm_gender_conflict", "explicit_form_gender": "Fem", "applied_to_candidate": false},
+    {"query": "παισί", "source_headword": "παῖς", "gender_status": "multiple_source_genders", "dictionary_gender_options": ["feminine", "masculine"], "added_gender": null}
+  ],
+  "limitations": [
+    "Candidate gender enrichment does not assert that this source-linked candidate is the correct analysis of a particular occurrence. Link aliases remain distinct from exact printed-surface attestation.",
+    "Source noun metadata must never be borrowed from a target meaning entry or used to override explicit source form gender.",
+    "Counts describe candidate paths, not newly verified passage readings or independent dictionary senses.",
+    "Compact metadata is a transport view, not a standalone cryptographic authority. Public consumers must retain the local rebuild-and-equality validation boundary.",
+    "Future source snapshots containing multiple explicit form genders without a unique normalized Gender require continued preservation of ambiguity; no general permission to infer missing morphology is granted."
+  ],
+  "mutations": "Only this new audit report was written by auditor. E/F snapshots, previous reports, source databases, ranker code and deployment were not modified."
+}

@@ -1,0 +1,113 @@
+{
+  "schema": "melos-independent-commentary-semantics-audit-v1",
+  "audit_date": "2026-10-06",
+  "reviewer": "context_pipeline_review/review_prompt_semantics",
+  "artifact_role": "evaluation_metadata_not_corpus_data",
+  "scope": {
+    "packet_directory": "runtime/lexical-release-g/commentary-ablation-02",
+    "cases": 4,
+    "sampling": "purposeful_diagnostic_not_blind_random_or_held_out_benchmark",
+    "blind_sequence": "Full Greek, candidate senses, shared source references, commentary, translation context and morphology were reviewed before any answer.json files. Blind judgments were sent to the parent and frozen before output inspection.",
+    "translation_context": "All four frozen packets contain empty published_translation_context arrays. The supervising review reports this is deliberate: other-edition translations are reader-comparison material with model_eligible=False, not a missing-wiring defect. This audit does not recommend promoting them into model context.",
+    "model_calls_by_reviewer": 0,
+    "accuracy_certification": false,
+    "limitations": "One output per arm per purposeful case; semantic judgments are independent review opinions, not an externally adjudicated gold standard. No reliability, significance or calibration claim follows."
+  },
+  "operational_rule": {
+    "thresholds_unchanged": true,
+    "minimum_top_vector_score": 0.75,
+    "minimum_margin_against_next_complete_vector_entry_including_abstain": 0.20,
+    "complete_vector_required": true,
+    "all_eight_vectors": "Each contains exactly every supplied candidate ID plus abstain, with no missing or extra IDs, and sums to 1.",
+    "score_note": "Table scores use model_probabilities, not the distinct model_confidence field. Model-emitted choice may differ from vector argmax and is not itself an operational acceptance."
+  },
+  "cases": [
+    {
+      "case": 0,
+      "occurrence": "παχέων",
+      "passage_id": "campbell-glp:alcaeus:350",
+      "blind_judgment": {
+        "decision": "select",
+        "sense_id": "linked-sense:4786b913426c4639b9561b9892a36b260de20517f8b6f92f6ccbf8e45e2243a8",
+        "literal_definition": "cubit (the distance from the point of the elbow to that of the little finger)",
+        "source_claim_id": "wiktionary:kaikki:line:7510:sense:4",
+        "supporting_path_id": "linked-path:2fe4709029a7bf2ff6f66c8457ac98cc7f6e69c2a409e174310b11217f5e2f40",
+        "commentary_id": "campbell-glp:alcaeus:350:commentary",
+        "commentary_paragraph_ordinals": [2, 6, 7, 8, 9],
+        "rationale": "The printed Greek measures a warrior as one palm short of five royal units; Campbell explains royal cubits. The explicit source path connects πᾶχυς with πῆχυς. Adjective παχύς and noun πάχος remain distinct sourced alternatives but fit poorly.",
+        "uncertainty": "Campbell identifies the lines after 1–2 as modern reconstruction from Strabo's paraphrase. Selection interprets the printed occurrence and does not certify verbatim ancient transmission. Existing adjective morphology prediction must not veto the noun path."
+      },
+      "baseline": {"choice": "linked-sense:4786b913426c4639b9561b9892a36b260de20517f8b6f92f6ccbf8e45e2243a8", "top_score": 0.59, "margin": 0.41, "operational_decision": "abstain"},
+      "commentary_only": {"choice": "linked-sense:4786b913426c4639b9561b9892a36b260de20517f8b6f92f6ccbf8e45e2243a8", "top_score": 0.64, "margin": 0.50, "operational_decision": "abstain"},
+      "comparison": "Both raw choices match the blind reading. Both gates abstain, leaving a supportable sense unresolved. The score increase does not improve the accepted outcome or demonstrate greater accuracy."
+    },
+    {
+      "case": 1,
+      "occurrence": "δᾶμον",
+      "passage_id": "campbell-glp:alcaeus:129",
+      "blind_judgment": {
+        "decision": "abstain",
+        "supported_senses": [
+          {"id": "linked-sense:d1117c516df6c28b81c57935f81ce75866edb48739b0ca0171d4d0a0af715ac0", "source_claim_id": "wiktionary:kaikki:line:894:sense:2", "literal_definition": "the inhabitants of a district or land", "status": "strongest_broad_reading"},
+          {"id": "linked-sense:931441a5b018867677ac1ea9c589e8bb3adb1b810ed6d74b14abe3c4f50ccb54", "source_claim_id": "wiktionary:kaikki:line:894:sense:3", "literal_definition": "the common people", "status": "plausible_narrower_reading"},
+          {"id": "linked-sense:e38890b099cb84e53901d94e09f9d9ab496a3a14d160503836a542e0ac1becb4", "source_claim_id": "wiktionary:kaikki:line:894:sense:5", "literal_definition": "free citizens, sovereign people", "status": "plausible_but_stronger_political_implications_unsecured"}
+        ],
+        "excluded_homonym": {"id": "linked-sense:e5f42613be080aad5b78ad2f48662fde1d833e1d6b1adb55017107399aeca42a", "source_claim_id": "wiktionary:kaikki:line:895:sense:0", "literal_definition": "yellow serradella, Ornithopus compressus", "reason": "Separate etymology 2; no contextual support."},
+        "commentary_id": "campbell-glp:alcaeus:129:commentary",
+        "rationale": "Rescuing the community from troubles and Pittacus devouring the city support a political collective. Commentary establishes faction, exile and betrayal but does not discriminate the overlapping collective definitions.",
+        "uncertainty": "Accusative singular is supported; inhabitants versus common people versus civic people remains semantically underdetermined. Territorial land is a weaker metonymic possibility."
+      },
+      "baseline": {"choice": "abstain", "vector_top_id": "linked-sense:931441a5b018867677ac1ea9c589e8bb3adb1b810ed6d74b14abe3c4f50ccb54", "top_score": 0.27, "margin": 0.01, "operational_decision": "abstain"},
+      "commentary_only": {"choice": "linked-sense:931441a5b018867677ac1ea9c589e8bb3adb1b810ed6d74b14abe3c4f50ccb54", "top_score": 0.24, "margin": 0.02, "operational_decision": "abstain"},
+      "comparison": "Both operational abstentions are appropriate. The commentary-only raw choice becomes more specific while its top score decreases. Common people is plausible, not established as uniquely correct; the raw switch is not a demonstrated improvement. Both vectors exclude the plant homonym."
+    },
+    {
+      "case": 2,
+      "occurrence": "ἀνέμων",
+      "passage_id": "campbell-glp:alcaeus:326",
+      "blind_judgment": {
+        "decision": "abstain_under_exact_id_near_synonym_rule",
+        "supported_senses": [
+          {"id": "lsj:1:n8238:tei-definition-spans-v2:/entryFree/sense[1]/tr[1]:67:71", "literal_definition": "wind"},
+          {"id": "autenrieth:n975:tei-definition-spans-v2:/entryFree/gloss:31:35", "literal_definition": "wind"},
+          {"id": "linked-sense:db7bc0889c9075fde4e230787ffa3f38f4cb2a90ccc8c7930fc0b16bd7f877dc", "source_claim_id": "wiktionary:kaikki:line:4347:sense:0", "literal_definition": "wind, breeze, gale"}
+        ],
+        "commentary_id": "campbell-glp:alcaeus:326:commentary",
+        "commentary_paragraph_ordinals": [2, 5],
+        "rationale": "Storm, waves and damaged ship strongly support the meteorological image. The political allegory does not select another supplied dictionary meaning. Campbell's direction/strife discussion concerns στάσιν, not a forced cardinal-direction sense of ἀνέμων.",
+        "uncertainty": "Meaning is clear but three source IDs are equally suitable. This is source-ID selection ambiguity, not substantive uncertainty about wind. Supplied morphology agrees on genitive plural masculine."
+      },
+      "baseline": {"choice": "lsj:1:n8238:tei-definition-spans-v2:/entryFree/sense[1]/tr[1]:67:71", "top_score": 0.36, "margin": 0.13, "operational_decision": "abstain", "meteorological_source_score_sum": 0.46, "cardinal_direction_source_score_sum": 0.31},
+      "commentary_only": {"choice": "lsj:1:n8238:tei-definition-spans-v2:/entryFree/sense[1]/tr[1]:67:71", "top_score": 0.38, "margin": 0.19, "operational_decision": "abstain", "meteorological_source_score_sum": 0.49, "cardinal_direction_source_score_sum": 0.32},
+      "comparison": "Both raw choices have the correct substantive meaning but arbitrarily favor one interchangeable source ID. Both gates appropriately abstain under the current exact-ID rule. Both allocate substantial score to cardinal directions; commentary-only slightly increases that score too. Semantic-family sums are diagnostic descriptions, not a proposed replacement gate."
+    },
+    {
+      "case": 3,
+      "occurrence": "ἦλθες",
+      "passage_id": "campbell-glp:alcaeus:350",
+      "blind_judgment": {
+        "decision": "select",
+        "sense_id": "lsj:5:n42827:tei-definition-spans-v2:/entryFree/sense[4]/tr[1]:10466:10476",
+        "literal_definition": "come or go",
+        "commentary_id": "campbell-glp:alcaeus:350:commentary",
+        "commentary_paragraph_ordinals": [2],
+        "rationale": "The Greek and welcome context support coming from afar. The supplied LSJ scope includes ἦλθες as an arrival example. Start/set out and walk are limited to the present; arrive-at and from-a-place alternatives have accusative-place and bare-genitive construction restrictions absent from this explicit ἐκ phrase.",
+        "uncertainty": "No material ambiguity warrants abstention. Second-person singular aorist is supported. This occurrence is in the quoted first two lines, unlike the reconstructed later target in case 0."
+      },
+      "baseline": {"choice": "lsj:5:n42827:tei-definition-spans-v2:/entryFree/sense[4]/tr[1]:10466:10476", "top_score": 0.86, "margin": 0.79, "operational_decision": "select"},
+      "commentary_only": {"choice": "lsj:5:n42827:tei-definition-spans-v2:/entryFree/sense[4]/tr[1]:10466:10476", "top_score": 0.87, "margin": 0.81, "operational_decision": "select"},
+      "comparison": "Both accepted choices agree with blind adjudication. Small score changes do not change outcome or demonstrate improved accuracy."
+    }
+  ],
+  "usage": {
+    "model": "jev-1.13.0",
+    "baseline": {"input_tokens": 68251, "output_tokens": 3006, "total_tokens": 71257},
+    "commentary_only": {"input_tokens": 68231, "output_tokens": 3061, "total_tokens": 71292},
+    "combined_total_tokens": 142549
+  },
+  "instruction_review": {
+    "observed_difference": "The baseline says Campbell notes interpret the whole poem, not this word/line or a translation, parse, or dictionary sense, ending preserve alternatives and abstain. The commentary-only replacement says to use notes as fallible whole-poem context, avoid asserting exact occurrence alignment from placement, and choose a supplied sense only when combined evidence supports it.",
+    "interpretive_recommendation": "The replacement is logically clearer: whole-poem packaging does not mean the notes contain no word-level interpretations, translations or grammatical explanations. The supplied notes visibly do contain these. Keep the prohibition on inferring exact alignment from placement and keep source alternatives and the existing abstention rule. This is an instruction-consistency justification, not evidence of improved measured accuracy."
+  },
+  "bounded_recommendation": "No operational outcome changes: each arm accepts only case 3 and abstains on cases 0–2. No wrong decisive accepted choice appears in these four cases. Case 0 shows a supportable sense remaining below threshold; case 1 warrants substantive abstention; case 2 distinguishes clear meaning from arbitrary source-ID choice, while substantial cardinal-direction scores show ID duplication is not the sole reason for uncertainty. Retain thresholds and do not claim the commentary-only arm outperforms baseline. Cleaning the internally overbroad commentary instruction is reasonable on logical grounds. Evaluate editorial provenance, source-scope restrictions, genuine ambiguity and interchangeable source IDs separately in further independently adjudicated cases; do not equate higher self-reported scores with accuracy."
+}

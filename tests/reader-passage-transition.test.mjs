@@ -45,14 +45,14 @@ function harness() {
     renderAuthors() {}, renderPassageText: passage => { ui.text.textContent = passage.text; },
     renderRelated: related => { ui.related.textContent = related?.[0]?.text || ''; ui.related.hidden = !related?.length; },
     renderMirrors() {}, renderProvenance: passage => { ui.provenance.textContent = passage.id; ui.provenance.hidden = false; },
-    renderWiktionary(host) { host.textContent = 'STALE WIKI'; },
+    renderWiktionary(host) { host.textContent = 'STALE WIKI'; }, renderExactCommentaryNotes() {},
     addInspectorSection(label, host) { const section = new Element(); host.append(section); return section; },
     api(path, params) { return new Promise((resolve, reject) => requests.push({ path, params, resolve, reject })); },
     apiPost: (...args) => { posts.push(args); return Promise.resolve({}); }
   });
   for (const [start, end] of [
     ['  function resetPassageContext(', '  // Shared literal lexer:'],
-    ['  async function openPassage(', '  function appendWarnings('],
+    ['  function formatPassageTitlePart(', '  function appendWarnings('],
     ['  async function loadWiktionary(', '  function foldGreekForm('],
     ['  function addContextAction(', '  function renderFormInventories('],
     ['  async function inspectWord(', '  function updateSelection(']

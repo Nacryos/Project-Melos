@@ -1,0 +1,40 @@
+{
+  "schema": "melos-large-json-gzip-offline-review-v1",
+  "status": "implementation_staged_not_integrated_or_deployed",
+  "installed_versions": {
+    "starlette": "0.46.2",
+    "fastapi": "0.115.14"
+  },
+  "installed_middleware_finding": "Starlette GZipMiddleware excludes text/event-stream but compresses other streaming responses and uses a substring Accept-Encoding check; the scoped middleware instead excludes all streaming JSON and honors explicit gzip q=0.",
+  "saved_source": {
+    "path": "runtime/lexical-release-g/root-editorial/receipts/0ab76a479f481af4a4f5c824e2b5bb67a265879151187d3d127f47c6adef0fca.body",
+    "sha256": "4043219974edb89639586168356c095c1a9ce93c0f8e281bb812f50352d3a977",
+    "raw_bytes": 45882575,
+    "offline_gzip_level1_bytes": 6499954,
+    "offline_encode_seconds_three_runs": [0.299, 0.297, 0.3],
+    "all_three_decompress_to_exact_original_sha256": true
+  },
+  "implementation": {
+    "module": "backend/large_json_gzip.py",
+    "module_sha256": "95b5804db12e0eee91844e313c0c6edc06a7c55e8e429a8d7f38da7aa180e5eb",
+    "tests": "tests/test_large_json_gzip.py",
+    "tests_sha256": "ca75e2dfa0c116c5e5d8d59e9d5d6b4a2195ac94efdb188cf0bf9e3215ccf8c3",
+    "focused_tests_passed": 9,
+    "server_insertion_patch": "runtime/lexical-release-g/large-json-gzip-insertion.patch",
+    "patch_sha256": "a5b1728b0b072b9d0791a83d69a99c78a08edd36d8d5889229e7ca607fb6f346",
+    "patch_base_server_path": "runtime/lexical-release-g/candidate-code/server.py",
+    "patch_base_server_sha256": "6b8c808fb0a1d875c657463d4d3d23a9b442c93038a65a8b78ea72f553efd534",
+    "dirty_local_server_sha256_not_used_as_patch_base": "e47b8d27bc3d8dacf5018a9b8bcd131551d6760c1b2a4708611252463c058b2a",
+    "patch_check": "git apply --check --verbose --directory=runtime/lexical-release-g/candidate-code runtime/lexical-release-g/large-json-gzip-insertion.patch from repository root printed Checking patch runtime/lexical-release-g/candidate-code/server.py and exited zero. No live/H server edit was made.",
+    "registration_order": "Register immediately after app = FastAPI, before CORS and @app.middleware('http'); later Starlette middleware is outermost and BaseHTTPMiddleware otherwise re-emits ordinary JSON as streaming frames."
+  },
+  "contract": {
+    "eligible": "HTTP 200, single-frame application/json, at least 4096 bytes, no existing content encoding, range, digest, ETag or Cache-Control:no-transform",
+    "negotiation": "gzip or wildcard with positive quality; an explicit gzip refusal wins, including across duplicate fields",
+    "vary": "Eligible identity and gzip representations both carry Vary: Accept-Encoding; existing Vary values and other headers are retained",
+    "excluded": "Streaming JSON, SSE, small JSON, non-JSON, pre-encoded, content-bound, trailer-declared, no-transform and non-200 responses",
+    "timing": "Known-ineligible starts such as SSE pass immediately, before the first event. JSON starts must wait for the first body frame to decide single-frame eligibility; streamed JSON first-frame latency is an inherent bounded limitation.",
+    "unchanged": "Routes, authentication, request body, cache-control policy, source data and model requests",
+    "limitation": "This reduces transfer size, not the number or duration of dictionary lookups or browser rendering after decompression."
+  }
+}

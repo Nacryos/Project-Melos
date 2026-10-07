@@ -1,0 +1,76 @@
+{
+  "verdict": "PASS",
+  "approval_scope": "upload_and_private_loopback_canary_only",
+  "auditor": "/root/campbell_integrate/release_c_audit",
+  "reviewed_date_utc": "2026-10-07",
+  "base_container_id": "b7b0d8996609a41f3ca8b740f4ccf19979462845c89445e571c1972398eb75bb",
+  "image": "sha256:2f60b62520d88098663fa79e2cb76cdeae8b7540e24752d586df042fc09d1777",
+  "candidate_directory": "runtime/lexical-release-h/candidate-code",
+  "files": {
+    "lexicon_senses.py": {
+      "verdict": "PASS",
+      "sha256": "60b141a7f2dc6b435279c5d1a82cb66ddb74cd3190bde96d86d31f97b9a94a22",
+      "baseline_sha256": "00d2fe4ed17066a1f7ba211b723cc56e074ce43b563c5d6e07c8e9deebd3dde9"
+    },
+    "interlinear.py": {
+      "verdict": "PASS",
+      "sha256": "463667edc5bc24757480ea8a70a2f8149cae59b344634631bc0519e3bb73b598",
+      "baseline_sha256": "c8ca0b41d8ece747875766525c68567541e0814fc08544144adc9096cb5c57cc"
+    }
+  },
+  "evidence_and_helper_hashes": {
+    "docs/audits/lsj-backward-tense-restriction-v4.json": "405476f35a2955ae5b201404aaf990fc404405c3dc822d594b234d8e875c0739",
+    "runtime/alcaeus-morpheus-maintenance/source-tense-consumer-audit.json": "ea59191939379fbd6d0aaede2f10fb7db580d9a27597e4d3ac766b53a87958ba",
+    "runtime/lexical-release-h/staging.json": "78d92301bb8fa4e7f119c07c0571ead80436c1a01e85960c3cbe79866ba4ec93",
+    ".benchmarks/lexical-h-baseline/b7b0d8996609a41f3ca8b740f4ccf19979462845c89445e571c1972398eb75bb/baseline.json": "c3e8283d0fbebc80c7a046167addcfb9b1689affeaf2dd934f8bfd14c17795b8",
+    "deploy/lexical_release_h.py": "bc0ab3b17bc2171af9d1f6b98585ceb65d17670161556af96eaccc08224ff851",
+    "deploy/lexical_transport_h.py": "12454090ee89e8a9d7c4da9561bbb036a7671a6047c2526000051c90447d7529",
+    "deploy/lexical_baseline_h.py": "f74a5a06ce44f681ac0c91f1535671db45796fed575def938c6d2c144fae4329",
+    "tests/test_lexical_release_h.py": "daadd50ce6f008c0cc4d689cc4f1ddfa7f09b6efc6a698e40664ed0aa1992934",
+    "tests/test_lexicon_senses.py": "cf8d86e278796dbd23fe412a829eefc9b4500cb73d075c037ddae3cdb2461c0b",
+    "tests/test_interlinear_tense_scope.py": "81d863066b83b048f31396aad519d93df6f17710c03f5f6a63ca6edd67bdd908"
+  },
+  "source_review": [
+    "Independent source extraction audit binds exact archived LSJ entry, raw XML hash, sense IDs and rendered source coordinates. One explicitly fenced backward-reference layout yields literal present-tense restriction metadata for exactly the two preceding senses.",
+    "Extractor requires matching numbered adjacent source units, literal terminal declaration, tagged pres., matching explicit headword and complete extracted target definitions. Other wording/layouts abstain; no new gloss or morphology is authored.",
+    "Consumer checks provenance, sense/entry identity namespaces, coordinate nesting, expected scope/count/rule and literal allowed tense metadata. Malformed or absent proof does not constrain senses.",
+    "Known competing tenses affect headline compatibility only; unknown or supporting present alternatives prevent categorical exclusion. Full literal senses and competing parse inventories remain available to the separately labeled ranker.",
+    "Baseline G homograph protection and all prior source boundaries remain intact. H introduces no dictionary database or corpus writes."
+  ],
+  "deployment_review": [
+    "All 32 saved G baseline files independently rehashed; both exact H candidate hashes verified. Baseline receipt binds current public G b7b0d899.",
+    "Minimal adapters have exactly two allowed modules, no new-module absence exceptions, no cache-import or private-runtime artifact allowance.",
+    "All 27 baseline G mounts retained; only two code mount targets change. H uses original production runtime, not G's isolated private-copy wrapper. Existing resources, source databases, sidecars, model/secret mounts and route guards retained.",
+    "Transport remains immutable and exact-hash gated; prior G helper configuration remains unchanged. H staging refuses changed existing files and binds separately approved immutable interlinear snapshot.",
+    "No public promotion authorized; private canary and subsequent operational source-tense checks are still required."
+  ],
+  "verification": {
+    "exact_staged_tests_passed": 282,
+    "duration_seconds": 7.41,
+    "method": "Import hook loaded the two H candidates and all remaining inventoried backend modules from downloaded exact G baseline; source-relative file paths preserved. Adjacent JSON sidecars hash-checked against baseline. No dirty backend modules substituted.",
+    "tests": [
+      "test_lexicon_senses.py",
+      "test_interlinear_tense_scope.py",
+      "test_interlinear.py",
+      "test_sense_ranker.py",
+      "test_ranked_sense_alternatives.py",
+      "test_contextual_lemma_senses.py",
+      "test_linked_sense_integration.py",
+      "test_linked_dictionary.py",
+      "test_source_tense_live_probe.py",
+      "test_editorial_analysis.py",
+      "test_editorial_transport.py",
+      "test_passage_analysis.py",
+      "test_edition_commentary_integration.py",
+      "all H-through-B release guards"
+    ],
+    "paid_model_calls": 0,
+    "auditor_remote_mutations": 0,
+    "source_or_corpus_writes": 0
+  },
+  "limitations": [
+    "This is bounded source-extraction and consumer integrity approval, not general LSJ scope interpretation or full grammatical/semantic accuracy certification.",
+    "Restricted senses are retained as alternatives; H does not establish the correct contextual tense or sense.",
+    "Shared runtime means later authorized private requests may produce normal cache changes. No morphology fetch, paid inference, new receipt import, or public promotion is authorized by this receipt."
+  ]
+}

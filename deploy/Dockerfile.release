@@ -1,0 +1,13 @@
+# Full current code and parser dependencies atop the verified production runtime.
+# Source data, model files, secrets and operational databases stay separate mounts.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+USER root
+COPY deploy/requirements-runtime.txt /tmp/melos-runtime.txt
+RUN pip install --no-cache-dir -r /tmp/melos-runtime.txt && pip check
+COPY backend /app/backend
+COPY js /app/js
+COPY css /app/css
+COPY assets/branding /app/assets/branding
+COPY reader.html index.html /app/
+USER 1000:1000

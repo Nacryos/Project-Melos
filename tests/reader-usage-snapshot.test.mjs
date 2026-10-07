@@ -6,7 +6,10 @@ const source = readFileSync(new URL('../js/reader.js', import.meta.url), 'utf8')
 
 function harness() {
   class Element {
-    constructor() { this.children = []; this.value = ''; this.checked = false; this.hidden = false; this.options = []; }
+    constructor() { this.children = []; this.value = ''; this.checked = false; this.hidden = false; this.options = [];
+      const classes = new Set();
+      this.classList = { add: name => classes.add(name), remove: name => classes.delete(name), contains: name => classes.has(name) };
+    }
     append(...children) { this.children.push(...children); }
     querySelectorAll() { return this.children.filter(child => child.result); }
     scrollIntoView() {}

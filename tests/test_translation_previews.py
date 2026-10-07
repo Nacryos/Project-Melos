@@ -20,7 +20,7 @@ def parent(number=1):
 
 def translation(number=1, index=1, *, inline=False):
     base = parent(number)
-    return {**base, 'id': f'{base["id"]}:tr{index}', 'kind': 'translation', 'language': 'ell',
+    return {**base, 'id': f'{base["id"]}:tr{index}', 'kind': 'translation', 'language': 'eng',
             'parent_id': base['id'], 'text': 'Literal synthetic translation.\nSecond synthetic line.',
             'source_url': base['source_url'] + ('' if inline else f'#m{index}'),
             'edition': 'Synthetic published edition', 'citation': 'Synthetic citation', 'license': 'Fixture licence',
@@ -48,9 +48,25 @@ def test_verified_whole_source_pair_preserves_literal_text_credit_and_proof(inli
     assert translated == before
 
 
+@pytest.mark.parametrize('language', ['ell', 'el', 'el-GR', None, '', 'unknown'])
+def test_modern_greek_and_unknown_never_become_translation_previews(language):
+    row = translation(); row['language'] = language
+    original = deepcopy(row)
+    result = project(parent(), [row], full_text=True)
+    assert result['translation_previews'] == []
+    assert result['translation_preview_count'] == 0
+    assert row == original
+
+
+@pytest.mark.parametrize('language', ['eng', 'en', 'en-GB'])
+def test_explicit_english_codes_are_preserved(language):
+    row = translation(); row['language'] = language
+    assert project(parent(), [row])['translation_previews'][0]['language'] == language
+
+
 @pytest.mark.parametrize('change', [
     {'source': 'perseus'}, {'parent_id': 'wrong-parent'}, {'quality': 'machine_ocr'},
-    {'kind': 'commentary'}, {'language': 'eng'}, {'raw_sha256': 'b' * 64}, {'raw_path': 'different.html'},
+    {'kind': 'commentary'}, {'language': 'ell'}, {'raw_sha256': 'b' * 64}, {'raw_path': 'different.html'},
     {'source_url': 'https://example.test/different-page'}, {'source_url': 'javascript:alert(1)'},
     {'id': 'p2_cgl_anthology:2:tr1'},
 ])

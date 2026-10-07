@@ -1,0 +1,428 @@
+{
+  "source_replay": "runtime\\lyric-context-eval\\elthes-baseline\\0.response.json",
+  "form": "ἦλθες",
+  "source_candidates": [
+    {
+      "lemma": "ἔρχομαι",
+      "lemma_raw": "ἔρχομαι1",
+      "matched_form": "ἦλθες",
+      "analysis": "v2saia---",
+      "analysis_text": "verb · second person · singular · aorist · indicative · active",
+      "match_kind": "indexed_form",
+      "edit_distance": 0,
+      "source": "PerseusDL Greek Dependency Treebank v1.6",
+      "source_url": "https://raw.githubusercontent.com/PerseusDL/treebank_data/bf4334f0af5e13d16b04c1cccd6237e683ac6f5f/v1.6/greek/data/tlg0011.tlg003.perseus-grc1.tb.xml"
+    }
+  ],
+  "contextual_candidates": [
+    {
+      "id": "wiktionary:kaikki:line:10375:morphology:entry#form:4",
+      "matched_form": "ἦλθες",
+      "lemma": "ἦλθον",
+      "lemma_targets": null,
+      "entry_headword": "ἦλθον",
+      "candidate_kind": "grammatical_analysis",
+      "analysis": [
+        "active",
+        "indicative",
+        "second-person",
+        "singular"
+      ],
+      "features": null,
+      "relation_raw": null,
+      "source_tags": [
+        "active",
+        "indicative",
+        "second-person",
+        "singular"
+      ],
+      "source_raw_tags": null,
+      "claim_ids": [
+        "wiktionary:kaikki:line:10375:morphology:entry"
+      ],
+      "evidence_refs": [
+        "wiktionary:kaikki:line:10375"
+      ],
+      "status": "source_claim",
+      "assertion_type": "extracted_annotation",
+      "strength": "listed_entry_form",
+      "source_family": "enwiktionary-kaikki-ancient-greek-2026-09-02",
+      "match_reason": "Source entry explicitly lists this form; no passage attestation is asserted.",
+      "matched_object_form": {
+        "form": "ἦλθες",
+        "tags": [
+          "active",
+          "indicative",
+          "second-person",
+          "singular"
+        ],
+        "source": "inflection"
+      },
+      "entry_senses": [
+        {
+          "claim_id": "wiktionary:kaikki:line:10375:sense:0",
+          "entry_id": "wiktionary:kaikki:line:10375",
+          "sense_index": 0,
+          "source_sense_id": "en-ἦλθον-grc-verb-ZEl-fL~~",
+          "glosses": [
+            "first-person singular/third-person plural aorist indicative active of ἔρχομαι (érkhomai):",
+            "came"
+          ],
+          "raw_glosses": [],
+          "tags": [],
+          "raw_tags": [],
+          "source_url": "https://kaikki.org/dictionary/Ancient%20Greek/kaikki.org-dictionary-AncientGreek.jsonl",
+          "locator": "/entry/senses/0/glosses",
+          "quote": "[\"first-person singular/third-person plural aorist indicative active of ἔρχομαι (érkhomai):\", \"came\"]",
+          "scope": "general_dictionary_entry",
+          "scope_note": "Dictionary entry senses only; no contextual sense or passage attestation is asserted.",
+          "source_quality": "machine_extracted_unreviewed",
+          "license": "Wiktionary text CC-BY-SA-4.0/GFDL; merged fields may differ"
+        },
+        {
+          "claim_id": "wiktionary:kaikki:line:10375:sense:1",
+          "entry_id": "wiktionary:kaikki:line:10375",
+          "sense_index": 1,
+          "source_sense_id": "en-ἦλθον-grc-verb-7Nz7H4PV",
+          "glosses": [
+            "first-person singular/third-person plural aorist indicative active of ἔρχομαι (érkhomai):",
+            "went"
+          ],
+          "raw_glosses": [],
+          "tags": [],
+          "raw_tags": [],
+          "source_url": "https://kaikki.org/dictionary/Ancient%20Greek/kaikki.org-dictionary-AncientGreek.jsonl",
+          "locator": "/entry/senses/1/glosses",
+          "quote": "[\"first-person singular/third-person plural aorist indicative active of ἔρχομαι (érkhomai):\", \"went\"]",
+          "scope": "general_dictionary_entry",
+          "scope_note": "Dictionary entry senses only; no contextual sense or passage attestation is asserted.",
+          "source_quality": "machine_extracted_unreviewed",
+          "license": "Wiktionary text CC-BY-SA-4.0/GFDL; merged fields may differ"
+        }
+      ],
+      "entry_sense_claim_ids": [
+        "wiktionary:kaikki:line:10375:sense:0",
+        "wiktionary:kaikki:line:10375:sense:1"
+      ]
+    },
+    {
+      "id": "wiktionary:kaikki:line:770:morphology:entry#form:240",
+      "matched_form": "ἦλθες",
+      "lemma": "ἔρχομαι",
+      "lemma_targets": null,
+      "entry_headword": "ἔρχομαι",
+      "candidate_kind": "grammatical_analysis",
+      "analysis": [
+        "active",
+        "indicative",
+        "second-person",
+        "singular"
+      ],
+      "features": null,
+      "relation_raw": null,
+      "source_tags": [
+        "active",
+        "indicative",
+        "second-person",
+        "singular"
+      ],
+      "source_raw_tags": null,
+      "claim_ids": [
+        "wiktionary:kaikki:line:770:morphology:entry"
+      ],
+      "evidence_refs": [
+        "wiktionary:kaikki:line:770"
+      ],
+      "status": "source_claim",
+      "assertion_type": "extracted_annotation",
+      "strength": "listed_entry_form",
+      "source_family": "enwiktionary-kaikki-ancient-greek-2026-09-02",
+      "match_reason": "Source entry explicitly lists this form; no passage attestation is asserted.",
+      "matched_object_form": {
+        "form": "ἦλθες",
+        "tags": [
+          "active",
+          "indicative",
+          "second-person",
+          "singular"
+        ],
+        "source": "conjugation"
+      },
+      "entry_senses": [
+        {
+          "claim_id": "wiktionary:kaikki:line:770:sense:0",
+          "entry_id": "wiktionary:kaikki:line:770",
+          "sense_index": 0,
+          "source_sense_id": "en-ἔρχομαι-grc-verb-gNM9bcDR",
+          "glosses": [
+            "to go"
+          ],
+          "raw_glosses": [],
+          "tags": [
+            "intransitive"
+          ],
+          "raw_tags": [],
+          "source_url": "https://kaikki.org/dictionary/Ancient%20Greek/kaikki.org-dictionary-AncientGreek.jsonl",
+          "locator": "/entry/senses/0/glosses",
+          "quote": "[\"to go\"]",
+          "scope": "general_dictionary_entry",
+          "scope_note": "Dictionary entry senses only; no contextual sense or passage attestation is asserted.",
+          "source_quality": "machine_extracted_unreviewed",
+          "license": "Wiktionary text CC-BY-SA-4.0/GFDL; merged fields may differ"
+        },
+        {
+          "claim_id": "wiktionary:kaikki:line:770:sense:1",
+          "entry_id": "wiktionary:kaikki:line:770",
+          "sense_index": 1,
+          "source_sense_id": "en-ἔρχομαι-grc-verb-InxwJN6G",
+          "glosses": [
+            "to come"
+          ],
+          "raw_glosses": [],
+          "tags": [
+            "intransitive"
+          ],
+          "raw_tags": [],
+          "source_url": "https://kaikki.org/dictionary/Ancient%20Greek/kaikki.org-dictionary-AncientGreek.jsonl",
+          "locator": "/entry/senses/1/glosses",
+          "quote": "[\"to come\"]",
+          "scope": "general_dictionary_entry",
+          "scope_note": "Dictionary entry senses only; no contextual sense or passage attestation is asserted.",
+          "source_quality": "machine_extracted_unreviewed",
+          "license": "Wiktionary text CC-BY-SA-4.0/GFDL; merged fields may differ"
+        }
+      ],
+      "entry_sense_claim_ids": [
+        "wiktionary:kaikki:line:770:sense:0",
+        "wiktionary:kaikki:line:770:sense:1"
+      ]
+    },
+    {
+      "id": "wiktionary:kaikki:line:770:morphology:entry#form:279",
+      "matched_form": "ἦλθες",
+      "lemma": "ἔρχομαι",
+      "lemma_targets": null,
+      "entry_headword": "ἔρχομαι",
+      "candidate_kind": "grammatical_analysis",
+      "analysis": [
+        "active",
+        "indicative",
+        "second-person",
+        "singular"
+      ],
+      "features": null,
+      "relation_raw": null,
+      "source_tags": [
+        "active",
+        "indicative",
+        "second-person",
+        "singular"
+      ],
+      "source_raw_tags": null,
+      "claim_ids": [
+        "wiktionary:kaikki:line:770:morphology:entry"
+      ],
+      "evidence_refs": [
+        "wiktionary:kaikki:line:770"
+      ],
+      "status": "source_claim",
+      "assertion_type": "extracted_annotation",
+      "strength": "listed_entry_form",
+      "source_family": "enwiktionary-kaikki-ancient-greek-2026-09-02",
+      "match_reason": "Source entry explicitly lists this form; no passage attestation is asserted.",
+      "matched_object_form": {
+        "form": "ἦλθες",
+        "tags": [
+          "active",
+          "indicative",
+          "second-person",
+          "singular"
+        ],
+        "source": "conjugation"
+      },
+      "entry_senses": [
+        {
+          "claim_id": "wiktionary:kaikki:line:770:sense:0",
+          "entry_id": "wiktionary:kaikki:line:770",
+          "sense_index": 0,
+          "source_sense_id": "en-ἔρχομαι-grc-verb-gNM9bcDR",
+          "glosses": [
+            "to go"
+          ],
+          "raw_glosses": [],
+          "tags": [
+            "intransitive"
+          ],
+          "raw_tags": [],
+          "source_url": "https://kaikki.org/dictionary/Ancient%20Greek/kaikki.org-dictionary-AncientGreek.jsonl",
+          "locator": "/entry/senses/0/glosses",
+          "quote": "[\"to go\"]",
+          "scope": "general_dictionary_entry",
+          "scope_note": "Dictionary entry senses only; no contextual sense or passage attestation is asserted.",
+          "source_quality": "machine_extracted_unreviewed",
+          "license": "Wiktionary text CC-BY-SA-4.0/GFDL; merged fields may differ"
+        },
+        {
+          "claim_id": "wiktionary:kaikki:line:770:sense:1",
+          "entry_id": "wiktionary:kaikki:line:770",
+          "sense_index": 1,
+          "source_sense_id": "en-ἔρχομαι-grc-verb-InxwJN6G",
+          "glosses": [
+            "to come"
+          ],
+          "raw_glosses": [],
+          "tags": [
+            "intransitive"
+          ],
+          "raw_tags": [],
+          "source_url": "https://kaikki.org/dictionary/Ancient%20Greek/kaikki.org-dictionary-AncientGreek.jsonl",
+          "locator": "/entry/senses/1/glosses",
+          "quote": "[\"to come\"]",
+          "scope": "general_dictionary_entry",
+          "scope_note": "Dictionary entry senses only; no contextual sense or passage attestation is asserted.",
+          "source_quality": "machine_extracted_unreviewed",
+          "license": "Wiktionary text CC-BY-SA-4.0/GFDL; merged fields may differ"
+        }
+      ],
+      "entry_sense_claim_ids": [
+        "wiktionary:kaikki:line:770:sense:0",
+        "wiktionary:kaikki:line:770:sense:1"
+      ]
+    },
+    {
+      "id": "wiktionary:kaikki:line:770:morphology:entry#form:335",
+      "matched_form": "ἦλθες",
+      "lemma": "ἔρχομαι",
+      "lemma_targets": null,
+      "entry_headword": "ἔρχομαι",
+      "candidate_kind": "grammatical_analysis",
+      "analysis": [
+        "active",
+        "indicative",
+        "second-person",
+        "singular"
+      ],
+      "features": null,
+      "relation_raw": null,
+      "source_tags": [
+        "active",
+        "indicative",
+        "second-person",
+        "singular"
+      ],
+      "source_raw_tags": null,
+      "claim_ids": [
+        "wiktionary:kaikki:line:770:morphology:entry"
+      ],
+      "evidence_refs": [
+        "wiktionary:kaikki:line:770"
+      ],
+      "status": "source_claim",
+      "assertion_type": "extracted_annotation",
+      "strength": "listed_entry_form",
+      "source_family": "enwiktionary-kaikki-ancient-greek-2026-09-02",
+      "match_reason": "Source entry explicitly lists this form; no passage attestation is asserted.",
+      "matched_object_form": {
+        "form": "ἦλθες",
+        "tags": [
+          "active",
+          "indicative",
+          "second-person",
+          "singular"
+        ],
+        "source": "conjugation"
+      },
+      "entry_senses": [
+        {
+          "claim_id": "wiktionary:kaikki:line:770:sense:0",
+          "entry_id": "wiktionary:kaikki:line:770",
+          "sense_index": 0,
+          "source_sense_id": "en-ἔρχομαι-grc-verb-gNM9bcDR",
+          "glosses": [
+            "to go"
+          ],
+          "raw_glosses": [],
+          "tags": [
+            "intransitive"
+          ],
+          "raw_tags": [],
+          "source_url": "https://kaikki.org/dictionary/Ancient%20Greek/kaikki.org-dictionary-AncientGreek.jsonl",
+          "locator": "/entry/senses/0/glosses",
+          "quote": "[\"to go\"]",
+          "scope": "general_dictionary_entry",
+          "scope_note": "Dictionary entry senses only; no contextual sense or passage attestation is asserted.",
+          "source_quality": "machine_extracted_unreviewed",
+          "license": "Wiktionary text CC-BY-SA-4.0/GFDL; merged fields may differ"
+        },
+        {
+          "claim_id": "wiktionary:kaikki:line:770:sense:1",
+          "entry_id": "wiktionary:kaikki:line:770",
+          "sense_index": 1,
+          "source_sense_id": "en-ἔρχομαι-grc-verb-InxwJN6G",
+          "glosses": [
+            "to come"
+          ],
+          "raw_glosses": [],
+          "tags": [
+            "intransitive"
+          ],
+          "raw_tags": [],
+          "source_url": "https://kaikki.org/dictionary/Ancient%20Greek/kaikki.org-dictionary-AncientGreek.jsonl",
+          "locator": "/entry/senses/1/glosses",
+          "quote": "[\"to come\"]",
+          "scope": "general_dictionary_entry",
+          "scope_note": "Dictionary entry senses only; no contextual sense or passage attestation is asserted.",
+          "source_quality": "machine_extracted_unreviewed",
+          "license": "Wiktionary text CC-BY-SA-4.0/GFDL; merged fields may differ"
+        }
+      ],
+      "entry_sense_claim_ids": [
+        "wiktionary:kaikki:line:770:sense:0",
+        "wiktionary:kaikki:line:770:sense:1"
+      ]
+    },
+    {
+      "id": "wiktionary:kaikki:line:19311:form_of:0",
+      "matched_form": "ἦλθες",
+      "lemma": "ἔρχομαι",
+      "lemma_targets": [
+        {
+          "word": "ἔρχομαι",
+          "extra": "érkhomai"
+        }
+      ],
+      "entry_headword": null,
+      "candidate_kind": "explicit_form_of",
+      "analysis": [
+        "active",
+        "aorist",
+        "indicative",
+        "second-person",
+        "singular"
+      ],
+      "features": null,
+      "relation_raw": "form_of",
+      "source_tags": [
+        "active",
+        "aorist",
+        "form-of",
+        "indicative",
+        "second-person",
+        "singular"
+      ],
+      "source_raw_tags": [],
+      "claim_ids": [
+        "wiktionary:kaikki:line:19311:form_of:0"
+      ],
+      "evidence_refs": [
+        "wiktionary:kaikki:line:19311"
+      ],
+      "status": "source_claim",
+      "assertion_type": "extracted_annotation",
+      "strength": "general_form_claim",
+      "source_family": "enwiktionary-kaikki-ancient-greek-2026-09-02",
+      "match_reason": "Source claim concerns this form generally; no occurrence in the requested passage is asserted.",
+      "matched_object_form": null
+    }
+  ]
+}

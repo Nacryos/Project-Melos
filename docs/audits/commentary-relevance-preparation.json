@@ -1,0 +1,61 @@
+{
+  "audit": "Independent offline preparation audit of frozen commentary-relevance comparison 02",
+  "reviewed_date_utc": "2026-10-07",
+  "auditor": "/root/context_pipeline_review/audit_linked_adapter",
+  "verdict": "PASS",
+  "blocking": false,
+  "superseded_by": "docs/audits/commentary-relevance-execution-gate.json: comparison-03 retains the current commentary_only baseline instruction; comparison-02 remains unexecuted historical preparation only",
+  "approval_scope": "Offline preparation and exact artifact integrity only; no paid execution authorization, result evaluation or production prompt approval",
+  "manifest": {
+    "path": "runtime/lexical-relevance-comparison-02/manifest.json",
+    "sha256": "79e8427a177b6db0a59b9744172f06378e8529fdc1a724ba44b604f4e36a27af",
+    "baseline_manifest_sha256": "10c0118500840e9234ae5aa029e2e02ddee23765811d9297d26e0d84961dc718",
+    "baseline_cases": [0, 2],
+    "source_choices_per_case": [15, 7],
+    "model": "jev-1.13.0",
+    "maximum_new_provider_calls": 2,
+    "maximum_attempts_per_case": 1,
+    "retries_permitted": false,
+    "execution_authorized": false
+  },
+  "code_sha256": {
+    "scripts/prepare_commentary_relevance.py": "3db3771be91ef61906dd4b01357e9aaa037f1f233adbfa6aa1abea1cd4f7fa1a",
+    "backend/commentary_retrieval.py": "1efd54840f3c6734714e6e6429dae6f7ae63a4489e037d9792015c65bd0c6318",
+    "backend/sense_ranker.py": "c5925064d85bc3d49b00b61e8974a8a024d92823898ad35d4dbd8fc464767833"
+  },
+  "dependencies": [
+    "docs/audits/commentary-retrieval.json",
+    "docs/audits/commentary-retrieval-integration.json",
+    "docs/audits/commentary-prompt-experiment-g.json"
+  ],
+  "tests": {
+    "command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_prepare_commentary_relevance.py -q",
+    "passed": 7,
+    "failed": 0,
+    "network_mode": "Provider serialization intercepted with a fake urlopen response; external urllib.request.urlopen forbidden during independent recapture"
+  },
+  "checks": [
+    "Manifest hash and every pinned dependency hash match current frozen files. Model, absolute output directory, baseline manifest, source records and declared two-call bound are unchanged.",
+    "Both original packet hashes and retained original-answer hashes match. Answers are diagnostic baseline artifacts, not authored gold labels or new model results.",
+    "All fifteen case-0 choices and seven case-2 choices retain their exact original IDs, source inventory digest and full candidate JSON. Complete Greek source text, target offsets and source commentary remain unchanged.",
+    "Rebuilding the relevance intervention from each original packet and the approved source commentary reproduces the saved revised packet bytes exactly.",
+    "Removing only commentary_retrieval_cues, the three selected-morphology preview flags when applicable, and the two appended constraints restores the complete original packet exactly. The old commentary instruction is retained.",
+    "Literal source-heading cues reproduce the independently audited helper's output; neighboring matches remain neighbors, not target glosses or occurrence attestations.",
+    "Provider request recapture from each saved packet reproduces the saved request bytes exactly after canonicalization. Removing state from captured baseline and revised request objects leaves identical model and question objects.",
+    "The retained original classifier with SHA256 35af1e3d4d145d603f94b330867d3f6e4fcfc14c6bbb0bdb1a4b12a67cb5983f has an AST-identical JevProvider class and _state_json serializer to the current provider; unrelated classifier-file changes do not change the comparison question.",
+    "Request UTF-8 byte and character counts match the saved manifest. Token proxies are explicitly not Jev usage or billing estimates.",
+    "Preparation exposes no live execution mode. No new answer artifacts or attempts ledger existed in comparison-02 at audit time, and reviewer made no paid call."
+  ],
+  "superseded_preparation": {
+    "path": "runtime/lexical-relevance-comparison-01",
+    "status": "Preserved, unexecuted and superseded; not approved for execution",
+    "finding": "Initial preparation captured a request before canonical packet roundtrip, causing serialization-order-only differences on recapture. Both the author test and independent audit found this. Comparison-02 canonicalizes before capture and passes strict byte reproducibility."
+  },
+  "limitations": [
+    "These are two previously observed diagnostic failures, not random, held-out or blind cases. No accuracy-rate inference follows from this sample.",
+    "Source retrieval cues and heuristic-preview demotion form one combined intervention; any future difference cannot be attributed separately to those two changes.",
+    "The preparation manifest declares a future budget but does not execute or enforce provider attempts; any executor and paid-run authority require separate review.",
+    "Higher confidence alone is not correctness. Source-supported readings, wrong decisive choices, alternatives and justified abstention must be evaluated separately."
+  ],
+  "mutations": "Only this audit receipt was authored by reviewer. Preparation was not rerun, source data and runtime modules were not edited, and no paid provider call occurred."
+}

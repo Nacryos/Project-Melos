@@ -1,0 +1,62 @@
+{
+  "audit": "Independent exact source-listed lexical variant projection audit",
+  "date": "2026-10-06",
+  "auditor": "subentry_evidence_audit",
+  "verdict": "PASS",
+  "blocking": false,
+  "scope": "Isolated read-only projection of accepted Kaikki dictionary claims; no contextual parsing or deployment approval",
+  "version": "exact-dictionary-variants-v1",
+  "code_sha256": {
+    "backend/lexical_variants.py": "aa7d8ca247019bf1af08100deec3f52ee61e22e49ff5387530781a4f1f24ff4c",
+    "tests/test_lexical_variants.py": "af0316f902fa952696c5080b44992add014375e72e88f7737f9b7604df6b1cfe",
+    "backend/candidate_senses.py": "c0442d19a4fd4931d1958e04a1b2a7b99b4ee7f4a92c430c5d87e65e7a47743a"
+  },
+  "source_sha256": {
+    "data/raw/wiktionary/kaikki.org-dictionary-AncientGreek.jsonl": "69d7185819de51cc746d96f8033eb6c3f3e2016a314c2ee640ec09ce80623029",
+    "data/lexica/wiktionary-entries.jsonl": "202f59461ababa9e36737b9857632947d12fd4825ffa4e6df52db67e3f1810a8",
+    "data/claims/p2_wiktionary.jsonl": "42b022848f10329603078090adb7d955a794c080cda546bf70cc812336724514"
+  },
+  "upstream_acceptance": "data/reports/p2-claim-acceptance.json",
+  "checks": [
+    "All three retained source/claim artifact hashes match accepted upstream provenance.",
+    "Initial projection revision: 23 queries tested, comprising three requested examples and 20 deterministic additional forms sampled with seed 20261006 from 2873 distinct source-listed alternative forms.",
+    "Initial projection revision: 18 emitted variants and the unresolved lyric crossreference traced through 89 returned supporting claims to 18 original downloaded JSONL lines. Raw line SHA-256 includes the original newline; every checked hash matches.",
+    "Every sampled projected sense object, gloss, explicit alternative form, headword and morphology form array matches the archived source field exactly.",
+    "Distinct dictionary entries sharing νεόφυτος retain independent noun and adjective entry identities and senses.",
+    "Nine current unit tests pass, including NFC-only matching, missing/changed proof rejection, duplicate identity rejection, literal unresolved-crossreference handling, and exclusion of Greek/example text from English previews.",
+    "No generated forms, meanings, morphological features or target-sense inheritance were observed. Variant analysis and features are null."
+  ],
+  "examples": [
+    {"query": "τάλαις", "entry_id": "wiktionary:kaikki:line:33375", "source_form_locator": "/entry/forms/62", "entry_headword": "τάλας", "glosses": ["miserable"], "source_tags": ["alternative", "Aeolic"]},
+    {"query": "ὄππᾳ", "entry_id": "wiktionary:kaikki:line:20270", "source_form_locator": "/entry/forms/7", "entry_headword": "ὅπῃ", "glosses": ["in which or whichever direction", "in which or whichever way, how"], "source_tags": ["alternative", "Aeolic"]},
+    {"query": "δᾶμον", "entry_id": "wiktionary:kaikki:line:9399", "query_anchor_locator": "/entry/forms/20", "relation_locator": "/entry/senses/0", "relation_text": "Lyric form of δῆμος (dêmos)", "target_link": "δῆμος#Ancient_Greek", "resolution_status": "unresolved_dictionary_crossreference"}
+  ],
+  "resolved_during_audit": {
+    "finding": "Initial crossreference payload dropped the exact query-form claim connecting δᾶμον to source entry δᾶμος.",
+    "resolution": "Final payload includes query_anchors with source form, ordinal, locator and claim ID, and retains the complete matching accepted morphology claim in supporting_claims. This reproduces the archived query-to-entry link without adjudicating occurrence grammar."
+  },
+  "english_preview_followup": {
+    "prior_helper_sha256": "006c24b4cdb0512fe64b59660e08244eb7b9cc1aedcfd2aaf1f4a7f141970c2c",
+    "verdict": "PASS",
+    "change": "Reject a whole source sense preview when any gloss contains a newline, carriage return or Greek letter. No source gloss is rewritten or completed; original accepted claim file hash remains unchanged.",
+    "checks": [
+      "For ἐς, emitted gloss arrays remain exactly equal to accepted claim quotes and contain no Greek letters or multiline text. εἰς retains literal 'into' and 'to; unto'; the distinct source-listed ἐκ alternative remains separate.",
+      "All 24 stored source projections in the local Alcaeus impact artifact reproduce exactly using the final helper; every emitted preview passes the new constraint.",
+      "The integration/helper/subentry test suite passes all 20 tests. Server and passage-analysis module hashes are unchanged."
+    ],
+    "tradeoff": "Whole-sense exclusion can remove valid English clauses containing a Greek comparison as well as examples. This intentionally reduces preview recall; it does not establish contextual sense correctness.",
+    "impact_artifact": "runtime/alcaeus-occurrences/lexical-variant-impact.json",
+    "impact_sha256": "292a8c799dce9325dde61834f6ce631f32329b10950bb45200d0d1e3723113ae",
+    "impact_count_checks": {"baseline_occurrences": 388, "baseline_hash_verified": true, "occurrences_with_variant_meanings": 8, "previously_without_alternative_gloss_now_with_variant_meaning": 6, "occurrences_with_unresolved_crossreferences": 30},
+    "impact_scope": "Counterfactual dictionary evidence availability only; not eight correct contextual readings or a production deployment."
+  },
+  "additional_sample_queries": ["ἐεισάμενος", "βώλομαι", "ῑ̓ητρεῖον", "ξῠσκοτᾰ́ζω", "οἰκηϊότης", "ἐπιζάμιος", "κόρρη", "ἡμέᾰς", "μελίη", "ἐφελκῠ́σῐος", "ᾰ̓κροποσθῐ́η", "ἐφελκῠ́σῑς", "ἔχομεν", "Μᾱλῐ́ς", "διαπατταλεύω", "Γήδειρα", "μετήορος", "δᾱ́ν", "βόλλομαι", "νεώφῠτος"],
+  "constraints": [
+    "Source quality remains machine_extracted_unreviewed; general entry senses are not contextually adjudicated meanings.",
+    "Unresolved linked form-of wording does not authorize adopting target dictionary senses or grammatical properties.",
+    "The adapter trusts the accepted local claim index; source-file hashes are acceptance/audit boundaries, not rehashed during each runtime call.",
+    "No new live download was needed: this projects previously accepted archived claims. Upstream merged-field licensing limitations remain unchanged.",
+    "The adapter caps participating source entries at 20 and emitted variants at the requested bounded limit; this audit does not establish exhaustive recall."
+  ],
+  "mutations": "Audit report only; no runtime code, datasets, integration or deployment changed by auditor."
+}

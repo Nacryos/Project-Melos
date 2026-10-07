@@ -21,6 +21,7 @@ const clicks = [];
 const fits = [];
 const ui = { text: new Element('div'), textLeading: {}, readingHint: {} };
 const context = vm.createContext({
+  state: {},
   ui, node: (tag, cls, text) => new Element(tag, cls, text),
   window: { MelosVerseFit: { watch: (host, selector) => fits.push(['watch', host, selector]), unwatch: host => fits.push(['unwatch', host]) } },
   document: { createTextNode: text => new Element('#text', '', text) },

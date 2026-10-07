@@ -1,0 +1,138 @@
+{
+  "verdict": "PASS",
+  "approval_scope": "upload_and_private_loopback_canary_only",
+  "auditor": "/root/campbell_integrate/release_c_audit",
+  "reviewed_date_utc": "2026-10-07",
+  "base_container_id": "e07b8119e854fd466222e5026759a9015d4dbad84ba4dccc4e46a4204b2d3d52",
+  "image": "sha256:2f60b62520d88098663fa79e2cb76cdeae8b7540e24752d586df042fc09d1777",
+  "candidate_directory": "runtime/lexical-release-g/candidate-code",
+  "files": {
+    "classifier.py": {
+      "verdict": "PASS",
+      "sha256": "0ff045b04e7b30948a7d178b995fcd29e2770ad081892ed63d153d496d0a48b5",
+      "baseline_sha256": "35af1e3d4d145d603f94b330867d3f6e4fcfc14c6bbb0bdb1a4b12a67cb5983f"
+    },
+    "editorial_analysis.py": {
+      "verdict": "PASS",
+      "sha256": "f58dbbe476816d21b123f2db099f86d90b2ffbdd31c527e1a9e0a1fac241536d",
+      "baseline_sha256": null,
+      "baseline_absent": true
+    },
+    "editorial_readings.py": {
+      "verdict": "PASS",
+      "sha256": "5d6a77348213b919d784e8110c898d322ab62e1ea5bac3c09ea9c034da99abb7",
+      "baseline_sha256": null,
+      "baseline_absent": true
+    },
+    "interlinear.py": {
+      "verdict": "PASS",
+      "sha256": "c8ca0b41d8ece747875766525c68567541e0814fc08544144adc9096cb5c57cc",
+      "baseline_sha256": "5e093a96302df53fcca2133b1eaee127ee204f78b061f24dcf1973e71804caff"
+    },
+    "linked_dictionary.py": {
+      "verdict": "PASS",
+      "sha256": "8bc98545f4ec4efd8da0ce9b0beaa33e7da199092241802265af8e495ec604c6",
+      "baseline_sha256": "8fe4afbf8f34acf96dc07c7566b2ace1d59066614bccfbe3dcfe3a14e56223ee"
+    },
+    "machine_morphology.py": {
+      "verdict": "PASS",
+      "sha256": "6918e20b3cf0a279542d6c0d34f50fcf6059d899c04cee4670d6b3bc06865b97",
+      "baseline_sha256": "3b2137f919c812b7db56870ede54184f88dc77c19f8fafa6b56ede8788d0b087"
+    },
+    "noun_entry_features.py": {
+      "verdict": "PASS",
+      "sha256": "f76b06f93709dd7024cbaa370d5bf9082c049b6eb7eff0ac0e7bfb56b5d98dfd",
+      "baseline_sha256": null,
+      "baseline_absent": true
+    },
+    "passage_analysis.py": {
+      "verdict": "PASS",
+      "sha256": "b52255126b219d64ad92ec4db6c1b0c8fcd2a28d6d8f7a9cafa3934df555797b",
+      "baseline_sha256": "2b66484df027e342f0be29c8b0cff0d7dc2b15e2c1fd83dd7f12a8980f09d497",
+      "scoped_live_baseline_patch": true
+    },
+    "sense_ranker.py": {
+      "verdict": "PASS",
+      "sha256": "76b8d63b782ecb028a32ef1506bddf3a5e141f794de07c64763928128c063fe3",
+      "baseline_sha256": "f4433c3c21a0fcdb8a0bf85d4750965c87f8ec6f16818d1b27041647f9133c56"
+    },
+    "server.py": {
+      "verdict": "PASS",
+      "sha256": "6b8c808fb0a1d875c657463d4d3d23a9b442c93038a65a8b78ea72f553efd534",
+      "baseline_sha256": "878e1f8b6e82a89ada99b038a885d9458141e267e69c7dba8c9fe06be6ddc74a",
+      "scoped_live_baseline_patch": true
+    }
+  },
+  "evidence_receipts": {
+    "docs/audits/noun-entry-features.json": "aeb5031dd9aa25c6be52e8f559b8a7342b45b649cac143b0e254e2ea92b1ab5a",
+    "docs/audits/linked-dictionary-noun-gender-g.json": "e77cebc5f0e4fdb3bedd2c969f7ecc9c7ee6de995cc98e8a566aa080aa6c6d7d",
+    "docs/audits/ranked-sense-alternatives-g.json": "bd9c7009767462a09c8ec33ca5ef3c81c766ae209ce4029c64a5be72b9b448e5",
+    "docs/audits/commentary-prompt-semantics-g.json": "a0d04202b71a071e22ca06e33c39b1402dd671c5be90eed82b4d80d159d39767",
+    "runtime/alcaeus-assignment-qa/g-editorial-helpers-audit.json": "a42beaac8459ca7cfe4b2b72d53502fa724c94dfc26b2d1177d2ee17c2630134",
+    "runtime/alcaeus-assignment-qa/g-editorial-integration-audit.json": "525e9a4ba9f5b925ca89c3e4d55e900157ed4ea6b9a81c73283fbab5b8502eae",
+    "runtime/alcaeus-morpheus-maintenance/homograph-inventory-audit.json": "58bf3336b24a9301fda2ddf524139e86cf6a3eee195dd7b7fe9d41c7cb9a9ed1",
+    "runtime/elision-protocol/independent-audit.json": "82bf252ca3bb49a72a97b468445177d7551a8011d285d26cbc724021cdd44f3c",
+    "runtime/elision-protocol/integration-audit.json": "d2c121034f129e5af27d68bd71a31dbd44d9ac48134ea4ee56a46c1c1d5cf6a9",
+    "runtime/alcaeus-morpheus-maintenance/audit/post-run.json": "a169cf9047f4f601bfd7cbe0a76ff39689ed8f944956d8797323eb32bad60037",
+    "runtime/lexical-release-g/private-runtime-pass.json": "ed75027b74056be112ef2910bb031b9a6eb5a13dc099415d40e731e657c689de",
+    "runtime/lexical-release-g/staging.json": "ed980589427096d9eff73efc901238125b563779c9a46d22cf15103b49d96d90",
+    ".benchmarks/lexical-g-baseline/e07b8119e854fd466222e5026759a9015d4dbad84ba4dccc4e46a4204b2d3d52/baseline.json": "83d8ae07c16b84bb6f91c14238201601319cb9c15d08557ec0d05a87941cc5d0",
+    "docs/audits/sense-rank-capacity-g.json": "719871df134fdd205a6f65d62bb06456cc6267dc786e2aae71d83c634048611f"
+  },
+  "helper_review": {
+    "verdict": "PASS",
+    "sha256": {
+      "deploy/lexical_release_g.py": "1bd291b66abfdf5859eac96e7a199e997d35927d36ced6cb2ac1fb70b7b9cb36",
+      "deploy/lexical_transport_g.py": "d6a950f2e04190833cdc70c8cc4a88f811f3e11517e011ba196f4d01be3d222f",
+      "deploy/lexical_baseline_g.py": "8bdd59de12368e7a1f80b97d3818ddf3e0f044c55603060029859516bc113c4d",
+      "deploy/stage_lexical_g.py": "0e6c4f08471116e40a8530356f1f7c041e80bc789019120e1ee4494f64127c2c",
+      "deploy/prepare_lexical_g_runtime.py": "b4e6bea5fa00079640cab451831a91e688eef87975f59141aaa907b0db980bb9",
+      "tests/test_lexical_release_g.py": "b13670bf0e8a707021ffd94ed3d6757f9fb12eae7879602d779b717266dfa33c"
+    },
+    "checks": [
+      "All 32 baseline file or absence records rehashed. Exact live F identity, image and 23 baseline mounts retained; exactly ten code overlays and three baseline-absent modules.",
+      "Server and passage overlays independently inspected as exact F bytes plus the pinned editorial patch only. Dirty discovery and optional later tense/scope edits are excluded.",
+      "Immutable transport and runtime approval bind exact candidate hashes, source baseline hashes and absent-module proofs. Private import transport admits only two pinned importer/bundle artifacts; upload does not execute or import them.",
+      "Only private canary name and port 8792 may substitute the independently approved isolated runtime. Saved baseline is deep-copied, not mutated. Production 8791 retains original runtime and all other configuration.",
+      "Canary startup rechecks initial private database hashes and absence of journal sidecars. Later validation permits controlled private cache changes but retains exact mount identity. Actual private snapshot has separate independent PASS.",
+      "Snapshot helper uses read-only source connections and held transactions with SQLite backup API; source/destination schema and per-table proofs must match, integrity must pass. Explicit close/checkpoint prevents leftover root-owned sidecars.",
+      "Initial open-connection/sidecar issue was independently reproduced and fixed before approval. Exact helper locally replayed against two synthetic WAL databases; quotas/BLOBs/schema preserved and private updates did not alter sources."
+    ]
+  },
+  "combined_application_review": [
+    "Same-entry noun gender projection rebuilds full source proofs and retains multiple/conflicting/incomplete evidence. Only a unique source noun gender fills an absent candidate gender; explicit source-form gender is preserved and target meanings never supply morphology.",
+    "Unresolved exact-lemma homographs retain source-local entry groups and literal traced English alternatives without choosing a homograph. Conflicting duplicate entry/sense IDs fail closed; qualified and raw entry namespaces stay distinct.",
+    "Editorial lookup uses only printed characters with exact maps to accepted source slices. Matched square brackets may be omitted in separate conditional views, never in corpus/source tokens. Uncertain 34a spans remain ineligible.",
+    "Server editorial display requires accepted Campbell commentary identity. Passage editorial analysis runs after model rankers, at most sixteen source-only lookups, with empty passage identity; it cannot enter model packets or claim occurrence attestation. Partial selections receive hints without lookups.",
+    "Elision transport preserves source/input spelling and uses the pinned Alpheios final-apostrophe convention and noAposRetry. Trusted receipt replay, not caller fields, supplies the four new classifier provenance fields.",
+    "Sense ranking retains every source choice and supporting path, including noun metadata. Model-visible short wire IDs map back to exact source IDs before complete probability-vector, inventory and source/form checks.",
+    "Separate limits admit at most 254 sense choices plus abstention and 32 morphology alternatives. Complete packet/request character proxies are bounded; no subset is silently selected. These are not exact provider tokenizer guarantees.",
+    "Ranked uncertain/abstained alternatives are rebuilt from trusted source inventory and do not become selected meanings or morphology. Existing decisive thresholds 0.75 and 0.20 remain unchanged.",
+    "Parent-approved commentary instruction treats notes as fallible whole-poem context while allowing supported finite-choice selection; placement does not establish exact alignment. The diagnostic ablation supports wording clarity, not an accuracy-improvement claim."
+  ],
+  "verification": {
+    "bounded_exact_staged_suite": "410 passed, 1 nonfunctional pytest import-rewrite warning in 9.86 seconds.",
+    "initial_suite": "406 passed and four stale test assumptions failed. Tests alone were corrected to expand short choice IDs/noun metadata references and use the current named sense-packet ceiling; the complete suite then passed.",
+    "test_corrections": {
+      "tests/test_linked_sense_integration.py": "6d2d113f5566cb881c4a04843d24da5fec94ed681340c5b99f96509a92759893",
+      "tests/test_edition_commentary_integration.py": "75e53edb3c9597c944a939a0afcf190a93e0583d9dcd8e92c97ecb43f9a00984"
+    },
+    "method": "Exact staged modules loaded under backend identities with normal source-relative roots. Unchanged lexicon_senses explicitly loaded from frozen live F snapshot because the working file contains excluded later tense edits; all other unchanged baseline dependencies were hash-verified. Includes 43 inherited G-through-B release guards, noun/linked/homograph/editorial, elision/provenance/import, ranker/capacity, commentary, syntax and passage integration tests.",
+    "private_runtime": "Independent pinned SSH read-only validation of actual snapshot: exact database hashes, all schema/table proofs, integrity, owner/group 1000, database mode 0600, directory mode 0700, no sidecars and still-running exact F production identity.",
+    "paid_model_calls": 0,
+    "auditor_remote_mutations": 0,
+    "auditor_source_or_corpus_writes": 0
+  },
+  "preservation": {
+    "corpus_and_evidence": "No corpus, dictionary, commentary or comparison sidecar, embeddings, source record, model or secret artifact overlaid. Existing five Campbell texts and source uncertainties remain unchanged.",
+    "production_runtime": "Unchanged. Eight previously audited receipt imports are authorized only for separately reviewed private canary workflow, not production cache replacement.",
+    "routes": "No public routing/promotion authorization. Port 8792 loopback testing only; existing public/private route contract retained."
+  },
+  "limitations": [
+    "Integrity and regression approval is not a semantic accuracy, complete dictionary coverage or philological truth certification.",
+    "Character proxy limits do not guarantee provider-token acceptance; operational private probes remain required.",
+    "Source database completeness/equivalence is not asserted beyond inherited audited records and actual private probes.",
+    "This receipt does not approve public promotion, new morphology fetches, paid model calls, source redistribution rights or optional later tense-feature changes.",
+    "Private runtime begins as an independently approved snapshot; any subsequent receipt import must preserve operational counters and bind the separately authorized bundle."
+  ]
+}

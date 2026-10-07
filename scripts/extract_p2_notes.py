@@ -7,15 +7,21 @@ Uncertain alignments remain form-level claims. Run from the repository root.
 
 from __future__ import annotations
 
+import argparse
 import hashlib
 import json
 import re
+import sys
 import unicodedata
 from collections import Counter, defaultdict
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
+if __package__ in {None, ""}:
+    sys.path.insert(0, str(ROOT))
+
+from backend.source_grammar import grammar_disjunctions
+
 INPUT = ROOT / "data/processed/sappho.jsonl"
 AUDIT = ROOT / "data/reports/audit-sappho.json"
 OUTPUT = ROOT / "data/claims/p2_notes.jsonl"
@@ -165,6 +171,53 @@ def first_grammar(text: str) -> tuple[str, dict] | None:
     return raw, mapped
 
 
+def grammar_objects(parsed: tuple[str, dict], quote: str, body: str,
+                    body_offset: int) -> list[dict]:
+    """Preserve source alternatives; split only directly attached parentheses.
+
+    No branch inherits unprinted features. Prose discussion remains a single
+    qualified projection, never a new analysis of the note's headword.
+    Offsets refer to the exact retained evidence quote, not the Greek passage.
+    """
+    raw, mapped = parsed
+    obj = {"raw_label": raw, "features": mapped}
+    anchors = list(re.finditer(re.escape(raw), quote, re.I))
+    alternatives = [item for item in grammar_disjunctions(quote)
+                    if any(item['quote_start'] <= match.start() < match.end() <= item['quote_end']
+                           for match in anchors)]
+    if not alternatives:
+        return [obj]
+    obj['source_grammar_alternatives'] = alternatives
+    # Only literal headword -> optional explicit equivalent form -> parenthesis
+    # proves the note's grammatical scope without interpreting English prose.
+    prefix_end = 0
+    relation = EQUIV.match(body)
+    if relation and explicit_equivalence(body):
+        prefix_end = relation.end()
+    opening = re.match(r'\s*\(\s*', body[prefix_end:])
+    direct_start = body_offset + prefix_end + opening.end() if opening else None
+    direct = [item for item in alternatives if item['quote_start'] == direct_start]
+    if len(direct) != 1:
+        obj['source_grammar_scope'] = 'unresolved_prose_scope'
+        return [obj]
+    item = direct[0]
+    # A malformed/unclosed parenthesis does not establish a complete annotation.
+    tail = quote[item['quote_end']:]
+    if ')' not in tail or '(' in tail.split(')', 1)[0]:
+        obj['source_grammar_scope'] = 'unresolved_annotation_boundary'
+        return [obj]
+    if any(branch['unresolved_feature_keys'] or not branch['explicit_features']
+           for branch in item['branches']):
+        obj['source_grammar_scope'] = 'unresolved_branch_features'
+        return [obj]
+    return [{"raw_label": branch['raw_label'], "features": branch['explicit_features'],
+             "source_grammar_alternatives": alternatives,
+             "source_grammar_scope": "direct_headword_parenthesis",
+             "source_grammar_branch": {"index": index, "quote_start": branch['start'],
+                                       "quote_end": branch['end']}}
+            for index, branch in enumerate(item['branches'])]
+
+
 def explicit_equivalence(body: str) -> tuple[str, str] | None:
     match = EQUIV.match(body)
     if not match:
@@ -212,10 +265,11 @@ def digital_vocabulary(record: dict, parent: dict | None, hashes: dict[str, str]
     grammar_scope = rest[:180]
     parsed = first_grammar(grammar_scope)
     if parsed and len(linked) == 1:
-        raw, mapped = parsed
-        claims.append(make_claim(record, parent, hashes, form, "morphology",
-                                 {"raw_label": raw, "features": mapped}, text,
-                                 "digital_vocabulary_grammar_v1", line_label))
+        for obj in grammar_objects(parsed, text, rest, head.end()):
+            method = ("digital_vocabulary_grammar_alternatives_v2" if 'source_grammar_alternatives' in obj
+                      else "digital_vocabulary_grammar_v1")
+            claims.append(make_claim(record, parent, hashes, form, "morphology",
+                                     obj, text, method, line_label))
     # A verb's explicit English infinitival gloss is source text, not a model
     # translation. Restrict to the first simple clause before prose commentary.
     gloss_scope = rest.lstrip()
@@ -284,14 +338,31 @@ def dcc_notes(record: dict, parent: dict | None, hashes: dict[str, str]) -> list
                 grammar_scope = ""
             parsed = first_grammar(grammar_scope)
             if parsed:
-                raw, mapped = parsed
-                claims.append(make_claim(record, parent, hashes, form, "morphology",
-                                         {"raw_label": raw, "features": mapped},
-                                         segment, "dcc_note_colon_grammar_v1", line_label))
+                for obj in grammar_objects(parsed, segment, body, head.end() - head.start()):
+                    method = ("dcc_note_colon_grammar_alternatives_v2" if 'source_grammar_alternatives' in obj
+                              else "dcc_note_colon_grammar_v1")
+                    claims.append(make_claim(record, parent, hashes, form, "morphology",
+                                             obj, segment, method, line_label))
     return claims
 
 
-def main() -> None:
+def main(argv=None) -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--staging-dir', type=Path,
+                        help='New directory below data/staging; leaves active claims/reports unchanged.')
+    args = parser.parse_args(argv)
+    output, report_path = OUTPUT, REPORT
+    baseline_bytes = OUTPUT.read_bytes() if OUTPUT.exists() else b''
+    baseline = {row['id']: row for row in map(json.loads, baseline_bytes.splitlines())}
+    bindings = {str(path.relative_to(ROOT)).replace('\\', '/'): sha(path.read_bytes())
+                for path in (INPUT, AUDIT, OUTPUT, Path(__file__), ROOT / 'backend/source_grammar.py')}
+    if args.staging_dir:
+        staging = args.staging_dir.resolve()
+        if not staging.is_relative_to((ROOT / 'data/staging').resolve()) or staging == (ROOT / 'data/staging').resolve():
+            raise ValueError('Staging output must be a new child directory below data/staging')
+        if staging.exists():
+            raise FileExistsError(f'Staging directory already exists: {staging}')
+        output, report_path = staging / 'p2_notes.jsonl', staging / 'report.json'
     records, hashes = source_records()
     by_id = {r["id"]: r for r in records}
     claims = []
@@ -333,14 +404,29 @@ def main() -> None:
         if len(values) > 1:
             conflicts.append({"passage_id": key[0], "start": key[1], "end": key[2],
                               "predicate": key[3], "claim_ids": [c["id"] for c in group]})
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    for relative, digest in bindings.items():
+        assert sha((ROOT / relative).read_bytes()) == digest, f'Input/code changed during extraction: {relative}'
+    output.parent.mkdir(parents=True, exist_ok=True)
     payload = "".join(json.dumps(c, ensure_ascii=False, sort_keys=True) + "\n" for c in claims)
-    OUTPUT.write_text(payload, encoding="utf-8", newline="\n")
+    output.write_text(payload, encoding="utf-8", newline="\n")
+    new_by_id = {claim['id']: claim for claim in claims}
+    removed = sorted(baseline.keys() - new_by_id.keys())
+    added = sorted(new_by_id.keys() - baseline.keys())
     report = {
         "input": str(INPUT.relative_to(ROOT)).replace("\\", "/"),
         "input_sha256": sha(INPUT.read_bytes()),
-        "output": str(OUTPUT.relative_to(ROOT)).replace("\\", "/"),
-        "output_sha256": sha(OUTPUT.read_bytes()),
+        "output": str(output.relative_to(ROOT)).replace("\\", "/"),
+        "output_sha256": sha(output.read_bytes()),
+        "input_bindings": bindings,
+        "staged_only": bool(args.staging_dir),
+        "claim_changes": {"removed": removed, "added": added,
+                          "same_id_changed": sorted(i for i in baseline.keys() & new_by_id.keys()
+                                                    if baseline[i] != new_by_id[i]),
+                          "replacements_by_source_record": [
+                              {"removed_id": i, "source_record_id": baseline[i]['evidence'][0]['record_id'],
+                               "replacement_ids": [j for j in added if new_by_id[j]['evidence'] == baseline[i]['evidence']
+                                                    and new_by_id[j]['subject'] == baseline[i]['subject']]}
+                              for i in removed]},
         "count": len(claims), "counts": dict(statistics),
         "coverage": {"records_examined": statistics["digital_vocabulary_examined"] + statistics["dcc_notes_examined"],
                      "records_parsed": statistics["digital_vocabulary_examined"] + statistics["dcc_notes_examined"] - statistics["records_without_claim"],
@@ -352,7 +438,7 @@ def main() -> None:
         "method_note": "Only explicit commentary strings are extracted. Abbreviation expansions use FEATURES in this script. Parent offsets occur only for a single matching token; ambiguous candidates remain in metadata without a passage ID. Diacritic-fold alignments are labeled and do not assert identical spelling.",
         "examples": [c for c in claims if c["metadata"]["source_form"] == "πέμπην"][:5],
     }
-    REPORT.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    report_path.write_text(json.dumps(report, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(json.dumps({"count": len(claims), "counts": dict(statistics), "output_sha256": report["output_sha256"]}, ensure_ascii=False))
 
 

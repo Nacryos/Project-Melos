@@ -16,8 +16,10 @@
   }
   function mount({ host, form, passageId, current, post, node, safeLink, classifierReady }) {
     const section = node('section', 'inspector-section machine-analysis');
-    section.append(node('h3', '', 'Computational morphology'), node('p', 'candidate-reason',
-      'Ask the morphology service for possible headwords and inflections. These are computational alternatives, not attestations or a reading selected for this author.'));
+    section.append(node('h3', '', 'More possible parses'));
+    const about = node('details', 'entry-details notice-details');
+    about.append(node('summary', '', 'About these analyses'), node('p', 'candidate-reason',
+      'Ask the morphology service for possible headwords and inflections. These are computational alternatives, not attestations or a reading selected for this author. No meaning is inferred from a matching headword.'));
     const analyze = node('button', 'classifier-action', 'Analyze this form'); analyze.type = 'button';
     const cancel = node('button', 'machine-cancel', 'Cancel request'); cancel.type = 'button'; cancel.hidden = true;
     const attribution = node('p', 'candidate-reason machine-attribution');
@@ -26,11 +28,19 @@
     if (provider) attribution.append(provider);
     if (terms) { attribution.append(node('span', '', ' · ')); attribution.append(terms); }
     const output = node('div', 'machine-output'); output.setAttribute('aria-live', 'polite');
-    section.append(analyze, cancel, attribution, output); host.append(section);
+    about.append(attribution);
+    section.append(analyze, cancel, output, about); host.append(section);
     let generation = 0, controller = null, busy = false;
     const clear = target => target.replaceChildren();
     const say = (target, text, cls = 'candidate-reason') => target.append(node('p', cls, text));
-    const warnings = (target, values) => { for (const value of Array.isArray(values) ? values : []) say(target, String(value), 'warning'); };
+    const warnings = (target, values) => {
+      const notes = (Array.isArray(values) ? values : []).filter(Boolean);
+      if (!notes.length) return;
+      const details = node('details', 'entry-details notice-details');
+      details.append(node('summary', '', 'Details'));
+      for (const value of notes) say(details, String(value));
+      target.append(details);
+    };
     const valid = ticket => current() && generation === ticket;
     const stop = () => {
       ++generation; controller?.abort(); controller = null; busy = false;
@@ -54,7 +64,7 @@
         `${Object.hasOwn(labels, key) ? labels[key] : key}: ${typeof value === 'string' ? value : JSON.stringify(value)}`);
       if (fields.length) say(card, fields.join(' · '), 'candidate-analysis');
       if (!Object.keys(item.features || {}).length) say(card, 'No inflection fields supplied.');
-      if (item.features?.dial) say(card, 'Dialect tags are literal engine labels, not exclusive attribution to this author.');
+      if (item.features?.dial) warnings(card, ['Dialect tags are literal engine labels, not exclusive attribution to this author.']);
       if (members.length > 1) say(card, `${members.length} engine alternatives with the same displayed features.`);
       provenance(card, members.length > 1 ? 'All engine alternatives and identities' : 'Engine fields and candidate identity',
         members.map(member => ({ id: member.id, dictionary_fields: member.dictionary_fields, inflection: member.inflection,
@@ -63,7 +73,7 @@
     };
     const compare = (target, result, ticket) => {
       if (!passageId || !result.receipt?.id || !result.machine_candidates.length) return;
-      if (!classifierReady()) { say(target, 'Jev comparison is not configured; computational alternatives remain available.'); return; }
+      if (!classifierReady()) return;
       const button = node('button', 'classifier-action', 'Compare these analyses with Jev'); button.type = 'button';
       const answer = node('div', 'machine-comparison'); target.append(button, answer);
       button.addEventListener('click', async () => {
@@ -77,19 +87,17 @@
           clear(answer);
           const chosen = result.machine_candidates.find(item => item.id === decision.candidate_id);
           if (decision.status === 'machine_proposed' && decision.candidate_basis === 'machine' && chosen) {
-            say(answer, 'Jev proposal among computational alternatives · interpretive only', 'candidate-meta-label');
+            say(answer, 'Suggested reading · Jev', 'candidate-meta-label');
             candidate(answer, chosen);
-            say(answer, 'This selects neither an attested sense nor an authoritative textual reading. All alternatives remain above.');
-          } else say(answer, decision.decision_stage === 'preflight'
+            warnings(answer, ['Jev proposal among computational alternatives · interpretive only. This selects neither an attested sense nor an authoritative textual reading. All alternatives remain above.']);
+          } else warnings(answer, [decision.decision_stage === 'preflight'
             ? 'Comparison not run; no model call was made.'
-            : 'No computational alternative was selected.', 'warning');
-          if (decision.reason) say(answer, decision.reason);
-          if (decision.model) say(answer, `Model: ${decision.model}.`);
-          if (decision.cache_hit != null) say(answer, decision.cache_hit
-            ? 'Cached comparison; no new Jev call.' : 'New Jev comparison.');
+            : 'No computational alternative was selected.']);
+          warnings(answer, [decision.reason, decision.model ? `Model: ${decision.model}.` : '', decision.cache_hit != null
+            ? decision.cache_hit ? 'Cached comparison; no new Jev call.' : 'New Jev comparison.' : '']);
           if (decision.model_confidence_uncalibrated != null || decision.model_probabilities_uncalibrated != null) {
-            say(answer, 'Raw model signals are uncalibrated, not probabilities of philological truth.');
             provenance(answer, 'Raw uncalibrated model signals', {
+              note: 'Raw model signals are uncalibrated, not probabilities of philological truth.',
               confidence: decision.model_confidence_uncalibrated,
               candidate_preferences: decision.model_probabilities_uncalibrated,
             });
@@ -100,8 +108,8 @@
             model: decision.model, cache_hit: decision.cache_hit, machine_evidence: decision.machine_evidence });
         } catch (error) {
           if (valid(ticket)) {
-            clear(answer); say(answer, `Comparison unavailable: ${error.message || error}`, 'warning error-message');
-            warnings(answer, error.response?.warnings);
+            clear(answer); say(answer, 'Could not compare these readings. Try again.', 'error-message');
+            warnings(answer, [error.message || String(error), ...(error.response?.warnings || [])]);
           }
         } finally {
           if (valid(ticket)) { busy = false; button.disabled = false; analyze.disabled = false; cancel.hidden = true; controller = null; }
@@ -117,23 +125,22 @@
         if (!valid(ticket)) return;
         clear(output);
         if (result.status === 'ok' && Array.isArray(result.machine_candidates) && result.machine_candidates.length) {
-          say(output, `${result.machine_candidates.length} computational alternatives. No meaning is inferred from a matching headword.`);
+          say(output, `${result.machine_candidates.length} possible parses`, 'candidate-meta-label');
           for (const members of displayGroups(result.machine_candidates)) candidate(output, members[0], members);
           compare(output, result, ticket);
-        } else if (result.status === 'no_analyses') say(output, 'The engine returned no analyses for this request. This does not establish that the form is invalid.');
+        } else if (result.status === 'no_analyses') say(output, 'No additional parses found.');
         else say(output, result.status === 'rate_limited' || result.status === 'busy'
           ? 'The morphology service is busy or rate-limited. Please try again later.'
-          : `Computational analysis unavailable (${result.status || 'invalid response'}).`, 'warning error-message');
+          : 'Could not load additional parses. Try again.', 'error-message');
         warnings(output, result.warnings);
-        say(output, `Engine revision: ${result.receipt?.engine_revision || 'not supplied by the service'}.`);
         if (result.receipt) provenance(output, 'Request receipt and source API', result.receipt, result.receipt.url);
         if (Array.isArray(result.machine_entries) && result.machine_entries.length) provenance(output, 'Raw engine entries', result.machine_entries);
       } catch (error) {
         if (valid(ticket)) {
           clear(output); say(output, error.status === 429 || error.status === 409
             ? 'The morphology service is busy or rate-limited. Please try again later.'
-            : `Computational analysis unavailable: ${error.message || error}`, 'warning error-message');
-          warnings(output, error.response?.warnings);
+            : 'Could not load additional parses. Try again.', 'error-message');
+          warnings(output, [error.message || String(error), ...(error.response?.warnings || [])]);
           if (error.response?.receipt) provenance(output, 'Failed request receipt', error.response.receipt, error.response.receipt.url);
         }
       } finally {

@@ -1,0 +1,124 @@
+{
+  "artifact_kind": "machine_analysis_diagnostic",
+  "engine_revision": null,
+  "source_spelling_convention": "https://github.com/alpheios-project/alpheios-core/blob/a27dc27afa166998c15335295a63233219a16741/packages/data-models/src/greek_language_model.js#L153-L158",
+  "limits": {
+    "global_day": 200,
+    "global_minute": 10,
+    "visitor_day": 20,
+    "visitor_minute": 3
+  },
+  "samples": [
+    {
+      "occurrence_id": "campbell-glp:alcaeus:34a@165:172",
+      "passage_id": "campbell-glp:alcaeus:34a",
+      "text": "ἔρχεσθ’",
+      "start": 165,
+      "end": 172,
+      "source_text_sha256": "7cae61943576b9ec55cb1a71e648090875df1fe89cc3a3cca06fe141c701ca97",
+      "source_receipt": "runtime/alcaeus-occurrences/release-f/responses/f649899e07683d1b5e98b9e9946f238123da91e459c74cf015b8eb9137f27062.json",
+      "source_raw_sha256": "7b48e75a5f0b428c9724162ecff5f60af8502ec83f5888458fb3f1799fff35df",
+      "source_url": "https://greeklyric.com/sources/campbell-alcaeus/34a.html",
+      "source_quality": "machine_corrected_ocr",
+      "source_raw_path": "runtime/campbell-assignment/alcaeus-34a.source-bundle.json",
+      "source_bundle_sha256": "11871c58628739f6d91d1edf5f0b21a12855c32599d600166d856e29f3ac6a38",
+      "status": "ok",
+      "candidate_count": 4,
+      "receipt": {
+        "id": "23bd2b4720d60b77b8b2d29d1ebca28b82607cafaa7ad3450ac10ae0540d4668",
+        "engine_revision": null,
+        "http_status": 201,
+        "input_convention": "https://github.com/alpheios-project/alpheios-core/blob/a27dc27afa166998c15335295a63233219a16741/packages/data-models/src/greek_language_model.js#L153-L158",
+        "input_form": "ἔρχεσθ’",
+        "input_transformation": "NFC; final U+2019 to U+1FBD for transport only",
+        "parser_version": "alpheios-literal-v1",
+        "raw_sha256": "a14f4c35fda5ea40d2cd840b655bc26ce62c86ada8170d98c1e89bb81e974e5c",
+        "received_utc": "2026-10-07T04:43:19.590414+00:00",
+        "request_form": "ἔρχεσθ᾽",
+        "response_headers": {
+          "Age": "0",
+          "Content-Type": "application/json",
+          "Date": "Wed, 07 Oct 2026 04:43:20 GMT",
+          "X-Cache": "MISS"
+        },
+        "source_form": "ἔρχεσθ’",
+        "url": "https://morph.alpheios.net/api/v1/analysis/word?word=%E1%BC%94%CF%81%CF%87%CE%B5%CF%83%CE%B8%E1%BE%BD&engine=morpheusgrc&lang=grc&clientId=project-melos-explicit-morphology&noAposRetry=1"
+      },
+      "raw_file": "response-00.json"
+    },
+    {
+      "occurrence_id": "campbell-glp:alcaeus:34a@184:187",
+      "passage_id": "campbell-glp:alcaeus:34a",
+      "text": "ἐπ’",
+      "start": 184,
+      "end": 187,
+      "source_text_sha256": "7cae61943576b9ec55cb1a71e648090875df1fe89cc3a3cca06fe141c701ca97",
+      "source_receipt": "runtime/alcaeus-occurrences/release-f/responses/f649899e07683d1b5e98b9e9946f238123da91e459c74cf015b8eb9137f27062.json",
+      "source_raw_sha256": "7b48e75a5f0b428c9724162ecff5f60af8502ec83f5888458fb3f1799fff35df",
+      "source_url": "https://greeklyric.com/sources/campbell-alcaeus/34a.html",
+      "source_quality": "machine_corrected_ocr",
+      "source_raw_path": "runtime/campbell-assignment/alcaeus-34a.source-bundle.json",
+      "source_bundle_sha256": "11871c58628739f6d91d1edf5f0b21a12855c32599d600166d856e29f3ac6a38",
+      "status": "ok",
+      "candidate_count": 1,
+      "receipt": {
+        "id": "6cb03696b9c33dedbd22d2eca5170811d36a6421e57c46f170db9ffb3697804b",
+        "engine_revision": null,
+        "http_status": 201,
+        "input_convention": "https://github.com/alpheios-project/alpheios-core/blob/a27dc27afa166998c15335295a63233219a16741/packages/data-models/src/greek_language_model.js#L153-L158",
+        "input_form": "ἐπ’",
+        "input_transformation": "NFC; final U+2019 to U+1FBD for transport only",
+        "parser_version": "alpheios-literal-v1",
+        "raw_sha256": "555a64b9ce985f676d1cb0e5b73545b42d2fd69351d2975f66cbcc4cd43e3b9f",
+        "received_utc": "2026-10-07T04:43:19.901599+00:00",
+        "request_form": "ἐπ᾽",
+        "response_headers": {
+          "Age": "0",
+          "Content-Type": "application/json",
+          "Date": "Wed, 07 Oct 2026 04:43:20 GMT",
+          "X-Cache": "MISS"
+        },
+        "source_form": "ἐπ’",
+        "url": "https://morph.alpheios.net/api/v1/analysis/word?word=%E1%BC%90%CF%80%E1%BE%BD&engine=morpheusgrc&lang=grc&clientId=project-melos-explicit-morphology&noAposRetry=1"
+      },
+      "raw_file": "response-01.json"
+    },
+    {
+      "occurrence_id": "campbell-glp:alcaeus:350@88:90",
+      "passage_id": "campbell-glp:alcaeus:350",
+      "text": "δ᾽",
+      "start": 88,
+      "end": 90,
+      "source_text_sha256": "827dc3b0c8c1fd564f0dd9ac97c8752cfd0b74de7fb0303c9400c71be3637838",
+      "source_receipt": "runtime/alcaeus-occurrences/release-f/responses/341eabd856e26c5c83736a949b66240fcff5fcccae33f43e18e7224dd6420dc4.json",
+      "source_raw_sha256": "7269cf6d171e97c33559a47fd03fd4441bba71900af8deff4d1fa792c5c93d1e",
+      "source_url": "https://greeklyric.com/sources/campbell-alcaeus/350.html",
+      "source_quality": "machine_corrected_ocr",
+      "source_raw_path": "runtime/campbell-assignment/alcaeus-350.source-bundle.json",
+      "source_bundle_sha256": "2fc0da4a1f959e1544ae3d1e227ad772959175713259c82a2ff93024910e4925",
+      "status": "ok",
+      "candidate_count": 1,
+      "receipt": {
+        "id": "d13e8c0bebcfb50b9d367f8f13f2dcc6967b8a0ce575b0a1f7e945ba330a80f9",
+        "engine_revision": null,
+        "http_status": 201,
+        "input_convention": "https://github.com/alpheios-project/alpheios-core/blob/a27dc27afa166998c15335295a63233219a16741/packages/data-models/src/greek_language_model.js#L153-L158",
+        "input_form": "δ᾽",
+        "input_transformation": "NFC; final U+2019 to U+1FBD for transport only",
+        "parser_version": "alpheios-literal-v1",
+        "raw_sha256": "d5a39cd6987aa0431687076e59b7d599b55d034d963f03fe4ec80155a9476c3b",
+        "received_utc": "2026-10-07T04:43:20.212847+00:00",
+        "request_form": "δ᾽",
+        "response_headers": {
+          "Age": "0",
+          "Content-Type": "application/json",
+          "Date": "Wed, 07 Oct 2026 04:43:20 GMT",
+          "X-Cache": "MISS"
+        },
+        "source_form": "δ᾽",
+        "url": "https://morph.alpheios.net/api/v1/analysis/word?word=%CE%B4%E1%BE%BD&engine=morpheusgrc&lang=grc&clientId=project-melos-explicit-morphology&noAposRetry=1"
+      },
+      "raw_file": "response-02.json"
+    }
+  ]
+}

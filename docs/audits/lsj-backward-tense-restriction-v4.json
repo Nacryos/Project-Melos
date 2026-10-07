@@ -1,0 +1,37 @@
+{
+  "audit_date": "2026-10-06",
+  "auditor": "dictionary_sense_audit",
+  "verdict": "PASS",
+  "blocking": false,
+  "scope": "Metadata extraction only: one explicitly fenced LSJ backward-reference layout; not consumer enforcement or general tense disambiguation.",
+  "extraction_version": "tei-definition-spans-v4",
+  "source_entry": "lsj:5:n42827",
+  "raw_sha256": "2e0ef90281c62e320f5386364b875f1000d1bcb22718369a5dbe0b6c68d5ad95",
+  "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng5.xml",
+  "checks": {
+    "archived_raw_hash_matches_record": true,
+    "restricted_source_sense_ids": ["n42827.1", "n42827.2"],
+    "unrestricted_come_or_go_source_sense": "n42827.3",
+    "restriction_rendered_offsets": [10334, 10414],
+    "tense_rendered_offsets": [10381, 10386],
+    "literal_source_slices_reproduce_metadata": true,
+    "restriction_provenance_matches_source_record": true,
+    "negative_layout_mutations_abstain": 11,
+    "paid_calls": 0,
+    "corpus_writes": 0
+  },
+  "tests": {
+    "command": "runtime/venv-syntax/Scripts/python.exe -m pytest tests/test_lexicon_senses.py -q",
+    "passed": 16,
+    "failed": 0
+  },
+  "reviewed_files_sha256": {
+    "backend/lexicon_senses.py": "60b141a7f2dc6b435279c5d1a82cb66ddb74cd3190bde96d86d31f97b9a94a22",
+    "tests/test_lexicon_senses.py": "cf8d86e278796dbd23fe412a829eefc9b4500cb73d075c037ddae3cdb2461c0b"
+  },
+  "limitations": [
+    "The rule intentionally abstains on other numbering, scope, wording, headword, or tense layouts.",
+    "Consumer handling of known, ambiguous, and unavailable morphological features requires separate tests.",
+    "This receipt does not authorize deployment or certify complete dictionary extraction accuracy."
+  ]
+}

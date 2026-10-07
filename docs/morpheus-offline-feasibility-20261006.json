@@ -1,0 +1,103 @@
+{
+  "purpose": "Read-only feasibility and proposed isolated validation; not approval to install or serve",
+  "recommendation": "First evaluate the official Alpheios XML CLI and its own pinned Greek stemlib in a disposable restricted Linux container. Keep all offline results separate from existing hosted-service receipts and live corpus. This removes network dependence without consuming or bypassing hosted quotas. It does not solve contextual disambiguation or dictionary joining automatically.",
+  "primary_candidate": {
+    "repository": "https://github.com/alpheios-project/morpheus",
+    "revision": "2f1a30d65ed7ae9c6120dbf64d730b863be412e4",
+    "archive_url": "https://codeload.github.com/alpheios-project/morpheus/tar.gz/2f1a30d65ed7ae9c6120dbf64d730b863be412e4",
+    "archive_bytes": 10219347,
+    "archive_sha256": "bdb3d653e5236850bc66b61f27b4102b6f46b9f163f876f72d0f5053e50daee0",
+    "source_prefix": "src/",
+    "source_manifest_files": 634,
+    "source_manifest_sha256": "d511a5153839f813799b3c35b3f02c58493c24386864a73917b09030f5702101",
+    "dictionary_prefix": "dist/stemlib/",
+    "dictionary_manifest_files": 246,
+    "dictionary_bytes": 13769618,
+    "dictionary_manifest_sha256": "646440e8fbce89dca9fb4674ca365cb3ce8454cfc0fec33f652a38a96a7fbdd9",
+    "manifest_definition": "SHA256 of UTF-8 compact sorted-key JSON list of {path,size,sha256} records sorted by repository path; each file digest is over literal archive file bytes. Not a single stemlib-file digest.",
+    "fingerprint_reproduction": "python scripts/inspect_morpheus_offline_source.py",
+    "license_path": "LICENSE",
+    "license_sha256": "f27c9386a3a6dcad6e733e951aadb7dd548fcdde7518de82f60ac6ed5da67951",
+    "license_url": "https://github.com/alpheios-project/morpheus/blob/2f1a30d65ed7ae9c6120dbf64d730b863be412e4/LICENSE",
+    "license_observation": "Root LICENSE repeats Perseus CC BY-SA 3.0 US default, component-specific caveat, and requirement to offer Perseus modifications. Do not mislabel this fork or stem data MPL simply because a different fork is MPL. Preserve all notices and source provenance. This is a source-notice inventory, not a blanket redistribution/legal conclusion.",
+    "build_evidence": "https://github.com/alpheios-project/morpheus/actions/runs/32257026195",
+    "build_evidence_result": "GitHub API: completed/success, exact revision, created 2026-08-19T13:15:04Z",
+    "build_recipe_source": "https://github.com/alpheios-project/morpheus/blob/2f1a30d65ed7ae9c6120dbf64d730b863be412e4/.github/workflows/main.yml",
+    "build_recipe": "Ubuntu22.04; build-essential and flex-old; in src: CFLAGS='-std=gnu89 -fcommon' make && make install. The upstream workflow also runs build_stemlib.sh, which runs the Greek stem build twice.",
+    "initial_experiment_data_policy": "Compile the executable from source and initially use the already compiled pinned dist/stemlib bytes for parser parity. The repository includes historical .o/.a/executable files: inspect clean rules and require a proven full source rebuild, not accidental reuse of checked-in build outputs. Do not silently rebuild or combine a different fork's data. A reconstructed stemlib is a separately fingerprinted experiment.",
+    "cli": "bin/morpheus -m/absolute/path/dist/stemlib -S < beta-code-input.txt",
+    "cli_source": "https://github.com/alpheios-project/morpheus/blob/2f1a30d65ed7ae9c6120dbf64d730b863be412e4/src/anal/morpheus.c",
+    "output": "XML words/analyses and explicit unknown elements; not the hosted service RDF envelope",
+    "wrapper_reference": "https://github.com/alpheios-project/morphsvc/blob/master/morphsvc/lib/engines/MorpheusLocalEngine.py",
+    "encoding_reference": "https://github.com/alpheios-project/morphsvc/blob/master/morphsvc/lib/transformers/BetacodeTransformer.py",
+    "adapter_cautions": [
+      "Preserve source Unicode and exact token offsets; record Beta Code transport separately with adapter version and mapping provenance.",
+      "Use the documented terminal elision convention; never silently strip apostrophes, accents, underdots, lacunae or reconstructed letters.",
+      "Alpheios wrapper has optional apostrophe stripping fallback, remote lexical-entity lookups and a headword # suffix compatibility transformation. Do not copy these unnoticed; offline experiment must disable network and retain literal identities.",
+      "Use stdin or argv arrays, never shell interpolation. The legacy CLI uses global state and fixed arrays; isolate process execution, bound input/output and fail explicitly on malformed XML."
+    ]
+  },
+  "alternatives": [
+    {
+      "repository": "https://github.com/perseids-tools/morpheus",
+      "revision": "ab6898ffed335fc6169fa02c9940657a9b5a78e0",
+      "license_url": "https://github.com/perseids-tools/morpheus/blob/ab6898ffed335fc6169fa02c9940657a9b5a78e0/LICENSE",
+      "license_observation": "Root license is MPL2.0; retain file-specific notices and inspect stem-data provenance separately.",
+      "build_docs": "https://github.com/perseids-tools/morpheus/blob/ab6898ffed335fc6169fa02c9940657a9b5a78e0/README.md",
+      "build": "Documented Linux gcc/make/flex; gnu89 and fcommon; provided Ubuntu22.04 Dockerfile.",
+      "cli": "MORPHLIB=stemlib bin/cruncher -S; Beta Code; tagged output, not Alpheios XML CLI contract",
+      "assessment": "Credible build fallback, but switching fork/data can alter candidate sets; require separate parity baseline. Greek+Latin stemlib tree is 23329374 bytes by GitHub tree metadata."
+    },
+    {
+      "repository": "https://github.com/defense-humanites/libmorpheus",
+      "observed_release": "v0.4.2, published2026-09-28; repositorycreated2026-08-19",
+      "docs": "https://github.com/defense-humanites/libmorpheus/blob/main/README.md",
+      "license_docs": "https://github.com/defense-humanites/libmorpheus/blob/main/docs/licensing.md",
+      "assessment": "Recent third-party C17 modernization with structured C ABI and Pythonctypes, Node and Deno bindings. Worth a later comparison, not the initial trusted replacement. Mixed MPL/AGPL boundary and separately acquired stem data; AGPL/public API integration needs review. Native release archives contain no linguistic data."
+    }
+  ],
+  "aeolic_limits": {
+    "dialect_source": "https://github.com/alpheios-project/morpheus/blob/2f1a30d65ed7ae9c6120dbf64d730b863be412e4/src/includes/dialect.h",
+    "rules_source": "https://github.com/alpheios-project/morpheus/blob/2f1a30d65ed7ae9c6120dbf64d730b863be412e4/stemlib/Greek/rule_files/vowcontr.table",
+    "finding": "Source explicitly distinguishes AEOLIC and LESBIAN flags and has Aeolic-specific contraction/crasis rules. This is real dialect-aware morphology, not exclusively Attic parsing.",
+    "limits": "Dialect flags are not proof of author attestation or exhaustive dialect coverage. Keep unlabelled/common alternatives; do not hard-filter everything by Alcaeus author label. Missing stems, editorial uncertainty and ambiguous analyses persist. Local deployment can improve availability/reproducibility, not guarantee better linguistic coverage than the same hosted engine/data."
+  },
+  "environment_observed": {
+    "windows": "Python3.13 and git available. DockerCLI installed but DockerDesktop Linux daemon unavailable; WSL lists only docker-desktop. No gcc/make found on PATH. No local Morpheus installed.",
+    "basecamp": "Read-only checks: x86_64; memory total64081MiB, available53586MiB. Current live API approximately2.595GiB/8GiB. Values are point-in-time, not reservations.",
+    "existing_dependencies": "deploy/requirements-runtime.txt includes lxml>=5,<7 and betacode==1.1; no Morpheus build step in deploy/Dockerfile.release.",
+    "resource_assessment": "No GPU/model weights required. Pinned archive10.22MB, stem distribution13.77MB; likely modest runtime footprint, but no RSS/latency benchmark has been run. Do not promise throughput or no performance impact.",
+    "actions_taken": "Primary web/API reads, source archive streamed into memory for hashes without saving/extracting/executing, local read-only checks and remote uname/free/dockerstats. No installs, builds, service restarts, live code edits, corpus/cache writes or upstream morphology requests."
+  },
+  "proposed_bounded_experiment": {
+    "requires_separate_authorization": true,
+    "local_evidence_directory": "runtime/morpheus-offline-eval/",
+    "proposed_remote_disposable_workspace": "/home/alvin/services/melos/lab/morpheus-offline-eval-20261006/",
+    "build": "Independent container build only, pinned Ubuntu22.04 base digest to record at authorization time, exact source revision+archive hash; gcc/make/flex-old. Build limits proposed1CPU/1GiB/timeout300s. Network only for explicit source/package acquisition in build stage, not parsing. Never add compiler or legacy C to current API image.",
+    "runtime_isolation": "Separate container, network=none, nonrootUID1000, read-only rootfs and read-only executable/stem/input mounts, writable boundedtmpfs only; dropALL capabilities,no-new-privileges,pids_limit32,cpus0.5,memory256MiB,memory_swap256MiB. No Docker socket, credentials, live data/runtime mounts or published ports. These are initial safety caps to validate, not measured requirements.",
+    "execution_bounds": "One serialized worker; at most64 input tokens per process, 10s wall timeout and1MiB output cap per batch, strict source token length and Beta Code validation. Preserve stderr/exit code and classify timeout, malformed output and no-analysis distinctly. No retry/letter repair or fallback to hosted service.",
+    "evaluation_inputs": "Exact five Campbell records at runtime/campbell-assignment/campbell_assignment.jsonl (SHAafe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b). Derive eligible whole-word forms with the existing source-barrier rules; preserve excluded fragmentary tokens explicitly. Compare the20 existing maintenance receipts (including elisions and the true negative) before broader clean-source coverage. Do not author test vocabulary or expected parses.",
+    "reference_artifacts": [
+      "runtime/alcaeus-morpheus-maintenance/successful-receipts.json",
+      "runtime/alcaeus-morpheus-maintenance/production-results.json",
+      "runtime/alcaeus-morpheus-maintenance/production-successful-receipts.json",
+      "runtime/alcaeus-occurrences/release-f/occurrences.json"
+    ],
+    "reference_note": "Existing hosted receipts establish observed parity, not grammatical truth, and their deployed engine/stem revision is unknown. Canonical candidate comparisons exclude transport-specific receipt IDs but preserve lemma identities, POS/features, dialect tags, quantities and multiple alternatives.",
+    "success_gates": [
+      "Independent audit of source/license/hash acquisition and exact copied source tokens before running downloaded code.",
+      "Build succeeds in isolated image; executable/compiler/baseimage/stem manifests and actual runtime deps are recorded.",
+      "No egress during parsing, no source text mutations, no unexplained parser crashes or candidate loss against cached references.",
+      "Every projected candidate points to raw local XML and pinnedengine+data+adapter receipts; new engine namespace cannot collide with alpheios-literal-v1 cache keys.",
+      "Measure recognized-form coverage, dictionaryjoin coverage, p50/p95/max latency and peakRSS separately from contextual accuracy.",
+      "No production imports or serving until independent output audit and a subsequent explicit deployment decision."
+    ],
+    "concrete_remaining_blockers": [
+      "This exact legacy build has not been reproduced here; compiler/data ABI compatibility must pass.",
+      "Image base digest and actual compiled executable/runtime hashes do not exist until isolated build.",
+      "Unicode/BetaCode/XML adapter and source-pointer projection need parity tests, particularly elision, homograph numbering and lexical quantities.",
+      "Licensing notices differ by fork and component; retain them and make a separate distribution decision before publishing container/data artifacts.",
+      "Current local Docker daemon is off; use a separately authorized lab container on Basecamp or start an isolated local Linux environment, not the live API container."
+    ]
+  }
+}

@@ -1,0 +1,61 @@
+{
+  "audit": "Independent F audit of literal source form-link spelling aliases",
+  "date": "2026-10-06",
+  "auditor": "subentry_evidence_audit",
+  "verdict": "PASS",
+  "blocking": false,
+  "scope": "Isolated candidate helper and tests for source-listed form links and one explicit structured alt_of edge; no production integration or contextual selection approval",
+  "version": "literal-source-form-link-alias-v1",
+  "code_sha256": {
+    "backend/source_link_aliases.py": "70a5e9c157be50558240cdb4dc439d8419006eb433d43577b6bc512aa6db6507",
+    "tests/test_source_link_aliases.py": "bfd28203099896299c66dbb77bd40e4cba749fbb517cbd90ce88b942eebd8cfa",
+    "backend/dictionary_crossrefs.py": "24296bb371d3271d3551ece513253b8ab2d0e4bdab51c38e0e31f27a23f017f2",
+    "backend/lexical_variants.py": "e6271e256b982e94d955078910339fcfebf67f91952ce53f3ceb6d038918a53f",
+    "backend/evidence.py": "6e6a0a7d90e234418ff4695433df97fef003e94ad0c5025c5938a5888a12b84e"
+  },
+  "source_sha256": {
+    "data/raw/wiktionary/kaikki.org-dictionary-AncientGreek.jsonl": "69d7185819de51cc746d96f8033eb6c3f3e2016a314c2ee640ec09ce80623029",
+    "data/lexica/wiktionary-entries.jsonl": "202f59461ababa9e36737b9857632947d12fd4825ffa4e6df52db67e3f1810a8",
+    "data/claims/p2_wiktionary.jsonl": "42b022848f10329603078090adb7d955a794c080cda546bf70cc812336724514"
+  },
+  "query": "παχέων",
+  "coverage": {"complete_source_records": 4, "supporting_claims": 24, "source_form_link_aliases": 8, "structured_alt_of_relations": 1, "meaning_candidate_rows": 45, "distinct_target_senses": 15},
+  "checks": [
+    "All four complete source entries equal the original downloaded JSONL objects and raw line hashes. Every supporting claim parent hash reproduces from the complete archived wrapper serialization.",
+    "All eight alias rows match the exact source form-array object, form ordinal, link label and destination. Every projected grammatical tag occurs literally in that source row, in source order.",
+    "All 45 meaning-candidate rows preserve literal accepted target gloss arrays. Every candidate ID is unique; 15 distinct target senses fan out over separate source-form aliases.",
+    "The πᾶχυς chain retains source form πᾱχέων, literal genitive/plural tags, source link destination παχέων, explicit alt_of display πῆχῠς, link destination πῆχυς, and target sense identity 7510:sense:4. No quantity/accent folding or reconstructed spelling supplies an edge.",
+    "The genuine παχύς and πάχος aliases and their senses remain separate alternatives. The resolver never selects the cubit sense or removes competing entries.",
+    "Target retrieval follows only the explicit structured alt_of page link once. Target form pages and relation-only senses do not become terminal English meanings; no recursive resolution is implemented.",
+    "Independent mutations rejected a changed relation source URL, coordinated parent-plus-form-link change, duplicate target wrapper, and coordinated target gloss/source-sense/quote change. Removing target proof retains the source alias but does not supply target meanings.",
+    "Source packets replay exactly without input mutation. Accentless παχεων and printed πᾱχέων do not obtain the παχέων link alias through stripping.",
+    "python -m pytest tests/test_source_link_aliases.py -q: 12 passed, including parent/link/claim tampering, exact tags, no global stripping and no network requirement.",
+    "Backend reference search found no production importer/caller of lookup_form_link_aliases. No paid/network request, corpus mutation or deployment is introduced."
+  ],
+  "cubit_chain": {
+    "source_entry_id": "wiktionary:kaikki:line:11786",
+    "source_headword": "πᾶχυς",
+    "printed_form": "πᾱχέων",
+    "form_link_locator": "/entry/forms/11/links/0",
+    "form_link": ["πᾱχέων", "παχέων#Ancient_Greek"],
+    "literal_grammatical_tags": ["genitive", "plural"],
+    "relation_claim_id": "wiktionary:kaikki:line:11786:sense:0",
+    "structured_relation_locator": "/entry/senses/0/alt_of/0",
+    "structured_word": "πῆχῠς",
+    "relation_link_locator": "/entry/senses/0/links/0",
+    "relation_link": ["πῆχῠς", "πῆχυς#Ancient_Greek"],
+    "target_entry_id": "wiktionary:kaikki:line:7510",
+    "target_sense_claim_id": "wiktionary:kaikki:line:7510:sense:4",
+    "literal_target_gloss": "cubit (the distance from the point of the elbow to that of the little finger)",
+    "contextually_selected": false
+  },
+  "other_source_entries": ["wiktionary:kaikki:line:3880", "wiktionary:kaikki:line:6188"],
+  "limitations": [
+    "A source page link is evidence for candidate retrieval, not proof that an unmarked occurrence has the linked printed form's analysis. Literal grammatical tags remain source annotations; features stay null and candidates remain unselected.",
+    "45 rows do not represent 45 independent dictionary senses: repeated source form rows preserve separate provenance and share 15 target sense identities.",
+    "An exact target headword does not choose a homograph or etymology. All validated retrieved target entry identities remain separate; no context adjudication is performed.",
+    "This validates the complete actual παχέων packet and adversarial cases, not exhaustive recall for every linked form in the source corpus.",
+    "The unchanged accepted-source and mixed-field licensing qualifications still apply."
+  ],
+  "mutations": "Only this new audit report was written by auditor. Frozen helpers, old audits, source data and deployment were not modified."
+}

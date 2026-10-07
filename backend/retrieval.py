@@ -9,6 +9,7 @@ from __future__ import annotations
 from collections.abc import Callable, Iterable, Mapping
 from typing import Any
 import unicodedata
+from .translation_languages import translation_allowed_in_search
 
 
 SIGNALS = ("lexical", "forms", "semantic")
@@ -57,6 +58,8 @@ def _default_author_keys(label: Any) -> set[str]:
 def _eligible(record: Mapping[str, Any], *, authors: set[str], language: str,
               edition: str, include_reference: bool,
               author_keys: Callable[[Any], Iterable[str]] = _default_author_keys) -> bool:
+    if not translation_allowed_in_search(record, language, edition):
+        return False
     if authors and not (set(author_keys(record.get("author"))) & authors):
         return False
     if language and record.get("language") != language:
@@ -174,6 +177,8 @@ def fuse(
             record = resolve(hit)
             if record is None:
                 skipped_unresolved += 1
+                continue
+            if not translation_allowed_in_search(record, language, edition):
                 continue
             if not include_reference and record.get("quality") in EXCLUDED_QUALITIES:
                 continue

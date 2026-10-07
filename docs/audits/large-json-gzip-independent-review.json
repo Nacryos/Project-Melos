@@ -1,0 +1,66 @@
+{
+  "status": "PASS_OFFLINE_MODULE_AND_SAVED_BASE_PATCH",
+  "reviewer": "/root/packet_compaction",
+  "date": "2026-10-06",
+  "scope": "Independent local code, synthetic ASGI tests, cached payload roundtrip, and non-applying patch check. This is not integration, live traffic, performance, or deployment approval.",
+  "sha256": {
+    "backend/large_json_gzip.py": "95b5804db12e0eee91844e313c0c6edc06a7c55e8e429a8d7f38da7aa180e5eb",
+    "tests/test_large_json_gzip.py": "ca75e2dfa0c116c5e5d8d59e9d5d6b4a2195ac94efdb188cf0bf9e3215ccf8c3",
+    "docs/audits/large-json-gzip-proposal.json": "7605c420b8eed21c6d518c0d856e6d2adeecb05e3efe15ddfcb9d3cfeabbb5d7",
+    "runtime/lexical-release-g/large-json-gzip-insertion.patch": "a5b1728b0b072b9d0791a83d69a99c78a08edd36d8d5889229e7ca607fb6f346",
+    "runtime/lexical-release-g/candidate-code/server.py": "6b8c808fb0a1d875c657463d4d3d23a9b442c93038a65a8b78ea72f553efd534"
+  },
+  "tests": {
+    "command": "python -m pytest tests/test_large_json_gzip.py -q",
+    "passed": 9,
+    "failed": 0,
+    "independently_executed": true,
+    "coverage": [
+      "Eligible gzip and identity representations preserve Vary and policy headers",
+      "Explicit gzip q=0 overrides wildcard and duplicate positive acceptance",
+      "Small, streaming, SSE, no-transform, ETag and already encoded responses are excluded",
+      "Raw ASGI compressed bytes decompress exactly and compressed Content-Length is correct",
+      "All Cache-Control and Vary header fields, including wildcard Vary, are respected",
+      "Response start precedes extensions; trailer-declared responses are excluded",
+      "SSE response start is forwarded before a deliberately delayed first event"
+    ]
+  },
+  "patch_check": {
+    "working_directory": "C:/Users/alvin/melos",
+    "command": "git apply --check --verbose --directory=runtime/lexical-release-g/candidate-code runtime/lexical-release-g/large-json-gzip-insertion.patch",
+    "exit_code": 0,
+    "output": "Checking patch runtime/lexical-release-g/candidate-code/server.py...",
+    "applied": false,
+    "baseline": "Exact locally saved live-G server hash, corroborated against local canary-promotion-pass.json and live-verify.json; no remote verification in this audit.",
+    "not_baseline": "Dirty backend/server.py SHA256 e47b8d27bc3d8dacf5018a9b8bcd131551d6760c1b2a4708611252463c058b2a was inspected but is not the final insertion-patch base."
+  },
+  "resolved_findings": [
+    "Previously ignored later Cache-Control fields now prevent compression when any field specifies no-transform.",
+    "Previously overwritten duplicate Vary fields are preserved; Accept-Encoding is appended only when needed.",
+    "Held response start is flushed before ASGI representation extensions; trailer-declared responses pass through.",
+    "Known-ineligible SSE and non-JSON response starts no longer wait for the first body event.",
+    "The earlier nested-directory Git check skipped its target. The corrected contextual patch was independently checked from repository root against the actual saved live-G target without a skip."
+  ],
+  "middleware_order": "Proposed registration immediately after FastAPI construction is inner to subsequently registered CORS and request-policy middleware. Existing outer authentication, security, cookie and cache policies remain outside compression. No server integration was performed.",
+  "cached_payload_roundtrip": {
+    "path": "runtime/lexical-release-g/root-editorial/receipts/0ab76a479f481af4a4f5c824e2b5bb67a265879151187d3d127f47c6adef0fca.body",
+    "sha256": "4043219974edb89639586168356c095c1a9ce93c0f8e281bb812f50352d3a977",
+    "original_bytes": 45882575,
+    "gzip_level_1_mtime_0_bytes": 6499954,
+    "decompressed_exact_equality": true,
+    "timing_independently_measured": false
+  },
+  "limitations": [
+    "Potentially eligible JSON headers wait for the first body frame to distinguish single-body from streamed JSON. Later streamed frames are not collected or compressed.",
+    "Compression reduces transferred bytes, not lookup cost or browser rendering workload.",
+    "Deployment must independently verify the actual target source, middleware stack and hosted behavior."
+  ],
+  "audit_actions": {
+    "network_calls": 0,
+    "paid_calls": 0,
+    "source_or_corpus_changes": false,
+    "server_integration": false,
+    "deployment": false,
+    "only_written_artifact": "docs/audits/large-json-gzip-independent-review.json"
+  }
+}

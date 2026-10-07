@@ -28,6 +28,7 @@ from .author_aliases import (canonical as canonical_author, canonical_key, compo
                              merged_labels, is_mixed as mixed_author_label, fold as fold_author,
                              profile as alias_record)
 from .textutils import text_key as passage_text_key
+from .translation_languages import is_english_language
 
 ROOT = Path(__file__).resolve().parents[1]
 DB = ROOT / 'data/corpus.sqlite'
@@ -296,6 +297,7 @@ def connect():
     con.create_function('mirror_pref',2,mirror_pref,deterministic=True)
     con.create_function('author_canonical_key',1,canonical_key,deterministic=True)
     con.create_function('author_has_key',2,lambda label,key: key in component_keys(label),deterministic=True)
+    con.create_function('is_english_language',1,is_english_language,deterministic=True)
     if publication_restricted():
         corpus_views(con, DB)
     return con
@@ -317,6 +319,15 @@ def unpack(row):
     if chronology:
         record['author_chronology']=chronology
     return record
+
+
+def with_visual_themes(record, con):
+    """Attach optional source-bound aesthetic labels through this visibility view."""
+    from .visual_themes import attach_visual_themes
+    def lookup(passage_id):
+        row = con.execute('SELECT data FROM passages WHERE id=?', (passage_id,)).fetchone()
+        return json.loads(row['data']) if row else None
+    return attach_visual_themes(record, lookup=lookup)
 
 
 @lru_cache(maxsize=4)
@@ -378,6 +389,8 @@ def filters(author='',language='',edition='',include_reference=False, alias='p')
         if value:
             clauses.append(f'{alias}.{col}=?')
             values.append(value)
+    if not language and not edition:
+        clauses.append(f"({alias}.kind<>'translation' OR is_english_language({alias}.language))")
     if not include_reference:
         clauses += [f"{alias}.quality IN {QUALITY_SQL}",f"{alias}.kind IN ('text','translation','commentary')"]
     return (' AND '+ ' AND '.join(clauses) if clauses else ''), values
@@ -612,6 +625,7 @@ def authors():
             merged[key]['identity_id']=identity['id']
     for item in merged.values():
         item['merged']=len(item['labels'])>1
+        item['author_chronology']=author_chronology(item['author'])
     return {'authors':sorted(merged.values(),key=lambda item:fold_author(item['author'])),
             'method':'Author labels merged by the owner alias table (backend/author_aliases.json) and audited identity profiles; joint labels stay separate.'}
 
@@ -639,7 +653,8 @@ def passages(work_id: str='',offset:int=0,limit:int=Query(20,ge=1,le=100)):
         args = [work_id] if work_id else []
         total = con.execute('SELECT count(*) FROM passages'+where,args).fetchone()[0]
         rows = con.execute('SELECT data FROM passages'+where+' ORDER BY sequence,id LIMIT ? OFFSET ?',args+[limit,max(offset,0)]).fetchall()
-    return {'results':[unpack(r) for r in rows],'total':total}
+        results = [with_visual_themes(unpack(r), con) for r in rows]
+    return {'results':results,'total':total}
 
 
 @app.get('/api/passage')
@@ -648,7 +663,7 @@ def passage(id: str):
         row = con.execute('SELECT * FROM passages WHERE id=?',(id,)).fetchone()
         if not row:
             raise HTTPException(404,'Passage not found')
-        result = unpack(row)
+        result = with_visual_themes(unpack(row), con)
         for label,operator,ordering in [('previous_id','<','DESC'),('next_id','>','ASC')]:
             neighbor = con.execute(f'SELECT id FROM passages WHERE work_id=? AND sequence{operator}? ORDER BY sequence {ordering} LIMIT 1',(row['work_id'],row['sequence'])).fetchone()
             result[label] = neighbor[0] if neighbor else None
@@ -669,6 +684,22 @@ def passage(id: str):
     result['author_profile']=author_profile(result.get('author',''))
     from .translation_previews import project as translation_previews
     result.update(translation_previews(result,result.get('related',[]),full_text=True))
+    from .edition_commentary import for_passage as edition_commentary_for_passage
+    if (published_commentary := edition_commentary_for_passage(result)) is not None:
+        result['published_commentary'] = published_commentary
+        if published_commentary.get('status') == 'available':
+            from .editorial_readings import editorial_readings
+            try:
+                result['editorial_readings'] = editorial_readings(result)
+            except (ValueError,TypeError,KeyError):
+                result['editorial_readings'] = {'version':1,'status':'unavailable','rows':[],
+                    'reason':'Approved source editorial spans could not be verified.'}
+        else:
+            result['editorial_readings'] = {'version':1,'status':'unavailable','rows':[],
+                'reason':'Approved Campbell source identity is unavailable.'}
+    from .translation_comparisons import for_passage as translation_comparisons_for_passage
+    if (translation_comparisons := translation_comparisons_for_passage(result)) is not None:
+        result['translation_comparisons'] = translation_comparisons
     return result
 
 
@@ -692,7 +723,6 @@ def occurrences(keys,author='',limit=30,con=None):
             con.close()
 
 
-@app.get('/api/word')
 def word(form: str, passage_id: str=''):
     context = None
     if passage_id:
@@ -755,6 +785,30 @@ def word(form: str, passage_id: str=''):
         result['contextual_candidates'] = []
         result['contextual_supporting_claims'] = []
         result['contextual_unresolved_claim_ids'] = []
+    # Lexical variants can supply an entry meaning without supplying a parse.
+    # Keep them out of both morphological candidate inventories and rankings.
+    try:
+        from .lexical_variants import lookup_variants
+        lexical=lookup_variants(form,evidence_service())
+        result['lexical_variants']=lexical['lexical_variants']
+        result['dictionary_crossreferences']=lexical['dictionary_crossreferences']
+        result['lexical_variant_supporting_claims']=lexical['supporting_claims']
+        result['lexical_variant_status']='available'
+    except (ImportError,AttributeError,OSError,RuntimeError,ValueError,sqlite3.Error):
+        result['lexical_variants']=[]
+        result['dictionary_crossreferences']=[]
+        result['lexical_variant_supporting_claims']=[]
+        result['lexical_variant_status']='unavailable'
+    # Source-linked dictionary paths are a separate inventory, never ordinary
+    # morphology candidates or contextual source claims.
+    try:
+        from .linked_dictionary import lookup_linked_dictionary
+        result['linked_dictionary']=lookup_linked_dictionary(form,evidence_service())
+        result['linked_dictionary_status']='available'
+    except (ImportError,AttributeError,OSError,RuntimeError,ValueError,TypeError,KeyError,sqlite3.Error):
+        result['linked_dictionary']=None
+        result['linked_dictionary_status']='unavailable'
+        result['warnings'].append('Source-linked dictionary paths are unavailable; ordinary source alternatives remain separate.')
     result['parallel_contexts'] = []
     if context and context.get('author'):
         from .parallel_context import matching_texts, source_claim_matches
@@ -787,6 +841,20 @@ def word(form: str, passage_id: str=''):
                     break
         except (ImportError,AttributeError,OSError,RuntimeError,sqlite3.Error):
             result['warnings'].append('Parallel-text evidence comparison is unavailable; direct source evidence remains separate.')
+    return result
+
+
+@app.get('/api/word')
+def word_request(form: str, passage_id: str=''):
+    # Keep internal word/headword lookups source-only. Cached machine evidence
+    # is added only at the ordinary user-facing HTTP boundary.
+    result = word(form, passage_id)
+    if os.environ.get('MELOS_MACHINE_SUBENTRIES_ENABLED') == '1':
+        from .passage_analysis import machine_dictionary_lookup
+        from .machine_morphology import get_service
+        result['machine_dictionary'] = machine_dictionary_lookup(form,
+            machine_lookup=lambda value: get_service().analyze(value, visitor_id=None, fetch=False),
+            subentry_lookup=_passage_machine_subentries)
     return result
 
 
@@ -953,16 +1021,35 @@ def _passage_rerank_allowed(request):
     return public_enabled() or (not public_deployment() and client in ('127.0.0.1', '::1', 'testclient'))
 
 
+@lru_cache(maxsize=1)
+def _passage_subentry_resolver():
+    from .machine_subentries import MachineSubentryResolver
+    required = ('MELOS_SUBENTRY_INDEX', 'MELOS_SUBENTRY_MANIFEST', 'MELOS_SUBENTRY_INDEX_SHA256')
+    configured = [os.environ.get(name, '').strip() for name in required]
+    if not all(configured):
+        raise RuntimeError('Enabled machine subentries require an explicit audited index, manifest and SHA-256.')
+    return MachineSubentryResolver(configured[0], configured[1], expected_index_sha256=configured[2])
+
+
+def _passage_machine_subentries(token):
+    from .machine_morphology import get_service
+    return _passage_subentry_resolver().resolve(token, receipt_loader=get_service().load_receipt)
+
+
 # Providers are lazy: importing the API never downloads or loads model weights.
 from . import syntax_provider as _passage_syntax
 from .passage_ranker import PassageRanker
+from .sense_ranker import PassageSenseRanker
 from .passage_routes import create_router as _passage_router
 
 app.include_router(_passage_router(
     lambda identifier: passage(identifier), lambda form, identifier: word(form, identifier),
     machine_service=_PassageMachineAdapter(), syntax_provider=_passage_syntax,
     ranker=PassageRanker(lambda identifier: passage(identifier), _passage_classify, _passage_provider),
+    sense_ranker=PassageSenseRanker(lambda identifier: passage(identifier), _passage_provider),
     rerank_allowed=_passage_rerank_allowed,
+    machine_subentry_lookup=(_passage_machine_subentries
+                            if os.environ.get('MELOS_MACHINE_SUBENTRIES_ENABLED') == '1' else None),
 ))
 
 
@@ -1392,7 +1479,10 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
     """
     from .retrieval import fuse
     pool=400
-    candidate_language='' if commentary_assisted else (language or 'grc')
+    # An explicitly selected translation language is a source lookup. Preserve
+    # it in the candidate pool, whose default otherwise excludes non-English
+    # translations; Greek output can still use English parent-linked evidence.
+    candidate_language=(language if language and language != 'grc' else '') if commentary_assisted else (language or 'grc')
     common=dict(author=author,language=candidate_language,edition='',
                 include_reference=include_reference,match=match,limit=pool,
                 order='relevance',offset=0)
@@ -1567,6 +1657,10 @@ def legacy_sample():
     return FileResponse(ROOT/'data/lexicon.json')
 
 
+from .discovery import router as discovery_router
+app.include_router(discovery_router)
+
 for directory in ('js','css'):
     app.mount('/'+directory,StaticFiles(directory=ROOT/directory),name=directory)
 app.mount('/assets/paintings',StaticFiles(directory=ROOT/'assets/paintings'),name='paintings')
+app.mount('/assets/branding',StaticFiles(directory=ROOT/'assets/branding',check_dir=False),name='branding')

@@ -44,6 +44,31 @@ test('nearby spellings and unlinked dictionary entries never become definitions 
   assert.equal(buildPreview(data).entries.length, 0);
 });
 
+test('structured dictionary senses replace legacy etymological glosses and keep source identities', () => {
+  const data = fixture(), entry = data.lexicon_entries[0];
+  entry.gloss = 'OLD_ETYMOLOGY_MUST_NOT_RENDER';
+  entry.dictionary_senses = [0, 1].map(index => ({ id: `sense:${index}`, entry_id: 'native-xml-id', lexicon_entry_id: entry.id,
+    text: `Synthetic literal meaning ${index}`, evidence_type: 'dictionary_sense', language: 'en',
+    source: entry.source, source_url: entry.source_url, qualifiers: ['fixture qualifier'], scope_text: 'Synthetic scope' }));
+  const result = buildPreview(data);
+  assert.equal(result.entries[0].meaning_kind, 'structured_dictionary_gloss');
+  assert.equal(result.entries[0].meanings.length, 2);
+  assert.equal(result.entries[0].meanings[1].sense_id, 'sense:1');
+  assert.equal(result.entries[0].meanings[0].provenance[0].lexicon_entry_id, entry.id);
+  assert.equal(definitionExcerpt(entry).text, 'Synthetic literal meaning 0');
+  assert.doesNotMatch(JSON.stringify(result), /OLD_ETYMOLOGY_MUST_NOT_RENDER/);
+});
+
+test('empty, invalid or mismatched structured senses never resurrect a legacy gloss', () => {
+  for (const patch of [{ dictionary_senses: [] }, { dictionary_senses_status: 'unavailable' },
+    { dictionary_senses: [{ id: 'wrong', entry_id: 'another-entry', text: 'Wrong source', evidence_type: 'dictionary_sense', language: 'en', source_url: 'https://example.test' }] },
+    { dictionary_senses: [{ id: 'wrong-language', entry_id: 'entry:a', text: 'NON_ENGLISH', evidence_type: 'dictionary_sense', language: 'el', source_url: 'https://example.test' }] }]) {
+    const data = fixture(); Object.assign(data.lexicon_entries[0], patch);
+    assert.equal(buildPreview(data).entries.length, 0);
+    assert.equal(definitionExcerpt(data.lexicon_entries[0]), null);
+  }
+});
+
 test('different accents/case are not silently merged into one lemma', () => {
   const data = fixture();
   data.lexicon_entries[0].lemma = 'λογός';
@@ -237,12 +262,13 @@ test('source-shaped Πατήρ/Πάτερ records do not attach a vocative gloss
   const result = buildPreview({ form: 'πατήρ' }, wiki);
   assert.deepEqual(wiki, original); // The source/API payload is never rewritten.
   assert.deepEqual(Array.from(result.entries, entry => entry.id),
-    ['wiktionary:kaikki:line:177', 'wiktionary:kaikki:line:36869']);
-  assert.equal(result.compact.entries.length, 2);
-  assert.ok(!JSON.stringify(result).includes('vocative singular of Πᾰτήρ'));
-  assert.deepEqual(Array.from(result.entries[0].analyses, row => row.text), ['nominative, singular']);
+    ['wiktionary:kaikki:line:177']);
+  assert.equal(result.compact.entries.length, 1);
+  assert.ok(!JSON.stringify(result.compact).includes('vocative singular of Πᾰτήρ'));
+  assert.equal(result.entries[0].analyses.length, 0);
+  assert.ok(result.entries[0].normalized_analyses.some(row => row.text === 'nominative, singular'));
   assert.ok(!JSON.stringify(result.entries[0].analyses).includes('masculine'));
-  assert.equal(result.entries[1].meanings[0].text, 'God the Father; (one of the three Persons of the Trinity)');
+  assert.equal(result.normalized_alternatives[0].meanings[0].text, 'God the Father; (one of the three Persons of the Trinity)');
 });
 
 test('direct Πάτερ and ὄμμασι headwords retain source form-of glosses and sense grammar', () => {
@@ -267,7 +293,7 @@ test('direct Πάτερ and ὄμμασι headwords retain source form-of glosse
 
 test('mixed lexical and form-of senses retain only applicable glosses for a different listed form', () => {
   const wiki = wikiFixture('πατήρ', 'Πάτερ', [
-    { kind: 'listed_form', form: { form: 'Πᾰτήρ', tags: ['nominative', 'singular'] } },
+    { kind: 'listed_form', form: { form: 'πατήρ', tags: ['nominative', 'singular'] } },
   ]);
   wiki.results[0].senses = [
     { sense_index: 0, glosses: ['Source lexical sense.'] },
@@ -303,13 +329,36 @@ test('Wiktionary suffix/headword punctuation cannot disappear into a standalone-
   }
 });
 
-test('Wiktionary exact Greek listed forms retain accent and quantity folding without Latin guesses', () => {
+test('Wiktionary accent and quantity folding yields alternatives, not exact parses or Latin guesses', () => {
   const wiki = wikiFixture('βλεφάροις', 'βλέφαρον', [
     { kind: 'listed_form', form: { form: 'βλεφᾰ́ροις', tags: ['dative', 'plural'] } }
   ]);
-  assert.equal(buildPreview({ form: 'βλεφάροις' }, wiki).entries.length, 1);
+  const preview = buildPreview({ form: 'βλεφάροις' }, wiki);
+  assert.equal(preview.entries.length, 0);
+  assert.equal(preview.normalized_alternatives.length, 1);
+  assert.equal(preview.normalized_alternatives[0].analyses.length, 0);
+  assert.equal(preview.normalized_alternatives[0].normalized_analyses[0].text, 'dative, plural');
   const latin = wikiFixture('love', 'λοβός', [{ kind: 'listed_form', form: { form: 'λοβέ', tags: ['vocative'] } }]);
   assert.equal(buildPreview({ form: 'love' }, latin).entries.length, 0);
+});
+test('normalized-only headword cannot lend form-of grammar to an exact table match', () => {
+  const wiki = wikiFixture('α', 'ά', [{ kind: 'headword', word: 'ά' },
+    { kind: 'listed_form', form: { form: 'α', tags: ['second-person'] } }]);
+  wiki.results[0].senses = [{ tags: ['form-of', 'first-person'], form_of: [{ word: 'β' }], glosses: ['headword-specific grammar'] }];
+  assert.equal(buildPreview({ form: 'α' }, wiki).entries.length, 0);
+});
+test('inherited multi-gloss entries without grammatical scope are not rewritten as table-form meanings', () => {
+  const wiki = wikiFixture('α', 'β', [{ kind: 'listed_form', form: { form: 'α', tags: ['second-person'] } }]);
+  wiki.results[0].senses = [{ glosses: ['parent headword grammar', 'nested lexical wording'] }];
+  assert.equal(buildPreview({ form: 'α' }, wiki).entries.length, 0);
+});
+test('captured live Wiki scope preserves exact selected form but excludes unrelated nested headword definitions', () => {
+  const wiki = JSON.parse(readFileSync(new URL('./fixtures/wiktionary-elthes-live.json', import.meta.url), 'utf8'));
+  const preview = buildPreview({ form: wiki.query }, wiki);
+  assert.ok(preview.entries.some(entry => entry.lemma === wiki.query));
+  const inherited = wiki.results.filter(item => item.headword !== wiki.query).flatMap(item => item.senses)
+    .filter(sense => sense.glosses.length > 1).map(sense => sense.glosses[0]);
+  for (const text of inherited) assert.ok(!JSON.stringify(preview.compact).includes(text));
 });
 
 test('compact meanings prefer structured literal glosses and retain full source entries separately', () => {

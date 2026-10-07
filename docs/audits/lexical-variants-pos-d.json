@@ -1,0 +1,45 @@
+{
+  "audit": "Independent follow-up D audit of literal dictionary POS projection",
+  "date": "2026-10-06",
+  "auditor": "subentry_evidence_audit",
+  "verdict": "PASS",
+  "blocking": false,
+  "scope": "Optional dictionary_pos, dictionary_pos_claim_ids and dictionary_pos_scope in lexical variants only. Interlinear consumer veto behavior is assigned to a separate audit.",
+  "version": "exact-dictionary-variants-v2",
+  "code_sha256": {
+    "backend/lexical_variants.py": "e6271e256b982e94d955078910339fcfebf67f91952ce53f3ceb6d038918a53f",
+    "tests/test_lexical_variants.py": "bfee15825f941ba54170f40bc62d48ab3ac38a2d90f393ea9dd08399d44c6802"
+  },
+  "frozen_c_reference": {
+    "path": "runtime/lexical-release-c/candidate-code/lexical_variants.py",
+    "sha256": "aa7d8ca247019bf1af08100deec3f52ee61e22e49ff5387530781a4f1f24ff4c",
+    "reports_preserved": ["docs/audits/lexical-variants.json", "docs/audits/lexical-variants-integration.json"]
+  },
+  "accepted_claims": {
+    "path": "data/claims/p2_wiktionary.jsonl",
+    "sha256": "42b022848f10329603078090adb7d955a794c080cda546bf70cc812336724514",
+    "changed": false
+  },
+  "checks": [
+    "Diff against immutable C helper contains only the extraction-version increment and optional POS projection block.",
+    "dictionary_pos is copied literally only when the already accepted, same-source-bound headword and morphology claim objects contain the same nonempty string POS. No mapping or inferred POS is supplied.",
+    "Both POS proof IDs remain in the returned supporting claims. Missing or conflicting POS omits all optional POS fields while retaining the lexical alternative.",
+    "44 queries compared against the immutable C implementation, comprising prior seeded examples and all retained local impact forms. After removing only the three new POS fields and reverting method version strings, every output equals C exactly.",
+    "26 emitted variant rows traced to 25 original downloaded JSONL records. All projected POS values match both returned claim objects and each raw entry's literal pos field. All 25 raw line SHA-256 values match provenance.",
+    "Every variant retains analysis=null and features=null. Crossreferences remain unresolved and do not gain target POS.",
+    "python -m pytest tests/test_lexical_variants.py tests/test_lexical_variants_integration.py -q: 16 passed, including the four new POS agreement/missing/conflict regressions."
+  ],
+  "examples": [
+    {"query": "ὄππᾳ", "entry_id": "wiktionary:kaikki:line:20270", "dictionary_pos": "adv", "proof_ids": ["wiktionary:kaikki:line:20270:lemma:entry", "wiktionary:kaikki:line:20270:morphology:entry"]},
+    {"query": "τάλαις", "entry_id": "wiktionary:kaikki:line:33375", "dictionary_pos": "adj", "proof_ids": ["wiktionary:kaikki:line:33375:lemma:entry", "wiktionary:kaikki:line:33375:morphology:entry"]},
+    {"query": "νεώφῠτος", "separate_entry_pos": {"wiktionary:kaikki:line:40480": "adj", "wiktionary:kaikki:line:40481": "noun"}},
+    {"query": "ὠς", "separate_entry_pos": {"wiktionary:kaikki:line:7184": "adv", "wiktionary:kaikki:line:7185": "conj"}}
+  ],
+  "limitations": [
+    "Agreement of two projected claim objects is internal source consistency, not agreement of independent dictionaries or scholarly confirmation.",
+    "Dictionary entry POS does not establish occurrence morphology, case, number, gender, tense or a selected contextual reading.",
+    "Multiple same-spelling dictionary entries can expose different POS labels; this layer retains alternatives and does not decide which applies.",
+    "Downstream use as a veto, frontend behavior and production deployment are outside this report."
+  ],
+  "mutations": "Only this new report was written by auditor. C code snapshot and C reports were preserved; no runtime code, data or deployment changed."
+}

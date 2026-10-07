@@ -129,6 +129,28 @@ test('180, 181 and 1000 codepoints remain complete; oversize is visible and bloc
   h.update(null); assert.equal(h.ui.selectionActions.hidden, true); assert.equal(h.ui.selectedPhrase.textContent, '');
 });
 
+test('captured phrase stays selected after toolbar focus without bypassing search length limits', () => {
+  const f = fixture([['1', 'α β']]), h = harness(f);
+  let captured = { selected_text: 'α β' }, refreshed = 0;
+  h.state.passageAnalysis = { selectionChanged() {}, wordSelection: () => null,
+    currentSelection: () => captured, refreshAction: () => refreshed++ };
+  h.update(null);
+  assert.equal(h.state.selectedText, 'α β'); assert.equal(h.button.disabled, false);
+  captured = { selected_text: 'α'.repeat(1500) };
+  h.update(null);
+  assert.equal(h.state.selectedText, ''); assert.equal(h.button.disabled, true);
+  assert.equal(h.ui.selectionActions.classList.contains('selection-too-long'), true);
+  assert.equal(refreshed, 2);
+});
+
+test('an empty native selection keeps the action dock visible while waiting for the first tap', () => {
+  const f = fixture([['1', 'α β']]), h = harness(f); let choosing = true, refreshed = 0;
+  h.state.passageAnalysis = { selectionChanged() {}, wordSelection: () => null, currentSelection: () => null,
+    isChoosingPhrase: () => choosing, refreshAction: () => refreshed++ };
+  h.update(null); assert.equal(h.ui.selectionActions.hidden, false); assert.equal(h.state.selectedText, '');
+  choosing = false; h.update(null); assert.equal(h.ui.selectionActions.hidden, true); assert.equal(refreshed, 2);
+});
+
 test('astral characters count once, combining marks stay literal, and cross-line separators count toward 1000', () => {
   const f = fixture([['1', '𐀀'.repeat(1001)]]), h = harness(f), word = f.content(0)[0];
   h.update(f.select(word, 0, word, 2000)); assert.equal([...h.state.selectedText].length, 1000);

@@ -1,0 +1,26 @@
+{
+  "schema": "melos-render-memo-independent-review-v1",
+  "verdict": "PASS_memo_hunk_only",
+  "pre_memo_i_baseline_morphology_sha256": "11d58224a7af51939008c074708350da1af2557047084c8120bb87b7066e3190",
+  "current_morphology_sha256": "4baaaf0b276b3f2d02305ee767f9c62a46d2db9cb235a8dc78c0e6949ad8f4a1",
+  "replay_script": "scripts/audit_morphology_render_memo.py",
+  "replay_script_sha256": "eb71ea14bfed39a109683e9b1ee20718879dc46c4383fb15347da79681ccc033",
+  "source_file": "runtime/campbell-assignment/campbell_assignment.jsonl",
+  "source_file_sha256": "afe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b",
+  "source_passage_id": "campbell-glp:alcaeus:130b",
+  "source_text_sha256": "dd1402e22bd6b4f9f7397c92510b66ab5ab8acad66605d07e4f8d1a622ca7a32",
+  "reproduction": "python -B -m scripts.audit_morphology_render_memo",
+  "baseline": "In-memory current morphology module with only request-local memo removed; no source or corpus files edited.",
+  "full_word_output_equal_for_all_five_forms": true,
+  "render_source_record_calls_without_memo": 70,
+  "render_source_record_calls_with_memo": 36,
+  "per_form_calls_old_new": [[7, 4], [25, 11], [18, 14], [12, 2], [8, 5]],
+  "memo_calls_equal_distinct_source_object_count": true,
+  "tests": "python -B -m pytest tests/test_morphology.py -q: 13 passed",
+  "network_calls": 0,
+  "model_calls": 0,
+  "limitations": [
+    "Local active corpus lacks the approved Campbell passage, so the replay selected words from hash-bound runtime JSONL and used server.word(form, '') without passage context.",
+    "Other morphology.py lines visible in git diff were already in the exact I runtime baseline (pre-memo hash above); this review covers only the request-local rendering memo."
+  ]
+}

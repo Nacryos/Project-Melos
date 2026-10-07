@@ -14,6 +14,7 @@ from typing import Any
 import unicodedata
 
 import numpy as np
+from .translation_languages import translation_allowed_in_search
 
 MODEL_NAME = "BAAI/bge-m3"
 MODEL_REVISION = "5617a9f61b028005a4858fdac845db406aefb181"
@@ -193,6 +194,8 @@ class SemanticIndex:
                 eligible[author_positions[label]] = True
         if language:
             eligible &= languages == language
+        else:
+            eligible &= np.asarray([translation_allowed_in_search(row) for row in rows], dtype=bool)
         if not include_reference:
             eligible &= ~reference_mask
         positions = np.flatnonzero(eligible)

@@ -16,6 +16,7 @@ from functools import lru_cache
 from pathlib import Path
 import re
 from urllib.parse import parse_qs, urlsplit
+from .translation_languages import is_english_translation
 
 
 SOURCE = "p2_cgl_anthology"
@@ -54,7 +55,7 @@ def _cgl_pair(parent, translation):
     metadata = _metadata(translation)
     parent_metadata = _metadata(parent)
     if (translation.get('source') != SOURCE or translation.get('kind') != 'translation'
-            or translation.get('quality') != 'source_text' or translation.get('language') != 'ell'
+            or translation.get('quality') != 'source_text' or not is_english_translation(translation)
             or translation.get('parent_id') != parent['id']
             or metadata.get('translation_of') != parent['id']
             or type(metadata.get('text_id')) is not int
@@ -170,7 +171,8 @@ def _perseus_proof(parent, translation):
         binding = proof.get(field)
         metadata = _metadata(row)
         if (not isinstance(binding, dict) or row.get('source') != 'perseus'
-                or row.get('language') != language or row.get('kind') != kind or row.get('quality') != 'source_text'
+                or (not is_english_translation(row) if language == 'eng' else row.get('language') != language)
+                or row.get('kind') != kind or row.get('quality') != 'source_text'
                 or not isinstance(row.get('text'), str)
                 or hashlib.sha256(row['text'].encode('utf-8')).hexdigest() != binding.get('text_sha256')
                 or row.get('raw_sha256') != binding.get('raw_sha256')
@@ -211,8 +213,8 @@ def _excerpt(value):
 
 
 def project(parent, related, *, full_text=False):
-    """Return source-scoped previews; input records are never modified."""
-    valid = {row['id']: row for row in related if _pair(parent, row)}
+    """Return English-only source-scoped previews; never relabel source records."""
+    valid = {row['id']: row for row in related if is_english_translation(row) and _pair(parent, row)}
     ordered = sorted(valid.values(), key=lambda row: (row.get('source') or '',
         int(row['id'].rsplit(':tr', 1)[1]) if row.get('source') == SOURCE else 0, row['id']))
     previews = []

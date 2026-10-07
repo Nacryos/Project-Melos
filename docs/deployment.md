@@ -1,5 +1,483 @@
 # Deployment handoff
 
+## Current: gzip backend and grouped reader I (2026-10-07)
+
+Public backend: `f888ab8692593446a2495b3543be2ce7274bfcd672cc0d5f8379083af8f50a19`,
+release `/home/alvin/services/melos/releases/lexical-20261007i`, unchanged QA29 image.
+I adds only negotiated large single-body JSON gzip and its four-line server
+registration. No dictionary, corpus, runtime cache, parser or vector changes.
+Independent review passed 79 relevant tests; actual private HTTP checks proved
+byte-exact identity/gzip equivalence, explicit gzip refusal, and non-JSON/small
+response passthrough. The sampled dictionary response shrank from 717,597 to
+119,024 transferred bytes. Compression does not reduce lookup CPU or decoded
+browser payload size; no general latency claim is made.
+
+Root approved the exact private canary in
+`runtime/lexical-release-i/canary-promotion-pass.json` (SHA256
+`601ece8f5170c67da0f260599471cc2f9fc5c6afbca959a4f67d188d553a5781`).
+Guarded promotion verified preserved resources, environment, source databases,
+semantic coverage and routes. H is retained stopped as
+`melos-api-before-lexical-20261007i`; private I is also retained stopped.
+Root repeated all nine raw-transport probes against the public backend
+`https://basecamp.taila44c41.ts.net:8443`: PASS, matching the private decoded
+bytes exactly. Final receipt `runtime/lexical-release-i/live-verify.json`, SHA256
+`ff5108c9c7bc42023878fff8afbf0d7488a6ce3b7251f99a2b90c8efa83bc07c`,
+binds those bodies, exact deployed modules, retained rollback, unchanged
+environment/resources and preserved routes. This raw-transport test targets
+the backend endpoint; the separate browser check below targets greeklyric.com.
+
+Reader-I frontend: `dpl_4t9JqwmbUUAtJsKqXAoghEKVrRY1`,
+https://project-melos-8bypsq3yq-nacryos-projects.vercel.app, aliased to
+https://greeklyric.com. Root verified the public reader using computer use:
+the complete aorist parse and “come or go” remain visible; duplicate source
+records group together and expand to their original incomplete analyses.
+Distinct noun/adjective readings remain separate in the private checks.
+This verifies the tested grouping and default dictionary presentation, not
+universal parsing or contextual meaning accuracy.
+
+Optional isolated CPU diagnostic completed with network disabled, read-only
+mounts, one CPU, 4 GiB and a 120-second limit. No serving worker was modified.
+`runtime/lexical-release-i/isolated-word-profile-r3.json` records 12.99 seconds
+of initial warmup and 2.288 seconds across five second-pass profiled lookups;
+70 source-entry renders consumed 1.472 cumulative seconds (about 64% of the
+profiled lookup time). These are diagnostic-process timings with profiler
+overhead, not HTTP latency or a philologically representative benchmark.
+The automatic selector included `ις`, which is not independently certified
+as an intact word. No rendering optimization was deployed with I.
+
+## Historical: source-tense dictionary headlines H (2026-10-07)
+
+Public backend: `e37c1e216b508388caa8d9260298390b59edc9b5bf07b3d825fc5d3fb3b68eda`,
+release `/home/alvin/services/melos/releases/lexical-20261007h`, unchanged QA29 image.
+Immutable H-r2 reader frontend: `dpl_BiSgFewQxH9JPQ4UyE3BgqZmPzLk`,
+https://project-melos-8vw4pzmdi-nacryos-projects.vercel.app. Root verified
+the four live JavaScript files against the frozen H-r2 artifact during this
+completed rollout; the dirty working tree was not deployed.
+Root also reloaded the public reader and clicked `ἦλθες`: both the searched-form
+card and the separate source-definition excerpt visibly showed “come or go”,
+with the complete aorist parse. This verifies that default dictionary correction
+in the live UI, not universal contextual sense accuracy.
+
+Only `lexicon_senses.py` and `interlinear.py` changed in the backend, with 282
+exact-stage tests passing. The narrowly audited LSJ backward-reference note
+marks two senses as present-only. For known aorist candidates, those senses
+no longer supply the dictionary headline. No missing tense is inferred, and
+all 14 literal LSJ senses remain available in the expanded source inventory.
+The visible `ἦλθες` compact meanings now start with “come or go”; its full
+second-person singular aorist indicative active parse is retained.
+
+Final verification: `runtime/lexical-release-h/live-verify.json`, SHA256
+`774feeebfadd6b6682580efcd982adaa0b3976de83b53fa61d5ed69594884b80`.
+Eleven bounded live HTTP probes verified the exact two-response tense case,
+five contextual parses and both linked inventories (15/11 senses). Exact
+source text, 88 commentary paragraphs and five English comparisons remain
+unchanged, as do environment, resources, routes and the original runtime.
+No cached receipts, counters, corpus rows or vectors were imported or replaced
+for H. No paid calls or upstream morphology fetches were requested.
+
+G is retained stopped as `melos-api-before-lexical-20261007h`, ID
+`b7b0d8996609a41f3ca8b740f4ccf19979462845c89445e571c1972398eb75bb`.
+Private H `07f6ceacbe94e4f509aee1ce3ce8b54fc430d44d39d5ff18072f93acf5026ae9`
+is retained stopped after production warmup. This fix does not resolve every
+candidate identity: a single interlinear gloss may remain unavailable while
+compatible candidate meanings are shown separately. The large whole-poem
+payload/performance problem documented under G also remains unresolved.
+
+## Historical: contextual alternatives and editorial readings G (2026-10-07)
+
+Public backend: `b7b0d8996609a41f3ca8b740f4ccf19979462845c89445e571c1972398eb75bb`,
+release `/home/alvin/services/melos/releases/lexical-20261007g`, unchanged QA29 image.
+Reader-only frontend: `dpl_74H2frBj2KHABBc8LGrfzXbyRuKX`,
+https://project-melos-nr5bfctdd-nacryos-projects.vercel.app, aliased to
+https://greeklyric.com. This is the immutable reviewed G frontend, not the newer
+H working files. Discovery pages remain unpublished.
+
+Ten narrow backend overlays passed 410 exact-stage tests. G adds source-owned
+noun gender, unresolved homograph inventories, ranked uncertain sense alternatives,
+documented elision transport, and separately displayed conditional editorial
+readings. Larger sense packets retain all alternatives through reversible short
+IDs. Capacity limits are character proxies, not a guarantee of Jev token fit.
+The commentary instruction was clarified after the eight-call experiment;
+thresholds remain unchanged and no accuracy improvement is claimed.
+
+Final public verification: `runtime/lexical-release-g/live-verify.json`, SHA256
+`0173d2319ab11cd5453b0d0d6738e84f4c3a522d0a105d9e0e081643ad225f00`.
+It binds all ten module hashes, unchanged environment/resources/routes, the five
+exact Greek texts, 88 commentary paragraphs and five English comparisons.
+Public probes preserve full `ἦλθες` parsing, all 15/11 linked senses, and verify
+eight cached source forms against exact receipt IDs and candidate counts.
+Eight editorial API chunks retain 54 source rows, with 26 eligible conditional
+projections and 10 having source-backed analysis. Missing analyses remain missing;
+printed supplements are not promoted to securely transmitted text.
+
+Public whole-poem analysis is functionally correct in these checks but still
+too heavy: some raw responses were roughly 38–46 MB and took tens of seconds.
+This known repeated-provenance payload problem is not fixed by G. No low-latency
+or universal philological accuracy claim is made.
+
+Eight audited Morpheus receipts were imported after preview using G's validator.
+Independent audit `runtime/lexical-release-g/public-import-audit.json` (SHA256
+`1311e6cbd84469163ee544a616fa0ee84ddfa234be8f606225a57145759d2099`)
+proves the previous 18 cache entries, 18 receipts and 15 attempt records remain
+unchanged, including the separate maintenance additions; cache/receipt totals
+are now 26/26. No operational counters or in-flight records were imported.
+No paid calls or upstream parser fetches were requested by release verification.
+
+F is retained stopped as `melos-api-before-lexical-20261007g`, ID
+`e07b8119e854fd466222e5026759a9015d4dbad84ba4dccc4e46a4204b2d3d52`.
+Private G `bc0e2210c9dd78928250b875bbb861cc5ad4b35d7ba5608c33f1e87f4474e8ed`
+is stopped; its separately audited SQLite snapshot/import never replaced the
+production runtime. Source databases, corpus, vectors, quotas, secrets and
+Basecamp/private routes were preserved. Five Campbell embeddings remain pending.
+The optional H tense-restriction change is not included in this release.
+
+## Historical: source-linked dictionary and comparison release F (2026-10-07)
+
+Public backend is `e07b8119e854fd466222e5026759a9015d4dbad84ba4dccc4e46a4204b2d3d52`,
+release `/home/alvin/services/melos/releases/lexical-20261007f`, on the unchanged
+QA29 image. Frontend is reader-only deployment
+`dpl_GQjuM5iMG9pHRLtWtXmGCdV1VhHG`, aliased to https://greeklyric.com.
+The rejected discovery pages remain unpublished.
+
+Nine exact backend overlays add source-linked dictionary alternatives and
+five source-bound English comparisons from other editions. The comparisons
+remain explicitly unaligned with Campbell's Greek, retain translator/source/
+license labels, and are reader context rather than model translation evidence.
+No corpus, vector, evidence index, source index, secret, resource or route
+changes were made. All five Campbell Greek texts and 88 commentary paragraphs
+match the approved artifacts. Existing 116,191 semantic vectors remain ready;
+the five Campbell poems remain explicitly pending embeddings.
+
+Independent module approval: `docs/audits/lexical-context-backend-f.json`.
+Root's public promotion authorization:
+`runtime/lexical-release-f/canary-promotion-pass.json`, SHA256
+`6095acc72e42937180e5423a0b951d606d44ebce979d1ddde2b7421b2a19f4b9`.
+Post-promotion verification: `runtime/lexical-release-f/live-verify.json`, SHA256
+`8705c33914134eacfbc3596f26c19a55737f49f852f03e4203c9110d9edc9524`.
+That receipt binds exact live module hashes, retained E, stopped private F,
+unchanged resources/environment/routes, all five source/comparison checks,
+and nine public HTTP probe receipts without paid ranking or parser fetching.
+
+Public probes preserve the full `ἦλθες` second-person singular aorist indicative
+active parse. All 15 source-linked senses for `παχέων` and 11 for `δᾶμον` reach
+the ranking input. Root separately checked the live browser: the English
+comparison expands with attribution, and the cubit dictionary path appears
+alongside distinct competing adjective entries. This demonstrates source
+coverage and functionality, not universal parsing or sense accuracy.
+The one authorized private Jev trial favored the cubit sense at an uncalibrated
+0.57 and remained uncertain; no further paid calls were made for deployment.
+Conflicting predictions for `τάλαις` and `ὄππᾳ` remain suppressed. The subsequently
+identified prompt contradiction is not fixed by F and belongs to follow-up work.
+
+E is retained stopped as `melos-api-before-lexical-20261007f`, ID
+`0acc39cfe31fb883bedf3cbf4818f05a5f46c400a58e111f494315301e3116f5`.
+Private F `36de860ef7770eeb649f1a5e522c76cd5eb275c984ca570c775ae5f6b0b1f4d6`
+is retained stopped after the production warmup. Funnel 8443 still serves
+localhost 8791; Basecamp 80/443 remain private and unchanged.
+
+The following sections are historical release snapshots, not current status.
+
+## Historical: commentary-ready reader display (2026-10-07)
+
+Live frontend: `dpl_HFbuHTZF2kbEJB14k15kqYWrnh1o`,
+https://project-melos-knym4dnfb-nacryos-projects.vercel.app, aliased to
+https://greeklyric.com. Reader-only build; 378 frontend tests pass.
+Live `reader.js` and `passage-analysis.js` bytes match independently reviewed
+hashes `045e53ce9bf7cc9713162fc073a7aebb95e721163a737b9118e799db30baee22`
+and `7719a2c97a0893b4633e6b2c6a9d42301de5ae23e8c90bb8173661bccfb617c9`.
+
+Exact lexical variants no longer trigger false dictionary-absence copy when
+only a complete morphological parse is unavailable. New source-bound
+commentary rendering is backward compatible with the current D backend:
+whole-poem notes stay collapsed, while literal NFC printed-heading matches
+can appear beside an intact clicked word. No accent folding, substring
+matching, cross-poem binding or inferred word attestation is permitted.
+Uncertain OCR paragraphs cannot become these heading matches.
+
+E backend is live: `0acc39cfe31fb883bedf3cbf4818f05a5f46c400a58e111f494315301e3116f5`,
+release `/home/alvin/services/melos/releases/lexical-20261007e`. It adds an exact
+neighboring syntax window for long poems and the audited commentary sidecar.
+Independent staged review: 360 application tests and 31 deployment guards.
+Root approval: `runtime/lexical-release-e/canary-promotion-pass.json`.
+Final verification: `runtime/lexical-release-e/live-verify.json` (SHA256
+`ab4a5e0f28830117d169df1ce437cb8ee98f3ba902251298429afd65ed49ed77`).
+Root independently repeated the five public context checks in
+`runtime/lexical-release-e/live-root/`; all five Greek texts and all 88 reader
+commentary paragraphs remain bound to approved sources. The model receives
+87 paragraphs, excluding the uncertain OCR paragraph. Browser verification
+confirmed the immediate Campbell note on clicked `στάσιν` and the expanded
+whole-poem commentary panel on live fragment 326.
+
+The old local test tunnel had expired; its failed request receipt is preserved
+under `runtime/lexical-release-e/operational/`. The replacement tunnel was
+verified before the explicit successful retry in `operational-restored-tunnel/`.
+D is retained stopped as `melos-api-before-lexical-20261007e`; private E is
+retained stopped. Existing corpus, vectors, resources and routes are unchanged.
+
+Newer 23-sense saved `στάσιν` packets initially exceeded the unchanged 32k
+classification budget. Lossless common-field sharing now retains all 23
+choices and the eligible commentary at 30,817 characters. One actual paid
+Jev sense call completed in 2.293 seconds: it favored the literal LSJ sense
+"position in relation to the compass" at an uncalibrated 0.68, below the
+decisive threshold; no definitive gloss was substituted. The morphology
+comparison abstained before a provider call. See `jev-stasin/` receipts.
+
+This is not universal accuracy: long-window predictions for `τάλαις` and
+`ὄππᾳ` still conflict with source lexical identity and remain suppressed.
+`δᾶμον` now has a compatible contextual prediction but no resolved meaning.
+`παχέων` retains a possible `παχύς` analysis; Campbell's royal-cubit discussion
+exposes the missing alternative. Source investigation found explicit Kaikki
+links from quantity-marked `πᾱχέων` to `παχέων#Ancient_Greek`, and from
+`πᾶχυς` to `πῆχυς`; source-link alias support is being developed separately.
+The separately audited five English translation comparisons remain staging
+only, without reader/model integration or exact Campbell alignment.
+The independently audited `backend/dictionary_crossrefs.py` resolver is also
+staged only. Do not claim its source-backed alternative meanings are live.
+
+## Exact-form dictionary display cleanup (2026-10-07)
+
+Live frontend: `dpl_5ZaetrW4yGf9hnbHyanUABzMZ1Ze`,
+https://project-melos-cumk6reie-nacryos-projects.vercel.app, aliased to
+https://greeklyric.com. Explicit `MELOS_READER_ONLY=1` build; `/lexicon`,
+`/authors`, and `/themes` remain 404. All 365 frontend tests pass; the three
+changed live JavaScript files match local reviewed hashes. Exact NFC form
+scope now separates normalized matches from exact grammatical evidence.
+Inherited headword form-of prose from the actual Wiktionary `ἦλθον` payload
+no longer appears as a meaning of table-matched `ἦλθες`. Exact lexical
+variant display is now backed by release D's live API fields.
+
+Public backend is release D (`71c6555a265f83a01f781e3673a815a073c2ed9bc7f8153d36297b8f6797b0c0`),
+release directory `/home/alvin/services/melos/releases/lexical-20261007d`.
+Five exact module overlays passed 301 application and 23 deployment guard
+tests; audit: `docs/audits/lexical-context-backend-d.json`. Root's separate
+canary approval is `runtime/lexical-release-d/canary-promotion-pass.json`.
+Production verification: `runtime/lexical-release-d/live-verify.json` and
+root's independently repeated public probes in `runtime/lexical-release-d/live-root/`.
+The five approved Campbell texts, corpus, vectors, and Basecamp routes are
+unchanged. B is retained stopped for rollback as
+`melos-api-before-lexical-20261007d`; C and D canaries are retained stopped.
+
+Exact source features now survive incomplete or conflicting model parses:
+`ἦλθες` shows `2nd sg. aor. ind. act.` and `δᾶμον` sourced `acc. sg.`.
+Exact lexical variants retain meanings without a fabricated full parse.
+Contradictory standalone model parses for `ὄππᾳ` and `τάλαις` are suppressed;
+the raw model predictions remain separate. Never promote the older C release:
+its operational probes exposed these contradictions. C artifacts are frozen.
+The audited surrounding-context window helper is not yet integrated or live.
+
+Fresh source-occurrence baseline: 388 segments, 119 API-flagged damaged
+segments and 269 unflagged (not independently certified intact words).
+Only 47 selected English glosses, 120 occurrences with any candidate gloss,
+and 137 with exact-surface source/contextual candidates. These are coverage
+counts, not accuracy scores. See `runtime/alcaeus-occurrences/baseline/`.
+
+New source packages remain STAGING ONLY, not live context:
+
+- `runtime/campbell-commentary/commentary-candidates.jsonl`: five records,
+  88 retained paragraphs, package SHA256
+  `3e33ec114f43058f62553d4f6764f65c0e7bc655b204376c7ac82b063c07335a`.
+  Independent pixel/package approval under its `audits/` directory. Two
+  unreliable OCR paragraphs excluded; one documented unreadable glyph remains
+  unsuitable for exact lexical evidence.
+- `runtime/alcaeus-translations/translation-candidates.jsonl`: five audited
+  English comparisons, Edmonds for 34a/326/350 and Lowell Edmunds for 129/130b.
+  None is asserted to be an exact translation of the Campbell Greek. Preserve
+  edition differences, translator attribution and original rights labels.
+
+The goal of accurate contextual meanings and full source-backed analyses for
+all words/spans remains incomplete. Do not report successful requests or
+passing code tests as universal linguistic accuracy.
+
+## Contextual dictionary and complete-parse repair (2026-10-06)
+
+Live frontend: `dpl_8z6qJU4nuhg78NRvGZaJ4HghSWmJ` at
+https://greeklyric.com, built explicitly with `MELOS_READER_ONLY=1`.
+The rejected discovery routes still return 404. All 348 frontend tests pass.
+
+Live backend: `ec2cdc5176ed0f747cb03de0037d7bfb1bc00e93644fae7fbf761822e6eb6aa5`,
+release `/home/alvin/services/melos/releases/lexical-20261007b`, with five
+hash-verified module overlays on the unchanged QA29 image: `classifier.py`,
+`interlinear.py`, `lexicon_senses.py`, `passage_analysis.py`, `sense_ranker.py`.
+The prior Campbell container is retained stopped as
+`melos-api-before-lexical-20261007b`; both lexical canaries are stopped and
+retained. Corpus, embeddings, secrets, environment, resource limits and
+private Basecamp routes are unchanged. Independent module approval:
+`docs/audits/lexical-context-backend-b.json` (274 tests, canary eligibility only).
+Actual operational promotion evidence:
+`runtime/lyric-context-eval/canary-b-promotion-pass.json` and
+`runtime/lyric-context-eval/live-b-verify.json`.
+
+Hyphenated Wiktionary person tags now survive projection. Coarse UD Past no
+longer incorrectly contradicts a source's explicit aorist; it never supplies
+an aorist by inference. Partial source analyses cannot displace an otherwise
+compatible fuller analysis. When exact source alternatives agree on a complete
+parse but lexical identity remains unresolved, the parse can be displayed
+without choosing a dictionary homograph or inventing a gloss.
+
+The new explicit **Read in context** word action uses Jev to choose an existing
+English dictionary sense independently of resolving every morphological
+alternative. Full passage hashes, source-entry/sense/candidate bindings and
+stale-response guards are checked. No automatic paid calls on word selection.
+Shared packet-local references reduce repeated metadata without dropping
+meaning choices; source coordinates stay bound in the server inventory hash.
+
+Bounded actual canary results: ἀνέμων → "wind", κῦμα → "wave, billow", and
+ἦλθες → "come or go"; στάσιν remained uncertain with all 23 senses retained.
+These are three useful proposals and one abstention, not an accuracy benchmark.
+Live browser verification confirmed the four-word phrase ἦλθες ἐκ περάτων γᾶς
+shows **2nd sg. aor. ind. act.** for ἦλθες, and its word inspector's explicit
+context action shows "come or go" with that full parse.
+
+Known gaps remain: default phrase analysis does not automatically run Jev;
+περάτων still lacked an English preview in that phrase; source-order dictionary
+previews and form-of headword descriptions can still be unhelpful. Do not claim
+universal morphology or contextual-meaning accuracy. The staged 717-entry LSJ
+subentry index was NOT shipped: its independent audit found a source-tagging
+error producing a truncated definition, documented in
+`docs/audits/lyric-subentries.json`.
+
+## Campbell Alcaeus assignment release (2026-10-06)
+
+Frontend: `dpl_B9ZWF9NfiHe6nu4RyiwEZxEYgemj`, aliased to
+https://greeklyric.com. Explicit reader-only production build; rejected discovery
+routes remain 404. Includes five source-facsimile pages, immutable excerpt-image
+caching, and editorial-segment lookup guards. All 330 frontend tests pass.
+
+Backend candidate: `/home/alvin/services/melos/releases/campbell-20261007b`.
+Five IDs: `campbell-glp:alcaeus:{34a,129,130b,326,350}`. Campbell prints the
+assignment's 130b as 130; citation metadata explicitly indexes both references.
+Source JSONL SHA256: `afe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b`.
+Independent acceptance: `runtime/campbell-assignment/integration-pass-v2.json`.
+Production promotion passed the final canary gate. Live container:
+`99ac41bf357439a2e07bb69cde3f279b6bf8ae8b89690c8cc7d9ee28be517460`.
+Original QA29 container `cc62bec35b7b...` is retained stopped as
+`melos-api-before-campbell`; routes, environment and resource limits preserved.
+Both private Campbell canaries are stopped and retained. Promotion receipt:
+`/home/alvin/services/melos/releases/campbell-20261007b/promotion-receipt.json`.
+Public UTF-8 API verification matched all five exact Greek text hashes and
+all five reference searches after promotion.
+
+The immutable QA29 image is retained with exactly two audited read-only module
+overlays: `passage_analysis.py` and `interlinear.py`. These preserve damaged
+Greek segments, attach exact dictionary entries to machine lemma hypotheses,
+and avoid displaying a sole syntax prediction when explicit candidates
+contradict it. Machine alternatives do not become source attestations.
+
+Scope limitations: tiny glyphs in 34a remain explicitly uncertain; source
+facsimiles are available for comparison. These records have no aligned English
+translation. Existing 116,191 semantic vectors are unchanged; the five new
+records are explicitly pending embedding. Do not claim complete contextual
+parsing accuracy or complete dictionary coverage from HTTP/offset tests.
+
+QA artifacts live under `runtime/alcaeus-assignment-qa/`. The baseline full run
+tested 227 distinct printed lookup segments (not necessarily complete words):
+149 had exact indexed parses; 166 had displayable sourced English dictionary
+previews. All 60 sampled phrase analyses preserved source text and offsets;
+28 literal phrase searches and 10 intact Forms searches retrieved their target.
+Editorial/lacuna barriers are reported separately, not repaired for matching.
+
+Final V2 QA report SHA256:
+`1916a8e4b5f7160caa00878b7fe8183a80a30d9945a1092148d60bb44d6b6bef`.
+Word/Wiktionary results were reused only after checking unchanged code/image
+and all 227 exact source-context hashes; all 60 phrase checks and reference
+navigation checks were freshly repeated against V2. Three additional cached
+Morpheus projections were rechecked without new external model/parser calls.
+
+Live browser verification covered fragment 326 word lookup, endpoint-based
+four-word selection, successful analysis, Same wording retrieval (Campbell
+plus a separately labelled other edition), and fullscreen artwork. Important
+unresolved semantic regressions: the word preview for `στάσιν` leads with
+source-order senses "erection" and "standing stone, pillar", not an adjudicated
+meaning in this poem; OdyCy proposes adverb for `ἀσυννέτημμι` when no exact
+indexed candidate is available. Operational QA is not philological approval.
+
+## Fullscreen artwork and touch selection fix (2026-10-06)
+
+Live: `dpl_EVjdaLHk6ahtiXTcDmh4q1yz9EoU` at https://greeklyric.com.
+Built with `vercel deploy --prod --yes --build-env MELOS_READER_ONLY=1`.
+The old hero/reader remain; discovery navigation is absent and `/lexicon`,
+`/authors`, `/themes` return 404. Discovery source remains local. Backend QA29
+was not changed. Do not use ordinary preview promotion for this profile:
+promotion rebuilt using production settings and dropped the one-off build
+environment; the explicit production build above corrected that immediately.
+
+Fullscreen loads a real decorative image eagerly, preserves the CSS fallback,
+uses one dark overlay, and has a fixed-overlay fallback for missing/failing
+native dialog support. Touch-friendly Select phrase lets readers tap endpoints;
+native selection remains available. The selection dock tracks the exit toolbar
+height and becomes nonsticky on short landscape screens to avoid covering text.
+
+327 frontend tests pass, including missing/throwing modal APIs, image failure
+fallback, selection ranges, and reader-only build isolation. Browser QA verified
+artwork and four-word selection at 390x844 and 844x390 in Chromium. Actual iOS
+Safari hardware testing was not available; do not claim all-device verification.
+
+## Discovery frontend rolled back at owner request (2026-10-06)
+
+The owner rejected the current lexicon arrangement and author portraits/names.
+Live Vercel was restored to the pre-discovery nature-header deployment
+`dpl_GXF8m6Md3c8xdpzw9KxmrQNAv4vF`. The discovery implementation is retained
+locally, not discarded, at http://127.0.0.1:8792/ with its local API on 8791.
+The exact pre-discovery QA29 backend container `cc62bec35b7b...`, image
+`sha256:2f60b62520d88098663fa79e2cb76cdeae8b7540e24752d586df042fc09d1777`,
+was restored and publicly verified; new discovery API routes again return 404.
+`tools/serve_timeline_preview.py` now serves the three discovery routes and
+their public assets. Do not redeploy this design without the owner's approval.
+The earlier release descriptions below are historical, not current live state.
+
+## Discovery routes release (2026-10-06 Pacific)
+
+Production `dpl_4YFGiy5cncWfMaK8k5GYBno1QwSU` is aliased to
+https://greeklyric.com. The original hero/reader remain, with three new entry
+cards and `/lexicon`, `/authors`, `/themes`. Vercel builds use their own API
+rewrite, avoiding cross-origin production calls from preview deployments.
+
+The author catalogue contains 13 source-extracted Wikipedia biographies,
+10 image-backed profiles, and two DCC commentary excerpt instances. Original
+images are unchanged; CSS framing provides portrait details. Expanded pictures
+precede biographies. Revision, license and image provenance remain accessible.
+The old local timeline preview remains intact.
+
+Browser checks covered English `love` lookup, Greek `ἄνθρωπος`, Sappho's
+expanded portrait/biography and real work-to-passage navigation, garden category
+results, line-level `love and longing` within Sappho, and phone-sized layouts.
+The last query exposed editorial-only semantic hits; a focused backend fix
+excludes spans with no printed Greek letters without changing source texts.
+See `discovery-release.md` for backend image identities, tests and rollback.
+
+Limits: English definitions currently inspect up to 256 source-entry candidates.
+Child semantics encode a bounded sample on demand (at most 64 spans across 16
+retrieved parents), not a complete materialised hierarchical index. Stanzas
+require explicit blank lines; sentence/phrase boundaries are heuristic. Literary
+categories launch discovery searches, not certified poem classifications.
+Ancient Greek semantic rankings remain exploratory, especially for lacunose text.
+
+## Nature-header preset release (2026-10-05 Pacific)
+
+Production deployment `dpl_GXF8m6Md3c8xdpzw9KxmrQNAv4vF` is aliased to
+https://greeklyric.com. Five owner-approved landscape images are served as
+content-hashed 960px and 480px WebPs from `/assets/nature-presets/`, with
+one-year immutable caching. Originals and portrait favourites remain local.
+
+`tools/build_nature_presets.py` rebuilds the selected images;
+`tools/build_nature_assignments.py` exports only existing source-validated
+positive aesthetic annotations (247 records: 169 Greek, 78 translations).
+Both support `--check`. The public export contains IDs, hashes and theme IDs,
+not source text or private file paths. Runtime matches exact record ID and
+SHA-256 of the returned text; missing/stale annotations use a decorative grove
+default, not a new theme classification.
+
+The plain reading view stays white. Only fullscreen poem headings consume
+the image under the existing dark overlay. `js/nature-presets.js` exposes a
+reusable preset registry and lazy assignment accessor. Background images warm
+sequentially at low priority after the hero painting queue; data-saver/2G skips
+speculative warming. Opening fullscreen explicitly warms the selected image.
+No backend deployment, paid inference, corpus edit or runtime generation is
+required. Existing Hetzner service remains unchanged.
+
+Checks: 272 frontend tests, 14 annotation/export tests, deterministic asset
+verification, production asset/cache checks, and live fullscreen browser QA.
+
 Melos has two deployable parts. Vercel serves the static reader and design studio. A separate persistent Python service serves `/api/*` from the accepted corpus, dictionary, and search indexes. Deploying the frontend alone does not make the reader functional.
 
 ## Static frontend

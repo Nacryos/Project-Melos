@@ -1,0 +1,703 @@
+{
+  "version": 1,
+  "status": "ok",
+  "passage": {
+    "id": "campbell-glp:alcaeus:326",
+    "author": "Alcaeus",
+    "work": "Fragments",
+    "citation": "Fragment 326",
+    "source": "campbell_assignment",
+    "source_url": "https://greeklyric.com/sources/campbell-alcaeus/326.html",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "license": "user_supplied_edition_excerpt",
+    "text_sha256": "df602e007e7a1818f14413317de6540b7820d0d9a094d13fb23d9c7f81c9bf86"
+  },
+  "selection": {
+    "text": "ἀσυννέτημμι",
+    "start": 0,
+    "end": 11,
+    "start_utf16": 0,
+    "end_utf16": 11,
+    "offset_unit": "codepoint"
+  },
+  "tokens": [
+    {
+      "id": "t0",
+      "text": "ἀσυννέτημμι",
+      "kind": "word",
+      "start": 0,
+      "end": 11,
+      "start_utf16": 0,
+      "end_utf16": 11,
+      "partial_word": false,
+      "warnings": [],
+      "source_candidates": [],
+      "contextual_candidates": [],
+      "structured_evidence": {
+        "ready": false,
+        "claims": []
+      },
+      "source_status": "available",
+      "candidate_scope": "General-form and passage-level alternatives, not a resolved analysis of this occurrence. Only exact_token_span claim applications bind to this token; ordering is not a probability.",
+      "claim_applications": {},
+      "machine": {
+        "status": "ok",
+        "form": "ἀσυννέτημμι",
+        "machine_candidates": [
+          {
+            "id": "machine:4bd60bc21b775487c6fc15b602b26d4ca939884cfe8bde981d65368fac9b0c43",
+            "candidate_kind": "machine_analysis",
+            "basis": "machine_analysis",
+            "receipt_id": "0129602992c0b00b047c53668281d8efe6b574a494f9a36898e1fdec90205967",
+            "lemma": "ἀσυνετέω",
+            "dictionary_fields": {
+              "hdwd": {
+                "lang": "grc",
+                "$": "ἀσυνετέω"
+              },
+              "pofs": {
+                "order": 1,
+                "$": "verb"
+              }
+            },
+            "inflection": {
+              "term": {
+                "lang": "grc",
+                "stem": {
+                  "$": "ἀσυννετ"
+                },
+                "suff": {
+                  "$": "ημμι"
+                }
+              },
+              "pofs": {
+                "order": 1,
+                "$": "verb"
+              },
+              "mood": {
+                "$": "indicative"
+              },
+              "num": {
+                "$": "singular"
+              },
+              "pers": {
+                "$": "1st"
+              },
+              "tense": {
+                "$": "present"
+              },
+              "voice": {
+                "$": "active"
+              },
+              "dial": {
+                "$": "Doric Aeolic"
+              },
+              "stemtype": {
+                "$": "emi_pr"
+              }
+            },
+            "features": {
+              "pofs": "verb",
+              "mood": "indicative",
+              "num": "singular",
+              "pers": "1st",
+              "tense": "present",
+              "voice": "active",
+              "dial": "Doric Aeolic",
+              "stemtype": "emi_pr"
+            },
+            "entry_pointer": "/RDF/Annotation/Body/rest/entry",
+            "inflection_pointer": "/RDF/Annotation/Body/rest/entry/infl",
+            "lexicon_entry_ids": [],
+            "dictionary_join": {
+              "status": "no_exact_headword",
+              "basis": "machine_lemma_exact_dictionary_headword",
+              "entry_ids": [],
+              "occurrence_attested": false
+            }
+          }
+        ],
+        "machine_entries": [
+          {
+            "entry_pointer": "/RDF/Annotation/Body/rest/entry",
+            "entry": {
+              "uri": null,
+              "dict": {
+                "hdwd": {
+                  "lang": "grc",
+                  "$": "ἀσυνετέω"
+                },
+                "pofs": {
+                  "order": 1,
+                  "$": "verb"
+                }
+              },
+              "infl": {
+                "term": {
+                  "lang": "grc",
+                  "stem": {
+                    "$": "ἀσυννετ"
+                  },
+                  "suff": {
+                    "$": "ημμι"
+                  }
+                },
+                "pofs": {
+                  "order": 1,
+                  "$": "verb"
+                },
+                "mood": {
+                  "$": "indicative"
+                },
+                "num": {
+                  "$": "singular"
+                },
+                "pers": {
+                  "$": "1st"
+                },
+                "tense": {
+                  "$": "present"
+                },
+                "voice": {
+                  "$": "active"
+                },
+                "dial": {
+                  "$": "Doric Aeolic"
+                },
+                "stemtype": {
+                  "$": "emi_pr"
+                }
+              }
+            }
+          }
+        ],
+        "receipt": {
+          "id": "0129602992c0b00b047c53668281d8efe6b574a494f9a36898e1fdec90205967",
+          "engine_revision": null,
+          "http_status": 201,
+          "parser_version": "alpheios-literal-v1",
+          "raw_sha256": "cface53b97daffd116d3aba2dcb8c2c331818883a813a094aa0ccc82dc82218a",
+          "received_utc": "2026-10-07T04:45:34.978866+00:00",
+          "request_form": "ἀσυννέτημμι",
+          "response_headers": {
+            "Age": "0",
+            "Content-Type": "application/json",
+            "Date": "Wed, 07 Oct 2026 04:45:35 GMT",
+            "X-Cache": "MISS"
+          },
+          "url": "https://morph.alpheios.net/api/v1/analysis/word?word=%E1%BC%80%CF%83%CF%85%CE%BD%CE%BD%CE%AD%CF%84%CE%B7%CE%BC%CE%BC%CE%B9&engine=morpheusgrc&lang=grc&clientId=project-melos-explicit-morphology"
+        },
+        "warnings": [
+          "Machine-generated alternatives, not occurrence-attested or contextually adjudicated morphology.",
+          "The deployed engine and stem-library revisions are unknown; dialect labels are not exhaustive."
+        ]
+      },
+      "machine_subentries": {
+        "status": "available",
+        "inventory_ref": "5cefe41b9014adc6b751e5f121bb61983c7649d73f5974727797c96531db0de1",
+        "candidate_refs": [
+          "machine-subentry:810a41961474cb505410790958243257875d465c4f4ecabae7754725684c13ba"
+        ],
+        "ranking_status": "unsupported_source_type"
+      },
+      "lexicon_entries": []
+    }
+  ],
+  "syntax": {
+    "status": "unavailable",
+    "state": "unavailable",
+    "tokens": [],
+    "evidence_type": "contextual_prediction",
+    "reason": "Local syntax provider is not configured."
+  },
+  "lint": {
+    "status": "unavailable",
+    "warnings": []
+  },
+  "context": {
+    "published_translations": [],
+    "commentary": [],
+    "published_commentary": null,
+    "translation_comparisons": null,
+    "translation_scope": "whole_passage",
+    "translation_status": "unavailable",
+    "commentary_status": "unavailable",
+    "structured_evidence": {
+      "ready": false,
+      "claims": []
+    },
+    "author_profile": null,
+    "dialect_note": "Authorial dialect is context, not proof that each word belongs exclusively to that dialect."
+  },
+  "ranking": {
+    "status": "not_requested"
+  },
+  "limits": {
+    "max_characters": 2000,
+    "max_words": 80,
+    "max_machine_fetches": 3,
+    "machine_fetches": 0,
+    "max_dictionary_lemma_lookups": 24,
+    "dictionary_lemma_lookups": 1,
+    "max_machine_subentry_lookups": 24,
+    "machine_subentry_lookups": 1
+  },
+  "warnings": [
+    "Morphological alternatives and dependency predictions are not verified readings of this occurrence.",
+    "Source lookups are bounded; absence is not evidence of linguistic impossibility."
+  ],
+  "machine_subentry_evidence": {
+    "version": 1,
+    "ranking_status": "unsupported_source_type",
+    "dependencies": {
+      "a00c52ee0cfe75752876c41951d80b0cb692483a2704416a1632a68b69ff0004": {
+        "index_artifact": "data/staging/lyric-subentries-20261006-v2/subentries.sqlite",
+        "index_sha256": "33f9a798232948baa3efa13f402ffd8e278414b987a2230f63b5fff89fafcb81",
+        "index_version": "lsj-explicit-subentry-v2",
+        "manifest_artifact": "data/lexica/entries.jsonl",
+        "manifest_sha256": "ca2e64c5bace58fe58f44cd111884b0362b4f83480702077f526f14f13ae546e",
+        "sense_extractor_version": "tei-definition-spans-v4",
+        "index_rows": 716,
+        "use": "locator_only_reextract_current_archived_source"
+      }
+    },
+    "bindings": {
+      "machine-subentry:810a41961474cb505410790958243257875d465c4f4ecabae7754725684c13ba": {
+        "candidate_id": "machine:4bd60bc21b775487c6fc15b602b26d4ca939884cfe8bde981d65368fac9b0c43",
+        "form": "ἀσυννέτημμι",
+        "lemma": "ἀσυνετέω",
+        "receipt_id": "0129602992c0b00b047c53668281d8efe6b574a494f9a36898e1fdec90205967",
+        "machine_candidate_sha256": "a37ccb32860c30a08a139b2b961a96e3a5a46cb7ee594cc286e68368d1eb6efe",
+        "match_method": "exact_parser_lemma_to_explicit_subentry_orthography",
+        "lookup_key": "ἀσυνετέω",
+        "subentry_ids": [
+          "lsj:1:n16814:lsj-explicit-subentry-v2:/entryFree/sense/orth[1]"
+        ],
+        "english_preview_subentry_ids": [
+          "lsj:1:n16814:lsj-explicit-subentry-v2:/entryFree/sense/orth[1]"
+        ],
+        "occurrence_attested": false,
+        "contextually_selected": false,
+        "surface_equivalence_inferred": false,
+        "id": "machine-subentry:810a41961474cb505410790958243257875d465c4f4ecabae7754725684c13ba"
+      }
+    },
+    "subentries": {
+      "lsj:1:n16814:lsj-explicit-subentry-v2:/entryFree/sense/orth[1]": {
+        "id": "lsj:1:n16814:lsj-explicit-subentry-v2:/entryFree/sense/orth[1]",
+        "source_subentry": {
+          "id": "lsj:1:n16814:lsj-explicit-subentry-v2:/entryFree/sense/orth[1]",
+          "evidence_type": "dictionary_explicit_subentry",
+          "scope": "source_dictionary_orthography_not_morphological_analysis",
+          "parent_lexicon_entry_id": "lsj:1:n16814",
+          "parent_entry_id": "n16814",
+          "parent_headword": "ἀσυνεσία",
+          "parent_lemma_beta": "a)sunesi/a",
+          "orthography": "ἀσυν‐ετέω",
+          "orthography_raw": "a)sun-ete/w",
+          "orthography_raw_encoding": "Perseus Beta Code",
+          "orth_extent": "suff",
+          "lookup_key": "ἀσυνετέω",
+          "spelling_validation": "literal_source_spelling_not_independently_validated_full_form",
+          "morphology_status": "not_supplied",
+          "lookup_method": "NFC; internal printed segmentation hyphens removed for retrieval only; no case/accent/dialect folding",
+          "source_locator": {
+            "node_path": "/entryFree/sense/orth[1]",
+            "rendered_start": 490,
+            "rendered_end": 499,
+            "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+          },
+          "entry_byte_start": 37864957,
+          "entry_byte_end": 37868763,
+          "dictionary_senses": [
+            {
+              "id": "lsj:1:n16814:tei-definition-spans-v4:/entryFree/sense/tr[2]:501:528",
+              "entry_id": "n16814",
+              "lexicon_entry_id": "lsj:1:n16814",
+              "text": "to be without understanding",
+              "language": "en",
+              "source": "PerseusDL LSJ TEI",
+              "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng1.xml",
+              "raw_sha256": "15b1b7ca0a6c88e5a14e97f2339a0c7a7dfae71c028bdfb45fcee04c79a754f7",
+              "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng1.xml",
+              "evidence_type": "dictionary_sense",
+              "definition_kind": "explicit_definition_markup",
+              "sense_path": [
+                {
+                  "id": "n16814.0",
+                  "n": "A",
+                  "level": "1"
+                }
+              ],
+              "scope_text": "want of understanding, stupidity, E. Ph. 1727 (lyr.), Th. 1.122 ; opp. σύνεσις, Arist. EN 1142b34 codd. ἀσυν‐ετέω, to be without understanding, τὰ μέγιστα Hp. Fract. 25 , cf. LXX",
+              "scope_locator": {
+                "rendered_start": 102,
+                "rendered_end": 768,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              },
+              "qualifiers": [
+                {
+                  "text": "s.v.",
+                  "type": "lbl",
+                  "source_locator": {
+                    "node_path": "/entryFree/sense/xr/lbl",
+                    "rendered_start": 870,
+                    "rendered_end": 874,
+                    "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+                  }
+                },
+                {
+                  "text": "Aeol.",
+                  "type": "dialect",
+                  "source_locator": {
+                    "node_path": "/entryFree/sense/gramGrp/gram",
+                    "rendered_start": 948,
+                    "rendered_end": 953,
+                    "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+                  }
+                }
+              ],
+              "citations": [
+                {
+                  "text": "E. Ph. 1727",
+                  "reference": "urn:cts:greekLit:tlg0006.tlg015.perseus-grc1:1727",
+                  "source_locator": {
+                    "node_path": "/entryFree/sense/bibl[1]",
+                    "rendered_start": 174,
+                    "rendered_end": 268,
+                    "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+                  }
+                },
+                {
+                  "text": "Th. 1.122",
+                  "reference": "urn:cts:greekLit:tlg0003.tlg001.perseus-grc1:1:122",
+                  "source_locator": {
+                    "node_path": "/entryFree/sense/bibl[2]",
+                    "rendered_start": 277,
+                    "rendered_end": 348,
+                    "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+                  }
+                },
+                {
+                  "text": "Arist. EN 1142b34",
+                  "reference": "urn:cts:greekLit:tlg0086.tlg010.perseus-grc1:1142b:34",
+                  "source_locator": {
+                    "node_path": "/entryFree/sense/bibl[3]",
+                    "rendered_start": 383,
+                    "rendered_end": 483,
+                    "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+                  }
+                },
+                {
+                  "text": "Hp. Fract. 25",
+                  "reference": "urn:cts:greekLit:tlg0627.tlg009.perseus-grc1:25",
+                  "source_locator": {
+                    "node_path": "/entryFree/sense/cit[1]/bibl",
+                    "rendered_start": 604,
+                    "rendered_end": 712,
+                    "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+                  }
+                },
+                {
+                  "text": "LXX Ps. 118(119).158",
+                  "reference": "urn:cts:greekLit:tlg0527.tlg027:118(119).158",
+                  "source_locator": {
+                    "node_path": "/entryFree/sense/bibl[4]",
+                    "rendered_start": 737,
+                    "rendered_end": 841,
+                    "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+                  }
+                },
+                {
+                  "text": "Alc. 18",
+                  "reference": "urn:cts:greekLit:tlg0383.tlg001:18",
+                  "source_locator": {
+                    "node_path": "/entryFree/sense/cit[2]/bibl",
+                    "rendered_start": 1105,
+                    "rendered_end": 1183,
+                    "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+                  }
+                }
+              ],
+              "qualifier_scope": "containing_source_sense_not_individual_definition",
+              "citation_scope": "containing_source_sense_not_individual_definition",
+              "source_locator": {
+                "node_path": "/entryFree/sense/tr[2]",
+                "rendered_start": 501,
+                "rendered_end": 528,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              },
+              "extraction_method": "tei-definition-spans-v4",
+              "form_scope": {
+                "text": "ἀσυν‐ετέω",
+                "relation": "variant",
+                "source_locator": {
+                  "node_path": "/entryFree/sense/orth[1]",
+                  "rendered_start": 490,
+                  "rendered_end": 499,
+                  "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+                }
+              }
+            }
+          ],
+          "citations": [
+            {
+              "text": "Hp. Fract. 25",
+              "reference": "urn:cts:greekLit:tlg0627.tlg009.perseus-grc1:25",
+              "source_locator": {
+                "node_path": "/entryFree/sense/cit[1]/bibl",
+                "rendered_start": 604,
+                "rendered_end": 712,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            },
+            {
+              "text": "LXX Ps. 118(119).158",
+              "reference": "urn:cts:greekLit:tlg0527.tlg027:118(119).158",
+              "source_locator": {
+                "node_path": "/entryFree/sense/bibl[4]",
+                "rendered_start": 737,
+                "rendered_end": 841,
+                "offset_basis": "uncompacted Greek-span-rendered TEI entry"
+              }
+            }
+          ],
+          "citation_scope": "following_orthographic_source_block_not_verified_passage_alignment",
+          "qualifiers": [],
+          "qualifier_scope": "immediately_preceding_gramGrp_only",
+          "source": "PerseusDL LSJ TEI",
+          "source_url": "https://raw.githubusercontent.com/PerseusDL/lexica/56061ca127f4a2844980baffc5f2b6d1332897b3/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng1.xml",
+          "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29sunesi%2Fa",
+          "raw_path": "data/raw/lexica/lsj/CTS_XML_TEI/perseus/pdllex/grc/lsj/grc.lsj.perseus-eng1.xml",
+          "raw_sha256": "15b1b7ca0a6c88e5a14e97f2339a0c7a7dfae71c028bdfb45fcee04c79a754f7",
+          "license": "CC-BY-SA-4.0",
+          "extraction_method": "lsj-explicit-subentry-v2"
+        },
+        "english_preview": {
+          "eligible": true,
+          "reasons": [],
+          "scope": "parser_lemma_matched_literal_subentry_not_independently_validated_lemma"
+        }
+      }
+    },
+    "receipts": {
+      "0129602992c0b00b047c53668281d8efe6b574a494f9a36898e1fdec90205967": {
+        "id": "0129602992c0b00b047c53668281d8efe6b574a494f9a36898e1fdec90205967",
+        "raw_sha256": "cface53b97daffd116d3aba2dcb8c2c331818883a813a094aa0ccc82dc82218a",
+        "url": "https://morph.alpheios.net/api/v1/analysis/word?word=%E1%BC%80%CF%83%CF%85%CE%BD%CE%BD%CE%AD%CF%84%CE%B7%CE%BC%CE%BC%CE%B9&engine=morpheusgrc&lang=grc&clientId=project-melos-explicit-morphology",
+        "parser_version": "alpheios-literal-v1",
+        "source_form": null,
+        "request_form": "ἀσυννέτημμι",
+        "http_status": 201
+      }
+    },
+    "inventories": {
+      "5cefe41b9014adc6b751e5f121bb61983c7649d73f5974727797c96531db0de1": {
+        "version": "receipt-lemma-explicit-subentry-v1",
+        "status": "available",
+        "form": "ἀσυννέτημμι",
+        "issues": [],
+        "scope": "dictionary_definitions_for_parser_lemma_not_occurrence_attestation",
+        "contextually_selected": false,
+        "dependency_ref": "a00c52ee0cfe75752876c41951d80b0cb692483a2704416a1632a68b69ff0004",
+        "candidates": [
+          "machine-subentry:810a41961474cb505410790958243257875d465c4f4ecabae7754725684c13ba"
+        ],
+        "supporting_subentries": [
+          "lsj:1:n16814:lsj-explicit-subentry-v2:/entryFree/sense/orth[1]"
+        ],
+        "supporting_receipts": [
+          "0129602992c0b00b047c53668281d8efe6b574a494f9a36898e1fdec90205967"
+        ]
+      }
+    }
+  },
+  "meaning": {
+    "status": "unavailable",
+    "language": "eng",
+    "scope": "selected_span",
+    "selection_kind": "word",
+    "summary": "No English translation is currently available for this selection.",
+    "interpretations": [],
+    "context_translations": [],
+    "relationships": [],
+    "ranking_status": "not_ranked",
+    "joint_alternatives_status": "unavailable",
+    "limitations": [
+      "Independent word rankings do not establish a joint reading or rank competing translations.",
+      "Dependency relationships are predictions, not verified explanations of a published translation.",
+      "Partial-phrase translation generation and verified phrase alignments are not configured."
+    ]
+  },
+  "interlinear": {
+    "version": 1,
+    "status": "proposed",
+    "label": "Proposed reading",
+    "text": "ἀσυννέτημμι",
+    "readings": [
+      {
+        "id": "syntax-1",
+        "label": "Proposed reading",
+        "status": "proposed",
+        "tokens": [
+          {
+            "id": "t0",
+            "text": "ἀσυννέτημμι",
+            "kind": "word",
+            "start": 0,
+            "end": 11,
+            "start_utf16": 0,
+            "end_utf16": 11,
+            "token_id": "t0",
+            "lemma": "ἀσυνετέω",
+            "features": {
+              "POS": "VERB",
+              "Mood": "Ind",
+              "Number": "Sing",
+              "Person": "1",
+              "Tense": "Pres",
+              "Voice": "Act"
+            },
+            "parse_short": "1st sg. pres. ind. act.",
+            "gloss": {
+              "text": null,
+              "full_text": null,
+              "status": "unavailable",
+              "selection_basis": "dictionary_preview_not_contextual_sense"
+            },
+            "status": "selected",
+            "selection_basis": "unique_candidate",
+            "candidate_id": "machine:4bd60bc21b775487c6fc15b602b26d4ca939884cfe8bde981d65368fac9b0c43",
+            "agreement_group_id": null,
+            "alternative_count": 1,
+            "source_candidate": {
+              "id": "machine:4bd60bc21b775487c6fc15b602b26d4ca939884cfe8bde981d65368fac9b0c43",
+              "candidate_kind": "machine_analysis",
+              "basis": "machine_analysis",
+              "receipt_id": "0129602992c0b00b047c53668281d8efe6b574a494f9a36898e1fdec90205967",
+              "lemma": "ἀσυνετέω",
+              "dictionary_fields": {
+                "hdwd": {
+                  "lang": "grc",
+                  "$": "ἀσυνετέω"
+                },
+                "pofs": {
+                  "order": 1,
+                  "$": "verb"
+                }
+              },
+              "inflection": {
+                "term": {
+                  "lang": "grc",
+                  "stem": {
+                    "$": "ἀσυννετ"
+                  },
+                  "suff": {
+                    "$": "ημμι"
+                  }
+                },
+                "pofs": {
+                  "order": 1,
+                  "$": "verb"
+                },
+                "mood": {
+                  "$": "indicative"
+                },
+                "num": {
+                  "$": "singular"
+                },
+                "pers": {
+                  "$": "1st"
+                },
+                "tense": {
+                  "$": "present"
+                },
+                "voice": {
+                  "$": "active"
+                },
+                "dial": {
+                  "$": "Doric Aeolic"
+                },
+                "stemtype": {
+                  "$": "emi_pr"
+                }
+              },
+              "features": {
+                "pofs": "verb",
+                "mood": "indicative",
+                "num": "singular",
+                "pers": "1st",
+                "tense": "present",
+                "voice": "active",
+                "dial": "Doric Aeolic",
+                "stemtype": "emi_pr"
+              },
+              "entry_pointer": "/RDF/Annotation/Body/rest/entry",
+              "inflection_pointer": "/RDF/Annotation/Body/rest/entry/infl",
+              "lexicon_entry_ids": [],
+              "dictionary_join": {
+                "status": "no_exact_headword",
+                "basis": "machine_lemma_exact_dictionary_headword",
+                "entry_ids": [],
+                "occurrence_attested": false
+              },
+              "generated_candidate_identity": false
+            },
+            "syntax_token_id": null,
+            "syntax_conflict": false,
+            "candidate_meanings": [
+              {
+                "candidate_id": "machine:4bd60bc21b775487c6fc15b602b26d4ca939884cfe8bde981d65368fac9b0c43",
+                "lemma": "ἀσυνετέω",
+                "features": {
+                  "POS": "VERB",
+                  "Mood": "Ind",
+                  "Number": "Sing",
+                  "Person": "1",
+                  "Tense": "Pres",
+                  "Voice": "Act"
+                },
+                "parse_short": "1st sg. pres. ind. act.",
+                "gloss": {
+                  "text": null,
+                  "full_text": null,
+                  "status": "unavailable",
+                  "selection_basis": "dictionary_preview_not_contextual_sense"
+                },
+                "basis": "machine_analysis",
+                "status": "unresolved_alternative",
+                "machine_subentry_alternatives": [
+                  {
+                    "binding_ref": "machine-subentry:810a41961474cb505410790958243257875d465c4f4ecabae7754725684c13ba",
+                    "subentry_ref": "lsj:1:n16814:lsj-explicit-subentry-v2:/entryFree/sense/orth[1]",
+                    "sense_refs": [
+                      "lsj:1:n16814:tei-definition-spans-v4:/entryFree/sense/tr[2]:501:528"
+                    ],
+                    "inventory_ref": "5cefe41b9014adc6b751e5f121bb61983c7649d73f5974727797c96531db0de1",
+                    "ranking_status": "unsupported_source_type",
+                    "status": "unresolved_machine_lemma_dictionary_alternative"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "groups": []
+      }
+    ],
+    "warnings": [
+      "One proposed reading, not a ranked set of joint sentence analyses. Colors indicate predicted modifier agreement, not independently verified syntax.",
+      "Dictionary previews retain source wording; a first listed sense is not a contextually adjudicated translation."
+    ]
+  },
+  "sense_ranking": {
+    "status": "not_requested"
+  },
+  "editorial_analysis": {
+    "version": 1,
+    "status": "unavailable",
+    "rows": [],
+    "selection_expansion_hints": [],
+    "reason": "Approved Campbell source identity is unavailable."
+  }
+}

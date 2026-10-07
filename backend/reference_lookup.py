@@ -12,6 +12,7 @@ import re
 import unicodedata
 
 from backend.author_aliases import fold as author_spelling_key
+from .translation_languages import translation_allowed_in_search
 
 
 def _key(value: object) -> str:
@@ -209,6 +210,8 @@ def rank_reference_records(
     hits = []
     if not intent.filter_conflict:
         for record in records:
+            if not translation_allowed_in_search(record, language, edition):
+                continue
             parent = by_id.get(record.get('parent_id'))
             linked_author = bool(record.get('kind') in {'translation', 'commentary'}
                                  and parent and parent.get('kind') == 'text'
