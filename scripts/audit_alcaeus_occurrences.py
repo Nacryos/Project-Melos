@@ -214,6 +214,7 @@ def occurrence(record, token, display, syntax, response_file, chunk):
            'source_text_sha256': sha(record['text']), 'selected_span_sha256': sha(record['text'][chunk[0]:chunk[1]]),
            'response_file': response_file, 'api_token_id': token['id'],
            'editorial_fragment': bool(token.get('editorial_fragment')), 'partial_word': bool(token.get('partial_word')),
+           'damaged_piece': bool(token.get('damaged_piece')),
            'editorial_barriers': barrier(record['text'], [token], token['start'], token['end']),
            'source_line': record['text'][line_start:line_end],
            'source_line_editorial_barriers': barrier(record['text'], [], line_start, line_end),
@@ -366,12 +367,13 @@ def main():
             stream.write(json.dumps(span, ensure_ascii=False) + '\n')
     cases = priority_cases(rows)
     save(args.output/'priority-cases.json', cases)
-    intact = [r for r in rows if not r['editorial_fragment'] and not r['partial_word']]
+    intact = [r for r in rows if not r['editorial_fragment'] and not r['partial_word'] and not r.get('damaged_piece')]
     analyzed_chunks = [c for record_summary in summaries for c in record_summary['chunks']]
     summary = {'records': len(records), 'word_occurrences': len(rows), 'verse_word_occurrences': sum(r['verse'] for r in rows),
                'counting_unit': 'source tokenizer word segment, including separately preserved pieces of interrupted printed words',
                'intact_word_occurrences': len(intact), 'api_unflagged_word_segments': len(intact),
                'editorial_fragment_occurrences': sum(r['editorial_fragment'] for r in rows),
+               'damaged_piece_occurrences': sum(bool(r.get('damaged_piece')) for r in rows),
                'source_exact_occurrences': sum(r['source_exact'] for r in rows),
                'intact_with_exact_surface_source_candidates': sum(any(c['exact_surface_eligible'] for c in r['candidates']) for r in intact),
                'intact_with_occurrence_aligned_claims': sum(any(c['exact_occurrence_claim_ids'] for c in r['candidates']) for r in intact),

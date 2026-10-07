@@ -45,6 +45,6 @@ def test_circumflex_eu_and_capitalised_onyma_rules():
 def test_every_variant_is_labelled_distinct_and_bounded():
     for form in ("ῤήα", "ὀντρέχοντες", "Ἐρίννυς", "ἄμμι", "ἔγων’", "δεῦτέ"):
         found = variants(form)
-        assert len(found) <= 4
+        assert len(found) <= 6
         assert len({item["form"] for item in found}) == len(found)
         assert all(item["form"] != form and item["tier"] == "dialect_normalised_query" and item["note"] for item in found)

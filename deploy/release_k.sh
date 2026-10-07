@@ -20,9 +20,11 @@ cd /home/alvin/services/melos
 K=/home/alvin/melos-k
 SRC=$K/src
 BASE=melos-api:20261005-qa29
-IMAGE=melos-api:20261007k
+# Later K-series builds set MELOS_K_TAG (e.g. k2); the kept and failed names follow it.
+TAG=${MELOS_K_TAG:-k}
+IMAGE=melos-api:20261007$TAG
 LIVE=melos-api
-KEPT=melos-api-before-lexical-20261007k
+KEPT=melos-api-before-lexical-20261007$TAG
 CANARY=melos-api-canary
 step=${1:-}
 
@@ -76,7 +78,7 @@ case "$step" in
     sleep 8; curl -fsS http://127.0.0.1:8791/api/status | head -c 300; echo
     ;;
   rollback)
-    docker stop "$LIVE" >/dev/null && docker rename "$LIVE" "melos-api-failed-lexical-20261007k"
+    docker stop "$LIVE" >/dev/null && docker rename "$LIVE" "melos-api-failed-lexical-20261007$TAG"
     docker rename "$KEPT" "$LIVE" && docker start "$LIVE"
     sleep 8; curl -fsS http://127.0.0.1:8791/api/status | head -c 300; echo
     ;;

@@ -119,6 +119,49 @@ def printed_reading(text):
     return unicodedata.normalize("NFC", stripped)
 
 
+def uncertain_edge_variants(token):
+    """Readings of a lacuna-adjacent word without its doubtfully read edge letters.
+
+    ". . ς̣βιότοις̣ . ." may be the end of one word followed by βιότοις; the
+    underdotted edge letters are dropped one side at a time and the remainder
+    is offered as a labelled query variant, never as the printed reading.
+    """
+    if not token.get("uncertain_letters") or not token.get("lacuna_boundary_uncertain"):
+        return []
+    decomposed = unicodedata.normalize("NFD", token.get("text") or "")
+    letters = []
+    for char in decomposed:
+        if unicodedata.category(char).startswith("L"):
+            letters.append([char, False])
+        elif char == UNCERTAIN_MARK and letters:
+            letters[-1][1] = True
+        elif unicodedata.category(char).startswith("M") and letters:
+            letters[-1][0] += char
+    def reading(rows):
+        return unicodedata.normalize("NFC", "".join(row[0] for row in rows))
+    found = []
+    head = 0
+    while head < len(letters) and letters[head][1]:
+        head += 1
+    tail = len(letters)
+    while tail > head and letters[tail - 1][1]:
+        tail -= 1
+    whole = reading(letters)
+    note = "Doubtfully read letters at the edge of a damaged word omitted; the remainder read as a complete word"
+    options = []
+    if head:
+        options.append(("leading", reading(letters[head:])))
+    if tail < len(letters):
+        options.append(("trailing", reading(letters[:tail])))
+    if head and tail < len(letters):
+        options.append(("both", reading(letters[head:tail])))
+    for side, candidate in options:
+        if len(candidate) >= 2 and candidate != whole and candidate not in [item["form"] for item in found]:
+            found.append({"form": candidate, "rule": "uncertain_edge_letters_dropped_" + side,
+                          "tier": "dialect_normalised_query", "note": note})
+    return found
+
+
 def supplied_letters(text):
     """Letters the editor supplied inside square brackets, in printed order."""
     runs, current, inside = [], [], False
@@ -454,7 +497,7 @@ class PassageAnalysisService:
                     machine = {**machine, "machine_candidates": list(machine.get("machine_candidates") or []),
                                "normalised_queries": []}
                     from .aeolic_variants import variants
-                    for variant in variants(form):
+                    for variant in [*variants(form), *uncertain_edge_variants(token)]:
                         try:
                             result = self.machine_service.analyze(variant["form"], visitor_id, fetch=False)
                             if (result.get("status") == "cache_miss" and request.get("fetch_machine")
@@ -492,6 +535,7 @@ class PassageAnalysisService:
                     candidate["id"] = candidate_identity(candidate)
                     candidate["generated_candidate_identity"] = True
         syntax = self._syntax(selected, text, start, end)
+        self._last_tier(tokens, syntax)
         syntax_text = text[syntax["context_start"]:syntax["context_end"]] if syntax.get("scope") in {"whole_passage", "bounded_context_window"} else selected
         editorial = any(char in EDITORIAL for char in syntax_text) or any(token.get("lacuna_boundary_uncertain") for token in tokens)
         result = {"version": VERSION, "status": "ok",
@@ -549,6 +593,59 @@ class PassageAnalysisService:
                     'selection_expansion_hints':[],
                     'reason':'Approved Campbell source identity is unavailable.'}
         return result
+
+    @staticmethod
+    def _last_tier(tokens, syntax):
+        """Ending-based analyses for unrecognised words; damaged-piece labels.
+
+        Runs after the lexicon, parser and normalisation tiers. A word that no
+        source attests and no parser knows gets labelled ending-pattern analyses
+        (never a lemma or a gloss). Letters surviving beside a lacuna that do
+        not form a word are labelled a damaged piece rather than parsed.
+        """
+        from .interlinear import _exact as exact_candidate
+        from .pattern_morphology import pattern_candidates
+        ready = syntax.get("state", syntax.get("status")) == "ready"
+        rows = syntax.get("tokens") or [] if ready else []
+        by_span = {(row.get("absolute_start"), row.get("absolute_end")): row
+                   for row in rows if row.get("prediction_status") != "not_applicable"}
+        for token in tokens:
+            if token.get("kind") != "word" or token.get("partial_word") or token.get("editorial_fragment"):
+                continue
+            form = analysis_form(token)
+            letters = sum(1 for char in unicodedata.normalize("NFD", form) if unicodedata.category(char).startswith("L"))
+            machine = token.get("machine") or {}
+            has_machine = bool(machine.get("machine_candidates"))
+            # For a short run of letters beside a lacuna only an analysis of the
+            # exact printed letters counts; a normalised spelling of one or two
+            # surviving letters (ἀ → ἁ) is not evidence of a word.
+            has_exact_machine = any(not row.get("normalised_query") and row.get("candidate_kind") != "pattern_analysis"
+                                    for row in machine.get("machine_candidates") or [])
+            has_source = any(exact_candidate(row, token) for row in
+                             [*(token.get("source_candidates") or []), *(token.get("contextual_candidates") or [])])
+            if token.get("lacuna_boundary_uncertain") and letters <= 2 and not (has_exact_machine or has_source):
+                token["damaged_piece"] = True
+                token["warnings"].append("Surviving letters beside a lacuna, not a complete word; no analysis is asserted.")
+                continue
+            if has_machine or has_source:
+                continue
+            if token.get("lacuna_boundary_uncertain"):
+                token["damaged_piece"] = True
+                token["warnings"].append("Surviving letters beside a lacuna that no analysis fits; not a complete word.")
+                continue
+            predicted = by_span.get((token["start"], token["end"])) or by_span.get((token["start"], token["end"] - 1))
+            candidates = pattern_candidates(form, predicted.get("upos") if predicted else None)
+            if candidates:
+                for candidate in candidates:
+                    candidate["id"] = candidate_identity(candidate)
+                token["machine"] = {**machine, "status": "ok_pattern", "machine_candidates": candidates,
+                                    "warnings": [*(machine.get("warnings") or []),
+                                                 "No dictionary or parser used here knows this word; the analyses shown read only its ending."]}
+                token["pattern_analysis"] = {"status": "ending_pattern_only", "ending": candidates[0]["pattern_ending"],
+                                             "candidate_count": len(candidates)}
+            elif token.get("lacuna_boundary_uncertain"):
+                token["damaged_piece"] = True
+                token["warnings"].append("Surviving letters beside a lacuna that no analysis fits; not a complete word.")
 
     def _syntax(self, selected, full_text, start, selection_end):
         if self.syntax_provider is None:

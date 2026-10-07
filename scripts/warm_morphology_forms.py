@@ -48,11 +48,16 @@ def passages_from_corpus(path: Path, ids):
                 yield row
 
 
+EDGE_VARIANTS = {}
+
+
 def collect_forms(passages):
-    from backend.passage_analysis import tokenize_span
+    from backend.lacuna_boundaries import annotate_lacuna_boundaries
+    from backend.passage_analysis import tokenize_span, uncertain_edge_variants
     forms, occurrences = [], {}
     for pid, text in passages:
-        for token in tokenize_span(text, 0, len(text)):
+        tokens = annotate_lacuna_boundaries(text, tokenize_span(text, 0, len(text)), source_critical=True)
+        for token in tokens:
             if token["kind"] != "word" or token.get("editorial_fragment") or token.get("partial_word"):
                 continue
             form = token["form"]
@@ -60,6 +65,8 @@ def collect_forms(passages):
                 occurrences[form] = []
                 forms.append(form)
             occurrences[form].append(f"{pid}@{token['start']}:{token['end']}")
+            for variant in uncertain_edge_variants(token):
+                EDGE_VARIANTS.setdefault(form, []).append(variant)
     return forms, occurrences
 
 
@@ -125,7 +132,7 @@ def main():
         if record["status"] != "no_analyses":
             continue
         record["normalised"] = []
-        for variant in variants(form):
+        for variant in [*variants(form), *EDGE_VARIANTS.get(form, [])]:
             if args.limit and done >= args.limit:
                 break
             cached = service.analyze(variant["form"], VISITOR, fetch=False)

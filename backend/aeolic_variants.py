@@ -37,6 +37,25 @@ APOCOPE = (
     ("πεδ", "μετα", "Aeolic πεδά for μετά in composition"),
 )
 GEMINATES = (("νν", "ν"), ("μμ", "μ"), ("λλ", "λ"), ("σσ", "σ"), ("ρρ", "ρ"))
+# Lesbian function words with an isolated standard equivalent (Hamm §§ 30, 40;
+# Buck §§ 100–102). Only words whose equivalence is lexical, not derivable.
+LEXICAL = {
+    "ἤπειτα": ("ἔπειτα", "Lesbian ἤπειτα for ἔπειτα"),
+    "ὄττι": ("ὅτι", "Lesbian ὄττι for ὅτι"),
+    "ὄττινας": ("οὕστινας", "Lesbian ὄττινας for οὕστινας"),
+    "κῆνος": ("ἐκεῖνος", "Lesbian κῆνος for ἐκεῖνος"),
+    "κήνων": ("ἐκείνων", "Lesbian κήνων for ἐκείνων"),
+    "ἄμμες": ("ἡμεῖς", "Lesbian ἄμμες for ἡμεῖς"),
+    "ἄμμι": ("ἡμῖν", "Lesbian ἄμμι for ἡμῖν"),
+    "ἄμμε": ("ἡμᾶς", "Lesbian ἄμμε for ἡμᾶς"),
+    "ὔμμες": ("ὑμεῖς", "Lesbian ὔμμες for ὑμεῖς"),
+    "ὔμμι": ("ὑμῖν", "Lesbian ὔμμι for ὑμῖν"),
+    "πεδά": ("μετά", "Lesbian πεδά for μετά"),
+    "πεδὰ": ("μετὰ", "Lesbian πεδά for μετά"),
+    "ὄνυμα": ("ὄνομα", "Lesbian ὄνυμα for ὄνομα"),
+    "αἴ": ("εἰ", "Lesbian αἴ for εἰ"),
+    "ἔγων": ("ἐγών", "Lesbian ἔγων (recessive accent) for epic ἐγών"),
+}
 
 
 def _nfd(text):
@@ -119,7 +138,7 @@ def variants(form):
 
     def add(candidate, rule, note):
         candidate = _nfc(candidate)
-        if candidate and candidate not in seen and len(found) < 4:
+        if candidate and candidate not in seen and len(found) < 6:
             seen.add(candidate)
             found.append({"form": candidate, "rule": rule, "note": note, "tier": "dialect_normalised_query"})
 
@@ -150,6 +169,26 @@ def variants(form):
         index = lowered.index("ὀνυμ")
         replacement = "Ὀνομ" if form[index].isupper() else "ὀνομ"
         add(form[:index] + replacement + form[index + 4:], "aeolic_onyma", "Lesbian ὄνυμα for ὄνομα in names and compounds")
+    if form[-1] in ELISION and len(form) > 2:
+        # ἔγων’ beside a vowel: the word may be complete and only an enclitic
+        # or final vowel elided; the parser accepts the bare word.
+        bare = form[:-1]
+        add(bare, "elision_mark_dropped", "The final elision mark is dropped; the remaining letters are read as a complete word")
+        bare_shifted = _accent_shifted_right(bare)
+        if bare_shifted:
+            add(bare_shifted, "elision_mark_dropped+recessive_accent", "Elision mark dropped and the Lesbian recessive accent undone")
+    lexical = LEXICAL.get(form)
+    if lexical:
+        add(lexical[0], "aeolic_lexical", lexical[1])
+    if _nfd(form)[0].lower() == "ο" and SMOOTH in _nfd(form)[:3] and len(form) > 3 and _nfd(form)[2].lower() in "ηε":
+        # ὀήϊα for οἰήϊα: Lesbian ὀ- where the standard spelling has οἰ-.
+        add(_nfc("οἰ" + _nfd(form)[2:]) if form[0].islower() else _nfc("Οἰ" + _nfd(form)[2:]),
+            "aeolic_o_for_oi", "Lesbian ὀ- for standard οἰ- before a vowel")
+    if "η" in _nfd(form)[1:]:
+        # Αἰολήαν for Αἰολείαν, κῆνος for κεῖνος: Lesbian η where Attic has ει.
+        index = _nfd(form).index("η", 1)
+        add(_nfc(_nfd(form)[:index] + "ει" + _nfd(form)[index + 1:]), "aeolic_eta_for_ei",
+            "Lesbian η where the standard spelling has ει (secondary lengthening)")
     decomposed = _nfd(form)
     if CIRCUMFLEX in decomposed:
         # κεῖσεσθ’ for κείσεσθ(αι): the recessive accent turns an acute on a

@@ -19,7 +19,9 @@ import unicodedata
 # A run of spaced dots (". . .") marks several lost letters; a single dot
 # standing between spaces (" . ") marks one lost letter. Both separate
 # surviving letters from the lost ones without establishing a word boundary.
-_DOT_RUN = re.compile(r"\.(?:[\t \u00a0\u202f]*\.)+|(?<=[\t \u00a0\u202f\[\]])\.(?=[\t \u00a0\u202f\[\]])")
+# Also a dot printed directly against a letter (".\u03af.\u03b1\u03b9\u03c2"): a sentence period is
+# followed by space or line end, a lost-letter dot is followed by a letter.
+_DOT_RUN = re.compile(r"\.(?:[\t \u00a0\u202f]*\.)+|(?<=[\t \u00a0\u202f\[\]])\.(?=[\t \u00a0\u202f\[\]])|\.(?=[^\W\d_])")
 _BRACKETS = frozenset("[]⟦⟧⟨⟩<>")
 
 

@@ -787,6 +787,11 @@
             ? `Letters in square brackets were supplied by the editor${(token.supplied_letters || []).length ? ` (${token.supplied_letters.join(', ')})` : ''}; the analysis follows the printed reading ${token.form}.`
             : 'Underdots mark doubtfully read letters; the analysis follows the printed reading.', 'candidate-reason');
         }
+        if (token.damaged_piece) {
+          say(box, 'Surviving letters beside a lacuna, not a complete word; no analysis is asserted.', 'candidate-reason');
+        } else if (token.pattern_analysis) {
+          say(box, `No dictionary or parser knows this word; the analyses below read only its ending (-${token.pattern_analysis.ending}).`, 'candidate-reason');
+        }
         const ranking = projection?.morphology_ranking || [];
         if (ranking.length) {
           // Full parses in order of fit to the contextual prediction and to the

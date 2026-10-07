@@ -156,6 +156,20 @@ obtained this way carries `normalised_query`, `normalisation_rule` and
 `normalisation_note`, is labelled `machine_analysis_normalised`, and ranks
 below any analysis of the exact printed form.
 
+**Last tier** (`backend/pattern_morphology.py`, `PassageAnalysisService._last_tier`).
+A word that no source attests, no parser knows and no normalisation rescues
+gets labelled ending-based analyses (`candidate_kind: pattern_analysis`, no
+lemma, no gloss, a note naming the ending; machine status `ok_pattern`), using
+the contextual prediction's part of speech to pick the nominal or verbal table.
+Letters surviving beside a lacuna (one or two letters, or any run that no
+analysis of the exact letters fits) are labelled `damaged_piece`: they are not
+counted as words, not selected, and the reader says so. A lacuna-adjacent word
+with doubtfully read edge letters (ς̣βιότοις̣) is also queried without those
+edge letters (`uncertain_edge_letters_dropped_*`) and shown conditionally.
+A short Lesbian lexical table (ἤπειτα → ἔπειτα, κῆνος → ἐκεῖνος, …) and the
+rules elision-mark-dropped, ὀ-/οἰ-, η/ει and circumflex-for-acute complete the
+normalisations.
+
 **Ranking by morphology** (`backend/interlinear.py`). Candidate parses are
 ranked by `_affinity`: +1 per grammatical feature agreeing with the contextual
 prediction, −1.5 per stated disagreement, +1 for lemma agreement, +0.1 per

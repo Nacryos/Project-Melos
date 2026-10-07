@@ -105,7 +105,7 @@ def test_elision_transfer_preserves_original_source_and_transport_binding(tmp_pa
     before = snapshot(target)
     assert export_bundle(source, bundle)["exported"] == 1
     preview = import_bundle(target, bundle)
-    assert preview["entries"] == [{"form": sample["text"], "candidates": sample["candidate_count"]}]
+    assert preview["entries"] == [{"form": sample["text"], "candidates": sample["candidate_count"], "status": "ok"}]
     assert snapshot(target) == before
     assert import_bundle(target, bundle, True)["missing"] == 1
     restored = MachineMorphologyService(target).analyze(sample["text"], "", fetch=False)

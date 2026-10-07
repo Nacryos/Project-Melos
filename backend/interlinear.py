@@ -123,7 +123,10 @@ def _feature_agrees(key, candidate_value, predicted_value):
     return key == 'Tense' and predicted_value == 'Past' and candidate_value in {'Aor', 'Imp', 'Pqp'}
 
 
-_AGREEMENT_RELATIONS = {'amod', 'det', 'nmod', 'acl', 'appos'}
+# Relations whose dependent agrees with its head in case, number and gender.
+# Genitive modifiers (nmod) and clausal modifiers do not agree, so they are
+# excluded: ἄκρα νάων must not pull νάων towards the case of ἄκρα.
+_AGREEMENT_RELATIONS = {'amod', 'det', 'appos', 'nummod'}
 _NOMINAL_POS = {'NOUN', 'PRON', 'PROPN', 'ADJ', 'DET', 'NUM'}
 
 
@@ -240,6 +243,13 @@ def _affinity(candidate, syntax):
         # A parse reached through a spelling normalisation ranks below any
         # analysis of the exact printed form with the same fit.
         score -= 0.5
+    if candidate.get('candidate_kind') == 'pattern_analysis':
+        # Ending-based analyses rank below every lexicon-backed parse.
+        score -= 1.0
+    elif candidate.get('basis') != 'machine_analysis' and candidate.get('candidate_kind') != 'machine_analysis':
+        # An exact-form attestation recorded by a dictionary (LSJ, Wiktionary)
+        # outranks a parser hypothesis of the same fit.
+        score += 0.6
     if features.get('Case') == 'Voc' and predicted.get('Case') != 'Voc':
         # Vocative forms coincide with nominatives (participles, feminines);
         # unless the prediction says vocative, the nominative reading leads.
@@ -948,8 +958,10 @@ def interlinear_reading(result):
             predicted = None
         if predicted:
             predicted = {**predicted, 'agreement_partners': _agreement_partners(predicted, syntax_rows)}
-        partial = token.get('partial_word') or token.get('editorial_fragment')
+        partial = token.get('partial_word') or token.get('editorial_fragment') or token.get('damaged_piece')
         boundary_uncertain = bool(token.get('lacuna_boundary_uncertain'))
+        if token.get('damaged_piece'):
+            row['damaged_piece'] = True
         chosen, basis, count = (None, 'partial_word', 0) if partial else _choose(
             token, predicted, None if boundary_uncertain else ranks.get(token['id']))
         candidates = [] if partial else [
