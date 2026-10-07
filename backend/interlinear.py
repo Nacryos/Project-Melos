@@ -296,7 +296,8 @@ def candidate_basis(item):
 # is a ranking signal and may stand in for missing contextual evidence; it is
 # labelled when it decides, and never overrides contextual agreement.
 _PRECEDENTS = {}
-_STRONG_BASES = {'unique_compatible_candidate', 'morphology_ranked_by_syntax', 'morphology_ranked_by_neighbour_parse'}
+_STRONG_BASES = {'unique_compatible_candidate', 'morphology_ranked_by_syntax', 'morphology_ranked_by_neighbour_parse',
+                 'morphology_ranked_without_syntax', 'morphology_ranked_despite_syntax_conflict'}
 
 
 def record_precedent(form, chosen):
