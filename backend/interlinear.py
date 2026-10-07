@@ -659,10 +659,11 @@ def _choose(token, syntax, rank):
     # A vocative that differs from a nominative of the same lemma only in case
     # is the same form (participles, feminines); fold it so a nom./voc. pair
     # counts as one reading rather than an unresolved ambiguity.
-    nominatives = {(_identity(row.get('lemma_raw') or row.get('lemma')), tuple(sorted({**canonical_features(row), 'Case': 'Nom'}.items())))
-                   for row in candidates if canonical_features(row).get('Case') == 'Nom'}
-    candidates = [row for row in candidates if not (canonical_features(row).get('Case') == 'Voc' and
-                  (_identity(row.get('lemma_raw') or row.get('lemma')), tuple(sorted({**canonical_features(row), 'Case': 'Nom'}.items()))) in nominatives)]
+    if not (syntax and canonical_features(syntax).get('Case') == 'Voc'):
+        nominatives = {(_identity(row.get('lemma_raw') or row.get('lemma')), tuple(sorted({**canonical_features(row), 'Case': 'Nom'}.items())))
+                       for row in candidates if canonical_features(row).get('Case') == 'Nom'}
+        candidates = [row for row in candidates if not (canonical_features(row).get('Case') == 'Voc' and
+                      (_identity(row.get('lemma_raw') or row.get('lemma')), tuple(sorted({**canonical_features(row), 'Case': 'Nom'}.items()))) in nominatives)]
     compatible = [row for row in candidates if syntax and _compatible(row, syntax)]
     # Preserve source-local homograph suffixes. Duplicate evidence for the same
     # analysis need not create duplicate presentation alternatives.
