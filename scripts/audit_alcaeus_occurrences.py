@@ -31,7 +31,11 @@ def sha(value):
 
 def save(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    # Stream to disk: the full occurrence report can exceed available memory
+    # as one indented string.
+    with path.open('w', encoding='utf-8', newline='\n') as handle:
+        json.dump(value, handle, ensure_ascii=False, indent=1)
+        handle.write('\n')
 
 
 class Receipts:
