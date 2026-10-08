@@ -80,6 +80,8 @@ def main():
     parser.add_argument("--limit", type=int, default=0)
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument("--report", type=Path)
+    parser.add_argument("--order", choices=("text", "frequency"), default="text",
+                        help="fetch in text order, or most frequent forms first (for a bounded daily budget)")
     args = parser.parse_args()
     passages = []
     if args.records:
@@ -87,6 +89,8 @@ def main():
     if args.corpus and args.ids:
         passages += list(passages_from_corpus(args.corpus, args.ids))
     forms, occurrences = collect_forms(passages)
+    if args.order == "frequency":
+        forms.sort(key=lambda form: -len(occurrences[form]))
     print(f"passages={len(passages)} unique_forms={len(forms)}", flush=True)
     if args.dry_run:
         for form in forms:
