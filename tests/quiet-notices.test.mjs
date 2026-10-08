@@ -46,6 +46,6 @@ test('dictionary and inventory caveats are disclosures, with a concise nearby-ma
   assert.match(script, /appendWarnings\(section, \['Machine-extracted dictionary reference/);
   assert.match(script, /appendWarnings\(section, \['Forms recorded under each source lemma/);
   assert.match(script, /'candidate-meta-label', 'No exact source match\.'/);
-  assert.match(script, /appendWarnings\(morphologyHost, \['Only nearby spellings/);
+  assert.match(script, /appendWarnings\(absence, \['Only nearby spellings/);
   assert.doesNotMatch(script, /card.append\(live, node\('p', 'candidate-reason', 'Live page may differ/);
 });

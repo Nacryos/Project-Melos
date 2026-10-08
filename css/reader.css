@@ -245,3 +245,34 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .dictionary-glimpse-details>summary{display:flex;align-items:center}.dictionary-glimpse-details>summary::after{flex:none}
 .greek-text .line-label{line-height:1;vertical-align:baseline}
 .greek-text.word-dragging,.greek-text.word-dragging .word{-webkit-user-select:none;user-select:none}
+/* Word panel 2026-10-08: dictionary reading order (headword, form + parse, dictionaries, notes; sources last). */
+.word-headline-source{margin:4px 0 0;font-size:12px;line-height:1.4;color:var(--muted)}
+.word-headline-alternatives{margin:10px 0 0;padding:8px 0 0;border-top:1px dotted var(--line)}
+.word-headline-alt-title{margin:0 0 3px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.word-headline-alt-list{margin:0;padding-left:20px;font-size:13px;line-height:1.45;color:var(--ink)}.word-alt-lemma{font-family:var(--greek);font-size:15px}
+.word-zone{margin:18px 0 0;padding-top:12px;border-top:1px solid var(--line)}
+.word-zone-title{margin:0 0 8px;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
+.word-dictionary{margin:0 0 8px;border:1px solid var(--line);background:#fff}
+.word-dictionary>summary{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;padding:8px 10px;cursor:pointer;list-style-position:inside}
+.word-dictionary[open]>summary{border-bottom:1px solid var(--line)}
+.word-dictionary-name{font-weight:700;color:var(--ink)}.word-dictionary-sub{font-size:12px;color:var(--muted)}.word-dictionary-count{margin-left:auto;font-size:12px;color:var(--muted)}
+.word-dictionary>:not(summary){margin-left:10px;margin-right:10px}
+.word-dictionary-senses{margin:8px 0;padding-left:0;list-style:none;font-size:14px;line-height:1.45}
+.word-dictionary-senses li{margin:0 0 4px}.word-sense-label{display:inline-block;min-width:2.2em;margin-right:4px;font-size:12px;font-weight:700;color:var(--sea)}
+.word-more{margin:4px 0 8px;font-size:13px}.word-more>summary{cursor:pointer;color:var(--sea);text-decoration:underline;text-underline-offset:2px}
+.word-dictionary-entry{max-height:340px;overflow:auto;font-size:13px;line-height:1.5;white-space:pre-line}
+.word-dictionary-link{display:inline-block;margin:0 10px 10px;font-size:12px}
+.word-sources>summary{font-size:12px;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;color:var(--ink)}
+.word-sources[open]>summary{margin-bottom:8px}
+.word-notes .inspector-section h3,.word-sources .inspector-section h3{font-size:12px}
+.readable-record{display:grid;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:2px 10px;margin:6px 0;font-size:12px;line-height:1.4}
+.readable-record dt{color:var(--muted)}.readable-record dd{margin:0;overflow-wrap:anywhere}.readable-record .readable-record{grid-column:1/-1;margin-left:0}
+.readable-record-list{margin:0;padding-left:18px}
+/* Touch: each word's hit area is at least 44x44 px (text layout unchanged). The
+   transparent pseudo-element sits just above the line so it catches taps in the
+   gaps; word-panel.js then gives every tap to the nearest real word box, so an
+   enlarged area never steals a tap from a neighbouring word. */
+@media(pointer:coarse){
+  .greek-text .word{position:relative}
+  .greek-text .word::before{content:'';position:absolute;z-index:1;top:min(-8px,calc((100% - 44px)/2));bottom:min(-8px,calc((100% - 44px)/2));left:min(-3px,calc((100% - 44px)/2));right:min(-3px,calc((100% - 44px)/2))}
+}

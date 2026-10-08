@@ -1881,7 +1881,7 @@
       }
       return;
     }
-    const section = addInspectorSection(`Source lemma inventories · ${groups.length} groups`, host);
+    const section = addInspectorSection(`Recorded forms of these headwords · ${groups.length}`, host);
     appendWarnings(section, ['Forms recorded under each source lemma across indexed material—not a complete or dialect-specific paradigm, and not a list of attestations in the selected author or passage.']);
     for (const group of groups) {
       const forms = Array.isArray(group.forms) ? group.forms.filter(item => item && typeof item.form === 'string') : [];
@@ -2116,35 +2116,83 @@
     const passageId = button ? state.passage?.id : '';
     state.machineAnalysisCancel?.();
     clear(ui.inspector);
-    // Dictionary order: headword, its short English gloss directly beneath,
-    // then the printed form with its parse; everything else follows.
-    const headlineHost = node('div', 'word-headline-host'), renderHeadline = window.MelosPassageAnalysis?.renderWordHeadline;
+    // Dictionary order, as in Logeion or Perseus: (1) headword with its short
+    // English gloss, (2) the printed form with its parse in words, source and
+    // ranked alternatives, (3) one block per dictionary, (4) notes and evidence;
+    // technical provenance sits behind one "Sources and method" disclosure.
+    const panel = window.MelosWordPanel, baseHeadline = window.MelosPassageAnalysis?.renderWordHeadline;
+    const renderHeadline = baseHeadline && ((host, value, make) => {
+      const head = baseHeadline(host, value, make); panel?.decorateHeadline?.(head, value, make); return head;
+    });
+    const headlineHost = node('div', 'word-headline-host');
     ui.inspector.append(node('span', 'eyebrow', fragmentSegment ? 'PRINTED SEGMENT' : 'SELECTED WORD'), headlineHost);
     if (renderHeadline) renderHeadline(headlineHost, { form, pending: true }, node);
     else headlineHost.append(node('div', 'word-title', form));
-    if (joined) ui.inspector.append(node('p', 'word-normalized', 'Lookup joins an explicit printed line-end division. Both printed segments remain unchanged in the passage; no missing letters are supplied.'));
+    if (joined) ui.inspector.append(node('p', 'word-normalized', 'Looked up as one word across the printed line break; both printed parts are unchanged.'));
     const printed = button && !joined ? button.textContent : '';
-    if (printed && printed !== form) ui.inspector.append(node('p', 'word-normalized', `Printed ${printed}. Editorial brackets and underdots are left out of the lookup; letters inside brackets are the editor’s. The passage text is unchanged.`));
+    if (printed && printed !== form) ui.inspector.append(node('p', 'word-normalized', `Printed ${printed}; looked up as ${form}. Letters inside brackets are the editor’s.`));
     if (fragmentSegment) {
       ui.inspector.append(node('p', 'candidate-meta-label', 'Printed fragment'));
       appendWarnings(ui.inspector, ['Printed segment of an editorially marked or uncertain line-divided span. No complete word has been reconstructed. Dictionary matches concern this literal string, not necessarily the source word; computational and Jev analysis are unavailable for this segment.']);
     }
-    if (form.includes('\u1fbf')) ui.inspector.append(node('p', 'word-normalized', 'Printed spacing mark retained; not silently treated as an apostrophe.'));
-    if (!passageId) ui.inspector.append(node('p', 'word-normalized', 'Standalone form lookup · no passage context supplied.'));
+    if (form.includes('᾿')) ui.inspector.append(node('p', 'word-normalized', 'Printed spacing mark retained; not silently treated as an apostrophe.'));
+    if (!passageId) ui.inspector.append(node('p', 'word-normalized', 'Looked up on its own, without a passage to rank the parses.'));
+    const dictionaryHost = node('div', 'word-dictionary-host');
+    const notesHost = node('section', 'word-zone word-notes');
+    notesHost.append(node('h3', 'word-zone-title', 'Notes and evidence'));
+    const sourcesHost = node('details', 'word-zone word-sources entry-details');
+    sourcesHost.append(node('summary', '', 'Sources and method'));
     const machineHost = node('details', 'machine-panel entry-details');
-    machineHost.append(node('summary', '', 'Additional parsing options'));
+    machineHost.append(node('summary', '', 'Run the parser on this form'));
     const morphologyHost = node('div', 'morphology-panel');
     const wiktionaryHost = node('div', 'wiktionary-panel');
     const contextHost = node('div', 'word-context-host');
-    ui.inspector.append(contextHost, machineHost, morphologyHost, wiktionaryHost);
+    notesHost.append(contextHost);
+    sourcesHost.append(morphologyHost, machineHost, wiktionaryHost);
+    ui.inspector.append(dictionaryHost, notesHost, sourcesHost);
     if (button && !joined && !fragmentSegment) renderExactCommentaryNotes(contextHost, state.passage, form);
     const pending = node('p', 'inspector-message melos-loading', 'Looking up recorded analyses…');
     morphologyHost.append(pending);
     const sequence = ++state.wordSequence;
-    let headlineSettled = false;
+    let headlineSettled = false, headlineValue = null, wordData = null, wiktionaryData = null;
+    // Dictionaries follow the headline's headword when one is known; otherwise
+    // the form lookup's own dictionary matches are shown, as before.
+    const lemmaEntries = new Map();
+    const drawDictionaries = () => {
+      if (sequence !== state.wordSequence) return;
+      const lemma = headlineValue?.lemma || '';
+      const blocks = lemma && panel?.dictionaryBlocks ? panel.dictionaryBlocks(lemma, wordData?.lexicon_entries || [], lemmaEntries.get(lemma) || []) : [];
+      clear(dictionaryHost);
+      if (blocks.length) { panel.renderDictionaryBlocks(dictionaryHost, blocks, node, safeLink); return; }
+      if (wordData) renderDictionaryPreview(dictionaryHost, wordData, { openEntries: false, wiktionary: wiktionaryData });
+      if (lemma && panel?.dictionaryBlocks && !lemmaEntries.has(lemma)) {
+        lemmaEntries.set(lemma, []);
+        const loading = node('p', 'inspector-message melos-loading', `Looking up ${lemma} in the dictionaries…`);
+        if (!dictionaryHost.children.length) dictionaryHost.append(loading);
+        api('/api/word', { form: lemma }).then(data => {
+          lemmaEntries.set(lemma, Array.isArray(data?.lexicon_entries) ? data.lexicon_entries : []); drawDictionaries();
+          if (sequence === state.wordSequence && !dictionaryHost.children.length) message(dictionaryHost, `No dictionary entry for ${lemma} was found.`);
+        }).catch(() => {
+          loading.remove();
+          if (sequence === state.wordSequence && !dictionaryHost.children.length) message(dictionaryHost, 'The dictionaries could not be reached just now (server error). Choose the word again to retry.', 'warning error-message');
+        });
+      }
+    };
+    // One coherent statement: when the headline names a headword, the form
+    // index's "no exact match" notices would contradict it, so they give way to
+    // one line saying where the headline came from.
+    const reconcile = () => {
+      if (sequence !== state.wordSequence || !headlineValue?.lemma) return;
+      const absent = [...(morphologyHost.querySelectorAll?.('.word-absence') || [])];
+      if (!absent.length) return;
+      for (const item of absent) item.remove();
+      if (!morphologyHost.querySelector?.('.word-reconciled')) morphologyHost.prepend(node('p', 'candidate-reason word-reconciled',
+        'The headword and parse at the top come from reading this word in its passage. The index of recorded forms has no entry for this exact spelling.'));
+    };
     const showHeadline = (value, final = true) => {
       if (!renderHeadline || !value || sequence !== state.wordSequence || headlineSettled) return;
-      headlineSettled = final; renderHeadline(headlineHost, value, node);
+      headlineSettled = final; headlineValue = value; renderHeadline(headlineHost, value, node);
+      drawDictionaries(); reconcile();
     };
     const contextualHeadline = button && !joined && !fragmentSegment
       ? passageWordHeadline(button, form).catch(() => null) : Promise.resolve(null);
@@ -2181,10 +2229,8 @@
       const fallbackHeadline = wordHeadlineFallback(form, data, fragmentSegment);
       contextualHeadline.then(value => { if (!value) showHeadline(fallbackHeadline); });
       globalThis.setTimeout?.(() => showHeadline(fallbackHeadline, false), 4000);
-      if (data.normalized && data.normalized !== form) morphologyHost.append(node('p', 'word-normalized', `Normalized search: ${data.normalized}`));
-      const glimpse = node('div');
-      morphologyHost.append(glimpse);
-      renderDictionaryPreview(glimpse, data, { openEntries: false });
+      if (data.normalized && data.normalized !== form) morphologyHost.append(node('p', 'word-normalized', `Searched without accents and marks as ${data.normalized}`));
+      wordData = data; drawDictionaries();
       const hasLexicalVariant = !fragmentSegment && renderLexicalVariants(morphologyHost, data) === true;
       const hasLinkedMeanings = !fragmentSegment && Boolean(window.MelosDictionaryPreview?.linkedDictionaryGroups?.(form, data.linked_dictionary)?.length);
       const wordStillCurrent=() => sequence===state.wordSequence && !state.passageLoading && (!passageId || state.passage?.id===passageId);
@@ -2193,12 +2239,11 @@
       const hasDictionaryMeaning = hasLexicalVariant || hasLinkedMeanings || hasMachineMeanings;
       wikiPreview.then(wiktionary => {
         if (!wiktionary || sequence !== state.wordSequence) return;
-        clear(glimpse);
-        renderDictionaryPreview(glimpse, data, { openEntries: false, wiktionary });
+        wiktionaryData = wiktionary; drawDictionaries();
       });
       const evidenceHost = node('details', 'entry-details word-evidence');
-      evidenceHost.append(node('summary', '', 'Context, commentary and sources'));
-      morphologyHost.append(evidenceHost);
+      evidenceHost.append(node('summary', '', 'Commentary and parallel passages'));
+      notesHost.append(evidenceHost);
       renderLexicalEvidence(evidenceHost, data.lexical_evidence, passageId);
       renderStructuredEvidence(evidenceHost, data.structured_evidence, passageId);
       renderParallelContexts(evidenceHost, data.parallel_contexts);
@@ -2207,8 +2252,10 @@
         && !data.contextual_candidates?.length && !data.parallel_contexts?.some(item => item.candidates?.length);
       if (!fragmentSegment) {
         if (onlyNearby && !hasDictionaryMeaning) {
-          morphologyHost.append(node('p', 'candidate-meta-label', 'No exact source match.'));
-          appendWarnings(morphologyHost, ['Only nearby spellings were found in the source lookup. Use Analyze this form for separate computational alternatives.']);
+          const absence = node('div', 'word-absence');
+          absence.append(node('p', 'candidate-meta-label', 'No exact source match.'));
+          appendWarnings(absence, ['Only nearby spellings were found in the index of recorded forms. “Run the parser on this form” gives separate computational alternatives.']);
+          morphologyHost.append(absence);
         }
         else if (!onlyNearby) addContextAction(evidenceHost, form, passageId, sequence);
       }
@@ -2216,15 +2263,14 @@
       const rawCandidates = [...(data.contextual_candidates || []), ...(nearbyOnly ? [] : Array.isArray(data.candidates) ? data.candidates : [])];
       const uniqueCandidates = window.MelosPassageAnalysis?.dedupeCandidates?.(rawCandidates) || rawCandidates;
       const candidates = window.MelosPassageAnalysis?.groupCandidateDisplays?.(uniqueCandidates) || uniqueCandidates;
-      const analysisTitle = candidates.length === 1 ? 'Recorded analysis' : 'Possible analyses';
-      const analysis = hasDictionaryMeaning && !candidates.length ? node('details', 'entry-details')
-        : addInspectorSection(analysisTitle, morphologyHost);
-      if (hasDictionaryMeaning && !candidates.length) {
-        analysis.append(node('summary', '', 'Parsing details'));
-        morphologyHost.append(analysis);
-      }
+      // Recorded analyses are provenance for the headline parse: collapsed, inside
+      // "Sources and method".
+      const analysis = node('details', 'entry-details word-recorded');
+      analysis.append(node('summary', '', hasDictionaryMeaning && !candidates.length ? 'Parsing details'
+        : candidates.length ? `Analyses recorded in the sources · ${candidates.length}` : 'Analyses recorded in the sources'));
+      morphologyHost.append(analysis);
       appendWarnings(analysis, data.warnings);
-      if (!candidates.length) analysis.append(node('p', 'inspector-message', hasLexicalVariant
+      if (!candidates.length) analysis.append(node('p', `inspector-message${hasDictionaryMeaning ? '' : ' word-absence'}`, hasLexicalVariant
         ? 'No complete sourced morphological parse is available. The exact dictionary-listed variant and its general meanings are shown above.'
         : hasLinkedMeanings ? 'No complete sourced morphological parse is available. Dictionary-linked meaning alternatives are shown above.'
         : hasMachineMeanings ? 'No recorded source parse is available. The dictionary definitions above are linked through the displayed computational alternatives.'
@@ -2252,7 +2298,7 @@
         if (candidate.matched_form && candidate.matched_form !== form) card.append(node('p', 'candidate-reason', `Matched source spelling: ${candidate.matched_form}`));
         else if (candidate.attested_form && candidate.attested_form !== form) card.append(node('p', 'candidate-reason', `Recorded form: ${candidate.attested_form}`));
         const provenance = node('details', 'entry-details');
-        provenance.append(node('summary', '', 'Sources and analysis details')); card.append(provenance);
+        provenance.append(node('summary', '', 'Source details')); card.append(provenance);
         if (candidate.reason) provenance.append(node('p', 'candidate-reason', candidate.reason));
         const entryText = candidate.rendered_entry_text || candidate.entry_text;
         if (entryText) {
@@ -2274,13 +2320,16 @@
       }
       if (nearbyOnly && data.candidates?.length) {
         const nearby = node('details', 'entry-details nearby-analysis');
-        nearby.append(node('summary', '', 'Nearby spellings — not parses of the selected word'));
+        nearby.append(node('summary', '', 'Nearby spellings (not analyses of this word)'));
         renderContextualCandidates(nearby, window.MelosPassageAnalysis?.dedupeCandidates?.(data.candidates) || data.candidates,
           'These analyses belong to different source spellings, not the selected word.');
         morphologyHost.append(nearby);
       }
       renderFormInventories(morphologyHost, data);
-      const found = renderOccurrencePreview(morphologyHost, data);
+      const occurrences = node('details', 'entry-details word-occurrences');
+      occurrences.append(node('summary', '', 'Other passages with this form'));
+      notesHost.append(occurrences);
+      const found = renderOccurrencePreview(occurrences, data);
       const fullSearch = node('button', 'occurrence-search', 'Search all indexed occurrences ↗');
       fullSearch.type = 'button';
       fullSearch.title = 'Searches every indexed record, including reference material; clears the current author, edition, and language filters.';
@@ -2295,10 +2344,14 @@
         search(form, 'exact');
       });
       found.append(fullSearch);
-      if (data.method) evidenceHost.append(node('p', 'candidate-reason', `Lookup method: ${String(data.method).replaceAll('_', ' ')}`));
+      if (data.method) morphologyHost.append(node('p', 'candidate-reason', `Lookup method: ${String(data.method).replaceAll('_', ' ')}`));
+      reconcile();
     } catch (error) {
       contextualHeadline.then(value => { if (!value) showHeadline({ form, note: 'Lookup unavailable' }); });
-      if (sequence === state.wordSequence) message(morphologyHost, `Word lookup unavailable: ${errorText(error)}`, 'warning error-message');
+      if (sequence === state.wordSequence) {
+        message(morphologyHost, `Word lookup unavailable: ${errorText(error)}`, 'warning error-message');
+        if (!dictionaryHost.children.length) message(dictionaryHost, 'The dictionary lookup for this form failed. Choose the word again to retry.', 'warning error-message');
+      }
     }
   }
   // Headline for a passage word: the exact-span interlinear row (headword,
@@ -2315,8 +2368,10 @@
       selected_text: passage.text.slice(start, end), fetch_machine: false, rerank: false });
     if (data?.passage?.id !== passage.id) return null;
     const rows = (data.interlinear?.readings?.[0]?.tokens || []).filter(row => row.kind === 'word');
-    const value = fromRow(rows.find(row => row.start_utf16 === start) || (rows.length === 1 ? rows[0] : null));
-    if (!value) return null;
+    const row = rows.find(item => item.start_utf16 === start) || (rows.length === 1 ? rows[0] : null);
+    const base = fromRow(row);
+    if (!base) return null;
+    const value = { ...base, ...(window.MelosWordPanel?.headlineDetail?.(row) || {}) };
     cache.set(key, value);
     while (cache.size > 64) cache.delete(cache.keys().next().value);
     return value;
@@ -2329,12 +2384,22 @@
     const candidates = fragment || nearby ? [] : [...(data?.contextual_candidates || []), ...(Array.isArray(data?.candidates) ? data.candidates : [])];
     const lemmas = [...new Set(candidates.map(item => item.lemma).filter(Boolean))];
     const value = { form, lemma: '', gloss: '', parse: fragment ? 'printed segment · no analysis' : '',
-      note: fragment ? 'Printed segment · no headword' : lemmas.length > 1 ? `${lemmas.length} possible headwords below` : '' };
+      note: fragment ? 'Printed segment · no headword' : lemmas.length > 1 ? `${lemmas.length} possible headwords` : '' };
+    if (lemmas.length > 1) {
+      const seen = new Set();
+      value.alternatives = candidates.filter(item => item.lemma && !seen.has(`${item.lemma}\0${item.analysis_text || ''}`) && seen.add(`${item.lemma}\0${item.analysis_text || ''}`))
+        .map(item => ({ lemma: item.lemma, parse: String(item.analysis_text || '').replace(/,(?=\S)/g, ', ') }));
+      value.ranked = false;
+    }
     if (lemmas.length !== 1) return value;
     const own = candidates.filter(item => item.lemma === lemmas[0]);
     const parses = [...new Set(own.map(item => item.analysis_text).filter(Boolean))];
+    const sources = [...new Set(own.map(item => item.source).filter(Boolean))];
+    const plainSource = name => window.MelosWordPanel?.plainSource?.(name) || name;
     return { ...value, lemma: lemmas[0], gloss: candidateDictionaryExcerpt(own[0], data.lexicon_entries, form).text || '',
-      parse: parses.length === 1 ? parses[0] : parses.length ? `${parses.length} possible parses below` : '',
+      parse: parses.length === 1 ? parses[0] : parses.length ? `${parses.length} possible parses` : '',
+      source: sources.length ? `Parse recorded in ${sources.slice(0, 2).map(plainSource).join(' and ')}.` : '',
+      alternatives: parses.length > 1 ? parses.map(parse => ({ parse: String(parse).replace(/,(?=\S)/g, ', ') })) : [], ranked: false,
       properName: /^\p{Lu}/u.test(lemmas[0].normalize('NFD')) };
   }
   function updateSelectionTranslationAction() {

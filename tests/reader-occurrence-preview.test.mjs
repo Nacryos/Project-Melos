@@ -52,7 +52,8 @@ test('grouped preview retains all edition labels, source IDs, links and click ac
     assert.equal(opened.at(-1), member.id);
   }
   assert.deepEqual(data, before);
-  assert.match(script, /renderOccurrencePreview\(morphologyHost, data\)/);
+  assert.match(script, /renderOccurrencePreview\(occurrences, data\)/);
+  assert.match(script, /notesHost\.append\(occurrences\)/);
 });
 
 test('cap applies to groups not members; legacy raw response stays separate', () => {
