@@ -7,6 +7,7 @@ it neither changes the archive nor supplies missing meanings from a model.
 """
 from __future__ import annotations
 
+from contextvars import ContextVar
 from copy import deepcopy
 from functools import lru_cache
 import re
@@ -14,11 +15,14 @@ from typing import Any
 
 from lxml import etree
 
-from .lexicon_render import (SPACE, _raw_digest, _render_spans, _source_path,
-                             read_entry)
+from .short_gloss import meaningful
+
+from .lexicon_render import (GREEK_LANGS, SOURCE_FORMATS, SPACE, _raw_digest, _render_spans,
+                             _source_path, read_entry, source_format)
 
 VERSION = "tei-definition-spans-v4"
-SOURCES = {"PerseusDL LSJ TEI", "Perseus Autenrieth TEI via Homerica"}
+# Every TEI dictionary whose layout lexicon_render.SOURCE_FORMATS describes.
+SOURCES = frozenset(SOURCE_FORMATS)
 BLOCKED = {"bibl", "cit", "quote", "etym", "xr", "foreign", "orth",
            "itype", "pron", "gram", "gramGrp"}
 NON_ENGLISH = re.compile(r"\b(?:Skt\.|Sanskrit|Lat\.|Latin|Germ\.|Goth\.|I\.-\s*E\.|Lith\.|Zend|root\b)", re.I)
@@ -29,6 +33,16 @@ OFFSET_BASIS = "uncompacted Greek-span-rendered TEI entry"
 # This is a source typography delimiter, not a linguistic inference: LSJ
 # separates inflectional preambles from English definitions with colon-dash.
 DEFINITION_BOUNDARY = re.compile(r":\s*[\u2014\u2013]")
+# Source-typography markers that introduce a referenced Greek word rather than
+# a usage example ("poet. for", "Adv. of", "= ", "cf."). Used only for sources
+# whose SOURCE_FORMATS entry sets reference_lead (Middle Liddell, Logeion LSJ).
+REFERENCE_LEAD = re.compile(r"(?:\b(?:for|of|from|than)|=|\bcf\.|\bi\.\s*e\.|\bv\.)\s*,?\s*$", re.I)
+PREAMBLE = {"etym", "form", "note", "xr"}
+
+
+def _is_greek(node):
+    language = node.get("lang") or node.get("{http://www.w3.org/XML/1998/namespace}lang")
+    return bool(language) and language.strip().lower() in GREEK_LANGS
 
 
 def _plain(value: str) -> str:
@@ -56,8 +70,14 @@ def _locator(node, start, end):
             "offset_basis": OFFSET_BASIS}
 
 
+# Element(s) that delimit one source sense. Cunliffe nests sense <div>s
+# instead of <sense>; set per parse from SOURCE_FORMATS (thread-local context).
+_SENSE_TAGS: ContextVar[tuple[str, ...]] = ContextVar("sense_tags", default=("sense",))
+
+
 def _scope(node, entry):
-    return next((a for a in node.iterancestors() if a.tag == "sense"), entry)
+    tags = _SENSE_TAGS.get()
+    return next((a for a in node.iterancestors() if a.tag in tags), entry)
 
 
 def _path(scope):
@@ -138,11 +158,27 @@ def _backward_tense_restrictions(entry, text, spans, rows):
 
 
 def _parse(entry, entities, record):
-    text, spans = _render_spans(entry, entities)
+    fmt = source_format(record)
+    token = _SENSE_TAGS.set(tuple(fmt.get("sense_tags", ("sense",))))
+    try:
+        return _parse_entry(entry, entities, record, fmt)
+    finally:
+        _SENSE_TAGS.reset(token)
+
+
+def _parse_entry(entry, entities, record, fmt):
+    text, spans = _render_spans(entry, entities, fmt["beta"])
     parentheses = _parentheses(text)
-    nodes = list(entry.iter())
+    nodes = [n for n in entry.iter() if isinstance(n.tag, str)]
     order = {node: i for i, node in enumerate(nodes)}
-    first_orth = next(iter(entry.iter("orth")), None)
+    definition_tags = set(fmt["definition_tags"])
+    # Elements that mark an English rendering for example/continuation checks.
+    # Unchanged {"tr", "gloss"} for the original LSJ/Autenrieth layout.
+    marked = {"tr", "gloss"} | (definition_tags - {"def", "title"})
+    example_rule = fmt.get("example_rule", "lsj")
+    headword_tag = fmt.get("headword", "orth")
+    first_orth = (entry.find(headword_tag) if headword_tag != "orth"
+                  else next(iter(entry.iter("orth")), None))
     accepted, excluded = [], []
 
     def make(node, start, end, kind, scope=None):
@@ -208,7 +244,7 @@ def _parse(entry, entities, record):
         return row
 
     for node in nodes:
-        if node.tag not in {"tr", "gloss", "def", "title"}:
+        if node.tag not in definition_tags:
             continue
         # LSJ sometimes marks an English entry-head definition as <title>,
         # e.g. ego. Bibliographical titles are never definition candidates.
@@ -231,7 +267,14 @@ def _parse(entry, entities, record):
             reason = "explicit_non_english_language"
         elif not re.search(r"[A-Za-z]", value) or GREEK.search(value):
             reason = "no_english_definition_text"
-        elif re.fullmatch(r"[A-Z][\w-]+\.", value):
+        elif not meaningful(value):
+            # A bare article or one letter ("a," in LSJ Dionysos) is a
+            # typographic fragment of a phrase, not a definition.
+            reason = "no_english_definition_text"
+        elif re.fullmatch(r"[A-Z][\w-]+\.", value) and not (
+                # Cunliffe prints one-word sense heads capitalised with a full
+                # stop ("Thoughtlessness."); short ones stay excluded.
+                fmt.get("capitalised_glosses") and len(value) > 6):
             reason = "abbreviation_not_safe_definition"
         elif re.fullmatch(r"[A-Z]{2,}[,.;]?", value):
             reason = "citation_acronym_not_safe_definition"
@@ -257,11 +300,17 @@ def _parse(entry, entities, record):
         # Distinguish bare lexical glosses from a translation of a Greek
         # example immediately before them. Morphology-labelled variants are
         # retained with their literal context, not generalized to the lemma.
-        if reason is None:
+        if reason is None and example_rule is not None:
             node_scope = _scope(node, entry)
             preceding = [n for n in nodes[:order[node]] if n.tag in
-                         {"foreign", "quote", "orth", "itype", "bibl", "cit", "tr", "gloss", "sense"}
+                         ({"foreign", "quote", "orth", "itype", "bibl", "cit", "sense"} | marked)
                          and spans[n][1] <= a
+                         # Middle Liddell: only a Greek example inside the same
+                         # <sense> can own a following translation; Latin
+                         # cognates and etymology/form preambles cannot.
+                         and not (example_rule == "sense_scoped" and n.tag in {"foreign", "quote"}
+                                  and (_scope(n, entry) is not node_scope or not _is_greek(n)
+                                       or any(x.tag in PREAMBLE for x in n.iterancestors())))
                          # Some flattened TEI senses start immediately after
                          # an example belonging to that sense, so a scope
                          # change alone is NOT a definition boundary. Only
@@ -304,15 +353,18 @@ def _parse(entry, entities, record):
                     and re.search(r"\b(?:as\s+)?(?:sg|pl|dual)\.\s+of\s*$",
                                   _plain(text[max(0, spans[previous][0] - 100):spans[previous][0]]), re.I)
                     and re.fullmatch(r"[\s,]*", gap)
-                    and not any(n.tag in {"bibl", "cit", "tr", "gloss", "sense"}
+                    and not any(n.tag in ({"bibl", "cit", "sense"} | marked)
                                 for n in nodes[:order[previous]])
                 )
+                # "poet. for X, wild", "Adv. of X, with admiration": a Greek
+                # word introduced by a reference marker is not an example.
+                referenced = bool(fmt.get("reference_lead") and REFERENCE_LEAD.search(lead))
                 if (not closed_comparison and not closed_note and not grammatical_counterpart
-                        and not DEFINITION_BOUNDARY.search(gap) and len(gap) < 60 and (example_marker or
+                        and not referenced and not DEFINITION_BOUNDARY.search(gap) and len(gap) < 60 and (example_marker or
                         (not GRAMMATICAL_LEAD.search(lead) and not re.search(r"\b(?:means|meaning|of)\s*$", gap)))):
                     reason = "translation_of_preceding_greek_example"
             # A translation split over multiple <tr>s is still an example.
-            if previous is not None and previous.tag in {"tr", "gloss"}:
+            if previous is not None and previous.tag in marked:
                 previous_exclusion = next((x for x in reversed(excluded)
                                            if x["source_locator"]["node_path"] == previous.getroottree().getpath(previous)), None)
                 gap = _plain(text[spans[previous][1]:a])
@@ -349,7 +401,7 @@ def _parse(entry, entities, record):
     # connective text, retaining a single contiguous, reproducible source span.
     merged = []
     for row in accepted:
-        if merged:
+        if merged and fmt.get("merge_adjacent", True):
             prior = merged[-1]
             left, right = prior["source_locator"], row["source_locator"]
             gap = text[left["rendered_end"]:right["rendered_start"]]
@@ -406,13 +458,22 @@ def _parse(entry, entities, record):
             "dictionary_senses_method": VERSION}
 
 
+def _byte_range(record):
+    if not source_format(record).get("located"):
+        return (None, None)
+    locator = record.get("locator") or {}
+    return (locator.get("byte_start"), locator.get("byte_end"))
+
+
 @lru_cache(maxsize=2048)
-def _cached(raw_path, entry_id, record_id, source, source_url, digest, mtime_ns, size):
+def _cached(raw_path, entry_id, record_id, source, source_url, digest, mtime_ns, size,
+            byte_start=None, byte_end=None):
     path = _source_path(raw_path)
     if _raw_digest(path, mtime_ns, size) != digest:
         return {"dictionary_senses": [], "dictionary_senses_status": "source_hash_mismatch",
                 "dictionary_senses_warning": "Archived dictionary source does not match its recorded SHA-256."}
-    entry, entities = read_entry(raw_path, entry_id)
+    entry, entities = read_entry(raw_path, entry_id, {
+        "source": source, "locator": {"byte_start": byte_start, "byte_end": byte_end}})
     after = path.stat()
     if (after.st_mtime_ns, after.st_size) != (mtime_ns, size):
         return {"dictionary_senses": [], "dictionary_senses_status": "source_changed_during_read",
@@ -439,7 +500,8 @@ def dictionary_senses(record: dict[str, Any]) -> dict[str, Any]:
         stat = path.stat()
         return deepcopy(_cached(record["raw_path"], record["entry_id"], record["id"],
                                 record["source"], record["source_url"], record["raw_sha256"],
-                                stat.st_mtime_ns, stat.st_size))
+                                stat.st_mtime_ns, stat.st_size,
+                                *_byte_range(record)))
     except (OSError, KeyError, ValueError, etree.XMLSyntaxError) as exc:
         return {"dictionary_senses": [], "dictionary_senses_status": "source_unavailable",
                 "dictionary_senses_warning": str(exc)}

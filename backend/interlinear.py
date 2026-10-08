@@ -12,6 +12,7 @@ import re
 import unicodedata
 
 from .morphology import describe_postag
+from .short_gloss import NON_NUMERAL_POS, dictionary_rank, letter_or_numeral_entry, short_head
 from .translation_languages import is_english_language
 
 _VALUES = {
@@ -403,7 +404,8 @@ def _english(row):
     if language:
         return is_english_language(language)
     source = ' '.join(str(row.get(key) or '') for key in ('gloss_source', 'source', 'source_family', 'gloss_source_url', 'source_url')).lower()
-    return any(mark in source for mark in ('lsj', 'autenrieth', 'en.wiktionary.org', 'enwiktionary', 'english wiktionary'))
+    return any(mark in source for mark in ('lsj', 'autenrieth', 'middle liddell', 'cunliffe', 'dodson',
+                                           'en.wiktionary.org', 'enwiktionary', 'english wiktionary'))
 
 
 def _dictionary_family(entry):
@@ -546,6 +548,14 @@ def _gloss(candidate, token):
         structured = [candidate]
     if structured:
         senses, seen = [], set()
+        if canonical_features(candidate).get('POS') in NON_NUMERAL_POS:
+            # τε parsed as a particle must not take its meaning from a letter
+            # or numeral entry of the same spelling.
+            structured = [entry for entry in structured if not letter_or_numeral_entry(entry)] or structured
+        # Every bound entry is one unambiguous entry per dictionary; the first
+        # sense shown comes from the dictionary first in DICTIONARY_ORDER
+        # (Middle Liddell, Autenrieth, then LSJ ...), not from file order.
+        structured = sorted(structured, key=lambda entry: dictionary_rank(entry.get('source')))
         for entry in structured:
             entry_id = entry.get('gloss_entry_id') or entry.get('id')
             for sense in entry.get('dictionary_senses') or []:
@@ -581,7 +591,7 @@ def _gloss(candidate, token):
         # Prefer a complete sourced sense over an arbitrary word cap. Long
         # senses may wrap in the reader, but their meaning is never clipped.
         short = first or None
-        return {**missing, 'text': short, 'full_text': full,
+        return {**missing, 'text': short, 'full_text': full, **_short_fields(short),
                 'status': 'available' if short else 'long_definition',
                 'source': row.get('gloss_source') or row.get('source'),
                 'source_url': row.get('gloss_source_url') or row.get('source_url'),
@@ -590,8 +600,14 @@ def _gloss(candidate, token):
     return missing
 
 
+def _short_fields(text):
+    """1-4 word head of the chosen source definition, in the source's words."""
+    head = short_head(text)
+    return {'short_text': head['text'], 'short_text_method': head['method']} if head else {'short_text': None}
+
+
 def gloss_from_sense(sense, alternatives, *, contextual=False):
-    return {'text': sense['text'], 'full_text': sense['text'], 'status': 'available',
+    return {'text': sense['text'], 'full_text': sense['text'], **_short_fields(sense['text']), 'status': 'available',
             'source': sense.get('source'), 'source_url': sense.get('source_url'),
             'entry_id': sense.get('lexicon_entry_id') or sense.get('entry_id'),
             'sense_id': sense['id'], 'alternatives': deepcopy(alternatives),

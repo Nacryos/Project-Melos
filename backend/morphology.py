@@ -11,6 +11,7 @@ from collections.abc import Callable, Iterable, Mapping
 import json
 from pathlib import Path
 from .publication import publication_restricted, record_allowed
+from .short_gloss import dictionary_rank
 import re
 import unicodedata
 from typing import Any
@@ -237,9 +238,16 @@ class Morphology:
     """Lazy lexicon lookup; keys and trigram postings build once per process."""
 
     def __init__(self, entries_path: str | Path = ROOT / "data/lexica/entries.jsonl",
-                 forms_path: str | Path = ROOT / "data/lexica/forms.jsonl") -> None:
+                 forms_path: str | Path = ROOT / "data/lexica/forms.jsonl",
+                 supplement_paths: Iterable[str | Path] = ()) -> None:
         self.entries_path = Path(entries_path)
         self.forms_path = Path(forms_path)
+        # Additional audited entries files (data/lexica/supplement-entries.jsonl:
+        # Middle Liddell, Logeion LSJ, Cunliffe, Dodson). Every row keeps its
+        # own source/licence; nothing is merged or deduplicated across sources.
+        self.supplement_paths = [Path(path) for path in supplement_paths]
+        # Perseus LSJ entry id -> the Logeion LSJ row that re-edits it.
+        self._superseded: dict[str, str] = {}
         self._loaded = False
         self.entry_count = 0
         self.form_count = 0
@@ -259,14 +267,22 @@ class Morphology:
     def _load(self) -> None:
         if self._loaded:
             return
-        for row in _read_jsonl(self.entries_path):
-            if publication_restricted() and not record_allowed(row):
-                continue
-            lemma = row.get("lemma")
-            if not isinstance(lemma, str) or not lemma.strip():
-                continue
-            self._entries[normalize(lemma)].append(row)
-            self.entry_count += 1
+        for path in (self.entries_path, *self.supplement_paths):
+            for row in _read_jsonl(path):
+                if publication_restricted() and not record_allowed(row):
+                    continue
+                lemma = row.get("lemma")
+                if not isinstance(lemma, str) or not lemma.strip():
+                    continue
+                self._entries[normalize(lemma)].append(row)
+                self.entry_count += 1
+                if row.get("perseus_lsj_id") and row.get("id"):
+                    self._superseded[str(row["perseus_lsj_id"])] = str(row["id"])
+        if self.supplement_paths:
+            # Display and short-gloss order (backend.short_gloss.DICTIONARY_ORDER);
+            # stable, so each dictionary keeps its own source order.
+            for bucket in self._entries.values():
+                bucket.sort(key=lambda row: dictionary_rank(row.get("source")))
         seen_forms: set[tuple[str, ...]] = set()
         # Temporary collection before reading-level deduplication: later tokens
         # of an already indexed form must not disappear. Buckets are shared by
@@ -352,6 +368,48 @@ class Morphology:
                 for gram in _trigrams(key):
                     self._grams[gram].add(key)
         self._loaded = True
+
+    def _visible(self, rows: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+        """Hide a Perseus LSJ row whose Logeion re-edition is in the same bucket.
+
+        The Perseus row keeps its id and stays on disk (and in the lexical
+        quotation search); only the duplicate dictionary display is dropped.
+        """
+        rows = list(rows)
+        if not self._superseded:
+            return rows
+        ids = {str(row.get("id")) for row in rows}
+        return [row for row in rows if self._superseded.get(str(row.get("id"))) not in ids]
+
+    def headword_entries(self, lemma: str) -> dict[str, Any]:
+        """Dictionary entries whose printed headword is this lemma, rendered.
+
+        Exact NFC (case-sensitive) headword match first; only when there is
+        none, an accent/breathing/case-folded match (labelled as such). Rows
+        come in DICTIONARY_ORDER. No morphology or occurrence data is used.
+        """
+        self._load()
+        if not isinstance(lemma, str) or not lemma.strip() or len(lemma) > 200:
+            return {"lemma": lemma, "status": "invalid_lemma", "entries": []}
+        target = unicodedata.normalize("NFC", lemma.strip())
+        bucket = self._visible(self._entries.get(normalize(target), ()))
+        exact = [row for row in bucket if unicodedata.normalize("NFC", str(row.get("lemma", ""))) == target]
+        rows, match = (exact, "exact_headword") if exact else (bucket, "folded_headword")
+        try:
+            from .lexicon_render import render_source_record
+        except ImportError:  # pragma: no cover - renderer is part of the package
+            render_source_record = None
+        entries = []
+        for row in rows[:24]:
+            display = {field: row.get(field) for field in
+                       ("id", "entry_id", "lemma", "lemma_beta", "lemma_raw", "homograph_id", "lemma_identity",
+                        "key", "gloss", "entry_text", "source", "source_url", "entry_url", "license",
+                        "attribution")}
+            if render_source_record:
+                display.update(render_source_record(row))
+            entries.append(display)
+        return {"lemma": target, "status": "available" if entries else "no_headword",
+                "match": match if entries else None, "entries": entries}
 
     def counts(self) -> dict[str, int]:
         self._load()
@@ -547,7 +605,7 @@ class Morphology:
                     numbered[(lemma_nfc, str(row.get("analysis")))].add(marker.group())
         ranked: list[tuple[tuple[Any, ...], tuple[str, str, str, str], dict[str, Any]]] = []
         for key, (distance, variant_index) in matches.items():
-            for kind, rows in (("form", self._forms.get(key, ())), ("lemma", self._entries.get(key, ()))):
+            for kind, rows in (("form", self._forms.get(key, ())), ("lemma", self._visible(self._entries.get(key, ())))):
                 for row in rows:
                     lemma = unicodedata.normalize("NFC", str(row.get("lemma", "")))
                     analysis = row.get("analysis") if kind == "form" else None
@@ -563,7 +621,7 @@ class Morphology:
                         possible_entries = [row]
                         gloss_row = row
                     else:
-                        entries = self._entries.get(normalize(lemma), ())
+                        entries = self._visible(self._entries.get(normalize(lemma), ()))
                         exact_entries = [item for item in entries if
                                          unicodedata.normalize("NFC", str(item.get("lemma", ""))) ==
                                          unicodedata.normalize("NFC", lemma)]
@@ -698,6 +756,10 @@ class Morphology:
                 entry_id = str(entry.get("id") or
                                f"{entry.get('source_url')}#{entry.get('entry_id')}")
                 if entry_id not in candidate["lexicon_entry_ids"]:
+                    # A superseded Perseus LSJ row is not displayed, but its
+                    # quotations still feed the lexical quotation search.
+                    if self._superseded.get(entry_id) in candidate["lexicon_entry_ids"]:
+                        quotation_entries.append(entry)
                     continue
                 quotation_entries.append(entry)
                 display_entry = {field: entry.get(field) for field in
@@ -777,7 +839,9 @@ class Morphology:
                 "candidates": candidates,
                 "quarantined_source_analyses": quarantined,
                 "expansion_lemmas": sorted(expansion_lemmas),
-                "lexicon_entries": list(lexicon_entries.values()),
+                # Shown in DICTIONARY_ORDER (Middle Liddell, Autenrieth, LSJ ...).
+                "lexicon_entries": sorted(lexicon_entries.values(),
+                                          key=lambda entry: dictionary_rank(entry.get("source"))),
                 "lexical_evidence": lexical_evidence,
                 "observed_form_groups": observed_form_groups,
                 "attested_forms": sorted(attested_forms, key=lambda item: (normalize(item), item)),

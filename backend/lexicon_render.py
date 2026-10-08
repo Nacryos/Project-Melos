@@ -21,7 +21,52 @@ from lxml import etree
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW_ROOT = (ROOT / "data/raw/lexica").resolve()
+# Middle Liddell and Cunliffe were staged under data/raw/perseus-lexica
+# (docs/lexica-perseus-ingestion.md); both directories are local XML archives.
+EXTRA_RAW_ROOTS = ((ROOT / "data/raw/perseus-lexica").resolve(),)
 SPACE = re.compile(r"\s+")
+XML_NS = "{http://www.w3.org/XML/1998/namespace}"
+
+# Source TEI layouts. ``tag`` is the entry element; ``beta`` says whether
+# lang="greek" spans are Perseus Beta Code (Unicode sources must never pass
+# through the Beta Code converter: it would turn parentheses into breathings).
+# ``located`` sources are read from the byte range recorded in the audited
+# entries row (locator.byte_start/byte_end) and the fragment's own identity
+# attribute is checked against entry_id; nothing is matched by headword.
+# ``definition_tags`` are the TEI elements that mark English definitions.
+SOURCE_FORMATS: dict[str, dict[str, Any]] = {
+    "PerseusDL LSJ TEI": {"tag": "entryFree", "beta": True, "located": False,
+                          "definition_tags": ("tr", "gloss", "def", "title")},
+    "Perseus Autenrieth TEI via Homerica": {"tag": "entryFree", "beta": True, "located": False,
+                                            "definition_tags": ("tr", "gloss", "def", "title")},
+    "Perseus Middle Liddell TEI (Hopper open-source texts)": {
+        "tag": "entry", "beta": True, "located": True, "id_attr": "id",
+        "definition_tags": ("tr", "gloss", "def", "title"),
+        # ML puts every definition inside <sense>; an example translation
+        # follows a Greek <foreign> in the same sense.
+        "example_rule": "sense_scoped", "reference_lead": True},
+    # Cunliffe's <gloss> marks only the lexicographer's own sense heads; it
+    # never translates the quoted Homeric examples, so no example rule.
+    "Perseus Cunliffe TEI via Homerica": {
+        "tag": "div", "beta": False, "located": True, "id_attr": XML_NS + "id",
+        "definition_tags": ("gloss",), "example_rule": None, "capitalised_glosses": True,
+        # Each numbered sense is a nested <div>: citations/qualifiers are scoped to it.
+        "sense_tags": ("div",)},
+    # Logeion's LSJ marks English definitions as italics (<i>); other
+    # languages in italics carry an explicit lang attribute (README, Nov. 2024).
+    "LSJ (Logeion edition, H. Dik) TEI": {
+        "tag": "div2", "beta": False, "located": True, "id_attr": "id", "headword": "head",
+        "definition_tags": ("i",), "reference_lead": True},
+    # Dodson: <def role="brief"> and <def role="full"> are the only content.
+    "Dodson Greek Lexicon (NT; public domain)": {
+        "tag": "entry", "beta": False, "located": True, "id_attr": "n", "id_suffix": True,
+        "definition_tags": ("def",), "example_rule": None, "merge_adjacent": False},
+}
+DEFAULT_FORMAT = SOURCE_FORMATS["PerseusDL LSJ TEI"]
+
+
+def source_format(record: dict[str, Any] | None) -> dict[str, Any]:
+    return SOURCE_FORMATS.get((record or {}).get("source"), DEFAULT_FORMAT)
 GREEK_LANGS = {"greek", "grc", "el", "ancient greek"}
 # Standard-library copy of the HTML named character reference table:
 # https://html.spec.whatwg.org/multipage/named-characters.html . Only explicit
@@ -35,32 +80,37 @@ ENTITY_MARKER = re.compile(r"[\ue000-\uf8ff]")
 
 def _source_path(raw_path: str | Path) -> Path:
     candidate = (ROOT / raw_path).resolve()
-    if not candidate.is_relative_to(RAW_ROOT) or candidate.suffix.lower() != ".xml":
+    if (not any(candidate.is_relative_to(root) for root in (RAW_ROOT, *EXTRA_RAW_ROOTS))
+            or candidate.suffix.lower() != ".xml"):
         raise ValueError(f"Lexicon source path outside local XML archive: {raw_path}")
     return candidate
 
 
-def _render_text(value: str, greek: bool, entities: dict[str, str]) -> str:
+def _render_text(value: str, greek: bool, entities: dict[str, str], beta: bool = True) -> str:
     """Keep decoded source entities outside the Beta Code conversion span."""
+    convert = greek and beta
     result: list[str] = []
     previous = 0
     for marker in ENTITY_MARKER.finditer(value):
         if marker.group() not in entities:
             continue
         chunk = value[previous:marker.start()]
-        result.append(beta_to_uni(chunk) if greek else chunk)
+        result.append(beta_to_uni(chunk) if convert else chunk)
         result.append(entities[marker.group()])
         previous = marker.end()
     chunk = value[previous:]
-    result.append(beta_to_uni(chunk) if greek else chunk)
+    result.append(beta_to_uni(chunk) if convert else chunk)
     return "".join(result)
 
 
 def _render_node(node: etree._Element, entities: dict[str, str],
-                 inherited_greek: bool = False) -> str:
+                 inherited_greek: bool = False, beta: bool = True) -> str:
     if isinstance(node, etree._Entity):
         name = node.name
         return HTML5_ENTITIES.get(name + ";", f"&{name};")
+    if not isinstance(node.tag, str):
+        # Comments and processing instructions are not source text.
+        return ""
     language = node.get("lang") or node.get("{http://www.w3.org/XML/1998/namespace}lang")
     if language:
         greek = language.strip().lower() in GREEK_LANGS
@@ -68,11 +118,11 @@ def _render_node(node: etree._Element, entities: dict[str, str],
         greek = inherited_greek or node.tag == "orth"
     pieces: list[str] = []
     if node.text:
-        pieces.append(_render_text(node.text, greek, entities))
+        pieces.append(_render_text(node.text, greek, entities, beta))
     for child in node:
-        pieces.append(_render_node(child, entities, greek))
+        pieces.append(_render_node(child, entities, greek, beta))
         if child.tail:
-            pieces.append(_render_text(child.tail, greek, entities))
+            pieces.append(_render_text(child.tail, greek, entities, beta))
     return "".join(pieces)
 
 
@@ -114,14 +164,54 @@ def _entry_offsets(path: Path, mtime_ns: int | None = None,
     return result
 
 
-def read_entry(raw_path: str | Path, entry_id: str) -> tuple[etree._Element, dict[str, str]]:
+def _identity_matches(entry: etree._Element, fmt: dict[str, Any], entry_id: str,
+                      entities: dict[str, str] | None = None) -> bool:
+    value = entry.get(fmt.get("id_attr", "id"))
+    if value is None:
+        return False
+    # Character references in the attribute (Logeion ids such as
+    # "crossa)ke/llea&lt;n&gt;") were swapped for placeholders before parsing.
+    value = "".join((entities or {}).get(char, char) for char in value)
+    if fmt.get("id_suffix"):
+        # Dodson: n="<lemma> | <number>"; entry_id is the number.
+        return value.rpartition("|")[2].strip() == entry_id
+    return value == entry_id
+
+
+def _read_located(source: Path, entry_id: str, fmt: dict[str, Any],
+                  locator: dict[str, Any] | None) -> tuple[etree._Element, dict[str, str]]:
+    start = (locator or {}).get("byte_start")
+    end = (locator or {}).get("byte_end")
+    if type(start) is not int or type(end) is not int or not 0 <= start < end:
+        raise KeyError(f"Entry {entry_id!r} has no byte locator in {source}")
+    with source.open("rb") as handle:
+        handle.seek(start)
+        fragment = handle.read(end - start)
+    parser = etree.XMLParser(load_dtd=False, no_network=True, resolve_entities=False,
+                             huge_tree=True, recover=False)
+    safe_fragment, entities = _safe_entities(fragment)
+    entry = etree.fromstring(safe_fragment, parser=parser)
+    if entry.tag != fmt["tag"] or not _identity_matches(entry, fmt, entry_id, entities):
+        raise ValueError(f"Malformed entry fragment {entry_id!r} in {source}")
+    return entry, entities
+
+
+def read_entry(raw_path: str | Path, entry_id: str,
+               record: dict[str, Any] | None = None) -> tuple[etree._Element, dict[str, str]]:
     """Read one source entry without flattening its sense/citation hierarchy.
 
     Missing files/IDs raise; callers may surface that failure as a warning.
     The first lookup indexes byte offsets in that source file. Only the chosen
     entry fragment is parsed; cached offsets avoid a large XML parse for each
     word. External DTDs and network entity resolution are off.
+
+    Sources marked ``located`` in SOURCE_FORMATS are read from the byte range
+    in the audited record's locator instead, and the fragment's own identity
+    attribute must equal ``entry_id``.
     """
+    fmt = source_format(record)
+    if fmt.get("located"):
+        return _read_located(_source_path(raw_path), entry_id, fmt, (record or {}).get("locator"))
     source = _source_path(raw_path)
     signature = source.stat()
     try:
@@ -140,13 +230,14 @@ def read_entry(raw_path: str | Path, entry_id: str) -> tuple[etree._Element, dic
     return entry, entities
 
 
-def render_entry_text(raw_path: str | Path, entry_id: str) -> str:
+def render_entry_text(raw_path: str | Path, entry_id: str,
+                      record: dict[str, Any] | None = None) -> str:
     """Render one entry; only explicitly Greek spans undergo Beta conversion."""
-    entry, entities = read_entry(raw_path, entry_id)
-    return SPACE.sub(" ", _render_node(entry, entities)).strip()
+    entry, entities = read_entry(raw_path, entry_id, record)
+    return SPACE.sub(" ", _render_node(entry, entities, beta=source_format(record)["beta"])).strip()
 
 
-def _render_spans(entry: etree._Element, entities: dict[str, str]):
+def _render_spans(entry: etree._Element, entities: dict[str, str], beta: bool = True):
     """Render the existing source text while retaining exact node offsets."""
     pieces, spans, length = [], {}, 0
     def append(text):
@@ -156,16 +247,18 @@ def _render_spans(entry: etree._Element, entities: dict[str, str]):
     def visit(node, inherited=False):
         start = length
         if isinstance(node, etree._Entity):
-            append(_render_node(node, entities, inherited))
+            append(_render_node(node, entities, inherited, beta))
+        elif not isinstance(node.tag, str):
+            pass  # comments / processing instructions carry no source text
         else:
             language = node.get('lang') or node.get('{http://www.w3.org/XML/1998/namespace}lang')
             greek = language.strip().lower() in GREEK_LANGS if language else inherited or node.tag == 'orth'
             if node.text:
-                append(_render_text(node.text, greek, entities))
+                append(_render_text(node.text, greek, entities, beta))
             for child in node:
                 visit(child, greek)
                 if child.tail:
-                    append(_render_text(child.tail, greek, entities))
+                    append(_render_text(child.tail, greek, entities, beta))
         spans[node] = (start, length)
     visit(entry)
     return ''.join(pieces), spans
@@ -240,7 +333,7 @@ def _comparative_definition(entry: etree._Element, entities: dict[str, str]) -> 
     return None
 
 
-@lru_cache(maxsize=32)
+@lru_cache(maxsize=160)  # LSJ (27) + Logeion LSJ (86) + other lexicon files
 def _raw_digest(path: Path, mtime_ns: int, size: int) -> str:
     with path.open('rb') as handle:
         return hashlib.file_digest(handle, 'sha256').hexdigest()
@@ -274,7 +367,7 @@ def render_source_record(record: dict[str, Any]) -> dict[str, Any]:
     """Add a rendered display field and explicit method/warning metadata."""
     from .lexicon_senses import dictionary_senses
     try:
-        rendered = render_entry_text(record["raw_path"], record["entry_id"])
+        rendered = render_entry_text(record["raw_path"], record["entry_id"], record)
     except (KeyError, ValueError, FileNotFoundError, etree.XMLSyntaxError) as exc:
         return {"rendered_entry_text": None, "rendering_method": METHOD,
                 "rendering_warning": str(exc), **dictionary_senses(record)}
@@ -292,4 +385,5 @@ def render_source_record(record: dict[str, Any]) -> dict[str, Any]:
     return result
 
 
-__all__ = ["read_entry", "render_entry_text", "render_source_record", "METHOD"]
+__all__ = ["read_entry", "render_entry_text", "render_source_record", "source_format",
+           "SOURCE_FORMATS", "METHOD"]

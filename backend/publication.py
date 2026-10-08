@@ -21,7 +21,7 @@ PUBLIC_LICENSES = frozenset({
     'CC BY-SA 4.0 (repository default; check TEI rights)',
     'PD (ancient text); First1KGreek/Perseus CC BY-SA 4.0',
     'https://creativecommons.org/licenses/by-sa/4.0/',
-    'CC BY 3.0', 'CC-BY-SA-3.0-US',
+    'CC BY 3.0', 'CC-BY-SA-3.0-US', 'CC0-1.0',
 })
 
 PUBLIC_SOURCE_LICENSES = {
@@ -44,6 +44,11 @@ PUBLIC_SOURCE_LICENSES = {
     'p2_stesichorus': frozenset({'CC BY 4.0'}),
     'p2_elegy': frozenset({'CC BY-SA 4.0'}),
     'PerseusDL LSJ TEI': frozenset({'CC-BY-SA-4.0'}),
+    # Open lexica supplement (docs/lexica-perseus-ingestion.md). Cunliffe's
+    # digital edition states no licence ('unknown') and stays local-only.
+    'LSJ (Logeion edition, H. Dik) TEI': frozenset({'CC-BY-SA-4.0'}),
+    'Perseus Middle Liddell TEI (Hopper open-source texts)': frozenset({'CC-BY-SA-3.0-US'}),
+    'Dodson Greek Lexicon (NT; public domain)': frozenset({'CC0-1.0'}),
     'PerseusDL Greek Dependency Treebank v1.6': frozenset({'CC-BY-SA-3.0-US'}),
 }
 
