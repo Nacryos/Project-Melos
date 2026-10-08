@@ -173,7 +173,7 @@ def test_real_saved_elthes_retains_explicit_aorist_without_resolving_homograph()
 @pytest.mark.parametrize('name,count', [('0', 21), ('1', 4), ('2', 7)])
 def test_real_saved_sense_packets_keep_all_choices_within_original_bound(name, count):
     path = Path(f'runtime/lyric-context-eval/baseline/{name}.response.json')
-    source = Path('runtime/campbell-assignment/campbell_assignment.jsonl')
+    source = Path('data/campbell_glp/alcaeus_five_corrected.jsonl')
     if not path.exists() or not source.exists(): pytest.skip('Read-only live receipts are not installed')
     passage = next(json.loads(line) for line in source.read_text(encoding='utf8').splitlines()
                    if json.loads(line)['id'].endswith(':326'))
@@ -190,7 +190,7 @@ def test_real_saved_sense_packets_keep_all_choices_within_original_bound(name, c
 def test_current_canary_packets_losslessly_roundtrip_semantic_evidence(folder, name):
     from backend.sense_ranker import _inventory
     path = Path(f'runtime/lyric-context-eval/{folder}/{name}.response.json')
-    source = Path('runtime/campbell-assignment/campbell_assignment.jsonl')
+    source = Path('data/campbell_glp/alcaeus_five_corrected.jsonl')
     if not path.exists() or not source.exists(): pytest.skip('Read-only canary receipts are not installed')
     result = json.loads(path.read_text(encoding='utf8'))
     passage = next(json.loads(line) for line in source.read_text(encoding='utf8').splitlines()
@@ -236,7 +236,7 @@ def test_current_linked_326_packet_retains_all_senses_and_fits_full_provider_req
     from backend.linked_dictionary import lookup_linked_dictionary
 
     path = Path(f'runtime/lyric-context-eval/canary-326/{name}.response.json')
-    source = Path('runtime/campbell-assignment/campbell_assignment.jsonl')
+    source = Path('data/campbell_glp/alcaeus_five_corrected.jsonl')
     if not path.exists() or not source.exists(): pytest.skip('Read-only canary receipts are not installed')
     result = json.loads(path.read_text(encoding='utf8'))
     passage = next(json.loads(line) for line in source.read_text(encoding='utf8').splitlines()

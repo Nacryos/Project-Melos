@@ -1,0 +1,931 @@
+{
+ "decisions": [
+  {
+   "dispute_id": 168,
+   "final_lines": [
+    "ὄπποτα πλήθοισα μάλιστα λάμπῃ"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 169,
+   "final_lines": [
+    "Κυπρο. [          ]ας·"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 170,
+   "final_lines": [
+    "κάρυξ ἦλθε θε[          ]ελε[. . .] . θεις"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 171,
+   "final_lines": [
+    "Ἔκτωρ καὶ συνέταιρ[ο]ι ἄγοισ’ ἐλικώπιδα"
+   ],
+   "labels": [
+    "5"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 172,
+   "final_lines": [
+    "Θήβας ἐξ ἰέρας Πλακίας τ’ ἀ[π’ ἀι]ν⟨ν⟩άω"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 173,
+   "final_lines": [
+    "ὢς εἶπ’· ὀτραλέως δ’ ἀνόρουσε πάτ[η]ρ φίλος·"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "breathing+grave: two separate strokes over omega, right one slants down-right (grave), same as ὢς on p85",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 174,
+   "final_lines": [
+    "αὔτικ’ Ἰλίαδαι σατίναι[ς] ὐπ’ ἐυτρόχοις"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "14x crop: breathing printed over the epsilon, nothing over upsilon (cf. αὔτικ’ where mark sits over υ) -> ἐυτρόχοις",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 175,
+   "final_lines": [
+    "χῶρις δ’ αὖ Περάμοιο θύγ[α]τρες["
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 176,
+   "final_lines": [
+    "δ[          ]. ἀνίοχοι φ[. . . . .] . [",
+    "π̣[          ´]ξα.ο["
+   ],
+   "labels": [
+    "",
+    "20"
+   ],
+   "strophe_labels": [
+    "",
+    ""
+   ],
+   "basis": "wide blank inside brackets -> 10 spaces per protocol; underdot under π is a real round dot",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 177,
+   "final_lines": [
+    "πάντᾳ δ’ ἦς κὰτ ὄδο[ις"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "14x: mark under α is a vertical stroke with foot (iota subscript), unlike the compact round underdot under π̣ two lines above",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 178,
+   "final_lines": [
+    "φρένας, ὠς ἄνεμος κὰτ ὄρος δρύσιν ἐμπέτων."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 179,
+   "final_lines": [
+    "ἠράμαν μὲν ἔγω σέθεν Ἄτθι πάλαι ποτά· . . ."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 180,
+   "final_lines": [
+    "σμίκρα μοι πάις ἔμμεν’ ἐφαίνεο κἄχαρις."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 181,
+   "final_lines": [
+    "τὼν ἐκ Πιερίας, ἀλλ’ ἀφάνης κὰν Ἀίδα δόμῳ"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x: single narrow stroke slanting down-right over ω, identical to grave on κὰν in the same line; circumflex in this font is a wide arch (cf. δεῖνα)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 182,
+   "final_lines": [
+    "‘ᾤμ’ ὠς δεῖνα πεπ[όνθ]αμεν·"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 183,
+   "final_lines": [
+    "Ψάπφ’, ἦ μάν σ’ ἀέκοισ’ ἀπυλιμπάνω.’"
+   ],
+   "labels": [
+    "5"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 184,
+   "final_lines": [
+    "πό[λλοις γὰρ στεφάν]οις ἴων"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 185,
+   "final_lines": [
+    "καὶ βρ[όδων κρο]κίων τ’ ὔμοι"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 186,
+   "final_lines": [
+    "πλέκ[ταις ἀμφ’ ἀ]πάλᾳ δέρᾳ"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x: marks under α of ἀπάλᾳ and δέρᾳ are small hooked strokes, same shape as iota subscript in μύρῳ; underdots (πό̣λ̣λ̣ῳ) are compact 3x3 blobs",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 187,
+   "final_lines": [
+    "καὶ πό̣λ̣λ̣ῳ [          ]. μύρῳ"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 188,
+   "final_lines": [
+    "πόλ]λακι τυίδε̣ [ν]ῶν ἔχοισα"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 189,
+   "final_lines": [
+    "ὠσπ . [. . .] . ώομεν, . [. . .] . . χ[. .]-",
+    "σε θέᾳ σ’ ἰκέλαν ἀρι-",
+    "γνώτᾳ, σᾷ δὲ μάλιστ’ ἔχαιρε μόλπᾳ."
+   ],
+   "labels": [
+    "",
+    "",
+    "5"
+   ],
+   "strophe_labels": [
+    "",
+    "",
+    ""
+   ],
+   "basis": "marks under α of θέᾳ, γνώτᾳ, μόλπᾳ are hooked strokes (iota subscripts); initial ὠσπ has a single comma-shaped smooth breathing, no acute",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 190,
+   "final_lines": [
+    "νῦν δὲ Λύδαισιν ἐμπρέπεται γυναί-"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 191,
+   "final_lines": [
+    "πίσσυγγοι δὲ δέκ’ ἐξεπόναισαν."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "8x: two sigmas clearly printed: πίσσυγγοι",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 192,
+   "final_lines": [
+    "τίῳ σ’, ὦ φίλε γάμβρε, κάλως ἐικάσδω;"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 193,
+   "final_lines": [
+    "δέδυκε μὲν ἀ σελάννα"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 194,
+   "final_lines": [
+    "ἄντλην, ἐπεί κε νᾶος ἔμβᾳ"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "pixel dump: mark under α is a 5-row hooked stroke (iota subscript), not a compact round underdot",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 195,
+   "final_lines": [
+    "] . . [. .] . ["
+   ],
+   "labels": [
+    "5"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 196,
+   "final_lines": [
+    "φαρξώμεθ’ ὢς ὤκιστα [τοίχοις,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 197,
+   "final_lines": [
+    "καὶ μὴ καταισχύνωμεν [ἀνανδρίᾳ"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x: hooked vertical stroke under α -> iota subscript",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 198,
+   "final_lines": [
+    "δεῦτέ μοι νᾶ]σον Πέλοπος λίποντε[ς,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 199,
+   "final_lines": [
+    "εὐνόῳ] θύ[μ]ῳ προ[φά]νητε, Κάστορ"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 200,
+   "final_lines": [
+    "οἲ κὰτ εὔρηαν χ[θόνα] καὶ θάλασσαν"
+   ],
+   "labels": [
+    "5"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "10x: only a 1-px speck under α after λ, much smaller than real underdots (3x3 px) -> scan noise",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 201,
+   "final_lines": [
+    "ἀργαλέᾳ δ’ ἐν νύκτι φ[άος φέ]ροντες",
+    "νᾶϊ μ[ε]λαίνᾳ·"
+   ],
+   "labels": [
+    "",
+    ""
+   ],
+   "strophe_labels": [
+    "",
+    ""
+   ],
+   "basis": "12x: marks under α of ἀργαλέᾳ and μ[ε]λαίνᾳ are vertical strokes with foot, same as iota subscript under δῷ on this page",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 202,
+   "final_lines": [
+    "†ὄταμε[. . . .]διννάεντ’† Ἀχέροντα μεγ̣["
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 203,
+   "final_lines": [
+    "ἀνδρῶν πλεῖστα νοησάμενος [θανάτω κρέτην·"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 204,
+   "final_lines": [
+    "ἀλλὰ καὶ πολύιδρις ἔων ὐπὰ κᾶρι [δὶς"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 205,
+   "final_lines": [
+    ". . . ]ην ὄττινα τῶνδε πάθην τά[χα δῷ θέος."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 206,
+   "final_lines": [
+    "ὠς λόγος, κάκων ἄ[χος ἔννεκ’ ἔργων"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x/24x: a single comma-shaped mark over ω (smooth breathing only); contrast ὢς on p77/p85 where breathing and grave are two distinct strokes",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 207,
+   "final_lines": [
+    "Περράμῳ καὶ παῖσ[ί ποτ’, Ὦλεν’, ἦλθεν"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "breathing under circumflex on Ὦλεν/ἦλθεν is a 3-px blob; pixel shape slightly comma-like, kept smooth as both passes read",
+   "uncertain": true,
+   "uncertain_note": "Ὦλεν, ἦλθεν: breathing under circumflex too small to decide rough vs smooth; read smooth"
+  },
+  {
+   "dispute_id": 208,
+   "final_lines": [
+    "ἐς δόμον Χέρρωνος· ἔλ[υσε δ’ ἄγνας"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 209,
+   "final_lines": [
+    "ζῶμα παρθένω· φιλό[τας δ’ ἔθαλε"
+   ],
+   "labels": [
+    "10"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "14x: speck right of the rho descender is ~1 px and off-centre; real underdots are ~3x3 px -> noise",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 210,
+   "final_lines": [
+    "οἰ δ’ ἀπώλοντ’ ἀμφ’ Ἐ[λένᾳ Φρύγες τε"
+   ],
+   "labels": [
+    "15"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x: single comma-shaped mark over ι, no grave stroke (contrast οἲ on p85 with two marks)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 211,
+   "final_lines": [
+    "Θρᾳκ[ίας ἐρ]ευγόμενος ζὰ γαίας"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "16x: mark under α of Θρᾳκ is a short vertical stroke (iota subscript); dot after ρ in ἐρ] sits at mid-height, not below the letter, so not an underdot",
+   "uncertain": true,
+   "uncertain_note": "small mid-height dot between ρ and ] in ἐρ] not transcribed (likely speck)"
+  },
+  {
+   "dispute_id": 212,
+   "final_lines": [
+    ". . . .]α· θέλγονται τὸ [σ]ὸν ὠς ἄλει[ππα"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "20x: single comma-shaped mark over ω (smooth breathing), no separate grave stroke; contrast ὢς on p77/p85",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 213,
+   "final_lines": [
+    "θή[ϊο]ν ὔδωρ"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "20x: breathing before the acute is comma-shaped (blob top, tail down-left) -> smooth: ὔδωρ",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 214,
+   "final_lines": [
+    "] . ρά . α τόδε Λέσβιοι"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "6x: clear space between ] and the following lacuna dot: ] . ρά . α",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 215,
+   "final_lines": [
+    "ξῦνον κά[τε]σσαν, ἐν δὲ βώμοις"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 216,
+   "final_lines": [
+    "σὲ δ’ Αἰολῄαν [κ]υδαλίμαν θέον"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "14x: left leg of η extends below baseline with a leftward hook (iota subscript), unlike plain η in ἔθηκαν which ends at baseline",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 217,
+   "final_lines": [
+    "πάντων γενέθλαν, τὸν δὲ τέρτον"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 218,
+   "final_lines": [
+    "ἀργαλέας τε φύγας ῤ[ύεσθε,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 219,
+   "final_lines": [
+    "τὸν Ὕρραον δὲ πα[ῖδ]α πεδελθέτω"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "breathing+acute before Υ: breathing is ~3 px wide; direction not resolvable at scan resolution",
+   "uncertain": true,
+   "uncertain_note": "Ὕρραον: breathing direction not resolvable at scan resolution (pixel shape slightly favours smooth); kept rough as both passes read"
+  },
+  {
+   "dispute_id": 220,
+   "final_lines": [
+    "ἀλλ’ ἢ θάνοντες γᾶν ἐπιέμμενοι"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "pixel dump: speck under ε is a single pixel; real underdots on these pages are ~3x3 px -> noise",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 221,
+   "final_lines": [
+    "κείσεσθ’ ὐπ’ ἄνδρων οἶ τότ’ ἐπικ . .́ ην"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 222,
+   "final_lines": [
+    "δᾶμον ὐπὲξ ἀχέων ῤύεσθαι."
+   ],
+   "labels": [
+    "20"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "pixel dump: breathing over ρ has blob at top and tail extending down-left (comma shape) -> smooth ῤ, same as ῤ[ύεσθε on p88",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 223,
+   "final_lines": [
+    "οὐ κὰν νόμον [.]ον̣ . . [          ] .́ [ ]"
+   ],
+   "labels": [
+    "25"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "4x: the dot carrying the acute stands separated by a space from ] and from [, as do the lacuna dots earlier in the line",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 224,
+   "final_lines": [
+    "καρυ[ζο]μένας Ὦγεσιλαΐδα"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "pixel dump: mark under circumflex is ~3 px, bottom shifting left (comma-like) -> read smooth Ὦ",
+   "uncertain": true,
+   "uncertain_note": "Ὦγεσιλαΐδα: breathing under circumflex tiny; smooth vs rough not certain"
+  },
+  {
+   "dispute_id": 225,
+   "final_lines": [
+    "καὶ β[ό]λλας· τὰ πάτηρ καὶ πάτερος πάτηρ"
+   ],
+   "labels": [
+    "20"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 226,
+   "final_lines": [
+    "φεύγων ἐσχατίαισ’, ὠς δ’ Ὀνυμακλέης"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x: single comma-shaped smooth breathing over ω, no grave stroke; contrast ὢς on p77/p85",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 227,
+   "final_lines": [
+    "Μαῖα γέννατο Κρονίδᾳ μίγεισα"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 228,
+   "final_lines": [
+    "παμβασίληϊ."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "crop checked; image agrees with the reading both passes gave (A=B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  }
+ ]
+}

@@ -15,13 +15,13 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 STAGED = ROOT / 'runtime/alcaeus-translations/line-pairs'
 DATA_PATH = Path(__file__).with_name('source_line_english_data.json')
-DATA_SHA256 = '33a066a9757b52ed36ac2abbbbf95ef8c6672ba2a7bd6418dac5fde4b6b57018'
+DATA_SHA256 = 'e3501f6a9e4bbf7099875f49e9718c6c4589853ecfaf5fc0f384db56af2e7bf0'
 MAX_BYTES = 150_000
 PINS = {
     'accepted': 'a24787428143e3704d9854f4a08a66ff04ee977b549e7d2dfd2adaef50f1b601',
     'final_audit': '11a335669db20d64c9ed8de2b01435f1855f16a7e14863ef6d55166c92a1c1ef',
     'source_audit': '1c015c43909b74d8790069160367083b0181568f0e9c73ad81a6fc4a774e4f98',
-    'campbell': 'afe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b',
+    'campbell': 'ab2e1487885431669ebff57c566419bdceb1d6af69740e6ed05e8b7190d84457',
 }
 IDS = frozenset(('chs-line-pair:129:19', 'chs-line-pair:129:20', 'chs-line-pair:129:21',
                  'chs-line-pair:130b:3', 'chs-line-pair:130b:19', 'chs-line-pair:130b:20'))
@@ -48,7 +48,7 @@ def _public_slice(source: dict) -> dict:
 def project(accepted_path: Path = STAGED / 'line-pairs.accepted.json',
             final_audit_path: Path = STAGED / 'line-pair-final-audit.json',
             source_audit_path: Path = STAGED / 'line-pair-audit.json',
-            campbell_path: Path = ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl') -> dict:
+            campbell_path: Path = ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl') -> dict:
     accepted = json.loads(_read(accepted_path, PINS['accepted']))
     final_audit = json.loads(_read(final_audit_path, PINS['final_audit']))
     audit = json.loads(_read(source_audit_path, PINS['source_audit']))
@@ -69,6 +69,19 @@ def project(accepted_path: Path = STAGED / 'line-pairs.accepted.json',
         text_bytes = text.encode('utf8')
         metadata = poem['metadata']
         begin, end = row['campbell_line_text_utf8_range']
+        row = dict(row)
+        if (_sha(text_bytes) != row['campbell_text_sha256']
+                and metadata.get('text_corrections')
+                and metadata.get('previous_text_sha256') == row['campbell_text_sha256']):
+            # Re-anchor to the page-image-corrected text (2026-10-08): the paired line itself
+            # must be unchanged and occur exactly once; only its offsets and the text hash move.
+            line = row['campbell_line_text'].encode('utf8')
+            if (text_bytes.count(line) != 1
+                    or any(c['previous'] == row['campbell_line_text'] for c in metadata['text_corrections'])):
+                raise ValueError('Source line was itself corrected; re-approval required')
+            begin = text_bytes.index(line)
+            end = begin + len(line)
+            row['campbell_text_sha256'] = _sha(text_bytes)
         if (verdict != row['independent_audit'] or verdict.get('verdict') != 'PASS'
                 or verdict.get('source_notes_negate_compatibility') is not False
                 or row.get('compatibility_verdict') != 'PASS'

@@ -1,0 +1,27 @@
+{
+ "pages": [
+  69,
+  70,
+  71,
+  72,
+  73,
+  74,
+  75,
+  76,
+  77
+ ],
+ "lines_checked": 167,
+ "corrections": [
+  {
+   "poem_id": "campbell-glp:solon:24",
+   "line_index": 22,
+   "pdf_page": 69,
+   "current": "ἃ τοῖς ἐναντίοισιν ἥνδανεν τότε,",
+   "corrected": "ἃ τοῖς ἐναντ̣ίοισιν ἥνδανεν τότε,",
+   "what": "round dot centred below τ of ἐναντίοισιν at 5x (zoom/V69_p69_l22.png); may be a scan speck but looks like a printed underdot",
+   "confidence": "medium"
+  }
+ ],
+ "missing_or_extra": [],
+ "label_fixes": []
+}

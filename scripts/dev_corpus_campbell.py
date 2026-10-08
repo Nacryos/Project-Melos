@@ -68,7 +68,7 @@ def build(records: Path, output: Path, template: Path) -> dict:
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--records', type=Path, default=ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl')
+    parser.add_argument('--records', type=Path, default=ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl')
     parser.add_argument('--template', type=Path, default=ROOT / 'data/corpus.sqlite')
     parser.add_argument('--output', type=Path, default=ROOT / 'runtime/dev/corpus.sqlite')
     args = parser.parse_args()

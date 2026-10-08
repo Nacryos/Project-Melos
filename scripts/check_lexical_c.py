@@ -32,7 +32,7 @@ def run(origin, output, require_source_precedence=False):
         with manifest.open('xb') as handle:
             handle.write(origin_bytes)
     records = [json.loads(line) for line in
-               (ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl').read_text(encoding='utf-8').splitlines()]
+               (ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl').read_text(encoding='utf-8').splitlines()]
     reports = []
     # Existing source forms are query targets, not authored lexical data.
     targets = [('350', 'ἦλθες'), ('350', 'παχέων'), ('129', 'δᾶμον'),

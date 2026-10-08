@@ -1,0 +1,27 @@
+{
+ "pages": [
+  105,
+  106,
+  107,
+  108,
+  109,
+  110,
+  111,
+  112,
+  113
+ ],
+ "lines_checked": 157,
+ "corrections": [
+  {
+   "poem_id": "campbell-glp:anacreon:96d",
+   "line_index": 3,
+   "pdf_page": 105,
+   "current": "συμμίσγων ἐρατῆς μνήσκεται εὐφροσύνης.",
+   "corrected": "συμμίσγων ἐρατῆς μνῄσκεται εὐφροσύνης.",
+   "what": "μνήσκεται -> μνῄσκεται: 8x crop shows iota-subscript stroke beside the η descender",
+   "confidence": "high"
+  }
+ ],
+ "missing_or_extra": [],
+ "label_fixes": []
+}

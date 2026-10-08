@@ -37,7 +37,7 @@ def main():
         validated=read_bundle(path)
         print(json.dumps({'path':str(path),'sha256':sha(path.read_bytes()),'validated':len(validated)}))
         return
-    records={r['id']:r for r in map(json.loads,(ROOT/'runtime/campbell-assignment/campbell_assignment.jsonl').read_text(encoding='utf-8').splitlines())}
+    records={r['id']:r for r in map(json.loads,(ROOT/'data/campbell_glp/alcaeus_five_corrected.jsonl').read_text(encoding='utf-8').splitlines())}
     baseline={r['occurrence_id']:r for r in json.loads((ROOT/'runtime/alcaeus-occurrences/release-f/occurrences.json').read_text(encoding='utf-8'))}
     # Earlier batch source lines can contain words warmed in a later batch.
     # Freeze each batch separately rather than reusing its stale cache state.

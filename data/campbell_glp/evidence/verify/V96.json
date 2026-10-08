@@ -1,0 +1,27 @@
+{
+ "pages": [
+  96,
+  97,
+  98,
+  99,
+  100,
+  101,
+  102,
+  103,
+  104
+ ],
+ "lines_checked": 145,
+ "corrections": [
+  {
+   "poem_id": "campbell-glp:ibycus:286",
+   "line_index": 10,
+   "pdf_page": 98,
+   "current": "αισιν ἐρεμνὸς ἀθαμβὴς",
+   "corrected": "αίσιν ἐρεμνὸς ἀθαμβὴς",
+   "what": "a clear acute stroke is printed over the word (14x crop: sits above the left edge of σ, just right of ι); proof has no accent. Placement ambiguous (ι vs σ), assigned to ι",
+   "confidence": "medium"
+  }
+ ],
+ "missing_or_extra": [],
+ "label_fixes": []
+}

@@ -12,7 +12,7 @@ from backend.sense_ranker import sense_packet
 parser = argparse.ArgumentParser(description=__doc__)
 parser.add_argument('--responses', type=Path, default=ROOT / 'runtime/lyric-context-eval/baseline')
 args = parser.parse_args()
-rows = [json.loads(line) for line in (ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl').read_text(encoding='utf-8').splitlines()]
+rows = [json.loads(line) for line in (ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl').read_text(encoding='utf-8').splitlines()]
 paths = sorted([*args.responses.glob('*.response.json'), *args.responses.glob('*.body')])
 if not paths:
     raise SystemExit('No saved API responses found; no network call was made.')

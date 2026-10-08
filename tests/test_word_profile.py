@@ -11,7 +11,7 @@ from scripts.profile_word_lookup import forbid_network, select_forms, top_stats
 
 
 def test_actual_approved_source_forms_are_bounded_unique_and_unmodified():
-    artifact = Path(__file__).resolve().parents[1] / 'runtime/campbell-assignment/campbell_assignment.jsonl'
+    artifact = Path(__file__).resolve().parents[1] / 'data/campbell_glp/alcaeus_five_corrected.jsonl'
     for line in artifact.read_text(encoding='utf-8').splitlines():
         record = json.loads(line)
         result = select_forms(record, 5)
@@ -27,7 +27,7 @@ def test_missing_or_invalid_source_boundaries_are_not_replaced_with_whole_text()
 
 
 def test_diagnostic_does_not_call_dot_adjacent_letters_intact():
-    artifact = Path(__file__).resolve().parents[1] / 'runtime/campbell-assignment/campbell_assignment.jsonl'
+    artifact = Path(__file__).resolve().parents[1] / 'data/campbell_glp/alcaeus_five_corrected.jsonl'
     record = next(json.loads(line) for line in artifact.read_text(encoding='utf-8').splitlines()
                   if json.loads(line)['id'] == 'campbell-glp:alcaeus:130b')
     # This exact surviving suffix is in the source; its word boundary is not

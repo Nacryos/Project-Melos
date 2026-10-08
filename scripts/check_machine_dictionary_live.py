@@ -50,7 +50,7 @@ def main():
         raise ValueError('Reviewed full route fixture changed.')
     fixture = json.loads(raw)
     expected, form = fixture['machine_dictionary'], fixture['form']
-    records = ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl'
+    records = ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl'
     passage = next(json.loads(line) for line in records.read_text(encoding='utf-8').splitlines()
                    if json.loads(line)['id'] == 'campbell-glp:alcaeus:326')
     assert passage['text'].count(form) == 1

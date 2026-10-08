@@ -9,7 +9,7 @@ from backend import source_line_english as helper
 
 
 def _poems():
-    path=helper.ROOT/'runtime/campbell-assignment/campbell_assignment.jsonl'
+    path=helper.ROOT/'data/campbell_glp/alcaeus_five_corrected.jsonl'
     return {row['id']:row for row in map(json.loads,path.read_text(encoding='utf8').splitlines())}
 
 

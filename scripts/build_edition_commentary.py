@@ -18,14 +18,14 @@ import tempfile
 ROOT = Path(__file__).resolve().parents[1]
 COMMENTARY = ROOT / "runtime/campbell-commentary/commentary-candidates.jsonl"
 COMMENTARY_APPROVAL = ROOT / "runtime/campbell-commentary/audits/package-approval.json"
-GREEK = ROOT / "runtime/campbell-assignment/campbell_assignment.jsonl"
+GREEK = ROOT / "data/campbell_glp/alcaeus_five_corrected.jsonl"
 GREEK_APPROVAL = ROOT / "docs/audits/campbell-assignment-approval.json"
 OUTPUT = ROOT / "runtime/campbell-commentary/edition-commentary.public.json"
 PINS = {
     "commentary": "3e33ec114f43058f62553d4f6764f65c0e7bc655b204376c7ac82b063c07335a",
     "commentary_approval": "be05382bae2d421e3a164b3f257700cd35c32031ea91568c13dd740d33fe81c2",
-    "greek": "afe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b",
-    "greek_approval": "dbbd588e3068e106dfa771ed3038e7c1c43f91b40cde7e0e84740fab8e8c1ce5",
+    "greek": "ab2e1487885431669ebff57c566419bdceb1d6af69740e6ed05e8b7190d84457",
+    "greek_approval": "5d549fca6bc0662ce283f909fbf0b7fa3a819675e3f47fcae7629c8d5e9c47b4",
     "source_pdf": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
 }
 FRAGMENTS = ("34a", "129", "130b", "326", "350")

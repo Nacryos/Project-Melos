@@ -1,0 +1,2035 @@
+{
+ "disputes": [
+  {
+   "key": "ALCAEUS|338",
+   "type": "A_B_differ",
+   "a_range": [
+    1,
+    2
+   ],
+   "b_range": [
+    1,
+    2
+   ],
+   "pdf_pages": [
+    92
+   ],
+   "A": [
+    "χείμων, πεπάγαισιν δ’ ὐδάτων ῥόαι"
+   ],
+   "B": [
+    "χείμων, πεπάγαισιν δ’ ὐδάτων ῤόαι"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [
+    "ῤόαι: breathing on rho comma-shaped (smooth) as read"
+   ],
+   "dispute_id": 229
+  },
+  {
+   "key": "ALCAEUS|338",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    2,
+    3
+   ],
+   "b_range": [
+    2,
+    3
+   ],
+   "pdf_pages": [
+    92
+   ],
+   "A": [
+    "⟨          ἔνθεν          ⟩"
+   ],
+   "B": [
+    "⟨          ἔνθεν          ⟩"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "angle-bracket lines: blank widths approximated with 10-space blocks",
+      "lines 3-4 are angle-bracketed blank lines; blanks encoded as 10 spaces each side"
+     ]
+    }
+   ],
+   "dispute_id": 230
+  },
+  {
+   "key": "ALCAEUS|338",
+   "type": "A_B_differ",
+   "a_range": [
+    3,
+    4
+   ],
+   "b_range": [
+    3,
+    4
+   ],
+   "pdf_pages": [
+    92
+   ],
+   "A": [
+    "⟨                    ⟩"
+   ],
+   "B": [
+    "⟨          ⟩"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [],
+   "dispute_id": 231
+  },
+  {
+   "key": "ALCAEUS|338",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    4,
+    5
+   ],
+   "b_range": [
+    4,
+    5
+   ],
+   "pdf_pages": [
+    92
+   ],
+   "A": [
+    "κάββαλλε τὸν χείμων’, ἐπὶ μὲν τίθεις"
+   ],
+   "B": [
+    "κάββαλλε τὸν χείμων’, ἐπὶ μὲν τίθεις"
+   ],
+   "labels_A": [
+    "5"
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "χείμων’",
+       "open_forms": [
+        "χείμων΄"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 232
+  },
+  {
+   "key": "ALCAEUS|347",
+   "type": "A_B_differ",
+   "a_range": [
+    2,
+    3
+   ],
+   "b_range": [
+    2,
+    3
+   ],
+   "pdf_pages": [
+    93
+   ],
+   "A": [
+    "ἄχει δ’ ἐκ πετάλων· ἄδεα τέττιξ, πτερύγων δ’ ὔπα"
+   ],
+   "B": [
+    "ἄχει δ’ ἐκ πετάλων·ἄδεα τέττιξ, πτερύγων δ’ ὔπα"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [
+    "raised dot after πετάλων printed close between words; spacing approximated",
+    "raised dot between πετάλων and ἄδεα printed with little/no spacing; encoded 'πετάλων·ἄδεα'"
+   ],
+   "dispute_id": 233
+  },
+  {
+   "key": "ALCAEUS|347",
+   "type": "A_B_differ",
+   "a_range": [
+    5,
+    6
+   ],
+   "b_range": [
+    5,
+    6
+   ],
+   "pdf_pages": [
+    93
+   ],
+   "A": [
+    "⟨                    ⟩"
+   ],
+   "B": [
+    "⟨          ⟩"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [
+    "angle-bracketed blank line; blank encoded as 10 spaces"
+   ],
+   "dispute_id": 234
+  },
+  {
+   "key": "ALCAEUS|350",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    93
+   ],
+   "A": [
+    "ἦλθες ἐκ περάτων γᾶς ἐλεφαντίναν"
+   ],
+   "B": [
+    "ἦλθες ἐκ περάτων γᾶς ἐλεφαντίναν"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "ἦλθες: breathing under circumflex read as smooth",
+      "ἦλθες: breathing under circumflex unresolved (read smooth)"
+     ]
+    }
+   ],
+   "dispute_id": 235
+  },
+  {
+   "key": "ALCAEUS|350",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    1,
+    2
+   ],
+   "b_range": [
+    1,
+    2
+   ],
+   "pdf_pages": [
+    93
+   ],
+   "A": [
+    "λάβαν τὼ ξίφεος χρυσοδέταν ἔχων"
+   ],
+   "B": [
+    "λάβαν τὼ ξίφεος χρυσοδέταν ἔχων"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "τὼ",
+       "open_forms": [
+        "τῶ"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 236
+  },
+  {
+   "key": "ALCAEUS|350",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    5,
+    6
+   ],
+   "b_range": [
+    5,
+    6
+   ],
+   "pdf_pages": [
+    93
+   ],
+   "A": [
+    "κτένναις ἄνδρα μαχαίταν βασιληίων"
+   ],
+   "B": [
+    "κτένναις ἄνδρα μαχαίταν βασιληίων"
+   ],
+   "labels_A": [
+    "5"
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "βασιληίων",
+       "open_forms": [
+        "βασιληΐων"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 237
+  },
+  {
+   "key": "ALCAEUS|357",
+   "type": "A_B_differ",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    94
+   ],
+   "A": [
+    "[                    ] . . . [          ]"
+   ],
+   "B": [
+    "[          ] . . . [          ]"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [
+    "bracket line blank widths approximated",
+    "blank lacunae inside brackets encoded as 10 spaces; 3 dots between ] and ["
+   ],
+   "dispute_id": 238
+  },
+  {
+   "key": "ALCAEUS|357",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    9,
+    10
+   ],
+   "b_range": [
+    9,
+    10
+   ],
+   "pdf_pages": [
+    94
+   ],
+   "A": [
+    "θόρρακές τε νέω λίνω κόιλαί τε κὰτ ἄσπιδες βεβλήμεναι·"
+   ],
+   "B": [
+    "θόρρακές τε νέω λίνω κόιλαί τε κὰτ ἄσπιδες βεβλήμεναι·"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "faint speck at lower left of alpha in ἄσπιδες, taken as noise not underdot",
+      "speck at lower left of α in ἄσπιδες taken as noise, not underdot"
+     ]
+    }
+   ],
+   "dispute_id": 239
+  },
+  {
+   "key": "ALCAEUS|362",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    94
+   ],
+   "A": [
+    "ἀλλ’ ἀνήτω μὲν περὶ ταὶς δέραισι"
+   ],
+   "B": [
+    "ἀλλ’ ἀνήτω μὲν περὶ ταὶς δέραισι"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "ταὶς",
+       "open_forms": [
+        "ταῖσ"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 240
+  },
+  {
+   "key": "ALCAEUS|362",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    2,
+    3
+   ],
+   "b_range": [
+    2,
+    3
+   ],
+   "pdf_pages": [
+    94
+   ],
+   "A": [
+    "κὰδ δὲ χευάτω μύρον ἆδυ κὰτ τὼ"
+   ],
+   "B": [
+    "κὰδ δὲ χευάτω μύρον ἆδυ κὰτ τὼ"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "τὼ",
+       "open_forms": [
+        "τῶ"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 241
+  },
+  {
+   "key": "IBYCUS|282a",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    95
+   ],
+   "A": [
+    "οἳ κ]αὶ Δαρδανίδα Πριάμοιο ˌμέ-"
+   ],
+   "B": [
+    "οἳ κ]αὶ Δαρδανίδα Πριάμοιο ˌμέ-"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "οἳ: breathing read as rough (+grave), smooth not excluded; small low vertical tick printed before μέ- rendered as ˌ",
+      "breathing on initial eta read as rough (ἡ); small, could be smooth",
+      "ὃν: breathing+accent on omicron read as rough+grave; ἁ rough breathing only",
+      "οἳ: breathing+grave, breathing direction tiny (read rough); 'ˌ' = short vertical stroke printed below line before μέ- (encoded U+02CC)",
+      "breathing on ἡ looks rough but small; check",
+      "ὃν: breathing small, read as rough + grave"
+     ]
+    }
+   ],
+   "dispute_id": 242
+  },
+  {
+   "key": "IBYCUS|282a",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    2,
+    3
+   ],
+   "b_range": [
+    2,
+    3
+   ],
+   "pdf_pages": [
+    95
+   ],
+   "A": [
+    "Ἄργ]οθεν ὀρνυμένοι"
+   ],
+   "B": [
+    "Ἄργ]οθεν ὀρνυμένοι"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "initial ὡ partly obscured at left margin; breathing read as rough, accent on ὡσεὶ grave",
+      "left margin faint in scan: breathing on ὡσεὶ not clearly legible (rough assumed)"
+     ]
+    }
+   ],
+   "dispute_id": 243
+  },
+  {
+   "key": "IBYCUS|282a",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    6,
+    7
+   ],
+   "b_range": [
+    6,
+    7
+   ],
+   "pdf_pages": [
+    95
+   ],
+   "A": [
+    "πό]λεμον κατὰ δακρ[υό]εντα,"
+   ],
+   "B": [
+    "πό]λεμον κατὰ δακρ[υό]εντα,"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "small raised mark above the closing bracket after θλοῦ, ignored as print speck",
+      "small mark above the ] after ἐσ[θλοῦ — treated as bracket serif"
+     ]
+    }
+   ],
+   "dispute_id": 244
+  },
+  {
+   "key": "IBYCUS|282a",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    7,
+    8
+   ],
+   "b_range": [
+    7,
+    8
+   ],
+   "pdf_pages": [
+    95
+   ],
+   "A": [
+    "Πέρ]γαμον δ’ ἀνέ[β]α ταλαπείριο[ν ἄ]τα"
+   ],
+   "B": [
+    "Πέρ]γαμον δ’ ἀνέ[β]α ταλαπείριο[ν ἄ]τα"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "ἑξεῖς: breathing on initial epsilon read as rough, no accent on it",
+      "ἑξεῖς: breathing small blob, rough vs smooth unclear (rough read)"
+     ]
+    }
+   ],
+   "dispute_id": 245
+  },
+  {
+   "key": "IBYCUS|282a",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    10,
+    11
+   ],
+   "b_range": [
+    10,
+    11
+   ],
+   "pdf_pages": [
+    95
+   ],
+   "A": [
+    "ἐστ’] ἐπιθύμιον οὔτε τανί[σφ]υρ[ον"
+   ],
+   "B": [
+    "ἐστ’] ἐπιθύμιον οὔτε τανί[σφ]υρ[ον"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "ἐστ’]",
+       "open_forms": [
+        "ἔστ"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 246
+  },
+  {
+   "key": "IBYCUS|282a",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    11,
+    12
+   ],
+   "b_range": [
+    11,
+    12
+   ],
+   "pdf_pages": [
+    95
+   ],
+   "A": [
+    "ὑμ]νῆν Κασσάνδραν"
+   ],
+   "B": [
+    "ὑμ]νῆν Κασσάνδραν"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "ὑμ]νῆν: breathing on upsilon read as rough; small, smooth not excluded",
+      "ὡ[ς: rough breathing with downward tail; read as breathing only, could be rough+acute",
+      "ὑμ]νῆν: breathing c-shaped (rough)",
+      "ὡ[ς vs ὠ[ς: breathing appears rough"
+     ]
+    }
+   ],
+   "dispute_id": 247
+  },
+  {
+   "key": "IBYCUS|282a",
+   "type": "A_B_differ",
+   "a_range": [
+    13,
+    14
+   ],
+   "b_range": [
+    13,
+    14
+   ],
+   "pdf_pages": [
+    95
+   ],
+   "A": [
+    "Τρο]ίας θ’ὑψιπύλοιο ἁλώσι[μο]ν"
+   ],
+   "B": [
+    "Τρο]ίας θ’ ὑψιπύλοιο ἁλώσι[μο]ν"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [
+    "θ’ὑψιπύλοιο printed without space after apostrophe; ὑ and ἁλώσι[μο]ν read as rough breathing"
+   ],
+   "dispute_id": 248
+  },
+  {
+   "key": "IBYCUS|282a",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    14,
+    15
+   ],
+   "b_range": [
+    14,
+    15
+   ],
+   "pdf_pages": [
+    95
+   ],
+   "A": [
+    "ἆμ]αρ ἀνώνυμον· οὐδ’ ἐπ̣[ελεύσομαι"
+   ],
+   "B": [
+    "ἆμ]αρ ἀνώνυμον· οὐδ’ ἐπ̣[ελεύσομαι"
+   ],
+   "labels_A": [
+    "15"
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "οἵ: breathing read as rough+acute; could be grave; φώτες printed with acute (kept)",
+      "ἆμ]αρ: breathing under circumflex unresolved (read smooth); ἐπ̣: small dot below π read as underdot"
+     ]
+    }
+   ],
+   "dispute_id": 249
+  },
+  {
+   "key": "IBYCUS|282a",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    28,
+    29
+   ],
+   "b_range": [
+    28,
+    29
+   ],
+   "pdf_pages": [
+    96
+   ],
+   "A": [
+    "ἠλύθο̣[ν ἐς Τροΐα]ν"
+   ],
+   "B": [
+    "ἠλύθο̣[ν ἐς Τροΐα]ν"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "Τροΐα]ν",
+       "open_forms": [
+        "τροίαν"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 250
+  },
+  {
+   "key": "IBYCUS|282a",
+   "type": "A_B_differ",
+   "a_range": [
+    29,
+    30
+   ],
+   "b_range": [
+    29,
+    30
+   ],
+   "pdf_pages": [
+    96
+   ],
+   "A": [
+    "ἱπποτρόφο[ν οἵ τ]ε φώτες"
+   ],
+   "B": [
+    "ἱπποτρόφο[ν οἵ τ]ε φῶτες"
+   ],
+   "labels_A": [
+    "30"
+   ],
+   "labels_B": [
+    "30"
+   ],
+   "uncertain_notes": [],
+   "dispute_id": 251
+  },
+  {
+   "key": "IBYCUS|282a",
+   "type": "A_B_differ",
+   "a_range": [
+    34,
+    36
+   ],
+   "b_range": [
+    34,
+    36
+   ],
+   "pdf_pages": [
+    96
+   ],
+   "A": [
+    ". . . . . .] . ατ[. . . . . . .]γυρος.",
+    "Τυδέος υἷ]ὸς ἀπ’ Ἄργεος"
+   ],
+   "B": [
+    ". . . . . .] . ατ[. . . . . . .]γ̣υρος.",
+    "Τυδέος υἱ]ὸς ἀπ’ Ἄργεος"
+   ],
+   "labels_A": [
+    "35",
+    ""
+   ],
+   "labels_B": [
+    "35",
+    ""
+   ],
+   "uncertain_notes": [],
+   "dispute_id": 252
+  },
+  {
+   "key": "IBYCUS|286",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    97
+   ],
+   "A": [
+    "ἦρι μὲν αἵ τε Κυδώνιαι"
+   ],
+   "B": [
+    "ἦρι μὲν αἵ τε Κυδώνιαι"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "ἦρι: first letter damaged at left margin; breathing/accent read as smooth+circumflex. αἵ read rough+acute (could be smooth)",
+      "ἀίσ-: smooth breathing on alpha, acute on iota (no diaeresis seen)",
+      "left margin faint: breathing/accent on ἦρι read as smooth+circumflex"
+     ]
+    }
+   ],
+   "dispute_id": 253
+  },
+  {
+   "key": "IBYCUS|286",
+   "type": "A_B_differ",
+   "a_range": [
+    4,
+    5
+   ],
+   "b_range": [
+    4,
+    5
+   ],
+   "pdf_pages": [
+    97
+   ],
+   "A": [
+    "αὐξόμεναι σκιεροίσιν ὑφ’ ἕρνεσιν"
+   ],
+   "B": [
+    "αὐξόμεναι σκιεροίσιν ὑφ’ ἔρνεσιν"
+   ],
+   "labels_A": [
+    "5"
+   ],
+   "labels_B": [
+    "5"
+   ],
+   "uncertain_notes": [
+    "σκιεροίσιν printed with acute (not circumflex) as seen"
+   ],
+   "dispute_id": 254
+  },
+  {
+   "key": "IBYCUS|286",
+   "type": "A_B_differ",
+   "a_range": [
+    7,
+    8
+   ],
+   "b_range": [
+    7,
+    8
+   ],
+   "pdf_pages": [
+    97
+   ],
+   "A": [
+    "ἀλλ’ ἄθ’ ὑπὸ στεροπᾶς φλέγων"
+   ],
+   "B": [
+    "ἀλλ’ ἅθ’ ὑπὸ στεροπᾶς φλέγων"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [
+    "ἀλλ’ initial alpha damaged; ἄθ’ read smooth+acute",
+    "ἅθ’: breathing on α read rough+acute; left edge of ἀλλ’ faint"
+   ],
+   "dispute_id": 255
+  },
+  {
+   "key": "IBYCUS|286",
+   "type": "A_B_differ",
+   "a_range": [
+    10,
+    11
+   ],
+   "b_range": [
+    10,
+    11
+   ],
+   "pdf_pages": [
+    98
+   ],
+   "A": [
+    "αισιν ἐρεμνὸς ἀθαμβὴς"
+   ],
+   "B": [
+    "αισ́ιν ἐρεμνὸς ἀθαμβὴς"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [],
+   "dispute_id": 256
+  },
+  {
+   "key": "IBYCUS|287",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    4,
+    5
+   ],
+   "b_range": [
+    4,
+    5
+   ],
+   "pdf_pages": [
+    98
+   ],
+   "A": [
+    "ἦ μὰν τρομέω νιν ἐπερχόμενον,"
+   ],
+   "B": [
+    "ἦ μὰν τρομέω νιν ἐπερχόμενον,"
+   ],
+   "labels_A": [
+    "5"
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "ἦ: breathing read as smooth with circumflex; a stray mark at left; could be rough",
+      "ἦ: breathing over circumflex tiny; smooth read, rough possible"
+     ]
+    }
+   ],
+   "dispute_id": 257
+  },
+  {
+   "key": "IBYCUS|288",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    99
+   ],
+   "A": [
+    "Εὐρύαλε γλαυκέων Χαρίτων θάλος, ⟨Ὡρᾶν⟩"
+   ],
+   "B": [
+    "Εὐρύαλε γλαυκέων Χαρίτων θάλος, ⟨Ὡρᾶν⟩"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "initial Ε of Εὐρύαλε damaged at left margin; ⟨Ὡρᾶν⟩ printed with Ὡ rough breathing",
+      "left margin very faint: breathing on Εὐρύαλε not legible (smooth assumed)",
+      "⟨Ὡρᾶν⟩: rough breathing printed as separate sign before Ω inside the angle brackets"
+     ]
+    }
+   ],
+   "dispute_id": 258
+  },
+  {
+   "key": "IBYCUS|288",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    2,
+    3
+   ],
+   "b_range": [
+    2,
+    3
+   ],
+   "pdf_pages": [
+    99
+   ],
+   "A": [
+    "ἅ τ’ ἀγανοβλέφαρος Πει-"
+   ],
+   "B": [
+    "ἅ τ’ ἀγανοβλέφαρος Πει-"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "first word damaged at left margin; read ἅ (rough+acute?) - letter and accent uncertain",
+      "left margin very faint: ἅ — breathing and accent on α not legible (rough+acute assumed)"
+     ]
+    }
+   ],
+   "dispute_id": 259
+  },
+  {
+   "key": "IBYCUS|288",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    3,
+    4
+   ],
+   "b_range": [
+    3,
+    4
+   ],
+   "pdf_pages": [
+    99
+   ],
+   "A": [
+    "θὼ ῥοδέοισιν ἐν ἄνθεσι θρέψαν."
+   ],
+   "B": [
+    "θὼ ῥοδέοισιν ἐν ἄνθεσι θρέψαν."
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "θὼ damaged at left margin; accent read as grave",
+      "left margin very faint: θὼ — accent on ω unclear (grave assumed)"
+     ]
+    }
+   ],
+   "dispute_id": 260
+  },
+  {
+   "key": "IBYCUS|317a",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    1,
+    2
+   ],
+   "b_range": [
+    1,
+    2
+   ],
+   "pdf_pages": [
+    99
+   ],
+   "A": [
+    "ἰζάνοισι ποικίλαι αἰολόδειροι"
+   ],
+   "B": [
+    "ἰζάνοισι ποικίλαι αἰολόδειροι"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "ἰζάνοισι",
+       "open_forms": [
+        "ἱζάνοισι"
+       ]
+      }
+     ]
+    },
+    {
+     "both_passes_uncertain": [
+      "initial ἰ damaged at left margin; breathing not legible",
+      "left margin very faint: breathing on ἰζάνοισι not legible (smooth assumed)"
+     ]
+    }
+   ],
+   "dispute_id": 261
+  },
+  {
+   "key": "IBYCUS|317a",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    3,
+    4
+   ],
+   "b_range": [
+    3,
+    4
+   ],
+   "pdf_pages": [
+    99
+   ],
+   "A": [
+    "ἀλκυόνες τανυσίπτεροι."
+   ],
+   "B": [
+    "ἀλκυόνες τανυσίπτεροι."
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "initial ἀ damaged at left margin; breathing not legible",
+      "left margin very faint: breathing on ἀλκυόνες not legible (smooth assumed)"
+     ]
+    }
+   ],
+   "dispute_id": 262
+  },
+  {
+   "key": "ANACREON|348",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    99
+   ],
+   "A": [
+    "γουνοῦμαί σ’ ἐλαφηβόλε"
+   ],
+   "B": [
+    "γουνοῦμαί σ’ ἐλαφηβόλε"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "γουνοῦμαί",
+       "open_forms": [
+        "γουνοῡμαί"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 263
+  },
+  {
+   "key": "ANACREON|348",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    1,
+    2
+   ],
+   "b_range": [
+    1,
+    2
+   ],
+   "pdf_pages": [
+    99
+   ],
+   "A": [
+    "ξανθὴ παῖ Διὸς ἀγρίων"
+   ],
+   "B": [
+    "ξανθὴ παῖ Διὸς ἀγρίων"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "παῖ",
+       "open_forms": [
+        "παῑ"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 264
+  },
+  {
+   "key": "ANACREON|348",
+   "type": "A_B_differ",
+   "a_range": [
+    3,
+    4
+   ],
+   "b_range": [
+    3,
+    4
+   ],
+   "pdf_pages": [
+    99
+   ],
+   "A": [
+    "ἤ κου νῦν ἐπὶ Ληθαίου"
+   ],
+   "B": [
+    "ἥ κου νῦν ἐπὶ Ληθαίου"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [
+    "ἤ: breathing+accent at damaged left margin, read smooth+acute; could be rough",
+    "left margin faint: ἥ — rough+acute assumed, grave/smooth not excluded"
+   ],
+   "dispute_id": 265
+  },
+  {
+   "key": "ANACREON|348",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    6,
+    7
+   ],
+   "b_range": [
+    6,
+    7
+   ],
+   "pdf_pages": [
+    100
+   ],
+   "A": [
+    "χαίρουσ’, οὐ γὰρ ἀνημέρους"
+   ],
+   "B": [
+    "χαίρουσ’, οὐ γὰρ ἀνημέρους"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "ἀνημέρους",
+       "open_forms": [
+        "ανημέρουσ"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 266
+  },
+  {
+   "key": "ANACREON|356",
+   "type": "A_B_differ",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    100
+   ],
+   "A": [
+    "(a) ἄγε δὴ φέρ’ ἡμὶν ὦ παῖ"
+   ],
+   "B": [
+    "ἄγε δὴ φέρ’ ἡμὶν ὦ παῖ"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [
+    "part labels (a)/(b) printed in text column kept at start of line; continuation lines indented relative to label. ἡμὶν breathing read as rough",
+    "parts '(a)' and '(b)' printed in the text column before the first word; recorded in strophe_label, not in text",
+    "ὦ: breathing over circumflex barely visible (smooth assumed); ἡμὶν breathing read rough"
+   ],
+   "dispute_id": 267
+  },
+  {
+   "key": "ANACREON|356",
+   "type": "A_B_differ",
+   "a_range": [
+    6,
+    7
+   ],
+   "b_range": [
+    6,
+    7
+   ],
+   "pdf_pages": [
+    100
+   ],
+   "A": [
+    "(b) ἄγε δηὖτε μηκέτ’ οὕτω"
+   ],
+   "B": [
+    "ἄγε δηὖτε μηκέτ’ οὕτω"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [],
+   "dispute_id": 268
+  },
+  {
+   "key": "ANACREON|357",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    2,
+    3
+   ],
+   "b_range": [
+    2,
+    3
+   ],
+   "pdf_pages": [
+    100
+   ],
+   "A": [
+    "πορφυρῆ τ’ Ἀφροδίτη"
+   ],
+   "B": [
+    "πορφυρῆ τ’ Ἀφροδίτη"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "ἔλθ’ initial epsilon damaged at left margin, breathing/accent read smooth+acute; ἡμίν breathing read rough",
+      "left margin faint: breathing/accent on ἔλθ’ hard to read (smooth+acute assumed)"
+     ]
+    }
+   ],
+   "dispute_id": 269
+  },
+  {
+   "key": "ANACREON|358",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    101
+   ],
+   "A": [
+    "σφαίρῃ δηὖτέ με πορφυρῇ"
+   ],
+   "B": [
+    "σφαίρῃ δηὖτέ με πορφυρῇ"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "initial σ damaged at left margin",
+      "σφαίρῃ: left margin faint; small stroke under η read as iota subscript"
+     ]
+    }
+   ],
+   "dispute_id": 270
+  },
+  {
+   "key": "ANACREON|358",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    4,
+    5
+   ],
+   "b_range": [
+    4,
+    5
+   ],
+   "pdf_pages": [
+    101
+   ],
+   "A": [
+    "ἡ δ’, ἐστὶν γὰρ ἀπ’ εὐκτίτου"
+   ],
+   "B": [
+    "ἡ δ’, ἐστὶν γὰρ ἀπ’ εὐκτίτου"
+   ],
+   "labels_A": [
+    "5"
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "ἡ: damaged at left margin; breathing read as rough, no accent seen",
+      "left margin faint: ἡ breathing (rough assumed), no accent visible"
+     ]
+    }
+   ],
+   "dispute_id": 271
+  },
+  {
+   "key": "ANACREON|388",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    102
+   ],
+   "A": [
+    "πρὶν μὲν ἔχων βερβέριον, καλύμματ’ ἐσφηκωμένα,"
+   ],
+   "B": [
+    "πρὶν μὲν ἔχων βερβέριον, καλύμματ’ ἐσφηκωμένα,"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "ἔχων",
+       "open_forms": [
+        "έχων"
+       ]
+      },
+      {
+       "word": "ἐσφηκωμένα",
+       "open_forms": [
+        "εσφηκωμένα"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 272
+  },
+  {
+   "key": "ANACREON|388",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    1,
+    2
+   ],
+   "b_range": [
+    1,
+    2
+   ],
+   "pdf_pages": [
+    102
+   ],
+   "A": [
+    "καὶ ξυλίνους ἀστραγάλους ἐν ὠσὶ καὶ ψιλὸν περὶ"
+   ],
+   "B": [
+    "καὶ ξυλίνους ἀστραγάλους ἐν ὠσὶ καὶ ψιλὸν περὶ"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "ἀστραγάλους",
+       "open_forms": [
+        "αστραγάλουσ"
+       ]
+      },
+      {
+       "word": "ἐν",
+       "open_forms": [
+        "εν"
+       ]
+      },
+      {
+       "word": "ὠσὶ",
+       "open_forms": [
+        "ωσί"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 273
+  },
+  {
+   "key": "ANACREON|388",
+   "type": "A_B_differ",
+   "a_range": [
+    2,
+    3
+   ],
+   "b_range": [
+    2,
+    3
+   ],
+   "pdf_pages": [
+    102
+   ],
+   "A": [
+    "πλευρῆσι ⟨δέρμ’ ἤει⟩ βοός,"
+   ],
+   "B": [
+    "πλευρῇσι ⟨δέρμ’ ἤει⟩ βοός,"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [
+    "πλευρῆσι: no iota subscript visible; speck inside δ of δέρμ’ not taken as underdot",
+    "πλευρῇσι: iota subscript read under η; ἤει smooth+acute",
+    "εὑρίσκων: breathing read rough (c-shaped)"
+   ],
+   "dispute_id": 274
+  },
+  {
+   "key": "ANACREON|388",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    3,
+    4
+   ],
+   "b_range": [
+    3,
+    4
+   ],
+   "pdf_pages": [
+    103
+   ],
+   "A": [
+    "νήπλυτον εἴλυμα κακῆς ἀσπίδος, ἀρτοπώλισιν"
+   ],
+   "B": [
+    "νήπλυτον εἴλυμα κακῆς ἀσπίδος, ἀρτοπώλισιν"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "εἴλυμα",
+       "open_forms": [
+        "είλυμα"
+       ]
+      },
+      {
+       "word": "κακῆς",
+       "open_forms": [
+        "κακήσ"
+       ]
+      },
+      {
+       "word": "ἀσπίδος",
+       "open_forms": [
+        "ασπίδοσ"
+       ]
+      },
+      {
+       "word": "ἀρτοπώλισιν",
+       "open_forms": [
+        "αρτοπώλισιν"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 275
+  },
+  {
+   "key": "ANACREON|388",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    4,
+    5
+   ],
+   "b_range": [
+    4,
+    5
+   ],
+   "pdf_pages": [
+    103
+   ],
+   "A": [
+    "κἀθελοπόρνοισιν ὁμιλέων ὁ πονηρὸς Ἀρτέμων,"
+   ],
+   "B": [
+    "κἀθελοπόρνοισιν ὁμιλέων ὁ πονηρὸς Ἀρτέμων,"
+   ],
+   "labels_A": [
+    "5"
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "κἀθελοπόρνοισιν",
+       "open_forms": [
+        "καθελοπόρνοισιν"
+       ]
+      },
+      {
+       "word": "ὁμιλέων",
+       "open_forms": [
+        "ομιλέων"
+       ]
+      },
+      {
+       "word": "Ἀρτέμων",
+       "open_forms": [
+        "αρτέμων"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 276
+  },
+  {
+   "key": "ANACREON|388",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    5,
+    6
+   ],
+   "b_range": [
+    5,
+    6
+   ],
+   "pdf_pages": [
+    103
+   ],
+   "A": [
+    "κίβδηλον εὑρίσκων βίον,"
+   ],
+   "B": [
+    "κίβδηλον εὑρίσκων βίον,"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "εὑρίσκων",
+       "open_forms": [
+        "ευρίσκων"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 277
+  },
+  {
+   "key": "ANACREON|388",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    6,
+    7
+   ],
+   "b_range": [
+    6,
+    7
+   ],
+   "pdf_pages": [
+    103
+   ],
+   "A": [
+    "πολλὰ μὲν ἐν δουρὶ τιθεὶς αὐχένα, πολλὰ δ’ ἐν τροχῷ,"
+   ],
+   "B": [
+    "πολλὰ μὲν ἐν δουρὶ τιθεὶς αὐχένα, πολλὰ δ’ ἐν τροχῷ,"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "ἐν",
+       "open_forms": [
+        "εν"
+       ]
+      },
+      {
+       "word": "αὐχένα",
+       "open_forms": [
+        "αυχένα"
+       ]
+      },
+      {
+       "word": "ἐν",
+       "open_forms": [
+        "εν"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 278
+  },
+  {
+   "key": "ANACREON|388",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    7,
+    8
+   ],
+   "b_range": [
+    7,
+    8
+   ],
+   "pdf_pages": [
+    103
+   ],
+   "A": [
+    "πολλὰ δὲ νῶτον σκυτίνῃ μάστιγι θωμιχθείς, κόμην"
+   ],
+   "B": [
+    "πολλὰ δὲ νῶτον σκυτίνῃ μάστιγι θωμιχθείς, κόμην"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "νῶτον",
+       "open_forms": [
+        "νώτον"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 279
+  },
+  {
+   "key": "ANACREON|388",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    8,
+    9
+   ],
+   "b_range": [
+    8,
+    9
+   ],
+   "pdf_pages": [
+    103
+   ],
+   "A": [
+    "πώγωνά τ’ ἐκτετιλμένος·"
+   ],
+   "B": [
+    "πώγωνά τ’ ἐκτετιλμένος·"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "ἐκτετιλμένος",
+       "open_forms": [
+        "εκτετιλμένοσ"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 280
+  },
+  {
+   "key": "ANACREON|388",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    9,
+    10
+   ],
+   "b_range": [
+    9,
+    10
+   ],
+   "pdf_pages": [
+    103
+   ],
+   "A": [
+    "νῦν δ’ ἐπιβαίνει σατινέων χρύσεα φορέων κατέρματα"
+   ],
+   "B": [
+    "νῦν δ’ ἐπιβαίνει σατινέων χρύσεα φορέων κατέρματα"
+   ],
+   "labels_A": [
+    "10"
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "νῦν",
+       "open_forms": [
+        "νύν"
+       ]
+      },
+      {
+       "word": "ἐπιβαίνει",
+       "open_forms": [
+        "επιβαίνει"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 281
+  },
+  {
+   "key": "ANACREON|388",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    10,
+    11
+   ],
+   "b_range": [
+    10,
+    11
+   ],
+   "pdf_pages": [
+    103
+   ],
+   "A": [
+    "†παῖς Κύκης† καὶ σκιαδίσκην ἐλεφαντίνην φορεῖ"
+   ],
+   "B": [
+    "†παῖς Κύκης† καὶ σκιαδίσκην ἐλεφαντίνην φορεῖ"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "παῖς",
+       "open_forms": [
+        "παίσ"
+       ]
+      },
+      {
+       "word": "ἐλεφαντίνην",
+       "open_forms": [
+        "ελεφαντίνην"
+       ]
+      },
+      {
+       "word": "φορεῖ",
+       "open_forms": [
+        "φορεί"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 282
+  },
+  {
+   "key": "ANACREON|396",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    104
+   ],
+   "A": [
+    "φέρ’ ὕδωρ φέρ’ οἶνον ὦ παῖ φέρε ⟨δ’⟩ ἀνθεμόεντας ἡμὶν"
+   ],
+   "B": [
+    "φέρ’ ὕδωρ φέρ’ οἶνον ὦ παῖ φέρε ⟨δ’⟩ ἀνθεμόεντας ἡμὶν"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "both_passes_uncertain": [
+      "speck below line between ι and ν of οἶνον not taken as underdot; ἡμὶν breathing read rough",
+      "ὦ: breathing over circumflex small; smooth read, rough not excluded"
+     ]
+    }
+   ],
+   "dispute_id": 283
+  },
+  {
+   "key": "ANACREON|417",
+   "type": "A_B_differ",
+   "a_range": [
+    0,
+    1
+   ],
+   "b_range": [
+    0,
+    1
+   ],
+   "pdf_pages": [
+    105
+   ],
+   "A": [
+    "πῶλε Θρηκίη, τί δή με λοξὸν ὄμμασι βλέπουσα"
+   ],
+   "B": [
+    "πῶλε Θρῃκίη, τί δή με λοξὸν ὄμμασι βλέπουσα"
+   ],
+   "labels_A": [
+    ""
+   ],
+   "labels_B": [
+    ""
+   ],
+   "uncertain_notes": [
+    "ὄμμασι breathing read smooth; marginal at scan resolution"
+   ],
+   "dispute_id": 284
+  },
+  {
+   "key": "ANACREON|419",
+   "type": "agreed_but_flagged",
+   "a_range": [
+    1,
+    2
+   ],
+   "b_range": [
+    1,
+    2
+   ],
+   "pdf_pages": [
+    105
+   ],
+   "A": [
+    "ὤλεσας δ’ ἥβην ἀμύνων πατρίδος δουληΐην."
+   ],
+   "B": [
+    "ὤλεσας δ’ ἥβην ἀμύνων πατρίδος δουληΐην."
+   ],
+   "labels_A": [
+    ""
+   ],
+   "reasons": [
+    {
+     "crosscheck": [
+      {
+       "word": "δουληΐην",
+       "open_forms": [
+        "δουληίην"
+       ]
+      }
+     ]
+    }
+   ],
+   "dispute_id": 285
+  }
+ ]
+}

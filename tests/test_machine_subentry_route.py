@@ -46,7 +46,7 @@ def route_probe(mode, endpoint='passage', release_server=False, full_word_source
         c.get('lemma') == '\u1f00\u03c3\u03c5\u03bd\u03b5\u03c4\u03ad\u03c9'
         for c in row['result'].get('machine_candidates', [])))
     form = case['form']
-    passage = next(row for line in (ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl').read_text(encoding='utf8').splitlines()
+    passage = next(row for line in (ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl').read_text(encoding='utf8').splitlines()
                    if form in (row := json.loads(line)).get('text', ''))
     start = passage['text'].index(form)
     request = {'version': 1, 'passage_id': passage['id'], 'start': start, 'end': start + len(form),

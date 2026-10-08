@@ -1,0 +1,27 @@
+{
+ "pages": [
+  141,
+  142,
+  143,
+  144,
+  145,
+  146,
+  147,
+  148,
+  149
+ ],
+ "lines_checked": 215,
+ "corrections": [
+  {
+   "poem_id": "campbell-glp:bacchylides:5",
+   "line_index": 141,
+   "pdf_page": 148,
+   "current": "φῖτρον †ἐγκλαύσασα†· τὸν δὴ",
+   "corrected": "φίτρον †ἐγκλαύσασα†· τὸν δὴ",
+   "what": "φῖ -> φί: 10x crop shows a single straight acute stroke on iota, not a circumflex",
+   "confidence": "high"
+  }
+ ],
+ "missing_or_extra": [],
+ "label_fixes": []
+}

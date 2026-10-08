@@ -294,7 +294,7 @@ def priority_cases(rows):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--records', type=Path, default=ROOT/'runtime/campbell-assignment/campbell_assignment.jsonl')
+    parser.add_argument('--records', type=Path, default=ROOT/'data/campbell_glp/alcaeus_five_corrected.jsonl')
     parser.add_argument('--base', default='https://greeklyric.com')
     parser.add_argument('--output', type=Path, default=ROOT/'runtime/alcaeus-occurrences/baseline')
     parser.add_argument('--offline', action='store_true')

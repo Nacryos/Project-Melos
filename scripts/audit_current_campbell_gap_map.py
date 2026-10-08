@@ -44,7 +44,7 @@ def receipt(path, sources):
 
 
 def main():
-    source_path = "runtime/campbell-assignment/campbell_assignment.jsonl"
+    source_path = "data/campbell_glp/alcaeus_five_corrected.jsonl"
     sources = {r["id"]: r for r in map(json.loads, (ROOT / source_path).read_text(encoding="utf-8").splitlines())}
     h_path, i_path = "runtime/lexical-release-h/live-verify.json", "runtime/lexical-release-i/live-verify.json"
     h, i = read(h_path), read(i_path)

@@ -57,7 +57,7 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--machine-bundle', type=Path)
     args = parser.parse_args()
-    source_path = ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl'
+    source_path = ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl'
     records = [json.loads(line) for line in source_path.read_text(encoding='utf-8').splitlines()]
     receipts = Receipts(args.origin, args.output / 'receipts', timeout=180)
     expected_machine, seen_machine = {}, set()

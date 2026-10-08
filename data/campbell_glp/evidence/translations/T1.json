@@ -1,0 +1,1216 @@
+{
+ "items": [
+  {
+   "campbell_id": "campbell-glp:alcman:1",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcman, Edmonds fragment 1",
+   "translator_number": "1",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 71,
+     "printed_page": "51",
+     "sha256": "9eac07892eab290d228808a5d5c13670087a66bd9c5f680f5a7b5a43b68a6a51",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0071.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 73,
+     "printed_page": "53",
+     "sha256": "3a3ca32bea593bcad71e807167b0e0c7724c052647d814d54268a5e80305d24a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0073.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 75,
+     "printed_page": "55",
+     "sha256": "e61665a5d673c1260b9f9a8c10f3c0f87437d43e8e708462c6b92f95efea06a3",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0075.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 77,
+     "printed_page": "57",
+     "sha256": "dab128b0c658f6f3a98add3937479d50579d1f77a677fda8349f22320820ff8a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0077.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 79,
+     "printed_page": "59",
+     "sha256": "8c73092d17f7719552226d611b36fd3708db3c1b3f9efaa4e86a6df2e2e86461",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0079.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 70,
+     "printed_page": "50",
+     "sha256": "32929ba8624ff9b1e08100da5e43fea60a0c9998fa01d67959ebda14d3766ada",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0070.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 72,
+     "printed_page": "52",
+     "sha256": "4efa48ef73cb9093fd9ab32bf2b8d61fce4c5e36452f3acbcb859b3c6377393b",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0072.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 74,
+     "printed_page": "54",
+     "sha256": "b6ac6a3f9bf88279fddb06e823e1421698999347fa10b85f555797bc97b17c7b",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0074.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 76,
+     "printed_page": "56",
+     "sha256": "fe991c08135949ac871691c026a6412a2e16ff8cf02048e24d10fdc2a8cfe085",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0076.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 78,
+     "printed_page": "58",
+     "sha256": "78239abfc7b43019bb83b85ea31af68138db3aafaa0a8d7c9c6573ca3fc4b793",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0078.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": ". . . . . . . .\n. . . . . . Polydeuces.¹ Among the slain ’tis true I cannot reckon Lycaeus, but both Enarsphorus I can and the swift Sebrus, Alcimus the mighty and Hippothoüs the helmeted, Euteiches and chieftain Areïus, and [Acmon] noblest of demigods. And shall we pass Scaeus by, that was so great a captain of the host, and Eurytus and Alcon that were supremest of heroes in the tumult of the battle-mellay? Not so; vanquished were they all by the eldest of Gods, to wit by Destiny and Device, and their strength had not so much as a shoe to her foot. Nay, mortal man may not go soaring to the heavens, nor seek to wed the Queen of Paphos or to wive any silver-shining daughter of Porcus¹ of the sea; inviolate also is that chamber of Zeus where dwell the Graces whose eyes look love² . . . .\n. . . . . . . .\n. . . . . . . .\n. . . . . . . .\n. . . . . . . .\n. . . . went; and they perished one of them by an arrow and another by a millstone of hard rock, till one and all were had to Hell. These by their own folly did seek them their dooms, and their evil imaginations brought them into suffering never to be forgot.\nVerily there is a vengeance from on high, and happy he that weaveth merrily one day’s weft without a tear. And so, as for me, I¹ sing now of the light that is Agido’s. Bright I see it as the very sun’s which the same Agido now invoketh to shine upon us.² And yet neither praise nor blame can I give at all to such as she without offence to our splendid leader, who herself appeareth as pre-eminent as would a well-knit steed of ringing hoof that overcometh in the race, if he were set to graze among the unsubstantial cattle³ of our dreams that fly.\nSee you not first that the courser is of Enetic blood, and secondly that the tresses that bloom upon my cousin Hagesichora⁴ are like the purest gold? and as for her silvern face, how shall I put it you in express words? Such is Hagesichora; and yet she whose beauty shall run second not unto hers but unto Agido’s, shall run as courser Colaxaean to pure Ibenian-bred; for as we bear along her robe to Orthia, these our Doves⁵ rise to fight for us⁶ amid the ambrosial night not as those heavenly Doves but brighter, aye even as Sirius himself.\nFor neither is abundance of purple defence enough,¹ nor speckled snake of pure gold, nor the Lydian wimple that adorns the sweet and soft-eyed maid, nor yet the tresses of our Nanno, nay nor Areta the goddess-like, nor Thylacis and Cleësithera, nor again shalt thou go to Aenesimbrota’s and say ‘Give me Astaphis and let me see Philylla, and Damareta and the lovely Ianthemis;’ there is no need of that, for I am safe² with Hagesichora.\nFor is not the fair-ankled Hagesichora here present and abideth hard by Agido to commend our Thosteria³? Then O receive their prayers, ye Gods; for to the Gods belongeth the accomplishment. And for the end of my song I will tell you a passing strange thing. My own singing hath been nought; I that am a girl have yet shrieked like a very owl from the housetop—albeit ’tis the same girl’s desire to please Aotis⁴ so far as in her lies, seeing the Goddess is the healer of our woe⁵—; ’tis Hagesichora’s doing, hers alone, that the maidens have attained the longed-for peace.⁶\nFor ’tis true the others have run well beside her even as horses beside the trace-horse; but here as on shipboard the steersman must needs have a good loud voice, and Hagesichora—she may not outsing the Sirens, for they are Gods, but I would set her higher than any child of human breed. Aye, she sings like a very swan beside the yellow streams of Xanthus, and she that cometh next to that knot of yellow hair . . .¹",
+   "coverage_note": "Same poem (the Louvre Partheneion, PMG 1). Edmonds prints the papyrus with his own extensive restorations (esp. ll. 1-34 and 92-101, which he marks as very uncertain); the English is prose and gives the lacunae after line 21 as rows of dots, as printed. Ends, like Campbell, with the break-off of the papyrus at about l. 101. Footnote marks restart on each printed page, as printed.",
+   "match_evidence": "Edmonds fr. 1 (Book I, Maiden-Songs), \"From a First-Century Papyrus\": names Polydeuces, Lycaeus, Enarsphorus, Sebrus, Alcimus, Hippothous, Areius, Scaeus, Eurytus, Alcon (Campbell ll. 1-12), Agido and Hagesichora, the Doves (Peleiades) and Orthia, Nanno, Areta, Thylacis, Cleesithera, Aenesimbrota, Astaphis, Philylla, Damareta, Ianthemis (ll. 70-76), Aotis (l. 87), the swan by the Xanthus (ll. 100-101); Greek on pp. 50-58 carries the same names.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcman:14a",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcman, Edmonds fragment 8",
+   "translator_number": "8",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 83,
+     "printed_page": "63",
+     "sha256": "fc684336f4c1ae6b25ac3d3ba466dd081261098bb2a2757c0df19e3b13063ebf",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0083.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 82,
+     "printed_page": "62",
+     "sha256": "a1ac0882727044f14edd875b87f2feb0cca4f2ef5c13d65707c8f66c249f0999",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0082.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Hither, Muse, sweet clear Muse of the many tunes and everlasting song, and begin a new lay for maids to sing.²",
+   "coverage_note": "Same three-line fragment; Edmonds reads αἰενάοιδε (from the mss variants) where Campbell has αἰὲν ἀοιδέ. Edmonds places it under the heading \"8–15 To Lycaean Zeus\".",
+   "match_evidence": "Edmonds fr. 8, quoted by Maximus Planudes on Hermogenes; Greek begins Μῶσ’ ἄγε, Μῶσα λίγεια πολυμμελές ... μέλος νεοχμὸν ἄρχε παρσένοις ἀείδεν = Campbell 14a ll. 1-3.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcman:16",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcman, Edmonds fragment 2A",
+   "translator_number": "2A",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 79,
+     "printed_page": "59",
+     "sha256": "8c73092d17f7719552226d611b36fd3708db3c1b3f9efaa4e86a6df2e2e86461",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0079.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 78,
+     "printed_page": "58",
+     "sha256": "78239abfc7b43019bb83b85ea31af68138db3aafaa0a8d7c9c6573ca3fc4b793",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0078.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "No boor art thou nor a lubber, nor yet a tender of sties, nay nor Thessalian-born, nor Erysichaean (or drag-staff), nor a keeper of sheep, but a man of highest Sardis.",
+   "coverage_note": "Same fragment (Steph. Byz. s.v. Erysiche). Edmonds’ text is in the second person (\"art thou\"), Campbell’s in the third (οὐκ ἦς ἀνήρ); the \"(or drag-staff)\" gloss is Edmonds’ alternative rendering of Erysichaean. Extent agrees (Campbell ll. 1-5).",
+   "match_evidence": "Edmonds fr. 2A under \"2 A–C To the Dioscuri\", from Stephanus of Byzantium on Ἐρυσιχαῖος \"near the beginning of the second of his Maiden-Songs\"; content (boor, Thessalian, Erysichaean, shepherd, Sardis) = Campbell 16.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcman:20",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcman, Edmonds fragment 137",
+   "translator_number": "137",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 145,
+     "printed_page": "123",
+     "sha256": "37220e68cc430a155d0786e807f86b7afe3af19871758ab389478ea6d5c9e9c3",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0145.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 144,
+     "printed_page": "122",
+     "sha256": "dc51004088d38c0d595a2b9716894acde591fd0f2c496b1baa12a2f057fa663c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0144.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "And seasons made he three, summer and winter and the third the autumn, and a fourth also, to wit the spring, when things do flourish and grow but one cannot eat his fill.",
+   "coverage_note": "Same fragment; extent agrees (Campbell ll. 1-5; Edmonds ends with an uncertain οὐκ ἔστι . . .). In the scan the u of \"but\" is broken in the type.",
+   "match_evidence": "Edmonds fr. 137 (Book V, Drinking-Songs), Athenaeus on Alcman’s voracity: ὥρας δ’ ἔθηκε τρεῖς, θέρος καὶ χεῖμα ... = Campbell 20.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcman:26",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcman, Edmonds fragment 26",
+   "translator_number": "26",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 93,
+     "printed_page": "73",
+     "sha256": "fc3d8e1ecfd384c12175252e2dd9c8bb4fabff8229efffa963bace092503ec45",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0093.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 92,
+     "printed_page": "72",
+     "sha256": "4e86e390a24f32a4ca4ad4b2a963e27d5891140b2390fa9e4b53cc450f1314a9",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0092.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "O maidens of honey voice so loud and clear, my limbs can carry me no more. Would O would God I were but a ceryl, such as flies fearless of heart with the halcyons over the bloom of the wave, the Spring’s own bird that is purple as the sea!²",
+   "coverage_note": "Same four lines. Edmonds reads εἴαρος (\"Spring’s\") where Campbell has ἱαρός (\"holy\").",
+   "match_evidence": "Edmonds fr. 26, Antigonus of Carystus on the ceryl; Greek οὔ μ’ ἔτι, παρσενικαὶ μελιγάρυες ἱερόφωνοι, γυῖα φέρην δύναται ... κηρύλος ... ἁλιπόρφυρος = Campbell 26.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcman:27",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcman, Edmonds fragment 43",
+   "translator_number": "43",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 101,
+     "printed_page": "81",
+     "sha256": "6bf3095ff2133ba865c6badfd0d3e75444c2273743b8c0c195541fdbe681f6a4",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0101.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 100,
+     "printed_page": "80",
+     "sha256": "f526be9fe7f18e8776aef2fc72e583df7c432aa40912464eeb1594c012279789",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0100.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Come, Muse Calliopè, daughter of Zeus, begin thy lovely lines, and make a hymn to our liking and a dance that shall please.³",
+   "coverage_note": "Same fragment; extent agrees.",
+   "match_evidence": "Edmonds fr. 43 (Book III), quoted by Hephaestion on the dactylic: Μῶσ’ ἄγε Καλλιόπα, θύγατερ Διός ... = Campbell 27.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcman:41",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcman, Edmonds fragment 62",
+   "translator_number": "62",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 111,
+     "printed_page": "91",
+     "sha256": "df898786670dfc4c1330468d1bd6dbae6c954fcdbc50f5453e17830ab582269b",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0111.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 110,
+     "printed_page": "90",
+     "sha256": "6bff403973578e48563d9668c534b2d9ae3111d5873e76044cf1f3b7e39ac728",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0110.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "For to play well upon the lyre weigheth even-poise with the steel,",
+   "coverage_note": "Same single line. The hyphen of \"even-poise\" falls at a line end in the print and is kept as a compound.",
+   "match_evidence": "Edmonds fr. 62, Plutarch Lycurgus: ἕρπει γὰρ ἄντα τῶ σιδάρω τὸ καλῶς κιθαρίσδεν = Campbell 41.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcman:56",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcman, Edmonds fragment 47",
+   "translator_number": "47",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 103,
+     "printed_page": "83",
+     "sha256": "f74ee0b145cb987225914be58db40b7bfb52a6175373094ca86fe0ede8f546f7",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0103.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 102,
+     "printed_page": "82",
+     "sha256": "e1ff63bf1cffbc21bff0f964f8ccdfeac0747e41de03456f50237ffe387e87ed",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0102.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Time and again ’mid the mountain-tops, when the Gods take their pleasure in the torch-lit festival, you have carried a great can of the sort that shepherds carry, but all of gold and filled by your fair hand with the milk of a lioness, and thereof have made a great cheese, whole and unbroken and shining white.²",
+   "coverage_note": "Same six-line fragment; extent agrees.",
+   "match_evidence": "Edmonds fr. 47, Athenaeus on the scyphus (Asclepiades of Myrlea): golden vessel, lion’s milk, cheese = Campbell 56 (πολλάκι δ’ ἐν κορυφαῖς ὀρέων ...).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcman:58",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcman, Edmonds fragment 131",
+   "translator_number": "131",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 141,
+     "printed_page": "119",
+     "sha256": "590a6a2fe0339dc6dc399d182997cc385a54a8fb4d5e24453fe7815e23241302",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0141.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 140,
+     "printed_page": "118",
+     "sha256": "c944c8cc1a2dbcc15813f619523e47d4f6f6bc6d4b923b0d0af71d32cf32cce0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0140.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "It is not Aphroditè; but wild Love, like a child, plays me touch-me-not-with-your-little-reed, treading softly on tiptoe.²",
+   "coverage_note": "Same fragment; Edmonds’ text of the last clause differs (ἄκρ’ ἐπ’ ἄνθη ... see his note). In the scan the t of \"softly\" is damaged.",
+   "match_evidence": "Edmonds fr. 131 (Book IV, Love-Songs), Hephaestion on the cretic: Ἀφροδίτα μὲν οὐκ ἔστι, μάργος δ’ Ἔρως οἷα παῖς παίσδει = Campbell 58.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcman:59a",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcman, Edmonds fragment 130 (first quotation)",
+   "translator_number": "130 (first quotation)",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 141,
+     "printed_page": "119",
+     "sha256": "590a6a2fe0339dc6dc399d182997cc385a54a8fb4d5e24453fe7815e23241302",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0141.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 140,
+     "printed_page": "118",
+     "sha256": "c944c8cc1a2dbcc15813f619523e47d4f6f6bc6d4b923b0d0af71d32cf32cce0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0140.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Lo, at the Cyprian’s hest, sweet Love distils upon me and melts my heart.",
+   "coverage_note": "Edmonds fr. 130 prints two quotations from Athenaeus; only the first (given here) is Campbell 59a. The second (on Megalostrata) is Campbell 59b and is not included.",
+   "match_evidence": "Edmonds fr. 130, Athenaeus 13.600f: Ἔρως με δαὖτε Κύπριδος ϝέκατι γλυκὺς κατείβων καρδίαν ἰαίνει = Campbell 59a.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcman:89",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcman, Edmonds fragment 36",
+   "translator_number": "36",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 97,
+     "printed_page": "77",
+     "sha256": "9f244ff3b29a6e1b2aefe77b18d2d46d48ac724e9b51ef9c6f7549285175853c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0097.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 96,
+     "printed_page": "76",
+     "sha256": "9d6e8f8a892cd90d770170ae2e2612f31372d1134f6f7c8b2c93aca34df5b546",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0096.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Asleep lie mountain-top and mountain-gully, shoulder also and ravine; the creeping-things that come from the dark earth, the beasts whose lying is upon the hillside, the generation of the bees, the monsters in the depths of the purple brine, all lie asleep, and with them the tribes of the winging birds.",
+   "coverage_note": "Same six-line fragment; extent agrees.",
+   "match_evidence": "Edmonds fr. 36, Apollonius Homeric Lexicon (beasts, creeping things, monsters): εὕδουσιν δ’ ὀρέων κορυφαί τε καὶ φάραγγες = Campbell 89.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:1",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 1",
+   "translator_number": "1",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 205,
+     "printed_page": "183",
+     "sha256": "cce0925dd5baf80010d7a118da973fc59bf6d93174587d521ecae2ff21d50710",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0205.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 207,
+     "printed_page": "185",
+     "sha256": "e0702ef3282471e2ebe9f82e0ec730c6248306b35ed4420a83c767136ac255d1",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0207.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 204,
+     "printed_page": "182",
+     "sha256": "50cde2c409d511122e30b486a9f32c6d1ae3ea213a76f5e0426caa1ffcabea69",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0204.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 206,
+     "printed_page": "184",
+     "sha256": "efa7e1cbc49483447fa015c458e71c68ce83dda68d0011f14fcf53165f9242d1",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0206.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Aphrodite splendour-throned² immortal, wile-weaving child of Zeus, to thee is my prayer. Whelm not my heart, O Queen, with suffering and sorrow, but come hither I pray thee, if ever ere this thou hast heard and marked my voice afar, and stepping from thy Father’s house harnessed a golden chariot, and the strong pinions of thy two swans³ fair and swift, whirring from heaven through mid-sky, have drawn thee towards the dark earth, and lo! were there; and thou, blest Lady, with a smile on that immortal face, didst gently ask what ailed me, and why I called, and what this wild heart would have done, and ‘Whom shall I make to give thee room in her heart’s love, who is it, Sappho, that does thee wrong? for even if she flees thee, she shall soon pursue; if she will not take thy gifts, she yet shall give; and if she loves not, soon love she shall, whether or no;’—\nO come to me now as thou camest then, to assuage my sore trouble and do what my heart would fain have done, thyself my stay in battle.",
+   "coverage_note": "Same complete poem (28 lines); extent agrees. Edmonds renders the chariot birds as swans (see his note).",
+   "match_evidence": "Edmonds fr. 1 \"To Aphrodite\", quoted by Dionysius of Halicarnassus; Greek ποικιλόθρον’ ἀθάνατ’ Ἀφρόδιτα ... σύμμαχος ἔσσο = Campbell 1.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:2",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 4 and 6",
+   "translator_number": "4 and 6",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 211,
+     "printed_page": "189",
+     "sha256": "2e4b66712a5a3774a4a48a4cfb75635974142a0c3b5d86ec050196b905340d48",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0211.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 213,
+     "printed_page": "191",
+     "sha256": "750f150dd8b3553e2c969f0863054f4ae3352a26e6b19437396ea5136e019a38",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0213.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 210,
+     "printed_page": "188",
+     "sha256": "0dcdfb30eac9329a9969d620bb04b51cc013536adfe7dda30c4413609f35daf6",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0210.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 212,
+     "printed_page": "190",
+     "sha256": "36a510010c52f65781a5c7714f7f970cb25f090b50c5d0876fd145b83f6018c5",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0212.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": ". . . And by the cool waterside the breeze rustles amid the apple-branches, and the quivering leaves shed lethargy;\n\n. . . Come, Queen of Love, to bear round golden cups of nectar mingled with gentle cheer unto these comrades of thine and mine.¹",
+   "coverage_note": "Partial overlap only. Campbell 2 is the Florentine ostracon (published 1937); Edmonds (1922) knew only the two book-quotations, which he prints as separate fragments: fr. 4 (Hermogenes) = Campbell 2.5-8 (without the roses line), and fr. 6 (Athenaeus) = Campbell 2.13-16. The two fragments are separated here by a blank line (fr. 4 first, then fr. 6). Campbell ll. 1-4 and 9-12 have no Edmonds equivalent.",
+   "match_evidence": "Fr. 4 Greek: ἀμφὶ δ’ ὔδωρ ψῦχρον <ὤνεμος> κελάδει δι’ ὔσδων μαλίνων, αἰθυσσομένων δὲ φύλλων κῶμα καταρρεῖ (cf. Campbell 2.5-8 ἐν δ’ ὔδωρ ψῦχρον κελάδει δι’ ὔσδων μαλίνων ...). Fr. 6 Greek: ἔλθε, Κύπρι, χρυσίαισιν ἐν κυλίκεσσιν ἄβραις συμμεμείγμενον θαλίαισι νέκταρ οἰνοχόεισα (cf. Campbell 2.13-16).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:5",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 36",
+   "translator_number": "36",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 227,
+     "printed_page": "205",
+     "sha256": "8bf7edc367196ebda0cfccfcd4f5168d2ba9b069467d30b9201b5342bba3a18a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0227.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 229,
+     "printed_page": "207",
+     "sha256": "89d9962ab9fe9ebf33ad1dd6e2356b68c992acfa307d9d675620fa457c81c63a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0229.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 226,
+     "printed_page": "204",
+     "sha256": "621587cd13303d7fd54e91f6487344572aac65f8a5a79f39c08c9cedc1bd7970",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0226.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 228,
+     "printed_page": "206",
+     "sha256": "bae3d5927e7dbff9bfe10a1050e75e737d3e71d6af3ff3a7d061d66f2dc98ef5",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0228.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Golden Nereïds, grant me I pray my brother’s safe return, and that the true desires of his heart shall be accomplished, and putting away his former errors he shall become a delight to his friends and a grief to his enemies; and may our house be disgraced of no man. And may he be willing to bring honour to his sister; and the sore pain and the words wherewith, in bitter resentment of a taunt that must have cut to the quick, he sought ere he departed to overwhelm my heart,—O, when return he does on some near day, may he choose amid his fellow-townsmen’s mirth¹ to cast them clean away, and to have a mate, if he desire one, in wedlock due and worthy;² and as for thee, thou black and baleful she-dog,³ thou mayst set that evil snout to the ground and go a-hunting other prey.",
+   "coverage_note": "Same poem. Edmonds restores the whole papyrus text to 20 lines; Campbell’s text (12 lines here) agrees in ll. 1-12 in substance, while everything from \"the sore pain\" on rests largely on Edmonds’ supplements (Campbell prints only scraps of ll. 13-20).",
+   "match_evidence": "Edmonds fr. 36 \"To the Nereids\", from a third-century papyrus (P.Oxy. 7): Nereids, brother’s safe return, delight to friends and grief to enemies, honour to his sister = Campbell 5 (Κύπρι καὶ Νηρήιδες ...).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:15b",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 37",
+   "translator_number": "37",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 229,
+     "printed_page": "207",
+     "sha256": "89d9962ab9fe9ebf33ad1dd6e2356b68c992acfa307d9d675620fa457c81c63a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0229.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 228,
+     "printed_page": "206",
+     "sha256": "bae3d5927e7dbff9bfe10a1050e75e737d3e71d6af3ff3a7d061d66f2dc98ef5",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0228.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": ". . . O Cypris, and he found thee more bitter. And the others, they boasted loud and said: ‘What a delightful love-match hath Doricha made this second time!’³",
+   "coverage_note": "Same fragment (P.Oxy. 1231 fr. 1 col. i, ll. 9-12). Edmonds’ supplements and construal differ: Campbell has Sappho pray that Doricha find Cypris most bitter and not boast of a second love; Edmonds has \"he found thee more bitter\" and \"the others ... boasted\".",
+   "match_evidence": "Edmonds fr. 37 [To Charaxus], Ox. Pap. 1231. 1. i: . . . Κύπρι, καί σε πι[κροτέρ]αν ἔπευρε· οἱ δὲ καυχάσαντο τόδ’ ἐννέ[ποντες]· Δωρίχα τὸ δεύτερον ὡς πόθε[ννον εἰς] ἔρον ἦλθε = Campbell 15b ll. 9-12.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:16",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 38",
+   "translator_number": "38",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 231,
+     "printed_page": "209",
+     "sha256": "b1824e74bff3a5cb7f0400d86e1865c0ab20204adfeb62f996d1891ba2656278",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0231.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 230,
+     "printed_page": "208",
+     "sha256": "1df44599c902622691202ece588205aab81afdc86e602fe878e216881001ca14",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0230.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "The fairest thing in all the world some say is a host of foot, and some again a navy of ships, but to me ’tis the heart’s belovèd. And ’tis easy to make this understood by any. Though Helen surveyed much mortal beauty, she chose for most beautiful the destroyer of all the honour of Troy, and thought not so much either of child or parent dear, but was led astray by Love to bestow her heart afar; for woman is ever easy to be bent when she thinks lightly of what is near and dear. See to it then that you remember us Anactoria, now that we² are parted from one of whom I would rather the sweet sound of her footfall and the sight of the brightness of her beaming face than all the chariots and armoured footmen of Lydia. I know that in this world man cannot have the best; yet to wish that one had a share [in what was once shared is better than to forget it.]³",
+   "coverage_note": "Same poem. Edmonds’ opening has \"host of foot ... navy of ships\" (no horsemen), and his restorations differ (e.g. \"now that we are parted\"). His closing sentence and the bracketed words go beyond Campbell’s 20 lines (Edmonds restores the further papyrus lines).",
+   "match_evidence": "Edmonds fr. 38 \"To Anactoria\", second-century papyrus (P.Oxy. 1231): fairest thing on earth, ships, Helen, Troy, Anactoria, her footfall and face, chariots of Lydia = Campbell 16.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:31",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 2",
+   "translator_number": "2",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 209,
+     "printed_page": "187",
+     "sha256": "c415253a2259690cdde0c2f7f31e67f970522518028a8a45a322d24f319102cb",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0209.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 208,
+     "printed_page": "186",
+     "sha256": "90ef941bb76425b17cafc2b011fe2c238d67a24df8e8cbcadbd16797ce5539e8",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0208.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "It is to be a God, methinks, to sit before you and listen close by to the sweet accents and winning laughter which have made the heart in my breast beat so fast and high. When I look on you, Brocheo,¹ my speech comes short or fails me quite, I am tongue-tied²; in a moment a delicate fire has overrun my flesh, my eyes grow dim and my ears sing, the sweat runs down me and a trembling takes me altogether, till I am as green and pale as the grass,³ and death itself seems not very far away;⁴—but now that I am poor, I must fain be content⁵ . . . .",
+   "coverage_note": "Same poem, extent agrees including the first line of the next stanza (Campbell l. 17, ἀλλὰ πὰν τόλματον ἐπεὶ καὶ πένητα), which Edmonds reads as \"but now that I am poor\". Edmonds reads a vocative Βρόχεο (\"Brocheo\") in l. 7 where Campbell has ὠς γὰρ ἔς σ’ ἴδω βρόχε’.",
+   "match_evidence": "Edmonds fr. 2, quoted by [Longinus] On the Sublime; Greek φαίνεταί μοι κῆνος ἴσος θέοισιν ... τεθνάκην δ’ ὀλίγω ’πιδεύϝην φαίνομαι = Campbell 31.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:34",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 3",
+   "translator_number": "3",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 211,
+     "printed_page": "189",
+     "sha256": "2e4b66712a5a3774a4a48a4cfb75635974142a0c3b5d86ec050196b905340d48",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0211.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 210,
+     "printed_page": "188",
+     "sha256": "0dcdfb30eac9329a9969d620bb04b51cc013536adfe7dda30c4413609f35daf6",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0210.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Around the fair moon the bright beauty of the stars is lost them when her silver light illumes the world at its fullest.",
+   "coverage_note": "Same fragment; Edmonds prints the same four lines, with ἀργυρία γᾶν as the close (Campbell 34.4 γᾶν ... ἀργυρία).",
+   "match_evidence": "Edmonds fr. 3, quoted by Eustathius on Iliad 8.555: Ἄστερες μὲν ἀμφὶ κάλαν σελάνναν ἂψ ἀπυκρύπτοισι φάεννον εἶδος, ὄπποτα πλήθοισα μάλιστα λάμπῃσ’ = Campbell 34.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:44",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 66",
+   "translator_number": "66",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 249,
+     "printed_page": "227",
+     "sha256": "4692dab7e264970f94a368ae7373a0e1c2386646aaf1af1f0a5acf69d1cfdab5",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0249.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 251,
+     "printed_page": "229",
+     "sha256": "77f61c9d8d6fb456c254768e532593ee4a8f6e321a83fe22d06267ee188487bc",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0251.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 253,
+     "printed_page": "231",
+     "sha256": "635196e8a6f59ff96d6b95ee0e8b660b2ad423d049c88f91c5ed263b684ff0df",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0253.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 248,
+     "printed_page": "226",
+     "sha256": "4fb56926c86ce0ed094fd107652d83f02f775bbd74c3e4588122f1f00fbd0d7a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0248.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 250,
+     "printed_page": "228",
+     "sha256": "38935c360759dba5c220e66328c2ccc5349777f6c6c4b8f617716409404c03ea",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0250.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 252,
+     "printed_page": "230",
+     "sha256": "579cf1f254b9f4f01543954510456cded34c9dfbbcafe29d7c707951c71d93e7",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0252.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": ". . . Cyprus . . . . . . came a herald sped by the might of his swift legs bringing speedily these fair tidings unto the people of Ida . . . . . . and [throughout] the rest of Asia these tidings were a fame that never died: ‘Hector and his comrades bring from sacred Thebe¹ and ever-flowing Placia, by ship upon the briny sea, the dainty Andromache of the glancing eye; and many are the golden bracelets, and the purple robes, aye and the fine smooth broideries, indeed a richly-varied bride-gift; and without number also are the silver goblets and the ornaments of ivory.’ So spake the herald; and Hector’s dear father leapt up in haste, and the news went forth through Ilus’ spacious city. Straightway the children of Ilus harnessed the mules to the wheelèd cars, and the whole throng of the women and of the slender-ankled maidens mounted therein, the daughters of Priam riding apart; and the men did harness horses to the chariots, and the young men went with them one and all; till a mighty people moved mightily along, and the drivers drove their boss-bedizened steeds out of [the city] . . . . . . . . . . . . [Then, when the] god-like [Hector and Andromache were mounted in the chariots, the men of Troy and the women of Troy] accompanied them in one great company into [lovely] Ilium . . . . . . they mingled . . . . . . And now, when the maidens . . . . . .\n. . . . . . and cassia and frankincense went up in smoke. Meanwhile the elder women raised a loud cry, and all the men shouted amain a delightful song of thanksgiving unto the Far-Darting God of the lyre, and hymned the praise of the god-like Hector and Andromache.",
+   "coverage_note": "Same poem (P.Oxy. 1232). Edmonds’ supplements differ (bracketed passages are his restorations); his text ends with the same close as Campbell l. 34. The lacunae are given as rows of dots as printed (dot counts approximate the print).",
+   "match_evidence": "Edmonds fr. 66 [Marriage of Hector and Andromache]: herald, Ida, Thebe and Placia, Andromache, golden bracelets, Ilus, mules, Priam’s daughters, cassia and frankincense, paean to the Far-Darter, Hector and Andromache = Campbell 44.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:47",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 54",
+   "translator_number": "54",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 245,
+     "printed_page": "223",
+     "sha256": "e3b686d1f2c84235d55e6f8acff4b26434721fcc5a91d54967bceeca037e4135",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0245.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 244,
+     "printed_page": "222",
+     "sha256": "575c3ce3cc84b9f8f892bc95fe24d77b0621d933bde770140fbf1c3a59b10471",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0244.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "e. g. As for me, love has shaken my heart as a down-rushing whirlwind that falls upon the oaks.",
+   "coverage_note": "Same fragment, but Edmonds marks his Greek as an exempli gratia reconstruction from Maximus of Tyre’s paraphrase (\"e. g.\" printed before the translation, kept here). Campbell prints the quotation Ἔρος δ’ ἐτίναξέ μοι φρένας, ὠς ἄνεμος κὰτ ὄρος δρύσιν ἐμπέτων.",
+   "match_evidence": "Edmonds fr. 54, Maximus of Tyre: Sappho’s heart shaken by love as oaks by a down-rushing wind = Campbell 47.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:49",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 48",
+   "translator_number": "48",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 243,
+     "printed_page": "221",
+     "sha256": "30c005a456e541596b90d0655bc16f4241b01749c07b142c5ceecf7094ff8580",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0243.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 240,
+     "printed_page": "218",
+     "sha256": "1c0e375a260f04d7c5c84a91f0eea0d60767c49ea0a03032c7eddeafadc4dcec",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0240.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 242,
+     "printed_page": "220",
+     "sha256": "5d53678c1f355ace8766909ad0eecf07f5b03885edab18a7ae9bc869a2efd834",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0242.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "I loved you, Atthis, long ago, when my own girlhood was still all flowers, and you—you seemed to me a small ungainly child.¹",
+   "coverage_note": "Edmonds joins Campbell 49.1 and 49.2 with a bracketed middle line of his own, [ἆς ἔμ’ ἀνθεμόεσσ’ ἔτι παρθενία σὺ δὲ], restored from Terentianus Maurus’ paraphrase (\"when my own girlhood was still all flowers\"); Campbell prints only the two quoted lines.",
+   "match_evidence": "Edmonds fr. 48 \"To Atthis\", from Hephaestion and Plutarch (ἄχαρις): ἠράμαν μὲν ἔγω σέθεν, Ἄτθι, πάλαι ποτά ... σμίκρα μοι πάις ἔμμεν’ ἐφαίνεο κἄχαρις = Campbell 49.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:55",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 71",
+   "translator_number": "71",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 255,
+     "printed_page": "233",
+     "sha256": "cce640b77024b191b82756d2725acdc4c5fb4c28d80400b864ad40cfce714db9",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0255.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 254,
+     "printed_page": "232",
+     "sha256": "1088c5316af8e41923018b5946b324acd9b6bd8f8ab303355748705cfd20805c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0254.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "When you are dead you will lie unremembered for evermore; for you have no part in the roses that come from Pieria; nay, obscure here, you will move obscure in the house of Death, and flit to and fro among such of the dead as have no fame.",
+   "coverage_note": "Same four-line fragment; extent agrees.",
+   "match_evidence": "Edmonds fr. 71, Stobaeus on folly: κατθάνοισα δὲ κείσεαι ... βρόδων τῶν ἐκ Πιερίας = Campbell 55.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:81b",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 117",
+   "translator_number": "117",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 287,
+     "printed_page": "265",
+     "sha256": "3b783e557755f8ed991603bf520b46bd72c5a3239c4cda205022133da219e59c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0287.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 289,
+     "printed_page": "267",
+     "sha256": "beb9a1159b1edae3eecfa8ee389aa6e3c03245c13d10e4b8f65b3b5c5e9f6aa4",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0289.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 286,
+     "printed_page": "264",
+     "sha256": "42f7fa51b652540e964573ad93b87cdd987eb06fc8ba85510467378982a092d6",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0286.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 288,
+     "printed_page": "266",
+     "sha256": "d255427d21338dd4307393431a844f966e327be4c1420da4b348ff7f4ff7aa40",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0288.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": ". . . But do you, Dica, let your dainty fingers twine a wreath of anise-sprays and bind your lovely locks; for it may well be that the blessed Graces, too, are more apt to look with favour on that which is adorned with flowers, whereas they turn away from all that goes ungarlanded;",
+   "coverage_note": "Same fragment (Athenaeus 15.674e); extent agrees.",
+   "match_evidence": "Edmonds fr. 117 \"To Mnesidice\", Athenaeus on garlands: σὺ δὲ στεφάνοις, ὦ Δίκα ... Χάριτες μάκαιραι ... ἀστεφανώτοισι δ’ ἀπυστρέφονται = Campbell 81b.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:94",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 83",
+   "translator_number": "83",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 263,
+     "printed_page": "241",
+     "sha256": "c0395d635e0863f63041bbb8cd67b0307ba31c7ffa8276468376d4f3c70e53d7",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0263.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 265,
+     "printed_page": "243",
+     "sha256": "6bc3d81d544ebf36fea56adcfed7302ca7f2f5e8ac5c9b5e3b1f6bdbf046042d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0265.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 262,
+     "printed_page": "240",
+     "sha256": "f015c7059fb8c3d555769961d1c9cce882a30098b457e007cf35ff05d07f641e",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0262.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 264,
+     "printed_page": "242",
+     "sha256": "5065e62390a96fab3feeffb13b7bf6327b144918c9b7bd083e0f753b35bb6c41",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0264.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "So I shall never see Atthis more, and in sooth I might as well be dead. And yet she wept full sore to leave me behind and said ‘Alas! how sad our lot; Sappho, I swear ’tis all against my will I leave thee’; and I answered her ‘Go your way rejoicing and remember me, for you know how I doted upon you. And if you remember not, O then I will remind you of what you forget, how dear and beautiful was the life we led together. For with many¹ a garland of violets and sweet roses mingled you have decked your flowing locks by my side, and with many a woven necklet made of a hundred blossoms your dainty throat; and with many a jar of myrrh, both of the precious and the royal, have you anointed your fair young skin before me, and [lying upon] the couch have taken your fill of dainty [meats and of sweet drinks] . . .’",
+   "coverage_note": "Same poem (P.Berol. 9722). Edmonds’ opening clause \"So I shall never see Atthis more\" renders his own restored first line, which Campbell does not print (Campbell begins τεθνάκην δ’ ἀδόλως θέλω); Edmonds takes the poem to concern Atthis. His text stops at about Campbell l. 22; Campbell’s ll. 24-29 fragments are not translated.",
+   "match_evidence": "Edmonds fr. 83 [To Atthis?], from a seventh-century manuscript: wish to be dead, she wept, \"go your way rejoicing and remember me\", garlands of violets and roses, myrrh, couch = Campbell 94.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:96",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 86",
+   "translator_number": "86",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 269,
+     "printed_page": "247",
+     "sha256": "6ec1df59ec56af49021516e6939e4801974ed1c045c6515e8c6e483f1e6a66c2",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0269.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 268,
+     "printed_page": "246",
+     "sha256": "603540b1d509fb029323fedf9b3c70196a8dab4631cf2c9b2a5067be642f5239",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0268.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "[Atthis, our beloved Anactoria dwells in far-off] Sardis, but she often sends her thoughts hither, thinking how once we used to live in the days when you were like a glorious Goddess to her and she loved your song the best. And now she shines among the dames of Lydia as after sunset the rosy-fingered Moon¹ beside the stars that are about her, when she spreads her light o’er briny sea and eke o’er flowery field, while the dew lies so fair on the ground and the roses revive and the dainty anthrysc and the melilot with all its blooms. And oftentime while our beloved wanders abroad, when she calls to mind the love of gentle Atthis, her tender breast, for sure, is weighed down deep with longing; and she cries aloud for us to come thither; and what she says we know full well, you and I, for Night that hath the many ears calls it to us across the dividing sea.²",
+   "coverage_note": "Same poem (P.Berol. 9722). The bracketed opening is Edmonds’ restoration (naming Atthis and Anactoria); his text ends at about Campbell l. 20; the fragmentary remainder is not translated.",
+   "match_evidence": "Edmonds fr. 86 [To Atthis]: Sardis, like a goddess, among Lydian women as the rosy-fingered moon, dew, roses, chervil (anthrysc), melilot, gentle Atthis = Campbell 96.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:102",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 135",
+   "translator_number": "135",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 299,
+     "printed_page": "277",
+     "sha256": "0f5318775c0a9ba8cf9dc885b550d777a31042374a928315ded4aab2f6d44a77",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0299.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 298,
+     "printed_page": "276",
+     "sha256": "c35ad2a24b67a2904292175271d0af11cea4a983a57a0a69485c15673c581a94",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0298.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Sweet mother, I truly cannot weave my web; for I am o’erwhelmed through Aphrodite with love of a slender youth.",
+   "coverage_note": "Same two lines; extent agrees.",
+   "match_evidence": "Edmonds fr. 135, Hephaestion on the antispast: γλύκηα μᾶτερ, οὔτοι δύναμαι κρέκην τὸν ἴστον = Campbell 102.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:104a",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 149",
+   "translator_number": "149",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 307,
+     "printed_page": "285",
+     "sha256": "e8f1a850330881684f0415671b0490a555d6c870bfedba495818c21757c128ae",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0307.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 309,
+     "printed_page": "287",
+     "sha256": "73b656b460fcafb3afd6c1b6b82411aff6270b3a0eb5c2904fb2220e062b728a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0309.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 306,
+     "printed_page": "284",
+     "sha256": "72f5f19c76ff85ead33fb2c99d66ac75b3f85a34a06b0b3eafc6207af737ff75",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0306.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 308,
+     "printed_page": "286",
+     "sha256": "0e04c46eabc7f8d7ed466e822ad62162c04bacb56b0929474a831e60a079ad24",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0308.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Evening Star that bringest back all that lightsome Dawn hath scattered afar, thou bringest the sheep, thou bringest the goat, thou bringest her child home to the mother;¹",
+   "coverage_note": "Same two lines; extent agrees.",
+   "match_evidence": "Edmonds fr. 149, Demetrius On Style on anaphora: Ἕσπερε πάντα φέρων ... φέρεις ὄιν, φέρεις αἶγα, φέρεις ἄπυ μάτερι παῖδα = Campbell 104a.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:105a",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 150",
+   "translator_number": "150",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 309,
+     "printed_page": "287",
+     "sha256": "73b656b460fcafb3afd6c1b6b82411aff6270b3a0eb5c2904fb2220e062b728a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0309.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 308,
+     "printed_page": "286",
+     "sha256": "0e04c46eabc7f8d7ed466e822ad62162c04bacb56b0929474a831e60a079ad24",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0308.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Like the pippin blushing high\nOn the tree-top beneath the sky,\nWhere the pickers forgot it—nay,\nCould not reach it so far away;²",
+   "coverage_note": "Same three lines; Edmonds’ version is in rhymed verse (line breaks as printed).",
+   "match_evidence": "Edmonds fr. 150, Scholiast on Hermogenes: οἶον τὸ γλυκύμαλον ἐρεύθεται ἄκρῳ ἐπ’ ὔσδῳ ... = Campbell 105a.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:105c",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 151",
+   "translator_number": "151",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 311,
+     "printed_page": "289",
+     "sha256": "af71fb91b885d4929a9565c9318b1db5cbf565b9a627357dd22e157559804f11",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0311.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 310,
+     "printed_page": "288",
+     "sha256": "cbaf8c4b7c5cc14075d848dcbe7b158bacdac55f62a4389fb389876ae94fd19d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0310.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Like the hyacinth which the shepherd tramples underfoot on the mountain, and it still blooms purple on the ground.¹",
+   "coverage_note": "Same two lines; Edmonds reads \"and it still blooms\" (see his note on Demetrius’ text) where Campbell has χάμαι δέ τε πόρφυρον ἄνθος.",
+   "match_evidence": "Edmonds fr. 151, Demetrius On Style on the epiphoneme: οἴαν τὰν ὐάκινθον ἐν ὤρεσι ποίμενες ἄνδρες = Campbell 105c.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:110a",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 154",
+   "translator_number": "154",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 311,
+     "printed_page": "289",
+     "sha256": "af71fb91b885d4929a9565c9318b1db5cbf565b9a627357dd22e157559804f11",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0311.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 310,
+     "printed_page": "288",
+     "sha256": "cbaf8c4b7c5cc14075d848dcbe7b158bacdac55f62a4389fb389876ae94fd19d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0310.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "The doorkeeper’s feet are seven fathoms long, and his sandals five hides to the pair—it took ten shoemakers to make them; [and his father lived in other ways an honest life, but claimed to be better born than Cecrops himself.]²",
+   "coverage_note": "Campbell 110a = Edmonds’ first three lines (to \"make them\"). The bracketed sentence is Edmonds’ exempli gratia restoration of further lines (see his note), not in Campbell.",
+   "match_evidence": "Edmonds fr. 154, Hephaestion on dactylics: θυρώρῳ πόδες ἐπτορόγυιοι, τὰ δὲ σάμβαλα πεμπεβόεια, πίσσυγγοι δὲ δέκ’ ἐξεπόναισαν = Campbell 110a.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:111",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 148",
+   "translator_number": "148",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 307,
+     "printed_page": "285",
+     "sha256": "e8f1a850330881684f0415671b0490a555d6c870bfedba495818c21757c128ae",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0307.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 306,
+     "printed_page": "284",
+     "sha256": "72f5f19c76ff85ead33fb2c99d66ac75b3f85a34a06b0b3eafc6207af737ff75",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0306.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Up with the rafters high,\nHo for the wedding!¹\nRaise them high, ye joiners,\nHo for the wedding!\nThe bridegroom ’s as tall as Ares,\nHo for the wedding!\nFar taller than a tall man,\nHo for the wedding!\nTowering as the Lesbian poet\nHo for the wedding!\nOver the poets of other lands,\nHo for the wedding!",
+   "coverage_note": "Campbell 111 = Edmonds’ first eight lines. Edmonds adds the refrain from Hephaestion and appends ll. 9-11 (\"Towering as the Lesbian poet / Over the poets of other lands\"), which Campbell prints separately as fr. 106. Verse with italic refrain; line breaks as printed.",
+   "match_evidence": "Edmonds fr. 148, Demetrius On Style on metabole: ἴψοι δὴ τὸ μέλαθρον, ὐμήναον ... γάμβρος ἔρχεται ἶσος Ἄρευι ... ἄνδρος μεγάλω πόλυ μέσδων = Campbell 111.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:115",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 161",
+   "translator_number": "161",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 317,
+     "printed_page": "295",
+     "sha256": "5cd69f441f6c56ea808931a656bdeac173ff917c6d58ce8c21435ae56c4b4a53",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0317.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 316,
+     "printed_page": "294",
+     "sha256": "77574ee3dffaa86a1bb648bf3de94ab9759edc797495e3867383e450001e4c41",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0316.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "To what, dear bridegroom, may I well liken thee?\nTo a slender sapling do I best liken thee.",
+   "coverage_note": "Same two lines; extent agrees.",
+   "match_evidence": "Edmonds fr. 161, Hephaestion on dactylics: τίῳ σ’, ὦ φίλε γάμβρε, κάλως ἐικάσδω; ὄρπακι βραδίνῳ σε μάλιστ’ ἐικάσδω = Campbell 115.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:130",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 81",
+   "translator_number": "81",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 261,
+     "printed_page": "239",
+     "sha256": "24d1a1fef1e2fd5aeb892e3c15e11661469931ecab32cffd8abe6352693faac4",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0261.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 260,
+     "printed_page": "238",
+     "sha256": "228d2232b577194ae3e2d6be43bf737698d0130c0eadd2b36de645df2e5ddc06",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0260.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Lo! Love the looser of limbs stirs me, that creature irresistible, bitter-sweet; but you, Atthis, have come to hate the thought of me, and run after Andromeda in my stead.²",
+   "coverage_note": "Edmonds fr. 81 joins Campbell 130 (to \"bitter-sweet\") with Campbell 131 (\"but you, Atthis ... Andromeda\"), both quoted by Hephaestion; only the first clause belongs to Campbell 130.",
+   "match_evidence": "Edmonds fr. 81 \"To Atthis\", Hephaestion on the Aeolic tetrameter: Ἔρος δηὖτέ μ’ ὀ λυσιμέλης δόνει, γλυκύπικρον ἀμάχανον ὄρπετον = Campbell 130.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:132",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 130",
+   "translator_number": "130",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 295,
+     "printed_page": "273",
+     "sha256": "6b209d722a2b10062920c9026ae52fc63718c3f2a8b93f8fc6affb6026ad5d3d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0295.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 294,
+     "printed_page": "272",
+     "sha256": "ef690bd247cd735ecebd74df987f12cee138f2c76cd42a462c2b06ffd08d681f",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0294.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "I have a pretty little daughter who looks like a golden flower, my darling Cleïs, for whom I would not take all Lydia, nay nor lovely [Lesbos].",
+   "coverage_note": "Same three lines; \"[Lesbos]\" is Edmonds’ supplement at the break (Campbell’s text breaks off after ἐράνναν).",
+   "match_evidence": "Edmonds fr. 130 \"To Cleis\", Hephaestion on unconnectable metres: ἔστι μοι κάλα πάις χρυσίοισιν ἀνθέμοισιν ... Κλέις ἀγαπάτα ... Λυδίαν παῖσαν = Campbell 132.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:sappho:fr-adesp-976-pmg",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Sappho, Edmonds fragment 111",
+   "translator_number": "111",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 283,
+     "printed_page": "261",
+     "sha256": "45a288963987e81134a4fa54435553e505228e7bea1b288dcfcee82ebf26554a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0283.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 285,
+     "printed_page": "263",
+     "sha256": "417b4cc87325b12f9458136e81597cc2ccfde06bb278648347025033a0474638",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0285.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 284,
+     "printed_page": "262",
+     "sha256": "8239ea06fafcc6f226f5742aff08d9081658de0dcd52ef05d7778958bb6d748e",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0284.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "The Moon is gone\nAnd the Pleiads set,\nMidnight is nigh;\nTime passes on,\nAnd passes; yet\nAlone I lie.¹",
+   "coverage_note": "Same four-line poem (Hephaestion), which Edmonds prints as Sappho fr. 111; his English is a six-line rhymed version (line breaks as printed; the indentation of lines 3 and 6 is not reproduced).",
+   "match_evidence": "Edmonds fr. 111 (Book VI), Hephaestion on the ionic a maiore: Δέδυκε μὲν ἀ σελάννα καὶ Πληιάδες, μέσαι δὲ νύκτες ... ἔγω δὲ μόνα κατεύδω = Campbell Fr. Adesp. 976.",
+   "verified_against_image": true
+  }
+ ],
+ "gaps": [
+  {
+   "campbell_id": "campbell-glp:alcman:3",
+   "reason": "Alcman 3 (Ὀλ]υμπιάδες περί με φρένας ..., Astymeloisa) is P.Oxy. 2387, first published 1957; none of its lines is quoted by an ancient author, so it is absent from Edmonds, Lyra Graeca I (1922) (searched the OCR for Astymeloisa, limb-loosening, melting, and the Greek forms) and from every other pre-1930 translation. No public-domain English translation exists."
+  }
+ ]
+}

@@ -59,7 +59,7 @@ def main():
     args = parser.parse_args()
     fixture = ROOT / 'tests/fixtures/word-elthes-tense-preview.json'
     expected = json.loads(fixture.read_text(encoding='utf-8'))
-    source = ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl'
+    source = ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl'
     record = next(json.loads(line) for line in source.read_text(encoding='utf-8').splitlines()
                   if json.loads(line)['id'] == 'campbell-glp:alcaeus:350')
     form = expected['form']

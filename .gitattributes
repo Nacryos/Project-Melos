@@ -1,1 +1,6 @@
 *.sh text eol=lf
+data/campbell_glp/** -text
+backend/translation_comparisons_glp_data.json -text
+backend/*.json -text
+docs/audits/*.json -text
+tests/fixtures/** -text

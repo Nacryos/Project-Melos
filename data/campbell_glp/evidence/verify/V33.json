@@ -1,0 +1,27 @@
+{
+ "pages": [
+  33,
+  34,
+  35,
+  36,
+  37,
+  38,
+  39,
+  40,
+  41
+ ],
+ "lines_checked": 161,
+ "corrections": [
+  {
+   "poem_id": "campbell-glp:archilochus:79a",
+   "line_index": 10,
+   "pdf_page": 38,
+   "current": "ἄκρον παρὰ ῥηγμῖνα κυμαντῷ [.] . [.] . ι .",
+   "corrected": "ἄκρον παρὰ ῥηγμῖνα κ̣υμαντῷ [.] . [.] . ι .",
+   "what": "small round dot centred below kappa of κυμαντῷ at 10x (underdot)",
+   "confidence": "medium"
+  }
+ ],
+ "missing_or_extra": [],
+ "label_fixes": []
+}

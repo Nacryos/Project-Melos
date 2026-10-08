@@ -24,7 +24,7 @@ BOUNDARY_MARKS = frozenset('[]') | UNSUPPORTED_MARKS
 # until its scope is independently reviewed; it never reuses these offsets.
 _REVIEWED_UNCERTAINTY = {
     ('campbell-glp:alcaeus:34a',
-     '7cae61943576b9ec55cb1a71e648090875df1fe89cc3a3cca06fe141c701ca97',
+     'e207a84a42c326bbe015db2f46a03205e152e59705174612762f0aada7c184cc',
      'b80da0f74ffb097f7972470da06a37ae06cc19ee92552892f41dd2da0f9be930'):
         ((78, 84), (85, 96)),
 }

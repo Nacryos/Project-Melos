@@ -1,0 +1,27 @@
+{
+ "pages": [
+  150,
+  151,
+  152,
+  153,
+  154,
+  155,
+  156,
+  157,
+  158
+ ],
+ "lines_checked": 192,
+ "corrections": [
+  {
+   "poem_id": "campbell-glp:bacchylides:17",
+   "line_index": 130,
+   "pdf_page": 157,
+   "current": "φρένα ἰανθεὶς",
+   "corrected": "φρένα ἰανθείς",
+   "what": "ἰανθεὶς -> ἰανθείς: 8x crop shows acute (stroke rising to the right) on final ει, not grave",
+   "confidence": "high"
+  }
+ ],
+ "missing_or_extra": [],
+ "label_fixes": []
+}

@@ -40,7 +40,19 @@ def test_projection_is_deterministic_and_preserves_every_source_word(tmp_path):
         item, = record['translation_comparisons']
         for key in ('text', 'paired_greek', 'translator', 'edition', 'citation', 'license', 'source_url'):
             assert item[key] == source[key]
-        assert item['edition_difference_metadata']['exact_token_differences'] == source['campbell_comparison']['exact_token_differences']
+        metadata = item['edition_difference_metadata']
+        if 'campbell_text_reanchored' in metadata:
+            # Campbell text corrected to the page image (2026-10-08): the approved diff must be
+            # reproducible against the previous text and is recomputed against the corrected one.
+            poem = next(p for p in _poems() if p['id'] == record['campbell_record_id'])
+            other = source.get('paired_greek') or '\n'.join(
+                c['text'] for c in source.get('source_chunks', []) if c.get('language') == 'grc')
+            previous = source['campbell_comparison']['campbell_text']
+            assert builder._token_differences(previous, other) == source['campbell_comparison']['exact_token_differences']
+            assert metadata['exact_token_differences'] == builder._token_differences(poem['text'], other)
+            assert metadata['campbell_text_reanchored']['previous_text_sha256'] == hashlib.sha256(previous.encode()).hexdigest()
+        else:
+            assert metadata['exact_token_differences'] == source['campbell_comparison']['exact_token_differences']
     keys = set(_keys(projected))
     assert not {'parent_id', 'translation_of', 'published_translations', 'source_claims', 'raw_path', 'ocr_path'} & keys
     assert 'C:\\Users' not in staged.decode('utf8') and 'runtime/' not in staged.decode('utf8')

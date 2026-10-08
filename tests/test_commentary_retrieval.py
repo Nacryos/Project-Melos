@@ -10,7 +10,7 @@ from backend.commentary_retrieval import retrieval_cues, _exact_spans, _groups
 from backend.edition_commentary import for_passage
 
 ROOT = Path(__file__).resolve().parents[1]
-RECORDS = ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl'
+RECORDS = ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl'
 
 
 def occurrence(fragment, form):

@@ -1,0 +1,27 @@
+{
+ "pages": [
+  78,
+  79,
+  80,
+  81,
+  82,
+  83,
+  84,
+  85,
+  86
+ ],
+ "lines_checked": 148,
+ "corrections": [
+  {
+   "poem_id": "campbell-glp:alcaeus:6",
+   "line_index": 4,
+   "pdf_page": 85,
+   "current": "] . . [. .] . [",
+   "corrected": "] . . [. .] · [",
+   "what": "dot between ] and [ is printed raised (mid-height), unlike the baseline lacuna dots; 8x crop",
+   "confidence": "medium"
+  }
+ ],
+ "missing_or_extra": [],
+ "label_fixes": []
+}

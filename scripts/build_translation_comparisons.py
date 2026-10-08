@@ -17,15 +17,15 @@ ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'runtime/alcaeus-translations/translation-candidates.jsonl'
 APPROVAL = ROOT / 'runtime/alcaeus-translations/final-output-audit.json'
 NOTES = ROOT / 'runtime/alcaeus-translations/chs-source-notes.json'
-GREEK = ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl'
+GREEK = ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl'
 GREEK_APPROVAL = ROOT / 'docs/audits/campbell-assignment-approval.json'
 OUTPUT = ROOT / 'runtime/alcaeus-translations/translation-comparisons.public.json'
 PINS = {
     'source': '1499aff600c1fc4eef254bb1eb9c6f35c3d0851d63ddaf85df9093702c600497',
     'approval': 'c50c6fcac052d8a5003c2de567ea3599a7f12d64d64304c861557ff5bb5c184e',
     'notes': '5ae6184824807d8d7b4c8be657048440fa3809a2c640bc66832563d06169449a',
-    'greek': 'afe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b',
-    'greek_approval': 'dbbd588e3068e106dfa771ed3038e7c1c43f91b40cde7e0e84740fab8e8c1ce5',
+    'greek': 'ab2e1487885431669ebff57c566419bdceb1d6af69740e6ed05e8b7190d84457',
+    'greek_approval': '5d549fca6bc0662ce283f909fbf0b7fa3a819675e3f47fcae7629c8d5e9c47b4',
     'source_pdf': '8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f',
 }
 FRAGMENTS = ('34a', '129', '130b', '326', '350')
@@ -49,6 +49,42 @@ def _artifact(relative: str, expected: str) -> bytes:
     if not any(path.is_relative_to(base.resolve()) for base in allowed):
         raise ValueError('Source artifact escaped approved staging directories')
     return _read(path, expected, limit=12_000_000)
+
+
+def _token_differences(campbell_text: str, other_greek: str | None):
+    """Same exact token diff as scripts/extract_alcaeus_translations.py (no normalisation)."""
+    import difflib
+    if not other_greek:
+        return None
+    ca, other = campbell_text.split(), other_greek.split()
+    return [{'operation': tag, 'campbell_tokens': ca[a:b], 'other_edition_tokens': other[c:d],
+             'campbell_token_range': [a, b], 'other_token_range': [c, d]}
+            for tag, a, b, c, d in difflib.SequenceMatcher(None, ca, other, autojunk=False).get_opcodes() if tag != 'equal']
+
+
+def _reanchored(comparison: dict, poem: dict) -> dict:
+    """Re-anchor an approved comparison to a corrected Campbell text (2026-10-08 corrections).
+
+    The approved candidate still records the previous Campbell text. It is accepted only if that
+    text is exactly the one the corrected record names as previous; the token differences are
+    first reproduced against it, then recomputed against the corrected text.
+    """
+    if comparison.get('campbell_text') == poem.get('text'):
+        return comparison
+    metadata = poem.get('metadata') or {}
+    previous = comparison.get('campbell_text') or ''
+    if (not metadata.get('text_corrections')
+            or digest(previous.encode('utf8')) != metadata.get('previous_text_sha256')):
+        return comparison  # identity check below fails closed
+    other = comparison.get('_other_greek')
+    if comparison.get('exact_token_differences') != _token_differences(previous, other):
+        raise ValueError('Approved token differences cannot be reproduced against the previous text')
+    return {**comparison, 'campbell_text': poem['text'],
+            'exact_token_differences': _token_differences(poem['text'], other),
+            'reanchored': {'previous_text_sha256': metadata['previous_text_sha256'],
+                           'corrected_text_sha256': digest(poem['text'].encode('utf8')),
+                           'corrections': len(metadata['text_corrections']),
+                           'note': 'Campbell text corrected to the page image; token differences recomputed.'}}
 
 
 def _rows(raw: bytes) -> list[dict]:
@@ -87,7 +123,10 @@ def build(source: Path = SOURCE, approval: Path = APPROVAL, notes: Path = NOTES,
     for fragment in FRAGMENTS:
         row, poem = by_fragment[fragment], poem_by_fragment[fragment]
         metadata = poem.get('metadata') or {}
-        comparison = row.get('campbell_comparison') or {}
+        comparison = dict(row.get('campbell_comparison') or {})
+        comparison['_other_greek'] = row.get('paired_greek') if row.get('paired_greek') is not None else (
+            '\n'.join(c['text'] for c in row.get('source_chunks', []) if c.get('language') == 'grc') or None)
+        comparison = _reanchored(comparison, poem)
         record_id = 'campbell-glp:alcaeus:' + fragment
         if (poem.get('id') != record_id or poem.get('source') != 'campbell_assignment'
                 or poem.get('kind') != 'text' or poem.get('language') != 'grc'
@@ -146,6 +185,8 @@ def build(source: Path = SOURCE, approval: Path = APPROVAL, notes: Path = NOTES,
                 'extraction_metadata_note': row.get('source_note'),
             },
         }
+        if 'reanchored' in comparison:
+            item['edition_difference_metadata']['campbell_text_reanchored'] = comparison['reanchored']
         records.append({'campbell_record_id': record_id, 'assignment_fragment': fragment,
             'campbell_identity': {**{key: poem[key] for key in
                 ('source', 'kind', 'language', 'quality', 'author', 'work', 'edition', 'source_url', 'raw_sha256')},

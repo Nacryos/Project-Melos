@@ -94,7 +94,7 @@ def verify(result, request, record, *, require_commentary=False, expected_compar
 
 
 def run(origin, baseline, output, *, require_commentary=False, require_comparisons=False):
-    source_path = ROOT / "runtime/campbell-assignment/campbell_assignment.jsonl"
+    source_path = ROOT / "data/campbell_glp/alcaeus_five_corrected.jsonl"
     records = {row["id"]: row for row in map(json.loads, source_path.read_text(encoding="utf-8").splitlines())}
     baseline_report = load(baseline / "report.json")
     baseline_hashes = {row["response_sha256"] for row in baseline_report["results"]}
