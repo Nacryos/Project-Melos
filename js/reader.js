@@ -316,13 +316,13 @@
     const letter = /\p{L}/u, greekLetter = /(?=\p{L})\p{Script=Greek}/u;
     const mark = /\p{M}/u, attachedSign = /['’᾽ʼ\u1fbf]/u;
     const words = [];
-    let start = -1, end = 0, mixed = false;
+    let start = -1, end = 0, mixed = false, lettered = false;
     const flush = () => {
-      if (start >= 0 && !mixed) {
+      if (start >= 0 && !mixed && lettered) {
         const raw = text.slice(start, end);
         words.push({ text: raw, start, end, form: raw, group: start, joined: false });
       }
-      start = -1; mixed = false;
+      start = -1; mixed = false; lettered = false;
     };
     for (let offset = 0; offset < text.length;) {
       const character = String.fromCodePoint(text.codePointAt(offset));
@@ -332,11 +332,14 @@
         if (start >= 0) {
           end = next;
           const following = next < text.length ? String.fromCodePoint(text.codePointAt(next)) : '';
-          if (attachedSign.test(following) || !letter.test(following)) flush();
+          if (attachedSign.test(following) || !(letter.test(following) || EDITORIAL_BRACKET.test(following))) flush();
         }
-      } else if (letter.test(character)) {
+      } else if (EDITORIAL_BRACKET.test(character)) {
         if (start < 0) start = offset;
         end = next;
+      } else if (letter.test(character)) {
+        if (start < 0) start = offset;
+        end = next; lettered = true;
         if (!greekLetter.test(character)) mixed = true;
       } else if (mark.test(character)) {
         if (start >= 0) end = next;
@@ -345,6 +348,18 @@
     }
     flush();
     return words;
+  }
+  // Editorial brackets touching letters belong to the printed unit, so
+  // ἐ[πί]σταμαι, [κ]ακῶν and ]σταμαι are one unit each; a bracket run with no
+  // letters (a lacuna such as "[ . . . ]") never becomes a unit.
+  const EDITORIAL_BRACKET = /[\[\]⟨⟩⟦⟧{}()<>〈〉]/u;
+  // Lookup key only: drop editorial brackets and underdots (U+0323). The
+  // backend's /api/word normaliser turns brackets into word breaks, so they
+  // must not reach it. Elision signs stay: the backend uses them.
+  function editorialLookupForm(value) {
+    const text = String(value || '');
+    if (!EDITORIAL_BRACKET.test(text) && !text.normalize('NFD').includes('̣')) return text;
+    return text.normalize('NFD').replace(/[\[\]⟨⟩⟦⟧{}()<>〈〉̣]/gu, '').normalize('NFC');
   }
   // Lookup units never replace the printed text. Only explicit line-end
   // divisions are joined; editorial brackets/lacunae/numbers remain barriers.
@@ -356,7 +371,12 @@
     // word's definitions for them. Never silently repair bracketed/lacunose text.
     const editorialGap = /^[\[\]<>\{\}⟨⟩〈〉‹›⟦⟧⸢⸣⸤⸥†‡…\p{M}]+$/u;
     for (let i = 0; i < words.length; i++) {
-      if (/\u0323/u.test(words[i].text.normalize('NFD'))) words[i].fragmentaryJoinRejected = true;
+      // Brackets and underdots stay in the printed unit; only the lookup key drops them.
+      words[i].form = editorialLookupForm(words[i].text);
+      if (words[i].form !== words[i].text) words[i].editorial = true;
+      // A unit that opens on a closing bracket or ends on an opening one has
+      // lost letters at that edge (]σταμαι, Δ[): a printed segment, not a word.
+      if (/^[\]⟩⟧}>〉]/u.test(words[i].text) || /[\[⟨⟦{<〈]$/u.test(words[i].text)) words[i].fragmentaryJoinRejected = true;
       if (i && editorialGap.test(text.slice(words[i - 1].end, words[i].start))) {
         words[i - 1].fragmentaryJoinRejected = true;
         words[i].fragmentaryJoinRejected = true;
@@ -377,7 +397,7 @@
         const dottedGap = /^\.(?:[ \t]*\.)+/u.test(text.slice(words[end].end));
         const orphanContinuation = /[-\u2010\u00ad][ \t]*\r?\n[ \t]*$/u.test(text.slice(0, words[i].start));
         const safe = !editorial.test(before) && !editorial.test(after) && !dottedGap && !orphanContinuation
-          && chain.every(word => !/\u0323/u.test(word.text))
+          && chain.every(word => !word.editorial)
           && chain.slice(0, -1).every(word => greekLetter.test([...word.text.normalize('NFC')].at(-1)));
         if (safe) {
           const form = chain.map(word => word.text).join('');
@@ -403,7 +423,7 @@
       button.dataset.lookupGroup = String(word.group);
       button.dataset.sourceStart = String(word.start);
       button.dataset.sourceEnd = String(word.end);
-      button.setAttribute('aria-label', `Inspect ${word.form}${word.fragmentaryJoinRejected
+      button.setAttribute('aria-label', `Inspect ${word.form}${word.editorial ? `, printed ${word.text}` : ''}${word.fragmentaryJoinRejected
         ? ', printed segment; complete word not established'
         : word.joined ? `, printed segment ${word.text}, divided across source lines` : ''}`);
       button.addEventListener('click', event => {
@@ -1527,7 +1547,7 @@
     for (const item of related) {
       if (item?.kind !== 'commentary' || typeof item.text !== 'string') continue;
       for (const word of literalGreekWords(item.text)) {
-        if (foldGreekForm(word.text) !== folded) continue;
+        if (foldGreekForm(editorialLookupForm(word.text)) !== folded) continue;
         const start = Math.max(0, word.start - 65);
         const end = Math.min(item.text.length, word.end + 95);
         hits.push({ item, start, end });
@@ -2079,6 +2099,8 @@
     if (renderHeadline) renderHeadline(headlineHost, { form, pending: true }, node);
     else headlineHost.append(node('div', 'word-title', form));
     if (joined) ui.inspector.append(node('p', 'word-normalized', 'Lookup joins an explicit printed line-end division. Both printed segments remain unchanged in the passage; no missing letters are supplied.'));
+    const printed = button && !joined ? button.textContent : '';
+    if (printed && printed !== form) ui.inspector.append(node('p', 'word-normalized', `Printed ${printed}. Editorial brackets and underdots are left out of the lookup; letters inside brackets are the editor’s. The passage text is unchanged.`));
     if (fragmentSegment) {
       ui.inspector.append(node('p', 'candidate-meta-label', 'Printed fragment'));
       appendWarnings(ui.inspector, ['Printed segment of an editorially marked or uncertain line-divided span. No complete word has been reconstructed. Dictionary matches concern this literal string, not necessarily the source word; computational and Jev analysis are unavailable for this segment.']);

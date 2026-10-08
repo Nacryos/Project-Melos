@@ -52,8 +52,9 @@ test('combining marks stay attached, source offsets remain exact, and sigma fold
   const words = literal(text);
   assert.equal(words.length, 2);
   for (const word of words) assert.equal(text.slice(word.start, word.end), word.text);
-  assert.equal(words[0].text, 'α\u0323β\u0301ʼ');
-  assert.equal(fold(words[0].text), "αβ'");
+  // The editorial brackets touch the letters, so they belong to the printed unit.
+  assert.equal(words[0].text, '[α\u0323β\u0301ʼ]');
+  assert.equal(fold(words[0].text.slice(1, -1)), "αβ'");
   assert.equal(fold('ΓΣ'), fold('γς'));
   assert.equal(mention('αβ’', text).children.length, 1);
   assert.equal(literal('\u0323 · ; ᾽ ʼ ’ \'').length, 0);
@@ -80,8 +81,8 @@ test('spacing psili remains a distinct attached printed sign, not an apostrophe 
   const form = 'αβ\u1fbf';
   const text = `🪶 [${form}] = γδ`;
   const word = literal(text)[0];
-  assert.equal(word.form, form);
-  assert.equal(text.slice(word.start, word.end), form);
+  assert.equal(word.form, `[${form}]`);
+  assert.equal(text.slice(word.start, word.end), `[${form}]`);
   assert.equal(mention(form, text).children.length, 1);
   assert.ok(mention(form, text).textContent.includes(text));
   assert.equal(fold(form), form);

@@ -9,25 +9,33 @@ const context = vm.createContext({});
 vm.runInContext(source.slice(source.indexOf('  function literalGreekWords('), source.indexOf('  function appendTextWithWords(')), context);
 const words = vm.runInContext('readingWords', context);
 
-test('every bracket-interrupted segment uses the existing incomplete-word display', () => {
-  for (const text of ['α[β]γ', 'α⟨β⟩γ', 'α[…]β']) {
+test('brackets inside a word keep it one unit; a lacuna between letters still splits it', () => {
+  for (const [text, form] of [['α[β]γ', 'αβγ'], ['α⟨β⟩γ', 'αβγ']]) {
     const units = words(text);
-    assert.ok(units.every(unit => unit.fragmentaryJoinRejected), text);
-    assert.ok(units.every(unit => !unit.joined && unit.form === unit.text), text);
-    assert.ok(units.every(unit => text.slice(unit.start, unit.end) === unit.text), text);
+    assert.equal(units.length, 1, text);
+    assert.equal(units[0].text, text);
+    assert.equal(units[0].form, form);
+    assert.equal(units[0].fragmentaryJoinRejected, undefined, text);
   }
+  const gap = words('α[…]β');
+  assert.deepEqual(Array.from(gap, unit => unit.text), ['α[', ']β']);
+  assert.ok(gap.every(unit => unit.fragmentaryJoinRejected && !unit.joined));
+  assert.ok(gap.every(unit => 'α[…]β'.slice(unit.start, unit.end) === unit.text));
 });
 
-test('underdots indicate uncertain source letters, not ordinary accents', () => {
-  const units = words('α\u0323β γ\u0301 δ\u0313');
-  assert.equal(units[0].fragmentaryJoinRejected, true);
-  assert.equal(units[1].fragmentaryJoinRejected, undefined);
-  assert.equal(units[2].fragmentaryJoinRejected, undefined);
+test('underdots stay in the printed unit and are left out of the lookup key', () => {
+  const units = words('α̣β γ́ δ̓');
+  assert.equal(units[0].text, 'α̣β');
+  assert.equal(units[0].form, 'αβ');
+  assert.equal(units[0].fragmentaryJoinRejected, undefined);
+  assert.equal(units[1].form, 'γ́');
+  assert.equal(units[2].form, 'δ̓');
 });
 
 test('isolated accents are not buttons and supplied whole words retain behavior', () => {
-  const text = '…\u0301 α [β] γ';
+  const text = '…́ α [β] γ';
   const units = words(text);
-  assert.deepEqual(Array.from(units, unit => unit.text), ['α', 'β', 'γ']);
+  assert.deepEqual(Array.from(units, unit => unit.text), ['α', '[β]', 'γ']);
+  assert.deepEqual(Array.from(units, unit => unit.form), ['α', 'β', 'γ']);
   assert.ok(units.every(unit => !unit.fragmentaryJoinRejected));
 });

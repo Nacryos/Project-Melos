@@ -21,6 +21,9 @@ const context = vm.createContext({
 vm.runInContext(source.slice(source.indexOf('  function literalGreekWords('), source.indexOf('  function renderPassageText(')), context);
 const words = vm.runInContext('readingWords', context);
 const render = vm.runInContext('appendTextWithWords', context);
+// Lookup key: the printed unit without editorial brackets or underdots.
+const lookupKey = text => /[\[\]⟨⟩⟦⟧{}()<>〈〉]/u.test(text) || text.normalize('NFD').includes('\u0323')
+  ? text.normalize('NFD').replace(/[\[\]⟨⟩⟦⟧{}()<>〈〉\u0323]/gu, '').normalize('NFC') : text;
 
 test('both printed segments inspect the same joined word without altering source characters', () => {
   const lines = ['αβγ- ', '\tδε ζη']; // Synthetic mechanics fixture, not literary evidence.
@@ -96,7 +99,7 @@ test('combining marks remain attached; Greek punctuation never becomes a word bu
   const text = 'α\u0323β\u0323γ· δ; [ε]';
   const units = words(text);
   assert.equal(units[0].text, 'α\u0323β\u0323γ');
-  assert.equal(units.map(unit => unit.text).join('|'), 'α\u0323β\u0323γ|δ|ε');
+  assert.equal(units.map(unit => unit.text).join('|'), 'α\u0323β\u0323γ|δ|[ε]');
   const host = new Element('p');
   render(host, text, units);
   assert.equal(host.textContent, text);
@@ -117,7 +120,7 @@ test('editorial markers on either outer boundary block whole-chain joining', () 
     const units = words(input);
     assert.ok(units.every(unit => !unit.joined), input);
     assert.ok(units.some(unit => unit.fragmentaryJoinRejected), input);
-    assert.ok(units.every(unit => unit.form === unit.text), input);
+    assert.ok(units.every(unit => unit.form === lookupKey(unit.text)), input);
   }
 });
 
@@ -127,7 +130,7 @@ test('rejected multiple-line chains never salvage a suffix or drop terminal sign
     'αβ]-\nγδ-\nεζ']) {
     const units = words(input);
     assert.ok(units.every(unit => !unit.joined), input);
-    assert.ok(units.every(unit => unit.form === unit.text), input);
+    assert.ok(units.every(unit => unit.form === lookupKey(unit.text)), input);
   }
 });
 
@@ -157,7 +160,7 @@ test('rejected chain buttons retain exact printed text and pass a segment-only i
     assert.match(button.attributes['aria-label'], /printed segment; complete word not established/);
     assert.doesNotMatch(button.attributes['aria-label'], /divided across source lines/);
     button.handlers.click();
-    assert.equal(clicks.at(-1)[0], button.textContent);
+    assert.equal(clicks.at(-1)[0], lookupKey(button.textContent));
     assert.equal(clicks.at(-1)[2], false); assert.equal(clicks.at(-1)[3], true);
   }
 });

@@ -648,7 +648,7 @@
   function selectionIssue(span) {
     if (!span?.selected_text?.trim()) return 'Select source text to analyze.';
     if ([...span.selected_text].length > MAX_CHARACTERS) return 'Analyze up to 2,000 characters at a time. The selection has not been shortened.';
-    if ((span.selected_text.match(/[\p{L}\p{M}]+(?:['’᾽ʼ᾿][\p{L}\p{M}]+)*/gu) || []).length > MAX_WORDS) return 'Analyze up to 80 words at a time. The selection has not been shortened.';
+    if ((span.selected_text.match(/[\p{L}\p{M}\[\]⟨⟩⟦⟧{}()<>〈〉]*\p{L}[\p{L}\p{M}\[\]⟨⟩⟦⟧{}()<>〈〉]*(?:['’᾽ʼ᾿][\p{L}\p{M}\[\]⟨⟩⟦⟧{}()<>〈〉]+)*/gu) || []).length > MAX_WORDS) return 'Analyze up to 80 words at a time. The selection has not been shortened.';
     return '';
   }
   function sourceMap(root, source) {
@@ -679,8 +679,12 @@
     while (walker.nextNode()) {
       const leaf = walker.currentNode, mapped = map.get(leaf);
       if (!mapped || !range.intersectsNode(leaf)) continue;
-      const low = leaf === range.startContainer ? range.startOffset : 0;
-      const high = leaf === range.endContainer ? range.endOffset : leaf.data.length;
+      // A drag that starts or ends inside a word button covers that whole
+      // printed unit, brackets included (κ[άλ]λιστος is one word).
+      const whole = leaf.parentElement?.classList?.contains('word');
+      let low = leaf === range.startContainer ? range.startOffset : 0;
+      let high = leaf === range.endContainer ? range.endOffset : leaf.data.length;
+      if (whole && low < high) { low = 0; high = leaf.data.length; }
       if (low >= high) continue;
       if (start === null) start = mapped.start + low;
       end = mapped.start + high;
