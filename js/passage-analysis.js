@@ -520,6 +520,41 @@
     if (cursor < text.length) segments.push({ text: text.slice(cursor) });
     return segments;
   }
+  // A headword is a proper name when the dictionary capitalises it; a word with
+  // no headword counts only when the edition prints it capitalised.
+  const capitalised = value => typeof value === 'string' && /^\p{Lu}/u.test(value.normalize('NFD'));
+  // Dictionary-style headline built only from one interlinear row's server
+  // fields: headword, its short gloss, then the printed form and its parse.
+  function headlineFromRow(row) {
+    if (!row || row.kind !== 'word') return null;
+    const lemmas = [...new Set((row.morphology_ranking || []).map(item => item.lemma).filter(Boolean))];
+    const lemma = row.lemma || (lemmas.length === 1 ? lemmas[0] : '');
+    const gloss = row.gloss?.status === 'available' && typeof row.gloss.text === 'string' ? row.gloss.text.trim() : '';
+    const partial = row.damaged_piece || row.partial_word || row.editorial_fragment;
+    return { lemma, gloss, form: row.text, reading: row.form && row.form !== row.text ? row.form : '',
+      parse: row.parse_short || (partial ? 'damaged piece · no analysis' : ''),
+      properName: !partial && capitalised(lemma || row.form || row.text),
+      glossTitle: gloss ? `${row.gloss.full_text || gloss} — ${row.gloss.source || 'dictionary'} · ${glossBasis(row.gloss)}` : '' };
+  }
+  function renderWordHeadline(host, value, node) {
+    const head = node('div', 'word-headline');
+    const lemma = node('div', 'word-title word-headline-lemma', value.lemma || value.form); lemma.setAttribute('lang', 'grc');
+    head.append(lemma);
+    if (!value.lemma && !value.pending) head.append(node('p', 'word-headline-note', value.note || 'Headword not identified'));
+    const empty = value.pending || (!value.properName && !value.gloss);
+    const gloss = node('p', `word-headline-gloss${empty ? ' word-headline-empty' : ''}${value.pending ? ' melos-loading' : ''}`, value.pending ? 'Looking up meaning…'
+      : value.properName ? '(proper name)' : value.gloss || 'no short gloss');
+    gloss.setAttribute('lang', 'en');
+    if (value.glossTitle && !value.properName) gloss.title = value.glossTitle;
+    head.append(gloss);
+    if (value.lemma) {
+      const form = node('p', 'word-headline-form', value.form); form.setAttribute('lang', 'grc');
+      if (value.reading) form.append(node('span', 'word-headline-reading', ` (read ${value.reading})`));
+      head.append(form);
+    }
+    if (!value.pending) head.append(node('p', 'word-headline-parse', value.parse || 'parse not settled'));
+    host.replaceChildren(head); return head;
+  }
   function renderInterlinear(host, data, node) {
     const interlinear = data.interlinear;
     const readings = interlinear?.text === data.selection?.text ? interlinear.readings || [] : [];
@@ -779,7 +814,10 @@
         const shortGloss = projection?.gloss?.status === 'available' ? projection.gloss.text
           : structured ? '' : alternatives.find(item => item.gloss)?.gloss;
         const reading = token.form && token.form !== token.text ? ` (read ${token.form})` : '';
-        box.append(node('summary', '', `${token.text}${reading}${shortGloss ? ` — ${shortGloss}` : ''} · ${displayAlternatives.length} ${displayAlternatives.length === 1 ? 'parse' : 'possible parses'}`));
+        const headline = projection ? headlineFromRow(projection) : null;
+        const summaryGloss = headline?.properName ? '(proper name)' : shortGloss;
+        box.append(node('summary', '', `${token.text}${reading}${summaryGloss ? ` — ${summaryGloss}` : ''} · ${displayAlternatives.length} ${displayAlternatives.length === 1 ? 'parse' : 'possible parses'}`));
+        if (headline) { const headHost = node('div', 'word-headline-host'); box.append(headHost); renderWordHeadline(headHost, headline, node); }
         const lookup = node('button', 'occurrence-search', 'Open word dictionary'); lookup.type = 'button';
         lookup.addEventListener('click', () => inspectWord(token.form || token.text)); box.append(lookup);
         if (token.editorial_reconstruction || token.uncertain_letters) {
@@ -1051,5 +1089,5 @@
       }
     };
   }
-  window.MelosPassageAnalysis = { mount, sourceMap, selectedSpan, selectionIssue, createRequester, lexicalPrediction, sourceCandidateGroups, rankingCandidateLabel, dedupeCandidates, groupCandidateDisplays, renderPartialCandidateEvidence, machineSubentryMeanings, renderMachineSubentryMeanings, englishTranslation, interlinearSegments, renderInterlinear, renderPublishedCommentary, renderTranslationComparisons, verifiedEditorialRows, renderEditorialAnalysis, renderEditorialWordActions };
+  window.MelosPassageAnalysis = { mount, sourceMap, selectedSpan, selectionIssue, createRequester, lexicalPrediction, sourceCandidateGroups, rankingCandidateLabel, dedupeCandidates, groupCandidateDisplays, renderPartialCandidateEvidence, machineSubentryMeanings, renderMachineSubentryMeanings, englishTranslation, interlinearSegments, renderInterlinear, headlineFromRow, renderWordHeadline, renderPublishedCommentary, renderTranslationComparisons, verifiedEditorialRows, renderEditorialAnalysis, renderEditorialWordActions };
 })();
