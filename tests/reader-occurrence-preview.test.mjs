@@ -87,3 +87,24 @@ test('source ID buttons remove the inherited side margin and wrap within narrow 
   assert.match(scoped, /overflow-wrap:anywhere/);
   assert.match(css, /\.occurrence-sources\{[^}]*min-width:0;max-width:100%;overflow-wrap:anywhere/);
 });
+
+test('source records show the readable collection name: source_label, else the /api/status label, else the id', () => {
+  context.melosSourceLabels = new Map([['collection_id_b', 'Readable Collection B']]);
+  try {
+    const members = [record('one', { source: 'collection_id_a', source_label: 'Readable Collection A' }),
+      record('two', { source: 'collection_id_b' }), record('three', { source: 'collection_id_c' })];
+    const host = new Element();
+    render(host, { occurrences: members, occurrence_preview_groups: [{ representative_id: 'one', members }] });
+    const text = host.textContent;
+    assert.match(text, /Readable Collection A/); assert.doesNotMatch(text, /collection_id_a/);
+    assert.match(text, /Readable Collection B/); assert.doesNotMatch(text, /collection_id_b/);
+    assert.match(text, /collection_id_c/);
+  } finally { delete context.melosSourceLabels; }
+});
+
+test('provenance, mirror copies and search results read source_label too', () => {
+  for (const pattern of [/'Collection', \(passage\.source_label \|\| globalThis\.melosSourceLabels\?\.get\(passage\.source\)/,
+    /\[\(copy\.source_label \|\| globalThis\.melosSourceLabels\?\.get\(copy\.source\)/,
+    /`Collection: \$\{\(record\.source_label \|\| globalThis\.melosSourceLabels\?\.get\(record\.source\)/,
+    /globalThis\.melosSourceLabels = new Map\(/]) assert.match(script, pattern);
+});

@@ -36,9 +36,13 @@ receipt: { id: 'receipt', engine_revision: null, url: 'https://example.test/api'
 
 test('no automatic call; literal alternatives, dialect scope and provenance remain separate from meanings', async () => {
   const ui = setup(async () => result()); assert.equal(ui.requests.length, 0);
+  // No engine is named before a receipt says which one answered.
+  assert.doesNotMatch(ui.host.textContent, /Morpheus via Alpheios/);
+  assert.match(ui.host.textContent, /engine is named on each result/);
+  await ui.button('Analyze this form').handlers.click();
   assert.ok(descendants(ui.host).some(item => item.href === 'https://alpheios.net/pages/tools/' && item.text === 'Morpheus via Alpheios'));
   assert.ok(descendants(ui.host).some(item => item.href === 'https://alpheios.net/pages/apiterms/' && item.text === 'API terms'));
-  await ui.button('Analyze this form').handlers.click();
+  assert.match(ui.host.textContent, /Parsed by Morpheus via Alpheios\./);
   assert.equal(ui.requests.length, 1); assert.equal(ui.requests[0][0], '/api/machine-analysis');
   assert.match(ui.host.textContent, /Synthetic headword/); assert.match(ui.host.textContent, /Other synthetic headword/);
   assert.match(ui.host.textContent, /Case: nominative/); assert.match(ui.host.textContent, /Case: accusative/);
@@ -48,6 +52,25 @@ test('no automatic call; literal alternatives, dialect scope and provenance rema
   assert.ok(descendants(ui.host).some(item => item.tag === 'details' && item.cls.includes('notice-details') && /No meaning is inferred/.test(item.textContent)));
   assert.match(ui.host.textContent, /raw synthetic entry/); assert.match(ui.host.textContent, /synthetic-hash/);
   assert.ok(descendants(ui.host).some(item => item.href === 'https://example.test/api'));
+});
+
+test('a local Morpheus receipt names the build by commit, not Alpheios, and hides the internal URL', async () => {
+  const local = result();
+  local.receipt = { id: 'receipt', parser_version: 'morpheus-local-v1', url: 'http://internal-engine:8080/api/v1/analysis/word?word=x',
+    engine_revision: `alpheios-project/morpheus@${'a'.repeat(7)}${'0'.repeat(33)} (dist/stemlib); alpheios-project/morphsvc@${'b'.repeat(7)}${'1'.repeat(33)}` };
+  const ui = setup(async () => local, { safeLink(url, label) { if (!/^https?:/.test(String(url))) return null; const link = new Element('a', '', label); link.href = url; return link; } });
+  await ui.button('Analyze this form').handlers.click();
+  assert.match(ui.host.textContent, /Parsed by Morpheus, local build at commit aaaaaaa\./);
+  assert.doesNotMatch(ui.host.textContent, /Morpheus via Alpheios|API terms/);
+  const links = descendants(ui.host).filter(item => item.tag === 'a');
+  assert.ok(links.some(item => item.text === 'Morpheus, local build at commit aaaaaaa'
+    && item.href === `https://github.com/alpheios-project/morpheus/tree/${'a'.repeat(7)}${'0'.repeat(33)}`));
+  assert.ok(links.some(item => item.text === 'morphsvc bbbbbbb' && item.href.startsWith('https://github.com/alpheios-project/morphsvc/tree/')));
+  assert.ok(links.every(item => !item.href.includes('internal-engine')));
+  const context = vm.createContext({ AbortController }); vm.runInContext(script, context);
+  const engine = context.MelosMachineMorphology;
+  assert.equal(engine.engineOf(null), null);
+  assert.equal(engine.engineOf({ parser_version: 'alpheios-literal-v1' }).label, 'Morpheus via Alpheios');
 });
 
 test('Jev requires separate click and receipt, never displays inferred machine gloss', async () => {

@@ -142,14 +142,14 @@ function harness(response) {
   const ui = { text: new Element(), inspector: new Element() }; ui.text.append(word);
   ui.inspector.closest = () => ({ scrollIntoView() {} });
   const state = { passage: { id: 'synthetic:passage', text: 'αβ' }, wordSequence: 0, passageLoading: false, machineAnalysisCancel: () => {} };
-  const empty = () => {}, lookups = [];
+  const empty = () => {}, lookups = [], calls = [];
   const window = { MelosWordPanel: panel, matchMedia: () => ({ matches: false }),
     MelosPassageAnalysis: {
       renderWordHeadline: (host, value, make) => { const head = make('div', 'word-headline'); head.append(make('div', 'word-headline-lemma', value.lemma || value.form)); if (!value.pending) head.append(make('p', 'word-headline-parse', value.parse || '')); host.replaceChildren(head); return head; },
       headlineFromRow: row => row ? { lemma: row.lemma, gloss: 'g', form: row.text, parse: row.parse_short } : null,
     } };
   const context = vm.createContext({ ui, state, window, node, clear: host => host.replaceChildren(),
-    api: async (path, params) => { lookups.push(params.form); return params.form === 'αβ' ? response : { lexicon_entries: [
+    api: async (path, params) => { lookups.push(params.form); calls.push({ path, ...params }); return params.form === 'αβ' ? response : { lexicon_entries: [
       { id: 'ml', source: 'Perseus Middle Liddell TEI', lemma: 'λέμμα', dictionary_senses: [{ text: 'fixture sense', sense_path: [{ n: 'A' }] }] }] }; },
     apiPost: async () => ({ passage: { id: 'synthetic:passage' }, interlinear: { readings: [{ tokens: [{ kind: 'word', start_utf16: 0, text: 'αβ', lemma: 'λέμμα', parse_short: 'acc. fem. sg.',
       source_candidate: { basis: 'machine_analysis' }, selection_basis: 'unique_candidate', morphology_ranking: [] }] }] } }),
@@ -161,7 +161,7 @@ function harness(response) {
   });
   vm.runInContext(readerSource.slice(readerSource.indexOf('  function appendWarnings('), readerSource.indexOf('  function chronologyClaim(')), context);
   vm.runInContext(readerSource.slice(readerSource.indexOf('  async function renderWordMachineDictionary('), readerSource.indexOf('  function updateSelectionTranslationAction(')), context);
-  return { ui, word, lookups, inspect: context.inspectWord };
+  return { ui, word, lookups, calls, inspect: context.inspectWord };
 }
 
 test('panel zones run headword, dictionaries, notes, then one collapsed Sources and method', async () => {
@@ -183,4 +183,33 @@ test('panel zones run headword, dictionaries, notes, then one collapsed Sources 
   // Dictionaries follow the headline's headword, fetched by headword when the form lookup has none.
   assert.deepEqual(h.lookups, ['αβ', 'λέμμα']);
   assert.match(h.ui.inspector.querySelector('.word-dictionaries').textContent, /Middle Liddell.*fixture sense/);
+});
+
+test('the form lookup carries the headline headword as lemma=, and the dictionaries follow it', async () => {
+  const h = harness({ candidates: [], contextual_candidates: [], lexicon_entries: [
+    { id: 'ml', source: 'Perseus Middle Liddell TEI', lemma: 'λέμμα', dictionary_senses: [{ text: 'headline sense', sense_path: [] }] },
+    { id: 'other', source: 'Perseus Middle Liddell TEI', lemma: 'ἄλλο', dictionary_senses: [{ text: 'other sense', sense_path: [] }] }] });
+  await h.inspect('αβ', h.word);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  const lookup = h.calls.find(call => call.path === '/api/word' && call.form === 'αβ');
+  assert.equal(lookup.lemma, 'λέμμα'); assert.equal(lookup.passage_id, 'synthetic:passage');
+  // The form lookup already brought the headword's entries: no second lookup.
+  assert.deepEqual(h.lookups, ['αβ']);
+  const dictionaries = h.ui.inspector.querySelector('.word-dictionaries').textContent;
+  assert.match(dictionaries, /headline sense/); assert.doesNotMatch(dictionaries, /other sense/);
+});
+
+test('the headline names the parser the server reports in parse_source, with short build commits', () => {
+  const panel = loadPanel();
+  const local = { selection_basis: 'unique_candidate', source_candidate: { basis: 'machine_analysis' },
+    parse_source: { kind: 'machine_analysis', label: `Morpheus, local build (alpheios-project/morpheus@2f1a30d${'0'.repeat(33)})` } };
+  assert.equal(panel.parseSource(local), 'Parse from Morpheus, local build (alpheios-project/morpheus@2f1a30d); the only analysis found.');
+  assert.doesNotMatch(panel.parseSource(local), /Perseus\)/);
+  const recorded = { selection_basis: 'source_morphology_consensus',
+    parse_source: { kind: 'source_analysis', label: 'PerseusDL Greek Dependency Treebank v1.6; LSJ (Logeion edition, H. Dik) TEI' } };
+  assert.equal(panel.parseSource(recorded), 'Parse from Perseus treebank; LSJ; the recorded analyses agree.');
+  const model = { selection_basis: 'syntax_prediction', parse_source: { kind: 'contextual_model', label: 'Contextual model prediction (odyCy), not a source parse' } };
+  assert.equal(panel.parseSource(model), 'Predicted from the sentence only; no parser analysis.');
+  // Older rows without parse_source keep the candidate-based wording.
+  assert.match(panel.parseSource({ selection_basis: 'unique_candidate', source_candidate: { basis: 'machine_analysis' } }), /^Parse from Morpheus parser/);
 });

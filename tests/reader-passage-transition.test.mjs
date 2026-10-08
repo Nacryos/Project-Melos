@@ -120,6 +120,8 @@ test('late work enumeration cannot start another passage after an explicit passa
 test('pending word/Wiktionary results and old word buttons cannot restore stale context during transition', async () => {
   const h = harness();
   const oldLookup = h.inspectWord('fixture', h.oldWord);
+  // The form lookup waits (briefly) for the headline's headword before it goes out.
+  await new Promise(resolve => setTimeout(resolve, 0));
   assert.equal(h.requests.length, 2);
   const pending = h.open('new');
   const openingMessage = h.ui.inspector.textContent;

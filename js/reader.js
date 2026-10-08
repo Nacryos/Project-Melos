@@ -141,6 +141,11 @@
     if (Array.isArray(data.warnings) && data.warnings.length) ui.status.title = data.warnings.join(' ');
     state.semanticStatus = semanticCoverage(data.embeddings);
     state.classifierStatus = data.classifier || null;
+    // Readable collection names by id, for records that arrive without `source_label`
+    // (occurrences, mirror copies). Read inline where records are drawn.
+    globalThis.melosSourceLabels = new Map((Array.isArray(data.sources) ? data.sources : [])
+      .filter(item => item && typeof item.source === 'string' && typeof item.label === 'string' && item.label)
+      .map(item => [item.source, item.label]));
     updateLanguageOptions(data.languages);
     updateBridgeNote();
   }
@@ -568,7 +573,7 @@
     clear(ui.provenance);
     addMeta(ui.provenance, 'Original reference', passage.citation || 'Not supplied');
     addMeta(ui.provenance, 'Edition', passage.edition || 'Not supplied');
-    addMeta(ui.provenance, 'Collection', passage.source || 'Not supplied');
+    addMeta(ui.provenance, 'Collection', (passage.source_label || globalThis.melosSourceLabels?.get(passage.source) || passage.source) || 'Not supplied');
     addMeta(ui.provenance, 'Record type / language', [passage.kind || 'unlabeled', passage.language || 'unlabeled'].join(' · '));
     const tag = node('span', `quality-tag${passage.quality && passage.quality !== 'source_text' ? ' caution' : ''}`, qualityLabel(passage.quality));
     addMeta(ui.provenance, 'Text quality', tag);
@@ -724,7 +729,7 @@
       for (const member of group.members) {
         const line = node('p', 'occurrence-source');
         line.append(node('span', '', [member.author, member.work, member.citation,
-          member.edition, member.source, member.quality && qualityLabel(member.quality)].filter(Boolean).join(' · ')));
+          member.edition, (member.source_label || globalThis.melosSourceLabels?.get(member.source) || member.source), member.quality && qualityLabel(member.quality)].filter(Boolean).join(' · ')));
         if (member.id) {
           const open = node('button', 'related-open', 'Open this record →');
           open.title = `Record ${member.id}`; open.setAttribute?.('aria-label', `Open record ${member.id}`);
@@ -748,7 +753,7 @@
     block.append(node('p', 'related-note', 'Identical wording is shown together here; each copy retains its own source and citation.'));
     for (const copy of mirrors) {
       const line = node('p', 'mirror-copy');
-      line.append(node('span', '', [copy.source, copy.edition, copy.citation, copy.author, copy.quality && copy.quality !== 'source_text' ? qualityLabel(copy.quality) : ''].filter(Boolean).join(' · ')));
+      line.append(node('span', '', [(copy.source_label || globalThis.melosSourceLabels?.get(copy.source) || copy.source), copy.edition, copy.citation, copy.author, copy.quality && copy.quality !== 'source_text' ? qualityLabel(copy.quality) : ''].filter(Boolean).join(' · ')));
       if (copy.id) {
         const open = node('button', 'related-open', 'Open this copy →');
         open.type = 'button';
@@ -873,7 +878,7 @@
     const excerpt = (record.text || '').replace(/\s+/g, ' ').trim();
     body.append(node('span', 'result-excerpt', excerpt || 'Text unavailable'));
     body.append(node('span', 'result-edition', `Edition: ${record.edition || 'Not supplied'}`),
-      node('span', 'result-collection', `Collection: ${record.source || 'Not supplied'}`));
+      node('span', 'result-collection', `Collection: ${(record.source_label || globalThis.melosSourceLabels?.get(record.source) || record.source) || 'Not supplied'}`));
     const translation = passageTranslationPreviews(record)[0];
     if (translation) {
       const preview = node('span', 'result-translation');
@@ -2165,11 +2170,12 @@
       clear(dictionaryHost);
       if (blocks.length) { panel.renderDictionaryBlocks(dictionaryHost, blocks, node, safeLink); return; }
       if (wordData) renderDictionaryPreview(dictionaryHost, wordData, { openEntries: false, wiktionary: wiktionaryData });
-      if (lemma && panel?.dictionaryBlocks && !lemmaEntries.has(lemma)) {
+      // Only after the form lookup (which already carried `lemma=`) has none.
+      if (lemma && panel?.dictionaryBlocks && wordData && !lemmaEntries.has(lemma)) {
         lemmaEntries.set(lemma, []);
         const loading = node('p', 'inspector-message melos-loading', `Looking up ${lemma} in the dictionaries…`);
         if (!dictionaryHost.children.length) dictionaryHost.append(loading);
-        api('/api/word', { form: lemma }).then(data => {
+        api('/api/word', { form: lemma, lemma }).then(data => {
           lemmaEntries.set(lemma, Array.isArray(data?.lexicon_entries) ? data.lexicon_entries : []); drawDictionaries();
           if (sequence === state.wordSequence && !dictionaryHost.children.length) message(dictionaryHost, `No dictionary entry for ${lemma} was found.`);
         }).catch(() => {
@@ -2221,7 +2227,12 @@
       requestAnimationFrame(() => ui.inspector.closest('.inspector').scrollIntoView({ behavior: 'smooth', block: 'start' }));
     }
     try {
-      const data = await api('/api/word', { form, passage_id: passageId });
+      // The headline's headword goes to /api/word as `lemma=`, so the
+      // dictionaries and analyses below follow it (σ’ read as σύ, not σός).
+      // A slow headline does not hold the lookup for more than 2.5 s.
+      const lemma = await headlineLemma(contextualHeadline, 2500);
+      if (sequence !== state.wordSequence) return;
+      const data = await api('/api/word', { form, passage_id: passageId, ...(lemma ? { lemma } : {}) });
       if (sequence !== state.wordSequence) return;
       pending.remove();
       // Fall back to the form lookup when no passage row arrives, or
@@ -2270,6 +2281,8 @@
         : candidates.length ? `Analyses recorded in the sources · ${candidates.length}` : 'Analyses recorded in the sources'));
       morphologyHost.append(analysis);
       appendWarnings(analysis, data.warnings);
+      const parseFrom = parseSourceText(data.parse_source);
+      if (parseFrom) analysis.append(node('p', 'candidate-reason word-parse-source', `Parses from ${parseFrom}.`));
       if (!candidates.length) analysis.append(node('p', `inspector-message${hasDictionaryMeaning ? '' : ' word-absence'}`, hasLexicalVariant
         ? 'No complete sourced morphological parse is available. The exact dictionary-listed variant and its general meanings are shown above.'
         : hasLinkedMeanings ? 'No complete sourced morphological parse is available. Dictionary-linked meaning alternatives are shown above.'
@@ -2357,6 +2370,19 @@
   // Headline for a passage word: the exact-span interlinear row (headword,
   // short dictionary gloss, contextually ranked parse) from the same endpoint
   // as the phrase reading. Cached per span; null when no row is returned.
+  // /api/word's `parse_source` ({kind, label}) as reader-facing words, or ''.
+  function parseSourceText(given) {
+    const label = typeof given?.label === 'string' ? given.label.trim() : '';
+    return label ? (window.MelosWordPanel?.readableSourceLabel?.(label) || label) : '';
+  }
+  // The headline's headword, or '' when none arrives within `wait` ms.
+  function headlineLemma(headline, wait) {
+    const lemma = Promise.resolve(headline).then(value => typeof value?.lemma === 'string' ? value.lemma.trim() : '', () => '');
+    if (!globalThis.setTimeout) return lemma;
+    let timer;
+    return Promise.race([lemma, new Promise(resolve => { timer = globalThis.setTimeout(() => resolve(''), wait); })])
+      .finally(() => globalThis.clearTimeout?.(timer));
+  }
   async function passageWordHeadline(button, form) {
     const passage = state.passage, start = Number(button?.dataset?.sourceStart), end = Number(button?.dataset?.sourceEnd);
     const fromRow = window.MelosPassageAnalysis?.headlineFromRow;
@@ -2396,9 +2422,11 @@
     const parses = [...new Set(own.map(item => item.analysis_text).filter(Boolean))];
     const sources = [...new Set(own.map(item => item.source).filter(Boolean))];
     const plainSource = name => window.MelosWordPanel?.plainSource?.(name) || name;
+    const given = parseSourceText(data.parse_source);
     return { ...value, lemma: lemmas[0], gloss: candidateDictionaryExcerpt(own[0], data.lexicon_entries, form).text || '',
       parse: parses.length === 1 ? parses[0] : parses.length ? `${parses.length} possible parses` : '',
-      source: sources.length ? `Parse recorded in ${sources.slice(0, 2).map(plainSource).join(' and ')}.` : '',
+      source: given ? `${data.parse_source.kind === 'machine_analysis' ? 'Parse from' : 'Parse recorded in'} ${given}.`
+        : sources.length ? `Parse recorded in ${sources.slice(0, 2).map(plainSource).join(' and ')}.` : '',
       alternatives: parses.length > 1 ? parses.map(parse => ({ parse: String(parse).replace(/,(?=\S)/g, ', ') })) : [], ranked: false,
       properName: /^\p{Lu}/u.test(lemmas[0].normalize('NFD')) };
   }

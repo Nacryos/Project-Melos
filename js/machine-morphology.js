@@ -14,6 +14,20 @@
     }
     return [...groups.values()];
   }
+  // The engine that produced a result, read from its receipt: our local Morpheus
+  // build (named by commit) or the remote Alpheios service. Nothing is assumed.
+  const LOCAL_PARSER = 'morpheus-local-v1';
+  function engineOf(receipt) {
+    if (!receipt || typeof receipt !== 'object') return null;
+    if (receipt.parser_version === LOCAL_PARSER) {
+      const commits = {};
+      for (const match of String(receipt.engine_revision || '').matchAll(/alpheios-project\/(morpheus|morphsvc)@([0-9a-f]{40})/g)) commits[match[1]] = match[2];
+      const repo = name => `https://github.com/alpheios-project/${name}${commits[name] ? `/tree/${commits[name]}` : ''}`;
+      return { local: true, label: `Morpheus, local build${commits.morpheus ? ` at commit ${commits.morpheus.slice(0, 7)}` : ''}`,
+        url: repo('morpheus'), service: commits.morphsvc ? { label: `morphsvc ${commits.morphsvc.slice(0, 7)}`, url: repo('morphsvc') } : null };
+    }
+    return { local: false, label: 'Morpheus via Alpheios', url: 'https://alpheios.net/pages/tools/', terms: 'https://alpheios.net/pages/apiterms/' };
+  }
   function mount({ host, form, passageId, current, post, node, safeLink, classifierReady }) {
     const section = node('section', 'inspector-section machine-analysis');
     section.append(node('h3', '', 'More possible parses'));
@@ -23,10 +37,18 @@
     const analyze = node('button', 'classifier-action', 'Analyze this form'); analyze.type = 'button';
     const cancel = node('button', 'machine-cancel', 'Cancel request'); cancel.type = 'button'; cancel.hidden = true;
     const attribution = node('p', 'candidate-reason machine-attribution');
-    const provider = safeLink('https://alpheios.net/pages/tools/', 'Morpheus via Alpheios');
-    const terms = safeLink('https://alpheios.net/pages/apiterms/', 'API terms');
-    if (provider) attribution.append(provider);
-    if (terms) { attribution.append(node('span', '', ' · ')); attribution.append(terms); }
+    const attribute = engine => {
+      attribution.replaceChildren();
+      if (!engine) { attribution.append(node('span', '', 'Parser: the engine is named on each result (local Morpheus build or the Alpheios service).')); return; }
+      attribution.append(node('span', '', 'Parser: '));
+      const provider = safeLink(engine.url, engine.label);
+      attribution.append(provider || node('span', '', engine.label));
+      const service = engine.service && safeLink(engine.service.url, engine.service.label);
+      if (service) attribution.append(node('span', '', ' · service '), service);
+      const terms = engine.terms && safeLink(engine.terms, 'API terms');
+      if (terms) attribution.append(node('span', '', ' · '), terms);
+    };
+    attribute(null);
     const output = node('div', 'machine-output'); output.setAttribute('aria-live', 'polite');
     about.append(attribution);
     section.append(analyze, cancel, output, about); host.append(section);
@@ -124,8 +146,11 @@
         const result = await post('/api/machine-analysis', { form, ...(passageId ? { passage_id: passageId } : {}) }, { signal: controller.signal });
         if (!valid(ticket)) return;
         clear(output);
+        const engine = engineOf(result.receipt);
+        if (engine) attribute(engine);
         if (result.status === 'ok' && Array.isArray(result.machine_candidates) && result.machine_candidates.length) {
           say(output, `${result.machine_candidates.length} possible parses`, 'candidate-meta-label');
+          if (engine) say(output, `Parsed by ${engine.label}.`, 'candidate-reason machine-engine');
           for (const members of displayGroups(result.machine_candidates)) candidate(output, members[0], members);
           compare(output, result, ticket);
         } else if (result.status === 'no_analyses') say(output, 'No additional parses found.');
@@ -133,7 +158,8 @@
           ? 'The morphology service is busy or rate-limited. Please try again later.'
           : 'Could not load additional parses. Try again.', 'error-message');
         warnings(output, result.warnings);
-        if (result.receipt) provenance(output, 'Request receipt and source API', result.receipt, result.receipt.url);
+        // A local receipt's URL is the service's internal address, not a public link.
+        if (result.receipt) provenance(output, engine?.local ? 'Request receipt' : 'Request receipt and source API', result.receipt, engine?.local ? null : result.receipt.url);
         if (Array.isArray(result.machine_entries) && result.machine_entries.length) provenance(output, 'Raw engine entries', result.machine_entries);
       } catch (error) {
         if (valid(ticket)) {
@@ -149,5 +175,5 @@
     });
     return stop;
   }
-  globalThis.MelosMachineMorphology = { mount, displayGroups };
+  globalThis.MelosMachineMorphology = { mount, displayGroups, engineOf };
 })();

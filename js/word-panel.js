@@ -60,10 +60,21 @@
     if (typeof candidate?.source === 'string' && candidate.source) return plainSource(candidate.source);
     return kind ? 'an analysis recorded in the sources' : '';
   }
+  // The server's `parse_source` label in reader-facing words: dictionary and
+  // treebank names shortened, build commits cut to seven characters.
+  function readableSourceLabel(label) {
+    if (typeof label !== 'string' || !label.trim()) return '';
+    const parts = label.split(/;\s*/).map(part => part.trim()).filter(Boolean)
+      .map(part => /morpheus/i.test(part) ? part : plainSource(part))
+      .map(part => part.replace(/\b([0-9a-f]{7})[0-9a-f]{33}\b/g, '$1'));
+    return [...new Set(parts)].join('; ');
+  }
   // One plain sentence: where the headline parse comes from and how it was chosen.
   function parseSource(row) {
     if (!row || typeof row !== 'object') return '';
-    const from = sourceName(row.source_candidate);
+    const given = row.parse_source && typeof row.parse_source === 'object' ? row.parse_source : null;
+    const from = given?.label ? (given.kind === 'contextual_model' && row.selection_basis ? '' : readableSourceLabel(given.label))
+      : sourceName(row.source_candidate);
     const how = BASIS[row.selection_basis] || '';
     if (!from && !how) return '';
     if (!from) return `${how.charAt(0).toUpperCase()}${how.slice(1)}.`;
@@ -298,6 +309,6 @@
     const start = () => { watchReceipts(document.body, make); const text = document.getElementById('passage-text'); if (text) retargetTaps(text); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
   }
-  window.MelosWordPanel = Object.freeze({ plainParse, parseSource, alternatives, headlineDetail, dictionaryName, plainSource,
+  window.MelosWordPanel = Object.freeze({ plainParse, parseSource, readableSourceLabel, alternatives, headlineDetail, dictionaryName, plainSource,
     dictionaryBlocks, renderDictionaryBlocks, decorateHeadline, nearestWord, retargetTaps, plainKey, readableValue, humanizeReceipt, watchReceipts });
 })();
