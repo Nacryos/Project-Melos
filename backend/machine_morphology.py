@@ -1,7 +1,14 @@
-"""Explicit, bounded Alpheios machine analyses; never corpus attestations.
+"""Explicit, bounded Morpheus machine analyses; never corpus attestations.
 
-Endpoint: Alpheios' official client config at alpheios-core a27dc27a,
-packages/client-adapters/src/adapters/tufts/config.json. Service revision unknown.
+Two engines, each labelled on its own receipts:
+- Alpheios (remote): Alpheios' official client config at alpheios-core a27dc27a,
+  packages/client-adapters/src/adapters/tufts/config.json. Service revision unknown.
+  Courtesy quotas apply (daily/minute, global and per visitor).
+- Local Morpheus (MELOS_MORPHEUS_LOCAL=<http(s) URL of /api/v1/analysis/word>): our own
+  build of alpheios-project/morpheus with its stem library behind morphsvc's unmodified
+  envelope code (deploy/morpheus-local). Its /health names the commits, which every
+  local receipt records. No quotas; consulted on any cache miss, since the `fetch` flag
+  exists to protect the remote budget.
 SQLite holds immutable raw receipts and cross-process miss reservations/quotas.
 No retries, redirects, accent folding, feature inference, or dictionary joins.
 """
@@ -29,6 +36,17 @@ TIMEOUT = 8
 FAILURE_BACKOFF = 300
 WARNINGS = ["Machine-generated alternatives, not occurrence-attested or contextually adjudicated morphology.",
             "The deployed engine and stem-library revisions are unknown; dialect labels are not exhaustive."]
+LOCAL_PARSER_VERSION = "morpheus-local-v1"
+LOCAL_FAILURE_BACKOFF = 30
+LOCAL_REVISION = re.compile(r"alpheios-project/morpheus@[0-9a-f]{40} \(dist/stemlib\); "
+                            r"alpheios-project/morphsvc@[0-9a-f]{40}")
+
+
+def local_warnings(revision):
+    return [WARNINGS[0], f"Local Morpheus build ({revision}), not the Alpheios service; "
+                         "dialect labels are not exhaustive."]
+
+
 ELISION_MARKS = "\u2019\u1fbd"
 ELISION_CONVENTION = ("https://github.com/alpheios-project/alpheios-core/blob/"
                      "a27dc27afa166998c15335295a63233219a16741/"
@@ -72,7 +90,7 @@ def transport_form(form):
     return form[:-1] + "\u1fbd" if form.endswith("\u2019") else form
 
 
-def request_url(form):
+def request_url(form, endpoint=ENDPOINT):
     parameters = {"word": transport_form(form), "engine": "morpheusgrc",
                   "lang": "grc", "clientId": CLIENT}
     if form.endswith(tuple(ELISION_MARKS)):
@@ -80,7 +98,18 @@ def request_url(form):
         # morphsvc 264ad78feae7efcb23255736f7ed624f673db1e4,
         # morphsvc/lib/engines/MorpheusLocalEngine.py lines 123-132.
         parameters["noAposRetry"] = "1"
-    return ENDPOINT + "?" + urllib.parse.urlencode(parameters)
+    return endpoint + "?" + urllib.parse.urlencode(parameters)
+
+
+def local_endpoint():
+    """The configured local engine URL, or None. Only plain http(s) URLs are used."""
+    value = os.getenv("MELOS_MORPHEUS_LOCAL", "").strip()
+    if not value:
+        return None
+    parts = urllib.parse.urlsplit(value)
+    if parts.scheme not in ("http", "https") or not parts.hostname or parts.query or parts.username:
+        raise ValueError("MELOS_MORPHEUS_LOCAL must be an http(s) URL of the analysis/word endpoint")
+    return value
 
 
 def _items(value, pointer):
@@ -175,9 +204,11 @@ def project(raw, form, receipt):
                                      if isinstance(v, dict) and "$" in v},
                         "entry_pointer": ep, "inflection_pointer": ip,
                     })
+    warnings = (local_warnings(receipt["engine_revision"]) if receipt.get("parser_version") == LOCAL_PARSER_VERSION
+                else list(WARNINGS))
     return {"status": "ok" if candidates else "no_analyses", "form": form,
             "machine_candidates": candidates, "machine_entries": entries,
-            "receipt": receipt, "warnings": list(WARNINGS)}
+            "receipt": receipt, "warnings": warnings}
 
 
 class _NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -229,9 +260,11 @@ def default_cache_path():
 
 
 class MachineMorphologyService:
-    def __init__(self, cache_path=None, *, transport=None, clock=None):
+    def __init__(self, cache_path=None, *, transport=None, clock=None, local_transport=None):
         self.path = Path(cache_path) if cache_path is not None else default_cache_path()
         self.transport = transport or _fetch
+        self.local_transport = local_transport or _fetch
+        self._local_revision = None
         self.clock = clock or time.time
         self.max_bytes = _limit("MELOS_MACHINE_MAX_BYTES", 64 * 1024 * 1024, 256 * 1024 * 1024)
         self.global_day = _limit("MELOS_MACHINE_GLOBAL_DAILY", 200, 1000)
@@ -281,8 +314,19 @@ class MachineMorphologyService:
             if _sha(row["metadata"].encode()) != receipt_id:
                 raise ValueError("Receipt metadata integrity failure")
             source_form = metadata.get("source_form", metadata["request_form"])
-            if (source_form != form or metadata["request_form"] != transport_form(form)
-                    or metadata["url"] != request_url(form) or metadata["parser_version"] != PARSER_VERSION):
+            if metadata["parser_version"] == LOCAL_PARSER_VERSION:
+                # Local receipts bind the endpoint actually called and the build it reported.
+                endpoint = metadata["endpoint"]
+                if (not isinstance(endpoint, str) or urllib.parse.urlsplit(endpoint).scheme not in ("http", "https")
+                        or not isinstance(metadata["engine_revision"], str)
+                        or not LOCAL_REVISION.fullmatch(metadata["engine_revision"])):
+                    raise ValueError("Local receipt provenance mismatch")
+                expected_url = request_url(form, endpoint)
+            elif metadata["parser_version"] == PARSER_VERSION:
+                expected_url = request_url(form)
+            else:
+                raise ValueError("Unknown parser version")
+            if source_form != form or metadata["request_form"] != transport_form(form) or metadata["url"] != expected_url:
                 raise ValueError("Receipt request/parser mismatch")
             if form.endswith(tuple(ELISION_MARKS)):
                 if (validate_form(metadata["input_form"]) != form
@@ -300,6 +344,61 @@ class MachineMorphologyService:
         except (ValueError, KeyError, TypeError, RecursionError, sqlite3.Error, OSError):
             return self._result("invalid_receipt", form, "Cached response could not be verified; no analysis was used.")
 
+    def local_revision(self, endpoint):
+        """Build identity reported by the local engine's /health; required for every receipt."""
+        if self._local_revision is None:
+            parts = urllib.parse.urlsplit(endpoint)
+            status, raw, _ = self.local_transport(urllib.parse.urlunsplit((parts.scheme, parts.netloc, "/health", "", "")))
+            health = json.loads(raw)
+            if status != 200 or not all(isinstance(health.get(k), str) and re.fullmatch(r"[0-9a-f]{40}", health[k])
+                                        for k in ("morpheus_commit", "morphsvc_commit")):
+                raise ValueError("Local Morpheus did not report its build")
+            self._local_revision = (f"alpheios-project/morpheus@{health['morpheus_commit']} (dist/stemlib); "
+                                    f"alpheios-project/morphsvc@{health['morphsvc_commit']}")
+        return self._local_revision
+
+    def _analyze_local(self, form, input_form, key, endpoint):
+        """Local engine: no courtesy quotas; a failed call is not retried for a short backoff."""
+        if os.getenv("MELOS_MACHINE_ENABLED", "1").lower() in ("0", "false", "no"):
+            return self._result("disabled", form)
+        now = self.clock()
+        with self._connect() as conn:
+            if conn.execute("SELECT 1 FROM failures WHERE key=? AND expires>?", (key, now)).fetchone():
+                return self._result("upstream_error", form, "The local parser failed on this form recently; try again later.")
+        try:
+            revision = self.local_revision(endpoint)
+            url = request_url(form, endpoint)
+            status, raw, headers = self.local_transport(url)
+            if status not in (200, 201) or not isinstance(raw, bytes) or len(raw) > MAX_RESPONSE:
+                raise ValueError("Invalid or oversized response")
+            metadata = {"request_form": transport_form(form), "url": url, "endpoint": endpoint, "http_status": status,
+                        "received_utc": datetime.now(timezone.utc).isoformat(), "raw_sha256": _sha(raw),
+                        "parser_version": LOCAL_PARSER_VERSION, "engine_revision": revision,
+                        "response_headers": {k: v for k, v in headers.items() if k == "Content-Type"}}
+            if form.endswith(tuple(ELISION_MARKS)):
+                metadata.update(input_form=input_form, source_form=form,
+                                input_transformation="NFC; final U+2019 to U+1FBD for transport only",
+                                input_convention=ELISION_CONVENTION)
+            encoded = _json(metadata)
+            if len(encoded.encode()) > 4096:
+                raise ValueError("Oversized response metadata")
+            receipt_id = _sha(encoded.encode())
+            with self._connect() as conn:
+                conn.execute("INSERT OR IGNORE INTO receipts VALUES (?,?,?)", (receipt_id, encoded, raw))
+            result = self.load_receipt(receipt_id, form=form)
+            if result["status"] in ("ok", "no_analyses"):
+                with self._connect() as conn:
+                    conn.execute("INSERT OR IGNORE INTO cache VALUES (?,?,NULL)", (key, receipt_id))
+                return result
+            raise ValueError("Unverifiable local response")
+        except (OSError, ValueError, KeyError, TypeError, sqlite3.Error, urllib.error.URLError, TimeoutError):
+            try:
+                with self._connect() as conn:
+                    conn.execute("INSERT OR REPLACE INTO failures VALUES (?,?)", (key, self.clock() + LOCAL_FAILURE_BACKOFF))
+            except (sqlite3.Error, OSError):
+                pass
+            return self._result("upstream_error", form, "Local Morpheus request failed; no retry or fallback was made.")
+
     def analyze(self, form, visitor_id, fetch=True):
         input_form = form
         try:
@@ -307,11 +406,23 @@ class MachineMorphologyService:
         except ValueError as exc:
             return self._result("invalid_form", warning=str(exc))
         key = _sha((PARSER_VERSION + "\n" + form).encode())
+        local_key = _sha((LOCAL_PARSER_VERSION + "\n" + form).encode())
         try:
             with self._connect() as conn:
-                row = conn.execute("SELECT receipt_id FROM cache WHERE key=? AND (expires IS NULL OR expires>?)", (key, self.clock())).fetchone()
+                # An existing Alpheios receipt keeps precedence; then a local one.
+                for cache_key in (key, local_key):
+                    row = conn.execute("SELECT receipt_id FROM cache WHERE key=? AND (expires IS NULL OR expires>?)",
+                                       (cache_key, self.clock())).fetchone()
+                    if row:
+                        break
             if row:
                 return self.load_receipt(row[0], form=form)
+            try:
+                endpoint = local_endpoint()
+            except ValueError as exc:
+                return self._result("disabled", form, str(exc))
+            if endpoint:
+                return self._analyze_local(form, input_form, local_key, endpoint)
             if not fetch:
                 return self._result("cache_miss", form)
             if os.getenv("MELOS_MACHINE_ENABLED", "1").lower() in ("0", "false", "no"):

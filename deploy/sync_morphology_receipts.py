@@ -15,7 +15,7 @@ import sqlite3
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from backend.machine_morphology import (MachineMorphologyService, PARSER_VERSION,
+from backend.machine_morphology import (MachineMorphologyService, PARSER_VERSION, LOCAL_PARSER_VERSION,
                                        MAX_RESPONSE, validate_form)
 
 FORMAT = "melos-successful-morphology-receipts-v1"
@@ -80,7 +80,8 @@ def export_bundle(database, output):
             entries.append({"key": row["key"], "receipt_id": row["receipt_id"],
                             "metadata": row["metadata"],
                             "raw_base64": base64.b64encode(row["raw"]).decode("ascii")})
-    bundle = {"format": FORMAT, "parser_version": PARSER_VERSION, "entries": entries}
+    versions = {json.loads(row["metadata"])["parser_version"] for row in entries}
+    bundle = {"format": FORMAT, "parser_version": versions.pop() if len(versions) == 1 else "mixed", "entries": entries}
     encoded = json.dumps(bundle, ensure_ascii=False, indent=2).encode("utf-8")
     if len(encoded) > MAX_BUNDLE:
         raise ValueError("Bundle exceeds transfer limit")
@@ -96,7 +97,7 @@ def read_bundle(path):
     if len(encoded) > MAX_BUNDLE:
         raise ValueError("Bundle exceeds transfer limit")
     bundle = json.loads(encoded)
-    if bundle.get("format") != FORMAT or bundle.get("parser_version") != PARSER_VERSION:
+    if bundle.get("format") != FORMAT or bundle.get("parser_version") not in (PARSER_VERSION, LOCAL_PARSER_VERSION, "mixed"):
         raise ValueError("Unsupported bundle/parser version")
     entries = bundle["entries"]
     if not isinstance(entries, list) or len(entries) > 10000:
