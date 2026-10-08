@@ -527,7 +527,8 @@
     const short = typeof gloss.short_text === 'string' ? gloss.short_text.trim() : '';
     return short || (typeof gloss.text === 'string' ? gloss.text.trim() : '');
   }
-  // A headword is a proper name when the dictionary capitalises it; a word with
+  // A headword is a proper name when the dictionary capitalises it (labelled only
+  // when no dictionary gloss is available); a word with
   // no headword counts only when the edition prints it capitalised.
   const capitalised = value => typeof value === 'string' && /^\p{Lu}/u.test(value.normalize('NFD'));
   // Dictionary-style headline built only from one interlinear row's server
@@ -550,9 +551,9 @@
     if (!value.lemma && !value.pending) head.append(node('p', 'word-headline-note', value.note || 'Headword not identified'));
     const empty = value.pending || (!value.properName && !value.gloss);
     const gloss = node('p', `word-headline-gloss${empty ? ' word-headline-empty' : ''}${value.pending ? ' melos-loading' : ''}`, value.pending ? 'Looking up meaning…'
-      : value.properName ? '(proper name)' : value.gloss || 'no short gloss');
+      : value.gloss || (value.properName ? '(proper name)' : 'no short gloss'));
     gloss.setAttribute('lang', 'en');
-    if (value.glossTitle && !value.properName) gloss.title = value.glossTitle;
+    if (value.glossTitle) gloss.title = value.glossTitle;
     head.append(gloss);
     if (value.lemma) {
       const form = node('p', 'word-headline-form', value.form); form.setAttribute('lang', 'grc');
@@ -822,7 +823,7 @@
           : structured ? '' : alternatives.find(item => item.gloss)?.gloss;
         const reading = token.form && token.form !== token.text ? ` (read ${token.form})` : '';
         const headline = projection ? headlineFromRow(projection) : null;
-        const summaryGloss = headline?.properName ? '(proper name)' : shortGloss;
+        const summaryGloss = shortGloss || (headline?.properName ? '(proper name)' : '');
         box.append(node('summary', '', `${token.text}${reading}${summaryGloss ? ` — ${summaryGloss}` : ''} · ${displayAlternatives.length} ${displayAlternatives.length === 1 ? 'parse' : 'possible parses'}`));
         if (headline) { const headHost = node('div', 'word-headline-host'); box.append(headHost); renderWordHeadline(headHost, headline, node); }
         const lookup = node('button', 'occurrence-search', 'Open word dictionary'); lookup.type = 'button';

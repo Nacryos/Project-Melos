@@ -25,15 +25,19 @@ test('headline shows headword, then its short gloss, then printed form and parse
     ['word-headline-parse', 'acc. fem. sg.']]);
 });
 
-test('missing gloss is a quiet placeholder and capitalised headwords are proper names', () => {
+test('missing gloss is a quiet placeholder; a capitalised headword without a gloss is a proper name', () => {
   const quiet = node('div'), name = node('div');
   renderWordHeadline(quiet, headlineFromRow({ kind: 'word', text: 'βγ', lemma: 'αβ', gloss: { status: 'unavailable' } }), node);
   assert.deepEqual(lines(quiet)[1], ['word-headline-gloss', 'no short gloss']);
   assert.match(quiet.children[0].children[1].className, /word-headline-empty/);
   assert.deepEqual(lines(quiet)[3], ['word-headline-parse', 'parse not settled']);
   renderWordHeadline(name, headlineFromRow({ kind: 'word', text: 'Ἀβ', lemma: 'Ἄβος', parse_short: 'nom. masc. sg.',
-    gloss: { status: 'available', text: 'a' } }), node);
+    gloss: { status: 'unavailable' } }), node);
   assert.deepEqual(lines(name)[1], ['word-headline-gloss', '(proper name)']);
+  const glossed = node('div');
+  renderWordHeadline(glossed, headlineFromRow({ kind: 'word', text: 'Ἀβ', lemma: 'Ἄβος', parse_short: 'acc. masc. sg.',
+    gloss: { status: 'available', text: 'Abos', short_text: 'Abos' } }), node);
+  assert.deepEqual(lines(glossed)[1], ['word-headline-gloss', 'Abos']);
 });
 
 test('pending headline holds the gloss slot without inventing a meaning', () => {
