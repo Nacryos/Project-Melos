@@ -1,6 +1,86 @@
 # Deployment handoff
 
-## Current: release M — general lemma/gloss fixes measured by random sampling over all GLP poems (2026-10-08)
+## Current: release N — local Morpheus, generate-and-test normalisation, word-panel fixes (2026-10-08)
+
+Public backend: image `melos-api:20261008n`
+(`sha256:a0ecd6baf572ee96974445ebd40bd2329d703970877da3261f8deedec519dbf4`), built on Basecamp with
+`deploy/Dockerfile.patch` atop the M image from the N source tarball (`git archive` of `0d29a21`, sha256
+`751f9c08750dec3a890264b8bea5d81be9efb361b93fafd53b10b3a191c10e72`, unpacked in `/home/alvin/melos-n/src`).
+Same mounts as M, plus the user-defined Docker network `melos-morpheus` and
+`MELOS_MORPHEUS_LOCAL=http://melos-morpheus:8080/api/v1/analysis/word`. Sidecar `melos-morpheus` (image
+`melos-morpheus:2f1a30d`, built by `release_n.sh morpheus` from `deploy/morpheus-local`: alpheios-project/morpheus
+`2f1a30d65ed7ae9c6120dbf64d730b863be412e4` with its CI build and `dist/stemlib`, morphsvc
+`264ad78feae7efcb23255736f7ed624f673db1e4` envelope code; CC BY-SA 3.0 US and GPL-3.0, run as a service;
+read-only, 1 GiB, 127.0.0.1:8793). Recipe: `deploy/release_n.sh morpheus|build|warm|canary|canary-nogen|stop-canary|promote|rollback`.
+M is kept stopped as `melos-api-before-n`; the N canary as `melos-api-canary-n` (stopped). **Rollback:**
+`sh /home/alvin/melos-n/src/deploy/release_n.sh rollback` (stops N, renames it `melos-api-failed-n`, restarts M;
+the sidecar keeps running and M ignores it). No frontend change in this release.
+
+What N adds (design in `docs/morphology.md`, "Local Morpheus and generate-and-test normalisation"):
+- Local Morpheus transport: every cache miss is parsed locally (no courtesy quota; Alpheios caps kept for the
+  remote engine); receipts labelled `morpheus-local-v1` with the build commits; cached Alpheios receipts keep
+  precedence. Agreement with all 1,357 cached Alpheios forms: **1,347 identical (99.3 %)**, lemma sets 99.7 %, core
+  parses 99.6 %; the ten differences are stem-library data, not encoding.
+- Receipts: live cache backed up to `/home/alvin/melos-n/machine_morphology.before-n.sqlite` (1,631 receipts),
+  then `release_n.sh warm` added 7,797 local receipts (absent keys only). GLP coverage: 6,885 distinct forms,
+  1,357 cached before → **6,477 parsed exactly (94.1 %)**; of the 406 the parser does not know (mostly letters
+  beside lacunae and split words) 84 parse through the older Aeolic variants and 39 through generated spellings.
+  The rest of the corpus (~406,000 forms) is parsed on demand (~25 ms per word), not pre-warmed.
+- Generate-and-test dialect and elision normalisation; `/api/word` strips editorial brackets inside a word, adds
+  parser candidates (same path as in-poem analysis), the parsed headwords' dictionary entries, `parse_source`,
+  NFC lemmas, optional `lemma=`; word tokens keep an edge bracket they close/open (`[σ]ὸν`); readable
+  `source_label`; the occurrence query no longer overflows `/tmp` (HTTP 500 for καὶ, δ’: all 33 errors in M's log).
+- General rules from the live audit: participle/imperative endings and iota subscript in the last tier; lemma
+  ties settled by attestation (κάτεσσαν → καθίζω); gloss corroboration (ἀλλά "but", θεός "god"), short glosses
+  lower-case for common headwords; capitalised words prefer proper-name headwords and never borrow a common
+  noun's entry unless it names the being; ranked parses deduplicated by breathing/case; a single recorded
+  reading is kept when the contextual prediction contradicts every candidate; Middle Liddell `n="Perseus"`.
+- Also ships the committed cross-reference follow-up (αὔως → ἠώς "daybreak").
+
+Canary (8792) before promotion: smoke pass; `verify_campbell_glp.py --analyze sample`: 237/237 identical, 214
+translations, 50 lines analysed, 0 failures; `check_span_parses.py --random 30`: 227 spans, 816 word rows, **0
+failures**. Memory: canary 2.9 GiB of 8 GiB, sidecar 26 MiB. Backend tests 1,942 pass (the three known snapshot
+failures plus `test_sense_ranker::…keep_other_unambiguous…`, which also fails on M's HEAD).
+
+Development seed 101 (120 spans, 421 rows), live M → N canary: complete parse 94.5 → 96.9 %, lemma 84.8 → 96.4 %,
+short gloss 83.4 → 93.6 %, plausible gloss 83.4 → 93.6 %, plausible lemma 84.1 → 94.3 %, all checks 77.9 → 89.1 %;
+64 rows gain, none loses a lemma or gloss. Four rows lose a metric: three wrong M parses now left open by tied
+parses with a better lemma (τρῖς "thrice" → τρεῖς "three", Ὡρᾶν "acc. masc. sg." → Ὥρα, ἔσ beside a gap), and
+ἴψοι, where the contextual model's wrong VERB prediction now picks the parser's ἴπτομαι "to press hard" over the
+dictionary's ἴψοι "aloft" (not patched). Three rows only change label to the full printed bracket (`[ἀ]θανάτων`).
+
+Held-out sample (seed 20261008, 150 spans, 484 aligned rows), recorded production M → N canary. Note: the held-out
+failures were inspected during this release and two general fixes followed (capitalised headwords and lower-case
+entries, Νύμφαι read through νύμφαι); the numbers are from the final build.
+
+| Metric | M | N without generation | N |
+|---|---|---|---|
+| Complete parse fields | 94.4 % | 99.0 % | **99.0 %** |
+| Lemma present | 83.9 % | 96.3 % | **96.7 %** |
+| Short gloss present | 82.0 % | 93.2 % | **93.4 %** |
+| Plausible gloss | 81.8 % | 93.0 % | **93.2 %** |
+| Plausible lemma | 80.0 % | 92.2 % | **92.6 %** |
+| Rows passing every check | 74.2 % | 87.9 % | **88.1 %** |
+
+(The "without generation" column is live M's code and cache replaced by local Morpheus, measured from today's M,
+which had itself gained 2.4 points of lemma from Alpheios receipts fetched since release M.) 86 rows gain; two lose
+a metric: θαρσύνῃ (wrong pattern "nom. fem. sg." → θαρσύνω with the parse left at "sg."), Ἁρμόδιε (M's wrong gloss
+"fitting together" for the name is no longer shown). Νύμφαις now shows Νύμφαι "bride" (Middle Liddell's first
+sense; "nymph" would be better). Remaining failures: words beside lacunae, tied parses of different lemmas, words
+with no English definition in any open dictionary.
+
+Verified on https://greeklyric.com after promotion (run from Basecamp, `/home/alvin/melos-n/prod-checks`): smoke
+(288,821) pass; `verify_campbell_glp.py`: 237/237 identical, 0 failures; `check_span_parses.py --random 30`: 227
+spans, 812 word rows, 1 failure, an HTTP 502 from the public route for 34a [71:104]. The same request retried at
+once returned 200 on both greeklyric.com and 127.0.0.1:8791, and the API log has no error, so this was a transient
+proxy failure, not a parse failure. `/api/word` for δ’, καὶ, σελάννα and κ[άλ]λιστος returns 200. Memory: N 2.9 GiB
+of 8 GiB, sidecar 26 MiB.
+
+Frontend follow-ups (js/, not in this release): the machine-analysis card still says "Morpheus via Alpheios" (read
+the receipt's engine instead); pass the headline lemma as `lemma=` to `/api/word` (σ’: σύ vs σός); show
+`source_label` and `parse_source`.
+
+## Historical: release M — general lemma/gloss fixes measured by random sampling over all GLP poems (2026-10-08)
 
 Public backend: image `melos-api:20261008m`
 (`sha256:fe1b6e8369b8c1d87bd02f19b0d5630552d73992a14d74056bc883dce47383f6`), built on Basecamp with
