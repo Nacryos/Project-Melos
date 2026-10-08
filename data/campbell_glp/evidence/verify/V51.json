@@ -1,0 +1,54 @@
+{
+ "pages": [
+  51,
+  52,
+  53,
+  54,
+  55,
+  56,
+  57,
+  58,
+  59
+ ],
+ "lines_checked": 171,
+ "corrections": [
+  {
+   "poem_id": "campbell-glp:alcman:1",
+   "line_index": 73,
+   "pdf_page": 53,
+   "current": "Ἀσταφίς [τ]έ μοι γένοιτο",
+   "corrected": "Ἀστ̣αφίς [τ]έ μοι γένοιτο",
+   "what": "underdot under τ of Ἀσταφίς (round dot centred under τ at 10x, same as τ̣ in l.75)",
+   "confidence": "high"
+  },
+  {
+   "poem_id": "campbell-glp:alcman:1",
+   "line_index": 92,
+   "pdf_page": 54,
+   "current": "αὐ]τῶς εδ[",
+   "corrected": "αὐ]τῶ̣ς εδ[",
+   "what": "round dot below ω of αὐ]τῶς (10x)",
+   "confidence": "medium"
+  },
+  {
+   "poem_id": "campbell-glp:alcman:3",
+   "line_index": 7,
+   "pdf_page": 55,
+   "current": "]ς δέ μ’ ἄγει πεδ’ ἀγῶ̣ν’ ἴμεν",
+   "corrected": "]ς δέ μ’ ἄγει πεδ’ ἀγῶν̣’ ἴμεν",
+   "what": "underdot is under ν, not ω (10x)",
+   "confidence": "high"
+  },
+  {
+   "poem_id": "campbell-glp:alcman:3",
+   "line_index": 9,
+   "pdf_page": 55,
+   "current": "] . σχ[          ἁπ]αλοὶ πόδες",
+   "corrected": "] . σχ[          ἁ̣π]αλοὶ πόδες",
+   "what": "small round dot centred under ἁ of ἁπ]αλοὶ (10x)",
+   "confidence": "medium"
+  }
+ ],
+ "missing_or_extra": [],
+ "label_fixes": []
+}

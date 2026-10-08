@@ -1,0 +1,718 @@
+{
+ "items": [
+  {
+   "campbell_id": "campbell-glp:alcaeus:6",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 38",
+   "translator_number": "38",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 367,
+     "printed_page": "345",
+     "sha256": "21603047e34016aac6f1244942f49ef22c190548e2f047b5a2af34e886015c80",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0367.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 366,
+     "printed_page": "344",
+     "sha256": "1ce1f5233222805605402fa291c6d7b4a0dc353f566a2765a0f09f487794bfc1",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0366.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Lo now! the wave that is to windward of us comes this way, and will give us sore labour to bale it out when it breaks over us.",
+   "coverage_note": "Partial overlap: Edmonds 38 (printed in the group '37, 38, 39', quoted by Heracleitus) covers only Campbell's lines 1-3. Campbell's further papyrus lines (from 'φαρξώμεθ’ ὢς ὤκιστα' on) are not in Edmonds. Edmonds reads 'τὸ δηὖτε κῦμα τὸ προτιάνεμον' where Campbell prints 'τόδ’ αὖτε κῦμα τὼ προτέρω †νέμω'.",
+   "match_evidence": "Edmonds' Greek: 'τὸ δηὖτε κῦμα τὸ προτιάνεμον στείχει, παρέξει δ’ ἄμμι πόνον πολὺν ἄντλην, ἐπεί κε νᾶος ἔμβᾳ', the same as Campbell lines 1-3, cited from the same source (Heracleitus, Homeric Allegories 5).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcaeus:38a",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 122",
+   "translator_number": "122",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 419,
+     "printed_page": "397",
+     "sha256": "fbcdd608431da2745a76fd6c0fa51beac85d6a2dfe467795462c48a67b9c7809",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0419.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 418,
+     "printed_page": "396",
+     "sha256": "a81e1b1b9f8d32b006b1ae8e2abf24aff96061abb7059a7ab21cfac4ac908dd0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0418.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "O why, Melanippus, do you pray you might be with me? or why, when once Fate has sent me to eddying Acheron, shall I hope to re-cross it and see again the pure light of the sun? Nay, set not your desire on things too great. King Sisyphus son of Aeolus, he thought with a craft unsurpassed to have escaped death; but for all his cunning he crossed the eddying Acheron in fate the second time, and the Son of Cronus ordained that he should have below a toil the woefullest in all the world. So I pray you bewail not these things. If ever cries were unavailing, our cries are unavailing now. Assuredly some of these things were to be suffered with an enduring heart. When the wind rises in the north⁴ [no skilful pilot puts out into the wide sea.]",
+   "coverage_note": "Same papyrus poem (Ox. Pap. 1233), same extent (13 lines); Edmonds adds an exempli-gratia 14th line, printed in brackets in his English. His supplements differ: line 1 begins 'Τί ἂν ἔμμεν…' where Campbell restores 'πῶνε [καὶ μέθυ’…]', so his opening (\"why do you pray you might be with me?\") differs in sense from Campbell's \"drink and get drunk with me\"; lines 10-12 are also restored differently.",
+   "match_evidence": "Edmonds' Greek (Ox. Pap. 1233. 1. ii. 8-20): '…Μελάνιππ’ … δινάεντ’ … Ἀχέροντα … ζάβαι[ς ἀ]ελίω κόθαρον φάος … ὄψεσθ’; ἀλλ’ ἄγι μὴ μεγάλων ἐπ[ιβάλλεο] / καὶ γὰρ Σίσυφος Αἰολίδαις βασίλευς …', which matches Campbell lines 1-13.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcaeus:42",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 120",
+   "translator_number": "120",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 415,
+     "printed_page": "393",
+     "sha256": "70226a7f9facdff8c716eb766b64d2692fb950fe5be2a5b22f1bdbd6604fdfcd",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0415.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 417,
+     "printed_page": "395",
+     "sha256": "ba4cc368621acd249505e97643d2c4fc2bc66a0556d545b212dc8a813d3f891c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0417.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 414,
+     "printed_page": "392",
+     "sha256": "8f474ae7d4ccdcd843a6b5a33669bf6ecaf867714608fbabe1557dfb8831e4b8",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0414.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 416,
+     "printed_page": "394",
+     "sha256": "76e8a922954fb5a5da0960301c52231dbf44b44456d9074a715fd71b066c6aee",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0416.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": ". . . Through Helen ’tis said there sprang from evil deeds a branch bitter unto Priam and all the Trojans, and a flame rolled around sacred Ilium. Not such was the dainty maiden whom the son of Aeacus, with all the Gods gathered at his longed-for espousals, took from the palace of Nereus and led home to the house of Cheiron, where the love that was betwixt the noble Peleus and the best of all the Nereids¹ loosed the girdle of a pure virgin, and bore them a year afterwards a son that was mightiest of demigods, a victorious driver of bay steeds²; but the Trojans and their city were destroyed because of Helen.",
+   "coverage_note": "Same papyrus poem (Ox. Pap. 1233 fr. 2 ii), same extent (16 lines, four stanzas). Some supplements differ from Campbell's; for example, in line 3 Edmonds restores 'περὶ δ’ ἄλλατο φλόξ' where Campbell has 'π[ύρι δ’ ὤλεσε Ζεῦς'.",
+   "match_evidence": "Edmonds' Greek: '…ὢς λόγος κάκων ἀ[…] Περράμῳ καὶ παῖσ[ι…] … Ἴλιον ἴραν. / οὐ τεαύταν Αἰακίδαι[ς…] πάντας ἐς γάμον μάκ[αρας καλέσσαις] ἄγετ’ ἐκ Νήρηος …' and it ends 'οἲ δ’ ἀπώλοντ’ ἀμφ’ Ἐ[λένᾳ…] καὶ πόλις αὔτων'. These are the same opening and ending as Campbell's.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcaeus:308b",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 2",
+   "translator_number": "2",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 343,
+     "printed_page": "321",
+     "sha256": "21924ecf0b746a8ebb675e05e8e68a8d2b677b7b6ddf229ac001d4d7ed69fdd1",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0343.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 342,
+     "printed_page": "320",
+     "sha256": "32348b3166e68e7b1bb2840e7e84f33e18f9ebbc66ccaed80c4d804d7a7f183f",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0342.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Hail, thou ruler of Cyllene! thee it is my will to sing, whom Maia bare upon the breezy heights unto the love of the omnipotent Son of Cronus.",
+   "coverage_note": "Same extent (one Sapphic stanza, quoted by Hephaestion). Edmonds prints it as the first fragment under the heading '2-5 To Hermes', so it is cited as fragment 2. In line 2 Edmonds reads 'αὔϝαις' (\"breezy\") where Campbell obelizes '†αὐγαῖς', and in line 3 he has 'μάεισα' where Campbell has 'μίγεισα'.",
+   "match_evidence": "Edmonds' Greek: 'Χαῖρε Κυλλάνας ὀ μέδεις, σὲ γάρ μοι θῦμος ὔμνην, τὸν κορύφαισιν αὔϝαις Μαῖα γέννατο Κρονίδᾳ μάεισα παμβασίληι'. Apart from the readings noted, this is the same as Campbell's text.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcaeus:332",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 42",
+   "translator_number": "42",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 371,
+     "printed_page": "349",
+     "sha256": "76a16381d505005cbf7fa63793bc9ee9dd3790a93a090c758fe72fb45c479f29",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0371.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 370,
+     "printed_page": "348",
+     "sha256": "4b424751a232e3d54028d46e849216c10339c6828f7dc9af9d1f8b88157c67f5",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0370.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "’Tis time for wine and time for women, now that Myrsilus is dead.",
+   "coverage_note": "Same 2-line fragment (Athenaeus 10. 430a). Edmonds reads 'πόνην' and understands it in an erotic sense (\"time for women\"), where Campbell has 'πώνην' (\"drink\"), so the English differs in sense.",
+   "match_evidence": "Edmonds' Greek: 'Νῦν χρῆ μεθύσθην καί τινα πρὸς βίαν πόνην, ἐπειδὴ κάτθανε Μύρσιλος', the same as Campbell's text.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcaeus:333",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 169",
+   "translator_number": "169",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 447,
+     "printed_page": "425",
+     "sha256": "9d1e69d2f0cc91b631acff7380d3ee0bb6e055e8472ec0cbbe8e86714e35a87d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0447.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 446,
+     "printed_page": "424",
+     "sha256": "cf528a877b6bf33686e125b9cebfef9302fef0f3619fd61efa2f5745b2835e50",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0446.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "for wine is a spying-hole unto man.²",
+   "coverage_note": "Same one-line fragment (from Tzetzes on Lycophron).",
+   "match_evidence": "Edmonds' Greek: 'οἶνος γὰρ ἀνθρώποισι δίοπτρον', which is Campbell's text except that Campbell reads 'ἀνθρώπω'.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcaeus:335",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 158",
+   "translator_number": "158",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 439,
+     "printed_page": "417",
+     "sha256": "53a8aa4a2025fb209cacd583d4400aacc057f526c258276fb3541261e8815fbe",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0439.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 438,
+     "printed_page": "416",
+     "sha256": "5fa975b48a27d4ff5935d6921991d95e0ed1c0a841c6393381e01609e06ee085",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0438.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "It is ill yielding the heart to mischance; for we shall make no advance if we weary of thee, O Bacchus, and the best medicine is to call for wine and drink deep.",
+   "coverage_note": "Same 4-line stanza (Athenaeus 10. 430b). Edmonds prints 'ἀσάμενοι σ’, ὦ Βύκχι' as Campbell does, but he renders Βύκχις as 'O Bacchus' and adds the object 'σ’' (\"weary of thee\"), so the vocative is understood differently.",
+   "match_evidence": "Edmonds' Greek begins 'Οὐ χρῆ κάκοισι θῦμον ἐπιτρέπην· προκόψομεν γὰρ οὖδεν, ἀσάμενοι σ’, ὦ Βύκχι· φάρμακον δ’ ἄριστον' and ends 'οἶνον ἐνικαμένοις μεθύσθην', the same as Campbell lines 1-4.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcaeus:338",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 157",
+   "translator_number": "157",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 439,
+     "printed_page": "417",
+     "sha256": "53a8aa4a2025fb209cacd583d4400aacc057f526c258276fb3541261e8815fbe",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0439.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 438,
+     "printed_page": "416",
+     "sha256": "5fa975b48a27d4ff5935d6921991d95e0ed1c0a841c6393381e01609e06ee085",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0438.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "The Sky-God bows himself; there is a great storm in the heavens, the streams of water are frozen fast. . . . Defy the storm with a good fire and a bountiful mixing of honey-sweet wine, and then put a soft cushion on either side your brow.",
+   "coverage_note": "Same fragment (Athenaeus 10. 430a), with the same lacuna after line 2. In line 1 Edmonds reads 'Νεύει' (\"bows himself\") where Campbell has 'ὔει' (\"rains\"), so his line 1 differs in sense. In his last line he has 'ἀμφιδύω' where Campbell has 'ἀμφι⟨βάλων⟩'.",
+   "match_evidence": "Edmonds' Greek: 'Νεύει μὲν ὀ Ζεῦς, ἐν δ’ ὀράνῳ μέγας χείμων, πεπάγαισιν δ’ ὐδάτων ῥόαι … κάββαλλε τὸν χείμων’, ἐπὶ μὲν τίθεις πῦρ, ἐν δὲ κέρναις οἶνον ἀφειδέως μέλιχρον, αὐτὰρ ἀμφὶ κόρσᾳ μάλθακον ἀμφιδύω γνόφαλλον'. Apart from the readings noted, this is the same as Campbell's text.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcaeus:346",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 163",
+   "translator_number": "163",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 443,
+     "printed_page": "421",
+     "sha256": "18c1ceb637edf63370a59fe388995013fa4b232887c577fa573ca4494c3cda90",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0443.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 442,
+     "printed_page": "420",
+     "sha256": "ead46fecc68f6d09762d4a072921da11dccd1f3a3ba57c00c415f6e70b78e4ba",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0442.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Let us drink; why wait for the lamp-lighting? the day has but a finger’s breadth to go. Take down the great cups, beloved friend, from the cupboard; for the Son of Semele and Zeus gave wine to make us forget our cares. Pour bumpers in a mixture of one and two,² and let cup chase cup around hotfoot;³",
+   "coverage_note": "Same extent (Athenaeus 10. 430c). In line 2 Edmonds reads 'ἄϊτ’, ἀπ’ οἴκιδος' (\"beloved friend, from the cupboard\") where Campbell obelizes '†αιτα† ποικίλαις', so this phrase differs.",
+   "match_evidence": "Edmonds' Greek: 'Πώνωμεν· τί τὰ λύχν’ ὀμμένομεν; δάκτυλος ἀμέρα· κὰδ δ’ ἄερρε κυλίχναις μεγάλαις, ἄϊτ’, ἀπ’ οἴκιδος· οἶνον γὰρ Σεμέλας καὶ Δίος υἶος λαθικάδεον ἀνθρώποισιν ἔδωκ’· ἔγχεε κέρναις ἔνα καὶ δύο πλήαις κὰκ κεφάλας, ἀ δ’ ἀτέρα τὰν ἀτέραν κύλιξ ὠθήτω', the same as Campbell lines 1-6.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcaeus:347",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 161",
+   "translator_number": "161",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 441,
+     "printed_page": "419",
+     "sha256": "44bd07714bef9d268666d11662c687944e14bb9cde9acb0da28b040bba2c0b61",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0441.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 440,
+     "printed_page": "418",
+     "sha256": "63905d9c5d27215a82574778a03ebca753915d5d1eee032ce57eb02e229f9ade",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0440.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Soak your throttle in wine;⁴ for the star is coming round again,⁵ the season is hard to bear with the world athirst because of the heat; the cricket sounds sweetly from the leaves of the tree-top, and lo! the artichoke is blowing; now are women at their sauciest, but men lean and weak because Sirius⁵ parches both the head and the knees.",
+   "coverage_note": "Same fragment (Proclus on Hesiod and Athenaeus). Edmonds supplies 'ἐπιδένδριον' (\"tree-top\") in line 3 and omits the 2½ lines that Campbell (following others) supplements from Hesiod; see Edmonds' note on 'Sa. 94'. The two footnote marks printed as ⁵ are kept as printed.",
+   "match_evidence": "Edmonds' Greek: 'Τέγγε πλεύμονας οἴνῳ, τὸ γὰρ ἄστρον περιτέλλεται, ἀ δ’ ὤρα χαλέπα, πάντα δὲ δίψαισ’ ὐπὰ καύματος, ἄχει δ’ ἐκ πετάλων ἄδεα τέττιξ … ἄνθει δὲ σκόλυμος· νῦν δὲ γύναικες μιαρώταται, λέπτοι δ’ ἄνδρες, ἐπεὶ κεφάλαν καὶ γόνα Σείριος [ἄσδει]', the same as Campbell's text.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcaeus:357",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 19",
+   "translator_number": "19",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 355,
+     "printed_page": "333",
+     "sha256": "4770761233d6d786c90656358d629afa9ec4b9bcd24741035c710e634e8574d2",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0355.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 357,
+     "printed_page": "335",
+     "sha256": "1f8ca60a528d805683aad737ed107f5e12b1f3ec4283991fcedf2c8786f97867",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0357.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 354,
+     "printed_page": "332",
+     "sha256": "bb3f6221b5dbd84d408e4665b164dcb046978dc3dad8bdc93af2ed80617556d8",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0354.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 356,
+     "printed_page": "334",
+     "sha256": "4c02648e4c754f062b5cdfb673b6c44c28c34351659513c57b24da114f67608e",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0356.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": ". . . . . . . . . .\nThe great house is all agleam with bronze. War has bedecked the whole roof with bright helmets, from which hang waving horse-hair plumes to make adornment for the heads of men; the pegs are hidden with bright brazen greaves to ward off the strong arrow, corslets of new linen cloth and hollow shields are piled upon the floor, and beside them stand swords of Chalcidian steel, and many a doublet, many a kilt. These we cannot forget, so soon as ever we undertake this task.",
+   "coverage_note": "Same fragment (Athenaeus 14. 627a), with the same extent and an initial lacuna. Edmonds reads 'παῖσα δ’ Ἄρῃ κεκόσμηται στέγα' (\"War has bedecked the whole roof\") where Campbell reads 'παῖσα δ’ ἄρ’ εὖ κεκόσμηται στέγα' (\"the whole roof is well decked\").",
+   "match_evidence": "Edmonds' Greek: 'μαρμαίρει δὲ μέγας δόμος χάλκῳ· παῖσα δ’ Ἄρῃ κεκόσμηται στέγα λάμπραισιν κυνίαισι, κὰτ τᾶν λεῦκοι κατύπερθεν ἴππιοι λόφοι … κρύπτοισιν περικείμεναι λάμπραι κνάμιδες, ἔρκος ἰσχύρω βέλεος, θόρρακές τε νέω λίνω κόιλαί τε κὰτ ἄσπιδες βεβλήμεναι, πὰρ δὲ Χαλκίδικαι σπάθαι, πὰρ δὲ ζώματα πόλλα καὶ κυπάσσιδες· τῶν οὐκ ἔστι λάθεσθ’ …', which matches Campbell.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:alcaeus:362",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. I (1922), Loeb Classical Library 28",
+   "citation": "Alcaeus, Edmonds fragment 159",
+   "translator_number": "159",
+   "source_item": "lyragraecabeingr01edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr01edmouoft",
+   "publication_year": 1922,
+   "english_pages": [
+    {
+     "scan_leaf": 439,
+     "printed_page": "417",
+     "sha256": "53a8aa4a2025fb209cacd583d4400aacc057f526c258276fb3541261e8815fbe",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0439.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 438,
+     "printed_page": "416",
+     "sha256": "5fa975b48a27d4ff5935d6921991d95e0ed1c0a841c6393381e01609e06ee085",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01edmouoft%2Flyragraecabeingr01edmouoft_jp2.zip%2Flyragraecabeingr01edmouoft_jp2%2Flyragraecabeingr01edmouoft_0438.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "But let them put garlands woven of anise about our necks and pour sweet myrrh over our bosoms.³",
+   "coverage_note": "Same 4-line stanza; Edmonds also joins lines 1-2 (Athenaeus 15. 674c) and lines 3-4 (Athenaeus 687d), as Campbell does.",
+   "match_evidence": "Edmonds' Greek: 'ἀλλ’ ἀνήτω μὲν περὶ ταὶς δέραισι περθέτω πλέκταις ὐπαθύμιδάς τις, κὰδ δὲ χευάτω μύρον ἆδυ κὰτ τὼ στήθεος ἄμμι', the same as Campbell's text.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:stesichorus:185",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Stesichorus, Edmonds fragment 8",
+   "translator_number": "8",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 47,
+     "printed_page": "35",
+     "sha256": "93115a5794bfa84e8cba62a5da9a87ecb2384fd0c702cd339efac59b53bbe67e",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0047.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 46,
+     "printed_page": "34",
+     "sha256": "5fc26ed97276913a5dfaac14b869ea74879be5d142446e5cff68cb0d7d257a79",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0046.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Then went Helios son of Hyperion down into his golden goblet for to cross the Ocean and come to the deeps of sacred murky night, unto mother and wedded wife and children dear; and the son of Zeus⁴ went afoot into the laurel-shaded grove.",
+   "coverage_note": "Same 6-line fragment (Athenaeus 11. 469e). Only Edmonds' second Athenaeus quotation is translated here; his first, a testimonium, is left out.",
+   "match_evidence": "Edmonds' Greek: '[Ἆμος] δ’ Ὑπεριονίδας δέπας ἐσκατέβαινε χρύσεον, ὄφρα δι’ Ὠκεανοῖο περάσας ἀφίκοιθ’ ἱερᾶς ποτὶ βένθεα νυκτὸς ἐρεμνᾶς ποτὶ ματέρα κουριδίαν τ’ ἄλοχον παῖδάς τε φίλους· ὁ δ’ ἐς ἄλσος ἔβα δάφναισι κατάσκιον ποσὶν παῖς Διός', the same as Campbell.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:stesichorus:187",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Stesichorus, Edmonds fragment 15",
+   "translator_number": "15",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 55,
+     "printed_page": "43",
+     "sha256": "c7e9dcf17c0da0efcf462449bab4eac1666b53fd58e6ebe28ac2b4aa2b115173",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0055.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 54,
+     "printed_page": "42",
+     "sha256": "cb7ef12d5ea3e1d96b6e065c5cd921fe199d0ab3a766eb909e155cc51462d5a2",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0054.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Many the quinces they cast upon the chariot of the king, many the leaves of myrtle, and garlands of roses and twisted wreaths of violets.¹",
+   "coverage_note": "Same 4-line fragment (Athenaeus 3. 81d, from the Helen).",
+   "match_evidence": "Edmonds' Greek: 'πολλὰ μὲν Κυδώνια μᾶλα ποτερρίπτουν ποτὶ δίφρον ἄνακτι, πολλὰ δὲ μύρσινα φύλλα καὶ ῥοδίνους στεφάνους ἴων τε κορωνίδας οὔλας', the same as Campbell's text.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:stesichorus:192",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Stesichorus, Edmonds fragment 18",
+   "translator_number": "18",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 57,
+     "printed_page": "45",
+     "sha256": "1410c683ca3d98c3142fa7f00b25540c17edace863a2e4fb17b2f99c452e1f0d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0057.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 56,
+     "printed_page": "44",
+     "sha256": "aea27977e7d2c582ddc9ddac81002b6e79d924820a3c5fe0b3900b54415cb795",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0056.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "This story is not true; thou wentest not in the benchèd ships, thou camest not to the city of Troy.",
+   "coverage_note": "Same 3 lines (Plato, Phaedrus 243a). Edmonds' printed English for fr. 18 begins 'I spake vanities, and I will go seek another prelude.', a phrase he builds from Zonaras and Aristides. That phrase is not part of Campbell 192 and is left out here; the remainder is transcribed verbatim.",
+   "match_evidence": "Edmonds' Greek: 'οὐκ ἔστ’ ἔτυμος λόγος οὗτος· οὐδ’ ἔβας ἐν νηυσὶν εὐσέλμοις οὐδ’ ἵκεο πέργαμα Τροίας', the same as Campbell's text.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:stesichorus:219",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Stesichorus, Edmonds fragment 43",
+   "translator_number": "43",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 67,
+     "printed_page": "55",
+     "sha256": "caad017e6ec31642034307f94c684483cbcde261b96e92aab834f890fcf15620",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0067.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 66,
+     "printed_page": "54",
+     "sha256": "f5a9a2390e2d07d2e56c4aedb65aabaa71e865d26e56a068462809e970bea3fc",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0066.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "She dreamt there came a serpent with a bloodied crest, and out of it appeared a king of Pleisthenes’ line.²",
+   "coverage_note": "Same 2 lines (Plutarch, On the Slow Revenge of the Deity 10, from the Oresteia).",
+   "match_evidence": "Edmonds' Greek: 'τᾷ δὲ δράκων ἐδόκησε μολεῖν κάρα βεβροτωμένος ἄκρον, ἐκ δ’ ἄρα τοῦ βασιλεὺς Πλεισθενίδας ἐφάνη', the same as Campbell's text.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:stesichorus:223",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Stesichorus, Edmonds fragment 12",
+   "translator_number": "12",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 53,
+     "printed_page": "41",
+     "sha256": "4455f3254ef933619c4f56e07649048d4796540c80f4fc7a70e4a138ef68f7d0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0053.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 52,
+     "printed_page": "40",
+     "sha256": "12ddd92ea6923238026029ba4f4d1866cd95cad930a31cbaae19248689d10d16",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0052.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "How Tyndareüs one day in making sacrifice to all the Gods forgat the joy-giving Cypris; and in anger she caused the maidens of Tyndareüs to be twice-wed and thrice, and forsakers of husbands.",
+   "coverage_note": "Same 5-line fragment (scholiast on Euripides, Orestes 249). Edmonds prints it as the first fragment under the heading '12-17 Helen'; the scholiast's introduction (on English p. 39) is left out.",
+   "match_evidence": "Edmonds' Greek: 'Οὕνεκα Τυνδάρεος ῥέζων ποτὲ πᾶσι θεοῖς μούνας λάθετ’ ἠπιοδώρου Κύπριδος· κείνα δὲ Τυνδαρέω κόραις χολωσαμένα διγάμους τε καὶ τριγάμους τίθησι καὶ λιπεσάνορας', which matches Campbell.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:ibycus:282a",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Ibycus, Edmonds fragment 67",
+   "translator_number": "67",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 127,
+     "printed_page": "115",
+     "sha256": "9b39394156f3fab6ab5ed8e11283c6fcc35d0d82e384ebed0fb9704363ad567e",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0127.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 129,
+     "printed_page": "117",
+     "sha256": "369d241b47d44adfd365322607d3979ab50aa0f47ee0cd302dcf6e34d6c0063b",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0129.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 131,
+     "printed_page": "119",
+     "sha256": "cbc7982a9672cf4e7771fd83ce915d4b95247a9a9d8259225403a4aad15cda4a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0131.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 126,
+     "printed_page": "114",
+     "sha256": "ed77b24f07e6e5d0494f762ac67b49da0cac0ce6c8994e78f7cd6ee25f8512fe",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0126.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 128,
+     "printed_page": "116",
+     "sha256": "888f528551da6daf25b8a2b6acb6cbcd38b7a8b0acbc5b5bfef480e0b2797b6a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0128.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 130,
+     "printed_page": "118",
+     "sha256": "fd2248271a94a1a2ea17e9481c8159142d1090b634e60c380dc0d573a80db035",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0130.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": ". . . who set forth from Argos at the hest of great Zeus, and upholding an often-sung strife in tearful war for the sake of the form of flaxen-haired Helen, made an end of the city so mighty and rich and renowned of Dardanid Priam, and the vengeance of Heaven went up on long-suffering Pergamum because of the golden-tressèd Cypris. But now ’tis my will to sing neither of Paris the host-cheater nor yet of slim-ankled Cassandra and other the children of Priam with the taking of Troy the high-gated, for all ’tis so glorious a theme; nor shall I recount the proud valour of the Heroes, the Heroes so noble whom the hollow ships with their nailèd sides brought unto Troy for her mischief, of whom Agamemnon was chief, the Pleisthenid king, the leader of men, the son of a noble father, to wit of Atreus.\n\nOn such tasks may the well-skilled voice of the Muses of Helicon enter, but never a mortal alive could tell of all the doings of the ships, how came Menelaus from Aulis across the Aegean Sea from Argos to Dardany nurse of horses, and how came those brazen-targeted wights, the sons of the Achaeans, of whom the most eminent in battle came swift-foot Achilles and the great and courageous Aias son of Telamon . . . and the son of gold-girt Hyllis, aye and he to whom Troilus for loveliness of form was likened forthwith both by Trojan and Danaan even as gold thrice refined might be likened to mountain copper.\n\nTheirs it is to share beauty for ever, and thine, too, Polycrates, shall be a glory, even as my glory in song, unfading.",
+   "coverage_note": "Same papyrus poem (Ox. Pap. 1790, the ode to Polycrates). The extent is the same: from the opening '[οἳ κ]αὶ Δαρδανίδα Πριάμοιο' to the closing line on Polycrates. Edmonds does not translate the badly damaged lines 35-40 (marked ' . . . '). His supplements differ in places, and his English follows the papyrus order with 'who set forth from Argos' first.",
+   "match_evidence": "Edmonds' Greek: '…]αὶ Δαρδανίδα Πριάμοιο μέγ’ ἄστυ περικλεὲς ὄλβιον ἠνάρον Ἄργοθεν ὀρνυμένοι Ζηνὸς μεγάλοιο βουλαῖς ξανθᾶς Ἑλένας περὶ εἴδει …' It ends 'καὶ σύ, Πουλύκρατες, κλέος ἄφθιτον ἑξεῖς ὡς κατ’ ἀοιδὰν καὶ ἐμὸν κλέος', matching Campbell's opening and close.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:ibycus:286",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Ibycus, Edmonds fragment 1",
+   "translator_number": "1",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 97,
+     "printed_page": "85",
+     "sha256": "cfd4126dcf7d090914630486fc15b95e3c4e75a189b83189649c77a0d7e73af8",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0097.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 96,
+     "printed_page": "84",
+     "sha256": "f984a24a421d2f5e9201902badbf9400a3bd5cf80773b032478f61eb9beb14b9",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0096.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "’Tis but in Spring the quince-trees of the Maids’ holy garden grow green with the watering rills from the river, and the vine-blossoms wax ’neath the mantling sprays of the vines; but for me Love’s awake the year round, and like the Northwind from Thrace aflame with the lightning, comes with a rush from the Cyprian, with shrivelling frenzies baleful and bold, and with masterful power shakes me to the bottom of my heart.",
+   "coverage_note": "Same 13-line fragment (Athenaeus 13. 601b). Supplements differ in minor ways; for example, in line 8 Edmonds restores 'ἀλλ’ ἅθ’ ὑπὸ'.",
+   "match_evidence": "Edmonds' Greek: 'Ἦρι μὲν αἵ τε Κυδώνιαι μαλίδες ἀρδόμεναι ῥοᾶν ἐκ ποταμῶν ἵνα Παρθένων κᾶπος ἀκήρατος … ἐμοὶ δ’ Ἔρος οὐδεμίαν κατάκοιτος ὥραν … Θρηίκιος Βορέας … ἐγκρατέως πέδοθεν τινάσσει ἁμετέρας φρένας', the same as Campbell's text.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:ibycus:287",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Ibycus, Edmonds fragment 2",
+   "translator_number": "2",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 99,
+     "printed_page": "87",
+     "sha256": "a2b9d99c12e9ea6b6599062ed6c3bf8107600ca5ecf3df9f954b32850f23706c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0099.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 98,
+     "printed_page": "86",
+     "sha256": "016a3c70a77e5719d14bfa199e7e178e1c686e8008632e57676e834ea7770f9d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0098.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Yet again will Love eye me tenderly from beneath dark brows and cast me with manifold magic into the hopeless net of the Love-Goddess. I swear his approach makes me tremble like an old champion-horse of the chariot-race when he draws the swift car all unwillingly to the contest.",
+   "coverage_note": "Same 7-line fragment (scholiast on Plato, Parmenides 137a). In line 4 Edmonds reads 'βαλεῖ' (future, \"will … cast\") where Campbell has 'ἐσβάλλει'.",
+   "match_evidence": "Edmonds' Greek: 'Ἔρος αὖτέ με κυανέοισιν ὑπὸ βλεφάροις τακέρ’ ὄμμασι δερκόμενος κηλήμασι παντοδαποῖς ἐς ἄπειρα δίκτυα Κύπριδος βαλεῖ· ἦ μὰν τρομέω νιν ἐπερχόμενον, ὥστε φερέζυγος ἵππος ἀεθλοφόρος ποτὶ γήρᾳ ἀέκων σὺν ὄχεσφι θοοῖς ἐς ἅμιλλαν ἔβα', the same as Campbell's text.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:ibycus:288",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Ibycus, Edmonds fragment 6",
+   "translator_number": "6",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 101,
+     "printed_page": "89",
+     "sha256": "66db61d4f914d553d441562a9c7a23c887f159ac8c4cd246d91d33d64582e7c5",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0101.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 100,
+     "printed_page": "88",
+     "sha256": "d1fb8fef8dc909cd476d0d923a2b272cfb8fcd1a983153be4453f6d02a77d0da",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0100.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Euryalus, thou scion of the delicious Graces, . . . darling of the lovely-tressèd Muses, surely thou wast the nursling of Cypris and tender-eyed Persuasion amid flowers of the rose.",
+   "coverage_note": "Same 4-line fragment (Athenaeus 13. 564f). After line 1 Edmonds prints a line of lacuna ending in his supplement '<Μοισᾶν>' (\"Muses\"), where Campbell supplies '⟨Ὡρᾶν⟩' (\"Seasons\") at the end of line 1. He reads 'γλυκέων' where Campbell has 'γλαυκέων'.",
+   "match_evidence": "Edmonds' Greek: 'Εὐρύαλε, γλυκέων Χαρίτων θάλος … <Μοισᾶν> καλλικόμων μελέδημα, σὲ μὲν Κύπρις ἅ τ’ ἀγανοβλέφαρος Πειθὼ ῥοδίοισιν ἐν ἄνθεσι θρέψαν', which matches Campbell.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:ibycus:317a",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Ibycus, Edmonds fragment 4",
+   "translator_number": "4",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 99,
+     "printed_page": "87",
+     "sha256": "a2b9d99c12e9ea6b6599062ed6c3bf8107600ca5ecf3df9f954b32850f23706c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0099.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 98,
+     "printed_page": "86",
+     "sha256": "016a3c70a77e5719d14bfa199e7e178e1c686e8008632e57676e834ea7770f9d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0098.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "In the topmost leaves of it sit pied wild-ducks and sheeny-neckt shag-purples and wide-wingèd halcyons;",
+   "coverage_note": "Same 4-line fragment (Athenaeus 9. 388e). Edmonds prints it as the first of the pair '4, 5'; fr. 5 is a separate one-line quotation and is left out.",
+   "match_evidence": "Edmonds' Greek: 'τοῦ μὲν πετάλοισιν ἐπ’ ἀκροτάτοις ἰζάνοισι ποικίλαι … πανέλοπες … λαθιπορφυρίδες … ἀλκυόνες τανυσίπτεροι', the same as Campbell's text.",
+   "verified_against_image": true
+  }
+ ],
+ "gaps": [
+  {
+   "campbell_id": "campbell-glp:alcaeus:45",
+   "reason": "Edmonds, Lyra Graeca I (1922), has only fr. 93 (p. 380-381, scan leaves 402-403). This is a scholiast's testimonium (on Theocritus 7. 112) followed by Edmonds' own exempli-gratia reconstruction, 'e.g. . . . O Hebrus, fairest of all rivers'. It is not a transmitted text of the poem. The papyrus text Campbell prints (Hebrus, Aenus, the girls bathing) is not in Edmonds. Edmonds' vol. I OCR was searched for Hebrus, Thrace, Aenus and thighs; no other version was found. No pre-1930 English translation of the poem was located."
+  }
+ ]
+}

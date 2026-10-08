@@ -1,0 +1,36 @@
+{
+ "pages": [
+  159,
+  160,
+  161,
+  162,
+  163,
+  164,
+  165,
+  166,
+  167
+ ],
+ "lines_checked": 143,
+ "corrections": [
+  {
+   "poem_id": "campbell-glp:bacchylides:fr-20b",
+   "line_index": 5,
+   "pdf_page": 161,
+   "current": "εὖτε νέων ἀ[παλὸν] γλυκεῖ’ ἀνάγκα",
+   "corrected": "εὖτε νέων ἁ[παλὸν] γλυκεῖ’ ἀνάγκα",
+   "what": "ἀ[ -> ἁ[: 20x crop shows c-shaped breathing opening right (same as ἑπτάτονον l.1), unlike comma-shaped smooth on ἀμμειγνυμένα",
+   "confidence": "high"
+  },
+  {
+   "poem_id": "campbell-glp:bacchylides:fr-20b",
+   "line_index": 15,
+   "pdf_page": 162,
+   "current": "πλοῦτ̣ον· ὡς πίνοντος ὁρμαίνει κέαρ.",
+   "corrected": "πλοῦτ̣ον· ὣς πίνοντος ὁρμαίνει κέαρ.",
+   "what": "ὡς -> ὣς: 20x crop shows compact arch (c-breathing with a leg descending right) = breathing+grave, same shape as οἳ on p167 (907.3); plain ὁ in ὁρμαίνει is a bare c",
+   "confidence": "medium"
+  }
+ ],
+ "missing_or_extra": [],
+ "label_fixes": []
+}

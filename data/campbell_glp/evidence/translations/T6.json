@@ -1,0 +1,931 @@
+{
+ "items": [
+  {
+   "campbell_id": "campbell-glp:archilochus:7",
+   "translator": "Charles Abraham Elton",
+   "edition": "Specimens of the Classic Poets, in a Chronological Series from Homer to Tryphiodorus, translated into English verse, vol. I (London: Robert Baldwin, 1814)",
+   "citation": "Archilochus, \"Exhortation to Fortitude, under Calamity\", Elton, Specimens I p. 87",
+   "translator_number": "",
+   "source_item": "specimensclassi02eltogoog",
+   "source_url": "https://archive.org/details/specimensclassi02eltogoog",
+   "publication_year": 1814,
+   "english_pages": [
+    {
+     "scan_leaf": 128,
+     "printed_page": "87",
+     "sha256": "b7b66ef1e211d031a9e842a4eab362b8aaf1699a16a9d238b4267681e8207d43",
+     "iiif_url": "https://archive.org/download/specimensclassi02eltogoog/page/n127.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Groans rise on griefs, oh Pericles! nor they\nWho feed the woe, in wine or feast are gay.\nThe billow of the many-roaring deep\nHas borne these pleasures in its whelming sweep.\nOur grief-swol'n hearts, now, draw their breath in pain;\nYet blessings, oh my friend! shall smile again.\nThe Gods reserve for seeming-cureless woe\nA balm, and antidotes on grief bestow.\nIn turn the cure and suffering take their round,\nAnd we now groaning feel the bleeding wound:\nNow other breasts the shifting tortures know;\nEndure; nor droop thus womanish in woe.",
+   "coverage_note": "Elton renders the whole 10-line elegy to Pericles in 12 rhymed lines; same extent as Campbell. Elton's section heading names other English translators (e.g. 'English translator: Bland') as a reference list; the specimens themselves are Elton's own versions (they differ from Bland's 1813 versions; Dole's The Greek Poets, 1904, credits them to Elton). Elton prints no Greek; match is by content.",
+   "match_evidence": "Opens with groans/griefs addressed to Pericles, no citizen delighting in feasts (lines 1-2), the billow of the many-roaring sea (3), grief-swollen breasts (4-5), the gods giving endurance as remedy for incurable ills (5-7), the suffering turning now to us, now to others (7-9), and the closing command to thrust away womanish grief (10).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:74",
+   "translator": "Charles Abraham Elton",
+   "edition": "Specimens of the Classic Poets, in a Chronological Series from Homer to Tryphiodorus, translated into English verse, vol. I (London: Robert Baldwin, 1814)",
+   "citation": "Archilochus, \"On an Eclipse of the Sun\", Elton, Specimens I p. 88",
+   "translator_number": "",
+   "source_item": "specimensclassi02eltogoog",
+   "source_url": "https://archive.org/details/specimensclassi02eltogoog",
+   "publication_year": 1814,
+   "english_pages": [
+    {
+     "scan_leaf": 129,
+     "printed_page": "88",
+     "sha256": "c7307dfc675b2647194a1e86740cf051592f067690cfea778a70d458e0234474",
+     "iiif_url": "https://archive.org/download/specimensclassi02eltogoog/page/n128.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Nought, now, can pass belief; in Nature's ways\nNo strange anomaly our wonder raise.\nTh' Olympian Father hangs a noon-day night\nO'er the sun's disk, and veils its glittering light.\nFear falls on man. Hence miracles, before\nIncredible, are counted strange no more.\nStand not amazed if beasts exchange the wood\nWith dolphins; and exist amidst the flood;\nThese the firm land forsake for sounding waves,\nAnd those find pleasure in the mountain caves.",
+   "coverage_note": "Elton's 10 lines render Campbell lines 1-9 (nothing unexpected; Zeus makes night at noon; fear; let none marvel if beasts exchange pasture with dolphins and prefer the sea, and they the mountain). Campbell's papyrus-supplemented lines 10-16 (Archenactides etc.) are not in Elton. Elton's section heading names other English translators (e.g. 'English translator: Bland') as a reference list; the specimens themselves are Elton's own versions (they differ from Bland's 1813 versions; Dole's The Greek Poets, 1904, credits them to Elton). Elton prints no Greek; match is by content.",
+   "match_evidence": "Nothing past belief; the Olympian Father makes a noon-day night hiding the sun (Campbell 1-4); fear on men; let no one be amazed if beasts exchange their pasture with dolphins and the sea, and dolphins love the mountains (6-9).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:67a",
+   "translator": "Charles Abraham Elton",
+   "edition": "Specimens of the Classic Poets, in a Chronological Series from Homer to Tryphiodorus, translated into English verse, vol. I (London: Robert Baldwin, 1814)",
+   "citation": "Archilochus, \"Equanimity\", Elton, Specimens I p. 88",
+   "translator_number": "",
+   "source_item": "specimensclassi02eltogoog",
+   "source_url": "https://archive.org/details/specimensclassi02eltogoog",
+   "publication_year": 1814,
+   "english_pages": [
+    {
+     "scan_leaf": 129,
+     "printed_page": "88",
+     "sha256": "c7307dfc675b2647194a1e86740cf051592f067690cfea778a70d458e0234474",
+     "iiif_url": "https://archive.org/download/specimensclassi02eltogoog/page/n128.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Spirit, thou Spirit, like a troubled sea,\nRuffled with deep and hard calamity,\nSustain the shock: a daring heart oppose:\nStand firm, amidst the charging spears of foes:\nIf conquering, vaunt not in vain-glorious show:\nIf conquer'd, stoop not, prostrated in woe:\nModerate, in joy, rejoice; in sorrow, mourn:\nMuse on man's lot: be thine discreetly borne.",
+   "coverage_note": "Elton renders the whole 7-line trochaic fragment in 8 lines; same extent as Campbell. Elton's section heading names other English translators (e.g. 'English translator: Bland') as a reference list; the specimens themselves are Elton's own versions (they differ from Bland's 1813 versions; Dole's The Greek Poets, 1904, credits them to Elton). Elton prints no Greek; match is by content.",
+   "match_evidence": "Address to the spirit (thymos) troubled by helpless cares (Campbell 1); oppose the breast to the foe and stand firm (2-4); neither exult openly in victory nor collapse lamenting in defeat (4-5); rejoice in joys and grieve in ills moderately, and know the rhythm that holds mankind (6-7).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:mimnermus:2",
+   "translator": "Charles Abraham Elton",
+   "edition": "Specimens of the Classic Poets, in a Chronological Series from Homer to Tryphiodorus, translated into English verse, vol. I (London: Robert Baldwin, 1814)",
+   "citation": "Mimnermus, \"Shortness of Life\", Elton, Specimens I pp. 121-122",
+   "translator_number": "",
+   "source_item": "specimensclassi02eltogoog",
+   "source_url": "https://archive.org/details/specimensclassi02eltogoog",
+   "publication_year": 1814,
+   "english_pages": [
+    {
+     "scan_leaf": 162,
+     "printed_page": "121",
+     "sha256": "04ca6b0a99e178f64bc631628b91e7a6045a13ab866cfcb4071b869264b5b5a3",
+     "iiif_url": "https://archive.org/download/specimensclassi02eltogoog/page/n161.jpg"
+    },
+    {
+     "scan_leaf": 163,
+     "printed_page": "122",
+     "sha256": "02004892ae969ea24d980e277f95799da34acac5deea913b6ae35f7bf81d28f4",
+     "iiif_url": "https://archive.org/download/specimensclassi02eltogoog/page/n162.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "We, like the leaves of many-blossom'd spring,\nWhen the sun's rays their sudden radiance fling,\nIn growing strength, on earth, a little while,\nDelighted, see youth's blooming flow'rets smile.\nNot with that wisdom of the Gods endued,\nTo judge aright of evil and of good.\nTwo Fates, dark-scowling, at our side attend;\nOf youth, of life, each points the destin'd end,\nOld age, and death: the fruit of youth remains\nBrief, as the sunshine scatter'd o'er the plains:\nAnd, when these fleeting hours have fled away,\nTo die were better than to breathe the day.\nA load of grief the burthen'd spirit wears;\nDomestic troubles rise; penurious cares;\nOne with an earnest love of children sighs;\nThe grave is open'd, and he childless dies:\nAnother drags in pain his lingering days,\nWhile slow disease upon his vitals preys.\nNor lives there one, whom Jupiter on high\nExempts from years of mix'd calamity.",
+   "coverage_note": "Elton renders the whole 16-line elegy in 20 lines; same extent as Campbell. Elton's section heading names other English translators (e.g. 'English translator: Bland') as a reference list; the specimens themselves are Elton's own versions (they differ from Bland's 1813 versions; Dole's The Greek Poets, 1904, credits them to Elton). Elton prints no Greek; match is by content.",
+   "match_evidence": "We are like the leaves of flowery spring growing in the sun (Campbell 1-2), enjoying youth a short while, knowing neither good nor ill from the gods (3-5); two dark Fates, old age and death (5-7); the fruit of youth brief as sunlight (7-8); better to die at once (10); troubles, poverty, childlessness, disease (11-15); no man to whom Zeus does not give many ills (15-16).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:mimnermus:1",
+   "translator": "Charles Abraham Elton",
+   "edition": "Specimens of the Classic Poets, in a Chronological Series from Homer to Tryphiodorus, translated into English verse, vol. I (London: Robert Baldwin, 1814)",
+   "citation": "Mimnermus, \"Reproach of Old Age\", Elton, Specimens I p. 123",
+   "translator_number": "",
+   "source_item": "specimensclassi02eltogoog",
+   "source_url": "https://archive.org/details/specimensclassi02eltogoog",
+   "publication_year": 1814,
+   "english_pages": [
+    {
+     "scan_leaf": 164,
+     "printed_page": "123",
+     "sha256": "d06c7de42e0eb6e6978100897f3988cf01eea10c7c48a08f85c9b07c9548f4d0",
+     "iiif_url": "https://archive.org/download/specimensclassi02eltogoog/page/n163.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "What joy in life, were golden Venus fled?\nThen may I sleep among the silent dead,\nWhen this can charm no more; when tasteless prove\nSoft bribes, the yielding couch, clandestine love.\nWhat joy in life, if, with such transient bloom,\nYouth's dropping flow'rets waste their rich perfume,\nAnd both the sexes droop? then age is nigh;\nAt whose afflictive touch the Graces fly.\nThe fair-proportion'd limbs of smooth delight\nDeform'd, dishonour'd, loveless to the sight.\nPerpetual miseries make the soul their prey;\nThe aged man looks up, and loathes the day:\nOf boys the mock; of women the disdain;\nThe Gods have dealt to age the dole of pain.",
+   "coverage_note": "Elton renders the whole 10-line elegy in 14 lines; same extent as Campbell. Elton's section heading names other English translators (e.g. 'English translator: Bland') as a reference list; the specimens themselves are Elton's own versions (they differ from Bland's 1813 versions; Dole's The Greek Poets, 1904, credits them to Elton). Elton prints no Greek; match is by content.",
+   "match_evidence": "What life, what joy without golden Aphrodite (Campbell 1); may I die when secret love, gifts and bed no longer concern me (2-3); the flowers of youth for men and women (4-5); painful old age (5-6); cares wear the mind, no joy in the sun (7-8); hateful to boys, scorned by women (9); so grievous has God made old age (10).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:semonides:7",
+   "translator": "Charles Abraham Elton",
+   "edition": "Specimens of the Classic Poets, in a Chronological Series from Homer to Tryphiodorus, translated into English verse, vol. I (London: Robert Baldwin, 1814)",
+   "citation": "Simonides [of Amorgos], \"From the Apologue on Women\", Elton, Specimens I pp. 159-161",
+   "translator_number": "",
+   "source_item": "specimensclassi04eltogoog",
+   "source_url": "https://archive.org/details/specimensclassi04eltogoog",
+   "publication_year": 1814,
+   "english_pages": [
+    {
+     "scan_leaf": 196,
+     "printed_page": "159",
+     "sha256": "47df358b984be4e323e825c76ab5f6e4fea81ff444c8253e85e06766715f05ad",
+     "iiif_url": "https://archive.org/download/specimensclassi04eltogoog/page/n195.jpg"
+    },
+    {
+     "scan_leaf": 197,
+     "printed_page": "160",
+     "sha256": "8162c4ac216eafae74b165c5e00414447734c8f3a53fc0ca10e72107afc9675d",
+     "iiif_url": "https://archive.org/download/specimensclassi04eltogoog/page/n196.jpg"
+    },
+    {
+     "scan_leaf": 198,
+     "printed_page": "161",
+     "sha256": "650a1ee3dddc74e572b6d36fc8e25a8e2f08e28f6dc96e6d2d6d8c285f9146e7",
+     "iiif_url": "https://archive.org/download/specimensclassi04eltogoog/page/n197.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "She from the steed of wanton mane\nShall spurn all servile toil and pain;\nNor shake the sieve; nor ply the mill;\nNor sweep the floor, though dusty still;\nNor near the oven take her seat;\nBut loathe the ashes, smoke, and heat:\nAnd to her husband profit naught\nUnless by mere compulsion taught.\nTwice, thrice, she bathes her through the day,\nWashing the slightest soil away:\nPerfumes with oils her every limb;\nHer tresses combs in order trim;\nTress upon tress in thickening braid;\nWhile twisted flowers her temples shade,\nA goodly sight to strangers' view:\nBut he, that owns her, sore shall rue\nThe cost, I ween: unless he be\nSatrap or king, and joy in luxury.\nHer from an Ape the Maker sent\nMan's evil mate and punishment.\nHer visage foul; she walks the streets,\nThe laughing-stock of all she meets.\nScarce her short neck can turn; all slim,\nAnd lank, and spare; all leg and limb;\nWretched the man, who in his breast\nIs doom'd to fold this female pest!\nShe, like the Ape, is versed in wiles;\nAnd tricking turns; she never smiles:\nObliges none; but ponders still\nOn mischief-plots, and daily ill.\n\nWho gains the creature from the Bee,\nBy fortune favour'd most is he:\nTo her alone, with pointless sting,\nWould Scandal impotently cling.\nWith her his May of life is long;\nHis days are flourishing and strong.\nBeloved, her fond embrace she twines\nRound him she loves: with him declines\nIn fading years: her race is known\nFor goodly forms, and fair renown.\nHer decent charms her sex outshine:\nAround her flits a grace divine.\nShe sits not pleased where women crowd,\nIn amorous tattle, light and loud:\nWith such the God mankind has blest;\nWith such, the wisest and the best.",
+   "coverage_note": "PARTIAL: Elton translates only three sections of the 118-line poem: the woman from the mare (Campbell lines 57-70), the woman from the ape (71-82), and the woman from the bee (83-93). The rest (sow, vixen, bitch, earth, sea, ass, weasel, and the closing lines 94-118) is not translated. Elton prints the author as 'Simonides' within his Simonides (of Ceos) section; the apologue on women is by Semonides of Amorgos. Elton's section heading names other English translators (e.g. 'English translator: Bland') as a reference list; the specimens themselves are Elton's own versions (they differ from Bland's 1813 versions; Dole's The Greek Poets, 1904, credits them to Elton). Elton prints no Greek; match is by content.",
+   "match_evidence": "Mare-woman shuns slavish work, will not touch mill or sieve or sweep, will not sit by the oven for the ashes, bathes twice or thrice a day, anoints herself, wears her hair combed and garlanded, a fine sight for others but an expense to her husband unless he is a tyrant or sceptred king (Campbell 57-70); ape-woman, ugliest, laughing-stock of the town, short neck, no buttocks, all limbs, versed in tricks, never laughs (71-82); bee-woman, on whom no blame settles, life flourishes, grows old loving with her husband, bears a fine and famous race, conspicuous among women, a divine grace about her, does not sit among women talking of sex; Zeus grants these as the best and wisest wives (83-93).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:6",
+   "translator": "John Herman Merivale",
+   "edition": "Collections from the Greek Anthology, by the late Rev. Robert Bland and others; a new edition, comprising the fragments of early lyric poetry ... by J. H. Merivale (London: Longman et al. and John Murray, 1833)",
+   "citation": "Archilochus, Merivale (1833) Archilochus II \"On the Loss of his Shield\"",
+   "translator_number": "II (3)",
+   "source_item": "collectionsfromg00blan",
+   "source_url": "https://archive.org/details/collectionsfromg00blan",
+   "publication_year": 1833,
+   "english_pages": [
+    {
+     "scan_leaf": 79,
+     "printed_page": "5",
+     "sha256": "ccd121c8ac5b2f755cb4a0c26d7335bfdcca21786298bf2f11374795c5afae1c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/collectionsfromg00blan%2Fcollectionsfromg00blan_jp2.zip%2Fcollectionsfromg00blan_jp2%2Fcollectionsfromg00blan_0079.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "The foe-man glories in my shield—\nI left it on the battle field;\nI threw it down beside the wood,\nUnscath'd by scars, unstain'd with blood.\nAnd let him glory! Since, from death\nEscap'd, I keep my forfeit breath,\nI soon may find, at little cost,\nAs good a shield as that I've lost.",
+   "coverage_note": "Whole 4-line elegiac fragment rendered in 8 lines; same extent as Campbell. Piece signed 'M.' in the 1833 edition edited by J. H. Merivale (his own contributions; the Advertisement assigns B. to Bland, H. to Hodgson, C. M. to Charles Merivale); Dole's The Greek Poets (1904) credits these versions to John Hermann Merivale. The bracketed number is the fragment number in the editor's Greek text (Jacobs/Liebel), not printed here.",
+   "match_evidence": "Some (Saian) foeman glories in the shield I left beside a bush, blameless armour, unwillingly (Campbell 1-2); I saved myself (3); let it go, I will get another no worse (3-4).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:3",
+   "translator": "John Herman Merivale",
+   "edition": "Collections from the Greek Anthology, by the late Rev. Robert Bland and others; a new edition, comprising the fragments of early lyric poetry ... by J. H. Merivale (London: Longman et al. and John Murray, 1833)",
+   "citation": "Archilochus, Merivale (1833) Archilochus III \"The Close Fight\"",
+   "translator_number": "III (4)",
+   "source_item": "collectionsfromg00blan",
+   "source_url": "https://archive.org/details/collectionsfromg00blan",
+   "publication_year": 1833,
+   "english_pages": [
+    {
+     "scan_leaf": 79,
+     "printed_page": "5",
+     "sha256": "ccd121c8ac5b2f755cb4a0c26d7335bfdcca21786298bf2f11374795c5afae1c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/collectionsfromg00blan%2Fcollectionsfromg00blan_jp2.zip%2Fcollectionsfromg00blan_jp2%2Fcollectionsfromg00blan_0079.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Bows will not avail thee,\nDarts and slings will fail thee,\nWhen Mars tumultuous rages\nOn wide embattled land.\nThen with faulchions clashing,\nEyes with fury flashing,\nMan with man engages\nIn combat, hand to hand.\nBut most Eubœa's chiefs are known,\nMarshal'd hosts of spearmen leading\nTo conflict whence is no receding,\nTo make this—war's best art—their own.",
+   "coverage_note": "Whole 5-line fragment rendered in 12 lines; same extent as Campbell. Piece signed 'M.' in the 1833 edition edited by J. H. Merivale (his own contributions; the Advertisement assigns B. to Bland, H. to Hodgson, C. M. to Charles Merivale); Dole's The Greek Poets (1904) credits these versions to John Hermann Merivale. The bracketed number is the fragment number in the editor's Greek text (Jacobs/Liebel), not printed here.",
+   "match_evidence": "Not many bows nor frequent slings when Ares joins battle on the plain (Campbell 1-3); the grievous work of swords (3); in this the spear-famed lords of Euboea are skilled (4-5).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:60",
+   "translator": "John Herman Merivale",
+   "edition": "Collections from the Greek Anthology, by the late Rev. Robert Bland and others; a new edition, comprising the fragments of early lyric poetry ... by J. H. Merivale (London: Longman et al. and John Murray, 1833)",
+   "citation": "Archilochus, Merivale (1833) Archilochus V \"A Pair of Military Portraits\"",
+   "translator_number": "V (9)",
+   "source_item": "collectionsfromg00blan",
+   "source_url": "https://archive.org/details/collectionsfromg00blan",
+   "publication_year": 1833,
+   "english_pages": [
+    {
+     "scan_leaf": 80,
+     "printed_page": "6",
+     "sha256": "10bf1a14f478879f65f6103a305a03ebf74e7c65ba8650c1210d9371072456b6",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/collectionsfromg00blan%2Fcollectionsfromg00blan_jp2.zip%2Fcollectionsfromg00blan_jp2%2Fcollectionsfromg00blan_0080.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Boast me not your valiant captain,\nstrutting fierce with measur'd stride,\nGlorying in his well-trimm'd beard, and\nwavy ringlets' cluster'd pride.\n\nMine be he that's short of stature,\nfirm of foot, with curved knee;\nHeart of oak in limb and feature,\nand of courage bold and free.",
+   "coverage_note": "Whole 4-line trochaic fragment rendered in two quatrains (each long line printed as two half-lines); same extent as Campbell. Piece signed 'M.' in the 1833 edition edited by J. H. Merivale (his own contributions; the Advertisement assigns B. to Bland, H. to Hodgson, C. M. to Charles Merivale); Dole's The Greek Poets (1904) credits these versions to John Hermann Merivale. The bracketed number is the fragment number in the editor's Greek text (Jacobs/Liebel), not printed here.",
+   "match_evidence": "I do not like a tall general, straddling, proud of his curls, shaven (Campbell 1-2); give me a small one, bandy-legged to look at, firm on his feet, full of heart (3-4).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:22",
+   "translator": "John Herman Merivale",
+   "edition": "Collections from the Greek Anthology, by the late Rev. Robert Bland and others; a new edition, comprising the fragments of early lyric poetry ... by J. H. Merivale (London: Longman et al. and John Murray, 1833)",
+   "citation": "Archilochus, Merivale (1833) Archilochus VI \"Riches and Power\"",
+   "translator_number": "VI (10)",
+   "source_item": "collectionsfromg00blan",
+   "source_url": "https://archive.org/details/collectionsfromg00blan",
+   "publication_year": 1833,
+   "english_pages": [
+    {
+     "scan_leaf": 80,
+     "printed_page": "6",
+     "sha256": "10bf1a14f478879f65f6103a305a03ebf74e7c65ba8650c1210d9371072456b6",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/collectionsfromg00blan%2Fcollectionsfromg00blan_jp2.zip%2Fcollectionsfromg00blan_jp2%2Fcollectionsfromg00blan_0080.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "For Gyges' wealth let others care,\nGold is nothing to me;\nEnvy of another's share\nNever shall undo me.\n\nNothing that the Gods decree\nMoves my special wonder;\nAnd as for boastful tyranny—\nWe're too far asunder.",
+   "coverage_note": "Whole 4-line iambic fragment rendered in 8 lines; same extent as Campbell (Campbell prints it as the words of Charon the carpenter; Merivale gives no speaker). Piece signed 'M.' in the 1833 edition edited by J. H. Merivale (his own contributions; the Advertisement assigns B. to Bland, H. to Hodgson, C. M. to Charles Merivale); Dole's The Greek Poets (1904) credits these versions to John Hermann Merivale. The bracketed number is the fragment number in the editor's Greek text (Jacobs/Liebel), not printed here.",
+   "match_evidence": "The wealth of Gyges rich in gold is no concern of mine, nor has envy seized me (Campbell 1-2); I do not marvel at the deeds of the gods (2-3); I have no love for great tyranny, it is far from my eyes (3-4).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:56",
+   "translator": "John Herman Merivale",
+   "edition": "Collections from the Greek Anthology, by the late Rev. Robert Bland and others; a new edition, comprising the fragments of early lyric poetry ... by J. H. Merivale (London: Longman et al. and John Murray, 1833)",
+   "citation": "Archilochus, Merivale (1833) Archilochus VIII \"The Storm\"",
+   "translator_number": "VIII (13)",
+   "source_item": "collectionsfromg00blan",
+   "source_url": "https://archive.org/details/collectionsfromg00blan",
+   "publication_year": 1833,
+   "english_pages": [
+    {
+     "scan_leaf": 81,
+     "printed_page": "7",
+     "sha256": "71994e263d892eb189f80e58c6b1f15610cf11c71e1afa7b51751072ccf50810",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/collectionsfromg00blan%2Fcollectionsfromg00blan_jp2.zip%2Fcollectionsfromg00blan_jp2%2Fcollectionsfromg00blan_0081.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Behold, my Glaucus! how the deep\nHeaves, while the sweeping billows howl,\nAnd round the promontory steep\nThe big black clouds portentous scowl,\nWith thunder fraught and lightning's glare,\nWhile Terror rules, and wild Despair.",
+   "coverage_note": "Whole 3-line trochaic fragment rendered in 6 lines; same extent as Campbell. Piece signed 'M.' in the 1833 edition edited by J. H. Merivale (his own contributions; the Advertisement assigns B. to Bland, H. to Hodgson, C. M. to Charles Merivale); Dole's The Greek Poets (1904) credits these versions to John Hermann Merivale. The bracketed number is the fragment number in the editor's Greek text (Jacobs/Liebel), not printed here.",
+   "match_evidence": "Glaucus, look: the deep sea is troubled with waves (Campbell 1-2); a cloud stands upright round the heights of Gyrae, sign of storm (2-3); fear comes unexpectedly (3).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:58",
+   "translator": "John Herman Merivale",
+   "edition": "Collections from the Greek Anthology, by the late Rev. Robert Bland and others; a new edition, comprising the fragments of early lyric poetry ... by J. H. Merivale (London: Longman et al. and John Murray, 1833)",
+   "citation": "Archilochus, Merivale (1833) Archilochus IX \"Moral\", second part (fr. 15)",
+   "translator_number": "IX (15)",
+   "source_item": "collectionsfromg00blan",
+   "source_url": "https://archive.org/details/collectionsfromg00blan",
+   "publication_year": 1833,
+   "english_pages": [
+    {
+     "scan_leaf": 82,
+     "printed_page": "8",
+     "sha256": "62758e4a122f284164c4563fdf166feb31abe706b621981e80139fada6e58a3b",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/collectionsfromg00blan%2Fcollectionsfromg00blan_jp2.zip%2Fcollectionsfromg00blan_jp2%2Fcollectionsfromg00blan_0082.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Leave the gods to order all things:\noften from the gulf of woe\nThey exalt the poor man grov'ling\nin the gloomy shades below;\nOften turn again, and prostrate\nlay in dust the loftiest head,\nDooming him thro' life to wander,\nreft of sense, and wanting bread.",
+   "coverage_note": "Merivale's piece IX joins two fragments (14 = Campbell 67a, 15 = Campbell 58), separated by a printed rule; only the part after the rule (fragment 15) is given here. It renders Campbell's 5 lines. Piece signed 'M.' in the 1833 edition edited by J. H. Merivale (his own contributions; the Advertisement assigns B. to Bland, H. to Hodgson, C. M. to Charles Merivale); Dole's The Greek Poets (1904) credits these versions to John Hermann Merivale. The bracketed number is the fragment number in the editor's Greek text (Jacobs/Liebel), not printed here.",
+   "match_evidence": "Leave all to the gods (Campbell 1); often they raise men lying on the black earth out of misfortune (1-2), often overturn those who stand firm and lay them on their backs (3-4); then many ills come, and a man wanders in want of livelihood, distraught in mind (4-5).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:64",
+   "translator": "John Herman Merivale",
+   "edition": "Collections from the Greek Anthology, by the late Rev. Robert Bland and others; a new edition, comprising the fragments of early lyric poetry ... by J. H. Merivale (London: Longman et al. and John Murray, 1833)",
+   "citation": "Archilochus, Merivale (1833) Archilochus XI \"On Life and Death\", lines 3-6 (fr. 18)",
+   "translator_number": "XI (18)",
+   "source_item": "collectionsfromg00blan",
+   "source_url": "https://archive.org/details/collectionsfromg00blan",
+   "publication_year": 1833,
+   "english_pages": [
+    {
+     "scan_leaf": 83,
+     "printed_page": "9",
+     "sha256": "e6f52df5e5a7f078e822df9d96d60e848b01a666588bac2db5aad7e685315d28",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/collectionsfromg00blan%2Fcollectionsfromg00blan_jp2.zip%2Fcollectionsfromg00blan_jp2%2Fcollectionsfromg00blan_0083.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Death seals the fountains of reward and fame:\nMan dies, and leaves no guardian of his name.\nApplause awaits us only while we live,\nWhile we can honour take, and honour give:",
+   "coverage_note": "Merivale's piece XI joins three fragments (17, 18, 19); only its lines 3-6, which render Campbell 64 (Bergk/Liebel fr. 18), are given here. Lines 1-2 render a different fragment and lines 7-8 render Campbell 65. Piece signed 'M.' in the 1833 edition edited by J. H. Merivale (his own contributions; the Advertisement assigns B. to Bland, H. to Hodgson, C. M. to Charles Merivale); Dole's The Greek Poets (1904) credits these versions to John Hermann Merivale. The bracketed number is the fragment number in the editor's Greek text (Jacobs/Liebel), not printed here.",
+   "match_evidence": "No one, once dead, is respected or famous among the citizens (Campbell 1-2) = \"Death seals the fountains of reward and fame: Man dies, and leaves no guardian of his name\"; we the living pursue the favour of the living (2-3) = \"Applause awaits us only while we live ...\".",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:18",
+   "translator": "John Herman Merivale",
+   "edition": "Collections from the Greek Anthology, by the late Rev. Robert Bland and others; a new edition, comprising the fragments of early lyric poetry ... by J. H. Merivale (London: Longman et al. and John Murray, 1833)",
+   "citation": "Archilochus, Merivale (1833) Archilochus XII \"The Island Thasos\"",
+   "translator_number": "XII (21, 22)",
+   "source_item": "collectionsfromg00blan",
+   "source_url": "https://archive.org/details/collectionsfromg00blan",
+   "publication_year": 1833,
+   "english_pages": [
+    {
+     "scan_leaf": 83,
+     "printed_page": "9",
+     "sha256": "e6f52df5e5a7f078e822df9d96d60e848b01a666588bac2db5aad7e685315d28",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/collectionsfromg00blan%2Fcollectionsfromg00blan_jp2.zip%2Fcollectionsfromg00blan_jp2%2Fcollectionsfromg00blan_0083.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Like the sharp back-bone of an ass it stood,\nThat rugged Isle, o'ergrown with shaggy wood.\nNo verdant grot, no lawn for poet's dream,\nIs there, like those by Siris' pleasant stream.",
+   "coverage_note": "Merivale joins the two parts (21, 22) of Campbell's fragment (which marks a gap between them) without marking the gap; same extent otherwise. Piece signed 'M.' in the 1833 edition edited by J. H. Merivale (his own contributions; the Advertisement assigns B. to Bland, H. to Hodgson, C. M. to Charles Merivale); Dole's The Greek Poets (1904) credits these versions to John Hermann Merivale. The bracketed number is the fragment number in the editor's Greek text (Jacobs/Liebel), not printed here.",
+   "match_evidence": "This island stands like the back of an ass, crowned with wild wood (Campbell 1-2); for it is no fair place nor lovely, like that about the streams of Siris (4-5).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:1",
+   "translator": "C. D. Yonge",
+   "edition": "The Deipnosophists, or Banquet of the Learned, of Athenaeus, literally translated by C. D. Yonge, vol. III (London: Henry G. Bohn, 1854; Bohn's Classical Library)",
+   "citation": "Archilochus quoted by Athenaeus 14.627c; Yonge, Deipnosophists III p. 1000",
+   "translator_number": "",
+   "source_item": "deipnosophistsor03atheuoft",
+   "source_url": "https://archive.org/details/deipnosophistsor03atheuoft",
+   "publication_year": 1854,
+   "english_pages": [
+    {
+     "scan_leaf": 192,
+     "printed_page": "1000",
+     "sha256": "3c8f9114e6b420daffb57c9c67929d12867eb2a60d6c0377e54b646a28a3460c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/deipnosophistsor03atheuoft%2Fdeipnosophistsor03atheuoft_jp2.zip%2Fdeipnosophistsor03atheuoft_jp2%2Fdeipnosophistsor03atheuoft_0192.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "But I'm a willing servant of great Mars,\nSkill'd also in the Muses' lovely art.",
+   "coverage_note": "Both lines of the fragment; same extent as Campbell. Verse rendering embedded in Yonge's translation of Athenaeus (Bohn, 1854); the surrounding prose (Athenaeus' context) is excluded. Yonge prints no Greek; match is by Athenaeus' citation and content.",
+   "match_evidence": "I am the servant of lord Enyalius (= Mars) and skilled in the lovely gift of the Muses (Campbell 1-2).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:2",
+   "translator": "C. D. Yonge",
+   "edition": "The Deipnosophists, or Banquet of the Learned, of Athenaeus, literally translated by C. D. Yonge, vol. I (London: Henry G. Bohn, 1854; Bohn's Classical Library)",
+   "citation": "Archilochus quoted by Athenaeus 1.30f; Yonge, Deipnosophists I p. 51",
+   "translator_number": "",
+   "source_item": "deipnosophistsor01atheuoft",
+   "source_url": "https://archive.org/details/deipnosophistsor01atheuoft",
+   "publication_year": 1854,
+   "english_pages": [
+    {
+     "scan_leaf": 63,
+     "printed_page": "51",
+     "sha256": "92c0346d4c372bf5d47e87f34d2bcb017943d412931d45f9054de51b13609e2b",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/deipnosophistsor01atheuoft%2Fdeipnosophistsor01atheuoft_jp2.zip%2Fdeipnosophistsor01atheuoft_jp2%2Fdeipnosophistsor01atheuoft_0063.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "My spear finds corn, my spear finds wine,\nFrom Ismarus; on my spear I dine,\nAnd on it, when fatigued, recline.",
+   "coverage_note": "Whole 2-line fragment rendered in 3 lines; same extent as Campbell. Verse rendering embedded in Yonge's translation of Athenaeus (Bohn, 1854); the surrounding prose (Athenaeus' context) is excluded. Yonge prints no Greek; match is by Athenaeus' citation and content.",
+   "match_evidence": "In my spear is my kneaded bread, in my spear Ismarian wine, and I drink leaning on my spear (Campbell 1-2).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:5a",
+   "translator": "C. D. Yonge",
+   "edition": "The Deipnosophists, or Banquet of the Learned, of Athenaeus, literally translated by C. D. Yonge, vol. II (London: Henry G. Bohn, 1854; Bohn's Classical Library)",
+   "citation": "Archilochus quoted by Athenaeus 11.483d; Yonge, Deipnosophists II p. 772",
+   "translator_number": "",
+   "source_item": "deipnosophistsor02atheuoft",
+   "source_url": "https://archive.org/details/deipnosophistsor02atheuoft",
+   "publication_year": 1854,
+   "english_pages": [
+    {
+     "scan_leaf": 351,
+     "printed_page": "772",
+     "sha256": "d0693fb9d8876635955f8a2226f6d2017fffd27dbd232414d4e9f68697005c6c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/deipnosophistsor02atheuoft%2Fdeipnosophistsor02atheuoft_jp2.zip%2Fdeipnosophistsor02atheuoft_jp2%2Fdeipnosophistsor02atheuoft_0351.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "But come now, with your cothon in your hand,\nMove o'er the benches of the speedy ship,\nAnd lift the covers from the hollow casks,\nAnd drain the rosy wine down to the dregs;\nFor while we're keeping such a guard as this,\nWe shan't be able to forego our wine;",
+   "coverage_note": "Whole 4-line elegiac fragment rendered in 6 lines; same extent as Campbell. Verse rendering embedded in Yonge's translation of Athenaeus (Bohn, 1854); the surrounding prose (Athenaeus' context) is excluded. Yonge prints no Greek; match is by Athenaeus' citation and content.",
+   "match_evidence": "Come, go with the cup (kothon) through the benches of the swift ship (Campbell 1-2), pull the lids off the hollow casks (2), draw the red wine from the lees (3); we cannot stay sober on this watch (3-4).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:53",
+   "translator": "C. D. Yonge",
+   "edition": "The Deipnosophists, or Banquet of the Learned, of Athenaeus, literally translated by C. D. Yonge, vol. I (London: Henry G. Bohn, 1854; Bohn's Classical Library)",
+   "citation": "Archilochus quoted by Athenaeus 3.76b; Yonge, Deipnosophists I p. 128",
+   "translator_number": "",
+   "source_item": "deipnosophistsor01atheuoft",
+   "source_url": "https://archive.org/details/deipnosophistsor01atheuoft",
+   "publication_year": 1854,
+   "english_pages": [
+    {
+     "scan_leaf": 140,
+     "printed_page": "128",
+     "sha256": "0139681c160c56f300d560625477b05e8cac65c70c99390ff8c9bcdd331828f9",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/deipnosophistsor01atheuoft%2Fdeipnosophistsor01atheuoft_jp2.zip%2Fdeipnosophistsor01atheuoft_jp2%2Fdeipnosophistsor01atheuoft_0140.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Never mind Paros, and the figs which grow\nWithin that marble island, and the life\nOf its seafaring islanders.",
+   "coverage_note": "The single tetrameter line rendered in 3 lines; same extent as Campbell. Verse rendering embedded in Yonge's translation of Athenaeus (Bohn, 1854); the surrounding prose (Athenaeus' context) is excluded. Yonge prints no Greek; match is by Athenaeus' citation and content.",
+   "match_evidence": "Let Paros go, and those figs, and the seafaring life (Campbell 1).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:77",
+   "translator": "C. D. Yonge",
+   "edition": "The Deipnosophists, or Banquet of the Learned, of Athenaeus, literally translated by C. D. Yonge, vol. III (London: Henry G. Bohn, 1854; Bohn's Classical Library)",
+   "citation": "Archilochus quoted by Athenaeus 14.628a; Yonge, Deipnosophists III p. 1002",
+   "translator_number": "",
+   "source_item": "deipnosophistsor03atheuoft",
+   "source_url": "https://archive.org/details/deipnosophistsor03atheuoft",
+   "publication_year": 1854,
+   "english_pages": [
+    {
+     "scan_leaf": 194,
+     "printed_page": "1002",
+     "sha256": "646f1284709f37c333da8f6f079b02c3d46564f947fde0fc48d16b9990b39678",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/deipnosophistsor03atheuoft%2Fdeipnosophistsor03atheuoft_jp2.zip%2Fdeipnosophistsor03atheuoft_jp2%2Fdeipnosophistsor03atheuoft_0194.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "I, all excited in my mind with wine,\nAm skilful in the dithyrambic, knowing\nThe noble melodies of the sovereign Bacchus.",
+   "coverage_note": "Both lines rendered in 3; same extent as Campbell. Verse rendering embedded in Yonge's translation of Athenaeus (Bohn, 1854); the surrounding prose (Athenaeus' context) is excluded. Yonge prints no Greek; match is by Athenaeus' citation and content.",
+   "match_evidence": "I know how to lead off the fair song of lord Dionysus, the dithyramb, when my wits are thunderstruck with wine (Campbell 1-2).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:mimnermus:10",
+   "translator": "C. D. Yonge",
+   "edition": "The Deipnosophists, or Banquet of the Learned, of Athenaeus, literally translated by C. D. Yonge, vol. II (London: Henry G. Bohn, 1854; Bohn's Classical Library)",
+   "citation": "Mimnermus (Nanno) quoted by Athenaeus 11.470a; Yonge, Deipnosophists II pp. 748-749",
+   "translator_number": "",
+   "source_item": "deipnosophistsor02atheuoft",
+   "source_url": "https://archive.org/details/deipnosophistsor02atheuoft",
+   "publication_year": 1854,
+   "english_pages": [
+    {
+     "scan_leaf": 328,
+     "printed_page": "748",
+     "sha256": "48f81285ca2b38e3a70eddd76d651ad5c8b6675b0fcca546b2ac1890ee91199d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/deipnosophistsor02atheuoft%2Fdeipnosophistsor02atheuoft_jp2.zip%2Fdeipnosophistsor02atheuoft_jp2%2Fdeipnosophistsor02atheuoft_0328.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 329,
+     "printed_page": "749",
+     "sha256": "99a3b3d5528c4717c5c33dda09708e1235c67e6168df8a27cf47a507fc722018",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/deipnosophistsor02atheuoft%2Fdeipnosophistsor02atheuoft_jp2.zip%2Fdeipnosophistsor02atheuoft_jp2%2Fdeipnosophistsor02atheuoft_0329.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "For the Sun labours every day, nor ever\nDo he or his fleet steeds know pleasing rest\nFrom that bright hour when the rosy Morn,\nLeaving her ocean-bed, mounts up to heaven.\nFor all across the sea, a lovely bed\nOf precious gold, the work of Vulcan's hands,\nConveys the god; passing on rapid wings\nAlong the water, while he sleeps therein,\nFrom the bright region of th' Hesperides,\nTo th' Ethiopian shore, where his swift car\nAnd fiery horses wait within their stalls\nTill bright Aurora comes again and opes\nHer rosy portals. Then Hyperion's son\nAscends again his swift untiring car.",
+   "coverage_note": "Whole 11-line fragment rendered in 14 lines; same extent as Campbell. Verse rendering embedded in Yonge's translation of Athenaeus (Bohn, 1854); the surrounding prose (Athenaeus' context) is excluded. Yonge prints no Greek; match is by Athenaeus' citation and content.",
+   "match_evidence": "The Sun's lot is toil every day, no rest for him or his horses once rosy-fingered Dawn leaves Ocean (Campbell 1-4); a lovely hollow bed, winged, of precious gold, forged by Hephaestus, carries him sleeping over the waves from the land of the Hesperides to the Ethiopians (5-9), where his chariot and horses stand until early-born Dawn comes; then Hyperion's son mounts his car (9-11).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:hipponax:77",
+   "translator": "C. D. Yonge",
+   "edition": "The Deipnosophists, or Banquet of the Learned, of Athenaeus, literally translated by C. D. Yonge, vol. III (London: Henry G. Bohn, 1854; Bohn's Classical Library)",
+   "citation": "Hipponax (Hexameters) quoted by Athenaeus 15.698b; Yonge, Deipnosophists III p. 1116",
+   "translator_number": "",
+   "source_item": "deipnosophistsor03atheuoft",
+   "source_url": "https://archive.org/details/deipnosophistsor03atheuoft",
+   "publication_year": 1854,
+   "english_pages": [
+    {
+     "scan_leaf": 308,
+     "printed_page": "1116",
+     "sha256": "4316a7f576070f83ecd43b4dc1b19e37bec453b19ea89d9cb5c767b104cbe105",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/deipnosophistsor03atheuoft%2Fdeipnosophistsor03atheuoft_jp2.zip%2Fdeipnosophistsor03atheuoft_jp2%2Fdeipnosophistsor03atheuoft_0308.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Muse, sing me now the praises of Eurymedon,\nThat great Charybdis of the sea, who holds\nA sword within his stomach, never weary\nWith eating. Tell me how the votes may pass\nCondemning him to death, by public judgment,\nOn the loud-sounding shore of the barren sea.",
+   "coverage_note": "Whole 4-line hexameter parody rendered in 6 lines; same extent as Campbell (Campbell supplies ⟨κακὸς⟩ in line 3; Yonge has no equivalent word). Verse rendering embedded in Yonge's translation of Athenaeus (Bohn, 1854); the surrounding prose (Athenaeus' context) is excluded. Yonge prints no Greek; match is by Athenaeus' citation and content.",
+   "match_evidence": "Muse, tell me of Eurymedontiades the sea-Charybdis, with a knife in his belly, who eats without order (Campbell 1-2), how he shall perish by the pebble (vote) of public decree beside the shore of the barren sea (3-4).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:tyrtaeus:8",
+   "translator": "J. Banks",
+   "edition": "The Idylls of Theocritus, Bion, and Moschus, and the War-Songs of Tyrtaeus, literally translated into English prose by the Rev. J. Banks, M.A. (London: Henry G. Bohn, 1853; Bohn's Classical Library)",
+   "citation": "Tyrtaeus, Banks (1853), War-Songs of Tyrtaeus II",
+   "translator_number": "II",
+   "source_item": "idyllstheocritus00theoiala",
+   "source_url": "https://archive.org/details/idyllstheocritus00theoiala",
+   "publication_year": 1853,
+   "english_pages": [
+    {
+     "scan_leaf": 363,
+     "printed_page": "329",
+     "sha256": "3c5527a471ba27ee5a0abef010607d41b93104bb9ac408bc0e936df3932aaa74",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/idyllstheocritus00theoiala%2Fidyllstheocritus00theoiala_jp2.zip%2Fidyllstheocritus00theoiala_jp2%2Fidyllstheocritus00theoiala_0363.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 364,
+     "printed_page": "330",
+     "sha256": "b973150b1e42da5ebeb0d061691403401f8db4309d430af30459dd4bdf5e59d3",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/idyllstheocritus00theoiala%2Fidyllstheocritus00theoiala_jp2.zip%2Fidyllstheocritus00theoiala_jp2%2Fidyllstheocritus00theoiala_0364.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "But since ye are the race of ¹invincible Hercules, be ye of good courage; not yet hath Zeus ²turned his neck aside from you. Neither fear ye, nor be affrighted at a host of men, but let hero hold his shield right against the foremost fighters; having counted life hostile, and ³the dark fates of death dear as the rays of the sun. For ye know that the ⁴works of Ares of-many-tears are much-seen, and well have ye learned the ⁵temper of troublous war. Ye have been, O young men, with the flying and the pursuing, and have pushed on to a full measure of both. Now of those, who dare, abiding one beside another, to advance to the close fray, and the foremost champions, fewer die, and they save the people in the rear; but in men ⁶that fear, all excellence is lost. No one could ever in words go through those several ills, which befall a man, ⁷if he has been actuated by cowardice. For 'tis grievous to wound in the rear the back of a flying man in hostile war. Shameful too is a corpse ⁸lying low in the dust, ⁹wounded behind in the back by the point of a spear. Rather let every one with firm stride await the enemy, having both feet fixed on the ground, biting his lip with his teeth, and having covered with the ¹⁰hollow of his broad shield thighs and shins below, and breast and shoulders. But in his right hand let him brandish a heavy lance, and ¹¹shake above his head a threatening crest. Then let him learn war, by doing bold deeds, nor let him stand with his shield out of the range of weapons. But let each, drawing nigh in close fray, ¹²hit his foe, wounding him with long lance or sword. ¹³And having set foot beside foot, and having fixed shield against shield, and crest on crest, and helmet on helmet, and breast against breast, struggle in fight with his man, having seized either the hilt of his sword, or his long lance. But do ye, ¹⁴O light-armed soldiers, crouching under your shields, some from one quarter, some from another, make them fall with huge stones, and with polished spears, as ye dart at them, and stand near to the ¹⁵heavy-armed troops.",
+   "coverage_note": "Whole 38-line elegy (Tyrtaeus fr. 11 W), same extent as Campbell. Literal prose; Banks prints no Greek. Footnote reference numbers are kept as superscripts, the footnotes omitted; words Banks prints in italics (supplied for sense) appear in plain type. End-of-line hyphenation removed.",
+   "match_evidence": "Since you are the race of unconquered Heracles, take courage; Zeus does not yet turn his neck aside (Campbell 1-2); hold the shield against the foremost, count life hateful and the black fates dear as the sun's rays (4-6); the works of Ares, flight and pursuit (7-10); those who stand together die fewer and save the people behind (11-13); the shame of a corpse wounded in the back (17-20); stand firm, bite the lip, cover thighs, shins, breast and shoulders with the shield, brandish the spear, shake the crest (21-26); foot to foot, shield on shield, crest on crest (31-33); you light-armed, throw great stones and polished javelins (35-38).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:tyrtaeus:9",
+   "translator": "J. Banks",
+   "edition": "The Idylls of Theocritus, Bion, and Moschus, and the War-Songs of Tyrtaeus, literally translated into English prose by the Rev. J. Banks, M.A. (London: Henry G. Bohn, 1853; Bohn's Classical Library)",
+   "citation": "Tyrtaeus, Banks (1853), War-Songs of Tyrtaeus III",
+   "translator_number": "III",
+   "source_item": "idyllstheocritus00theoiala",
+   "source_url": "https://archive.org/details/idyllstheocritus00theoiala",
+   "publication_year": 1853,
+   "english_pages": [
+    {
+     "scan_leaf": 365,
+     "printed_page": "331",
+     "sha256": "4c902a8bef181ab0d640290546e164cc67b9d977934f1210c673161af724b262",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/idyllstheocritus00theoiala%2Fidyllstheocritus00theoiala_jp2.zip%2Fidyllstheocritus00theoiala_jp2%2Fidyllstheocritus00theoiala_0365.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 366,
+     "printed_page": "332",
+     "sha256": "99d1307295199bd1dcaa3d0a866d4e14a21a860addb13492cf0aa323d914dde4",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/idyllstheocritus00theoiala%2Fidyllstheocritus00theoiala_jp2.zip%2Fidyllstheocritus00theoiala_jp2%2Fidyllstheocritus00theoiala_0366.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 367,
+     "printed_page": "333",
+     "sha256": "addaa9d08143b1981ad5ee233ed05e74e9a5668e150a133b781d4d1366cbe761",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/idyllstheocritus00theoiala%2Fidyllstheocritus00theoiala_jp2.zip%2Fidyllstheocritus00theoiala_jp2%2Fidyllstheocritus00theoiala_0367.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "¹I would neither commemorate, nor hold in account a man, either for excellence in running, or for wrestling; no, nor though he should have the bulk and strength of the Cyclopes, and in speed surpass ²Thracian Boreas. No, nor though he should in personal appearance be more graceful than ³Tithonus, and should be more rich than Midas or ⁴Cinyras. Nor though he should be more kingly than Pelops, son of Tantalus, and have the ⁵soft-voiced tongue of Adrastus; nor yet if he should have all glory, save that of resistless valour; for he is not a man brave in war, ⁶unless he have the courage to face bloody slaughter, and standing near attack the foemen. But this is excellence, this the best prize among men, and noblest for a young man to carry off. And this is a common good to a city, and all its people, namely, whatsoever man standing firm bides unceasingly in the front ranks, and is wholly forgetful of base flight, when he has ⁷staked his life, and enduring spirit; but has the heart to fall, standing beside his next neighbour. This man is good in war. And quickly does he turn in flight the sturdy phalanxes of foemen, and ⁸zealously stem the wave of battle. He too himself having fallen amid the foremost, loses his life, and (at the same time) having brought renown to his city and people and sire: pierced in many places through breast, and round shield, and through his cuirass in the front. Him young alike and old lament, and the whole state is distressed for him with painful regret. His ⁹tomb and children are famous among men, ay, ¹⁰his children's children, and his race after him. Never does his fair fame or his name perish, but though he be on earth, he becomes immortal, whom, bravely bearing himself, standing firm, and fighting for country and for children, impetuous Ares shall have destroyed. But should he have escaped the fate of death that-lays-men-out-at-length; and as victor, have borne off the splendid boast of battle won, all honour him, young and old alike; and ¹¹after tasting many delights, he comes to Hades. Growing old, he is eminent amid the citizens, nor does any one wish to hurt him in point of respect or justice. And all ¹²on the seats, alike young, and those of his age, and they who are still older, give place to him. Let every one now strive in his spirit to reach the summit of ¹³excellence like this, not ¹⁴slackening warfare.",
+   "coverage_note": "Whole 44-line elegy (Tyrtaeus fr. 12 W), same extent as Campbell. Literal prose; Banks prints no Greek. Footnote reference numbers are kept as superscripts, the footnotes omitted; words Banks prints in italics (supplied for sense) appear in plain type. End-of-line hyphenation removed.",
+   "match_evidence": "I would not mention or account a man for speed of foot or wrestling (Campbell 1-2), not if he had the size and strength of the Cyclopes and outran Thracian Boreas (3-4), were more handsome than Tithonus, richer than Midas and Cinyras (5-6), more kingly than Pelops son of Tantalus, with the honey-tongue of Adrastus (7-8), unless he has furious valour and can face bloody slaughter (9-12); this is excellence, the best prize for a young man (13-14); the fallen hero mourned by young and old, his tomb and children's children famous (23-30); the survivor honoured, all give place to him on the seats (35-42); let each strive for this excellence (43-44).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:callinus:1",
+   "translator": "J. Banks",
+   "edition": "The Idylls of Theocritus, Bion, and Moschus, and the War-Songs of Tyrtaeus, literally translated into English prose by the Rev. J. Banks, M.A. (London: Henry G. Bohn, 1853; Bohn's Classical Library)",
+   "citation": "Callinus fr. 1, printed as Tyrtaeus IV in Banks (1853), War-Songs of Tyrtaeus",
+   "translator_number": "IV (as Tyrtaeus)",
+   "source_item": "idyllstheocritus00theoiala",
+   "source_url": "https://archive.org/details/idyllstheocritus00theoiala",
+   "publication_year": 1853,
+   "english_pages": [
+    {
+     "scan_leaf": 367,
+     "printed_page": "333",
+     "sha256": "addaa9d08143b1981ad5ee233ed05e74e9a5668e150a133b781d4d1366cbe761",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/idyllstheocritus00theoiala%2Fidyllstheocritus00theoiala_jp2.zip%2Fidyllstheocritus00theoiala_jp2%2Fidyllstheocritus00theoiala_0367.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 368,
+     "printed_page": "334",
+     "sha256": "d680ec7198cfe213efeea94b14d8227039b8dc81a70b58ed8350c0185ece0310",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/idyllstheocritus00theoiala%2Fidyllstheocritus00theoiala_jp2.zip%2Fidyllstheocritus00theoiala_jp2%2Fidyllstheocritus00theoiala_0368.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "How long lie ye inactive? when will ye have a brave spirit, young men? and are ye not ¹ashamed of the dwellers all around, since ye dally thus exceedingly? For ye think ye ²sit secure in peace, yet war possesses the whole land.\n* * * * * *\n³And let a man, as he dies, discharge his javelin for the last time. For it is both honourable and noble for a man to fight for land, and children, and wedded wife, with his foes; and death will come at some time, whensoever in truth the fates shall have allotted. But let every one, having lifted aloft his lance, and ⁴gathered up his stout heart under his shield, go right forward, when the battle first is joined. For it is not fated by any means that a man should escape death at least, no, not though he be by family of immortal ancestry. Often ⁵he comes forth, after having escaped battle-strife and din of javelins, and in his home fated death found him. Now the latter is not in like manner a friend ⁶to the commonalty, nor regretted by them, whilst the former, the brave man, small and great bewail, if aught shall have happened to him. For the whole people together regrets a stout-hearted hero, when he dies, and living he is worthy of the demigods. For they behold him with their eyes even as a ⁷tower, since, though single-handed, he performs deeds worth those of many.",
+   "coverage_note": "Banks prints this elegy as Tyrtaeus IV (Stobaeus' lemma was disputed in older editions; it is now assigned to Callinus). Same extent as Campbell: lines 1-4, a row of asterisks marking the lacuna where Campbell prints dots, then lines 5-21. Literal prose; Banks prints no Greek. Footnote reference numbers are kept as superscripts, the footnotes omitted; words Banks prints in italics (supplied for sense) appear in plain type. End-of-line hyphenation removed.",
+   "match_evidence": "How long will you lie idle, young men, when will you have a valiant heart, are you not ashamed before your neighbours (Campbell 1-3)? you think you sit in peace but war holds the whole land (3-4); [lacuna]; let a man hurl his javelin one last time as he dies (5); honourable to fight for land, children and wedded wife (6-7); death comes when the Fates spin it (8-9); go straight forward with spear raised and heart gathered behind the shield (9-11); no man may escape death though of immortal descent (12-13); often one who fled the battle meets death at home (14-15); the whole people mourns a stout-hearted man, they look on him as a tower, alone he does the deeds of many (18-21).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:54",
+   "translator": "Horace Leonard Jones",
+   "edition": "The Geography of Strabo, with an English translation by Horace Leonard Jones, vol. IV (London: William Heinemann; New York: G. P. Putnam's Sons, 1927; Loeb Classical Library) [title page MCMXXVII]",
+   "citation": "Archilochus quoted by Strabo 8.6.6; Jones, Strabo IV p. 157",
+   "translator_number": "",
+   "source_item": "geographyofstrab0000hora_b4n3",
+   "source_url": "https://archive.org/details/geographyofstrab0000hora_b4n3",
+   "publication_year": 1927,
+   "english_pages": [
+    {
+     "scan_leaf": 169,
+     "printed_page": "157",
+     "sha256": "63a772e8657dc302764c29a2b72e0f6a9d40aadbc67aa0339e51e509929de246",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/geographyofstrab0000hora_b4n3%2Fgeographyofstrab0000hora_b4n3_jp2.zip%2Fgeographyofstrab0000hora_b4n3_jp2%2Fgeographyofstrab0000hora_b4n3_0169.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "the woes of the Panhellenes centred upon Thasos",
+   "coverage_note": "Strabo quotes the single line; Jones's rendering embedded in his translation of Strabo (Greek on the facing page). Same extent as Campbell; the quotation marks and Strabo's framing words are excluded.",
+   "match_evidence": "\"as the woe of all the Greeks (Panhellenes) ran together to Thasos\" (Campbell 1).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:callinus:3",
+   "translator": "Horace Leonard Jones",
+   "edition": "The Geography of Strabo, with an English translation by Horace Leonard Jones, vol. VI (London: William Heinemann; New York: G. P. Putnam's Sons, 1929; Loeb Classical Library) [title page MCMXXIX]",
+   "citation": "Callinus quoted by Strabo 14.1.40; Jones, Strabo VI p. 253",
+   "translator_number": "",
+   "source_item": "geographyofstrab0006hora_t1l8",
+   "source_url": "https://archive.org/details/geographyofstrab0006hora_t1l8",
+   "publication_year": 1929,
+   "english_pages": [
+    {
+     "scan_leaf": 265,
+     "printed_page": "253",
+     "sha256": "a0ade5b64f593847a21b1869458347b336ff8f30c9cc204ee7535cd333a9798b",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/geographyofstrab0006hora_t1l8%2Fgeographyofstrab0006hora_t1l8_jp2.zip%2Fgeographyofstrab0006hora_t1l8_jp2%2Fgeographyofstrab0006hora_t1l8_0265.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "And now the army of the Cimmerians, mighty in deeds, advanceth",
+   "coverage_note": "The single hexameter as quoted by Strabo; Jones's rendering embedded in his translation (Greek on the facing page). Same extent as Campbell; quotation marks and footnote mark excluded.",
+   "match_evidence": "\"And now the host of the Cimmerians comes on, doers of mighty deeds\" (Campbell 1).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:94",
+   "translator": "William Wilson",
+   "edition": "The Writings of Clement of Alexandria, translated by the Rev. William Wilson, vol. II (Edinburgh: T. & T. Clark, 1869; Ante-Nicene Christian Library vol. XII)",
+   "citation": "Archilochus quoted by Clement of Alexandria, Stromata 5.14; Wilson, Writings of Clement II p. 294",
+   "translator_number": "",
+   "source_item": "writingsofclemen02clem",
+   "source_url": "https://archive.org/details/writingsofclemen02clem",
+   "publication_year": 1869,
+   "english_pages": [
+    {
+     "scan_leaf": 308,
+     "printed_page": "294",
+     "sha256": "0b9cd5eeee56b40b74695bf8b83f738fb50685bca3029845c6b8185017205892",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/writingsofclemen02clem%2Fwritingsofclemen02clem_jp2.zip%2Fwritingsofclemen02clem_jp2%2Fwritingsofclemen02clem_0308.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "O Zeus, thine is the power of heaven, and thou\nInflict'st on men things violent and wrong.",
+   "coverage_note": "PARTIAL: Clement quotes only the opening of the fable-prayer (Campbell lines 1-3, ending at λεωργὰ καὶ θεμιστά); Wilson's two lines render 'O Zeus, yours is the power of heaven, you see men's deeds, violent and lawful'. Campbell's line 4 (beasts' insolence and justice) is not quoted. Embedded in the translation of Clement; quotation marks and footnote mark excluded.",
+   "match_evidence": "O Zeus, thine is the power of heaven = ὦ Ζεῦ πάτερ Ζεῦ, σὸν μὲν οὐρανοῦ κράτος (Campbell 1); things violent and wrong ~ λεωργὰ καὶ θεμιστά (3).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:65",
+   "translator": "William Wilson",
+   "edition": "The Writings of Clement of Alexandria, translated by the Rev. William Wilson, vol. II (Edinburgh: T. & T. Clark, 1869; Ante-Nicene Christian Library vol. XII)",
+   "citation": "Archilochus quoted by Clement of Alexandria, Stromata 6.2; Wilson, Writings of Clement II p. 305",
+   "translator_number": "",
+   "source_item": "writingsofclemen02clem",
+   "source_url": "https://archive.org/details/writingsofclemen02clem",
+   "publication_year": 1869,
+   "english_pages": [
+    {
+     "scan_leaf": 319,
+     "printed_page": "305",
+     "sha256": "48a9cd258510094adad8dfc3ab539e03d2cef04fc1ff87ddd5de01c554329c54",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/writingsofclemen02clem%2Fwritingsofclemen02clem_jp2.zip%2Fwritingsofclemen02clem_jp2%2Fwritingsofclemen02clem_0319.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "It is not noble at dead men to sneer",
+   "coverage_note": "The single line, quoted by Clement as a borrowing from Odyssey 22.412; same extent as Campbell. Embedded in the translation of Clement; quotation marks excluded.",
+   "match_evidence": "It is not noble to jeer at dead men (Campbell 1), cited by Clement right after the Homeric line \"it is unholy to exult over dead men\".",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:semonides:6",
+   "translator": "William Wilson",
+   "edition": "The Writings of Clement of Alexandria, translated by the Rev. William Wilson, vol. II (Edinburgh: T. & T. Clark, 1869; Ante-Nicene Christian Library vol. XII)",
+   "citation": "Simonides [of Amorgos] quoted by Clement of Alexandria, Stromata 6.2; Wilson, Writings of Clement II p. 310",
+   "translator_number": "",
+   "source_item": "writingsofclemen02clem",
+   "source_url": "https://archive.org/details/writingsofclemen02clem",
+   "publication_year": 1869,
+   "english_pages": [
+    {
+     "scan_leaf": 324,
+     "printed_page": "310",
+     "sha256": "4c544be7d7be4a43bbcbeb46fe516a9748575710ed1265411a6e1d4027cebede",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/writingsofclemen02clem%2Fwritingsofclemen02clem_jp2.zip%2Fwritingsofclemen02clem_jp2%2Fwritingsofclemen02clem_0324.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "A better prize than a good wife no man\nEre gained, than a bad one nought worse.",
+   "coverage_note": "Both lines, quoted by Clement as an imitation of Hesiod, Works and Days 702-703; same extent as Campbell. Embedded in the translation of Clement; quotation marks excluded.",
+   "match_evidence": "A man wins no prize better than a good wife nor more chilling than a bad one (Campbell 1-2).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:66",
+   "translator": "Marcus Dods",
+   "edition": "Ante-Nicene Christian Library vol. III: Tatian, Theophilus, and the Clementine Recognitions (Edinburgh: T. & T. Clark, 1867); Theophilus to Autolycus translated by the Rev. Marcus Dods",
+   "citation": "Archilochus quoted by Theophilus, To Autolycus 2.37; Dods, ANCL III p. 105",
+   "translator_number": "",
+   "source_item": "AnteNiceneChristianLibraryV03",
+   "source_url": "https://archive.org/details/AnteNiceneChristianLibraryV03",
+   "publication_year": 1867,
+   "english_pages": [
+    {
+     "scan_leaf": 115,
+     "printed_page": "105",
+     "sha256": "d51adb7de30ff70895afd1efa2e371819de10868074123e35b244ee2400ad5de",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/AnteNiceneChristianLibraryV03%2FAnteNiceneChristianLibraryV03_jp2.zip%2FAnteNiceneChristianLibraryV03_jp2%2FAnteNiceneChristianLibraryV03_0115.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "One thing I know, I hold it ever true,\nThe evil-doer evil shall endure.",
+   "coverage_note": "Both lines as quoted by Theophilus (whose text reads differently from Campbell's in line 2); same extent as Campbell. Embedded in Dods's translation of Theophilus; quotation marks excluded.",
+   "match_evidence": "One great thing I know (Campbell 1): to repay with terrible evils the one who does me wrong (2) ~ \"the evil-doer evil shall endure\".",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:25",
+   "translator": "John Addington Symonds",
+   "edition": "Studies of the Greek Poets, by John Addington Symonds, third edition (London: A. & C. Black, 1920; one-volume reprint of the 1893 third edition)",
+   "citation": "Archilochus, translated in a footnote to Symonds, Studies of the Greek Poets (3rd ed.), ch. IX \"The Satirists\", p. 173 (citing Bergk p. 691)",
+   "translator_number": "",
+   "source_item": "studiesofgreekpo00symouoft",
+   "source_url": "https://archive.org/details/studiesofgreekpo00symouoft",
+   "publication_year": 1920,
+   "english_pages": [
+    {
+     "scan_leaf": 193,
+     "printed_page": "173",
+     "sha256": "a9b8bb0d716118628a70d803609d6bd3f2b982fe84f7dd4bb6434f99a88b2c24",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/studiesofgreekpo00symouoft%2Fstudiesofgreekpo00symouoft_jp2.zip%2Fstudiesofgreekpo00symouoft_jp2%2Fstudiesofgreekpo00symouoft_0193.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Holding a myrtle-rod she blithely moved,\nAnd a fair blossoming rose; the flowing tresses\nShadowed her shoulders, falling to her girdle.",
+   "coverage_note": "Symonds prints the Greek of the fragment in his text and gives this verse rendering in the footnote; same 3-4 line extent as Campbell. Quotation marks excluded. Translator not named; presumably Symonds's own (the book's own translations are unsigned).",
+   "match_evidence": "Symonds's Greek (garbled in OCR but legible on the page) is ἔχουσα θαλλὸν μυρσίνης ἐτέρπετο / ῥοδῆς τε καλὸν ἄνθος, ἡ δέ οἱ κόμη / ὤμους κατεσκίαζε καὶ μετάφρενα, identical to Campbell 1-4: holding a myrtle sprig and a fair rose-flower she rejoiced; her hair shadowed her shoulders and back.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:hipponax:fr-chol-adesp-1",
+   "translator": "John Addington Symonds",
+   "edition": "Studies of the Greek Poets, by John Addington Symonds, third edition (London: A. & C. Black, 1920; one-volume reprint of the 1893 third edition)",
+   "citation": "Hipponax (as attributed by Symonds), Studies of the Greek Poets (3rd ed.), ch. IX \"The Satirists\", p. 176",
+   "translator_number": "",
+   "source_item": "studiesofgreekpo00symouoft",
+   "source_url": "https://archive.org/details/studiesofgreekpo00symouoft",
+   "publication_year": 1920,
+   "english_pages": [
+    {
+     "scan_leaf": 196,
+     "printed_page": "176",
+     "sha256": "e3f0e91e7cc6572894a01e9f96477484102e7593412d13aa0c6c48fb9fd3aad5",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/studiesofgreekpo00symouoft%2Fstudiesofgreekpo00symouoft_jp2.zip%2Fstudiesofgreekpo00symouoft_jp2%2Fstudiesofgreekpo00symouoft_0196.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "A woman gives two days of happiness to man, in her bridal and her burial.",
+   "coverage_note": "Symonds prints the two Greek choliambics and this one-sentence prose rendering of both; same extent as Campbell. Symonds attributes the lines to Hipponax; Campbell prints them as an anonymous choliambic fragment (Fr. Chol. Adesp. 1). Quotation marks excluded.",
+   "match_evidence": "Symonds's Greek δύ' ἡμέραι γυναικός εἰσιν ἥδισται, / ὅταν γαμῇ τις κἀκφέρῃ τεθνηκυῖαν = Campbell lines 1-2 exactly: two days of a woman are sweetest, when one marries her and when one carries her out dead.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:semonides:1",
+   "translator": "Robert Bland",
+   "edition": "Collections from the Greek Anthology, and from the Pastoral, Elegiac, and Dramatic Poets of Greece, by the Rev. Robert Bland and others (London, 1813)",
+   "citation": "Simonides [of Amorgos] fr. 18 Jacobs (i. 128), \"The Miseries of Life\", Bland (1813) p. 184",
+   "translator_number": "Simonides 18 (Jacobs i. 128)",
+   "source_item": "collectionsfromg00blanuoft",
+   "source_url": "https://archive.org/details/collectionsfromg00blanuoft",
+   "publication_year": 1813,
+   "english_pages": [
+    {
+     "scan_leaf": 254,
+     "printed_page": "184",
+     "sha256": "d0bd8628866488fb4420f1195218c1762316baa59fb1d5c590c6fa18641733e0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/collectionsfromg00blanuoft%2Fcollectionsfromg00blanuoft_jp2.zip%2Fcollectionsfromg00blanuoft_jp2%2Fcollectionsfromg00blanuoft_0254.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Jove rules the world, and with resistless sway\nDemands to-morrow what he gave to-day;\nIn vain our thoughts to future scenes we cast,\nOr only read them darkly in the past;\nFor hope enchanting points to new delights,\nAnd charms with dulcet sounds, and heav'nly sights;\nExpecting yet some fancied bliss to share,\nWe grasp at bubbles that dissolve in air,\nAnd some a day, and some whole years await\nThe whims and chances of capricious fate;\nNor yet the lovely visions are possess'd—\nAnother year remains to make them blest.\nWhile age creeps on to tear their dreams away,\nAnd grim diseases hover round their prey;\nOr war with iron hold unlocks the grave,\nDevouring myriads of the young and brave.\nSome on the billows rock'd that roll on high\nCling to the plank in vain, and wasted die;\nSome by the halter lay their miseries down,\nAnd rush unsummon'd to a place unknown.\nOur very sweets possess a secret harm,\nTeem with distress, and poison while they charm;\nThe fatal Sisters hover round our birth,\nAnd dash with bitter dregs our cup on earth:\nYet cease to murmur at thy fate in vain,\nAnd in oblivion steep the shaft of pain.",
+   "coverage_note": "Signed 'B.' (Robert Bland). Free rhymed version of the whole 24-line poem (26 lines); Bland's 'Simonides' is Semonides of Amorgos (Jacobs' numbering i. 128). Same extent as Campbell, rendered loosely. Bland prints no Greek.",
+   "match_evidence": "Zeus holds the end of all things and disposes as he wills (Campbell 1-2); men live like beasts from day to day, not knowing how god will bring each thing to pass, fed by hope (3-7); some wait a day, some years, thinking next year to be rich (7-10); old age, disease, war, death at sea, the noose (11-20); ills without number from the Fates (20-22); if men listened to me we would not love our misfortunes nor torment our hearts (22-24).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:semonides:29",
+   "translator": "John Herman Merivale",
+   "edition": "Collections from the Greek Anthology, and from the Pastoral, Elegiac, and Dramatic Poets of Greece, by the Rev. Robert Bland and others (London, 1813)",
+   "citation": "Simonides fr. 104 Jacobs (i. 145), \"Uncertainty of Life\", Merivale in Bland (1813) p. 185",
+   "translator_number": "Simonides 104 (Jacobs i. 145)",
+   "source_item": "collectionsfromg00blanuoft",
+   "source_url": "https://archive.org/details/collectionsfromg00blanuoft",
+   "publication_year": 1813,
+   "english_pages": [
+    {
+     "scan_leaf": 255,
+     "printed_page": "185",
+     "sha256": "5451548020f442bd6d88cdb3b1d4285e17889467e38a9607c3f0024bebd57f31",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/collectionsfromg00blanuoft%2Fcollectionsfromg00blanuoft_jp2.zip%2Fcollectionsfromg00blanuoft_jp2%2Fcollectionsfromg00blanuoft_0255.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "All human things are subject to decay;\nAnd well the man of Chios tuned his lay,\n“Like leaves on trees the race of man is found.”\nYet few receive the melancholy sound,\nOr in their breasts imprint this solemn truth;\nFor hope is near to all, but most to youth.\nHope's vernal season leads the laughing hours,\nAnd strews o'er every path the fairest flowers.\nTo cloud the scene no distant mists appear,\nAge moves no thought, and death awakes no fear.\nAh, how unmindful is the giddy crowd\nOf the small span to youth and life allow'd\nYe who reflect, the short-lived good employ,\nAnd while the power remains, indulge your joy.",
+   "coverage_note": "Signed 'M.' (J. H. Merivale) in the 1813 Collections (reprinted 1833). Merivale's first line ('All human things are subject to decay') renders a line that precedes Campbell's text in older editions (οὐδὲν ἐν ἀνθρώποισι μένει χρῆμ' ἔμπεδον αἰεί); the remaining 13 lines render Campbell 1-13. Bland/Merivale print no Greek.",
+   "match_evidence": "The man of Chios said it best: as the generation of leaves, so of men (Campbell 1-2); few who hear it take it to heart, for hope is in every man, rooted in the young (3-5); while a man has the flower of youth he plans much, expects neither old age nor death (6-9); fools, not knowing how short the time of youth and life (10-12); learn this and indulge your soul with good things to the end (12-13).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:mimnermus:5",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose by the Rev. J. Banks, M.A. (London: Henry G. Bohn, 1856; Bohn's Classical Library)",
+   "citation": "Theognis 1020-1022 (lines Banks notes are by Mimnermus); Banks, Hesiod, Callimachus and Theognis p. 273",
+   "translator_number": "",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 303,
+     "printed_page": "273",
+     "sha256": "65f0c9157a33935938d5c107491e26a1bba9bc58f5538efec9c879cf8ccd9961",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0303.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "but, like a dream, precious youth is a short-lived thing: and presently over-head hangs unhappy and unsightly old age.",
+   "coverage_note": "PARTIAL: Campbell's lines 1-3 (ἀλλ' ὀλιγοχρόνιον ... ὑπερκρέμαται) also stand in the Theognis collection (1020-1022), and Banks's note 5 on p. 272 says these verses 'are the work of Mimnermus'. Only the clause rendering those three lines is given (the preceding Theognidean lines 1017-1019 = Mimnermus 5.1-3 West are not in Campbell's text). Campbell's lines 4-5 (hateful and dishonoured old age that makes a man unknown and harms eyes and mind), preserved only by Stobaeus, are not in Theognis and not translated.",
+   "match_evidence": "Precious youth is short-lived like a dream (Campbell 1-2); painful and ugly old age at once hangs over the head (2-3).",
+   "verified_against_image": true
+  }
+ ],
+ "gaps": [
+  {
+   "campbell_id": "campbell-glp:archilochus:55",
+   "reason": "Source is Pausanias 10.31.12, who reports Archilochus' Tantalus' stone story without quoting the line in any English version found (Shilleto 1886 paraphrases only). No verse translation in the anthologies. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:71",
+   "reason": "Merivale (1833) quotes this line only in Greek in his introduction, untranslated; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:79a",
+   "reason": "Strasbourg papyrus epode (published 1899); no pre-1930 English translation found in the sources searched. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:88",
+   "reason": "Fable epode (Lycambes); quoted by Hephaestion/others; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:89",
+   "reason": "Fox-and-eagle fable opening; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:92a",
+   "reason": "Fable fragment (Atticus); no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:103",
+   "reason": "Fox/hedgehog proverb (Zenobius); no English rendering of the verse found in the sources searched. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:104",
+   "reason": "Stobaeus fragment; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:112",
+   "reason": "Stobaeus fragment; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:archilochus:118",
+   "reason": "Hephaestion fragment; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:semonides:2",
+   "reason": "Stobaeus fragment; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:mimnermus:13",
+   "reason": "Stobaeus fragment (Smyrna battle); Symonds mentions it (as Bergk fr. 9/14) without translating it; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:hipponax:24a",
+   "reason": "Tzetzes et al.; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:hipponax:24b",
+   "reason": "Tzetzes et al.; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:hipponax:25",
+   "reason": "Tzetzes; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:hipponax:29",
+   "reason": "Tzetzes; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:hipponax:70",
+   "reason": "Tzetzes; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  },
+  {
+   "campbell_id": "campbell-glp:hipponax:81",
+   "reason": "Stobaeus (marriage choliambics); no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  }
+ ]
+}

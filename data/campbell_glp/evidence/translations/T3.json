@@ -1,0 +1,1427 @@
+{
+ "items": [
+  {
+   "campbell_id": "campbell-glp:anacreon:348",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 1",
+   "translator_number": "1",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 149,
+     "printed_page": "137",
+     "sha256": "21eaf732daaa1bc4c3a5e37f4981253b0d87f3aa1ebc35f126872eb61c7f8d1e",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0149.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 148,
+     "printed_page": "136",
+     "sha256": "84ab3b8d5a6fc810182c8729c23adc999b04a55d8a2ac4fe83585691eea1645f",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0148.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "To thee I kneel,³ thou shooter of deer, flaxen-haired child of Zeus, Artemis queen of wild beasts, who now doubtless lookest down rejoicing beside the eddies of Lethaeus upon a city of valiant hearts; for thou art shepherd to no savage flock of men.⁴",
+   "coverage_note": "Same extent: Edmonds prints the same eight lines (Hephaestion's citation plus scholia).",
+   "match_evidence": "Edmonds' Greek begins γουνοῦμαί σ’ ἐλαφηβόλε, ξανθὴ παῖ Διὸς, ἀγρίων δέσποιν’ Ἄρτεμι θηρῶν, as Campbell 1-3; ends ποιμαίνεις πολιήτας. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:357",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 2",
+   "translator_number": "2",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 151,
+     "printed_page": "139",
+     "sha256": "17c7866a58730f83267b9f7da42cc736108aeea0d90dd9c5409f77aa353730ea",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0151.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 150,
+     "printed_page": "138",
+     "sha256": "e4cb6d766a26314048bd223e1f006260a47ac77af45ac110a47a55ff76a4c849",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0150.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "O Lord with whom playeth Love the subduer and the dark-eyed Nymphs and rosy Aphrodite as thou wanderest the tops of the lofty hills, to thee I kneel; do thou come unto me kind and lending ear unto a prayer that is acceptable, and give Cleobulus good counsel, O Dionysus, to receive my love.²",
+   "coverage_note": "Same extent (11 lines, Dio Chrysostom 2.62).",
+   "match_evidence": "Edmonds' Greek begins ὦναξ, ᾧ δαμάλης Ἔρως καὶ Νύμφαι κυανώπιδες, as Campbell 1-2; names Cleobulus and Dionysus (Campbell 9-11). (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:359",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 3",
+   "translator_number": "3",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 151,
+     "printed_page": "139",
+     "sha256": "17c7866a58730f83267b9f7da42cc736108aeea0d90dd9c5409f77aa353730ea",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0151.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 150,
+     "printed_page": "138",
+     "sha256": "e4cb6d766a26314048bd223e1f006260a47ac77af45ac110a47a55ff76a4c849",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0150.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "I love Cleobulus, I dote on Cleobulus, I gaze at Cleobulus.",
+   "coverage_note": "Same extent (3 lines, [Herodian] On Figures).",
+   "match_evidence": "Edmonds' Greek Κλευβούλου μὲν ἔγωγ’ ἐρέω, Κλευβούλῳ δ’ ἐπιμαίνομαι, Κλεύβουλον δὲ διοσκέω = Campbell 1-3. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:360",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 4",
+   "translator_number": "4",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 151,
+     "printed_page": "139",
+     "sha256": "17c7866a58730f83267b9f7da42cc736108aeea0d90dd9c5409f77aa353730ea",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0151.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 150,
+     "printed_page": "138",
+     "sha256": "e4cb6d766a26314048bd223e1f006260a47ac77af45ac110a47a55ff76a4c849",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0150.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "O lad that lookest in maiden wise, I seek thee and thou hearkenest not, little knowing that the reins of my soul are in thy hand.",
+   "coverage_note": "Same extent (4 lines, Athenaeus 13.564d).",
+   "match_evidence": "Edmonds' Greek ὦ παῖ παρθένιον βλέπων, δίζημαί σε ... ψυχῆς ἡνιοχεύεις = Campbell 1-4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:361",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 8",
+   "translator_number": "8",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 155,
+     "printed_page": "143",
+     "sha256": "c21c360565603dedd3f1a5799346498c8de42c83cc6fcada08f5e6a7376a94fe",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0155.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 154,
+     "printed_page": "142",
+     "sha256": "df5ca005c1dfd09278802b047ea72c7c9eb1073dcd57aeb0d95d326c198ae32c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0154.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "I would not have Amalthea’s horn, nor even a reign of a hundred years and fifty over all-happy Tartessus;¹",
+   "coverage_note": "Edmonds prints a fifth word-line πανευδαίμονος (from the scholiast on Dionysius Periegetes), translated \"all-happy\"; otherwise same as Campbell's 4 lines (Strabo 3.151).",
+   "match_evidence": "Edmonds' Greek ἔγωγ’ οὔτ’ ἂν Ἀμαλθίης βουλοίμην κέρας οὔτ’ ἔτεα πεντήκοντά τε κἀκατὸν Ταρτησσοῦ βασιλεῦσαι = Campbell 1-4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:358",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 15",
+   "translator_number": "15",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 157,
+     "printed_page": "145",
+     "sha256": "bd2a4563a07c17246db7e137724f1a6adeaff87f7953062e6de28745d8f3d79d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0157.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 159,
+     "printed_page": "147",
+     "sha256": "b4f03f039da1034b4fecba54ba5dbd552b312be5b06293bd4e196dfc6750efd9",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0159.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 156,
+     "printed_page": "144",
+     "sha256": "3be12998f375aeeb332ced53b30bc662ad41d134cc701773b9b44f24afcc1653",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0156.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 158,
+     "printed_page": "146",
+     "sha256": "fc5a342de171631f929f47c10dc6b79386297119a3be75d931c4966f1881a2af",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0158.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Lo now! golden-haired Love hits me with his purple ball and calls me forth to play with a motley-slippered maid; but no, she hails from grand Lesbos, and so she finds fault with my hair because it is white, and goes gaping after another;",
+   "coverage_note": "Same extent (8 lines, Athenaeus 13.599c). Edmonds reads ἄλλον τινὰ (a man) in the last line where Campbell has ἄλλην τινὰ; the English \"another\" is neutral.",
+   "match_evidence": "Edmonds' Greek σφαίρῃ δηὖτέ με πορφυρῇ βάλλων χρυσοκόμης Ἔρως ... Λέσβου ... λευκὴ γάρ, καταμέμφεται = Campbell 1-8. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:376",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 21",
+   "translator_number": "21",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 161,
+     "printed_page": "149",
+     "sha256": "18e1c0eef24c380148b7fc0d0c7fed1fd0fa3a2778d937748047fe79cd8cb95d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0161.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 160,
+     "printed_page": "148",
+     "sha256": "3d718971c0bf83f7dfcfbab38591c0d4ccaa9a2890fb61bd7201a7c196b5f3a9",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0160.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Lo! I climb up and dive from the White Cliff into the hoary wave, drunken with love.³",
+   "coverage_note": "Same extent (2 lines, Hephaestion On Poems).",
+   "match_evidence": "Edmonds' Greek ἀρθεὶς δηὖτ’ ἀπὸ Λευκάδος πέτρης ἐς πολιὸν κῦμα κολυμβῶ μεθύων ἔρωτι = Campbell 1-2. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:398",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 47",
+   "translator_number": "47",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 175,
+     "printed_page": "163",
+     "sha256": "d639f30f8459211abe2ba4fa2b3e533be748fa706796aa7320d85b9c9b6f84e0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0175.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 174,
+     "printed_page": "162",
+     "sha256": "89de233f13687f45fe32f363c0d45689b25fbe8442c14075ad073e287da0b77d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0174.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "The dice of Love are madnesses and mellays.",
+   "coverage_note": "Same extent (2 lines, scholiast on Iliad 23.88).",
+   "match_evidence": "Edmonds' Greek ἀστραγάλαι δ’ Ἔρωτός εἰσιν μανίαι τε καὶ κυδοιμοί = Campbell 1-2. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:413",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 48",
+   "translator_number": "48",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 175,
+     "printed_page": "163",
+     "sha256": "d639f30f8459211abe2ba4fa2b3e533be748fa706796aa7320d85b9c9b6f84e0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0175.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 174,
+     "printed_page": "162",
+     "sha256": "89de233f13687f45fe32f363c0d45689b25fbe8442c14075ad073e287da0b77d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0174.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Lo now! Love like a smith has smitten me with a great hammer and soused me in the chill stream.",
+   "coverage_note": "Same extent (2 lines, Hephaestion). Edmonds prints it under the joint heading \"48, 49 πρὸς Σμερδίην\"; 49 (the shorn hair) is a separate fragment and is not included.",
+   "match_evidence": "Edmonds' Greek μεγάλῳ δηὖτέ μ’ Ἔρως ἔκοψεν ὥστε χαλκεὺς πελέκει, χειμερίῃ δ’ ἔλουσεν ἐν χαράδρῃ = Campbell 1-2. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:408",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 52",
+   "translator_number": "52",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 177,
+     "printed_page": "165",
+     "sha256": "b55ba2c581a37e7a457cdc7a98eddb8058deff765102ac36505cc5e56f3f9961",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0177.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 176,
+     "printed_page": "164",
+     "sha256": "6e96c72eb7ddc0fa087a67b0f233862338ba20f4b79cb1877e58d5df5bce6c5b",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0176.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "mild-eyed, like a little suckling fawn that is afraid when he is left by his hornèd mother in the wood.",
+   "coverage_note": "Same extent (3 lines, scholiast on Pindar O. 3.52). Edmonds reads ἀγανώπ’ (mild-eyed) where Campbell has ἀγανῶς.",
+   "match_evidence": "Edmonds' Greek ... οἷά τε νεβρὸν νεοθηλέα γαλαθηνόν, ὅστ’ ἐν ὕλῃ κεροέσσης ἀπολειφθεὶς ὑπὸ μητρὸς ἐπτοήθη = Campbell 1-3. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:395",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 69",
+   "translator_number": "69",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 185,
+     "printed_page": "173",
+     "sha256": "32d805381612805a632efed721541aa2cda382e57f81b820c28761ac3171f34d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0185.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 184,
+     "printed_page": "172",
+     "sha256": "5a032e21471d3c61959aecc99079d3a66adc78f21d1706e44f9a24d213f681bd",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0184.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "My temples have grown grey and my crown bare and white; graceful youth is no longer with me, and my teeth are the teeth of an old man. There is left me but a short span of sweet life. And so I often make my moan for fear of the underworld. For dire is the dark hold of death, and grievous the way down thither; and more, ’tis sure that once down there’s no coming up.",
+   "coverage_note": "Same extent (12 short lines in Campbell, printed by Edmonds as 6 long lines; Stobaeus 4.51.12).",
+   "match_evidence": "Edmonds' Greek πολιοὶ μὲν ἡμὶν ἤδη κρόταφοι κάρη τε λευκόν ... Ἀίδεω γάρ ἐστι δεινὸς μυχός ... καταβάντι μὴ ἀναβῆναι = Campbell 1-12. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:396",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 75",
+   "translator_number": "75",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 189,
+     "printed_page": "177",
+     "sha256": "751e402349419c7b7534e08fdb4fab2da87c792b9df0c775789d698dc16eff8c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0189.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 188,
+     "printed_page": "176",
+     "sha256": "67da1dcda70c765ae405c06967016901a8ae725cb82d92bc7360b0b2edc30e10",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0188.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Bring water, lad, bring wine, bring me garlands of flowers; aye, bring them hither; for I would try a bout with Love.",
+   "coverage_note": "Same extent (2 long lines in Campbell, 4 short lines in Edmonds; Athenaeus 11.782a).",
+   "match_evidence": "Edmonds' Greek φέρ’ ὕδωρ, φέρ’ οἶνον, ὦ παῖ, φέρε δ’ ἀνθεμεῦντας ἡμῖν στεφάνους, ἔνεικον, ὡς δὴ πρὸς Ἔρωτα πυκταλίζω = Campbell 1-2. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:356",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 76",
+   "translator_number": "76",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 189,
+     "printed_page": "177",
+     "sha256": "751e402349419c7b7534e08fdb4fab2da87c792b9df0c775789d698dc16eff8c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0189.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 188,
+     "printed_page": "176",
+     "sha256": "67da1dcda70c765ae405c06967016901a8ae725cb82d92bc7360b0b2edc30e10",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0188.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Come bring me a jar, lad; I want my first-drink; ten ladles of water to five of wine, for I would e’en play the Bacchanal in decent wise;\n\nCome let us give up this Scythian drinking with uproar and din over our cups, and drink moderately between pretty songs of praise.³",
+   "coverage_note": "Same extent: Edmonds 76 contains both of Campbell's parts (a) lines 1-6 and (b) lines 7-11, quoted consecutively by Athenaeus 10.427a; the intervening sentence of Athenaeus (\"and proceeding he calls the drinking of wine unmixed a Scythian practice:\") is omitted here and the two parts are separated by a blank line.",
+   "match_evidence": "Edmonds' Greek ἄγε δὴ φέρ’ ἡμίν, ὦ παῖ, κελέβην ... βασσαρήσω (= Campbell a 1-6) and ἄγε δηὖτε μηκέτ’ οὕτω πατάγῳ τε κἀλαλητῷ ... ὑποπίνοντες ἐν ὕμνοις (= Campbell b 7-11). (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:417",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 84",
+   "translator_number": "84",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 193,
+     "printed_page": "181",
+     "sha256": "fcc3c785829491967d59ed3f57d1242137d80fd1b6353a26c98454afa3855b76",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0193.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 192,
+     "printed_page": "180",
+     "sha256": "a29d3cd8f63133bd7cbb4b9953b0578878e74683e0a5cd978e020cc53fca065d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0192.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Pray, why do you look askance at me, my Thracian filly, and shun me so resolutely as though I knew nothing of my art? I would have you to know I could bridle you right well and take rein and ride you about the turning-post of the course. But instead you graze in the meadows and frisk and frolic to your heart’s content; for you have not a clever breaker to ride you.⁴",
+   "coverage_note": "Same extent (6 lines, Heraclitus Homeric Allegories 5).",
+   "match_evidence": "Edmonds' Greek πῶλε Θρῃκίη, τί δή με λοξὸν ὄμμασι βλέπουσα νηλεῶς φεύγεις ... ἐπεμβάτην = Campbell 1-6. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:419",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 87",
+   "translator_number": "87",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 195,
+     "printed_page": "183",
+     "sha256": "8a07c96c5a2387dda5ee587e7d65ae92c5e757934562743b66635f5339f1ef18",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0195.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 194,
+     "printed_page": "182",
+     "sha256": "83a8d9b5b8bd31d60f18fc6f4a41524d083c8bd8ae3e17fc1116885589106181",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0194.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Of all my gallant friends, Aristocleides, I pity thee the most; for in the defence of thy country from slavery thou hast lost thy youth.²",
+   "coverage_note": "Same extent (2 lines, Palatine Anthology 13.4).",
+   "match_evidence": "Edmonds' Greek ἀλκίμων σ’, ὦριστόκλειδη, πρῶτον οἰκτίρω φίλων· ὤλεσας δ’ ἥβην ἀμύνων πατρίδος δουληίην = Campbell 1-2. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:388",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 97",
+   "translator_number": "97",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 199,
+     "printed_page": "187",
+     "sha256": "b7a36df83a02c711b8b5bee2496199bc011daa91971248bf997170ac5b4f99b6",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0199.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 201,
+     "printed_page": "189",
+     "sha256": "b669643f9710ce9c79734ff924fb2f5fa01c549312b4ff3dbc69640126c3e8dd",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0201.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 198,
+     "printed_page": "186",
+     "sha256": "fb69327ed918279bdd3692d94a0f5d8b4bee0ff8e259e56d618cc35b0b54749c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0198.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 200,
+     "printed_page": "188",
+     "sha256": "393f0478914260b7e71fb9b3efc90019147b565848156a32796ce2c8d2f0d5b0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0200.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Once he went about in the waspèd-headdress of a Cimmerian, with wooden astragals in his ears, and about his ribs a hairy oxhide that had been the unwashen cover of a wretched shield—the scoundrel Artemon who made a fraudulent living by consorting with bread-wenches and whores-for-choice, with his neck often bound to the whipping-stock¹ or else to the wheel, and his back often seared with the leathern scourge and his hair and beard plucked out; but now he goes in a coach, wearing earrings of gold like a mix-with-all, and carries an ivory sunshade as though he were a woman.",
+   "coverage_note": "Same extent (12 lines, Athenaeus 12.533f). Edmonds prints it under the joint heading \"96, 97\"; 96 (the flaxen-haired Eurypyle couplet) is a separate fragment and is not included. Some readings differ (e.g. Edmonds κερβέριον for Campbell βερβέριον).",
+   "match_evidence": "Edmonds' Greek πρὶν μὲν ἔχων κερβέριον, καλύμματ’ ἐσφηκωμένα, καὶ ξυλίνους ἀστραγάλους ἐν ὠσὶ ... ὁ πονηρὸς Ἀρτέμων ... σκιαδίσκην ἐλεφαντίνην φορεῖ = Campbell 1-12. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:anacreon:96d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Anacreon, Edmonds fragment 116",
+   "translator_number": "116",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 209,
+     "printed_page": "197",
+     "sha256": "abbd916d81bcd208b8ca8f7b8d2c0b39101b3127d33e79cc071894ff026b4507",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0209.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 208,
+     "printed_page": "196",
+     "sha256": "5b05b481fda5d775051e32a5a63a4eab105ac1bae0ca2647fbdc4c4eb323da79",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0208.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "I like not him who at his drinking beside the full mixing-bowl tells of strife and lamentable war, but rather one that taketh thought for delightsome mirth by mingling the Muses and the splendid gifts of Aphrodite.",
+   "coverage_note": "Same extent (4 lines, elegiac, Athenaeus 11.463a). Edmonds prints it in Lyra Graeca II, Anacreon Book V \"Elegiacs\".",
+   "match_evidence": "Edmonds' Greek οὐ φιλέω ὃς κρητῆρι παρὰ πλέῳ οἰνοποτάζων νείκεα καὶ πόλεμον δακρυόεντα λέγει ... συμμίσγων ἐρατῆς μνήσκεται εὐφροσύνης = Campbell 1-4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:542",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 19",
+   "translator_number": "19",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 297,
+     "printed_page": "285",
+     "sha256": "28de2b2b29423a7ba57295f48f4082ae607561b10e7b4e1da11fdf99a47ccd3b",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0297.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 299,
+     "printed_page": "287",
+     "sha256": "648f176550f764ef87b42faac1bbfc4e32f6905cbd36f488de45786d704964c9",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0299.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 296,
+     "printed_page": "284",
+     "sha256": "97dff15594bbca6d1f8beafd37e4222132148e18511fe976a0254a5c32002a04",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0296.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 298,
+     "printed_page": "286",
+     "sha256": "43e462f5c96a13bc4f9ef1846149f018122e43d0ddb831fd64000b88da5c9077",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0298.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "It is hard to quit you like a truly good man fashioned without flaw in hand, foot, or mind, four-square.² . . . . . And though it come of a wise man, I hold not with the saying of Pittacus, ‘’Tis hard to be good.’³ Such is the lot of a God alone; as for a man, he cannot but be evil if he be overtaken by hopeless calamity; for any man is good in good fortune and bad in bad, and take it all in all, they are best who are loved by the Gods.⁴ Therefore never will I cast my portion of life profitless away upon a hope unaccomplishable, by going in quest of what cannot be, to wit a man without spot or blemish among all of us who win the fruit of the wide-set earth, but if so be I should come upon him I will send you word of it. My praise and friendship is for all them that of themselves earn no disgrace; even Gods fight not against necessity. . . . . . I am no faultfinder; enough for me is he that is not good nor yet too exceeding wicked, that knoweth that Right which aideth cities, a sound man. Him will I never blame. For the generation of the worthless is without number, and surely all is fair wherein is mixed nothing foul.",
+   "coverage_note": "Same poem and broadly the same extent (Plato Protagoras 339a-346d, the Scopas ode). Both editions reconstruct it from Plato's quotations with lacunae; Edmonds' reconstruction and supplements differ in detail from Campbell's 34-line text, and the lacunae (marked by dots in Edmonds' English) are placed slightly differently.",
+   "match_evidence": "Edmonds' Greek begins ἄνδρ’ ἀγαθὸν μὲν ἀλαθέως γενέσθαι χαλεπὸν χερσίν τε καὶ ποσὶ καὶ νόῳ τετράγωνον, as Campbell 1-3; includes the Pittacus saying and ends πάντα τοι καλά, τοῖσί τ’ αἰσχρὰ μὴ μέμικται, as Campbell's close. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:531",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 21",
+   "translator_number": "21",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 301,
+     "printed_page": "289",
+     "sha256": "ef34562b6260434d549848832b6e9de93e64d4d2d162c03630078fdea1eaf3a2",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0301.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 300,
+     "printed_page": "288",
+     "sha256": "22a1803dea6e11847430558b21fcc39ba146d4fa1de7a203e7d80b1b46ebfddf",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0300.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "To them that fell at Thermopylae belong a glorious fortune and a noble lot; for grave they have an altar, for libation-ewers remembrance, and the wine that comes thereof is praise. Such burial neither shall Decay darken, nor Time the all-vanquisher bedim.² This shrine of brave men hath taken for its keeper the fair fame of Greece, witness Leonidas the king of Sparta by token of the great ornament of valour and the everlasting glory that he hath left behind.",
+   "coverage_note": "Same extent (9 lines, Diodorus 11.11.6).",
+   "match_evidence": "Edmonds' Greek begins τῶν ἐν Θερμοπύλαις θανόντων εὐκλεὴς μὲν ἁ τύχα, καλὸς δ’ ὁ πότμος, as Campbell 1-2; names Leonidas at the end as Campbell 8-9. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:521",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 22",
+   "translator_number": "22",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 303,
+     "printed_page": "291",
+     "sha256": "621931a99f5bad49ec06dfb87a9a01d4efd5e0cfa7623dc28a4a32b274dc50f0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0303.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 302,
+     "printed_page": "290",
+     "sha256": "b416a63c48317f9b16273e7c57920a25c4b0b6e428caccddc75c2140b0737531",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0302.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "If thou be’st a mortal man, never say what To-morrow will bring, nor when thou seest a man happy, how long he shall be happy. For swift is change—nay, not so swift the changing course of the wide-wingèd fly.¹",
+   "coverage_note": "Same extent (4 lines, Stobaeus 4.41.9). Edmonds prints the quotation after a testimonium of Menander under the same number 22; Edmonds' text of line 1 differs slightly (ὅ τ’ ἀγωνήσει Αὔριον).",
+   "match_evidence": "Edmonds' Greek ἄνθρωπος ὢν μήποτε φάσῃς ... μηδ’ ἄνδρα ἰδὼν ὄλβιον ὅσσον χρόνον ἔσσεται· ὠκεῖα γάρ, οὐδὲ τανυπτερύγου μυίας οὕτως ἁ μετάστασις = Campbell 1-4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:543",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 27",
+   "translator_number": "27",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 305,
+     "printed_page": "293",
+     "sha256": "3bd637b5cf3a5da77732f4f68bcd0c7de64d26e4c56f1a670cc11a7fc77f6df1",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0305.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 307,
+     "printed_page": "295",
+     "sha256": "b71a43dcedb1b82dea4eb9a803a641e548269701cccc918c1c68ed114cc0364d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0307.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 304,
+     "printed_page": "292",
+     "sha256": "d03941c9fbc953087abb6599becbe626145b399e55f91e77640ce9c52f8f3d33",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0304.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 306,
+     "printed_page": "294",
+     "sha256": "cfac74de71d12f28b7812d9457f2e56b260f9f2252d2dd4a87360bf1475aa736",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0306.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "When the wind came blowing upon the carven chest and the swaying sea bent her towards fear and tears that would not be stayed from her cheeks, she threw a loving arm round Perseus, saying, ‘O babe, what woe is thine! and yet thou weepest not, but slumberest in thy suckling’s way as thou liest night-bound in the black darkness¹ of a dismal brass-ribbed bark, and reckest not of the salt of the passing wave so thick on thy hair, nay, nor the cry of the wind, lying in thy purple swathings with thy pretty face against me. For if the dire were dire to thee, thou ’dst lend thy little ear to what I say. So sleep thou on, my baby, as I pray the sea may sleep and our great great woe may sleep; and come some change to us, Father Zeus, of thee. And whatsoever of my prayer be overbold and wrong, do thou forgive it me.’",
+   "coverage_note": "Same extent (Danae fragment, Dionysius of Halicarnassus Comp. 26; Campbell 27 lines, Edmonds 20 lines with different colometry and several different readings).",
+   "match_evidence": "Edmonds' Greek begins ὅτε λάρνακα δαιδαλέαν ἄνεμος τέτμε πνέων κινηθεῖσά τε λίμνα δείματι ... ἀμφὶ Περσεῖ βάλλε φίλαν χέρα, εἶπέ τ’· ὦ τέκος, as Campbell 1-8; ends ... σύγγνωθί μοι, as Campbell 27. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:520",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 29",
+   "translator_number": "29",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 309,
+     "printed_page": "297",
+     "sha256": "0dff0597717198c316f3a5e42b0fc1fed8e8ab8ee122d319197a15e3d27990ec",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0309.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 308,
+     "printed_page": "296",
+     "sha256": "ca29fc01501bc76275c60959d16be0e504326e8ba6a901fe06b80281bfbb6f21",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0308.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Little is man’s strength and his cares unavailing, and ’tis toil upon toil for him in a life that is short; for all he can do, there’s a death hangs over him that will not be escaped, in which both good men and bad must share alike.",
+   "coverage_note": "Same extent (6 lines, Plutarch Consolation to Apollonius 11).",
+   "match_evidence": "Edmonds' Greek ἀνθρώπων ὀλίγον μὲν κάρτος, ἄπρακτοι δὲ μεληδόνες ... ὁ δ’ ἄφυκτος ὁμῶς ἐπικρέμαται θάνατος ... ἀγαθοί ... ὅστις τε κακός = Campbell 1-6. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:581",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 31",
+   "translator_number": "31",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 309,
+     "printed_page": "297",
+     "sha256": "0dff0597717198c316f3a5e42b0fc1fed8e8ab8ee122d319197a15e3d27990ec",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0309.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 308,
+     "printed_page": "296",
+     "sha256": "ca29fc01501bc76275c60959d16be0e504326e8ba6a901fe06b80281bfbb6f21",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0308.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Who that hath understanding would praise Cleobulus the man of Lindus for his pitting of the might of a gravestone against the ever-running rivers and the flowers of the Spring, against the flame of sun and of golden moon, and against the eddies of the ocean-wave? All these are subject to the Gods; but a stone, even mortal hands may break it. This is the rede of a fool.",
+   "coverage_note": "Same extent (7 lines, Diogenes Laertius 1.89-90).",
+   "match_evidence": "Edmonds' Greek τίς κεν αἰνήσειε νόῳ πίσυνος Λίνδου ναέταν Κλεόβουλον ... μωροῦ φωτὸς ἅδε βουλά = Campbell 1-7. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:567",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 51",
+   "translator_number": "51",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 323,
+     "printed_page": "311",
+     "sha256": "97d2318df0069de68a790470d108945af77c51865aff00ba64ab04325ff3fdab",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0323.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 322,
+     "printed_page": "310",
+     "sha256": "6b09164b41850e4474713a4e53e0d3e3cee287ead9f8c403b5b97a587f03caf0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0322.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Above his head there hovered birds innumerable, and fishes leapt clean from the blue water because of his sweet music.",
+   "coverage_note": "Same extent (5 lines in Campbell, Tzetzes Chiliades 1.309-11).",
+   "match_evidence": "Edmonds' Greek τοῦ καὶ ἀπειρέσιοι πωτῶντ’ ὄρνιθες ὑπὲρ κεφαλᾶς, ἀνὰ δ’ ἰχθύες ὀρθοὶ κυανέου ’ξ ὕδατος ἅλλοντο = Campbell 1-5; Tzetzes names Orpheus. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:595",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 52",
+   "translator_number": "52",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 325,
+     "printed_page": "313",
+     "sha256": "3a5635b46d65a9d22444fad25f3ba40ae50232194ef20d6e868b3815f1535ebd",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0325.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 324,
+     "printed_page": "312",
+     "sha256": "18f1d0283aa441921b5501782d9e5e8136131f0aaaa23ebdd0516257c8bd14bd",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0324.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "For then there was wind not so much as the breath that maketh leaves quiver, to stay the honey-sweet voice from its goal in the ears of man.",
+   "coverage_note": "Same extent (Plutarch Table-Talk 8.3.4; Campbell 4 lines, Edmonds 3 lines).",
+   "match_evidence": "Edmonds' Greek οὐδὲ γὰρ ἐννοσίφυλλος ἀήτα τότ’ ὦρτ’ ἀνέμων, ἅτις κατεκώλυε κιδναμέναν μελιαδέα γᾶρυν ἀραρεῖν ἀκοαῖσι βροτῶν = Campbell 1-4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:579",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 65",
+   "translator_number": "65",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 333,
+     "printed_page": "321",
+     "sha256": "d77a08862da40195e141b1d8136ddae131585a12d7f46800d83ce39887c63b7d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0333.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 332,
+     "printed_page": "320",
+     "sha256": "92d04ddb98247f457f2b67493a31eb2919bb46df20ed784c802f2f6e00367b04",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0332.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "There’s a tale that Virtue¹ dwelleth on a rock hard to climb and with a pure band of Goddesses to watch over it, nor may she ever be seen by eye of mortal, unless heart-devouring sweat come out of one and he reach unto the very top of manliness.",
+   "coverage_note": "Same extent (7 lines, Clement of Alexandria Strom. 4.7.48). Edmonds' number 65 and the introductory testimonium are on p. 319; the English poem is on p. 321. Some readings differ (e.g. Edmonds ἀγνὸν ἀμφέπειν).",
+   "match_evidence": "Edmonds' Greek ἔστι τις λόγος τὰν Ἀρετὰν ναίειν δυσαμβάτοις ἐπὶ πέτραις ... ἵκηταί τ’ ἀνδρείας ἐς ἄκρον = Campbell 1-7. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:99d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 110",
+   "translator_number": "110",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 357,
+     "printed_page": "345",
+     "sha256": "d1a3225abcbf45547ff38200eb995996e2af8c82ba7a30620d16ec100c8949ca",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0357.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 356,
+     "printed_page": "344",
+     "sha256": "66e44e77bb2c11d90dc664c22a88435ebb3b1c4e58ff25b88e95b19381965238",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0356.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Your guttling o’er, your tippling done,\nYou’re lying still, Timocreon,³",
+   "coverage_note": "Same epigram (2 lines, Athenaeus 10.415f), but Edmonds' printed English is a free verse rendering that does not render \"and having spoken much ill of men\" or \"of Rhodes\"; his literal version is relegated to a footnote, not included here. Edmonds prints it among the Simonides skits (Book XIII), not the Inscriptions.",
+   "match_evidence": "Edmonds' Greek πολλὰ πιὼν καὶ πολλὰ φαγὼν καὶ πολλὰ κάκ’ εἰπὼν ἀνθρώπους κεῖμαι Τιμοκρέων Ῥόδιος = Campbell 1-2; Athenaeus' context names Timocreon. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:87d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 116",
+   "translator_number": "116",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 363,
+     "printed_page": "351",
+     "sha256": "aadaa0ae197d5c032d1f8401c890c2da2cf105a74049b6f2fc31f917035b9b41",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0363.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 362,
+     "printed_page": "350",
+     "sha256": "dcdb0a3128d657578c44a70f9c957863e2311cc61a46878ad6276c8360edd67c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0362.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "We were slain in a glen of Dirphys, and the mound of our grave is made beside Euripus at our country’s charge, and rightly so; for by abiding the onset of the cruel cloud of war we lost our lovely time of youth.²",
+   "coverage_note": "Same extent (4 lines, Planudean Anthology). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek Δίρφυος ἐδμήθημεν ὑπὸ πτυχί, σῆμα δ’ ἐφ’ ἡμῖν ἐγγύθεν Εὐρίπου δημοσίᾳ κέχυται = Campbell 1-2; ends with ἥβην ... νέφος, Campbell 3-4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:91d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 118",
+   "translator_number": "118",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 365,
+     "printed_page": "353",
+     "sha256": "befbf3a8ca7b140d6b458d2d959aee4a5fc285c84972c633cc333d395b964e17",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0365.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 364,
+     "printed_page": "352",
+     "sha256": "b30168db0ac0996645c75ea07a7334d0a3bb468a19fd959233204d21e33b2a40",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0364.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Here four thousand of the Peloponnese once fought with three thousand thousand.",
+   "coverage_note": "Same extent (2 lines, Herodotus 7.228). Edmonds prints 118, 119, 120 under one heading with the Herodotus passage. Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek μυριάσιν ποτὲ τῇδε τριακοσίαις ἐμάχοντο ἐκ Πελοποννάσου χιλιάδες τέτορες = Campbell 1-2. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:92d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 119",
+   "translator_number": "119",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 365,
+     "printed_page": "353",
+     "sha256": "befbf3a8ca7b140d6b458d2d959aee4a5fc285c84972c633cc333d395b964e17",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0365.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 364,
+     "printed_page": "352",
+     "sha256": "b30168db0ac0996645c75ea07a7334d0a3bb468a19fd959233204d21e33b2a40",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0364.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Stranger, go tell the Lacedaemonians that we lie here in obedience to their word.",
+   "coverage_note": "Same extent (2 lines, Herodotus 7.228). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek ὦ ξεῖν’, ἀγγέλλειν Λακεδαιμονίοις ὅτι τῇδε κείμεθα τοῖς κείνων ῥήμασι πειθόμενοι = Campbell 1-2. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:83d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 120",
+   "translator_number": "120",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 365,
+     "printed_page": "353",
+     "sha256": "befbf3a8ca7b140d6b458d2d959aee4a5fc285c84972c633cc333d395b964e17",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0365.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 364,
+     "printed_page": "352",
+     "sha256": "b30168db0ac0996645c75ea07a7334d0a3bb468a19fd959233204d21e33b2a40",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0364.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "This is the tomb of the famous Megistias, slain by the Medes beside the river Spercheius, the seer who well-knowing that his doom was nigh, would not forsake the leaders of Sparta.",
+   "coverage_note": "Same extent (4 lines, Herodotus 7.228). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek μνῆμα τόδε κλεινοῖο Μεγιστία, ὅν ποτε Μῆδοι Σπερχειὸν ποταμὸν κτεῖναν ἀμειψάμενοι = Campbell 1-2; ends Σπάρτης ἡγεμόνας, Campbell 4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:90d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 123",
+   "translator_number": "123",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 367,
+     "printed_page": "355",
+     "sha256": "383cd97c17fa226261de82e94def76bb49d3cf1965f245b51cff7ea25d325567",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0367.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 366,
+     "printed_page": "354",
+     "sha256": "401fcf73036548b98bdce89ab4ee8c564e598ece164b864abed241234a118e37",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0366.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Once, O stranger, we lived in the well-watered citadel of Corinth, but now we dwell in Ajax’ isle of Salamis.⁴",
+   "coverage_note": "Same extent (2 lines, the stone / Plutarch Malice of Herodotus 39, Dio Chrysostom 37.18). Edmonds' footnote (not included) notes the extra lines of the literary tradition. Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek ὦ ξέν’, εὔυδρόν ποκ’ ἐναίομες ἄστυ Κορίνθω, νῦν δ’ ἄμ’ Αἴαντος νᾶσος ἔχει Σαλαμίς = Campbell 1-2 (Doric forms differ). (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:121d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 126",
+   "translator_number": "126",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 369,
+     "printed_page": "357",
+     "sha256": "78e0a3beb591c043bd8ef9de790feb05f67e42208f9652a2448ae010a2e0f7ec",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0369.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 368,
+     "printed_page": "356",
+     "sha256": "68b4904821520c36cff1cb645cf1c75832685bd5f1f8d1020615144253731ab5",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0368.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "These crowned their dear country with fame inextinguishable by wrapping round them the mist and gloom of death; though they died they are not dead, for their valour brings them back in glory from the world below.",
+   "coverage_note": "Same extent (4 lines, Palatine Anthology 7.251). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek ἄσβεστον κλέος οἵδε φίλῃ περὶ πατρίδι θέντες κυάνεον θανάτου ἀμφεβάλοντο νέφος ... ἐξ Ἀίδεω = Campbell 1-4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:122d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 129",
+   "translator_number": "129",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 371,
+     "printed_page": "359",
+     "sha256": "631c03660a0d514102217224ae042a4b880dba3de0354f45cbbe382e06873daf",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0371.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 370,
+     "printed_page": "358",
+     "sha256": "76fe112900b8dfec021af7cf95fc1cbc19f9d589c917e839a479df02db334b04",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0370.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Because of these men’s manly virtue the smoke of the burning of spacious Tegea has not gone to the sky; for they chose to leave their children a country green and gay with freedom, and themselves to die in the forefront of the battle.",
+   "coverage_note": "Same extent (4 lines, Palatine Anthology 7.512). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek τῶνδε δι’ ἀνθρώπων ἀρετὰν οὐχ ἵκετο καπνὸς αἰθέρα δαιομένας εὐρυχόρου Τεγέας = Campbell 1-2; ends ἐν προμάχοισι θανεῖν, Campbell 4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:97d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 136",
+   "translator_number": "136",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 375,
+     "printed_page": "363",
+     "sha256": "654eac5fba63316b64c3166c4f18fec1799314dc4c400d2d6839a61c80f01053",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0375.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 374,
+     "printed_page": "362",
+     "sha256": "637cd9f5c9b0bb8f337c7b820e5c66feea5ee46d35bbbc91c425372f5d0f090a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0374.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "All these men, on their way to Apollo with first-fruits of the Tyrrhenian spoil, had their burial of one sea, one night, and one ship.",
+   "coverage_note": "Same 2-line epigram (Palatine Anthology 7.270), but Edmonds reads ἓν πέλαγος, μία νύξ, ἓν σκάφος (one sea, one night, one ship) where Campbell has ἓν πέλαγος, μία ναῦς, εἷς τάφος (one sea, one ship, one grave). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek τούσδ’ ἀπὸ Τυρρηνῶν ἀκροθίνια Φοίβῳ ἄγοντας = Campbell 1; line 2 differs as noted. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:85d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 139",
+   "translator_number": "139",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 377,
+     "printed_page": "365",
+     "sha256": "432354f9c7fd2853dba88dcbb1cd6a3b590d9431964517126bfcfeac81e0ebf7",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0377.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 376,
+     "printed_page": "364",
+     "sha256": "e0d20e80e580ed58e708e3a5c3ad14a349f4d6223692c09c8f09423f7509880d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0376.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "This dust covers Archedicè the daughter of Hippias the foremost Greek of his time; daughter, wife, sister, and mother, of despots, she lifted not up her heart unto presumptuousness.",
+   "coverage_note": "Same extent (4 lines, Thucydides 6.59). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek ἀνδρὸς ἀριστεύσαντος ἐν Ἑλλάδι τῶν ἐφ’ ἑαυτοῦ Ἱππίου Ἀρχεδίκην ἥδε κέκευθε κόνις = Campbell 1-2; ends οὐκ ἤρθη νοῦν ἐς ἀτασθαλίην, Campbell 4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:84d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 141",
+   "translator_number": "141",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 379,
+     "printed_page": "367",
+     "sha256": "8010c507aba74590222abfba5a5fefd2dbc70fc13493af068762fc5fab0e3fe0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0379.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 378,
+     "printed_page": "366",
+     "sha256": "b576388aae525e53cec9901f0eb97063aed665241742a20f29f936c68155a1c1",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0378.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "When I behold the tomb of Megacles, I pity you, poor Callias.²",
+   "coverage_note": "Same extent (2 lines, Palatine Anthology 7.511). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek σῆμα καταφθιμένοιο Μεγακλέος εὖτ’ ἂν ἴδωμαι, οἰκτίρω σε, τάλαν Καλλία, οἷ’ ἔπαθες = Campbell 1-2. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:130d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 145",
+   "translator_number": "145",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 381,
+     "printed_page": "369",
+     "sha256": "d7933d08b96a496803c28e911b958f31babe13c8caeb6b26cdef30db79284cfb",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0381.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 380,
+     "printed_page": "368",
+     "sha256": "9e82290ec48acbd290ad895173067935f7884683a17bede97bb470d8f7f7aa4a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0380.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Alas, thou fell disease! Why dost thou grudge the souls of men their sojourn with lovely youth? Now it is the young Timarchus thou hast reft of delicious life, and that ere he might look upon a wedded spouse.",
+   "coverage_note": "Same extent (4 lines, Palatine Anthology 7.515). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek αἰαῖ, νοῦσε βαρεῖα, τί δὴ ψυχαῖσι μεγαίρεις ἀνθρώπων ἐρατῇ πὰρ νεότητι μένειν; = Campbell 1-2; names Timarchus, Campbell 3. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:135d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 147",
+   "translator_number": "147",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 383,
+     "printed_page": "371",
+     "sha256": "c135bd7612a3b8d0fb85cfc288deb81ad424fd674c61708e2db42780d824dfce",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0383.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 382,
+     "printed_page": "370",
+     "sha256": "3b622a4a3828615e96856065d86a0d10ba1dff7aa2c87c67f07cd4fae9780d2a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0382.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Your tomb stands on no foreign soil, Cleisthenes, but the doom of death overtaking you in the Euxine Sea you have lost the sweet delicious home-coming and returned no more to wave-washed Ceos.",
+   "coverage_note": "Same extent (4 lines, Palatine Anthology 7.510), with different readings: Edmonds begins σῆμ’ οὐκ ἀλλοδαπὴ σὸν ἔχει κόνις (your tomb is in no foreign soil) where Campbell has σῶμα μὲν ἀλλοδαπὴ κεύθει κόνις, and ends Κεῖον (Ceos) where Campbell has Χῖον (Chios). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek lines 2-4 Κλείσθενες, Εὐξείνῳ μοῖρ’ ἔκιχεν θανάτου πλαζόμενον, γλυκεροῦ δὲ μελίφρονος οἴκαδε νόστου ἤμπλακες = Campbell 2-4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:138d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 156",
+   "translator_number": "156",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 387,
+     "printed_page": "375",
+     "sha256": "2b69411e046ce25a0366a4f77cb63b02ed90fd7c60922ea8ba9a310d142a92d6",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0387.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 386,
+     "printed_page": "374",
+     "sha256": "bdc2d56c11eaf3bac6646fda07ffe23e43464629406cbdf9035d4ef5630346ba",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0386.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "I that lie here am Brotachus of Gortyn, a Cretan born, and I came not for this but on business.",
+   "coverage_note": "Same extent (2 lines, Palatine Anthology 7.254b). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek Κρὴς γενεὰν Βρόταχος Γορτύνιος ἐνθάδε κεῖμαι οὐ κατὰ τοῦτ’ ἐλθών, ἀλλὰ κατ’ ἐμπορίαν = Campbell 1-2. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:142d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 159",
+   "translator_number": "159",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 387,
+     "printed_page": "375",
+     "sha256": "2b69411e046ce25a0366a4f77cb63b02ed90fd7c60922ea8ba9a310d142a92d6",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0387.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 386,
+     "printed_page": "374",
+     "sha256": "bdc2d56c11eaf3bac6646fda07ffe23e43464629406cbdf9035d4ef5630346ba",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0386.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Methinks, huntress Lycas, even the dead white bones in this tomb must still affright the beasts of the field; for thy valour is well-known to great Pelion and far-seen Ossa and the towering sheep-walks of Cithaeron.³",
+   "coverage_note": "Same extent (4 lines, Pollux 5.47). Simonides' epigrams are printed by Edmonds in Lyra Graeca II, Simonides Book XIV \"Inscriptions\".",
+   "match_evidence": "Edmonds' Greek ἦ σεῦ καὶ φθιμένας λεύκ’ ὀστέα τῷδ’ ἐνὶ τύμβῳ ἴσκω ἔτι τρομέειν θῆρας, ἄγρωσσα Λυκάς = Campbell 1-2; names Pelion, Ossa, Cithaeron, Campbell 3-4. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:simonides:76d",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Simonides, Edmonds fragment 160",
+   "translator_number": "160",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 389,
+     "printed_page": "377",
+     "sha256": "24cc9a646eb3ea18e59fe524e7f0b7047d8af99acde7e31049723788671519e8",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0389.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 388,
+     "printed_page": "376",
+     "sha256": "7d43cd7ee09e49a808999acb740e5dddd4510d4d8356135ad5863bf6bbe7cd35",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0388.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "A marvellous great light shone upon Athens when Aristogeiton and Harmodius slew Hipparchus.²",
+   "coverage_note": "Same extent (2 lines, Hephaestion 4.6). Edmonds prints it under Simonides' Inscriptions, \"2 Dedications\".",
+   "match_evidence": "Edmonds' Greek ἦ μέγ’ Ἀθηναίοισι φόως γένεθ’, ἡνίκ’ Ἀριστογείτων Ἵππαρχον κτεῖνε καὶ Ἁρμόδιος = Campbell 1-2. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:timocreon:727",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Timocreon, Edmonds fragment 1",
+   "translator_number": "1",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 433,
+     "printed_page": "421",
+     "sha256": "09b422700b838c33e2213d7f336b3e64c0d26ada886eb190f7778b62a7487d0c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0433.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 435,
+     "printed_page": "423",
+     "sha256": "620f05f48630b94345ec8604d9725eb3113184b3cf6940009707a22576007630",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0435.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 432,
+     "printed_page": "420",
+     "sha256": "42845edcab9d23b42bea61af6d6ac0c96c3b5d41853290c10c075d78af5897f9",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0432.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 434,
+     "printed_page": "422",
+     "sha256": "7cb44866e7e66eb3e4f811b7f25bf4c10c24f6fd688dde5fac32ca3b8357163a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0434.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "O you may praise Pausanias, or you again Xanthippus, or you perhaps Leotychidas, but I praise Aristides as the finest man of all that hail from holy Athens now that Leto hateth Themistocles, the liar, the cheat, the traitor who for a bribe of rascally silver-pieces kept his old friend Timocreon an exile from his native Ialysus, and sailed off to the devil with three talents of silver, restoring, expelling or killing as he would, choke-full of his silver-pieces; and at the Isthmus played the scoundrelly innkeeper and gave them meat that was cold, meat that they ate with curses on his head.",
+   "coverage_note": "Same extent (15 lines, strophe-antistrophe-epode, Plutarch Themistocles 21). Edmonds prints three fragments from the same Plutarch passage under the joint heading \"1, 2, 3\"; only fragment 1 (= Campbell 727) is given here, not 2 (Campbell 728) or 3 (Campbell 729).",
+   "match_evidence": "Edmonds' Greek ἀλλ’ εἰ τύ γε Παυσανίαν ἢ καὶ τύ γε Ξάνθιππον αἰνεῖς ἢ τύ γε Λευτυχίδαν, ἐγὼ δ’ Ἀριστείδαν ἐπαινέω ... ψυχρὰ κρέα παρέχων· οἱ δ’ ἤσθιον κηὔχοντο μὴ ὥραν Θεμιστοκλέος γενέσθαι = Campbell 1-15. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:timocreon:731",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. II (1924), Loeb Classical Library 143",
+   "citation": "Timocreon, Edmonds fragment 8",
+   "translator_number": "8",
+   "source_item": "lyragraecavol20002jmed",
+   "source_url": "https://archive.org/details/lyragraecavol20002jmed",
+   "publication_year": 1924,
+   "english_pages": [
+    {
+     "scan_leaf": 439,
+     "printed_page": "427",
+     "sha256": "db0ceea0b190da6643f5b47cdbfde4dc1c8bb8131997f2308f69dc5f87ea7779",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0439.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 438,
+     "printed_page": "426",
+     "sha256": "e901d57b380a6d00976de035f8c1ed811c97325d31e6d6373184e008df38a151",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecavol20002jmed%2Flyragraecavol20002jmed_jp2.zip%2Flyragraecavol20002jmed_jp2%2Flyragraecavol20002jmed_0438.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Oh how I wish, blind God of Riches, you were to be seen neither ashore nor at sea nor on the mainland, but dwelt by Acheron’s bank in Tartarus! For you it is that are the cause of all the evil of the world.",
+   "coverage_note": "Same extent (6 lines, scholiast on Aristophanes Acharnians 532).",
+   "match_evidence": "Edmonds' Greek ὤφελέν σ’, ὦ τυφλὲ Πλοῦτε, μήτε γῇ μήτ’ ἐν θαλάσσῃ μήτ’ ἐν ἠπείρῳ φανῆμεν, ἀλλὰ Τάρταρόν τε ναίειν κἀχέροντα· διὰ σὲ γὰρ πάντ’ ἐν ἀνθρώποις κακά = Campbell 1-6. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:pratinas:708",
+   "translator": "J. M. Edmonds",
+   "edition": "Lyra Graeca, vol. III (1927), Loeb Classical Library 144",
+   "citation": "Pratinas, Edmonds fragment 1",
+   "translator_number": "1",
+   "source_item": "lyragraecabeingr03edmouoft",
+   "source_url": "https://archive.org/details/lyragraecabeingr03edmouoft",
+   "publication_year": 1927,
+   "english_pages": [
+    {
+     "scan_leaf": 67,
+     "printed_page": "51",
+     "sha256": "71f104240e1031b8fee0f2193a2c2a511b0fc6c6c222ea75b33fc71fb74ccaf2",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr03edmouoft%2Flyragraecabeingr03edmouoft_jp2.zip%2Flyragraecabeingr03edmouoft_jp2%2Flyragraecabeingr03edmouoft_0067.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 69,
+     "printed_page": "53",
+     "sha256": "5aff0b683df7b94bf1e95a99da3d758d7c827dc6b45990f4e275daf37354f375",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr03edmouoft%2Flyragraecabeingr03edmouoft_jp2.zip%2Flyragraecabeingr03edmouoft_jp2%2Flyragraecabeingr03edmouoft_0069.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 66,
+     "printed_page": "50",
+     "sha256": "f878bd5ab963a714d84f7828e09e46df29834fed46995ad01b4049db23d95304",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr03edmouoft%2Flyragraecabeingr03edmouoft_jp2.zip%2Flyragraecabeingr03edmouoft_jp2%2Flyragraecabeingr03edmouoft_0066.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 68,
+     "printed_page": "52",
+     "sha256": "889d0d127f0fa955b4f43fd3227a86832d5762ced0cf405ccd2df13dc740cb60",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr03edmouoft%2Flyragraecabeingr03edmouoft_jp2.zip%2Flyragraecabeingr03edmouoft_jp2%2Flyragraecabeingr03edmouoft_0068.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "What clamour is this, what measures are here? What outrage is befallen on the patter-circled altar Dionysiac? To me belongs Bromius, to me. It is I that should sing, it is I that should ring, as I speed me o’er the hills with the Naiads like a swan that makes his motley-feathered tune. Song’s the queen Muse hath made; the flute, he must dance second as becometh a servant; let him captain the revels if he will, the fist-to-fist door-battery of the tipsy and the young. Beat O beat him that breathes the breath of a speckled toad!² To the flames with this reedy spender of spittle, bawler of bibble-babble, counter-runner unto time and unto tune, this hireling creation of a carpenter’s bit! Look ye here; here’s thy true wagging of hand, wagging of foot, thou king of Thriamb and Dithyramb, thou Lord of the ivied tresses;¹ so give thou ear to me and my Dorian roundelay.²",
+   "coverage_note": "Same extent (Athenaeus 14.617b-f; Campbell 17 lines, Edmonds 20 lines with different colometry and some different readings). Note the footnote marks restart on Edmonds' p. 53 (¹ ²).",
+   "match_evidence": "Edmonds' Greek begins τίς ὁ θόρυβος ὅδε; τί τάδε τὰ χορεύματα; as Campbell 1, and ends ... κισσοχαῖτ’ ἄναξ· ἄκουε τὰν ἐμὰν Δώριον χορείαν, as Campbell 16-17. (Greek cited in normalised spelling; Edmonds' accentuation/orthography may differ in detail. English checked against the scan image.)",
+   "verified_against_image": true
+  }
+ ],
+ "gaps": []
+}

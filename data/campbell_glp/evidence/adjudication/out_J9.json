@@ -1,0 +1,220 @@
+{
+ "decisions": [
+  {
+   "dispute_id": 0,
+   "printed": "δεῦτέ μοι νᾶ]σον Πέλοπος λίποντε[ς,",
+   "live_text_correct": false,
+   "differences_from_live": "underdot under α of νᾶ removed",
+   "basis": "p085 2x halves: the mark under α is a 2x2-px component (area 4 at 2x) like blank-area specks; printed underdots on these pages are 28-56 px (e.g. πρό̣, τρ̣ p086; ἀγνοι̣ς̣ p089)",
+   "uncertain": true,
+   "uncertain_note": "mark under α is a single-pixel speck, not a printed underdot by size; small chance it is a faint dot"
+  },
+  {
+   "dispute_id": 1,
+   "printed": "οἲ κὰτ εὔρηαν χ[θόνα] καὶ θάλασσαν",
+   "live_text_correct": false,
+   "differences_from_live": "οἳ (rough+grave) -> οἲ (smooth+grave)",
+   "basis": "12x crop: breathing on ι has same shape as the smooth breathing in ἢ (p089 l.17) and ὔπα (p085 l.2); dot under λα is a 4-px speck, no underdot",
+   "uncertain": true,
+   "uncertain_note": "breathing shape at this size is hard; reading by comparison with ἢ/ὔπα"
+  },
+  {
+   "dispute_id": 2,
+   "printed": "π]ήλοθεν λάμπροι πρό̣[τον’ ὀν]τρ̣[έχο]ντες",
+   "live_text_correct": false,
+   "differences_from_live": "τ] -> π]; underdot added under ο of πρό̣ and under ρ of τρ̣",
+   "basis": "p086 crop: initial letter clearly π; round dots (area 52, 28 px) under ο and ρ",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 3,
+   "printed": "ἀργαλέᾳ δ’ ἐν νύκτι φ[άος φέ]ροντες",
+   "live_text_correct": true,
+   "differences_from_live": "",
+   "basis": "10x crop: hooked vertical stroke under α = iota subscript, not a round dot",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 4,
+   "printed": "νᾶϊ μ[ε]λαίνᾳ·",
+   "live_text_correct": true,
+   "differences_from_live": "",
+   "basis": "10x crop: hooked vertical stroke under α = iota subscript",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 5,
+   "printed": "] . ρά . α τόδε Λέσβιοι",
+   "live_text_correct": true,
+   "differences_from_live": "",
+   "basis": "6x crop: '] . ρά . α' with a space between bracket and dot",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 6,
+   "printed": "σὲ δ’ Αἰολῄαν [κ]υδαλίμαν θέον",
+   "live_text_correct": false,
+   "differences_from_live": "η -> ῄ (iota subscript added)",
+   "basis": "10x crop: second descender under η left of its leg, absent from the η of κεμήλιον l.8",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 7,
+   "printed": "κήνων Ἐ[ρίννυ]ς ὤς ποτ’ ἀπώμνυμεν",
+   "live_text_correct": false,
+   "differences_from_live": "ὠς -> ὤς (acute added)",
+   "basis": "8x crop: breathing plus clear acute over ω",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 8,
+   "printed": "τόμοντες ἄ . . [          .́ .]ν̣ . .",
+   "live_text_correct": false,
+   "differences_from_live": "space before ] removed ('. ]' -> '.]')",
+   "basis": "4x crop: last dot sits close to ] (about half the dot-to-dot gap); ν underdot confirmed",
+   "uncertain": true,
+   "uncertain_note": "spacing judgement: gap dot-to-bracket is narrower than word spacing but not zero"
+  },
+  {
+   "dispute_id": 9,
+   "printed": "μηδάμα μηδένα τὼν ἐταίρων",
+   "live_text_correct": false,
+   "differences_from_live": "τῶν -> τὼν (grave, not circumflex)",
+   "basis": "8x crop: single stroke falling left to right = grave",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 10,
+   "printed": "ἀλλ’ ἢ θάνοντες γᾶν ἐπιέμμενοι",
+   "live_text_correct": true,
+   "differences_from_live": "",
+   "basis": "dot under ε is a 4-px speck (printed underdots 28-56 px)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 11,
+   "printed": "κείσεσθ’ ὐπ’ ἄνδρων οἶ τότ’ ἐπικ . .́ ην",
+   "live_text_correct": false,
+   "differences_from_live": "κεῖ -> κεί (acute); οἰ -> οἶ (circumflex added); ἔπικ -> ἐπικ (no acute)",
+   "basis": "7-12x crops: straight acute over ι of κείσεσθ’; bar-shaped circumflex with breathing over ι of οἶ; only a breathing over ε of ἐπικ",
+   "uncertain": true,
+   "uncertain_note": "breathing under the circumflex of οἶ read as smooth (not clearly separable); circumflex itself is certain"
+  },
+  {
+   "dispute_id": 12,
+   "printed": "δᾶμον ὐπὲξ ἀχέων ῤύεσθαι.",
+   "live_text_correct": true,
+   "differences_from_live": "",
+   "basis": "6x crop: breathing on ρ is the comma shape used for smooth ἐπικ on the same page",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 13,
+   "printed": "πρὸς θῦμον, ἀλλὰ βραϊδίως πόσιν",
+   "live_text_correct": false,
+   "differences_from_live": "ι -> ϊ (diaeresis)",
+   "basis": "6x crop: two dots clearly over ι",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 14,
+   "printed": "ἔ]μβαις ἐπ’ ὀρκίοισι δάπτει",
+   "live_text_correct": true,
+   "differences_from_live": "",
+   "basis": "dot under δ is a 4-px speck (printed underdots 28-56 px)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 15,
+   "printed": "οὐ κὰν νόμον [.]ον̣ . . [          ] .́ [ ]",
+   "live_text_correct": true,
+   "differences_from_live": "",
+   "basis": "3.5x crop: '] .́ [ ]' with word spaces on both sides of the dotted acute",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 16,
+   "printed": "γεγρά . [",
+   "live_text_correct": false,
+   "differences_from_live": "ᾶ -> ά (acute)",
+   "basis": "5x crop: straight acute over α",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 17,
+   "printed": "ἀγνοι̣ς̣ . . ς̣βιότοις . . ις ὀ τάλαις ἔγω",
+   "live_text_correct": false,
+   "differences_from_live": "ἄγνοις̣ -> ἀγνοι̣ς̣ (no acute, underdot under ι added); βιότοις̣ -> βιότοις (no underdot); ὁ -> ὀ",
+   "basis": "4x crop + blob sizes: only a breathing on α; dots under ι (44 px) and ς (20 px) of ἀγνοι̣ς̣, under ς of ς̣βιό (52 px); 4-px speck only under final ς of βιότοις; comma-shaped (smooth) breathing on ο",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 18,
+   "printed": "καρυ[ζο]μένας Ὦγεσιλαΐδα",
+   "live_text_correct": true,
+   "differences_from_live": "",
+   "basis": "10x crop: circumflex over comma-shaped smooth breathing, same as smooth on ἐπικ/ἐοι̣",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 19,
+   "printed": "καγγ[ε]γήρασ’ ἔχοντες πεδὰ τωνδέων",
+   "live_text_correct": false,
+   "differences_from_live": "τυνδέων -> τωνδέων",
+   "basis": "5x crop: clearly ω",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 20,
+   "printed": "ἔγ[ωγ’ ἀ]πὺ τούτων ἀπελήλαμαι",
+   "live_text_correct": false,
+   "differences_from_live": "ων’ -> ωγ’",
+   "basis": "6x crop: γ before the apostrophe",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 21,
+   "printed": "φεύγων ἐσχατίαισ’, ὠς δ’ Ὀνυμακλέης",
+   "live_text_correct": true,
+   "differences_from_live": "",
+   "basis": "10x crop: only a smooth breathing over ω, no grave",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 22,
+   "printed": ".] . [. . .] . [. .] . μακάρων ἐς τέμ[ε]νος θέων",
+   "live_text_correct": false,
+   "differences_from_live": "final raised dot removed",
+   "basis": "blob check: nothing after θέων except a 4-px speck; the real ano teleia after χθόνος l.13 is 56 px",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 23,
+   "printed": "ἐοι̣[. . . . .] με[λ]αίνας ἐπίβαις χθόνος·",
+   "live_text_correct": false,
+   "differences_from_live": "ἔοι̣ -> ἐοι̣ (no acute)",
+   "basis": "8x crop: only a smooth breathing over ε",
+   "uncertain": false,
+   "uncertain_note": ""
+  }
+ ]
+}

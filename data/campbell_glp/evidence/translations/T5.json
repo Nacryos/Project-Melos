@@ -1,0 +1,1245 @@
+{
+ "items": [
+  {
+   "campbell_id": "campbell-glp:theognis:19-26",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 19-26 (Banks, Maxims of Theognis, p. 218)",
+   "translator_number": "19-26",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 248,
+     "printed_page": "218",
+     "sha256": "f501ae48c515dfef34814a898c02ad1c8fb879c90c6963a0460f8c5d34dc9674",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0248.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Cyrnus,⁴ let a seal be set on these words of mine, as I pursue wisdom, but it will never escape notice, if it be stolen.⁵ Nor will any one take-in-exchange worse, when the good is present: but thus shall every one say, these are the poems of Theognis,⁶ the Megarean, and one celebrated among all men: yet not yet am I able to please all the citizens. No wonder, son of Polypas, for not even doth Jove please all, either when he rains, or when he holds up.⁷",
+   "coverage_note": "Same extent as Campbell 19-26 (Banks' running head on p. 218 reads 13-26; the passage is the sentence group beginning 'Cyrnus, let a seal be set'). Banks' prose has no Greek; italic supplied words ('these', 'one') are printed in italics in the original.",
+   "match_evidence": "'let a seal be set on these words of mine, as I pursue wisdom' = Κύρνε, σοφιζομένῳ μὲν ἐμοὶ σφρηγὶς ἐπικείσθω (19); 'poems of Theognis the Megarean' = Θεύγνιδός ἐστιν ἔπη τοῦ Μεγαρέως (22-3); 'not even doth Jove please all, either when he rains, or when he holds up' = οὐδ' ὁ Ζεὺς ... οὔθ' ὕων πάντεσσ' ἁνδάνει οὔτ' ἀνέχων (25-6).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:39-52",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 39-52 (Banks, pp. 219-220)",
+   "translator_number": "39-52",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 249,
+     "printed_page": "219",
+     "sha256": "9819e22dc1593dcb4148fccb0f3d5a7ff83032698d3bd910946aadfe3d540a9e",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0249.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 250,
+     "printed_page": "220",
+     "sha256": "1fab03756583a1987f1e9972ea194310300ce6bef7a20ec02d93483273442c48",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0250.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Cyrnus,³ this city is pregnant: but I fear that it will bring-forth a man to be a chastiser of our evil violence. For the citizens here on their part are as yet sober-minded: but the leaders, have turned themselves so as to fall into much worthlessness. No city yet, Cyrnus, have good men ruined;⁴ but when it pleases the bad to be insolent, and they corrupt the commons, and give judgments in favour of the unjust,⁵ for the sake of private gains and power, expect that that city will not long be kept tranquil,⁶ even though now it is settled in much calm, when these gains shall have become dear to the ignoble men, coming along with public hurt. For from these is sedition, and civil bloodshed of men, and to a state such as this a monarch would never be pleasing.",
+   "coverage_note": "Same extent as Campbell 39-52 (Banks' own note identifies the passage as 'Ver. 39-52'). Last line differs in text: Banks translates a singular 'a monarch would never be pleasing' (μούναρχος δὲ ...), where Campbell reads μούναρχοί θ'· ἃ πόλει μήποτε τῇδε ἅδοι.",
+   "match_evidence": "'this city is pregnant ... a chastiser of our evil violence' = Κύρνε, κύει πόλις ἥδε ... εὐθυντῆρα κακῆς ὕβριος ἡμετέρης (39-40); 'No city yet, Cyrnus, have good men ruined' = οὐδεμίαν πω, Κύρν', ἀγαθοὶ πόλιν ὤλεσαν ἄνδρες (43); 'sedition, and civil bloodshed' = στάσιές τε καὶ ἔμφυλοι φόνοι ἀνδρῶν (51).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:53-68",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 53-68 (Banks, p. 220)",
+   "translator_number": "53-68",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 250,
+     "printed_page": "220",
+     "sha256": "1fab03756583a1987f1e9972ea194310300ce6bef7a20ec02d93483273442c48",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0250.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Cyrnus, this state is still a state indeed:¹ but its people truly are other, who aforetime knew nor rights nor laws, but were wont to wear-out goat-skins about their sides, and to inhabit this city, like stags, without the walls.² And now, son of Polypas, they are noble: but they who were bettermost of yore, now are of-low-degree: who can endure to look on³ these things? They deceive also one another, laughing one at the other, conscious of the sentiments neither of bad nor good. Son of Polypas, get none of these citizens as a friend, with thine whole heart,⁴ for the sake of any advantage: but seem indeed to be friend to all in tongue, yet associate with none of them in any serious matter at all. For you will learn the minds of wretched men, that in their deeds there is no reliance.⁵ But they have loved tricks, and deceits, and crafts in suchwise, as men no longer in-a-sound-condition.⁶",
+   "coverage_note": "Same extent as Campbell 53-68 (Banks' note: 'Ver. 53-68').",
+   "match_evidence": "'this state is still a state indeed: but its people truly are other' = Κύρνε, πόλις μὲν ἔθ' ἥδε πόλις, λαοὶ δὲ δὴ ἄλλοι (53); 'goat-skins about their sides' = περὶ πλευραῖσι δορὰς αἰγῶν (55); 'as men no longer in-a-sound-condition' = οὕτως ὡς ἄνδρες μηκέτι σῳζόμενοι (68).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:77-8",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 77-78 (Banks, Maxims of Theognis, p. 221)",
+   "translator_number": "77-78",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 251,
+     "printed_page": "221",
+     "sha256": "2ec8a16b09c6619c9c3f6aae7bd34bdcbc433c5c4d20548c07098ee67ca34291",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0251.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "A faithful man is worthy to-be-prized-equally with gold and silver,² O Cyrnus, in vexatious doubt.",
+   "coverage_note": "Same extent as Campbell 77-8 (the first sentence of Banks' paragraph; the following sentences render 79-86 and are excluded).",
+   "match_evidence": "'A faithful man is worthy to-be-prized-equally with gold and silver ... in vexatious doubt' = πιστὸς ἀνὴρ χρυσοῦ τε καὶ ἀργύρου ἀντερύσασθαι ἄξιος ἐν χαλεπῇ, Κύρνε, διχοστασίῃ.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:87-92",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 87-92 (Banks, Maxims of Theognis, p. 222)",
+   "translator_number": "87-92",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 252,
+     "printed_page": "222",
+     "sha256": "404f83709b8a7d9d11907d87ed84b5718bf716a702bdd874664b62e94ae75bcd",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0252.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Do not caress me in words, and keep your mind and heart elsewhere,¹ if you love me and if there dwells in you a faithful mind. Either love me, cherishing a sincere mind, or disown and hate me, having raised a quarrel openly.² But he who, with one tongue, has yet his mind at variance, this man, Cyrnus, is a formidable comrade, better as a foe than when a friend.",
+   "coverage_note": "Same extent as Campbell 87-92 (first paragraph of p. 222).",
+   "match_evidence": "'Do not caress me in words, and keep your mind and heart elsewhere' = μή μ' ἔπεσιν μὲν στέργε, νόον δ' ἔχε καὶ φρένας ἄλλῃ (87); 'better as a foe than when a friend' = δεινός, Κύρν', ἐχθρὸς βέλτερος ἢ φίλος ὤν (92).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:113-14",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 113-114 (Banks, Maxims of Theognis, p. 223)",
+   "translator_number": "113-114",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 253,
+     "printed_page": "223",
+     "sha256": "008cf43f061023f45a10b3697ad897a3dfe5111577763ca404527bb0bf445bf4",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0253.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Never make the mean man friend and comrade,⁵ but ever fly from him as a bad harbour.",
+   "coverage_note": "Same extent as Campbell 113-14 (first sentence of the paragraph; what follows renders 115 ff.).",
+   "match_evidence": "'Never make the mean man friend and comrade, but ever fly from him as a bad harbour' = μήποτε τὸν κακὸν ἄνδρα φίλον ποιεῖσθαι ἑταῖρον, ἀλλ' αἰεὶ φεύγειν ὥστε κακὸν λιμένα.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:155-8",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 155-158 (Banks, Maxims of Theognis, p. 226)",
+   "translator_number": "155-158",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 256,
+     "printed_page": "226",
+     "sha256": "85413b8dad43b4cb49f4bcd63ed8397e0bed213b0209ca41079a7538e373e8ae",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0256.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Do not ever, having become enraged at a man, O Cyrnus, throw-in-his-teeth³ heart-breaking poverty, or base want-of-means. For Jove, look you, inclines the scale now to one, and now to another, so that one while they should be rich, and at another time have nothing.⁴",
+   "coverage_note": "Same extent as Campbell 155-8.",
+   "match_evidence": "'throw-in-his-teeth heart-breaking poverty' = μήποτέ τοι πενίην θυμοφθόρον ἀνδρὶ χολωθεὶς ... προφέρειν (155-6); 'one while they should be rich, and at another time have nothing' = ἄλλοτε μὲν πλουτεῖν, ἄλλοτε μηδὲν ἔχειν (158).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:173-82",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 173-182 (Banks, Maxims of Theognis, p. 227)",
+   "translator_number": "173-182",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 257,
+     "printed_page": "227",
+     "sha256": "39365ca376f899cf30b12a644c056729cbe6e395839a83610c53d61708edd6c3",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0257.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Poverty most of all things breaks down a noble man,⁴ more even, O Cyrnus, than hoary age and hot-ague. And it in truth he ought to flee, and to cast it even into the deep, deep sea,⁵ and down steep rocks. For every man subdued by poverty can neither say nor do anything, but his tongue is bound. One ought then, Cyrnus, to seek alike over earth and the broad back of the sea for a riddance from hard poverty.⁶ To die, dear Cyrnus, is better for a poor man than to live worn down by hard poverty.⁷",
+   "coverage_note": "Same extent as Campbell 173-82 (Banks' note: 'Ver. 173-182').",
+   "match_evidence": "'Poverty most of all things breaks down a noble man' = ἄνδρ' ἀγαθὸν πενίη πάντων δάμνησι μάλιστα (173); 'To die, dear Cyrnus, is better for a poor man than to live worn down by hard poverty' = ... ἢ ζώειν χαλεπῇ τειρόμενον πενίῃ (181-2).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:183-92",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 183-192 (Banks, Maxims of Theognis, p. 227-228)",
+   "translator_number": "183-192",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 257,
+     "printed_page": "227",
+     "sha256": "39365ca376f899cf30b12a644c056729cbe6e395839a83610c53d61708edd6c3",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0257.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 258,
+     "printed_page": "228",
+     "sha256": "ed8a348798d7f9a336988efdb56967f7d05cba2f1906338fd5cc8caa2af79309",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0258.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "We seek for well-bred rams, asses, and horses,⁸ Cyrnus, and every one wishes that those from a noble breed should cover.¹ But a well-born man cares not to marry a mean woman, a mean man’s daughter, if he give her much wealth. No woman refuses to be wife of a mean man if he be rich, but prefers that he be wealthy² instead of noble. ’Tis wealth they value; noble man weds mean man’s daughter, and mean man the daughter of the noble. Wealth is wont to mix the breed. Then marvel not, son of Polypas, that the race of citizens is obscured,³ for noble is mixed with base.",
+   "coverage_note": "Same extent as Campbell 183-92.",
+   "match_evidence": "'We seek for well-bred rams, asses, and horses, Cyrnus' = κριοὺς μὲν καὶ ὄνους διζήμεθα, Κύρνε, καὶ ἵππους εὐγενέας (183-4); 'for noble is mixed with base' = σὺν γὰρ μίσγεται ἐσθλὰ κακοῖς (192).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:213-18",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 213-218 (Banks, Maxims of Theognis, p. 229)",
+   "translator_number": "213-218",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 259,
+     "printed_page": "229",
+     "sha256": "47447e792553f2cf5d39d633b18a699183a129477e3b73c88ffc902eb2e7282a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0259.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Cyrnus, direct a various habit towards all your friends,⁵ mingling with your own the temper which each has. Get thee the temper of the polypus,⁶ with-tangled-twisting-arms, which on any rock to which he has attached himself appears such as it is to look upon. Now follow this way, now become different in complexion; the wisdom of versatility is something of a rapid kind.⁷",
+   "coverage_note": "Same extent as Campbell 213-18 (Banks runs on with 219-20, 'Be not too indignant ...', which is excluded). Banks' text addresses Cyrnus (Κύρνε) where Campbell reads θυμέ ('my heart'), and his last sentence renders a different text of 218 from Campbell's κρέσσων τοι σοφίη γίνεται ἀτροπίης.",
+   "match_evidence": "'direct a various habit towards all your friends' = φίλους κατὰ πάντας ἐπίστρεφε ποικίλον ἦθος (213); 'the temper of the polypus' = πουλύπου ὀργὴν ἴσχε πολυπλόκου (215); 'now become different in complexion' = τοτὲ δ' ἀλλοῖος χρόα γίνου (217).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:237-54",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 237-254 (Banks, Maxims of Theognis, p. 230-231-232)",
+   "translator_number": "237-254",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 260,
+     "printed_page": "230",
+     "sha256": "6d050a2507360b70675137885817d71d69ae4f100b3f725c6827a48463921cb3",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0260.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 261,
+     "printed_page": "231",
+     "sha256": "8c502389d7284f13b9fc9fe4f66d47d8d1341de2f9d6663c3d0443b540a57b4a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0261.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 262,
+     "printed_page": "232",
+     "sha256": "e5a603b1193ecd316825035f0d8da91c3249aac9c17b2c90baa9c92a4e4e6955",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0262.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "To thee indeed I have given wings, wherewith thou wilt fly¹ over boundless deep, and all earth, easily borne-aloft; and thou wilt be present at all banquets and feasts, resting in the mouths of many;² thee too with sweet-voiced pipes young men gracefully lovely shall sing well and tunefully; and whensoe’er thou comest to the much-lamenting homes of Hades, beneath earth’s murky vaults, never more, even though dead, shalt thou lose thy renown, nor,³ I ween, escape notice, having ever imperishable fame among men, O Cyrnus, whilst thou tarriest in the land of Greece,⁴ or up and down the isles, crossing over the fishy barren deep, and not seated on the backs of horses; but the tasteful gifts of violet-wreathed⁵ Muses will convey thee, for with all, to whom, even among posterity, minstrelsy is a care, thou wilt be likewise, as long as there shall be earth and sun. I, however, meet with small reverence from thee, but with words thou deceivest me, as a little child.¹",
+   "coverage_note": "Same extent as Campbell 237-54 (Banks' note: 'Ver. 237-254').",
+   "match_evidence": "'To thee indeed I have given wings, wherewith thou wilt fly over boundless deep' = σοὶ μὲν ἐγὼ πτέρ' ἔδωκα, σὺν οἷς ἐπ' ἀπείρονα πόντον πωτήσῃ (237-8); 'with words thou deceivest me, as a little child' = ἀλλ' ὥσπερ μικρὸν παῖδα λόγοις μ' ἀπατᾷς (254).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:341-50",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 341-350 (Banks, Maxims of Theognis, p. 237)",
+   "translator_number": "341-350",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 267,
+     "printed_page": "237",
+     "sha256": "d314a798b6a8c69752dbc8e88edfd238355ef96bd0f2954017fd07aa85330139",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0267.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "But, O Jove, accomplish me, thou Olympian god, a seasonable prayer, grant me to experience in return for ills some good also. But oh might I die,¹ unless I find some cessation from evil cares, and if thou givest but sorrows in return for sorrows. For thus is my lot; and there does not appear to me a means of vengeance on the men who perforce have plundered and possess my property; but like a dog² I have crossed a mountain-torrent, having shaken off everything in the rain-swollen stream. Whose black blood may it be mine to drink:³ and oh might the good Genius aid me, who would accomplish these things to my mind.",
+   "coverage_note": "Same extent as Campbell 341-50 (Banks runs 339-40 into the same paragraph; those sentences are excluded).",
+   "match_evidence": "'But, O Jove, accomplish me, thou Olympian god, a seasonable prayer' = ἀλλά, Ζεῦ, τέλεσόν μοι, Ὀλύμπιε, καίριον εὐχήν (341); 'like a dog I have crossed a mountain-torrent' = ἐγὼ δὲ κύων ἐπέρησα χαράδρην (347); 'Whose black blood may it be mine to drink' = τῶν εἴη μέλαν αἷμα πιεῖν (349).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:351-4",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 351-354 (Banks, Maxims of Theognis, p. 237)",
+   "translator_number": "351-354",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 267,
+     "printed_page": "237",
+     "sha256": "d314a798b6a8c69752dbc8e88edfd238355ef96bd0f2954017fd07aa85330139",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0267.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "O worthless poverty, why tarriest thou, failing to go⁴ to another man? and why, prithee, dost love me, not desiring it? Nay, go, and visit another house, nor along with us be ever sharing this wretched life.",
+   "coverage_note": "Same extent as Campbell 351-4.",
+   "match_evidence": "'O worthless poverty, why tarriest thou, failing to go to another man?' = ἆ δειλὴ πενίη, τί μένεις προλιποῦσα παρ' ἄλλον ἄνδρ' ἰέναι (351-2); 'nor along with us be ever sharing this wretched life' = μηδ' ἡμῖν αἰεὶ δυστήνου τοῦδε βίου μέτεχε (354).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:425-8",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 425-428 (Banks, Maxims of Theognis, p. 241-242)",
+   "translator_number": "425-428",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 271,
+     "printed_page": "241",
+     "sha256": "ab4d81a706f456cf1f3983c788dee916854fb4b0e877a64e4826b6c1784c0b09",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0271.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 272,
+     "printed_page": "242",
+     "sha256": "9972b2b61b767b63790584c943d528c206de4ec5234e36862390e387a0191e2c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0272.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Of all things indeed to men on-the earth, not to be born,⁷ and not to see the rays of the piercing sun, is best: but that when born he should, as soon as possible, cross the gates of Hades, and lie low, having heaped together for himself much earth.¹",
+   "coverage_note": "Same extent as Campbell 425-8.",
+   "match_evidence": "'Of all things ... not to be born ... is best' = πάντων μὲν μὴ φῦναι ἐπιχθονίοισιν ἄριστον (425); 'cross the gates of Hades' = πύλας Ἀίδαο περῆσαι (427); 'having heaped together for himself much earth' = πολλὴν γῆν ἐπαμησάμενον (428).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:447-52",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 447-452 (Banks, Maxims of Theognis, p. 243)",
+   "translator_number": "447-452",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 273,
+     "printed_page": "243",
+     "sha256": "7ccd7376033e89ec77acd6bedda803282d6ae66266ae519d74f993f0454a9ffc",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0273.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "If you choose to drench me, undefiled water shall flow ever clear from the top of my head: and you shall find me in all deeds like-as refined gold,² ruddy to look-on, when rubbed by touch-stone; the colour of which from above the dark rust doth not touch, nor mould, but it has its brilliancy⁴ always pure.",
+   "coverage_note": "Same extent as Campbell 447-52 (Banks' note: 'Ver. 447-452'). The reference mark after 'gold' is printed ² (the corresponding footnote is numbered 3).",
+   "match_evidence": "'If you choose to drench me, undefiled water shall flow ... from the top of my head' = εἴ μ' ἐθέλεις πλύνειν, κεφαλῆς ἀμίαντον ἀπ' ἄκρης ... ῥεύσεται ὕδωρ (447-8); 'the dark rust doth not touch, nor mould' = οὐκ ἰὸς ἅπτεται οὐδ' εὐρώς (451-2).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:503-10",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 503-510 (Banks, Maxims of Theognis, p. 246)",
+   "translator_number": "503-510",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 276,
+     "printed_page": "246",
+     "sha256": "b5aaeeb248efba52de166813cf6ae3de66124a025d7a20317b2565b51025fb21",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0276.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "My head, Onomacritus, is heavy-with-wine,³ and wine does violence to me, but I am no longer master of my senses; nay, the chamber whirls-round. Come, let me rise and try whether perchance the wine hath my feet too,⁴ and my mind within my breast. I fear lest, in my drunkenness, I should do anything foolish, and incur a great disgrace.\n\nMuch wine drunk is bad:⁵ but if a man drink it with-judgment, ’tis not bad but good.",
+   "coverage_note": "Same extent as Campbell 503-10; Banks prints 503-8 and 509-10 as two separate paragraphs (kept as two paragraphs here).",
+   "match_evidence": "'My head, Onomacritus, is heavy-with-wine' = οἰνοβαρέω κεφαλήν, Ὀνομάκριτε (503); 'Much wine drunk is bad: but if a man drink it with-judgment, 'tis not bad but good' = οἶνος πινόμενος πουλὺς κακόν ... πίνῃ ἐπισταμένως, οὐ κακόν, ἀλλ' ἀγαθόν (509-10).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:531-4",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 531-534 (Banks, Maxims of Theognis, p. 247)",
+   "translator_number": "531-534",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 277,
+     "printed_page": "247",
+     "sha256": "8195414cde29f653a6c94cdb7066586759473d7734a7fde0ae806a9e3d4eff1d",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0277.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Ever is my heart cheered,⁴ whensoever I shall have heard the delightsome sound of vocal flutes. And I rejoice in drinking well, and in listing to a flute-player; I delight, too, in carrying the gay lyre in my hands.",
+   "coverage_note": "Same extent as Campbell 531-4.",
+   "match_evidence": "'Ever is my heart cheered, whensoever I shall have heard' = αἰεί μοι φίλον ἦτορ ἰαίνεται, ὁππότ' ἀκούσω (531); 'I delight, too, in carrying the gay lyre in my hands' = χαίρω δ' εὔφθογγον χερσὶ λύρην ὀχέων (534).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:567-70",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 567-570 (Banks, Maxims of Theognis, p. 249)",
+   "translator_number": "567-570",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 279,
+     "printed_page": "249",
+     "sha256": "f9054576a39eb8042a9f3d005fe550002c94f1609b7b199a0fe5650d84a199be",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0279.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Delighting myself in youth I sport-and-sing:⁵ for, when I have lost my life, I shall lie long beneath the earth, like a voiceless stone; and shall quit the delightful light of the sun, and, though I be a man-of-worth, yet shall see nothing any more.",
+   "coverage_note": "Same extent as Campbell 567-70.",
+   "match_evidence": "'Delighting myself in youth I sport-and-sing' = ἥβῃ τερπόμενος παίζω (567); 'like a voiceless stone' = ὥστε λίθος ἄφθογγος (569); 'though I be a man-of-worth, yet shall see nothing any more' = ἔμπης δ' ἐσθλὸς ἐὼν ὄψομαι οὐδὲν ἔτι (570).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:667-82",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 667-682 (Banks, Maxims of Theognis, p. 254-255-256)",
+   "translator_number": "667-682",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 284,
+     "printed_page": "254",
+     "sha256": "38170ccfcfe5439f404bf0709a494a30a082fae514316f316a758c6c569a7949",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0284.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 285,
+     "printed_page": "255",
+     "sha256": "c793e402aae5abdc1e3833c55e4f7dbfae00c8964a75512936c1e7cafb613a08",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0285.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 286,
+     "printed_page": "256",
+     "sha256": "f52b4216debfcc84f6611de0353bb70e29de4ea4401871d00fb73a9d3d176ae7",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0286.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "If I had wealth, Simonides, even such as I was acquainted with,¹ I should not be vexed at associating with the noble. But now they (riches) pass-me-by, though I knew them,² and I am mute through poverty, though still knowing better than many. Wherefore we are borne-on now, having pulled down our white sails,³ from the Melian Sea, through murky gloom: but they do not choose to bale the ship, and the sea surmounts both the vessel’s sides, whereby with great difficulty any one saves himself: yet the sailors are slumbering,⁴ and have made the pilot, good though he was, cease from his work, the pilot who used to watch over it understandingly. By force they plunder property, order is upset, and no longer is there an equal distribution in common: but the porters bear-rule, and the mean are above the noble. I fear lest haply the waves should ingulf the ship.⁵ Let thus much have been wrapt in riddles darkly,¹ for the men-of-worth; but a man, if he be wise, would be cognizant also of the evil.",
+   "coverage_note": "Same extent as Campbell 667-82 (Banks' note: 'Ver. 667-682'). In the last line Banks' text differs from Campbell's γινώσκοι δ' ἄν τις καὶ κακός, ἂν σοφὸς ᾖ ('even a base man could understand, if he is wise'): Banks has 'would be cognizant also of the evil'.",
+   "match_evidence": "'If I had wealth, Simonides' = εἰ μὲν χρήματ' ἔχοιμι, Σιμωνίδη (667); 'having pulled down our white sails, from the Melian Sea' = ἱστία λευκὰ βαλόντες Μηλίου ἐκ πόντου (671-2); 'the porters bear-rule, and the mean are above the noble' = φορτηγοὶ δ' ἄρχουσι, κακοὶ δ' ἀγαθῶν καθύπερθεν (679).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:783-8",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 783-788 (Banks, Maxims of Theognis, p. 261)",
+   "translator_number": "783-788",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 291,
+     "printed_page": "261",
+     "sha256": "e8e002831dd2168e8048baed7549fa2923eeb9e0cf9f88e6620ff9cdaff29d54",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0291.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "For I have gone aforetime both to the Sicilian land, and I have gone to Eubœa’s vine-clad plain,¹ and to Sparta, splendid city of reed-nursing Eurotas, and all did with alacrity entreat-me-kindly when I came. But no pleasure in them came over my spirit; so much, I wot, is nought else dearer than our father-land.²",
+   "coverage_note": "Same extent as Campbell 783-8 (begins after Banks' sentence 'Phœbus, propitiously guard this our city', which ends 773-82).",
+   "match_evidence": "'I have gone aforetime both to the Sicilian land' = ἦλθον μὲν γὰρ ἔγωγε καὶ εἰς Σικελήν ποτε γαῖαν (783); 'Eurotas' = Εὐρώτα (785); 'nought else dearer than our father-land' = οὐδὲν ἄρ' ἦν φίλτερον ἄλλο πάτρης (788).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:1069-70b",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 1069-1070b (Banks, Maxims of Theognis, p. 275)",
+   "translator_number": "1069-1070b",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 305,
+     "printed_page": "275",
+     "sha256": "ce1e7c1960a8172a1825208c8e8e508723750f0d2b2a3c272ee60d8ba150af23",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0305.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Senseless and childish are the men, who mourn for the dead,³ and not the flower of manhood, when it perishes.\n\nPrithee, delight thyself, dear heart:⁴ soon will there be some other men, and I in death shall be black earth.",
+   "coverage_note": "Same extent as Campbell 1069-70b; Banks prints the two couplets (1069-70 and 1070a-b) as separate paragraphs.",
+   "match_evidence": "'Senseless and childish are the men, who mourn for the dead' = ἄφρονες ἄνθρωποι καὶ νήπιοι, οἵτε θανόντας κλαίουσ' (1069-70); 'I in death shall be black earth' = ἐγὼ δὲ θανὼν γαῖα μέλαιν' ἔσομαι (1070b).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:1101-4",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 1099-1104 (Banks, Maxims of Theognis, p. 277)",
+   "translator_number": "1099-1104",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 307,
+     "printed_page": "277",
+     "sha256": "162b8eacf42d2b31a93c24260dab7de72254f294464645c5ea9a992bb6a39716",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0307.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "But you, when you have lost my friendship, will afterwards be sensible of my prudence, no matter who it was that counselled you concerning me, and bade you go away and abandon my friendship.\n\nInsolence hath ruined both the Magnesians, and Colophon, and Smyrna:² Cyrnus, it will certainly ruin us likewise.",
+   "coverage_note": "Covers Campbell 1101-4, but Banks runs 1099-1100 and 1101-2 together in one sentence: the opening clause 'But you, when you have lost my friendship, will afterwards be sensible of my prudence' renders 1099-1100, which Campbell does not print; 'no matter who it was ... abandon my friendship' renders 1101-2. Banks' following sentence ('But having been put to the test ...', 1105-6) is excluded.",
+   "match_evidence": "'no matter who it was that counselled you concerning me, and bade you go away' = ὅστις σοι βούλευσεν ἐμεῦ πέρι, καί σ' ἐκέλευσεν (1101); 'Insolence hath ruined both the Magnesians, and Colophon, and Smyrna: Cyrnus, it will certainly ruin us likewise' = ... καὶ Σμύρνην. πάντως, Κύρνε, καὶ ὔμμ' ἀπολεῖ (1103-4).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:theognis:1197-1202",
+   "translator": "J. Banks",
+   "edition": "The Works of Hesiod, Callimachus, and Theognis, literally translated into English prose (Bohn's Classical Library, London: H. G. Bohn, 1856)",
+   "citation": "Theognis 1197-1202 (Banks, Maxims of Theognis, p. 281-282)",
+   "translator_number": "1197-1202",
+   "source_item": "worksofhesiodca00hesi",
+   "source_url": "https://archive.org/details/worksofhesiodca00hesi",
+   "publication_year": 1856,
+   "english_pages": [
+    {
+     "scan_leaf": 311,
+     "printed_page": "281",
+     "sha256": "5ce4e3c6f0ecd537d5ac001d5f968a4ed89c0f533499d96357d455f8fabfe374",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0311.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 312,
+     "printed_page": "282",
+     "sha256": "8ea7aca4354032dde9a7f35ecdb691b6b0ab329e8aa9e61fe34bd66382414b91",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/worksofhesiodca00hesi%2Fworksofhesiodca00hesi_jp2.zip%2Fworksofhesiodca00hesi_jp2%2Fworksofhesiodca00hesi_0312.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "I hear, son of Polypas, the voice of the shrill-crying crane,⁶ even her, who to mortals comes as harbinger of the season for ploughing; and it smote my dark heart⁷ that others possess my flourishing fields, neither do my mules drag the bent-yoke of the plough, on account of that ever-to-be-remembered voyage.",
+   "coverage_note": "Same extent as Campbell 1197-1202. Banks renders μνηστῆς ('ever-to-be-remembered'), which Campbell obelizes (†ἄλλης μνηστῆς†).",
+   "match_evidence": "'I hear, son of Polypas, the voice of the shrill-crying crane' = ὄρνιθος φωνήν, Πολυπαΐδη, ὀξὺ βοώσης ἤκουσ' (1197); 'on account of that ever-to-be-remembered voyage' = τῆς †ἄλλης μνηστῆς† εἵνεκα ναυτιλίης (1202).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:solon:1",
+   "translator": "I. M. Linforth",
+   "edition": "Solon the Athenian (University of California Publications in Classical Philology 6; Berkeley: University of California Press, 1919), The Fragments of Solon’s Poems, text and translation",
+   "citation": "Solon, Linforth fragment XL (pp. 165-169)",
+   "translator_number": "XL",
+   "source_item": "solonathenian00linf",
+   "source_url": "https://archive.org/details/solonathenian00linf",
+   "publication_year": 1919,
+   "english_pages": [
+    {
+     "scan_leaf": 179,
+     "printed_page": "165",
+     "sha256": "717669cdda5d4d006d96cd445c7793b0c5a18b2a2a51e48fcacea114103de74b",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0179.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 181,
+     "printed_page": "167",
+     "sha256": "83bd2c7e85be6969a1b7d0b43d177b1fa12165e6159843448c71e68dfc72f7da",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0181.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 183,
+     "printed_page": "169",
+     "sha256": "d6c8cd3f146f443cef8e306707b15c3bc4a5f7710360e1d17cab98c37c5a0c48",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0183.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 178,
+     "printed_page": "164",
+     "sha256": "649ec132a0d936bdb7fb35ddfec8b3d915520cbfb7fbde204282f0054489d88a",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0178.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 180,
+     "printed_page": "166",
+     "sha256": "37ce8f2c622476573562c3a7347496c1cfc6dc09e44c65981b4bba0b43f9d10b",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0180.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 182,
+     "printed_page": "168",
+     "sha256": "50f98ca2864caef90a514d12e423113e57455c417ae9ac04dc8596fb16a84aad",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0182.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "O ye fair children of Memory and Olympian Zeus, ye Muses of Pieria, hear me as I pray. Grant, that I may be blessed with prosperity by the gods, and that among all men I may ever enjoy fair fame; that I may be as a sweet savor to my friends and a bitterness in the mouth of my enemies, by the ones respected, by the others feared. Wealth I do indeed desire, but ill-gotten wealth I will not have: punishment therefor surely cometh with time. Wealth which the gods give, cometh to a man as an abiding possession, solid from the lowest foundation to the top; but that which is sought with presumptuous disregard of right and wrong, cometh not in the due course of nature. It yieldeth to the persuasion of dishonest practices and followeth against its will; and soon there is joined thereto blind folly which leadeth to destruction. Like fire, it taketh its beginning from small things; but, though insignificant at first, it endeth in ruin. For the works of unprincipled men do not continue long. Zeus watcheth all things to the end. Often, in the spring season, a wind riseth suddenly and disperseth the clouds, and, stirring up the depths of the surging, barren sea, and laying waste the fair works of the husbandman over the surface of the corn-bearing earth, cometh to the lofty habitation of the gods in heaven and bringeth the blue sky once more to view; the sun shineth forth in his beauty over the fertile earth, and clouds are no longer to be seen. Like such a sudden wind is the justice of Zeus. He is not, like mortal men, quick to wrath for each offense; but no man who hath an evil heart ever escapeth his watchful eye, and surely, in the end, his justice is made manifest. One man payeth his penalty early, another late. If the guilty man himself escape and the fate of the gods come not upon him and overtake him not, it cometh full surely in aftertime: the innocent pay for his offense—his children or his children’s children in later generations.\n\nThus all we men of mortal mold, good alike and bad, think, by straining every nerve, to win a fair name, each man for himself by his own unaided efforts, until something befall him from without: then straightway cometh pain. Till then like gaping fools we amuse ourselves with empty dreams. He who is worn by cruel disease pondereth ever how one day he will be whole; another, who is a coward, thinketh himself brave; another still counteth himself handsome, though he have no beauty of body; if one be penniless and subject to the toils of poverty, he assureth himself that he will sometime win great riches.\n\nOne man seeketh wealth from one source, another from another. This one wandereth in ships over the fishy deep in his eagerness to bring home a profit, the sport of the cruel winds, staking his life ungrudgingly. Another, whose labor is with the curved plow, cleaveth the fertile soil, drudging the year round like a slave. Another learneth the arts of Athena and skillful Hephaestus and gathereth a livelihood by the work of his two hands. Another, trained by the grace of the Olympian Muses, understandeth to the full the sweet art of minstrelsy. Another hath been endowed by the Lord Apollo, who worketh from afar, with the gift of prophecy; and, if the gods attend upon his ways, he discerneth, while it is still far off, the evil which approacheth his fellow. But it is sure that neither bird nor sacrificial victim will avert what Fate ordains. Others are physicians and practice the craft of Paeon, who knoweth many drugs. But no success crowneth their work: often great suffering groweth out of a little pain, and none can bring relief by administering soothing drugs; often, again, one who is overcome by cruel disease may be straightway restored to health merely by the touch of a hand.\n\nDestiny bringeth to mankind both good and evil, and the gifts which come from the immortal gods are not to be refused. Danger, we may be sure, followeth all the works of men, and none knoweth, at its beginning, which way an undertaking will turn. One man, though he is trying to acquit himself well, falleth unaware into great and dire misfortune. Another, who playeth his part ill, is blessed with good luck by the gods and granted release from his folly.\n\nNo visible limit is set to wealth among men. Even now those among us who have the largest fortune are striving with redoubled energy. What abundance of riches could satisfy us all? Increase of goods cometh to mortals by the gift of the gods. But out of it appeareth the madness which leadeth to destruction, and when Zeus sendeth this madness as a punishment to men, it lighteth first upon one and then upon another.",
+   "coverage_note": "Same extent as Campbell 1: Linforth's Greek (pp. 164-168) numbers 76 lines, as Campbell's. Linforth's prose is divided into five paragraphs.",
+   "match_evidence": "Linforth's Greek and English begin with the address to the 'children of Memory and Olympian Zeus, ye Muses of Pieria' = Μνημοσύνης καὶ Ζηνὸς Ὀλυμπίου ἀγλαὰ τέκνα, Μοῦσαι Πιερίδες (1-2); the spring-wind simile (17-25); the catalogue of livelihoods (43-62); ending 'it lighteth first upon one and then upon another' = ἄλλοτε ἄλλος ἔχει (76).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:xenophanes:1",
+   "translator": "John Burnet",
+   "edition": "Early Greek Philosophy, second edition (London: Adam and Charles Black, 1908), ch. II § 57, fragments of Xenophanes (text and arrangement of Diels)",
+   "citation": "Xenophanes, Burnet fr. 1 (Diels numbering), p. 129-130",
+   "translator_number": "1",
+   "source_item": "burnetgreek00burnrich",
+   "source_url": "https://archive.org/details/burnetgreek00burnrich",
+   "publication_year": 1908,
+   "english_pages": [
+    {
+     "scan_leaf": 145,
+     "printed_page": "129",
+     "sha256": "3f11ff0056eae766e536ee17adbad6f3c3ecb71d11b1d2294aec75885bed0b89",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/burnetgreek00burnrich%2Fburnetgreek00burnrich_jp2.zip%2Fburnetgreek00burnrich_jp2%2Fburnetgreek00burnrich_0145.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 146,
+     "printed_page": "130",
+     "sha256": "5af2b6f2bfc92440d0d762ce61451550e37b0bcaae289440a9ba4923026f31ec",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/burnetgreek00burnrich%2Fburnetgreek00burnrich_jp2.zip%2Fburnetgreek00burnrich_jp2%2Fburnetgreek00burnrich_0146.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Now is the floor clean, and the hands and cups of all; one sets twisted garlands on our heads, another hands us fragrant ointment on a salver. The mixing bowls stand ready, full of gladness, and there is more wine at hand that promises never to leave us in the lurch, soft and smelling of flowers in the jars. In the midst the frankincense sends up its holy smoke, and there is cold water, sweet and clean. Brown loaves are set before us and a lordly table laden with cheese and rich honey. The altar in the midst is clustered round with flowers; song and revel fill the halls.\n\nBut first it is meet that men should hymn the god with joyful song, with holy tales and pure words; then after libation and prayer made that we may have strength to do right—for that is in truth the better way—no sin is it to drink as much as a man can take and get home without an attendant, so he be not stricken in years. And above all men is he to be praised who after drinking gives goodly proof of himself in the trial of skill, as memory and voice will serve him. Let him not sing of Titans and Giants—those fictions of the men of old—nor of turbulent civil broils in which is no good thing at all; but ever give heedful reverence to the gods.",
+   "coverage_note": "Same extent as Campbell 1 (24 lines). Burnet prints a translation only (no Greek); he follows Diels’ text.",
+   "match_evidence": "'Now is the floor clean, and the hands and cups of all' = νῦν γὰρ δὴ ζάπεδον καθαρὸν καὶ χεῖρες ἁπάντων καὶ κύλικες (1-2); 'Titans and Giants' = Τιτήνων οὐδὲ Γιγάντων (21); 'to give heedful reverence to the gods is ever good' = θεῶν ⟨δὲ⟩ προμηθείην αἰὲν ἔχειν ἀγαθόν (24).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:xenophanes:2",
+   "translator": "John Burnet",
+   "edition": "Early Greek Philosophy, second edition (London: Adam and Charles Black, 1908), ch. II § 57, fragments of Xenophanes (text and arrangement of Diels)",
+   "citation": "Xenophanes, Burnet fr. 2 (Diels numbering), p. 130",
+   "translator_number": "2",
+   "source_item": "burnetgreek00burnrich",
+   "source_url": "https://archive.org/details/burnetgreek00burnrich",
+   "publication_year": 1908,
+   "english_pages": [
+    {
+     "scan_leaf": 146,
+     "printed_page": "130",
+     "sha256": "5af2b6f2bfc92440d0d762ce61451550e37b0bcaae289440a9ba4923026f31ec",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/burnetgreek00burnrich%2Fburnetgreek00burnrich_jp2.zip%2Fburnetgreek00burnrich_jp2%2Fburnetgreek00burnrich_0146.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "What if a man win victory in swiftness of foot, or in the pentathlon, at Olympia, where is the precinct of Zeus by Pisa’s springs, or in wrestling,—what if by cruel boxing or that fearful sport men call pankration he become more glorious in the citizens’ eyes, and win a place of honour in the sight of all at the games, his food at the public cost from the State, and a gift to be an heirloom for him,—what if he conquer in the chariot-race,—he will not deserve all this for his portion so much as I do. Far better is our art than the strength of men and of horses! These are but thoughtless judgments, nor is it fitting to set strength before our art. Even if there arise a mighty boxer among a people, or one great in the pentathlon or at wrestling, or one excelling in swiftness of foot—and that stands in honour before all tasks of men at the games—the city would be none the better governed for that. It is but little joy a city gets of it if a man conquer at the games by Pisa’s banks; it is not this that makes fat the store-houses of a city.",
+   "coverage_note": "Same extent as Campbell 2 (22 lines).",
+   "match_evidence": "'What if a man win victory in swiftness of foot, or in the pentathlon, at Olympia' = ἀλλ' εἰ μὲν ταχυτῆτι ποδῶν νίκην τις ἄροιτο ἢ πενταθλεύων (1-2); 'it is not this that makes fat the store-houses of a city' = οὐ γὰρ πιαίνει ταῦτα μυχοὺς πόλιος (22).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:xenophanes:3",
+   "translator": "John Burnet",
+   "edition": "Early Greek Philosophy, second edition (London: Adam and Charles Black, 1908), ch. II § 57, fragments of Xenophanes (text and arrangement of Diels)",
+   "citation": "Xenophanes, Burnet fr. 3 (Diels numbering), p. 130",
+   "translator_number": "3",
+   "source_item": "burnetgreek00burnrich",
+   "source_url": "https://archive.org/details/burnetgreek00burnrich",
+   "publication_year": 1908,
+   "english_pages": [
+    {
+     "scan_leaf": 146,
+     "printed_page": "130",
+     "sha256": "5af2b6f2bfc92440d0d762ce61451550e37b0bcaae289440a9ba4923026f31ec",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/burnetgreek00burnrich%2Fburnetgreek00burnrich_jp2.zip%2Fburnetgreek00burnrich_jp2%2Fburnetgreek00burnrich_0146.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "They learnt dainty and unprofitable ways from the Lydians, so long as they were free from hateful tyranny; they went to the market-place with cloaks of purple dye, not less than a thousand of them all told, vainglorious and proud of their comely tresses, reeking with fragrance from cunning salves.",
+   "coverage_note": "Same extent as Campbell 3 (6 lines).",
+   "match_evidence": "'They learnt dainty and unprofitable ways from the Lydians' = ἁβροσύνας δὲ μαθόντες ἀνωφελέας παρὰ Λυδῶν (1); 'reeking with fragrance from cunning salves' = ἀσκητοῖς ὀδμὴν χρίμασι δευόμενοι (6).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:xenophanes:6",
+   "translator": "John Burnet",
+   "edition": "Early Greek Philosophy, second edition (London: Adam and Charles Black, 1908), ch. II § 57, fragments of Xenophanes (text and arrangement of Diels)",
+   "citation": "Xenophanes, Burnet fr. 7 (Diels numbering), p. 124",
+   "translator_number": "7",
+   "source_item": "burnetgreek00burnrich",
+   "source_url": "https://archive.org/details/burnetgreek00burnrich",
+   "publication_year": 1908,
+   "english_pages": [
+    {
+     "scan_leaf": 140,
+     "printed_page": "124",
+     "sha256": "d85db8cf9150681dcd0a46f756e7d98ff90ddf52122f12df8341ba8a7451ddaa",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/burnetgreek00burnrich%2Fburnetgreek00burnrich_jp2.zip%2Fburnetgreek00burnrich_jp2%2Fburnetgreek00burnrich_0140.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Once, they say, he was passing by when a dog was being ill-treated. ‘Stop!’ he said, ‘don’t hit it! It is the soul of a friend! I knew it when I heard its voice.’",
+   "coverage_note": "Partial: Burnet (1908) translates only Campbell lines 3-6 (Diels 7.2-5), embedded in his own sentence on p. 124 ('We still have a fragment of an elegy in which he ridiculed Pythagoras ...'); the first line (νῦν αὖτ' ἄλλον ἔπειμι λόγον) is not translated in this edition.",
+   "match_evidence": "'Once, they say, he was passing by when a dog was being ill-treated' = καί ποτέ μιν στυφελιζομένου σκύλακος παριόντα φασὶν (3-4); 'a dog was being beaten' = στυφελιζομένου σκύλακος (3); 'it is the soul of a friend that I recognised when I heard its voice' = φίλου ἀνέρος ἐστίν ψυχή, τὴν ἔγνων φθεγξαμένης ἀίων (5-6).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:xenophanes:7",
+   "translator": "John Burnet",
+   "edition": "Early Greek Philosophy, second edition (London: Adam and Charles Black, 1908), ch. II § 57, fragments of Xenophanes (text and arrangement of Diels)",
+   "citation": "Xenophanes, Burnet fr. 8 (Diels numbering), p. 126",
+   "translator_number": "8",
+   "source_item": "burnetgreek00burnrich",
+   "source_url": "https://archive.org/details/burnetgreek00burnrich",
+   "publication_year": 1908,
+   "english_pages": [
+    {
+     "scan_leaf": 142,
+     "printed_page": "126",
+     "sha256": "49654b4109bf88c3d88d87c615de5231ecb6d3eed397f514da32f8299ec0d372",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/burnetgreek00burnrich%2Fburnetgreek00burnrich_jp2.zip%2Fburnetgreek00burnrich_jp2%2Fburnetgreek00burnrich_0142.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "There are by this time threescore years and seven that have tossed my careworn soul¹ up and down the land of Hellas; and there were then five-and-twenty years from my birth, if I can say aught truly about these matters.",
+   "coverage_note": "Same extent as Campbell 7 (Diels 8, 4 lines). Burnet quotes it in his account of Xenophanes’ life (p. 126); the introductory words (‘He says himself ...’) are excluded.",
+   "match_evidence": "'threescore years and seven that have tossed my careworn soul up and down the land of Hellas' = ἤδη δ' ἑπτά τ' ἔασι καὶ ἑξήκοντ' ἐνιαυτοί βληστρίζοντες ἐμὴν φροντίδ' ἀν' Ἑλλάδα γῆν (1-2); 'if I can say aught truly about these matters' = εἴπερ ἐγὼ περὶ τῶνδ' οἶδα λέγειν ἐτύμως (4).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:xenophanes:10",
+   "translator": "John Burnet",
+   "edition": "Early Greek Philosophy, second edition (London: Adam and Charles Black, 1908), ch. II § 57, fragments of Xenophanes (text and arrangement of Diels)",
+   "citation": "Xenophanes, Burnet fr. 11 (Diels numbering), p. 131",
+   "translator_number": "11",
+   "source_item": "burnetgreek00burnrich",
+   "source_url": "https://archive.org/details/burnetgreek00burnrich",
+   "publication_year": 1908,
+   "english_pages": [
+    {
+     "scan_leaf": 147,
+     "printed_page": "131",
+     "sha256": "91304cf8c007706ae99ce5b460062175ab18246346c8e3065ba4eee1d0dcbc2c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/burnetgreek00burnrich%2Fburnetgreek00burnrich_jp2.zip%2Fburnetgreek00burnrich_jp2%2Fburnetgreek00burnrich_0147.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Homer and Hesiod have ascribed to the gods all things that are a shame and a disgrace among mortals, stealings and adulteries and deceivings of one another.",
+   "coverage_note": "Same extent as Campbell 10 (Diels 11, 3 lines).",
+   "match_evidence": "'Homer and Hesiod have ascribed to the gods all things that are a shame and a disgrace among mortals, stealings and adulteries and deceivings of one another' = πάντα θεοῖς ἀνέθηκαν Ὅμηρός θ' Ἡσίοδός τε ... κλέπτειν μοιχεύειν τε καὶ ἀλλήλους ἀπατεύειν.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:xenophanes:13",
+   "translator": "John Burnet",
+   "edition": "Early Greek Philosophy, second edition (London: Adam and Charles Black, 1908), ch. II § 57, fragments of Xenophanes (text and arrangement of Diels)",
+   "citation": "Xenophanes, Burnet fr. 15 (Diels numbering), p. 131",
+   "translator_number": "15",
+   "source_item": "burnetgreek00burnrich",
+   "source_url": "https://archive.org/details/burnetgreek00burnrich",
+   "publication_year": 1908,
+   "english_pages": [
+    {
+     "scan_leaf": 147,
+     "printed_page": "131",
+     "sha256": "91304cf8c007706ae99ce5b460062175ab18246346c8e3065ba4eee1d0dcbc2c",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/burnetgreek00burnrich%2Fburnetgreek00burnrich_jp2.zip%2Fburnetgreek00burnrich_jp2%2Fburnetgreek00burnrich_0147.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "Yes, and if oxen and horses or lions had hands, and could paint with their hands, and produce works of art as men do, horses would paint the forms of the gods like horses, and oxen like oxen, and make their bodies in the image of their several kinds.",
+   "coverage_note": "Same extent as Campbell 13 (Diels 15, 5 lines).",
+   "match_evidence": "'if oxen and horses or lions had hands' = ἀλλ' εἰ χεῖρας ἔχον βόες ⟨ἵπποι τ'⟩ ἠὲ λέοντες (1); 'horses would paint the forms of the gods like horses, and oxen like oxen' = ἵπποι μέν θ' ἵπποισι, βόες δέ τε βουσὶν ὁμοίας καί ⟨κε⟩ θεῶν ἰδέας ἔγραφον (3-4).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:xenophanes:18",
+   "translator": "John Burnet",
+   "edition": "Early Greek Philosophy, second edition (London: Adam and Charles Black, 1908), ch. II § 57, fragments of Xenophanes (text and arrangement of Diels)",
+   "citation": "Xenophanes, Burnet fr. 22 (Diels numbering), p. 126",
+   "translator_number": "22",
+   "source_item": "burnetgreek00burnrich",
+   "source_url": "https://archive.org/details/burnetgreek00burnrich",
+   "publication_year": 1908,
+   "english_pages": [
+    {
+     "scan_leaf": 142,
+     "printed_page": "126",
+     "sha256": "49654b4109bf88c3d88d87c615de5231ecb6d3eed397f514da32f8299ec0d372",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/burnetgreek00burnrich%2Fburnetgreek00burnrich_jp2.zip%2Fburnetgreek00burnrich_jp2%2Fburnetgreek00burnrich_0142.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "This is the sort of thing we should say by the fireside in the winter-time, as we lie on soft couches after a good meal, drinking sweet wine and crunching chickpeas: “Of what country are you, and how old are you, good sir? And how old were you when the Mede appeared?”",
+   "coverage_note": "Same extent as Campbell 18 (Diels 22, 5 lines). Quoted by Burnet in his account of Xenophanes’ life (p. 126). Campbell marks the poem as continuing (‘. . .’) after the last question.",
+   "match_evidence": "'by the fireside in the winter-time, as we lie on soft couches after a good meal, drinking sweet wine and crunching chickpeas' = πὰρ πυρὶ ... χειμῶνος ἐν ὥρῃ ἐν κλίνῃ μαλακῇ κατακείμενον ... πίνοντα γλυκὺν οἶνον, ὑποτρώγοντ' ἐρεβίνθους (1-3); 'how old were you when the Mede appeared?' = πηλίκος ἦσθ', ὅθ' ὁ Μῆδος ἀφίκετο; (5).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:xenophanes:28",
+   "translator": "John Burnet",
+   "edition": "Early Greek Philosophy, second edition (London: Adam and Charles Black, 1908), ch. II § 57, fragments of Xenophanes (text and arrangement of Diels)",
+   "citation": "Xenophanes, Burnet fr. 32 (Diels numbering), p. 133",
+   "translator_number": "32",
+   "source_item": "burnetgreek00burnrich",
+   "source_url": "https://archive.org/details/burnetgreek00burnrich",
+   "publication_year": 1908,
+   "english_pages": [
+    {
+     "scan_leaf": 149,
+     "printed_page": "133",
+     "sha256": "b82a673fc56969a236b9146040e3288bda84796c412cb6bc9ad656586cbd3904",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/burnetgreek00burnrich%2Fburnetgreek00burnrich_jp2.zip%2Fburnetgreek00burnrich_jp2%2Fburnetgreek00burnrich_0149.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "She that they call Iris is a cloud likewise, purple, scarlet and green to behold.",
+   "coverage_note": "Same extent as Campbell 28 (Diels 32, 2 lines).",
+   "match_evidence": "'She that they call Iris is a cloud likewise, purple, scarlet and green to behold' = ἥν τ' Ἶριν καλέουσι, νέφος καὶ τοῦτο πέφυκε, πορφύρεον καὶ φοινίκεον καὶ χλωρὸν ἰδέσθαι.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:phocylides:1",
+   "translator": "Horace Leonard Jones",
+   "edition": "The Geography of Strabo, vol. V (Loeb Classical Library; London: Heinemann / New York: Putnam, 1928)",
+   "citation": "Phocylides fr. 1 Bergk, quoted in Strabo, Geography 10.5.12 (Jones, vol. V, p. 173)",
+   "translator_number": "Strabo 10.5.12",
+   "source_item": "geographyofstrab0005hora_l1u3",
+   "source_url": "https://archive.org/details/geographyofstrab0005hora_l1u3",
+   "publication_year": 1928,
+   "english_pages": [
+    {
+     "scan_leaf": 185,
+     "printed_page": "173",
+     "sha256": "35c2ebc0ea1754313546648b37e8735f7ba6fb9d303f083253d46cae3a97e8be",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/geographyofstrab0005hora_l1u3%2Fgeographyofstrab0005hora_l1u3_jp2.zip%2Fgeographyofstrab0005hora_l1u3_jp2%2Fgeographyofstrab0005hora_l1u3_0185.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 184,
+     "printed_page": "172",
+     "sha256": "db09aae51bee6828acff93a64c012233964864bc5b8844e4fc678363e29ebb34",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/geographyofstrab0005hora_l1u3%2Fgeographyofstrab0005hora_l1u3_jp2.zip%2Fgeographyofstrab0005hora_l1u3_jp2%2Fgeographyofstrab0005hora_l1u3_0184.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "And thus saith Phocylides, ‘the Lerians are bad, not one, but every one, all except Procles; and Procles is a Lerian.’",
+   "coverage_note": "Same extent as Campbell Phocylides 1 (2 lines, including the opening formula καὶ τόδε Φωκυλίδου). Embedded in Strabo's sentence ('... and Leros:'); Strabo's outer quotation marks and the reference mark ¹ after them are omitted.",
+   "match_evidence": "'And thus saith Phocylides' = καὶ τόδε Φωκυλίδου; 'the Lerians are bad, not one, but every one, all except Procles; and Procles is a Lerian' = Λέριοι κακοί· οὐχ ὃ μέν, ὃς δ' οὔ· πάντες, πλὴν Προκλέους· καὶ Προκλέης Λέριος. Jones' footnote identifies it as 'Frag. 1 (Bergk)'.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:demodocus:1",
+   "translator": "F. H. Peters",
+   "edition": "The Nicomachean Ethics of Aristotle, translated by F. H. Peters (London: C. Kegan Paul & Co., 1881)",
+   "citation": "Demodocus, quoted in Aristotle, Nicomachean Ethics VII.8.3, 1151a8 (Peters, p. 234)",
+   "translator_number": "EN VII.8.3",
+   "source_item": "nicomachethic00arisuoft",
+   "source_url": "https://archive.org/details/nicomachethic00arisuoft",
+   "publication_year": 1881,
+   "english_pages": [
+    {
+     "scan_leaf": 256,
+     "printed_page": "234",
+     "sha256": "dbeb6bf99593dc7141cca0265cb2e0058173bb53730b7a340f003ec36eededd6",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/nicomachethic00arisuoft%2Fnicomachethic00arisuoft_jp2.zip%2Fnicomachethic00arisuoft_jp2%2Fnicomachethic00arisuoft_0256.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [],
+   "text": "The Milesians are not fools, but they act like fools.",
+   "coverage_note": "Covers Campbell's lines (Μιλήσιοι ἀξύνετοι μὲν οὐκ εἰσί, δρῶσιν δ' οἷάπερ ἀξύνετοι); Campbell's supplied opening ⟨καὶ τόδε Δημοδόκου·⟩ is not in Aristotle's quotation and so not translated. Aristotle's framing ('as Demodocus said against the Milesians') is excluded. Peters prints no Greek.",
+   "match_evidence": "Aristotle cites Demodocus on the Milesians: 'The Milesians are not fools' = Μιλήσιοι ἀξύνετοι μὲν οὐκ εἰσί; 'but they act like fools' = δρῶσιν δ' οἷάπερ ἀξύνετοι.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:demodocus:4",
+   "translator": "W. R. Paton",
+   "edition": "The Greek Anthology, vol. IV (Loeb Classical Library; London: Heinemann / New York: Putnam, 1918), Book XI, The Satirical Epigrams",
+   "citation": "Demodocus, Anthologia Palatina XI.237 (Paton, vol. IV, p. 183)",
+   "translator_number": "AP XI.237",
+   "source_item": "greekanthology0004wrpa",
+   "source_url": "https://archive.org/details/greekanthology0004wrpa",
+   "publication_year": 1918,
+   "english_pages": [
+    {
+     "scan_leaf": 195,
+     "printed_page": "183",
+     "sha256": "e8c219ace4a12f0ef59faa3de3c46362e37ff3ef8eb5c00d41713ab590801283",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/greekanthology0004wrpa%2Fgreekanthology0004wrpa_jp2.zip%2Fgreekanthology0004wrpa_jp2%2Fgreekanthology0004wrpa_0195.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 194,
+     "printed_page": "182",
+     "sha256": "9e5f1733610a929962b02895e629f6516a74393d447fbc46d285bb74b1d49daf",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/greekanthology0004wrpa%2Fgreekanthology0004wrpa_jp2.zip%2Fgreekanthology0004wrpa_jp2%2Fgreekanthology0004wrpa_0194.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "An evil viper once bit a Cappadocian, but it died itself, having tasted the venomous blood.",
+   "coverage_note": "Same extent as Campbell Demodocus 4 (2 lines); Paton heads it '237.—By the same' (i.e. Demodocus, after 235). The first word is printed in small capitals ('An').",
+   "match_evidence": "'An evil viper once bit a Cappadocian' = Καππαδόκην ποτ' ἔχιδνα κακὴ δάκεν; 'but it died itself, having tasted the venomous blood' = ἀλλὰ καὶ αὐτή κάτθανε γευσαμένη αἵματος ἰοβόλου.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:solon:3",
+   "translator": "I. M. Linforth",
+   "edition": "Solon the Athenian (University of California Publications in Classical Philology 6; Berkeley: University of California Press, 1919), The Fragments of Solon’s Poems, text and translation",
+   "citation": "Solon, Linforth fragment XII (pp. 141-143; quoted in Demosthenes, De falsa legatione)",
+   "translator_number": "XII",
+   "source_item": "solonathenian00linf",
+   "source_url": "https://archive.org/details/solonathenian00linf",
+   "publication_year": 1919,
+   "english_pages": [
+    {
+     "scan_leaf": 155,
+     "printed_page": "141",
+     "sha256": "89b8e4b0e1d3e3d84b5f3a18569464f14e9307a2af81c5fd497fb2dc83133711",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0155.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 157,
+     "printed_page": "143",
+     "sha256": "3e8bb5cdaae44d0fba5ac4216eb2054c554c1eb41293f33432e93414d5719835",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0157.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 154,
+     "printed_page": "140",
+     "sha256": "bf0c3fdee63f0a0be505371fe7f226b3de52d315b30034aa4343fe794dc43c80",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0154.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 156,
+     "printed_page": "142",
+     "sha256": "8408ced4087a70448f9cff2df76f452fba047d6a2eec9e8b36c306b3017cfc3e",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0156.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "The ruin of our state will never come by the doom of Zeus or through the will of the blessed and immortal gods; for Pallas Athena, valiant daughter of a valiant sire, is our stout-hearted guardian, and she holdeth over us her protecting arms. It is the townsfolk themselves and their false-hearted leaders who would fain destroy our great city through wantonness and love of money. But they are destined to suffer sorely for their outrageous behavior. They know not how to hold in check their full-fed lust, or, content with the merriment the banquet affords, to take their pleasure soberly and in order. . . . They are rich because they yield to the temptation of dishonest courses. . . . They spare neither the treasures of the gods nor the property of the state, and steal like brigands one from another. They pay no heed to the unshaken rock of holy Justice, who, though she be silent, is aware of all that happeneth now or hath happened in the past, and, in course of time, surely cometh to demand retribution. Lo, even now there cometh upon the whole city a plague which none may escape. The people have come quickly into degrading bondage; bondage rouseth from their sleep war and civil strife; and war destroyeth many in the beauty of their youth. As if she were the prey of foreign foes, our beloved city is rapidly wasted and consumed in those secret conspiracies which are the delight of dishonest men.\n\nThese are the evils which stalk at home. Meanwhile the poor and needy in great numbers are loaded with shameful bonds and sold into slavery in foreign lands. . . . Thus public calamity cometh to the house of every individual, and a man is no longer safe within the gates of his own court, which refuse him their protection. It leapeth over the garden-wall, however high it be, and surely findeth him out, though he run and hide himself in the inmost corner of his chamber.\n\nThese things my heart prompteth me to teach the Athenians, and to make them understand that lawlessness worketh more harm to the state than any other cause. But a law-abiding spirit createth order and harmony, and at the same time putteth chains upon evil-doers; it maketh rough things smooth, it checketh inordinate desires, it dimmeth the glare of wanton pride and withereth the budding bloom of wild delusion; it maketh crooked judgments straight and softeneth arrogant behavior; it stoppeth acts of sedition and stoppeth the anger of bitter strife. Under the reign of law, sanity and wisdom prevail ever among men.",
+   "coverage_note": "Linforth XII corresponds to Campbell 3 (39 lines). Linforth marks two lacunae with '. . .' (after the line on the banquet, and after 'sold into slavery in foreign lands'), and a third after 'dishonest courses'; Campbell prints the text continuously. The quotation marks of Demosthenes' framing are omitted, as are his introductory and closing remarks.",
+   "match_evidence": "'The ruin of our state will never come by the doom of Zeus' = ἡμετέρα δὲ πόλις κατὰ μὲν Διὸς οὔποτ' ὀλεῖται αἶσαν (1-2); 'Pallas Athena ... holdeth over us her protecting arms' = Παλλὰς Ἀθηναίη χεῖρας ὕπερθεν ἔχει (4); 'lawlessness worketh more harm ... a law-abiding spirit' = Δυσνομίη ... Εὐνομίη (31-2); ends 'sanity and wisdom prevail' = ἄρτια καὶ πινυτά (39).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:solon:5",
+   "translator": "I. M. Linforth",
+   "edition": "Solon the Athenian (University of California Publications in Classical Philology 6; Berkeley: University of California Press, 1919), The Fragments of Solon’s Poems, text and translation",
+   "citation": "Solon, Linforth fragments VI, VII (p. 135; quoted in Aristotle, Constitution of Athens 12) and XXIII (p. 153; quoted in Plutarch, Solon 25)",
+   "translator_number": "VI, VII, XXIII",
+   "source_item": "solonathenian00linf",
+   "source_url": "https://archive.org/details/solonathenian00linf",
+   "publication_year": 1919,
+   "english_pages": [
+    {
+     "scan_leaf": 149,
+     "printed_page": "135",
+     "sha256": "472fd80be7deecf5cd06da7a7630a63d62e6361444a77c6b4d170092dddde7cc",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0149.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 167,
+     "printed_page": "153",
+     "sha256": "fa378d0bd3269b07de46d58a7ca64180e6389002412fccd1019e55d018e0ac31",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0167.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 148,
+     "printed_page": "134",
+     "sha256": "e3654e907fabd696c2aeb3ba4fa1ec0197ebc3985849cdacadd719172f99e22e",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0148.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 166,
+     "printed_page": "152",
+     "sha256": "514ca8a1c7dd3355a8253c9dfe5d24906c1a5c839529d366cc6344733f4d4852",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0166.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "To the common people I have given such a measure of privilege as sufficeth them, neither robbing them of the rights they had, nor holding out the hope of greater ones; and I have taken equal thought for those who were possessed of power and who were looked up to because of their wealth, careful that they, too, should suffer no indignity. I have taken a stand which enables me to hold a stout shield over both groups, and I have allowed neither to triumph unjustly over the other.\n\nThe populace will follow its leaders best if it is neither left too free nor subjected to too much restraint. For excess giveth birth to arrogance, when great prosperity attendeth upon men whose minds lack sober judgment.\n\nin great undertakings it is difficult to please all.",
+   "coverage_note": "Campbell 5 combines three fragments (lines 1-6, 7-10, 11); Linforth prints them separately as VI, VII and XXIII, given here as three paragraphs. XXIII is embedded in Plutarch's sentence ('For, as he says himself, ...'), so it begins in lower case.",
+   "match_evidence": "'To the common people I have given such a measure of privilege as sufficeth them' = δήμῳ μὲν γὰρ ἔδωκα τόσον γέρας ὅσσον ἀπαρκεῖ (1); 'hold a stout shield over both groups' = ἀμφιβαλὼν κρατερὸν σάκος ἀμφοτέροισι (5); 'excess giveth birth to arrogance' = τίκτει γὰρ κόρος ὕβριν (9); 'in great undertakings it is difficult to please all' = ἔργμασιν ἐν μεγάλοις πᾶσιν ἁδεῖν χαλεπόν (11).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:solon:10",
+   "translator": "I. M. Linforth",
+   "edition": "Solon the Athenian (University of California Publications in Classical Philology 6; Berkeley: University of California Press, 1919), The Fragments of Solon’s Poems, text and translation",
+   "citation": "Solon, Linforth fragment XIII (p. 145; quoted in Diogenes Laertius i 50)",
+   "translator_number": "XIII",
+   "source_item": "solonathenian00linf",
+   "source_url": "https://archive.org/details/solonathenian00linf",
+   "publication_year": 1919,
+   "english_pages": [
+    {
+     "scan_leaf": 159,
+     "printed_page": "145",
+     "sha256": "523f73ca7cfb5c8d40c51e827d884b49ef34d08d8b1469654a3bf80708dac3dd",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0159.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 158,
+     "printed_page": "144",
+     "sha256": "4a7088c6f1077b28a63a535353148929444cb475ea7fb09a33d1dd8b24898c4e",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0158.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Out of the cloud come snow and hail in their fury, and the thunderbolt springeth from the lightning’s flash: so from great men ruin issueth upon the state, and the people through their own folly sink into slavery under a single lord. Having raised a man to too high a place, it is not easy later to hold him back: now is the time to be observant of all things.",
+   "coverage_note": "Same extent as Campbell 10 (6 lines).",
+   "match_evidence": "'Out of the cloud come snow and hail in their fury' = ἐκ νεφέλης πέλεται χιόνος μένος ἠδὲ χαλάζης (1); 'the people through their own folly sink into slavery under a single lord' = ἐς δὲ μονάρχου δῆμος ἀιδρείῃ δουλοσύνην ἔπεσεν (3-4); 'now is the time to be observant of all things' = ἀλλ' ἤδη χρὴ τάδε πάντα νοεῖν (6).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:solon:13",
+   "translator": "I. M. Linforth",
+   "edition": "Solon the Athenian (University of California Publications in Classical Philology 6; Berkeley: University of California Press, 1919), The Fragments of Solon’s Poems, text and translation",
+   "citation": "Solon, Linforth fragment II (p. 131; quoted in Plato, Lysis 212e)",
+   "translator_number": "II",
+   "source_item": "solonathenian00linf",
+   "source_url": "https://archive.org/details/solonathenian00linf",
+   "publication_year": 1919,
+   "english_pages": [
+    {
+     "scan_leaf": 145,
+     "printed_page": "131",
+     "sha256": "2fd183d02ee512ed257870b3069482a44a8921e31f28a99c4475e9e708ca26e7",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0145.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 144,
+     "printed_page": "130",
+     "sha256": "bebda3495be4aee1cd2ba399d167c0eb40f4a1ded0c8748da8949f36214d9382",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0144.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Happy is he who hath children dear and horses of uncloven hoof and dogs for the chase and a friend to receive him in a foreign land.",
+   "coverage_note": "Same extent as Campbell 13 (2 lines); quoted within Linforth's translation of Plato's Lysis, whose framing is omitted.",
+   "match_evidence": "'Happy is he who hath children dear and horses of uncloven hoof and dogs for the chase and a friend to receive him in a foreign land' = ὄλβιος, ᾧ παῖδές τε φίλοι καὶ μώνυχες ἵπποι καὶ κύνες ἀγρευταὶ καὶ ξένος ἀλλοδαπός.",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:solon:19",
+   "translator": "I. M. Linforth",
+   "edition": "Solon the Athenian (University of California Publications in Classical Philology 6; Berkeley: University of California Press, 1919), The Fragments of Solon’s Poems, text and translation",
+   "citation": "Solon, Linforth fragment XV (p. 147; quoted in Philo, De opificio mundi 104)",
+   "translator_number": "XV",
+   "source_item": "solonathenian00linf",
+   "source_url": "https://archive.org/details/solonathenian00linf",
+   "publication_year": 1919,
+   "english_pages": [
+    {
+     "scan_leaf": 161,
+     "printed_page": "147",
+     "sha256": "59dd44585c868d2c034644f92f1cbc1286730658f975f574cb9baa0daba36070",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0161.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 160,
+     "printed_page": "146",
+     "sha256": "af22af401a783491a0154173d29d7f510d1fa6ddf4d45621677d8d020badc5ff",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0160.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "A boy, before he cometh to man’s estate, and while he is still a child, getteth and loseth his rampart of teeth within the first seven years. When god bringeth the second seven to a close, the signs of budding manhood begin to show. In the third period, a downy beard appeareth, though the limbs have not reached their full growth, and the boyish bloom of the complexion fadeth. In the fourth period of seven years, every man is at the prime of his physical strength. . . . The fifth period is the season for a man to bethink him of marriage and seek offspring against the future. In the sixth, experience of every sort carrieth his mind on to perfection, and he feeleth no longer the same inclination to the wild pranks of youth. In the seventh seven, he is at his prime in mind and tongue, and also in the eighth, the two together making fourteen years. In the ninth period, though he still retaineth some force, he is feebler both in wisdom and in speech and faileth of great achievement. If a man attaineth to the full measure of the tenth period, the fate of death, if it come upon him, cometh not untimely.",
+   "coverage_note": "Same extent as Campbell 19 (18 lines). Linforth marks a lacuna with '. . .' after the fourth period; Campbell prints lines 7-8 continuously.",
+   "match_evidence": "'getteth and loseth his rampart of teeth within the first seven years' = παῖς μὲν ἄνηβος ἐὼν ἔτι νήπιος ἕρκος ὀδόντων ... ἐν ἕπτ' ἔτεσιν (1-2); 'the fate of death ... cometh not untimely' = οὐκ ἂν ἄωρος ἐὼν μοῖραν ἔχοι θανάτου (18).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:solon:22",
+   "translator": "I. M. Linforth",
+   "edition": "Solon the Athenian (University of California Publications in Classical Philology 6; Berkeley: University of California Press, 1919), The Fragments of Solon’s Poems, text and translation",
+   "citation": "Solon, Linforth fragments XXXVII (p. 163; Diogenes Laertius i 60), XXVI (p. 155; Plutarch, Comparison of Solon and Publicola 1) and I (p. 131; Plato, Laches 188b)",
+   "translator_number": "XXXVII, XXVI, I",
+   "source_item": "solonathenian00linf",
+   "source_url": "https://archive.org/details/solonathenian00linf",
+   "publication_year": 1919,
+   "english_pages": [
+    {
+     "scan_leaf": 177,
+     "printed_page": "163",
+     "sha256": "d7ea6283ff6e723d0ba7575bd4eb2041109133e505c28b1c5e7e58fca3531c18",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0177.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 169,
+     "printed_page": "155",
+     "sha256": "0df461ae46898b7c61798e636a955dd89f18e3abfc63ecf2cb2b4c590ca517bc",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0169.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 145,
+     "printed_page": "131",
+     "sha256": "2fd183d02ee512ed257870b3069482a44a8921e31f28a99c4475e9e708ca26e7",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0145.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 176,
+     "printed_page": "162",
+     "sha256": "5ac2b81607e9d7f6899fc2b916ff708c0aab0821447f1a25e38c544020a39daf",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0176.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 168,
+     "printed_page": "154",
+     "sha256": "326967dfa69f548a338318ca529d3a8a5246922b73388f8d91a2f02dfaf7a8fe",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0168.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 144,
+     "printed_page": "130",
+     "sha256": "bebda3495be4aee1cd2ba399d167c0eb40f4a1ded0c8748da8949f36214d9382",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0144.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "But if even now thou wilt be persuaded by me, strike this out and take no offense because I find matter in thee to criticize. Change thy poem, thou scion of sweet song, and let the strain run thus: ‘May it be my lot to die in my eightieth year.’\n\nMay my death come not unlamented, and may I leave to my friends when I die a heritage of grief and tears\n\nAs I grow old I am ever learning many things that are new.",
+   "coverage_note": "Campbell 22 combines three fragments (lines 1-4 to Mimnermus, 5-6 on an unlamented death, 7 'I grow old ever learning'); Linforth prints them separately as XXXVII, XXVI and I, given here as three paragraphs. XXVI and I are quoted inside sentences of Plutarch and Plato (XXVI has no final stop in Linforth's sentence).",
+   "match_evidence": "'strike this out ... thou scion of sweet song ... May it be my lot to die in my eightieth year' = ἔξελε τοῦτον ... Λιγυαστάδη ... ὀγδωκονταέτη μοῖρα κίχοι θανάτου (1-4); 'May my death come not unlamented' = μηδέ μοι ἄκλαυστος θάνατος μόλοι (5); 'As I grow old I am ever learning many things' = γηράσκω δ' αἰεὶ πολλὰ διδασκόμενος (7).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:solon:23",
+   "translator": "I. M. Linforth",
+   "edition": "Solon the Athenian (University of California Publications in Classical Philology 6; Berkeley: University of California Press, 1919), The Fragments of Solon’s Poems, text and translation",
+   "citation": "Solon, Linforth fragments XXII and XXI (p. 153; quoted in Plutarch, Solon 14)",
+   "translator_number": "XXII, XXI",
+   "source_item": "solonathenian00linf",
+   "source_url": "https://archive.org/details/solonathenian00linf",
+   "publication_year": 1919,
+   "english_pages": [
+    {
+     "scan_leaf": 167,
+     "printed_page": "153",
+     "sha256": "fa378d0bd3269b07de46d58a7ca64180e6389002412fccd1019e55d018e0ac31",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0167.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 166,
+     "printed_page": "152",
+     "sha256": "514ca8a1c7dd3355a8253c9dfe5d24906c1a5c839529d366cc6344733f4d4852",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0166.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Solon is not gifted with wisdom and sagacity. God put good things into his hands, but he failed to grasp them. He cast his net and caught his fish, but, in his wonder and delight, he did not draw it in: both his courage and his wit were unequal to the occasion. If I could seize the power, acquire vast wealth, and be lord of Athens for but a single day, I would give my body to be flayed for a wineskin and consent to the annihilation of my race.\n\nIf I spared my fatherland and did not lay hold upon a despotism of harshness and force, staining and defiling my reputation thereby, I feel no shame for that. I believe that in this way I shall so much the more show my superiority over other men.",
+   "coverage_note": "Campbell 23 prints the critic's speech (7 lines) followed by Solon's answer (lines 8-12); Linforth prints them as XXI (the answer) and XXII (the speech) in the opposite order on the same page. They are given here in Campbell's order.",
+   "match_evidence": "'Solon is not gifted with wisdom and sagacity' = οὐκ ἔφυ Σόλων βαθύφρων οὐδὲ βουλήεις ἀνήρ (1); 'be lord of Athens for but a single day' = τυραννεύσας Ἀθηνῶν μοῦνον ἡμέραν μίαν (6); 'If I spared my fatherland' = εἰ δὲ γῆς ἐφεισάμην πατρίδος (8-9).",
+   "verified_against_image": true
+  },
+  {
+   "campbell_id": "campbell-glp:solon:24",
+   "translator": "I. M. Linforth",
+   "edition": "Solon the Athenian (University of California Publications in Classical Philology 6; Berkeley: University of California Press, 1919), The Fragments of Solon’s Poems, text and translation",
+   "citation": "Solon, Linforth fragment IX (pp. 137-139; quoted in Aristotle, Constitution of Athens 12)",
+   "translator_number": "IX",
+   "source_item": "solonathenian00linf",
+   "source_url": "https://archive.org/details/solonathenian00linf",
+   "publication_year": 1919,
+   "english_pages": [
+    {
+     "scan_leaf": 151,
+     "printed_page": "137",
+     "sha256": "48e60628d78ede13bbe3ec5c77eaca6e1d52571f23be055793207f7fddd1c5d0",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0151.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 153,
+     "printed_page": "139",
+     "sha256": "5c02a6f84c79e4f45cbac73f882972eff6e4a3bcca4514a62e85e4675e9d5c29",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0153.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "greek_pages": [
+    {
+     "scan_leaf": 150,
+     "printed_page": "136",
+     "sha256": "6d5e8a748964601f1d9a8872f4ed4ef7961dabf68d30462e4d4937968f0cd07e",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0150.jp2/full/max/0/default.jpg"
+    },
+    {
+     "scan_leaf": 152,
+     "printed_page": "138",
+     "sha256": "00a3e4e0711b3cac94097f1f45b493c0364059301db9591806814c857c8dcc18",
+     "iiif_url": "https://iiif.archive.org/image/iiif/3/solonathenian00linf%2Fsolonathenian00linf_jp2.zip%2Fsolonathenian00linf_jp2%2Fsolonathenian00linf_0152.jp2/full/max/0/default.jpg"
+    }
+   ],
+   "text": "Turning now to my own case, and considering first the objects for which I brought the people together, you ask me why I stopped before I had achieved those objects? The answer to this question may be found in the corroborative evidence which will be given before the tribunal of Time by the black Earth, the supreme mother of the divinities of Olympus. I removed the stones of her bondage which had been planted everywhere, and she who was a slave before is now free. I brought back to their own divinely founded home many Athenians who justly or unjustly had been sold into slavery in foreign lands, and I brought back those whom destitution had driven into exile, and who, through wandering long abroad, no longer spoke the Attic tongue; and I restored to liberty those who had been degraded to slavery here in their own land and trembled at their masters’ whims. These things I accomplished through arbitrary action, bringing force to the support of the dictates of justice, and I followed through to the end the course which I promised. On the other hand, I drafted laws, which show equal consideration for the upper and lower classes, and provide a fair administration of justice for every individual. An unscrupulous and avaricious man, if he had got the whip hand of the city as I had, would not have held the people back. If I had adopted the policy which was advocated by my opponents then, or if thereafter I had consented to the treatment which their opponents were always planning for them, this city would have lost many of her sons. This was the reason why I stood out like a wolf at bay amidst a pack of hounds, defending myself against attacks from every side.",
+   "coverage_note": "Same extent as Campbell 24 (27 lines).",
+   "match_evidence": "'considering first the objects for which I brought the people together' = ἐγὼ δὲ τῶν μὲν οὕνεκα ξυνήγαγον δῆμον (1-2); 'the black Earth, the supreme mother of the divinities of Olympus' = μήτηρ μεγίστη δαιμόνων Ὀλυμπίων ... Γῆ μέλαινα (4-5); 'like a wolf at bay amidst a pack of hounds' = ὡς ἐν κυσὶν πολλῇσιν ἐστράφην λύκος (27).",
+   "verified_against_image": true
+  }
+ ],
+ "gaps": [
+  {
+   "campbell_id": "campbell-glp:phocylides:3",
+   "reason": "Quoted only by Stobaeus. Searched Internet Archive for pre-1930 English versions of Phocylides (title/creator searches; only a Spanish 1802 'Sentencias de Teognis, de Phocylides ...' found), Banks' Bohn Theognis volume (1856; no Phocylides), Paton's Greek Anthology (not in the Anthology). Edmonds' Elegy and Iambus (1931) is excluded. No pre-1930 English translation found."
+  },
+  {
+   "campbell_id": "campbell-glp:phocylides:4",
+   "reason": "Quoted by Dio Chrysostom, Or. 36.13 (Borystheniticus). Searched Internet Archive for pre-1930 English Dio Chrysostom (only Greek editions, e.g. von Arnim 1893; Cohoon/Crosby Loeb vol. III is 1940) and for Phocylides translations; Edmonds 1931 excluded. No pre-1930 English translation found."
+  },
+  {
+   "campbell_id": "campbell-glp:phocylides:8",
+   "reason": "Quoted only by Stobaeus (gnomic couplet on night counsel). Same searches as Phocylides 3; no pre-1930 English translation found."
+  }
+ ]
+}

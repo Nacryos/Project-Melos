@@ -1,0 +1,814 @@
+{
+ "decisions": [
+  {
+   "dispute_id": 0,
+   "final_lines": [
+    "φοίτα καὶ κοίλων πώματ’ ἄφελκε κάδων,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "5x crop: κοίλων has acute only, no diaeresis",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 1,
+   "final_lines": [
+    "φάρμακον. ἄλλοτέ τ’ ἄλλος ἔχει τάδε· νῦν μὲν ἐς ἡμέας"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "6x crop: acute clearly printed on final ε of ἄλλοτέ",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 2,
+   "final_lines": [
+    "ἥδε δ’ ὥστ’ ὄνου ῥάχις"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "16x crop: mark on eta = breathing + acute side by side, identical pixel pattern to rough+acute of ὥστ’ in same line; not the stacked hump of a circumflex (cf. οἷος l.4)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 3,
+   "final_lines": [
+    "οὐ γάρ τι καλὸς χῶρος οὐδ’ ἐφίμερος"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "9x crop: only 1-px specks below ρ and ο/λ, not round centred underdots (real underdot ~4x3 px) -> none",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 4,
+   "final_lines": [
+    "οὐδ’ εἷλέ πώ με ζῆλος οὐδ’ ἀγαίομαι"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "16x + pixel check: stacked circumflex over breathing whose tail ends bottom-right (rough, as οἷος in l.4): εἷλέ",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 5,
+   "final_lines": [
+    "τοῖς θεοῖς †τ’ εἰθεῖ’ ἅπαντα†· πολλάκις μὲν ἐκ κακῶν"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "pixel check: ἅ breathing+acute forms the same loop as rough+acute ὥστ’ (p034); rough",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 6,
+   "final_lines": [
+    "ῥοικός, ἀσφαλέως βεβηκὼς ποσσί, καρδίης πλέως."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "4x crop: acute on ε of ἀσφαλέως",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 7,
+   "final_lines": [
+    "οὔ τις αἰδοῖος μετ’ ἀστῶν οὐδὲ περίφημος θανών"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "9x crop: 1-px speck under δ, not an underdot",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 8,
+   "final_lines": [
+    "οἱ ζοοί· κάκιστα δ’ αἰεὶ τῷ θανόντι γίγνεται."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "4.5x crop: single-px specks below τ/ν, also scattered in blank areas -> noise; iota subscript in τῷ",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 9,
+   "final_lines": [
+    "ἀσφαλέως· καὶ μήτε νικῶν ἀμφάδην ἀγάλλεο"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "5x crop: acute on second α of ἀμφάδην",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 10,
+   "final_lines": [
+    "εἰ γὰρ ὣς ἐμοὶ γένοιτο χεῖρα Νευβούλης θιγεῖν."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "Νευβούλης clearly printed with ευ. Mark on ω is the arch glyph (c-shaped rough breathing joined to a stroke descending right = rough+grave), identical to ὃ/οἳ on p041; circumflex+breathing in this font is a flat hump with breathing hanging below (οἷος p034, ἧσθαι p040): ὣς",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 11,
+   "final_lines": [
+    "] . . . ν̣νε . ."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "8x crop: letter before νε is a ν with no descender, with a clear round dot below (underdot) -> ν̣ (B's letter); gap ]-to-first-dot equals the inter-dot gap, so spaced as A",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 12,
+   "final_lines": [
+    "π. [          ]ν[. . .] . . . . ["
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "6x crop: gap between ] and first following dot equals dot spacing -> '] . . . . ['; speck left of π is in the margin, noise",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 13,
+   "final_lines": [
+    "Θρήικες ἀκρό[κ]ομοι"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "5x crop: Θρήικες acute on η, no diaeresis on ι",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 14,
+   "final_lines": [
+    "λάβοιεν — ἔνθα [πό]λλ’ ἀναπλήσει κακά"
+   ],
+   "labels": [
+    "5"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.8x crop: dash printed between words, rendered ' — ' per convention; margin 5",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 15,
+   "final_lines": [
+    "ἄκρον παρὰ ῥηγμῖνα κυμαντῷ [.] . [.] . ι ."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "pixel check: mark under κ is a 1x2 px speck touching the letter foot, far smaller than a real underdot on this page (ν̣ in fr.74 = 4x3 px round dot) -> no underdot; mark under ω is a 5-px vertical stroke with foot = iota subscript (same as τῷ p036); only one dot after ι",
+   "uncertain": true,
+   "uncertain_note": "Possible underdot under κ of κυμαντῷ is a 1x2 px mark (real underdots on this page are ~4x3 px); read as scan speck."
+  },
+  {
+   "dispute_id": 16,
+   "final_lines": [
+    "ὡς ἆρ’ ἀλώπηξ καἰετὸς ξυνωνίην"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "pixel check: breathing on ω of ὡς ends bottom-right (rough), no accent; mark on ι of καἰετὸς ends bottom-left (smooth/coronis)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 17,
+   "final_lines": [
+    "μέχρις τεῦ κατάκεισθε; κότ’ ἄλκιμον ἕξετε θυμόν,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x crop: ἄλκιμον smooth+acute; ἕξετε shows the loop glyph of rough+acute",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 18,
+   "final_lines": [
+    "ὦ νέοι; οὐδ’ αἰδεῖσθ’ ἀμφιπερικτίονας"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x crop: ὦ smooth breathing under circumflex; rest of line as transcribed",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 19,
+   "final_lines": [
+    "καί τις ἀποθνῄσκων ὕστατ’ ἀκοντισάτω."
+   ],
+   "labels": [
+    "5"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "3x crop: iota subscript clearly printed under η of ἀποθνῄσκων",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 20,
+   "final_lines": [
+    "ἔλσας, τὸ πρῶτον μειγνυμένου πολέμου."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x crop: ἔλσας mark identical to smooth+acute of ἄλκιμον; no underdots (pixel check)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 21,
+   "final_lines": [
+    "ἀλλ’ ὃ μὲν οὐκ ἔμπης δήμῳ φίλος οὐδὲ ποθεινός,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "16x crop: mark on ο is the arch glyph (rough breathing + grave), same as ὃ elsewhere; not a bare breathing",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 22,
+   "final_lines": [
+    "θνῄσκοντος, ζώων δ’ ἄξιος ἡμιθέων·"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.6x crop: iota subscript under η of θνῄσκοντος",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 23,
+   "final_lines": [
+    "ἔρδει γὰρ πολλῶν ἄξια μοῦνος ἐών."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.6x crop: circumflex on ω of πολλῶν",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 24,
+   "final_lines": [
+    "ἀλλ’ — Ἡρακλῆος γὰρ ἀνικήτου γένος ἐστέ —"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.3x crop: rough breathing before capital Η (Ἡ); dashes as printed",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 25,
+   "final_lines": [
+    "μηδ’ ἀνδρῶν πληθὺν δειμαίνετε μηδὲ φοβεῖσθε,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.3x crop: line as transcribed",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 26,
+   "final_lines": [
+    "ἰθὺς δ’ ἐς προμάχους ἀσπίδ’ ἀνὴρ ἐχέτω"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.5x crop: line as transcribed (ἀνὴρ grave)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 27,
+   "final_lines": [
+    "οἳ μὲν γὰρ τολμῶσι παρ’ ἀλλήλοισι μένοντες"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "16x crop + pixel comparison: mark on ι is the arch glyph (rough+grave) identical to ὃ in l.16 of same page and οἳ in Semonides 1; neither bare breathing (A) nor stacked circumflex (B)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 28,
+   "final_lines": [
+    "νικῴη δὲ θέων Θρηίκιον Βορέην,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x crop: iota subscript under ω of νικῴη; Θρηίκιον acute, no diaeresis",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 29,
+   "final_lines": [
+    "ξυνὸν δ’ ἐσθλὸν τοῦτο πόληί τε παντί τε δήμῳ,"
+   ],
+   "labels": [
+    "15"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.3x crop: πόληί acute without diaeresis; δήμῳ iota subscript; margin 15",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 30,
+   "final_lines": [
+    "καὶ διὰ θώρηκος πρόσθεν ἐληλαμένος,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.8x crop: acute on ε of ἐληλαμένος",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 31,
+   "final_lines": [
+    "πολλὰ δὲ τερπνὰ παθὼν ἔρχεται εἰς Ἀίδην·"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "8x crop: Ἀίδην smooth on capital, acute on ι, no diaeresis",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 32,
+   "final_lines": [
+    "ἃ δὴ βοτὰ ζώομεν οὐδὲν εἰδότες"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "16x crop: ἃ mark is the arch glyph (rough breathing + grave), same as ὃ p041",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 33,
+   "final_lines": [
+    "ἄπρηκτον ὁρμαίνοντας· οἳ μὲν ἡμέρην"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "14x crop: οἳ arch glyph (rough+grave)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 34,
+   "final_lines": [
+    "μένουσιν ἐλθεῖν, οἳ δ’ ἐτέων περιτροπάς."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "14x crop: οἳ arch glyph (rough+grave)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 35,
+   "final_lines": [
+    "πέμπει μελαίνης Ἀίδης ὑπὸ χθονός."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "3x crop: Ἀίδης acute on ι, no diaeresis",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 36,
+   "final_lines": [
+    "οἳ δ’ ἐν θαλάσσῃ λαίλαπι κλονεύμενοι"
+   ],
+   "labels": [
+    "15"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "14x composite: οἳ arch glyph (rough+grave); margin 15",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 37,
+   "final_lines": [
+    "θνῄσκουσιν, εὖτ’ ἂν μὴ δυνήσωνται ζόειν."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "3x crop: iota subscript under η of θνῄσκουσιν",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 38,
+   "final_lines": [
+    "οἳ δ’ ἀγχόνην ἅψαντο δυστήνῳ μόρῳ"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "14x composite: οἳ arch glyph (rough+grave)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 39,
+   "final_lines": [
+    "γυναικὸς οὐδὲν χρῆμ’ ἀνὴρ ληίζεται"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.8x crop: ληίζεται acute, no diaeresis",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 40,
+   "final_lines": [
+    "τὰ πρῶτα. τὴν μὲν ἒξ ὑὸς τανύτριχος,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "14x crop: smooth breathing + grave on ε of ἒξ as printed",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 41,
+   "final_lines": [
+    "γυναῖκα πάντων ἴδριν· οὐδέ μιν κακῶν"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.8x crop: line as transcribed",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 42,
+   "final_lines": [
+    "ἀλλ’ ἐμπέδως ἄπρηκτον αὐονὴν ἔχει."
+   ],
+   "labels": [
+    "20"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x crop: αὐονὴν breathing comma-shaped (smooth); speck under υ is noise",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 43,
+   "final_lines": [
+    "τὴν δὲ πλάσαντες γηίνην Ὀλύμπιοι"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.7x crop: γηίνην acute, no diaeresis",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 44,
+   "final_lines": [
+    "ῥιγῶσα δίφρον ἆσσον ἕλκεται πυρός."
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "3x crop: breathing + circumflex stacked on α of ἆσσον",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 45,
+   "final_lines": [
+    "‘οὐκ ἔστιν ἄλλη τῆσδε λωίων γυνή"
+   ],
+   "labels": [
+    "30"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.8x crop: λωίων acute, no diaeresis; margin 30",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 46,
+   "final_lines": [
+    "οὔτ’ ἆσσον ἐλθεῖν, ἀλλὰ μαίνεται τότε"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.8x crop: ἆσσον circumflex",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 47,
+   "final_lines": [
+    "τὴν δ’ ἐκ †τεσποδιης† καὶ παλιντριβέος ὄνου,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.2x crop: ἐκ smooth breathing, no accent",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 48,
+   "final_lines": [
+    "ἔστερξεν ὦν ἅπαντα κἀπονήσατο"
+   ],
+   "labels": [
+    "45"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "pixel comparison of the breathing under the circumflex: middle bulges right and tail ends bottom-left like smooth refs (οἶνος p033, ὦ νέοι p040); rough refs under circumflex (οἷος p034, ἧσθαι p040) end bottom-right -> ὦν. ἅπαντα breathing c-shaped (rough) confirmed",
+   "uncertain": true,
+   "uncertain_note": "Breathing under the circumflex of ὦν is ~3 px wide; smooth read by comparison with reference glyphs (both transcribers had read rough)."
+  },
+  {
+   "dispute_id": 49,
+   "final_lines": [
+    "οὔτε πρὸς ἱπνὸν ἀσβόλην ἀλευμένη"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "14x crop: breathing on ι is a clear c-shape opening right = rough: ἱπνὸν",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 50,
+   "final_lines": [
+    "καλὸν μὲν ὦν θέημα τοιαύτη γυνή"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "pixel comparison: breathing under circumflex has right bulge and bottom-left tail like smooth refs (οἶνος p033, ὦ νέοι p040), unlike rough refs (οἷος p034, ἧσθαι p040): ὦν",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 51,
+   "final_lines": [
+    "ἄπυγος, αὐτόκωλος. ἆ τάλας ἀνήρ,"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "16x crop: letter is α (not ω) with smooth breathing under a circumflex: ἆ",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 52,
+   "final_lines": [
+    "τὴν δ’ ἐκ μελίσσης· τήν τις εὐτυχεῖ λαβών·"
+   ],
+   "labels": [
+    ""
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "12x crop: one raised dot at mid-height after ν (ano teleia); the tiny specks near baseline below it are scan noise (similar specks scattered to the right)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "dispute_id": 53,
+   "final_lines": [
+    "ἔστιν τε πάντα καὶ παρ’ ἀνδράσιν μένει."
+   ],
+   "labels": [
+    "95"
+   ],
+   "strophe_labels": [
+    ""
+   ],
+   "basis": "2.1x crop: μένει acute on ε; margin 95",
+   "uncertain": false,
+   "uncertain_note": ""
+  }
+ ]
+}

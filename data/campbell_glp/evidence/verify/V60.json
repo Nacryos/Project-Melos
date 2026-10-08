@@ -1,0 +1,36 @@
+{
+ "pages": [
+  60,
+  61,
+  62,
+  63,
+  64,
+  65,
+  66,
+  67,
+  68
+ ],
+ "lines_checked": 210,
+ "corrections": [
+  {
+   "poem_id": "campbell-glp:mimnermus:2",
+   "line_index": 11,
+   "pdf_page": 60,
+   "current": "τρυχοῦται, πενίης δ’ ἔργ’ ὀδυνηρὰ πέλει·",
+   "corrected": "τρυχὸῦται, πενίης δ’ ἔργ’ ὀδυνηρὰ πέλει·",
+   "what": "8x crop: a distinct grave stroke is printed over the omicron of τρυχοῦται (in addition to the circumflex on υ); diplomatic misprint",
+   "confidence": "medium"
+  },
+  {
+   "poem_id": "campbell-glp:solon:5",
+   "line_index": 9,
+   "pdf_page": 66,
+   "current": "ἀνθρώποισιν ὅσοις μὴ νόος ἄρτιος ᾖ.",
+   "corrected": "ἀν̀θρώποισιν ὅσοις μὴ νόος ἄρτιος ᾖ.",
+   "what": "10x crop: a clear grave-shaped stroke is printed over the nu of ἀνθρώποισιν (stray/misplaced accent in the print); editor may prefer to ignore",
+   "confidence": "medium"
+  }
+ ],
+ "missing_or_extra": [],
+ "label_fixes": []
+}

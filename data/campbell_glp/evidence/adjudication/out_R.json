@@ -1,0 +1,124 @@
+{
+ "decisions": [
+  {
+   "item_id": 0,
+   "accept": true,
+   "final_text": "συμμίσγων ἐρατῆς μνῄσκεται εὐφροσύνης.",
+   "basis": "8x crop (zoom/R_0.png): second short vertical stroke beside the eta descender = iota subscript",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 1,
+   "accept": true,
+   "final_text": "φίτρον †ἐγκλαύσασα†· τὸν δὴ",
+   "basis": "8x crop (zoom/R_1.png): single straight acute on iota of φίτρον, no circumflex arch",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 2,
+   "accept": true,
+   "final_text": "φρένα ἰανθείς",
+   "basis": "8x crop (zoom/R_2.png): stroke on final ει rises to the right = acute",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 3,
+   "accept": true,
+   "final_text": "εὖτε νέων ἁ[παλὸν] γλυκεῖ’ ἀνάγκα",
+   "basis": "16x crop (zoom/R_3.png): c-shaped breathing opening right on α before [ = rough",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 4,
+   "accept": true,
+   "final_text": "πλοῦτ̣ον· ὣς πίνοντος ὁρμαίνει κέαρ.",
+   "basis": "24x crop (zoom/R_4c.png): c-breathing with leg descending right (breathing+grave), same shape as ὃς p161 l.7 (R_4e.png); ὁρμαίνει has a bare c",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 5,
+   "accept": true,
+   "final_text": "ἄκρον παρὰ ῥηγμῖνα κ̣υμαντῷ [.] . [.] . ι .",
+   "basis": "10x crop (zoom/R_5.png): round dot centred under kappa of κυμαντῷ",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 6,
+   "accept": true,
+   "final_text": "Ἀστ̣αφίς [τ]έ μοι γένοιτο",
+   "basis": "10x crop (zoom/R_6.png) + pixel dump: dot 2px below baseline under stem of first τ, same as other underdots",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 7,
+   "accept": true,
+   "final_text": "αὐ]τῶ̣ς εδ[",
+   "basis": "10x crop (zoom/R_7b.png): dot centred under ω of τῶς, same as underdot of κυβερνάτα̣ in next line",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 8,
+   "accept": true,
+   "final_text": "]ς δέ μ’ ἄγει πεδ’ ἀγῶν̣’ ἴμεν",
+   "basis": "10x crop (zoom/R_8.png): the dot is under ν, not ω",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 9,
+   "accept": true,
+   "final_text": "] . σχ[          ἁ̣π]αλοὶ πόδες",
+   "basis": "16x crop (zoom/R_9.png) + pixel dump: small round dot centred under ἁ of ἁπ]αλοὶ, 1px like other underdots",
+   "uncertain": true,
+   "uncertain_note": "underdot under ἁ of ἁ̣π]αλοὶ is a single small dot; could be a speck"
+  },
+  {
+   "item_id": 10,
+   "accept": false,
+   "final_text": "τρυχοῦται, πενίης δ’ ἔργ’ ὀδυνηρὰ πέλει·",
+   "basis": "grave stroke over omicron of τρυχοῦται is a printing blemish on an already-accented word (circumflex on υ); not encoded per policy",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 11,
+   "accept": false,
+   "final_text": "ἀνθρώποισιν ὅσοις μὴ νόος ἄρτιος ᾖ.",
+   "basis": "grave-like stroke over the nu of ἀνθρώποισιν is a printing blemish over a consonant; not encoded per policy",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 12,
+   "accept": true,
+   "final_text": "ἃ τοῖς ἐναντ̣ίοισιν ἥνδανεν τότε,",
+   "basis": "10x crop (zoom/R_12.png) + pixel dump: dot 2px below baseline centred under τ stem, same size/position as certain underdots (p53 Ἀστ̣αφίς); papyrus text",
+   "uncertain": true,
+   "uncertain_note": "underdot under τ of ἐναντ̣ίοισιν is a single-pixel dot; could be a speck"
+  },
+  {
+   "item_id": 13,
+   "accept": true,
+   "final_text": "] . . [. .] · [",
+   "basis": "pixel dump: dot after ] sits at rows 249-252 vs baseline lacuna dots 256-260, at x-height like the ano teleia after δρό[μωμεν· (rows 344-348, baseline ~354)",
+   "uncertain": false,
+   "uncertain_note": ""
+  },
+  {
+   "item_id": 14,
+   "accept": false,
+   "final_text": "αισιν ἐρεμνὸς ἀθαμβὴς",
+   "basis": "14x crop (zoom/R_14.png): acute sits over σ (consonant) of the turnover -αισιν of already-accented μανί-αισιν; printing blemish, not encoded per policy",
+   "uncertain": false,
+   "uncertain_note": ""
+  }
+ ]
+}
