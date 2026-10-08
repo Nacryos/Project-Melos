@@ -42,3 +42,14 @@ test('pending headline holds the gloss slot without inventing a meaning', () => 
   assert.deepEqual(lines(host), [['word-title', 'βγ'], ['word-headline-gloss', 'Looking up meaning…']]);
   assert.equal(headlineFromRow({ kind: 'punct', text: ',' }), null);
 });
+
+test('headline prefers the short dictionary head phrase and keeps the full text in the title', () => {
+  const host = node('div');
+  renderWordHeadline(host, headlineFromRow({ kind: 'word', text: 'βγ', lemma: 'αβ', parse_short: 'nom. neut. sg.',
+    gloss: { status: 'available', text: 'a piece of land cut off', short_text: 'a piece of land', source: 'ML' } }), node);
+  assert.deepEqual(lines(host)[1], ['word-headline-gloss', 'a piece of land']);
+  assert.match(host.children[0].children[1].title, /^a piece of land cut off/);
+  const fallback = headlineFromRow({ kind: 'word', text: 'βγ', lemma: 'αβ', gloss: { status: 'available', text: 'thing', short_text: ' ' } });
+  assert.equal(fallback.gloss, 'thing');
+  assert.equal(window.MelosPassageAnalysis.shortGlossText({ status: 'unavailable', short_text: 'x' }), '');
+});

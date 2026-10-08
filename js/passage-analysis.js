@@ -520,6 +520,13 @@
     if (cursor < text.length) segments.push({ text: text.slice(cursor) });
     return segments;
   }
+  // The dictionary's short head phrase (gloss.short_text, 1-4 words) when the
+  // server supplies one, else the full first-sense text.
+  function shortGlossText(gloss) {
+    if (gloss?.status !== 'available') return '';
+    const short = typeof gloss.short_text === 'string' ? gloss.short_text.trim() : '';
+    return short || (typeof gloss.text === 'string' ? gloss.text.trim() : '');
+  }
   // A headword is a proper name when the dictionary capitalises it; a word with
   // no headword counts only when the edition prints it capitalised.
   const capitalised = value => typeof value === 'string' && /^\p{Lu}/u.test(value.normalize('NFD'));
@@ -529,12 +536,12 @@
     if (!row || row.kind !== 'word') return null;
     const lemmas = [...new Set((row.morphology_ranking || []).map(item => item.lemma).filter(Boolean))];
     const lemma = row.lemma || (lemmas.length === 1 ? lemmas[0] : '');
-    const gloss = row.gloss?.status === 'available' && typeof row.gloss.text === 'string' ? row.gloss.text.trim() : '';
+    const gloss = shortGlossText(row.gloss);
     const partial = row.damaged_piece || row.partial_word || row.editorial_fragment;
     return { lemma, gloss, form: row.text, reading: row.form && row.form !== row.text ? row.form : '',
       parse: row.parse_short || (partial ? 'damaged piece · no analysis' : ''),
       properName: !partial && capitalised(lemma || row.form || row.text),
-      glossTitle: gloss ? `${row.gloss.full_text || gloss} — ${row.gloss.source || 'dictionary'} · ${glossBasis(row.gloss)}` : '' };
+      glossTitle: gloss ? `${row.gloss.full_text || row.gloss.text || gloss} — ${row.gloss.source || 'dictionary'} · ${glossBasis(row.gloss)}` : '' };
   }
   function renderWordHeadline(host, value, node) {
     const head = node('div', 'word-headline');
@@ -579,10 +586,10 @@
         word.setAttribute('data-token-id', token.token_id || '');
         if (group) word.setAttribute('data-agreement-group', group.id);
         const greek = node('span', 'interlinear-greek', segment.text); greek.setAttribute('lang', 'grc');
-        const glossText = token.gloss?.status === 'available' && typeof token.gloss.text === 'string' ? token.gloss.text.trim() : '';
+        const glossText = shortGlossText(token.gloss);
         const gloss = node('strong', 'interlinear-gloss', glossText || '—'); gloss.setAttribute('lang', 'en');
         if (!glossText) gloss.setAttribute('aria-label', 'English dictionary meaning unavailable');
-        else gloss.title = `${token.gloss.full_text || glossText} — ${glossBasis(token.gloss)}`;
+        else gloss.title = `${token.gloss.full_text || token.gloss.text || glossText} — ${glossBasis(token.gloss)}`;
         const parse = node('span', 'interlinear-parse', token.parse_short || '—');
         if (!token.parse_short) parse.setAttribute('aria-label', 'Parsing unavailable');
         if (token.form && token.form !== token.text) {
@@ -811,7 +818,7 @@
           && item.text === token.text && item.start_utf16 === token.start_utf16 && item.end_utf16 === token.end_utf16);
         const structured = (token.lexicon_entries || []).some(structuredSensesPresent) || alternatives.some(structuredSensesPresent)
           || Object.hasOwn(projection?.gloss || {}, 'alternatives');
-        const shortGloss = projection?.gloss?.status === 'available' ? projection.gloss.text
+        const shortGloss = projection?.gloss?.status === 'available' ? shortGlossText(projection.gloss)
           : structured ? '' : alternatives.find(item => item.gloss)?.gloss;
         const reading = token.form && token.form !== token.text ? ` (read ${token.form})` : '';
         const headline = projection ? headlineFromRow(projection) : null;
@@ -1089,5 +1096,5 @@
       }
     };
   }
-  window.MelosPassageAnalysis = { mount, sourceMap, selectedSpan, selectionIssue, createRequester, lexicalPrediction, sourceCandidateGroups, rankingCandidateLabel, dedupeCandidates, groupCandidateDisplays, renderPartialCandidateEvidence, machineSubentryMeanings, renderMachineSubentryMeanings, englishTranslation, interlinearSegments, renderInterlinear, headlineFromRow, renderWordHeadline, renderPublishedCommentary, renderTranslationComparisons, verifiedEditorialRows, renderEditorialAnalysis, renderEditorialWordActions };
+  window.MelosPassageAnalysis = { mount, sourceMap, selectedSpan, selectionIssue, createRequester, lexicalPrediction, sourceCandidateGroups, rankingCandidateLabel, dedupeCandidates, groupCandidateDisplays, renderPartialCandidateEvidence, machineSubentryMeanings, renderMachineSubentryMeanings, englishTranslation, interlinearSegments, renderInterlinear, shortGlossText, headlineFromRow, renderWordHeadline, renderPublishedCommentary, renderTranslationComparisons, verifiedEditorialRows, renderEditorialAnalysis, renderEditorialWordActions };
 })();
