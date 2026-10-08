@@ -35,9 +35,10 @@ function harness() {
   const state = { passage: { id: 'old', related: [{ text: 'Old commentary' }] }, selectedText: 'Old selection',
     activeWord: oldWord, passageLoading: false, passageSequence: 0, wordSequence: 0,
     works: new Map(), selectedAuthor: 'Old author', selectedWork: 'old-work', classifierStatus: { configured: true } };
-  const requests = [], posts = [];
+  const requests = [], posts = [], historyCalls = [];
   const context = vm.createContext({
-    ui, state, URL, location: { href: 'https://example.test/?id=old' }, history: { replaceState() {} },
+    ui, state, URL, location: { href: 'https://example.test/?id=old' },
+    history: { replaceState: (_, __, url) => historyCalls.push(['replace', String(url)]), pushState: (_, __, url) => historyCalls.push(['push', String(url)]) },
     window: { getSelection: () => null, matchMedia: () => ({ matches: false }) },
     errorText: error => error.message, clear: element => element.replaceChildren(),
     node: (tag, cls, value) => new Element(tag, cls, value),
@@ -58,7 +59,7 @@ function harness() {
     ['  async function inspectWord(', '  function updateSelection(']
   ]) vm.runInContext(script.slice(script.indexOf(start), script.indexOf(end)), context);
   const lookup = name => vm.runInContext(name, context);
-  return { ui, state, oldWord, requests, posts, open: lookup('openPassage'), selectWork: lookup('selectWork'),
+  return { ui, state, oldWord, requests, posts, historyCalls, open: lookup('openPassage'), selectWork: lookup('selectWork'),
     inspectWord: lookup('inspectWord'), addContextAction: lookup('addContextAction') };
 }
 const passage = id => ({ id, author: `Author ${id}`, work: 'Fixture work', citation: `Fragment ${id}`,
@@ -141,4 +142,12 @@ test('a detached old classifier action cannot spend a paid call after the passag
   await action.handlers.click();
   assert.equal(h.posts.length, 0);
   h.requests[0].resolve(passage('new')); await pending;
+});
+
+test('a passage the reader chooses gets a history entry; initial and Back/Forward loads only replace it', async () => {
+  const h = harness();
+  const chosen = h.open('chosen'); h.requests[0].resolve(passage('chosen')); await chosen;
+  const restored = h.open('restored', false); h.requests[1].resolve(passage('restored')); await restored;
+  assert.deepEqual(h.historyCalls.map(([kind, url]) => [kind, new URL(url).searchParams.get('id')]),
+    [['push', 'chosen'], ['replace', 'restored']]);
 });

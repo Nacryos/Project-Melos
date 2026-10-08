@@ -188,7 +188,9 @@ test('startup restores saved state only after asynchronous option populations an
   assert.ok(init.indexOf('restoreSearchUrl(params)') > init.indexOf('updateEditionOptions(works)'));
   assert.match(init, /if \(saved\.issues\.length\)/);
   assert.match(init, /else if \(saved\.query\) search\(saved\.query, saved\.mode\)/);
-  assert.match(init, /if \(saved\.query \|\| saved\.issues\.length\) return/);
+  assert.match(init, /if \(saved\.query \|\| saved\.issues\.length\) \{/);
+  // A search link opens no passage: the reading desk says so instead of staying on its loading line.
+  assert.match(init.slice(init.indexOf('if (saved.query || saved.issues.length) {')), /^[^}]*renderPassageEmpty\('Choose a search result[^}]*return;/);
 });
 
 test('search limit uses trimmed Unicode codepoints, never shortened request payloads', async () => {

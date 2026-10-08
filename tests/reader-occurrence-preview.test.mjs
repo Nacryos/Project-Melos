@@ -48,7 +48,7 @@ test('grouped preview retains all edition labels, source IDs, links and click ac
     assert.ok(host.textContent.includes(member.edition));
     assert.ok(host.textContent.includes(member.id));
     assert.ok(nodes.some(n => n.tag === 'a' && n.href === member.source_url));
-    nodes.find(n => n.tag === 'button' && n.text === `Open ${member.id}`).handlers.click();
+    nodes.find(n => n.tag === 'button' && n.text === 'Open this record →' && n.title === `Record ${member.id}`).handlers.click();
     assert.equal(opened.at(-1), member.id);
   }
   assert.deepEqual(data, before);

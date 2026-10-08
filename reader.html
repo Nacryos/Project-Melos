@@ -11,11 +11,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/reader.css?v=release-l-20261008">
+  <link rel="stylesheet" href="css/reader.css?v=ux-audit-20261008">
   <link rel="stylesheet" href="css/icons.css">
   <link rel="stylesheet" href="css/loading.css">
   <link rel="stylesheet" href="css/fullscreen.css?v=reader-touch-20261006">
-  <link rel="stylesheet" href="css/touch-selection.css?v=reader-touch-20261006">
+  <link rel="stylesheet" href="css/touch-selection.css?v=ux-audit-20261008">
   <link rel="stylesheet" href="css/theme.css?v=white-blue-1">
   <link rel="stylesheet" href="css/discovery-nav.css">
 </head>
@@ -78,7 +78,7 @@
     <aside class="corpus-panel" id="collection" aria-labelledby="browse-title"><div class="panel-top"><div><span class="eyebrow">THE COLLECTION</span><h2 id="browse-title">Browse the corpus</h2></div><button id="browse-toggle" class="mobile-toggle" type="button" aria-expanded="false" aria-controls="browse-body">Browse <span aria-hidden="true">⌄</span></button></div><div id="browse-body" class="browse-body"><div class="browse-heading"><span>POETS &amp; WORKS</span><span id="author-count"></span></div><div id="author-list" class="author-list" aria-live="polite"><p class="panel-placeholder">Loading authors…</p></div><div class="browse-foot"><span class="tiny-asterisk">✳</span> Source texts and reference material retain their collection labels.</div></div></aside>
     <section class="reading-column" aria-label="Reading desk"><div id="search-results" class="search-results" hidden><div class="results-top"><div><span class="eyebrow">DISCOVERY</span><h2 id="results-heading">Search results</h2><p id="results-summary"></p></div><button id="close-results" type="button" class="quiet-button">Return to reading <span aria-hidden="true">×</span></button></div><div id="dictionary-preview" aria-label="Dictionary preview" hidden></div><div id="results-list" class="results-list"></div><button id="more-results" type="button" class="more-button" hidden>Load more results <span aria-hidden="true">↓</span></button></div>
       <article id="passage" class="passage-card" tabindex="-1" aria-labelledby="passage-title"><div class="passage-heading"><div><span class="eyebrow" id="passage-kicker">A TEXT IN THE COLLECTION</span><h2 id="passage-title">Opening the reader</h2><p id="passage-subtitle" class="passage-subtitle">The first available source text will appear here.</p></div><button type="button" id="passage-fullscreen-toggle" class="passage-fullscreen-toggle" aria-label="Open poem fullscreen" aria-expanded="false" title="Open poem fullscreen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5m13-5h5v5M3 16v5h5m13-5v5h-5"/></svg></button></div><div class="passage-body"><div class="text-frame"><div class="text-leading" id="text-leading">TEXT</div><div id="passage-text" class="greek-text" lang="grc"><p class="loading-line">Loading a passage from the corpus…</p></div></div><div id="selection-actions" class="selection-actions" hidden><span id="selected-phrase"></span><button type="button" data-phrase-mode="exact">Same wording</button><button type="button" data-phrase-mode="forms">Related word forms</button><button type="button" data-phrase-mode="themes">Similar theme</button></div><p class="reading-hint" id="reading-hint">Select a phrase to trace it, or choose a Greek word to inspect it.</p></div><div id="related-material" class="related-material" hidden></div><div id="provenance" class="provenance" hidden></div><div class="passage-nav"><button id="prev-passage" type="button" disabled><span aria-hidden="true">←</span> Previous passage</button><span class="passage-nav-label">THROUGH THE TEXT</span><button id="next-passage" type="button" disabled>Next passage <span aria-hidden="true">→</span></button></div></article></section>
-    <aside class="inspector" aria-labelledby="inspector-title"><div class="inspector-sticky"><span class="eyebrow">CLOSE READING</span><h2 id="inspector-title">At a glance</h2><div class="inspector-tools"><button id="lookup-form" class="lookup-action" type="button">Look up entered form <span aria-hidden="true">↗</span></button><button id="back-to-passage" class="back-to-passage" type="button">← Back to passage</button></div><div id="inspector-content"><div class="inspector-empty"><span class="inspector-symbol" lang="grc">α</span><p>Choose a Greek word in the passage. Its recorded forms, possible analyses, and sources will appear here.</p></div></div></div></aside>
+    <aside class="inspector" aria-labelledby="inspector-title"><div class="inspector-sticky"><span class="eyebrow">CLOSE READING</span><h2 id="inspector-title">At a glance</h2><div class="inspector-tools"><button id="lookup-form" class="lookup-action" type="button" title="Look up the word typed in the search box">Look up searched word <span aria-hidden="true">↗</span></button><button id="back-to-passage" class="back-to-passage" type="button">← Back to passage</button></div><div id="inspector-content"><div class="inspector-empty"><span class="inspector-symbol" lang="grc">α</span><p>Choose a Greek word in the passage. Its recorded forms, possible analyses, and sources will appear here.</p></div></div></div></aside>
   </main>
   <footer class="reader-footer"><div><span lang="grc">Μέλος</span><p>Reading the record, one surviving line at a time.</p><p id="hero-credits"></p></div><a href="legacy">Design studio <span aria-hidden="true">↗</span></a></footer>
   <script src="js/config.js?v=p2-20260930"></script>
@@ -88,11 +88,11 @@
   <script src="js/usage-space.js?v=p2-20260930" defer></script>
   <script src="js/dictionary-preview.js?v=release-l-20261008" defer></script>
   <script src="js/machine-morphology.js?v=p2-20260930" defer></script>
-  <script src="js/passage-analysis.js?v=bracket-words-20261008" defer></script>
+  <script src="js/passage-analysis.js?v=ux-audit-20261008" defer></script>
   <script src="js/nature-preset-data.js" defer></script>
   <script src="js/nature-presets.js?v=reader-touch-20261006" defer></script>
   <script src="js/word-context.js?v=lyric-context-20261007b" defer></script>
-  <script src="js/reader.js?v=bracket-words-20261008" defer></script>
+  <script src="js/reader.js?v=ux-audit-20261008" defer></script>
   <script src="js/reader-fullscreen.js?v=reader-touch-20261006" defer></script>
   <script type="module" src="js/reader-hero.js?v=p2-20260930"></script>
 </body>

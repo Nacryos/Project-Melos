@@ -235,3 +235,13 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .word-headline-form{margin:0;font:22px/1.25 var(--greek);color:var(--ink-2,var(--ink))}.word-headline-reading{font:13px var(--text);color:var(--muted)}.word-headline-parse{margin:1px 0 0;font-size:13px;letter-spacing:.02em;color:var(--muted)}
 .passage-analysis-token .word-headline-host{margin:8px 0 4px}.passage-analysis-token .word-headline-lemma{font-size:28px}
 @media(max-width:600px){.word-headline .word-headline-lemma{font-size:32px}.word-headline-gloss{font-size:17px}.word-headline-form{font-size:20px}}
+/* Live UX audit 2026-10-08: every control shows it can be clicked; verse line numbers never add height. */
+.reader-layout summary,.reader-layout select,.utility-bar select,.mode-picker label{cursor:pointer}
+.reader-layout summary:hover{color:var(--sea)}
+.reader-layout a[href]:hover{color:var(--sea);text-decoration-thickness:2px}
+.dictionary-glimpse-source:hover{border-bottom-color:currentColor}
+.selection-start:not(:disabled):hover{background:#eaf0f6}
+.mark:hover .mark-en{text-decoration:underline;text-underline-offset:3px}
+.dictionary-glimpse-details>summary{display:flex;align-items:center}.dictionary-glimpse-details>summary::after{flex:none}
+.greek-text .line-label{line-height:1;vertical-align:baseline}
+.greek-text.word-dragging,.greek-text.word-dragging .word{-webkit-user-select:none;user-select:none}

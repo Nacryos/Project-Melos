@@ -112,6 +112,20 @@ test('missing authors remain explicit; old backend evidence retains its existing
   const card = harness().render(poem([hit({ author: null })]));
   assert.match(card.textContent, /Author not recorded/);
   const old = harness().render(poem([hit({ text_excerpt: undefined, projection_scope: undefined })]));
-  assert.match(old.textContent, /semantic · commentary · Fixture commentator · Fixture note 1: Retrieval similarity/);
+  assert.match(old.textContent, /Similar meaning · commentary · Fixture commentator · Fixture note 1: Retrieval similarity/);
   assert.doesNotMatch(old.textContent, /Linked passage;|Matched source excerpts/);
+});
+
+test('retrieval terms are shown in plain words; unknown reasons pass through unchanged', () => {
+  const render = harness().render;
+  const fused = render({ ...poem([]), match_reason: 'lexical + forms + semantic; direct passage match',
+    retrieval_score_kind: 'reciprocal_rank_fusion' }).textContent;
+  assert.match(fused, /Same words, related word forms and similar meaning, found in the Greek text/);
+  assert.match(fused, /the order is not a measure of certainty/);
+  assert.doesNotMatch(fused, /reciprocal rank|lexical \+|direct passage match/);
+  const bridged = render({ ...poem([]), match_reason: 'semantic; linked translation/commentary evidence' }).textContent;
+  assert.match(bridged, /Similar meaning, found through a linked translation or commentary/);
+  const signal = render(poem([hit({ parent_id: 'elsewhere', signal: 'lexical', match_reason: 'Normalized wording / citation match' })])).textContent;
+  assert.match(signal, /Same words · commentary · Fixture commentator · Fixture note 1: same wording, ignoring accents and capitals/);
+  assert.match(render({ ...poem([]), match_reason: 'Fixture backend reason' }).textContent, /Fixture backend reason/);
 });

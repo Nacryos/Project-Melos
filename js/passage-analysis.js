@@ -714,6 +714,17 @@
     }
     return { cancel, run };
   }
+  // Showing or resizing the selection toolbar above the poem must not move the
+  // word under the reader's pointer, and the sticky toolbar must not cover it.
+  function holdInView(element, top, toolbar = null) {
+    const view = element?.ownerDocument?.defaultView;
+    if (!view?.scrollBy || !element.isConnected || !Number.isFinite(top)) return;
+    const shift = element.getBoundingClientRect().top - top;
+    if (Math.abs(shift) >= 1) view.scrollBy({ top: shift, behavior: 'instant' });
+    if (!toolbar || toolbar.hidden) return;
+    const covered = toolbar.getBoundingClientRect().bottom + 8 - element.getBoundingClientRect().top;
+    if (covered > 0) view.scrollBy({ top: -covered, behavior: 'instant' });
+  }
   function mount({ root, toolbar, selectionHost, onSelectionChange, getPassage, post, node, safeLink, inspectWord }) {
     const startPhrase = node('button', 'selection-start', 'Select phrase'); startPhrase.type = 'button';
     startPhrase.setAttribute('aria-pressed', 'false'); startPhrase.setAttribute('aria-controls', root.id || 'passage-text');
@@ -747,11 +758,54 @@
     let map = null, source = '', span = null, wordMode = false, busy = false, passageId = '', extending = false, includeMachine = false;
     let phrasePhase = '', gesture = null, moved = false;
     // Observe gestures without cancelling browser scrolling or native selection.
-    root.addEventListener('pointerdown', event => { gesture = { x: event.clientX, y: event.clientY, id: event.pointerId }; moved = false; }, { passive: true });
+    // Chromium and WebKit never start a text selection inside a <button>, so a
+    // mouse drag from one word to another selects the words it passes over.
+    let drag = null;
+    const wordAt = event => {
+      const word = event.target?.closest?.('.word')
+        || root.ownerDocument?.elementFromPoint?.(event.clientX, event.clientY)?.closest?.('.word');
+      return word && root.contains(word) ? word : null;
+    };
+    const dragWords = current => {
+      const words = [...root.querySelectorAll('.word')];
+      const a = words.indexOf(current.start), b = words.indexOf(current.end);
+      return { words, from: Math.min(a, b), to: Math.max(a, b) };
+    };
+    root.addEventListener('pointerdown', event => {
+      gesture = { x: event.clientX, y: event.clientY, id: event.pointerId }; moved = false;
+      const word = event.pointerType === 'mouse' && event.button === 0 ? wordAt(event) : null;
+      drag = word ? { start: word, end: word, moved: false } : null;
+    }, { passive: true });
     root.addEventListener('pointermove', event => {
       if (gesture && gesture.id === event.pointerId && Math.hypot(event.clientX - gesture.x, event.clientY - gesture.y) > 10) moved = true;
+      if (!drag || !(event.buttons & 1)) return;
+      const word = wordAt(event);
+      if (!word || word === drag.end) return;
+      drag.end = word; drag.moved = true;
+      root.classList?.add('word-dragging');
+      root.ownerDocument?.defaultView?.getSelection?.()?.removeAllRanges?.();
+      const { words, from, to } = dragWords(drag);
+      words.forEach((item, index) => item.classList[index >= from && index <= to ? 'add' : 'remove']('phrase-selected'));
     }, { passive: true });
-    root.addEventListener('pointercancel', () => { moved = true; gesture = null; }, { passive: true });
+    root.addEventListener('pointercancel', () => {
+      moved = true; gesture = null;
+      if (drag?.moved) { root.classList?.remove('word-dragging'); highlight(); }
+      drag = null;
+    }, { passive: true });
+    root.ownerDocument?.addEventListener?.('pointerup', () => {
+      const current = drag; drag = null;
+      if (!current?.moved) return;
+      root.classList?.remove('word-dragging');
+      const { words, from, to } = dragWords(current);
+      const first = wordBounds(words[from]), last = wordBounds(words[to]);
+      if (first.start === null || last.end === null) { highlight(); return; }
+      const top = current.end.getBoundingClientRect?.().top;
+      phrasePhase = ''; extending = false; extend.setAttribute('aria-pressed', 'false'); extend.textContent = 'Choose end word';
+      root.ownerDocument?.defaultView?.getSelection?.()?.removeAllRanges?.();
+      change({ start: first.start, end: last.end, offset_unit: 'utf16', selected_text: source.slice(first.start, last.end) }, true);
+      toolbar.hidden = false; onSelectionChange?.();
+      holdInView(current.end, top, toolbar);
+    });
     const key = value => value ? `${value.start}:${value.end}:${value.selected_text}` : '';
     const requester = createRequester({ post,
       current: body => getPassage()?.id === body.passage_id && key(body) === key(span),
@@ -778,7 +832,7 @@
     function candidate(host, value, label, index, showLemma = true, suppressLegacyGloss = false) {
       const card = node('div', 'candidate');
       if (showLemma) say(card, value.lemma || 'Headword not supplied', 'candidate-lemma');
-      say(card, value.analysis_text || featureText(value.features) || featureText(value.inflection) || value.analysis || 'Inflection not supplied.', 'candidate-analysis');
+      say(card, (value.analysis_text && String(value.analysis_text).replace(/,(?=\S)/g, ', ')) || featureText(value.features) || featureText(value.inflection) || value.analysis || 'Inflection not supplied.', 'candidate-analysis');
       const glosses = suppressLegacyGloss ? [] : structuredSensesPresent(value) ? literalSenses(value).map(sense => sense.text)
         : value.glosses || (value.gloss ? [value.gloss] : []);
       for (const gloss of [...new Set(glosses)]) say(card, gloss, 'candidate-gloss');
@@ -1017,6 +1071,11 @@
       selectionNote.hidden = !selectionNote.textContent;
       if (phrasePhase) toolbar.hidden = false;
     }
+    function wordBounds(button) {
+      const walker = root.ownerDocument.createTreeWalker(button, 4); let start = null, end = null;
+      while (walker.nextNode()) { const item = map?.get(walker.currentNode); if (item) { start ??= item.start; end = item.end; } }
+      return { start, end };
+    }
     function highlight() {
       for (const button of root.querySelectorAll('.word')) {
         const walker = root.ownerDocument.createTreeWalker(button, 4); let selected = false;
@@ -1046,6 +1105,8 @@
     function request(options = {}) {
       if (!span || selectionIssue(span) || !map || !getPassage()?.id) return;
       panel.hidden = false; quote.hidden = false; quote.textContent = span.selected_text;
+      // The sticky selection toolbar must not cover the analysis heading.
+      if (panel.style) panel.style.scrollMarginTop = `${Math.ceil(toolbar.hidden ? 0 : toolbar.getBoundingClientRect?.().height || 0) + 16}px`;
       if (options.fetch_machine) includeMachine = true;
       status.textContent = options.rerank ? 'Requesting Jev model estimates…' : 'Looking up this exact selection…';
       requester.run({ version: 1, passage_id: getPassage().id, ...span, fetch_machine: includeMachine, rerank: false, ...options });
@@ -1083,16 +1144,16 @@
       reset() { requester.cancel(); span = null; map = null; wordMode = false; passageId = ''; extending = false; phrasePhase = ''; gesture = null; moved = false; includeMachine = false; extend.setAttribute('aria-pressed', 'false'); extend.textContent = 'Choose end word'; panel.hidden = true; quote.hidden = false; output.replaceChildren(); highlight(); refreshAction(); },
       bind(passage) { source = String(passage.text || ''); passageId = passage.id; map = sourceMap(root, source); refreshAction(); },
       selectionChanged(selection) {
-        if (!getPassage() || getPassage().id !== passageId) return;
+        if (!getPassage() || getPassage().id !== passageId || drag?.moved) return;
         // Focusing the action button collapses native selection in some browsers.
         // Keep the captured range until a new valid source selection replaces it.
         if (!selection || !selection.rangeCount || selection.isCollapsed || selection.getRangeAt?.(0)?.collapsed) return;
         const next = selectedSpan(selection, root, map, source);
         if (next) { phrasePhase = ''; extending = false; extend.setAttribute('aria-pressed', 'false'); extend.textContent = 'Choose end word'; change(next); }
       },
+      isDragging: () => Boolean(drag?.moved),
       chooseWord(button) {
-        const walker = root.ownerDocument.createTreeWalker(button, 4); let first = null, last = null;
-        while (walker.nextNode()) { const item = map?.get(walker.currentNode); if (item) { first ??= item.start; last = item.end; } }
+        let { start: first, end: last } = wordBounds(button);
         if ((extending || phrasePhase === 'end') && span && first !== null) { first = Math.min(first, span.start); last = Math.max(last, span.end); }
         if (first !== null && phrasePhase) phrasePhase = phrasePhase === 'end' ? 'ready' : 'end';
         extending = false; extend.setAttribute('aria-pressed', 'false'); extend.textContent = 'Choose end word';
@@ -1101,5 +1162,5 @@
       }
     };
   }
-  window.MelosPassageAnalysis = { mount, sourceMap, selectedSpan, selectionIssue, createRequester, lexicalPrediction, sourceCandidateGroups, rankingCandidateLabel, dedupeCandidates, groupCandidateDisplays, renderPartialCandidateEvidence, machineSubentryMeanings, renderMachineSubentryMeanings, englishTranslation, interlinearSegments, renderInterlinear, shortGlossText, headlineFromRow, renderWordHeadline, renderPublishedCommentary, renderTranslationComparisons, verifiedEditorialRows, renderEditorialAnalysis, renderEditorialWordActions };
+  window.MelosPassageAnalysis = { mount, holdInView, sourceMap, selectedSpan, selectionIssue, createRequester, lexicalPrediction, sourceCandidateGroups, rankingCandidateLabel, dedupeCandidates, groupCandidateDisplays, renderPartialCandidateEvidence, machineSubentryMeanings, renderMachineSubentryMeanings, englishTranslation, interlinearSegments, renderInterlinear, shortGlossText, headlineFromRow, renderWordHeadline, renderPublishedCommentary, renderTranslationComparisons, verifiedEditorialRows, renderEditorialAnalysis, renderEditorialWordActions };
 })();

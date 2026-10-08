@@ -20,3 +20,5 @@
 /* A landscape phone needs its limited vertical space for the poem itself. */
 @media(max-height:500px){.selection-actions{position:static}.greek-text .word{scroll-margin-top:80px}}
 @media(max-width:600px){.selection-actions{gap:6px;padding:8px}.selection-actions button{font-size:12px}.selection-actions .selection-extend{display:none}.selection-actions>span{font-size:16px;max-height:2.6em}.selection-actions .selection-analysis-note{font-size:12px}}
+/* With a mouse the sticky toolbar can be compact, so it covers fewer lines of the poem. */
+@media(pointer:fine){.selection-actions{padding:8px;gap:6px}.selection-actions button{min-height:34px;padding:5px 10px}.selection-actions>span{font-size:16px}}

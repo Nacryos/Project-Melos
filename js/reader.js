@@ -91,7 +91,7 @@
     ui.bridgeNote.textContent = formMode() === 'themes'
       ? 'Theme search may bridge through translations or commentary. Each result identifies the text that was indexed.'
       : formMode() === 'hybrid'
-        ? 'All evidence combines word, form, and semantic candidates. Source links explain each result; ranking is not certainty or influence.'
+        ? 'Searches exact words, related word forms and similar meanings together. Each result says why it matched; its place in the list is not a measure of certainty.'
         : formMode() === 'forms'
           ? 'Forms search uses source-recorded alternatives, not generated paradigms. A match does not select a meaning.'
         : 'English searches may use translations or commentary as a bridge. Results identify the indexed text.';
@@ -107,15 +107,15 @@
   function describeCount(count, thing) { return `${count.toLocaleString()} ${count === 1 ? thing : thing === 'match' ? 'matches' : `${thing}s`}`; }
   function semanticCoverage(embedding) {
     if (!embedding?.ready) return {
-      label: 'Themes: unavailable (absent or stale).',
+      label: 'Theme search is unavailable at the moment.',
       detail: embedding?.warning || 'The local semantic index is absent or stale.'
     };
     const count = Number(embedding.count);
     const eligible = embedding.eligible_count == null ? NaN : Number(embedding.eligible_count);
-    if (!Number.isFinite(count)) return { label: 'Themes: indexed.', detail: embedding.warning || 'Semantic index is ready.' };
+    if (!Number.isFinite(count)) return { label: 'Theme search is available.', detail: embedding.warning || 'Semantic index is ready.' };
     const detail = `${count.toLocaleString()} indexed${Number.isFinite(eligible) && eligible >= 0 ? ` of ${eligible.toLocaleString()} eligible source records` : ' source records'}. ${embedding.warning || ''}`;
-    if (Number.isFinite(eligible) && eligible > count) return { label: `Themes: partial (${count.toLocaleString()}/${eligible.toLocaleString()} eligible).`, detail };
-    return { label: Number.isFinite(eligible) ? `Themes: eligible index complete (${count.toLocaleString()}).` : `Themes: ${count.toLocaleString()} records indexed.`, detail };
+    if (Number.isFinite(eligible) && eligible > count) return { label: `Theme search covers ${count.toLocaleString()} of ${eligible.toLocaleString()} passages.`, detail };
+    return { label: Number.isFinite(eligible) ? `Theme search covers all ${count.toLocaleString()} passages.` : `Theme search covers ${count.toLocaleString()} passages.`, detail };
   }
   function updateLanguageOptions(languages) {
     if (!Array.isArray(languages)) return;
@@ -436,10 +436,14 @@
           && ui.text.contains(selection.getRangeAt(0).endContainer)) {
           updateSelection(); return;
         }
+        // Showing the selection toolbar above the poem must not move this word.
+        const top = button.getBoundingClientRect?.().top;
         if (state.passageAnalysis?.isChoosingPhrase?.() || state.passageAnalysis?.isExtending?.()) {
-          state.passageAnalysis.chooseWord(button); updateSelection(true); return;
+          state.passageAnalysis.chooseWord(button); updateSelection(true);
+          window.MelosPassageAnalysis?.holdInView?.(button, top, ui.selectionActions); return;
         }
         inspectWord(word.form, button, word.joined, Boolean(word.fragmentaryJoinRejected));
+        window.MelosPassageAnalysis?.holdInView?.(button, top, ui.selectionActions);
       });
       host.append(button);
       cursor = end;
@@ -722,7 +726,8 @@
         line.append(node('span', '', [member.author, member.work, member.citation,
           member.edition, member.source, member.quality && qualityLabel(member.quality)].filter(Boolean).join(' · ')));
         if (member.id) {
-          const open = node('button', 'related-open', `Open ${member.id}`);
+          const open = node('button', 'related-open', 'Open this record →');
+          open.title = `Record ${member.id}`; open.setAttribute?.('aria-label', `Open record ${member.id}`);
           open.type = 'button'; open.addEventListener('click', () => openPassage(member.id));
           line.append(open);
         }
@@ -802,8 +807,12 @@
       ui.selectionActions.hidden = true;
       if (state.works.has(state.selectedAuthor)) renderAuthors();
       const current = new URL(location.href);
+      const changed = current.searchParams.get('id') !== (passage.id || id);
       current.searchParams.set('id', passage.id || id);
-      history.replaceState(null, '', current);
+      // A passage the reader chose gets its own history entry, so Back returns
+      // to the previous passage; initial loads and Back/Forward only replace.
+      if (focus && changed && typeof history.pushState === 'function') history.pushState(null, '', current);
+      else history.replaceState(null, '', current);
       if (focus) ui.passage.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (error) {
       if (sequence === state.passageSequence) renderPassageEmpty(`Could not open this passage: ${errorText(error)}`, true);
@@ -838,6 +847,21 @@
       uncertainty: Array.isArray(selected?.uncertainty) ? selected.uncertainty : [] };
   }
   function renderResult(record, searchContract = null) {
+    // Search signals and reasons arrive as retrieval terms; show them in words a
+    // reader of Greek would use. Unknown reasons pass through unchanged.
+    const SIGNAL_LABELS = { lexical: 'Same words', forms: 'Related word forms', semantic: 'Similar meaning' };
+    function plainMatchReason(value) {
+      const text = String(value || '');
+      const signals = text.match(/^((?:lexical|forms|semantic)(?: \+ (?:lexical|forms|semantic))*); (linked translation\/commentary evidence|direct passage match)(.*)$/s);
+      if (signals) {
+        const kinds = signals[1].split(' + ').map((name, index) => index ? SIGNAL_LABELS[name].toLowerCase() : SIGNAL_LABELS[name]);
+        const how = signals[2] === 'direct passage match' ? 'found in the Greek text' : 'found through a linked translation or commentary';
+        const list = kinds.length > 1 ? `${kinds.slice(0, -1).join(', ')} and ${kinds.at(-1)}` : kinds[0];
+        return `${list}, ${how}${signals[3]}`;
+      }
+      return ({ 'Original passage embedding': 'similar in meaning to the whole passage',
+        'Normalized wording / citation match': 'same wording, ignoring accents and capitals' })[text] || text;
+    }
     const button = node('button', 'result-button');
     button.type = 'button';
     const source = node('span', 'result-source', record.author || 'Unattributed');
@@ -861,7 +885,7 @@
     const dateClaim = chronologyClaim(record);
     const copies = Number(record.mirror_count) > 1 ? `${record.mirror_count - 1} identical ${record.mirror_count === 2 ? 'copy' : 'copies'} collapsed` : '';
     const quality = record.quality && record.quality !== 'source_text' ? qualityLabel(record.quality) : '';
-    const reason = [record.match_reason, quality, copies, dateClaim ? `Author date claim (${dateClaim.kind}): ${dateClaim.interval}` : ''].filter(Boolean).join(' · ');
+    const reason = [plainMatchReason(record.match_reason), quality, copies, dateClaim ? `Author date claim (${dateClaim.kind}): ${dateClaim.interval}` : ''].filter(Boolean).join(' · ');
     if (reason) body.append(node('span', 'result-reason', reason));
     const evidence = (Array.isArray(record.matched_evidence) ? record.matched_evidence : []).filter(hit =>
       hit?.kind !== 'translation' || /^(?:en|eng)(?:-[a-z0-9]{2,8})*$/i.test(String(hit.language || '').trim()));
@@ -907,12 +931,12 @@
         detail.append(node('span', 'result-reason',
           `${scope}${hit.excerpt_truncated ? ' Excerpt shortened.' : ''}`));
       } else {
-        const label = [hit.signal && String(hit.signal).replaceAll('_', ' '), hit.kind, hit.quality && hit.quality !== 'source_text' ? qualityLabel(hit.quality) : '', hit.author, hit.citation].filter(Boolean).join(' · ');
-        detail.append(node('span', '', `${label || 'Linked source'}: ${hit.match_reason || 'retrieval match'}`));
+        const label = [hit.signal && (SIGNAL_LABELS[hit.signal] || String(hit.signal).replaceAll('_', ' ')), hit.kind, hit.quality && hit.quality !== 'source_text' ? qualityLabel(hit.quality) : '', hit.author, hit.citation].filter(Boolean).join(' · ');
+        detail.append(node('span', '', `${label || 'Linked source'}: ${plainMatchReason(hit.match_reason) || 'matched'}`));
       }
       body.append(detail);
     }
-    if (record.retrieval_score_kind === 'reciprocal_rank_fusion') body.append(node('span', 'result-reason', 'Ranked by reciprocal rank fusion; rank is not confidence.'));
+    if (record.retrieval_score_kind === 'reciprocal_rank_fusion') body.append(node('span', 'result-reason', 'Listed by how well several kinds of match agree; the order is not a measure of certainty.'));
     button.append(source, body);
     button.addEventListener('click', () => openPassage(record.id));
     if (sequenceProof) {
@@ -2218,7 +2242,7 @@
         if (definition.text) card.append(node('span', 'candidate-meta-label', definition.provenance ? 'Source definition excerpt' : 'Dictionary excerpt'), node('p', 'candidate-gloss', definition.text));
         if (!definition.structured) for (const gloss of candidate.glosses || []) if (gloss !== definition.text) card.append(node('p', 'candidate-gloss', gloss));
         if (candidate.analysis_text) {
-          const parse = node('p', 'candidate-analysis', candidate.analysis_text);
+          const parse = node('p', 'candidate-analysis', String(candidate.analysis_text).replace(/,(?=\S)/g, ', '));
           if (candidate.analysis) parse.title = `Source analysis: ${candidate.analysis}${candidate.analysis_format ? ` (${candidate.analysis_format})` : ''}`;
           card.append(parse);
         } else if (candidate.analysis) card.append(node('p', 'candidate-analysis', `${candidate.analysis}${candidate.analysis_format ? ` (${candidate.analysis_format})` : ''}`));
@@ -2446,7 +2470,13 @@
       ui.moreResults.hidden = true;
     } else if (saved.query) search(saved.query, saved.mode);
     if (params.get('id')) { await openPassage(params.get('id'), false); return; }
-    if (saved.query || saved.issues.length) return;
+    if (saved.query || saved.issues.length) {
+      // A search link opens no passage of its own: say so instead of leaving
+      // the reading desk on its loading message.
+      renderPassageEmpty('Choose a search result to read it here, or choose a poet under “Browse the corpus”.');
+      ui.title.textContent = 'The reading desk';
+      return;
+    }
     const preferred = state.authors.find(a => /sappho/i.test(a.author || ''))
       || state.authors.find(a => /pindar/i.test(a.author || ''))
       || state.authors.find(a => /bacchylides/i.test(a.author || ''))
@@ -2520,6 +2550,14 @@
     setFormMode(mode);
     search(state.selectedText, mode);
   });
-  document.addEventListener('selectionchange', () => requestAnimationFrame(updateSelection));
+  document.addEventListener('selectionchange', () => requestAnimationFrame(() => {
+    // A mouse drag across word buttons is finished by the analysis module.
+    if (!state.passageAnalysis?.isDragging?.()) updateSelection();
+  }));
+  window.addEventListener('popstate', () => {
+    // Back and Forward return to the passage that was open at that point.
+    const id = new URL(location.href).searchParams.get('id');
+    if (id && id !== state.passage?.id) openPassage(id, false);
+  });
   initialize();
 })();

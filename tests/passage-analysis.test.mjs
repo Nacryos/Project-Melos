@@ -460,3 +460,37 @@ test('word and endpoint selection never call the API; explicit actions preserve 
   assert.match(host.querySelector('.passage-ranking-abstain').textContent, /22.0% model estimate/);
   host.querySelector('.passage-analysis-close').click(); assert.equal(host.querySelector('.passage-analysis').hidden, true);
 });
+
+test('a mouse drag from one word button to another selects every word between them; touch drags never do', () => {
+  document.addEventListener = (name, fn) => { (document.events ??= {})[name] = fn; };
+  try {
+    const f = touchFixture(), at = word => ({ closest: () => word });
+    f.root.events.pointerdown({ pointerType: 'mouse', button: 0, pointerId: 1, clientX: 0, clientY: 0, target: at(f.first) });
+    f.root.events.pointermove({ pointerId: 1, buttons: 1, clientX: 60, clientY: 30, target: at(f.next) });
+    assert.equal(f.controller.isDragging(), true);
+    assert.ok([f.first, f.middle, f.next].every(button => button.classList.contains('phrase-selected')));
+    assert.ok(!f.last.classList.contains('phrase-selected'));
+    document.events.pointerup({});
+    assert.equal(f.controller.isDragging(), false);
+    assert.equal(f.controller.currentSelection().selected_text, 'α̣ [β]\nγ');
+    assert.equal(f.toolbar.hidden, false); assert.equal(f.requests.length, 0);
+    const g = touchFixture();
+    g.root.events.pointerdown({ pointerType: 'touch', button: 0, pointerId: 2, clientX: 0, clientY: 0, target: at(g.first) });
+    g.root.events.pointermove({ pointerId: 2, buttons: 1, clientX: 0, clientY: 80, target: at(g.last) });
+    assert.equal(g.controller.isDragging(), false); assert.equal(g.controller.currentSelection(), null);
+  } finally { delete document.addEventListener; delete document.events; }
+});
+
+test('holdInView keeps a clicked word where it was and scrolls it clear of the sticky toolbar', () => {
+  const { holdInView } = window.MelosPassageAnalysis, calls = []; let y = 0;
+  const view = { scrollBy: ({ top }) => { calls.push(top); y -= top; } };
+  const word = { isConnected: true, ownerDocument: { defaultView: view }, getBoundingClientRect: () => ({ top: y }) };
+  y = 466; // the toolbar appeared above the poem and pushed the word down
+  holdInView(word, 300, { hidden: false, getBoundingClientRect: () => ({ bottom: 120 }) });
+  assert.deepEqual(calls, [166]); assert.equal(y, 300);
+  calls.length = 0; y = 60; // a word under the stuck toolbar
+  holdInView(word, 60, { hidden: false, getBoundingClientRect: () => ({ bottom: 150 }) });
+  assert.deepEqual(calls, [-98]); assert.equal(y, 158);
+  calls.length = 0; holdInView(word, 158, { hidden: true });
+  assert.deepEqual(calls, []);
+});
