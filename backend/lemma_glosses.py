@@ -267,11 +267,20 @@ def stem_shared(form, lemma):
     return k >= 2 and skeleton_b[:k] in skeleton_a
 
 
+def _initial_upper(text):
+    letters = [c for c in unicodedata.normalize("NFD", str(text or "")).lstrip("†") if unicodedata.category(c).startswith("L")]
+    return bool(letters) and letters[0].isupper()
+
+
 def _resolve_direct(headword, row, lookup, *, marked=False, number=None, accept_folded=True):
     found = lookup(headword) or {}
     entries = found.get("entries") or []
     if not accept_folded and found.get("match") != "exact_headword":
         entries = []
+    if found.get("match") == "folded_headword" and _initial_upper(headword):
+        # A proper name (Ἀνακτορία) never takes the meaning of a common noun that
+        # differs from it only in case or accent (ἀνακτορία "management").
+        entries = [e for e in entries if _initial_upper(e.get("lemma"))]
     if found.get("match") == "folded_headword" and len({headword_key(e.get("lemma")).casefold() for e in entries}) > 1:
         # Several accent-distinct headwords share the letters (ὄρος / ὀρός):
         # the folded key does not say which one is meant.
@@ -580,7 +589,8 @@ def attach_lemma_glosses(interlinear, lookup, limit=MAX_LOOKUPS, *, syntax=None,
             for key in ("conditional_on",):
                 if key in gloss:
                     chosen[key] = gloss[key]
-            row["gloss"] = chosen
+            from .short_gloss import normalise_gloss_case
+            row["gloss"] = normalise_gloss_case(chosen, row.get("lemma"))
             summary["filled"] += 1
     return summary
 

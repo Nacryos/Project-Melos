@@ -887,37 +887,13 @@ def word_request(form: str, passage_id: str='', lemma: str=''):
     result = word(form, passage_id)
     if printed != form:
         result['printed_form'] = printed
-    status = result.get('analysis_match_status')
-    if status in ('spelling_suggestions_only', 'no_match', 'headword_only') and not result.get('contextual_candidates'):
-        # No indexed source analyses this exact form: ask the parser, through the same
-        # local Morpheus and generated-spelling path the in-poem analysis uses.
-        try:
-            from .machine_morphology import get_service
-            from .word_parser_candidates import parser_candidates
-            rows = parser_candidates(form, get_service(), lambda lemma: morph_service().headword_entries(lemma),
-                                     lambda value: morph_service().form_lemmas(value))
-        except Exception:
-            rows = []
-        if rows:
-            if status == 'spelling_suggestions_only':
-                # Nearby spellings stay available, apart from the analyses of this form.
-                result['spelling_suggestions'] = result.get('candidates') or []
-                result['candidates'] = []
-            result['candidates'] = [*(result.get('candidates') or []), *rows]
-            result['analysis_match_status'] = 'parser_analysis_only' if status != 'headword_only' else status
-            result['warnings'] = [*(result.get('warnings') or []),
-                'No indexed source text records this exact form; the parses shown are machine analyses (Morpheus), '
-                'some of them of a labelled standard spelling.']
-    if lemma:
-        # The caller's headword (the passage row's lemma) leads: its dictionary entries and
-        # candidates come first, so the panel's dictionary matches its headline. Nothing is removed.
-        import unicodedata as _ud
-        key = lambda value: _ud.normalize('NFC', str(value or '')).rstrip('0123456789')
-        wanted = key(lemma)
-        for field in ('lexicon_entries', 'candidates'):
-            if isinstance(result.get(field), list):
-                result[field] = sorted(result[field], key=lambda item: key((item or {}).get('lemma')) != wanted)
-        result['selected_lemma'] = lemma
+    # No indexed source analysis of the exact form: the same local Morpheus and
+    # generated-spelling path as in-poem analysis (backend.word_parser_candidates).
+    from .machine_morphology import get_service
+    from .word_parser_candidates import enrich_word_result
+    enrich_word_result(result, form, machine_service=get_service(),
+                       headword_lookup=lambda value: morph_service().headword_entries(value),
+                       form_lemmas=lambda value: morph_service().form_lemmas(value), lemma=lemma)
     if os.environ.get('MELOS_MACHINE_SUBENTRIES_ENABLED') == '1':
         from .passage_analysis import machine_dictionary_lookup
         from .machine_morphology import get_service

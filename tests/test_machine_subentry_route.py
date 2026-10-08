@@ -87,7 +87,12 @@ def test_actual_server_route_with_archived_receipt_and_source(mode, endpoint, re
     if endpoint == 'word':
         assert result['source_only_fixture'] is True
         if mode == 'disabled':
-            assert result == {'form': result['form'], 'source_only_fixture': True}
+            # Release N: /api/word adds labelled parser candidates (local Morpheus) and the
+            # dictionary entries of their headwords; machine subentries stay off.
+            extra = set(result) - {'form', 'source_only_fixture'}
+            assert extra <= {'parser_candidates', 'parse_source', 'lexicon_entries'}
+            assert 'machine_dictionary' not in result
+            assert all(row['candidate_kind'] == 'machine_analysis' for row in result.get('parser_candidates', []))
             return
         result = result['machine_dictionary']
         assert result['scope'] == 'standalone_form_query'

@@ -194,5 +194,26 @@ def corroborated_choice(groups):
     return None
 
 
-__all__ = ["DICTIONARY_ORDER", "corroborated", "corroborated_choice", "DICTIONARY_LABELS", "dictionary_rank", "letter_or_numeral_entry",
+def normalise_gloss_case(gloss, lemma):
+    """Lower-case the first letter of a short gloss for a common (lower-case) Greek headword.
+
+    "To be" (πάρειμι) -> "to be". A capitalised headword (Ζεύς "Zeus"), "I" and "O",
+    and an all-capitals first word are left as printed. Only `short_text` changes;
+    the dictionary's full text stays verbatim.
+    """
+    if not isinstance(gloss, dict) or not isinstance(gloss.get("short_text"), str) or not gloss["short_text"]:
+        return gloss
+    letters = [ch for ch in unicodedata.normalize("NFD", str(lemma or "")) if unicodedata.category(ch).startswith("L")]
+    if not letters or letters[0].isupper():
+        return gloss
+    text = gloss["short_text"]
+    first = text.split()[0]
+    if first in ("I", "O") or first.isupper() or not first[:1].isupper():
+        return gloss
+    gloss["short_text"] = text[0].lower() + text[1:]
+    gloss["short_text_case"] = "first_letter_lowercased_for_common_headword"
+    return gloss
+
+
+__all__ = ["DICTIONARY_ORDER", "normalise_gloss_case", "corroborated", "corroborated_choice", "DICTIONARY_LABELS", "dictionary_rank", "letter_or_numeral_entry",
            "meaningful", "metalanguage_only", "short_head", "NON_NUMERAL_POS"]

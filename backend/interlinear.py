@@ -303,6 +303,30 @@ def _affinity(candidate, syntax):
     return score
 
 
+def _ranking_key(lemma):
+    """A headword without breathing or case (ὀ/ὁ, Ἔρως/ἔρως); accents and homograph numbers kept."""
+    text = unicodedata.normalize('NFD', str(lemma or ''))
+    return unicodedata.normalize('NFC', ''.join(ch for ch in text if ch not in '̓̔')).lower()
+
+
+def _dedupe_ranking(ranking, candidates):
+    """One line per (headword ignoring breathing/case, part of speech, parse); the best-ranked stays.
+
+    A capitalised and a lower-case headword with the same parse are one reading here; a proper
+    noun and a common noun that really differ have different parts of speech and stay apart.
+    """
+    pos = {candidate_identity(candidate): canonical_features(candidate).get('POS') for candidate in candidates}
+    seen, out = set(), []
+    for item in ranking:
+        key = (_ranking_key(item.get('lemma')), pos.get(item.get('candidate_id')), item.get('parse_short'),
+               item.get('normalised_query'))
+        if item.get('lemma') and key in seen:
+            continue
+        seen.add(key)
+        out.append(item)
+    return out
+
+
 def parse_source(chosen, group=None, predicted=None, engines=None):
     """Which source supplied the shown parse, as a readable label (never an internal id)."""
     item = chosen or (group[0] if group else None)
@@ -405,13 +429,27 @@ def _fullest_reading(ranked, syntax, informative, everything=None):
     return fuller[0] if first - second >= 0.5 else top
 
 
+def _first_letter_upper(text):
+    letters = [ch for ch in unicodedata.normalize('NFD', str(text or '')) if unicodedata.category(ch).startswith('L')]
+    return bool(letters) and letters[0].isupper()
+
+
+def _case_prior(row):
+    """A capitalised printed word prefers a proper-name headword (Ἀνακτορίας: Ἀνακτορία, not
+    ἀνακτορία "management"); a lower-case one prefers a common headword (ἔρως, not Ἔρως)."""
+    form, lemma = _CURRENT_FORM[0], row.get('lemma')
+    if not form or not lemma:
+        return 0.0
+    return 1.0 if _first_letter_upper(form) == _first_letter_upper(lemma) else -1.0
+
+
 def rank_candidates(candidates, syntax):
     """Candidates ordered by affinity to the prediction; ties keep source order.
 
     Returns a list of {candidate, score}. Without a prediction every score is
     the dialect prior only, so the order is essentially the source order.
     """
-    scored = [(index, _affinity(row, syntax), row) for index, row in enumerate(candidates)]
+    scored = [(index, _affinity(row, syntax) + _case_prior(row), row) for index, row in enumerate(candidates)]
     scored.sort(key=lambda item: (-item[1], item[0]))
     return [{'candidate': row, 'score': score} for _, score, row in scored]
 
@@ -573,6 +611,10 @@ def _gloss(candidate, token):
             if family and family != primary_family and _identity(entry.get('lemma')) == _identity(candidate.get('lemma')):
                 other_families.setdefault(family, []).append(entry)
         bound += [rows[0] for rows in other_families.values() if len(rows) == 1 and not _homograph_marked(rows[0])]
+    if _first_letter_upper(candidate.get('lemma')):
+        # A proper name never borrows a common noun's entry that differs only in case.
+        entries = [entry for entry in entries if _first_letter_upper(entry.get('lemma'))
+                   or entry.get('id') == candidate.get('gloss_entry_id')]
     if not bound:
         bound = [entry for entry in entries if _identity(entry.get('lemma')) == _identity(candidate.get('lemma'))]
         if _homograph_marked(candidate):
@@ -1294,6 +1336,18 @@ def interlinear_reading(result):
         candidates = [] if partial else [
             *[item for item in [*(token.get('source_candidates') or []), *(token.get('contextual_candidates') or [])] if _exact(item, token)],
             *[item for item in (token.get('machine') or {}).get('machine_candidates') or [] if _exact(item, token, True)]]
+        if (chosen and _first_letter_upper(_form(token)) and not _first_letter_upper(chosen.get('lemma'))
+                and not chosen.get('claim_ids')):
+            # A capitalised printed word with a recorded proper-name reading of the same
+            # parse is that name (Ἀνακτορίας: Ἀνακτορία, not ἀνακτορία "management").
+            parse = canonical_features(chosen)
+            word_class = lambda pos: 'NOUN' if pos in ('NOUN', 'PROPN') else pos
+            named = [item for item in candidates if _first_letter_upper(item.get('lemma'))
+                     and canonical_features(item).get('POS') in (None, *({parse.get('POS'), 'PROPN'} if word_class(parse.get('POS')) == 'NOUN' else {parse.get('POS')}))
+                     and {k: v for k, v in canonical_features(item).items() if k != 'POS'}
+                     == {k: v for k, v in parse.items() if k != 'POS'}]
+            if len({_identity(item.get('lemma')) for item in named}) == 1:
+                chosen, basis = {**named[0], 'id': candidate_identity(named[0])}, 'proper_name_preferred_for_capitalised_form'
         # A conflict is recorded when the prediction disagrees with the chosen
         # parse (on a feature or on the lemma), or with every candidate. It
         # flags the disagreement; it does not erase a full source parse.
@@ -1396,6 +1450,7 @@ def interlinear_reading(result):
              **({'normalised_query': item['candidate']['normalised_query'], 'normalisation_rule': item['candidate'].get('normalisation_rule')}
                 if item['candidate'].get('normalised_query') else {})}
             for item in rank_candidates(candidates, predicted)] if candidates else []
+        row['morphology_ranking'] = _dedupe_ranking(row['morphology_ranking'], candidates)
         row['candidate_meanings'] = [
             {'candidate_id': candidate_identity(item), 'lemma': item.get('lemma'),
              'features': canonical_features(item), 'parse_short': compact_parse(canonical_features(item)),
@@ -1528,6 +1583,9 @@ def interlinear_reading(result):
         groups.append({'id': group_id, 'token_ids': [row['token_id'] for row in members], 'features': features,
                        'label': compact_parse(features), 'evidence_type': 'predicted_dependency_agreement', 'relations': component})
     ready = any(row.get('parse_short') or (row.get('gloss') or {}).get('text') for row in projected)
+    from .short_gloss import normalise_gloss_case
+    for row in projected:
+        normalise_gloss_case(row.get('gloss'), row.get('lemma'))
     return {'version': 1, 'status': 'proposed' if ready else 'unavailable', 'label': 'Proposed reading', 'text': selection['text'],
             'readings': [{'id': 'syntax-1', 'label': 'Proposed reading', 'status': 'proposed' if ready else 'unavailable', 'tokens': projected, 'groups': groups}],
             'warnings': ['One proposed reading, not a ranked set of joint sentence analyses. Colors indicate predicted modifier agreement, not independently verified syntax.',

@@ -9,7 +9,117 @@ exactly as for passage rows (backend.lemma_glosses). Nothing here is a source re
 """
 from __future__ import annotations
 
+import re
+import unicodedata
+
 MAX_ROWS = 12
+MAX_HEADWORDS = 4
+NO_SOURCE_ANALYSIS = ("spelling_suggestions_only", "no_match", "headword_only")
+
+
+_SENSE_LABEL = re.compile(r"(?:[0-9]{1,3}|[A-Za-z]{1,2}|[IVXivx]{1,5}|[α-ω]{1,2})\.?")
+
+
+def clean_sense_labels(entry):
+    """A TEI sense `n` that is not a sense numeral or letter is not shown as one.
+
+    Middle Liddell marks the Perseus editors' summary definition with n="Perseus";
+    that value moves to n_raw and the sense says who supplied it.
+    """
+    if not isinstance(entry, dict):
+        return entry
+    for sense in entry.get("dictionary_senses") or []:
+        for step in (sense.get("sense_path") if isinstance(sense, dict) else None) or []:
+            n = step.get("n") if isinstance(step, dict) else None
+            if isinstance(n, str) and n and not _SENSE_LABEL.fullmatch(n):
+                step["n_raw"], step["n"] = n, None
+                if n == "Perseus":
+                    sense["sense_note"] = "Summary definition supplied by the Perseus editors, not a numbered sense"
+    return entry
+
+
+def lemma_key(value):
+    """NFC, without a dagger or homograph number: εἰμί (oxia) == εἰμί (tonos), †εἰμί, ἐρύω2."""
+    return unicodedata.normalize("NFC", str(value or "")).lstrip("†").rstrip("0123456789").strip()
+
+
+def enrich_word_result(result, form, *, machine_service, headword_lookup=None, form_lemmas=None, lemma=""):
+    """/api/word additions; the source-only `word()` result is extended, never rewritten.
+
+    - lemmas in NFC (the stored spelling stays in lemma_raw), so one headword is one key;
+    - parser_candidates: local Morpheus (+ generated spellings) for the form, always listed
+      separately; merged into `candidates` only when no indexed source analyses the form;
+    - parse_source: which source the candidates' parses come from, as a readable label;
+    - the dictionary entries of the headwords the candidates parse to (and of `lemma`);
+    - `lemma` (the caller's headline headword) first among entries and candidates.
+    """
+    from copy import deepcopy
+    if isinstance(result.get("lexicon_entries"), list):
+        result["lexicon_entries"] = [clean_sense_labels(deepcopy(entry)) for entry in result["lexicon_entries"]]
+    for field in ("lexicon_entries", "candidates", "contextual_candidates"):
+        for item in result.get(field) or []:
+            if isinstance(item, dict) and isinstance(item.get("lemma"), str):
+                normal = unicodedata.normalize("NFC", item["lemma"])
+                if normal != item["lemma"]:
+                    item.setdefault("lemma_raw", item["lemma"])
+                    item["lemma"] = normal
+    try:
+        rows = parser_candidates(form, machine_service, headword_lookup, form_lemmas)
+    except Exception:
+        rows = []
+    result["parser_candidates"] = rows
+    status = result.get("analysis_match_status")
+    if rows and status in NO_SOURCE_ANALYSIS and not result.get("contextual_candidates"):
+        if status == "spelling_suggestions_only":
+            # Nearby spellings stay available, apart from the analyses of this form.
+            result["spelling_suggestions"] = result.get("candidates") or []
+            result["candidates"] = []
+        result["candidates"] = [*(result.get("candidates") or []), *rows]
+        result["analysis_match_status"] = "parser_analysis_only" if status != "headword_only" else status
+        result["warnings"] = [*(result.get("warnings") or []),
+                              "No indexed source text records this exact form; the parses shown are machine "
+                              "analyses (Morpheus), some of them of a labelled standard spelling."]
+    shown = [*(result.get("contextual_candidates") or []), *(result.get("candidates") or [])]
+    if result.get("analysis_match_status") == "parser_analysis_only":
+        labels = sorted({row["source"] for row in rows if row.get("source")})
+        result["parse_source"] = {"kind": "machine_analysis", "label": "; ".join(labels)}
+    elif any(item.get("analysis") or item.get("analysis_text") for item in shown):
+        labels = sorted({str(item.get("source")) for item in shown if item.get("source")})
+        result["parse_source"] = {"kind": "source_analysis", "label": "; ".join(labels[:4]) or "Recorded source analyses"}
+    else:
+        result["parse_source"] = None
+    if headword_lookup is not None:
+        wanted = [lemma] if lemma else []
+        for item in [*shown, *rows]:
+            if item.get("lemma") and lemma_key(item["lemma"]) not in {lemma_key(w) for w in wanted}:
+                wanted.append(item["lemma"])
+        entries = result.setdefault("lexicon_entries", [])
+        have = {lemma_key(entry.get("lemma")) for entry in entries if isinstance(entry, dict)}
+        ids = {entry.get("id") for entry in entries if isinstance(entry, dict)}
+        for headword in wanted[:MAX_HEADWORDS]:
+            if lemma_key(headword) in have:
+                continue
+            try:
+                found = (headword_lookup(headword) or {}).get("entries") or []
+            except Exception:
+                found = []
+            for entry in found:
+                if entry.get("id") not in ids:
+                    entry = dict(entry, headword_of_parse=headword,
+                                 dictionary_senses=[dict(sense, sense_path=[dict(step) for step in sense.get("sense_path") or []])
+                                                    for sense in entry.get("dictionary_senses") or [] if isinstance(sense, dict)])
+                    if isinstance(entry.get("lemma"), str) and unicodedata.normalize("NFC", entry["lemma"]) != entry["lemma"]:
+                        entry["lemma_raw"], entry["lemma"] = entry["lemma"], unicodedata.normalize("NFC", entry["lemma"])
+                    entries.append(clean_sense_labels(entry))
+                    ids.add(entry.get("id"))
+            have.add(lemma_key(headword))
+    if lemma:
+        target = lemma_key(lemma)
+        for field in ("lexicon_entries", "candidates"):
+            if isinstance(result.get(field), list):
+                result[field] = sorted(result[field], key=lambda item: lemma_key((item or {}).get("lemma")) != target)
+        result["selected_lemma"] = lemma
+    return result
 
 
 def parser_candidates(form, machine_service, headword_lookup=None, form_lemmas=None):
