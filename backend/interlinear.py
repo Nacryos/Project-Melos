@@ -1387,6 +1387,16 @@ def interlinear_reading(result):
                 consensus, parse_support = shared, [candidate_identity(item['candidate']) for item in top]
                 consensus_basis = 'morphology_ranked_parse_consensus'
                 consensus_group = [item['candidate'] for item in top]
+        if not chosen and not consensus and not partial and conflict and candidates:
+            # The prediction contradicts every candidate, so it cannot choose. A recorded
+            # source analysis outranks machine alternatives when the recorded rows give
+            # one single reading (ἁμέρα: the treebank's ἡμέρα over the parser's ἥμερος).
+            recorded = [item for item in candidates if candidate_basis(item) == 'source_alternative'
+                        and item.get('lemma') and canonical_features(item)]
+            readings = {(_lemma_key(item.get('lemma')), tuple(sorted(canonical_features(item).items()))) for item in recorded}
+            if len(readings) == 1:
+                best = rank_candidates(recorded, None)[0]['candidate']
+                chosen, basis = {**best, 'id': candidate_identity(best)}, 'recorded_analysis_despite_syntax_conflict'
         lexical_conflict = _lexical_prediction_conflict(token, predicted) if not chosen and not consensus and not partial else None
         conflict = conflict or bool(lexical_conflict)
         features = canonical_features(chosen) if chosen else consensus or (canonical_features(predicted or {}) if not partial and not conflict else {})
