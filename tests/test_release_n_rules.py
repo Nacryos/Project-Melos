@@ -114,3 +114,10 @@ def test_word_lookup_nfc_lemmas_and_requested_headword_first():
     enrich_word_result(result, "εἰμί", machine_service=Engine({}), lemma="εἰμί")
     assert result["lexicon_entries"][0]["id"] == "b" and result["lexicon_entries"][0]["lemma_raw"] == oxia
     assert lemma_key("†εἰμί") == lemma_key(oxia)
+
+
+def test_capitalised_headword_uses_lower_case_entry_only_if_it_names_a_being():
+    from backend.short_gloss import entry_names_a_being
+    assert entry_names_a_being({"dictionary_senses": [{"text": "a maiden"}, {"text": "II. a Muse, goddess of song"}]})
+    assert not entry_names_a_being({"dictionary_senses": [{"text": "the care of a household"}],
+                                    "entry_text": "Xen. Oec. 3.4, Plat."})

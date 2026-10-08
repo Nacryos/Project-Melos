@@ -215,5 +215,17 @@ def normalise_gloss_case(gloss, lemma):
     return gloss
 
 
-__all__ = ["DICTIONARY_ORDER", "normalise_gloss_case", "corroborated", "corroborated_choice", "DICTIONARY_LABELS", "dictionary_rank", "letter_or_numeral_entry",
+_NAMED_IN_TEXT = re.compile(r"(?<=[a-z,;] )[A-Z][a-z]{3,}(?![a-z.])")
+
+
+def entry_names_a_being(entry):
+    """A lower-case dictionary entry that also names a person, god or being in its English
+    (\"II. a Nymph\", \"Eros, the god of love\"): a capitalised word inside a sentence that is not an
+    abbreviation. A capitalised headword may use such an entry; ἀνακτορία \"the management\" has none."""
+    text = " ".join(str(sense.get("text") or "") for sense in (entry or {}).get("dictionary_senses") or [] if isinstance(sense, dict))
+    text += " " + str((entry or {}).get("rendered_entry_text") or (entry or {}).get("entry_text") or "")
+    return bool(_NAMED_IN_TEXT.search(text))
+
+
+__all__ = ["DICTIONARY_ORDER", "normalise_gloss_case", "entry_names_a_being", "corroborated", "corroborated_choice", "DICTIONARY_LABELS", "dictionary_rank", "letter_or_numeral_entry",
            "meaningful", "metalanguage_only", "short_head", "NON_NUMERAL_POS"]

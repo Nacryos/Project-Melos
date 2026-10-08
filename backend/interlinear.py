@@ -613,8 +613,9 @@ def _gloss(candidate, token):
         bound += [rows[0] for rows in other_families.values() if len(rows) == 1 and not _homograph_marked(rows[0])]
     if _first_letter_upper(candidate.get('lemma')):
         # A proper name never borrows a common noun's entry that differs only in case.
+        from .short_gloss import entry_names_a_being
         entries = [entry for entry in entries if _first_letter_upper(entry.get('lemma'))
-                   or entry.get('id') == candidate.get('gloss_entry_id')]
+                   or entry.get('id') == candidate.get('gloss_entry_id') or entry_names_a_being(entry)]
     if not bound:
         bound = [entry for entry in entries if _identity(entry.get('lemma')) == _identity(candidate.get('lemma'))]
         if _homograph_marked(candidate):

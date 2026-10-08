@@ -280,7 +280,8 @@ def _resolve_direct(headword, row, lookup, *, marked=False, number=None, accept_
     if found.get("match") == "folded_headword" and _initial_upper(headword):
         # A proper name (Ἀνακτορία) never takes the meaning of a common noun that
         # differs from it only in case or accent (ἀνακτορία "management").
-        entries = [e for e in entries if _initial_upper(e.get("lemma"))]
+        from .short_gloss import entry_names_a_being
+        entries = [e for e in entries if _initial_upper(e.get("lemma")) or entry_names_a_being(e)]
     if found.get("match") == "folded_headword" and len({headword_key(e.get("lemma")).casefold() for e in entries}) > 1:
         # Several accent-distinct headwords share the letters (ὄρος / ὀρός):
         # the folded key does not say which one is meant.
