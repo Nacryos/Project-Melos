@@ -186,3 +186,57 @@ candidates share a parse, lemma left open), then the older consensus and
 prediction fallbacks. Every word row carries `morphology_ranking`, the ordered
 list with scores, which the reader shows as "Parses ranked by fit to the
 context".
+
+## Random-sample fixes across all Campbell GLP poems (release M, 2026-10-08)
+
+Measured with `scripts/sample_glp_quality.py` (random 1–6 word spans from all
+237 `campbell-glp` passages, stratified by dialect group and poet; each word row
+scored for complete parse fields, a lemma, a short gloss, a plausible gloss and
+a plausible lemma, with a failure class). Every fix below is a rule or a lookup
+improvement, never an answer for a sampled word; unit tests use other words
+(`tests/test_glp_quality_rules.py`).
+
+**Lemma → headword** (`backend/lemma_glosses.py`, tried in order and labelled in
+`gloss.lemma_dictionary.lemma_normalisation`): macrons/breves and stray leading
+breathings or apostrophes removed from parser lemmas (πῑ́νω, ̓Αλέξανδρος); an
+elided lemma (τ’) restored to the one headword its stem can be, or to the
+contextual model's lemma when that is one of the restorations; a lemma that is
+itself a recorded inflected form (Μοῦσαι) read back to the one lemma its
+recorded analyses name (`Morphology.form_lemmas`); Lesbian psilosis in the
+lemma (ὀ → ὁ); a table of dialect correspondences (Ionic η/Attic ᾱ, Doric ᾱ/η,
+ει/ε, ου/ο, σσ/ττ, ρσ/ρρ, Doric ω and Aeolic οι for ου, Ionic ευ for ου) that
+must land on a printed headword. Folded (accentless) matches that cover
+several accent-distinct headwords are not used.
+
+**Contextual-model lemma.** A word with no parser or source lemma may take the
+odyCy model's lemma when it is a printed dictionary headword, shares a run of
+letters (or its consonant skeleton) with the word, the word has at least three
+letters, and no ranked parser lemma contradicts it. Labelled
+`lemma_source.basis = syntax_model_lemma_dictionary_headword`; the gloss is
+`syntax_model_lemma_dictionary_headword_first_sense_not_contextual`.
+
+**Recorded spellings of labelled variants** (`PassageAnalysisService._recorded_form_variants`,
+`aeolic_variants.offline_variants`). When the parser has no receipt or no
+analysis and the source index has no parse of the printed form, labelled
+variants are looked up as recorded forms (at most 40 lookups per request): the
+Aeolic parser normalisations, the elided vowel restored (ἀλλ’ → ἀλλά, every
+short vowel tried), the second word of a crasis (κἀγώ → ἐγώ, τοὔνομα → ὄνομα,
+χὠ → ὁ), and Doric/Aeolic ᾱ for η (νάσω → νήσω). A recorded analysis of the
+variant is listed with `candidate_kind: source_analysis_normalised`, its rule and
+the variant spelling, and ranks below any exact analysis.
+
+**Choosing the gloss.** A sense that is only grammatical metalanguage
+("comparative", "Adv.") is skipped; a preposition does not take a sense the
+dictionary labels adverbial (and vice versa); and the head phrase another
+dictionary prints word-for-word is preferred (`short_gloss.corroborated_choice`):
+Middle Liddell's Latin equivalent "alius" yields to "another", and a first
+sense found in no other entry yields to the next dictionary's confirmed one.
+The gloss stays the dictionary's own words with its source.
+
+**Part of speech.** The contextual model's SCONJ, PROPN, AUX and INTJ classes
+are now kept (they were dropped, leaving πρίν with no class); SCONJ~CCONJ,
+PROPN~NOUN and AUX~VERB count as the same class in ranking.
+
+**Parser receipts.** `scripts/warm_morphology_forms.py --order frequency`
+fetches the most frequent forms first under the daily budget; 870 new
+receipts for GLP forms ship with release M.

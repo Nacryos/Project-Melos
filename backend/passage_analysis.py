@@ -59,6 +59,9 @@ def machine_dictionary_lookup(form, *, machine_lookup, subentry_lookup):
         result.pop('interlinear', None)
         return result
 MAX_EDITORIAL_LOOKUPS = 16
+# Recorded-form lookups of labelled spelling variants (elision restored, crasis,
+# dialect vowels) for words nothing else analyses; per request.
+MAX_VARIANT_LOOKUPS = 40
 APOSTROPHES = "'’ʼ᾽"
 EDITORIAL = frozenset("[]⟦⟧⟨⟩<>…†‡̣")
 
@@ -324,11 +327,14 @@ def _context(passage):
 
 class PassageAnalysisService:
     def __init__(self, passage_lookup, word_lookup, *, machine_service=None, syntax_provider=None, ranker=None, sense_ranker=None,
-                 machine_subentry_lookup=None, headword_lookup=None):
+                 machine_subentry_lookup=None, headword_lookup=None, form_lemma_lookup=None):
         self.passage_lookup, self.word_lookup = passage_lookup, word_lookup
         # Optional: Morphology.headword_entries, used only to give a parse
         # lemma its dictionary headword meaning when no entry was joined.
         self.headword_lookup = headword_lookup
+        # Optional: Morphology.form_lemmas, to read a parser lemma that is itself
+        # an inflected form back to its headword.
+        self.form_lemma_lookup = form_lemma_lookup
         self.machine_service, self.syntax_provider, self.ranker = machine_service, syntax_provider, ranker
         self.sense_ranker = sense_ranker
         # Explicit deployment dependency only. The callback must wrap the
@@ -396,6 +402,7 @@ class PassageAnalysisService:
         if not 1 <= word_count <= MAX_WORDS:
             raise PassageAnalysisError("invalid_word_count", f"Select between 1 and {MAX_WORDS} words.")
         source_cache, machine_cache, fetch_count = {}, {}, 0
+        variant_budget = [MAX_VARIANT_LOOKUPS]
         dictionary_cache = {}
         subentry_cache, subentry_catalog = {}, {'version': 1, 'ranking_status': 'unsupported_source_type'}
 
@@ -523,8 +530,17 @@ class PassageAnalysisService:
                         machine["status"] = "ok_normalised"
                         machine.setdefault("warnings", []).append(
                             "No analysis of the exact printed form; the parses shown come from labelled Aeolic spelling normalisations.")
+                if (not machine.get("machine_candidates") and not token.get("lacuna_boundary_uncertain")
+                        and machine.get("status") in ("cache_miss", "no_analyses", "request_limit")):
+                    # The parser was consulted and has nothing for the printed form.
+                    machine = self._recorded_form_variants(form, token, machine, passage_id, source_cache, variant_budget)
                 machine_cache[form] = machine
             token["machine"] = deepcopy(machine_cache[form])
+            if token["machine"].get("normalised_lexicon_entries"):
+                known = {entry.get("id") for entry in token.get("lexicon_entries") or []}
+                token.setdefault("lexicon_entries", []).extend(
+                    deepcopy(entry) for entry in token["machine"].pop("normalised_lexicon_entries")
+                    if entry.get("id") not in known)
             if token.get("lacuna_boundary_uncertain"):
                 token["machine"].update(occurrence_scope="conditional_on_word_boundary",
                                         word_attestation=False, occurrence_verified=False)
@@ -572,7 +588,9 @@ class PassageAnalysisService:
         result["interlinear"] = interlinear_reading(result)
         if self.headword_lookup is not None:
             from .lemma_glosses import attach_lemma_glosses
-            result["limits"]["lemma_dictionary"] = attach_lemma_glosses(result["interlinear"], self.headword_lookup)
+            result["limits"]["lemma_dictionary"] = attach_lemma_glosses(
+                result["interlinear"], self.headword_lookup, syntax=result.get("syntax"),
+                form_lemmas=self.form_lemma_lookup)
         result["sense_ranking"] = {"status": "not_requested"}
         if request.get('rerank') and self.sense_ranker is not None:
             from .sense_ranker import apply_sense_ranking
@@ -599,6 +617,60 @@ class PassageAnalysisService:
                 result['editorial_analysis'] = {'version':1,'status':'unavailable','rows':[],
                     'selection_expansion_hints':[],
                     'reason':'Approved Campbell source identity is unavailable.'}
+        return result
+
+    def _recorded_form_variants(self, form, token, machine, passage_id, source_cache, budget):
+        """Parses of labelled spelling variants found in the recorded-form index.
+
+        Used only when neither the source index nor the parser analyses the
+        printed form. Each variant (``aeolic_variants.offline_variants``:
+        parser normalisations, the elided vowel restored, the second word of a
+        crasis, Doric/Aeolic ᾱ for η) is looked up exactly as a recorded form;
+        a recorded analysis of the variant is listed with its rule and the
+        variant spelling, ranks below any exact analysis, and is never a
+        claim about the printed form itself.
+        """
+        from .aeolic_variants import offline_variants
+        from .interlinear import _exact as exact_candidate, canonical_features
+        source = source_cache.get(form) or {}
+        printed = {"form": form, "text": token.get("text"), "analysis_match_status": source.get("analysis_match_status"),
+                   "structured_evidence": source.get("structured_evidence"), "claim_applications": {}}
+        if any(exact_candidate(row, printed) and canonical_features(row)
+               for row in [*(source.get("candidates") or []), *(source.get("contextual_candidates") or [])]):
+            return machine
+        added, entries, tried = [], [], []
+        for variant in offline_variants(form):
+            if budget[0] <= 0:
+                break
+            key = variant["form"]
+            if key not in source_cache:
+                budget[0] -= 1
+                try:
+                    source_cache[key] = self.word_lookup(key, passage_id) or {}
+                except Exception:
+                    source_cache[key] = {"status": "unavailable"}
+            found = source_cache[key]
+            probe = {"form": key, "text": key, "analysis_match_status": found.get("analysis_match_status"),
+                     "structured_evidence": found.get("structured_evidence"), "claim_applications": {}}
+            rows = [row for row in found.get("candidates") or []
+                    if exact_candidate(row, probe) and canonical_features(row) and row.get("lemma")]
+            tried.append({**variant, "status": "recorded" if rows else "not_recorded", "candidate_count": len(rows)})
+            for row in rows:
+                copy = {k: deepcopy(v) for k, v in row.items()
+                        if k not in ("matched_form", "matched_form_variants", "attested_form", "form", "id",
+                                     "generated_candidate_identity")}
+                copy.update(basis="source_analysis_normalised", candidate_kind="source_analysis_normalised",
+                            normalised_query=key, normalisation_rule=variant["rule"],
+                            normalisation_note=variant["note"], tier="recorded_form_of_normalised_spelling",
+                            normalised_matched_form=row.get("matched_form") or key)
+                added.append(copy)
+            entries.extend(found.get("lexicon_entries") or [])
+        result = {**machine, "recorded_form_variants": tried}
+        if added:
+            result.update(machine_candidates=added, status="ok_normalised_source",
+                          normalised_lexicon_entries=entries,
+                          warnings=[*(machine.get("warnings") or []),
+                                    "No analysis of the exact printed form; the parses shown are recorded analyses of labelled spelling variants."])
         return result
 
     @staticmethod

@@ -52,6 +52,33 @@ def letter_or_numeral_entry(entry: dict) -> bool:
     return bool(LETTER_OR_NUMERAL.search(opening))
 
 
+# Grammatical metalanguage a dictionary prints around its definitions
+# ("formed with a comparative force", "Adv.", "poet. form"). A sense made only
+# of these words is a label the extractor caught, not a meaning.
+_GRAMMAR_TERMS = {
+    "comparative", "superlative", "adverb", "adv", "adverbial", "particle", "enclitic", "proclitic",
+    "conjunction", "conj", "preposition", "prep", "pronoun", "pron", "interjection", "aorist", "aor",
+    "pf", "fut", "pres", "imperfect", "impf", "participle", "infinitive", "inf", "passive", "pass", "med",
+    "poet", "poetic", "ep", "epic", "ion", "ionic", "dor", "doric", "aeol", "aeolic", "att", "attic",
+    "dat", "gen", "acc", "nom", "voc", "pl", "plural", "sg", "singular", "masc", "fem", "neut", "irreg", "redupl",
+}
+_CONNECTORS = {"of", "and", "or", "the", "a", "an", "form", "forms", "also", "used", "only", "as", "in", "with",
+               "force", "sense", "sometimes", "mostly", "usu", "usually"}
+
+
+def metalanguage_only(text: str | None) -> bool:
+    """True when a definition is only grammatical labels ("comparative", "Adv.").
+
+    Every word must be a grammatical term or a connector, and at least one a
+    grammatical term, so real one-word meanings ("in", "and", "old") pass.
+    """
+    if re.search(r"[Ͱ-Ͽἀ-῿]", text or ""):
+        return False
+    words = [word.lower().strip(".’'") for word in re.findall(r"[A-Za-z][A-Za-z.’']*", text or "")]
+    return (bool(words) and all(word in _GRAMMAR_TERMS or word in _CONNECTORS for word in words)
+            and any(word in _GRAMMAR_TERMS for word in words))
+
+
 _WORDS = re.compile(r"[A-Za-z][A-Za-z'’-]*")
 # Only articles: "and", "or", "in", "on" are real glosses (τε, ἤ, ἐν, ἐπί).
 _STOP = {"a", "an", "the"}
@@ -104,5 +131,49 @@ def short_head(text: str | None) -> dict | None:
     return {"text": short, "method": method, "source_text": value}
 
 
-__all__ = ["DICTIONARY_ORDER", "DICTIONARY_LABELS", "dictionary_rank", "letter_or_numeral_entry",
-           "meaningful", "short_head", "NON_NUMERAL_POS"]
+_LEAD = re.compile(r"^(?:to|a|an|the)\s+", re.I)
+
+
+def _phrase_key(phrase: str) -> str:
+    return _LEAD.sub("", " ".join(phrase.lower().split()).strip(" .,;:!?")).strip()
+
+
+def _phrases(text: str, limit: int = 4) -> list[str]:
+    return [part.strip() for part in re.split(r"\s*[;:,]\s*", " ".join(str(text or "").split()))[:limit]
+            if part.strip()]
+
+
+def corroborated(phrase: str, others: list[str]) -> bool:
+    """The phrase (articles and "to" aside) occurs word-for-word in another
+    dictionary's entry for the same headword."""
+    key = _phrase_key(phrase)
+    if len(key) < 2 or not meaningful(key) or metalanguage_only(key):
+        return False
+    pattern = re.compile(r"(?<![A-Za-z])" + re.escape(key) + r"(?![A-Za-z])")
+    return any(pattern.search(" ".join(str(text or "").lower().split())) for text in others)
+
+
+def corroborated_choice(groups):
+    """Pick the gloss sense and head phrase that another dictionary confirms.
+
+    ``groups`` is an ordered list of (source, senses, other_entry_texts), one
+    per dictionary in DICTIONARY_ORDER, where ``other_entry_texts`` are the
+    full texts of the *other* dictionaries' entries for the same headword.
+    The first sense of each dictionary is examined in order; the first of its
+    leading phrases that another dictionary prints word-for-word wins
+    ("alius, another" -> "another": the Latin equivalent is in no English
+    dictionary; Middle Liddell's δή "exactness" is in no other entry, so
+    Autenrieth's "now" is used). Returns (sense, phrase) or None, in which case
+    the caller keeps the plain first sense. Nothing is reworded.
+    """
+    groups = [group for group in groups if group[1] and group[2]]
+    for source, senses, others in groups:
+        sense = senses[0]
+        for phrase in _phrases(sense.get("text")):
+            if corroborated(phrase, others):
+                return sense, phrase
+    return None
+
+
+__all__ = ["DICTIONARY_ORDER", "corroborated", "corroborated_choice", "DICTIONARY_LABELS", "dictionary_rank", "letter_or_numeral_entry",
+           "meaningful", "metalanguage_only", "short_head", "NON_NUMERAL_POS"]

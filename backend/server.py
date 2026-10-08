@@ -1080,6 +1080,7 @@ app.include_router(_passage_router(
     machine_subentry_lookup=(_passage_machine_subentries
                             if os.environ.get('MELOS_MACHINE_SUBENTRIES_ENABLED') == '1' else None),
     headword_lookup=lambda lemma: morph_service().headword_entries(lemma),
+    form_lemma_lookup=lambda form: morph_service().form_lemmas(form),
 ))
 
 

@@ -12,7 +12,8 @@ import re
 import unicodedata
 
 from .morphology import describe_postag
-from .short_gloss import NON_NUMERAL_POS, dictionary_rank, letter_or_numeral_entry, short_head
+from .short_gloss import (NON_NUMERAL_POS, corroborated_choice, dictionary_rank, letter_or_numeral_entry,
+                          metalanguage_only, short_head)
 from .translation_languages import is_english_language
 
 _VALUES = {
@@ -24,7 +25,11 @@ _VALUES = {
     'Mood': {'Ind': ('indicative', 'ind.'), 'Sub': ('subjunctive', 'subj.'), 'Opt': ('optative', 'opt.'), 'Imp': ('imperative', 'imper.')},
     'Voice': {'Act': ('active', 'act.'), 'Mid': ('middle', 'mid.'), 'Pass': ('passive', 'pass.'), 'Med': ('medio-passive', 'mid./pass.')},
     'VerbForm': {'Inf': ('infinitive', 'inf.'), 'Part': ('participle', 'ptcp.'), 'Fin': ('finite', '')},
-    'POS': {'NOUN': ('noun', 'n.'), 'ADJ': ('adjective', 'adj.'), 'DET': ('article', 'art.'), 'PRON': ('pronoun', 'pron.'), 'VERB': ('verb', 'v.'), 'ADV': ('adverb', 'adv.'), 'ADP': ('preposition', 'prep.'), 'CCONJ': ('conjunction', 'conj.'), 'PART': ('particle', 'part.')},
+    'POS': {'NOUN': ('noun', 'n.'), 'ADJ': ('adjective', 'adj.'), 'DET': ('article', 'art.'), 'PRON': ('pronoun', 'pron.'), 'VERB': ('verb', 'v.'), 'ADV': ('adverb', 'adv.'), 'ADP': ('preposition', 'prep.'), 'CCONJ': ('conjunction', 'conj.'), 'PART': ('particle', 'part.'),
+            # UD classes the contextual model predicts; without them its
+            # prediction for πρίν (SCONJ) or ἐστί (AUX) carried no class at all.
+            'SCONJ': ('subordinating conjunction', 'conj.'), 'INTJ': ('interjection', 'interj.'),
+            'PROPN': ('proper noun', 'n.'), 'AUX': ('auxiliary verb', 'v.')},
 }
 _KEYS = {'case': 'Case', 'gender': 'Gender', 'gend': 'Gender', 'number': 'Number', 'num': 'Number', 'person': 'Person', 'pers': 'Person', 'tense': 'Tense', 'mood': 'Mood', 'voice': 'Voice', 'verbform': 'VerbForm', 'pofs': 'POS', 'pos': 'POS', 'upos': 'POS'}
 
@@ -109,6 +114,9 @@ def _lemma_letters(value):
 
 
 _FUNCTION_WORD_POS = {'ADV', 'ADP', 'CCONJ', 'SCONJ', 'PART'}
+# The same class under two labels: Perseus "conjunction" covers UD CCONJ and
+# SCONJ; a proper noun is a noun; an auxiliary is a verb.
+_SAME_CLASS = ({'CCONJ', 'SCONJ'}, {'NOUN', 'PROPN'}, {'VERB', 'AUX'})
 
 
 def _feature_agrees(key, candidate_value, predicted_value):
@@ -118,7 +126,8 @@ def _feature_agrees(key, candidate_value, predicted_value):
     if candidate_value == predicted_value:
         return True
     if key == 'POS' and ({candidate_value, predicted_value} <= _FUNCTION_WORD_POS
-                         or {candidate_value, predicted_value} == {'DET', 'PRON'}):
+                         or {candidate_value, predicted_value} == {'DET', 'PRON'}
+                         or {candidate_value, predicted_value} in _SAME_CLASS):
         # Taggers and dictionaries split adverbs, prepositions, conjunctions
         # and particles differently (ἐκτός ADP/ADV, ἀλλά CCONJ/ADV, δέ PART),
         # and the article ὁ is tagged DET or PRON depending on its use.
@@ -200,10 +209,21 @@ def _agreements(candidate, syntax):
     return own + _partner_scores(candidate, syntax)[0]
 
 
+_ELIDED = "’᾽'ʼ"
+
+
 def _lemma_agrees(candidate, syntax):
     if not (candidate.get('lemma') and syntax.get('lemma')):
         return None
-    return _lemma_letters(candidate['lemma']) == _lemma_letters(syntax['lemma'])
+    a, b = _lemma_letters(candidate['lemma']), _lemma_letters(syntax['lemma'])
+    if a == b:
+        return True
+    # An elided lemma (τ’, ἀλλ’) agrees with the full word it shortens (τε,
+    # ἀλλά): same letters plus the one elided vowel.
+    for short, full in ((a, b), (b, a)):
+        if short[-1:] in _ELIDED and len(full) == len(short) and full.startswith(short[:-1]) and full[-1] in 'αεοι':
+            return True
+    return False
 
 
 def _contradicts(candidate, syntax):
@@ -237,7 +257,7 @@ def _affinity(candidate, syntax):
     features, predicted = canonical_features(candidate), canonical_features(syntax or {})
     score = 0.0
     for key in set(features) & set(predicted):
-        if features[key] == predicted[key]:
+        if features[key] == predicted[key] or (key == 'POS' and {features[key], predicted[key]} in _SAME_CLASS):
             score += 1.0
         elif _feature_agrees(key, features[key], predicted[key]):
             # Soft matches (Past~Aor, ADV~CCONJ) count, but an exact match
@@ -284,6 +304,8 @@ def _affinity(candidate, syntax):
 
 
 def candidate_basis(item):
+    if item.get('candidate_kind') == 'source_analysis_normalised':
+        return 'source_analysis_normalised'
     if item.get('normalised_query'):
         return 'machine_analysis_normalised'
     if item.get('basis') == 'machine_analysis' or item.get('candidate_kind') == 'machine_analysis':
@@ -572,6 +594,20 @@ def _gloss(candidate, token):
         eligible = [sense for sense in senses if sense_form_compatible(sense, token, candidate=candidate)]
         if not eligible:
             return {**missing, 'alternatives': senses, 'selection_basis': 'no_form_compatible_dictionary_sense'}
+        # A sense that is only a grammatical label the extractor caught
+        # ("comparative" from "formed with a comparative force") is not a
+        # meaning; the next sense of the same entries is shown instead.
+        eligible = [sense for sense in eligible if not metalanguage_only(sense['text'])]
+        if not eligible:
+            return {**missing, 'alternatives': senses, 'selection_basis': 'only_grammatical_label_senses'}
+        pos = canonical_features(candidate).get('POS')
+        entry_of = {(entry.get('gloss_entry_id') or entry.get('id')): entry for entry in structured}
+        matching = [sense for sense in eligible
+                    if sense_class_compatible(sense, entry_of.get(sense.get('lexicon_entry_id') or sense.get('entry_id')) or {}, pos)]
+        eligible = matching or eligible
+        choice = corroborated_choice(_corroboration_groups(structured, eligible))
+        if choice:
+            return gloss_from_sense(choice[0], senses, phrase=choice[1])
         return gloss_from_sense(eligible[0], senses)
     sources = [candidate, *bound] if candidate.get('gloss') else bound
     for row in sources:
@@ -588,6 +624,8 @@ def _gloss(candidate, token):
         # senses. A qualifier alone is not a meaning either.
         if re.fullmatch(r'\([^)]*\)[,.:]?', first):
             first = ''
+        if metalanguage_only(first):
+            continue
         # Prefer a complete sourced sense over an arbitrary word cap. Long
         # senses may wrap in the reader, but their meaning is never clipped.
         short = first or None
@@ -600,14 +638,36 @@ def _gloss(candidate, token):
     return missing
 
 
+def _entry_text(entry):
+    return str(entry.get('rendered_entry_text') or entry.get('entry_text') or '')
+
+
+def _corroboration_groups(entries, eligible):
+    """(source, eligible senses, other dictionaries' entry texts) per dictionary, in order."""
+    groups = []
+    for entry in entries:
+        entry_id = entry.get('gloss_entry_id') or entry.get('id')
+        own = [sense for sense in eligible if (sense.get('lexicon_entry_id') or sense.get('entry_id')) == entry_id]
+        others = [_entry_text(other) for other in entries if _dictionary_family(other) != _dictionary_family(entry)]
+        groups.append((entry.get('source'), own, others))
+    return groups
+
+
 def _short_fields(text):
     """1-4 word head of the chosen source definition, in the source's words."""
     head = short_head(text)
     return {'short_text': head['text'], 'short_text_method': head['method']} if head else {'short_text': None}
 
 
-def gloss_from_sense(sense, alternatives, *, contextual=False):
-    return {'text': sense['text'], 'full_text': sense['text'], **_short_fields(sense['text']), 'status': 'available',
+def gloss_from_sense(sense, alternatives, *, contextual=False, phrase=None):
+    short = _short_fields(sense['text'])
+    if phrase:
+        # A leading phrase of the same sense that another dictionary confirms
+        # (short_gloss.corroborated_choice); still the source's own words.
+        head = short_head(phrase)
+        if head:
+            short = {'short_text': head['text'], 'short_text_method': 'corroborated_phrase'}
+    return {'text': sense['text'], 'full_text': sense['text'], **short, 'status': 'available',
             'source': sense.get('source'), 'source_url': sense.get('source_url'),
             'entry_id': sense.get('lexicon_entry_id') or sense.get('entry_id'),
             'sense_id': sense['id'], 'alternatives': deepcopy(alternatives),
@@ -687,6 +747,51 @@ def _sense_tenses(sense, token, candidate):
     if token.get('selection_basis') == 'syntax_prediction':
         return []
     return [canonical_features(token).get('Tense')]
+
+
+_ADV_LABEL = re.compile(r"\b(?:as\s+)?adv\.?(?=[\s,.:;]|$)", re.I)
+_PREP_LABEL = re.compile(r"\bprep\.|\b(?:w|c)\.\s*(?:gen|dat|acc)\.|\bwith\s+(?:gen|dat|acc)\.", re.I)
+
+
+def sense_class_label(sense, entry):
+    """'ADV' or 'ADP' when the dictionary labels the sense itself ("I. adv.,
+    thereto"; "prep. with gen., ... from"); None otherwise.
+
+    Read from the entry text just before the sense: the sense is located near
+    its recorded offset, and only the stretch after the previous sense's
+    boundary (a dash, numbered head or full stop) is examined.
+    """
+    text = str(entry.get('rendered_entry_text') or entry.get('entry_text') or '')
+    wording = sense.get('text') or ''
+    locator = sense.get('source_locator') or {}
+    start = locator.get('rendered_start')
+    if not text or not wording:
+        return None
+    position = -1
+    if isinstance(start, int):
+        window_start = max(0, start - 60)
+        position = text.find(wording, window_start, start + 60 + len(wording))
+    if position < 0:
+        position = text.find(wording)
+    if position < 0:
+        return None
+    before = text[max(0, position - 40):position]
+    before = re.split(r"—|–|\(\d\)|\b[IVX]+\.\s|\b\d\.\s|;", before)[-1]
+    adverb, preposition = _ADV_LABEL.search(before), _PREP_LABEL.search(before)
+    if adverb and not preposition:
+        return 'ADV'
+    if preposition and not adverb:
+        return 'ADP'
+    return None
+
+
+def sense_class_compatible(sense, entry, pos):
+    """A preposition does not take an adverb-labelled sense, nor an adverb a
+    preposition-labelled one (πρός "in addition" is the adverbial use)."""
+    if pos not in ('ADP', 'ADV'):
+        return True
+    label = sense_class_label(sense, entry)
+    return label is None or label == pos
 
 
 def sense_form_compatible(sense, token, *, candidate=None):

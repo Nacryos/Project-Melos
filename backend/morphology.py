@@ -411,6 +411,20 @@ class Morphology:
         return {"lemma": target, "status": "available" if entries else "no_headword",
                 "match": match if entries else None, "entries": entries}
 
+    def form_lemmas(self, form: str) -> list[str]:
+        """Lemmas the source annotations record for this exact (NFC) spelling.
+
+        Used only to read a parser lemma that is itself an inflected form
+        (Μοῦσαι) back to its headword; no paradigm is generated.
+        """
+        self._load()
+        if not isinstance(form, str) or not form.strip() or len(form) > 200:
+            return []
+        target = unicodedata.normalize("NFC", form.strip())
+        return sorted({unicodedata.normalize("NFC", str(row.get("lemma")))
+                       for row in self._forms.get(normalize(target), ())
+                       if unicodedata.normalize("NFC", str(row.get("form") or "")) == target and row.get("lemma")})
+
     def counts(self) -> dict[str, int]:
         self._load()
         return {"entries": self.entry_count, "forms": self.form_count}
