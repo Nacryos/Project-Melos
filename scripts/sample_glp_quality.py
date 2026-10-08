@@ -256,7 +256,7 @@ def analyze(base, pid, text, start, end, fetch_machine):
             "selected_text": text[start:end], "rerank": False, "fetch_machine": fetch_machine}
     req = urllib.request.Request(base + "/api/analyze-passage", data=json.dumps(body).encode(),
                                  headers={"Content-Type": "application/json", "Accept-Encoding": "identity"})
-    return json.load(urllib.request.urlopen(req, timeout=600))
+    return json.load(urllib.request.urlopen(req, timeout=180))
 
 
 def passage_ids():
@@ -298,9 +298,18 @@ def run(args):
     with out.open("w", encoding="utf-8") as handle:
         for number, (group, poet, pid, size, position) in enumerate(plan):
             if pid not in texts:
-                pacer.wait()
-                texts[pid] = json.load(urllib.request.urlopen(
-                    args.base + "/api/passage?id=" + urllib.parse.quote(pid), timeout=120))["text"]
+                for _ in range(3):
+                    pacer.wait()
+                    try:
+                        texts[pid] = json.load(urllib.request.urlopen(
+                            args.base + "/api/passage?id=" + urllib.parse.quote(pid), timeout=120))["text"]
+                        break
+                    except (urllib.error.URLError, TimeoutError, OSError, ValueError):
+                        time.sleep(15)
+                if pid not in texts:
+                    handle.write(json.dumps({"span": number, "pid": pid, "error": "passage_unavailable"}) + "\n")
+                    errors += 1
+                    continue
             text = texts[pid]
             words = [t for t in tokenize_span(text, 0, len(text)) if t["kind"] == "word"]
             if not words:
@@ -322,8 +331,13 @@ def run(args):
                                              "selection": text[start:end]}, ensure_ascii=False) + "\n")
                     errors += 1
                     break
-                except (urllib.error.URLError, TimeoutError) as exc:
-                    handle.write(json.dumps({"span": number, "pid": pid, "error": str(exc),
+                except (urllib.error.URLError, TimeoutError, OSError, ValueError) as exc:
+                    # Dropped connections and truncated bodies are retried once
+                    # after a pause, then recorded as an error for the span.
+                    if attempt < 1:
+                        time.sleep(15)
+                        continue
+                    handle.write(json.dumps({"span": number, "pid": pid, "error": repr(exc)[:300],
                                              "selection": text[start:end]}, ensure_ascii=False) + "\n")
                     errors += 1
                     break

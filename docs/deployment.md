@@ -1,6 +1,75 @@
 # Deployment handoff
 
-## Current: release L — open lexica, every Campbell GLP poem, word-panel headline (2026-10-08)
+## Current: release M — general lemma/gloss fixes measured by random sampling over all GLP poems (2026-10-08)
+
+Public backend: image `melos-api:20261008m`
+(`sha256:fe1b6e8369b8c1d87bd02f19b0d5630552d73992a14d74056bc883dce47383f6`), built on Basecamp with
+`deploy/Dockerfile.patch` atop the L image `melos-api:20261008l` from the M source tarball (`git archive` of
+`40859d2`, sha256 `716895cd53f63c710ee3e9e9303758d6a59a1f6146ab5c9f9461a880519e7e1f`, unpacked in
+`/home/alvin/melos-m/src`). Same mounts as L (L's staged corpus `/home/alvin/melos-l/data`, 288,821 passages;
+live data mount with the open-lexica supplement; live runtime). Recipe: `deploy/release_m.sh
+receipts|build|canary|stop-canary|promote|rollback`. L is kept stopped as `melos-api-before-m`; the M canary
+as `melos-api-canary-m` (stopped). **Rollback:** `sh /home/alvin/melos-m/src/deploy/release_m.sh rollback`
+(stops M, renames it `melos-api-failed-m`, restarts L with its own mounts). No frontend change (no Vercel deploy).
+
+What M adds (commits `14e5d4f`, `f782cf6`, `67ec5f5`, `40859d2`; design in `docs/morphology.md`, "Random-sample
+fixes"): the sampler `scripts/sample_glp_quality.py`; lemma → headword normalisation (length marks, stray
+breathings, elided lemmas, lemma-as-recorded-form, Lesbian psilosis, a dialect correspondence table); the
+contextual model's lemma when it is a printed headword sharing the word's letters; recorded-form lookups of
+labelled spelling variants (elision restored, crasis second word, Doric/Aeolic ᾱ for η, parser
+normalisations) when nothing analyses the printed form; gloss choice that skips grammatical-label senses,
+respects prep./adv. sense labels and prefers the head phrase another dictionary confirms; the model's
+SCONJ/PROPN/AUX/INTJ classes kept. Morpheus receipts: **870 new** (487 → 1,357) for the most frequent GLP forms
+(`scripts/warm_morphology_forms.py --order frequency`, bundle `runtime/dev/glp-receipts-m.json`, sha256
+`a8c57b19…d5d4`), imported with `release_m.sh receipts` (absent keys only; L reads the same cache).
+
+Canary (8792) before promotion: `smoke_backend.py --expected-passages 288821` pass; `verify_campbell_glp.py
+--analyze sample`: 237/237 identical, 214 translations, 50 lines analysed, 0 failures; `check_span_parses.py
+--random 30`: 227 spans, 816 word rows, **0 failures** (as L). Sampler, development seed 101 (120 spans, 421
+word rows), L with the new receipts → M canary: complete parse 93.6 → 93.8 %, lemma 72.9 → 83.8 %, short
+gloss 70.8 → 82.4 %, plausible gloss 70.3 → 82.4 %, plausible lemma 72.7 → 83.1 %; no word row lost a lemma
+or gloss; 3 rows lost a parse that was only the model's (wrong) "adv." guess (ἄμμ’ ×2, ἒν), now shown as a
+parser/model conflict. Memory: canary 2.9 GiB of 8 GiB.
+
+Verified on https://greeklyric.com after promotion (run from Basecamp, `/home/alvin/melos-m/prod-checks`):
+smoke (288,821) pass; `verify_campbell_glp.py`: 237/237 identical, 0 failures; `check_span_parses.py --random
+30`: 227 spans, 816 word rows, **0 failures**.
+
+Held-out sample (seed 20261008, 150 spans, 484 word rows; never inspected before this point), production L
+(before receipts) → production M:
+
+| Metric | L | M |
+|---|---|---|
+| Complete parse fields | 91.9 % | **94.4 %** |
+| Lemma present | 71.9 % | **83.9 %** |
+| Short gloss present | 69.8 % | **82.0 %** |
+| Plausible gloss | 69.4 % | **81.8 %** |
+| Plausible lemma | 68.4 % | **80.0 %** |
+| Rows passing every check | 61.4 % | **74.2 %** |
+
+No held-out row lost any metric. By dialect group (lemma present, L → M): Aeolic 67 → 81 %, Doric/choral 68 →
+85 %, Ionic elegy/iambus 84 → 92 %, Attic/popular 71 → 80 %.
+
+Remaining held-out failures (125 rows): 70 words with no lemma because the parser has no receipt for them yet
+and no recorded form or variant matches (Lesbian/Doric forms and compounds such as σελάνναν, φόβαισιν,
+ἀελλοδρόμαν, παραμελορυθμοβάταν; names Πιττακὸς, Μυτιλήνας, Κυδώνια); 19 flagged lemma-implausible, mostly
+suppletive or ablaut verbs the heuristic cannot see (μολεῖν/βλώσκω, ἄμβροτε/ἁμαρτάνω, ἕπεται/ἕπομαι); 18
+parse rows left with a feature open (indeclinable numerals ἑπτά, ἑξήκοντ’; tied candidates); 7 Morpheus-known
+words whose candidates tie on different lemmas (οὐ/οὔτε, ὅτε/ὅτι); 9 rows whose lemma has no English definition
+in any open dictionary (see below); 1 crasis the parser does not analyse (δηὖτέ); 1 noun sense on a verb
+(μέδεις → μέδω "a guardian", Middle Liddell's only sense).
+
+Data limitations (no open dictionary supplies an English definition for the lemma): Ἀριστογείτων (no
+headword), ἄνητον (no headword; ἄνηθον is the usual spelling), ναῦον (LSJ's ναῦον is a different word, an
+Egyptian measure), αὔως (LSJ points to ἀώς, ἠώς; followed by the follow-up below), καγγεγήρασ’ (parser lemma
+κατά-γηράω, no compound headword), μαλίδες/μηλίς (homographs), ἀρι (letters beside a gap). The 70 parser-coverage words need Morpheus
+receipts: 6,885 distinct GLP forms, 1,357 now cached; the module's 1,000-fetch daily ceiling means about six
+more days of `warm_morphology_forms.py --order frequency` to cover all of them.
+
+Not in the image: `lemma_glosses` follow-up that tries every target a pointer entry prints ("Aeol. for ἀώς,
+ἠώς"), found while reading the held-out failures (committed after `40859d2`; ship with the next release).
+
+## Historical: release L — open lexica, every Campbell GLP poem, word-panel headline (2026-10-08)
 
 Public backend: image `melos-api:20261008l`
 (`sha256:57cb205cfaf725323b867ebe20c465eea6911a5641b87d474408d258558b0851`), built on Basecamp with
