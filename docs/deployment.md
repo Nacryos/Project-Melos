@@ -1,5 +1,39 @@
 # Deployment handoff
 
+## Prepared, NOT deployed: release GLP — every poem in Campbell's *Greek Lyric Poetry* (2026-10-08)
+
+Adds the 232 remaining Campbell poems (`campbell-glp:*`; audit `docs/audits/campbell-glp-full.md`)
+and public-domain comparison translations for 209 of them. Live K3 is unchanged until this is run.
+
+What ships (branch `worktree-agent-a6e935236d3ca4e7c`, on top of K3 source `b0934b4`):
+- Corpus: `data/campbell_glp/campbell_glp.jsonl` imported into a copy of the live corpus by
+  `scripts/import_campbell_glp.py` (idempotent; refuses to overwrite a differing row; the five approved
+  Alcaeus rows are not touched). Passages **288,589 → 288,821**. Semantic manifest rebound to the new
+  corpus (existing vectors kept; the 232 new ids listed as pending embedding, so they are found by word
+  search and reading, not yet by semantic search).
+- Backend code: `backend/translation_comparisons.py` (GLP sidecar loader) and
+  `backend/translation_comparisons_glp_data.json` (sha256 pinned in the module). No frontend change: the
+  reader's existing "English translation · another edition" panel renders these items.
+
+Steps on Basecamp (needs ~1.7 GB free; disk was 98 % full on 2026-10-07):
+1. Copy the source tarball of this branch to the box and unpack into `/home/alvin/melos-glp/src`.
+2. `sh /home/alvin/melos-glp/src/deploy/release_glp.sh stage` — copies the live corpus
+   (`releases/campbell-20261007b/candidate-data/corpus.sqlite`) to `/home/alvin/melos-glp/data/`, imports,
+   rebinds `manifest.json`, then `verify_campbell_glp.py --corpus … --expected-passages 288821` must report
+   `failures: 0` (receipts `import-receipt.json`, `verify-corpus.json`). Do not copy or touch the staged
+   corpus afterwards (the manifest is bound to its mtime and size).
+3. `… release_glp.sh build` (image `melos-api:20261008glp` from `Dockerfile.patch` atop QA29, as K).
+4. `… release_glp.sh canary`, then on the box:
+   `python3 deploy/smoke_backend.py --origin http://127.0.0.1:8792 --expected-passages 288821` and
+   `python3 scripts/verify_campbell_glp.py --origin http://127.0.0.1:8792 --expected-passages 288821 --analyze sample`.
+5. `… release_glp.sh promote` (K3 kept stopped as `melos-api-before-glp`; `rollback` restores it).
+6. From anywhere: `python deploy/smoke_backend.py --origin https://greeklyric.com --expected-passages 288821`
+   and `python scripts/verify_campbell_glp.py --origin https://greeklyric.com --expected-passages 288821`.
+   From then on the production smoke expectation is **288,821**.
+
+Not in this release: corrections to the five live Alcaeus texts (see the audit's findings table), BGE-M3
+vectors for the 232 new passages.
+
 ## Current: release K3 — every intact word fully parsed (2026-10-07, night)
 
 Public backend: image `melos-api:20261007k3`, same recipe and mounts as K
