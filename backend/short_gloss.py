@@ -147,6 +147,10 @@ def corroborated(phrase: str, others: list[str]) -> bool:
     """The phrase (articles and "to" aside) occurs word-for-word in another
     dictionary's entry for the same headword."""
     key = _phrase_key(phrase)
+    if phrase.strip(" .,;:!") in ("I", "O"):
+        # One-letter meanings (ἐγώ "I", ὦ "O") cannot be searched for as text
+        # without matching numerals and letters; they stand as printed.
+        return True
     if len(key) < 2 or not meaningful(key) or metalanguage_only(key):
         return False
     pattern = re.compile(r"(?<![A-Za-z])" + re.escape(key) + r"(?![A-Za-z])")

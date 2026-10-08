@@ -212,3 +212,9 @@ def test_sense_class_label_prep_vs_adverb():
 def test_resolve_psilotic_lemma():
     found, _, info = resolve("ὀ", {"features": {"POS": "DET"}}, lookup_from([entry("ml:8", "ὁ", "the"), entry("ml:9", "ὅ", "which")]))
     assert found["id"] == "ml:8" and info["lemma_normalisation"]["rule"] == "aeolic_psilosis_lemma"
+
+
+def test_corroboration_keeps_one_letter_meanings():
+    from backend.short_gloss import corroborated_choice
+    choice = corroborated_choice([("Autenrieth", [{"text": "I, me."}], ["ἐγώ, gen. ἐμοῦ: I"])])
+    assert choice[1] == "I"
