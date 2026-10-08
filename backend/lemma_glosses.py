@@ -364,6 +364,10 @@ def _normalised_headword(lemma, headword, row, lookup, form_lemmas):
     if form_lemmas is not None:
         try:
             others = [value for value in form_lemmas(headword) or [] if headword_key(value) != headword]
+            if not others and _initial_upper(headword):
+                # Νύμφαι: the index records the plural in lower case (νύμφαι -> νύμφη).
+                lower = unicodedata.normalize("NFC", headword[:1].lower() + headword[1:])
+                others = [value for value in form_lemmas(lower) or [] if headword_key(value) != lower]
         except Exception:
             others = []
         # Case is not a lexical difference here (Μοῦσα / μοῦσα in different
@@ -378,6 +382,9 @@ def _normalised_headword(lemma, headword, row, lookup, form_lemmas):
         if len(targets) == 1:
             target = targets.pop()
             entry, senses, _, _, _ = _resolve_direct(target, row, lookup, accept_folded=False)
+            from .short_gloss import entry_names_a_being
+            if entry is not None and _initial_upper(headword) and not _initial_upper(target)                     and not entry_names_a_being(entry):
+                entry = None  # a name does not take a common noun's meaning
             if entry is not None:
                 return entry, senses, {"rule": "lemma_as_attested_form", "from": lemma, "to": target,
                                        "note": "The parser's lemma is itself a recorded inflected form; every recorded analysis of it names this headword",
