@@ -39,3 +39,9 @@ test('plain labels replace internal identifiers and jargon', () => {
   assert.doesNotMatch(reader, /`Open \$\{member\.id\}`/);
   assert.match(html, /title="Look up the word typed in the search box">Look up searched word/);
 });
+
+test('comma-joined parse labels from sources are spaced for reading', () => {
+  assert.ok(reader.includes("String(candidate.analysis_text).replace(/,(?=\\S)/g, ', ')"));
+  assert.ok(reader.includes("String(candidate.analysis).replace(/,(?=\\S)/g, ', ')"));
+  assert.equal(String('accusative,dual,feminine').replace(/,(?=\S)/g, ', '), 'accusative, dual, feminine');
+});

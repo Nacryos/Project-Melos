@@ -2245,7 +2245,7 @@
           const parse = node('p', 'candidate-analysis', String(candidate.analysis_text).replace(/,(?=\S)/g, ', '));
           if (candidate.analysis) parse.title = `Source analysis: ${candidate.analysis}${candidate.analysis_format ? ` (${candidate.analysis_format})` : ''}`;
           card.append(parse);
-        } else if (candidate.analysis) card.append(node('p', 'candidate-analysis', `${candidate.analysis}${candidate.analysis_format ? ` (${candidate.analysis_format})` : ''}`));
+        } else if (candidate.analysis) card.append(node('p', 'candidate-analysis', `${String(candidate.analysis).replace(/,(?=\S)/g, ', ')}${candidate.analysis_format ? ` (${candidate.analysis_format})` : ''}`));
         else if (candidate.features) card.append(node('p', 'candidate-analysis', formatFeatures(candidate.features)));
         renderSourceGrammarAlternatives(card, candidate);
         window.MelosPassageAnalysis?.renderPartialCandidateEvidence?.(card, candidate, node);
