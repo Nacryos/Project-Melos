@@ -2072,7 +2072,12 @@
     const passageId = button ? state.passage?.id : '';
     state.machineAnalysisCancel?.();
     clear(ui.inspector);
-    ui.inspector.append(node('span', 'eyebrow', fragmentSegment ? 'PRINTED SEGMENT' : 'SELECTED FORM'), node('div', 'word-title', form));
+    // Dictionary order: headword, its short English gloss directly beneath,
+    // then the printed form with its parse; everything else follows.
+    const headlineHost = node('div', 'word-headline-host'), renderHeadline = window.MelosPassageAnalysis?.renderWordHeadline;
+    ui.inspector.append(node('span', 'eyebrow', fragmentSegment ? 'PRINTED SEGMENT' : 'SELECTED WORD'), headlineHost);
+    if (renderHeadline) renderHeadline(headlineHost, { form, pending: true }, node);
+    else headlineHost.append(node('div', 'word-title', form));
     if (joined) ui.inspector.append(node('p', 'word-normalized', 'Lookup joins an explicit printed line-end division. Both printed segments remain unchanged in the passage; no missing letters are supplied.'));
     if (fragmentSegment) {
       ui.inspector.append(node('p', 'candidate-meta-label', 'Printed fragment'));
@@ -2090,6 +2095,14 @@
     const pending = node('p', 'inspector-message melos-loading', 'Looking up recorded analyses…');
     morphologyHost.append(pending);
     const sequence = ++state.wordSequence;
+    let headlineSettled = false;
+    const showHeadline = (value, final = true) => {
+      if (!renderHeadline || !value || sequence !== state.wordSequence || headlineSettled) return;
+      headlineSettled = final; renderHeadline(headlineHost, value, node);
+    };
+    const contextualHeadline = button && !joined && !fragmentSegment
+      ? passageWordHeadline(button, form).catch(() => null) : Promise.resolve(null);
+    contextualHeadline.then(value => showHeadline(value));
     if (button && !joined && state.passageAnalysis?.selectSourceSpan && window.MelosPassageAnalysis?.renderEditorialWordActions) {
       const loaded = state.passage;
       window.MelosPassageAnalysis.renderEditorialWordActions(contextHost,loaded,Number(button.dataset.sourceStart),Number(button.dataset.sourceEnd),node,
@@ -2117,6 +2130,11 @@
       const data = await api('/api/word', { form, passage_id: passageId });
       if (sequence !== state.wordSequence) return;
       pending.remove();
+      // Fall back to the form lookup when no passage row arrives, or
+      // provisionally while a slow contextual reading is still on its way.
+      const fallbackHeadline = wordHeadlineFallback(form, data, fragmentSegment);
+      contextualHeadline.then(value => { if (!value) showHeadline(fallbackHeadline); });
+      globalThis.setTimeout?.(() => showHeadline(fallbackHeadline, false), 4000);
       if (data.normalized && data.normalized !== form) morphologyHost.append(node('p', 'word-normalized', `Normalized search: ${data.normalized}`));
       const glimpse = node('div');
       morphologyHost.append(glimpse);
@@ -2233,8 +2251,45 @@
       found.append(fullSearch);
       if (data.method) evidenceHost.append(node('p', 'candidate-reason', `Lookup method: ${String(data.method).replaceAll('_', ' ')}`));
     } catch (error) {
+      contextualHeadline.then(value => { if (!value) showHeadline({ form, note: 'Lookup unavailable' }); });
       if (sequence === state.wordSequence) message(morphologyHost, `Word lookup unavailable: ${errorText(error)}`, 'warning error-message');
     }
+  }
+  // Headline for a passage word: the exact-span interlinear row (headword,
+  // short dictionary gloss, contextually ranked parse) from the same endpoint
+  // as the phrase reading. Cached per span; null when no row is returned.
+  async function passageWordHeadline(button, form) {
+    const passage = state.passage, start = Number(button?.dataset?.sourceStart), end = Number(button?.dataset?.sourceEnd);
+    const fromRow = window.MelosPassageAnalysis?.headlineFromRow;
+    if (!fromRow || !passage?.id || typeof passage.text !== 'string' || !Number.isInteger(start) || !Number.isInteger(end)
+      || start < 0 || end <= start || end > passage.text.length) return null;
+    const key = `${passage.id}:${start}:${end}`, cache = state.headlineCache ??= new Map();
+    if (cache.has(key)) return cache.get(key);
+    const data = await apiPost('/api/analyze-passage', { version: 1, passage_id: passage.id, start, end, offset_unit: 'utf16',
+      selected_text: passage.text.slice(start, end), fetch_machine: false, rerank: false });
+    if (data?.passage?.id !== passage.id) return null;
+    const rows = (data.interlinear?.readings?.[0]?.tokens || []).filter(row => row.kind === 'word');
+    const value = fromRow(rows.find(row => row.start_utf16 === start) || (rows.length === 1 ? rows[0] : null));
+    if (!value) return null;
+    cache.set(key, value);
+    while (cache.size > 64) cache.delete(cache.keys().next().value);
+    return value;
+  }
+  // Headline for lookups without a passage reading, from /api/word: a headword
+  // only when every exact candidate names the same one; its gloss is the same
+  // source excerpt the candidate cards show.
+  function wordHeadlineFallback(form, data, fragment) {
+    const nearby = data?.analysis_match_status === 'spelling_suggestions_only';
+    const candidates = fragment || nearby ? [] : [...(data?.contextual_candidates || []), ...(Array.isArray(data?.candidates) ? data.candidates : [])];
+    const lemmas = [...new Set(candidates.map(item => item.lemma).filter(Boolean))];
+    const value = { form, lemma: '', gloss: '', parse: fragment ? 'printed segment · no analysis' : '',
+      note: fragment ? 'Printed segment · no headword' : lemmas.length > 1 ? `${lemmas.length} possible headwords below` : '' };
+    if (lemmas.length !== 1) return value;
+    const own = candidates.filter(item => item.lemma === lemmas[0]);
+    const parses = [...new Set(own.map(item => item.analysis_text).filter(Boolean))];
+    return { ...value, lemma: lemmas[0], gloss: candidateDictionaryExcerpt(own[0], data.lexicon_entries, form).text || '',
+      parse: parses.length === 1 ? parses[0] : parses.length ? `${parses.length} possible parses below` : '',
+      properName: /^\p{Lu}/u.test(lemmas[0].normalize('NFD')) };
   }
   function updateSelectionTranslationAction() {
     let button = ui.selectionActions.querySelector('.selection-translation');

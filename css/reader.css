@@ -230,3 +230,8 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .passage-ranked-parse .candidate-reason{flex-basis:100%;margin:0}
 .interlinear-reconstructed{text-decoration:underline dotted;text-underline-offset:3px;cursor:help}
 @media(max-width:600px){.passage-analysis{padding:13px 11px}.passage-analysis-controls button{flex:1 1 180px}.passage-analysis-heading{align-items:center}.passage-analysis-heading button{font-size:12px}.passage-analysis-selection{font-size:19px}}
+.word-headline{margin:4px 0 14px}.word-headline .word-headline-lemma{margin:4px 0 2px;overflow-wrap:anywhere}.word-headline-note{margin:0 0 4px;color:var(--muted);font-size:12px}
+.word-headline-gloss{margin:2px 0 10px;font:19px/1.3 var(--text);color:var(--ink)}.word-headline-gloss.word-headline-empty{font-size:14px;font-style:italic;color:var(--muted)}
+.word-headline-form{margin:0;font:22px/1.25 var(--greek);color:var(--ink-2,var(--ink))}.word-headline-reading{font:13px var(--text);color:var(--muted)}.word-headline-parse{margin:1px 0 0;font-size:13px;letter-spacing:.02em;color:var(--muted)}
+.passage-analysis-token .word-headline-host{margin:8px 0 4px}.passage-analysis-token .word-headline-lemma{font-size:28px}
+@media(max-width:600px){.word-headline .word-headline-lemma{font-size:32px}.word-headline-gloss{font-size:17px}.word-headline-form{font-size:20px}}
