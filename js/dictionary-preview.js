@@ -12,6 +12,10 @@
     ['Wiktionary / Kaikki', 'Wiktionary'], ['Wiktionary', 'Wiktionary'], ['Kaikki', 'Wiktionary'],
     ['PerseusDL LSJ TEI', 'LSJ'], ['LSJ', 'LSJ'],
     ['Perseus Autenrieth TEI via Homerica', 'Autenrieth'], ['Autenrieth', 'Autenrieth'],
+    ['Perseus Middle Liddell TEI (Hopper open-source texts)', 'Middle Liddell'],
+    ['LSJ (Logeion edition, H. Dik) TEI', 'LSJ (Logeion)'],
+    ['Perseus Cunliffe TEI via Homerica', 'Cunliffe'],
+    ['Dodson Greek Lexicon (NT; public domain)', 'Dodson (NT)'],
     ['PerseusDL Greek Dependency Treebank v1.6', 'Perseus treebank'], ['Perseus treebank', 'Perseus treebank']
   ]);
   const friendlySourceName = (source) => SOURCE_NAMES.get(text(source)) || text(source);

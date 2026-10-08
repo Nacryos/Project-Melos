@@ -324,8 +324,11 @@ def _context(passage):
 
 class PassageAnalysisService:
     def __init__(self, passage_lookup, word_lookup, *, machine_service=None, syntax_provider=None, ranker=None, sense_ranker=None,
-                 machine_subentry_lookup=None):
+                 machine_subentry_lookup=None, headword_lookup=None):
         self.passage_lookup, self.word_lookup = passage_lookup, word_lookup
+        # Optional: Morphology.headword_entries, used only to give a parse
+        # lemma its dictionary headword meaning when no entry was joined.
+        self.headword_lookup = headword_lookup
         self.machine_service, self.syntax_provider, self.ranker = machine_service, syntax_provider, ranker
         self.sense_ranker = sense_ranker
         # Explicit deployment dependency only. The callback must wrap the
@@ -567,6 +570,9 @@ class PassageAnalysisService:
                     result["ranking"] = {"status": "unavailable", "warnings": ["Context reranking failed; all original alternatives are retained."]}
         result["meaning"] = phrase_meaning(passage, result)
         result["interlinear"] = interlinear_reading(result)
+        if self.headword_lookup is not None:
+            from .lemma_glosses import attach_lemma_glosses
+            result["limits"]["lemma_dictionary"] = attach_lemma_glosses(result["interlinear"], self.headword_lookup)
         result["sense_ranking"] = {"status": "not_requested"}
         if request.get('rerank') and self.sense_ranker is not None:
             from .sense_ranker import apply_sense_ranking

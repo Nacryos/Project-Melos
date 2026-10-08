@@ -407,10 +407,34 @@ def file_digest(path,stamp,size):
         return hashlib.file_digest(stream,'sha256').hexdigest()
 
 
+SUPPLEMENT_ENTRIES = ROOT/'data/lexica/supplement-entries.jsonl'
+SUPPLEMENT_AUDIT = ROOT/'data/reports/audit-lexica-supplement.json'
+
+
 @lru_cache(maxsize=1)
-def _morph_service(entries_stamp,forms_stamp,public=False):
+def _morph_service(entries_stamp,forms_stamp,public=False,supplement_stamp=None):
     from .morphology import Morphology
-    return Morphology(entries_path=ROOT/'data/lexica/entries.jsonl',forms_path=ROOT/'data/lexica/forms.jsonl')
+    return Morphology(entries_path=ROOT/'data/lexica/entries.jsonl',forms_path=ROOT/'data/lexica/forms.jsonl',
+                      supplement_paths=[SUPPLEMENT_ENTRIES] if supplement_stamp else [])
+
+
+def _supplement_stamp():
+    """Optional open-lexica supplement (Middle Liddell, Logeion LSJ, Cunliffe,
+    Dodson). Absent: lookups run on the core files only. Present: it must
+    match its independent audit (scripts/audit_lexica_supplement.py)."""
+    # Unlike the core files, an unaudited supplement does not take lookups
+    # down: it is simply not loaded (fail closed for the supplement only).
+    if not SUPPLEMENT_ENTRIES.exists() or not SUPPLEMENT_AUDIT.exists():
+        return None
+    try:
+        audit=json.loads(SUPPLEMENT_AUDIT.read_text(encoding='utf-8'))
+        info=SUPPLEMENT_ENTRIES.stat()
+        digest=file_digest(str(SUPPLEMENT_ENTRIES),info.st_mtime_ns,info.st_size)
+    except (OSError,ValueError):
+        return None
+    if audit.get('verdict')!='PASS' or digest!=audit.get('sha256'):
+        return None
+    return info.st_mtime_ns
 
 
 def morph_service():
@@ -430,7 +454,7 @@ def morph_service():
             raise RuntimeError('Dictionary source files changed since their audit; revalidation is required.')
         stamps.append(info.st_mtime_ns)
     with _service_lock:
-        service=_morph_service(*stamps,publication_restricted())
+        service=_morph_service(*stamps,publication_restricted(),_supplement_stamp())
         service.counts()  # complete the one-time lazy load before concurrent lookups
         return service
 
@@ -1055,6 +1079,7 @@ app.include_router(_passage_router(
     rerank_allowed=_passage_rerank_allowed,
     machine_subentry_lookup=(_passage_machine_subentries
                             if os.environ.get('MELOS_MACHINE_SUBENTRIES_ENABLED') == '1' else None),
+    headword_lookup=lambda lemma: morph_service().headword_entries(lemma),
 ))
 
 

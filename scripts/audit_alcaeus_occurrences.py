@@ -299,6 +299,7 @@ def main():
     parser.add_argument('--output', type=Path, default=ROOT/'runtime/alcaeus-occurrences/baseline')
     parser.add_argument('--offline', action='store_true')
     parser.add_argument('--max-words', type=int, default=80)
+    parser.add_argument('--timeout', type=int, default=90, help='seconds per request (a cold local server needs more)')
     args = parser.parse_args()
     if not 1 <= args.max_words <= MAX_WORDS:
         parser.error('--max-words must be 1..80')
@@ -306,7 +307,7 @@ def main():
     if len(records) != 5 or any(not r['id'].startswith('campbell-glp:alcaeus:') for r in records):
         raise ValueError('Expected exactly the five Campbell Alcaeus records')
     args.output.mkdir(parents=True, exist_ok=True)
-    api = Receipts(args.base, args.output/'responses', offline=args.offline)
+    api = Receipts(args.base, args.output/'responses', timeout=args.timeout, offline=args.offline)
     save(args.output/'manifest.json', {'source_file': str(args.records), 'source_sha256': sha(args.records.read_bytes()),
          'script_sha256': sha(Path(__file__).read_bytes()),
          'local_module_sha256': {name: sha((ROOT/name).read_bytes()) for name in ('backend/passage_analysis.py', 'backend/interlinear.py')},
