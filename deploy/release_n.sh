@@ -12,6 +12,7 @@
 #   sh /home/alvin/melos-n/src/deploy/release_n.sh build      # melos-api:20261008n from Dockerfile.patch atop M
 #   sh /home/alvin/melos-n/src/deploy/release_n.sh warm       # local receipts for every GLP form (absent keys only)
 #   sh /home/alvin/melos-n/src/deploy/release_n.sh canary     # melos-api-canary-n on 127.0.0.1:8792
+#   sh /home/alvin/melos-n/src/deploy/release_n.sh canary-nogen  # measurement only: no generated normalisation, 8794
 #   sh /home/alvin/melos-n/src/deploy/release_n.sh promote    # stop+keep M as melos-api-before-n, start N on 8791
 #   sh /home/alvin/melos-n/src/deploy/release_n.sh rollback   # stop N, restart the kept M (sidecar left running, unused by M)
 set -eu
@@ -33,7 +34,7 @@ LOCAL=http://$MORPHEUS:8080/api/v1/analysis/word
 step=${1:-}
 
 run_container() {
-  name=$1; port=$2
+  name=$1; port=$2; generated=${3:-1}
   docker run -d --name "$name" --restart unless-stopped --network "$NET" \
     --cpus=2 --cpu-shares=256 --memory=8g --memory-swap=8g --pids-limit=128 \
     --read-only --tmpfs /tmp:rw,noexec,nosuid,size=128m \
@@ -47,7 +48,7 @@ run_container() {
     -e MELOS_SYNTAX_MODEL_PATH=/syntax-model \
     -e MELOS_MACHINE_GLOBAL_DAILY=1000 -e MELOS_MACHINE_GLOBAL_MINUTE=30 \
     -e MELOS_MACHINE_VISITOR_DAILY=100 -e MELOS_MACHINE_VISITOR_MINUTE=10 \
-    -e MELOS_MORPHEUS_LOCAL=$LOCAL \
+    -e MELOS_MORPHEUS_LOCAL=$LOCAL -e MELOS_GENERATED_NORMALISATION=$generated \
     -v /home/alvin/services/melos/models:/models:ro \
     -v /home/alvin/services/melos/releases/qa29/model/pipeline:/syntax-model:ro \
     -v $DATAMOUNT:/app/data:ro \
@@ -95,8 +96,14 @@ case "$step" in
     run_container "$CANARY" 8792
     sleep 8; curl -fsS http://127.0.0.1:8792/api/status | head -c 300; echo
     ;;
+  canary-nogen)
+    # Measurement only: N without generate-and-test normalisation, on 127.0.0.1:8794.
+    run_container "$CANARY-nogen" 8794 0
+    sleep 8; curl -fsS http://127.0.0.1:8794/api/status | head -c 120; echo
+    ;;
   stop-canary)
     docker stop "$CANARY" >/dev/null && echo "stopped $CANARY (kept)"
+    docker rm -f "$CANARY-nogen" >/dev/null 2>&1 || true
     ;;
   promote)
     docker container inspect "$LIVE" >/dev/null
@@ -110,5 +117,5 @@ case "$step" in
     sleep 8; curl -fsS http://127.0.0.1:8791/api/status | head -c 300; echo
     ;;
   *)
-    echo "usage: release_n.sh morpheus|build|warm|canary|stop-canary|promote|rollback" >&2; exit 1;;
+    echo "usage: release_n.sh morpheus|build|warm|canary|canary-nogen|stop-canary|promote|rollback" >&2; exit 1;;
 esac
