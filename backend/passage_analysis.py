@@ -62,6 +62,8 @@ MAX_EDITORIAL_LOOKUPS = 16
 # Recorded-form lookups of labelled spelling variants (elision restored, crasis,
 # dialect vowels) for words nothing else analyses; per request.
 MAX_VARIANT_LOOKUPS = 40
+# Generated spellings asked of the local parser per request (cached ones are instant).
+GENERATED_SECONDS = 8.0
 APOSTROPHES = "'’ʼ᾽"
 EDITORIAL = frozenset("[]⟦⟧⟨⟩<>…†‡̣")
 
@@ -449,6 +451,8 @@ class PassageAnalysisService:
             raise PassageAnalysisError("invalid_word_count", f"Select between 1 and {MAX_WORDS} words.")
         source_cache, machine_cache, fetch_count = {}, {}, 0
         variant_budget = [MAX_VARIANT_LOOKUPS]
+        import time as _time
+        generated_deadline = _time.monotonic() + GENERATED_SECONDS
         dictionary_cache = {}
         subentry_cache, subentry_catalog = {}, {'version': 1, 'ranking_status': 'unsupported_source_type'}
 
@@ -584,7 +588,8 @@ class PassageAnalysisService:
                 if (not machine.get("machine_candidates") and not token.get("lacuna_boundary_uncertain")
                         and machine.get("status") == "no_analyses" and self.machine_service is not None
                         and _local_parser()):
-                    machine = self._generated_variants(form, next_word.get(id(token)), machine, visitor_id)
+                    machine = self._generated_variants(form, next_word.get(id(token)), machine, visitor_id,
+                                                       deadline=generated_deadline)
                 if (not machine.get("machine_candidates") and not token.get("lacuna_boundary_uncertain")
                         and machine.get("status") in ("cache_miss", "no_analyses", "request_limit")):
                     # The parser was consulted and has nothing for the printed form.
@@ -674,7 +679,7 @@ class PassageAnalysisService:
                     'reason':'Approved Campbell source identity is unavailable.'}
         return result
 
-    def _generated_variants(self, form, next_form, machine, visitor_id):
+    def _generated_variants(self, form, next_form, machine, visitor_id, deadline=None):
         """Generate-and-test normalisation against local Morpheus (backend.dialect_generate).
 
         Only when the parser has no analysis of the printed form. Standard spellings
@@ -685,8 +690,13 @@ class PassageAnalysisService:
         form itself is unchanged.
         """
         from .dialect_generate import describe, generate_and_test
-        accepted, tried = generate_and_test(
-            form, lambda spelling: self.machine_service.analyze(spelling, visitor_id, fetch=False), next_form)
+        import time
+
+        def ask(spelling):
+            if deadline is not None and time.monotonic() > deadline:
+                return {"status": "request_limit", "machine_candidates": []}
+            return self.machine_service.analyze(spelling, visitor_id, fetch=False)
+        accepted, tried = generate_and_test(form, ask, next_form)
         result = {**machine, "generated_queries": tried}
         if not accepted:
             return result
