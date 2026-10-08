@@ -218,3 +218,15 @@ def test_corroboration_keeps_one_letter_meanings():
     from backend.short_gloss import corroborated_choice
     choice = corroborated_choice([("Autenrieth", [{"text": "I, me."}], ["ἐγώ, gen. ἐμοῦ: I"])])
     assert choice[1] == "I"
+
+
+def test_cross_reference_tries_each_printed_target():
+    pointer = {"id": "lsj:p", "lemma": "πόλλος", "source": "LSJ (Logeion edition, H. Dik) TEI",
+               "rendered_entry_text": "πόλλος, Aeol. for πουλύς, πολύς, Alc."}
+    stub = {"id": "lsj:q", "lemma": "πουλύς", "source": "LSJ (Logeion edition, H. Dik) TEI",
+            "rendered_entry_text": "πουλύς, Ep. for πολύς"}
+    found, senses, info = resolve("πόλλος", {"features": {"POS": "ADJ"}},
+                                  lookup_from([pointer, stub, entry("ml:10", "πολύς", "many")]))
+    assert found["id"] == "ml:10" and senses[0]["text"] == "many"
+    assert info["cross_reference"]["printed_targets"] == ["πουλύς", "πολύς"]
+    assert info["cross_reference"]["target_headword"] == "πολύς"

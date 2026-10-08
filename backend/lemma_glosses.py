@@ -159,8 +159,15 @@ def headword_key(lemma):
     return unicodedata.normalize("NFC", decomposed)
 
 
+_FURTHER_TARGET = re.compile(r"\s*(?:,|\bor\b|\band\b)\s*(" + GREEK_WORD + r")")
+
+
 def _cross_reference(entries):
-    """(entry, target, printed relation) for the first pure pointer entry."""
+    """(entry, [targets], printed relation) for the first pure pointer entry.
+
+    The targets are the Greek words printed right after the relation, joined
+    by commas or "or" ("Aeol. for ἀώς, ἠώς"), in their printed order.
+    """
     for entry in sorted(entries, key=lambda item: dictionary_rank(item.get("source"))):
         if entry.get("dictionary_senses"):
             continue
@@ -168,9 +175,21 @@ def _cross_reference(entries):
         opening = text[:140]
         match = CROSS_REFERENCE.search(opening)
         if match:
-            target = _nfc(match.group(1)).rstrip(",.;:ʼ’")
-            if target and target != _nfc(entry.get("lemma")):
-                return entry, target, opening[:match.end()].strip()
+            own = _nfc(entry.get("lemma"))
+            targets, end = [], match.end()
+            first = _nfc(match.group(1)).rstrip(",.;:\u02bc\u2019")
+            if first and first != own:
+                targets.append(first)
+            while len(targets) < 4:
+                further = _FURTHER_TARGET.match(opening, end)
+                if not further:
+                    break
+                word = _nfc(further.group(1)).rstrip(",.;:\u02bc\u2019")
+                if word and word != own and word not in targets:
+                    targets.append(word)
+                end = further.end()
+            if targets:
+                return entry, targets, opening[:end].strip()
     return None
 
 
@@ -289,14 +308,20 @@ def resolve(lemma, row, lookup, form_lemmas=None):
     if entry is None and entries and not homograph and not folded_ambiguous:
         pointer = _cross_reference(entries)
         if pointer:
-            source_entry, target, relation = pointer
-            target_found = lookup(target) or {}
-            target_entries = [e for e in target_found.get("entries") or []
-                              if target_found.get("match") == "exact_headword"]
-            entry, senses, target_skipped = choose(target_entries, row, homograph_marked=False)
-            info["cross_reference"] = {"from_entry_id": source_entry.get("id"), "printed_relation": relation,
-                                       "target_headword": target, "target_entry_ids": [e.get("id") for e in target_entries],
-                                       "target_skipped": target_skipped, "method": "explicit_source_cross_reference_one_hop"}
+            source_entry, targets, relation = pointer
+            # "Aeol. for ἀώς, ἠώς": the printed targets are tried in order,
+            # each one hop, until one has an English definition.
+            for target in targets:
+                target_found = lookup(target) or {}
+                target_entries = [e for e in target_found.get("entries") or []
+                                  if target_found.get("match") == "exact_headword"]
+                entry, senses, target_skipped = choose(target_entries, row, homograph_marked=False)
+                info["cross_reference"] = {"from_entry_id": source_entry.get("id"), "printed_relation": relation,
+                                           "target_headword": target, "printed_targets": targets,
+                                           "target_entry_ids": [e.get("id") for e in target_entries],
+                                           "target_skipped": target_skipped, "method": "explicit_source_cross_reference_one_hop"}
+                if entry is not None:
+                    break
     if entry is None and not homograph and not marked:
         entry, senses, normalisation = _normalised_headword(lemma, headword, row, lookup, form_lemmas)
         if normalisation:
