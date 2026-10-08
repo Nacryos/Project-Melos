@@ -1,7 +1,7 @@
 # Open lexica supplement: LSJ (Logeion), Middle Liddell, Cunliffe, Dodson
 
-Status (2026-10-08, branch `worktree-agent-afbdaf082f25b911d`): built, audited
-and wired into lookup locally. **Not deployed.** Production `entries.jsonl` /
+Status: deployed in release L (2026-10-08; see `docs/deployment.md`). Originally (branch `worktree-agent-afbdaf082f25b911d`): built, audited
+and wired into lookup locally. Production `entries.jsonl` /
 `forms.jsonl` are untouched; everything new is one extra audited file plus the
 raw XML it points into. Without that file the backend behaves as before apart
 from the code-level changes listed under "Behaviour changes".
@@ -188,7 +188,7 @@ python scripts/report_lemma_gloss_coverage.py --machine-cache runtime/dev/machin
 SHA-256; otherwise it silently runs on the core files (unlike the core files,
 a bad supplement never takes lookups down).
 
-## Deploy (for the owner; nothing was deployed)
+## Deploy (done in release L, `deploy/release_l.sh lexica`)
 
 Files to put on the box, relative to the backend `ROOT` (the data mount):
 

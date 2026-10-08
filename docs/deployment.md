@@ -1,10 +1,76 @@
 # Deployment handoff
 
-## Prepared, NOT deployed: release GLP — every poem in Campbell's *Greek Lyric Poetry* (2026-10-08)
+## Current: release L — open lexica, every Campbell GLP poem, word-panel headline (2026-10-08)
+
+Public backend: image `melos-api:20261008l`
+(`sha256:57cb205cfaf725323b867ebe20c465eea6911a5641b87d474408d258558b0851`), built on Basecamp with
+`deploy/Dockerfile.patch` atop QA29 from the L source tarball (`git archive` of `3f8de60`, sha256
+`6399af11e2fe0b1a7dce947af3363e415d1a542d1e0d18fd6313e3ac8ce3f9bb`, unpacked in `/home/alvin/melos-l/src`).
+Recipe: `deploy/release_l.sh lexica|stage-docker|receipts|build|canary|promote|rollback`, which combines
+`release_k.sh` (image) and `release_glp.sh` (staged corpus). K3 is kept stopped as `melos-api-before-l`;
+the L canary as `melos-api-canary-l`. **Rollback:** `sh /home/alvin/melos-l/src/deploy/release_l.sh rollback`
+(stops L, renames it `melos-api-failed-l`, restarts K3 with its own K3 mounts).
+
+What L merges (lyric-corpus-reader merges `e54527c`, `39fc913`, `e7526da`, then `3f8de60`, `eaa6211`):
+- Open lexica supplement (`docs/lexica-open-supplement.md`): LSJ Logeion, Middle Liddell, Cunliffe, Dodson;
+  dictionary order; `gloss.short_text`. Files copied into the live data mount
+  `/home/alvin/services/melos/data` (alvin-owned; K3 code ignores them): `lexica/supplement-entries.jsonl`
+  (sha256 `aacdddbe…b511`, audit PASS), `lexica/supplement.manifest.json`,
+  `reports/audit-lexica-supplement.json`, `raw/lexica/lsj-logeion-6aa48692192d/`,
+  `raw/lexica/dodson-74f70358d4ac/`, `raw/perseus-lexica/…/ml.xml`, `raw/perseus-lexica/…/cunliffe.lexentries.unicode.xml`.
+- Campbell GLP (section below): corpus staged at `/home/alvin/melos-l/data/corpus.sqlite` (sha256
+  `43020900dd53…3382`) + rebound `manifest.json` (`63099801574d…dbaf`). The live corpus directory
+  `releases/campbell-20261007b/candidate-data` is root-only, so `stage-docker` runs the GLP `stage` step in an
+  unprivileged uid-1000 container with the live corpus and manifest bind-mounted as files. Receipts: corrected
+  five 3 rows, already-corrected 2 (326, 350), 232 added, 288,589 → **288,821**, verify 237/237 identical,
+  0 failures. Morpheus receipts bundle (`glp-receipts-bundle.json`, sha256 `bb8fccc3…5211`) imported:
+  408 receipts.
+- Frontend: word panel headline (headword → short gloss → printed form + parse) showing `gloss.short_text`
+  when present, else `gloss.text`; a capitalised headword is labelled "(proper name)" only when no gloss is
+  available. Vercel `project-melos-hje17bxan-nacryos-projects.vercel.app` aliased to https://greeklyric.com
+  (`vercel deploy --prod --yes --build-env MELOS_READER_ONLY=1`; `.vercelignore` now excludes `.claude/`).
+
+Canary (8792) before promotion: `smoke_backend.py --expected-passages 288821` pass;
+`verify_campbell_glp.py --analyze sample`: 237/237 identical, 214 translations expected, 50 lines analysed,
+0 failures; `check_span_parses.py --random 30`: 227 spans, 816 word rows, 0 failures; `/api/word?form=μῆνις`
+lists Middle Liddell first ("wrath, anger"), then Autenrieth, LSJ Logeion, Cunliffe; Alcaeus 129 τε "and",
+Ζόννυσσον Διόνυσος "Dionysus" (Middle Liddell). Memory: canary 3.25 GiB (K3 2.7 GiB) of the 8 GiB limit.
+
+analyze-passage size/latency (80-word chunks, `fetch_machine`/`rerank` off), K3 → L:
+
+| Request | Decoded | gzip on the wire | Time (gzip) |
+|---|---|---|---|
+| 34a, 50 words | 40.6 → 47.2 MB | 5.34 → 5.52 MB | 10.6 → 9.0 s |
+| 129, words 1–80 | 76.6 → 79.7 MB | 11.0 → 9.7 MB | 17.9 → 15.0 s |
+| 129, words 81–112 | 31.0 → 32.7 MB | 4.46 → 4.03 MB | 8.7 → 7.1 s |
+| single word (reader headline), e.g. Ζόννυσσον | 106 KB | | 0.7 s |
+
+The whole-poem payload problem (documented since G) remains; L adds about 4–16 % decoded.
+
+Verified on https://greeklyric.com after promotion:
+- smoke (288,821) pass; `verify_campbell_glp.py --analyze sample`: 237/237 identical, 0 failures.
+- `check_span_parses.py --random 40`: 277 spans, 982 word rows, **0 failures** (a first run concurrent with
+  the other checks had one HTTP 429 "Passage analysis is busy", not a parse failure).
+- Production audit (`runtime/dev/audit-L-production`, corrected texts): **303 of 303 intact words with
+  complete parse fields**, 18 damaged pieces labelled, **282 intact words with a display gloss** (K3: 201 of
+  305), 289 with any candidate gloss.
+- Browser (Edge via Playwright), Alcaeus 129: τε → τε / and / part.; Ζόννυσσον → Διόνυσος / Dionysus /
+  acc. masc. sg.; τέμενος → a piece of land / acc. neut. sg.; ἔθηκαν → τίθημι / to set / 3rd pl. aor. ind. act.
+  Sappho 1 (Edmonds) and Archilochus 1 (Yonge) show their comparison translations.
+
+Backend tests (main checkout, with the supplement data present): 1889 pass after syncing the two re-anchored
+runtime sidecars (`runtime/alcaeus-translations/translation-comparisons.public.json`,
+`runtime/campbell-commentary/edition-commentary.public.json`; previous copies kept as `*.pre-release-l`).
+Three expected failures: the frozen-manifest `test_run_commentary_relevance`, and two saved snapshots that
+embed the pre-correction Alcaeus 129 text (`test_commentary_relevance_packet[…129…]`,
+`test_linked_sense_integration::test_real_full_packet_ready[129…]`). Frontend: 440 pass.
+
+## Shipped in release L: GLP — every poem in Campbell's *Greek Lyric Poetry* (prepared 2026-10-08)
 
 Adds the 232 remaining Campbell poems (`campbell-glp:*`; audit `docs/audits/campbell-glp-full.md`),
 public-domain comparison translations for 209 of them, and corrects 11 lines of the five live Alcaeus
-passages (34a, 129, 130b) to the page images. Live K3 is unchanged until this is run.
+passages (34a, 129, 130b) to the page images. Deployed as part of release L (above), with
+`deploy/release_l.sh` in place of `release_glp.sh`.
 
 What ships (branch `worktree-agent-a6e935236d3ca4e7c`, on top of K3 source `b0934b4`):
 - Corpus: `scripts/correct_campbell_five.py corpus` rewrites the five approved rows to
@@ -49,7 +115,7 @@ measurable locally: the laptop dev corpus has no dictionary index).
 Not in this release: BGE-M3 vectors for the 232 new passages (the five keep their existing vectors,
 computed on the pre-correction text; the differences are diacritics and three letters).
 
-## Current: release K3 — every intact word fully parsed (2026-10-07, night)
+## Historical: release K3 — every intact word fully parsed (2026-10-07, night)
 
 Public backend: image `melos-api:20261007k3`, same recipe and mounts as K
 (`MELOS_K_TAG=k3 sh /home/alvin/melos-k/src/deploy/release_k.sh …`, source tarball

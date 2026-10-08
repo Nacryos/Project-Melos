@@ -6,7 +6,7 @@
 # Alcaeus rows). Run on Basecamp after the L source tarball is unpacked into $L/src:
 #
 #   sh /home/alvin/melos-l/src/deploy/release_l.sh lexica    # check the open-lexica supplement files in the data mount
-#   sh /home/alvin/melos-l/src/deploy/release_l.sh stage     # corpus copy + correct five + import 232 + rebind manifest + verify
+#   sh /home/alvin/melos-l/src/deploy/release_l.sh stage-docker  # runs `stage` in a uid-1000 container (live corpus dir is root-only): corpus copy + correct five + import 232 + rebind manifest + verify
 #   sh /home/alvin/melos-l/src/deploy/release_l.sh receipts  # import Morpheus receipts (absent keys only)
 #   sh /home/alvin/melos-l/src/deploy/release_l.sh build     # melos-api:20261008l
 #   sh /home/alvin/melos-l/src/deploy/release_l.sh canary    # melos-api-canary on 127.0.0.1:8792
@@ -16,11 +16,12 @@
 # The supplement (docs/lexica-open-supplement.md, "Deploy") is copied into the live data
 # directory (/home/alvin/services/melos/data, alvin-owned, mounted read-only); K3 code ignores it.
 set -eu
-cd /home/alvin/services/melos
-L=/home/alvin/melos-l
+cd /home/alvin/services/melos 2>/dev/null || true
+L=${MELOS_L_DIR:-/home/alvin/melos-l}
 SRC=$L/src
 DATA=$L/data
-LIVE_DATA=/home/alvin/services/melos/releases/campbell-20261007b/candidate-data
+LIVE_DATA_HOST=/home/alvin/services/melos/releases/campbell-20261007b/candidate-data
+LIVE_DATA=${MELOS_LIVE_DATA:-$LIVE_DATA_HOST}
 DATAMOUNT=/home/alvin/services/melos/data
 BASE=melos-api:20261005-qa29
 IMAGE=melos-api:20261008l
@@ -69,6 +70,11 @@ case "$step" in
       test -s "$DATAMOUNT/$f" || { echo "missing $f" >&2; exit 1; }
     done
     echo "lexica files present"
+    ;;
+  stage-docker)
+    # releases/campbell-20261007b is root-only (0700); read the live corpus and manifest through file bind mounts
+    # in an unprivileged container (uid 1000, the same way the API container reads it).
+    docker run --rm --user=1000:1000 --cap-drop=ALL --security-opt=no-new-privileges --network=none       -v "$LIVE_DATA_HOST/corpus.sqlite:/live/corpus.sqlite:ro" -v "$LIVE_DATA_HOST/manifest.json:/live/manifest.json:ro" -v "$L:$L" -e MELOS_LIVE_DATA=/live -e MELOS_L_DIR="$L"       --entrypoint sh melos-api:20261007k3 "$SRC/deploy/release_l.sh" stage
     ;;
   stage)
     test ! -e "$DATA/corpus.sqlite" || { echo "$DATA/corpus.sqlite exists; move it aside first" >&2; exit 1; }
