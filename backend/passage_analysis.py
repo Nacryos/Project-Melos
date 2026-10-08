@@ -111,7 +111,11 @@ def _rough_initial(form):
 
 
 def _local_parser():
-    """Generate-and-test normalisation only runs against the local Morpheus build."""
+    """Generate-and-test normalisation only runs against the local Morpheus build
+    (MELOS_GENERATED_NORMALISATION=0 switches it off for measurement)."""
+    import os
+    if os.getenv("MELOS_GENERATED_NORMALISATION", "1").lower() in ("0", "false", "no"):
+        return False
     try:
         from .machine_morphology import local_endpoint
         return bool(local_endpoint())

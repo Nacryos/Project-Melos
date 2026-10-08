@@ -24,7 +24,7 @@ def test_single_rules_produce_standard_spellings():
     assert "ὔζον" in spellings("ὔσδον")              # σδ for ζ
     assert "φίλαις" in spellings("φίλαισι")          # dative plural
     assert "ἡμέρα" in spellings("ἀμέρα")             # psilosis + ᾱ for η (two rules)
-    assert "θυμός" in spellings("θῦμος")             # circumflex for acute, then accent moved
+    assert "λύκος" in spellings("λῦκος")             # circumflex written for an acute
 
 
 def test_bounded_and_rule_labelled():
@@ -45,7 +45,7 @@ def test_elision_completion_and_aspirate_reversal():
     # no rough breathing next: no τ/π/κ reading
     assert "ἀπό" not in [s for s, _ in elision_completions("ἀφ’", "ἐμοῦ")]
     assert elision_completions("οὐχ", "ὅπως") == [("οὐκ", ("aspirate_reversed",))]
-    assert elision_completions("δ’", "ἔβα") == []    # a lone consonant is left to the parser
+    assert elision_completions("γ’", "ἔβα") == []    # a lone consonant is left to the parser
     assert describe(("aspirate_reversed", "elision_completed")).startswith("Projection:")
 
 
@@ -104,18 +104,18 @@ def test_word_absorbs_edge_bracket_it_closes_or_opens():
     from backend.passage_analysis import tokenize_span
     def words(text):
         return [(t["text"], t["form"]) for t in tokenize_span(text, 0, len(text)) if t["kind"] == "word"]
-    assert words("καὶ [τ]ὰν πόλιν") == [("καὶ", "καὶ"), ("[τ]ὰν", "τὰν"), ("πόλιν", "πόλιν")]
+    assert words("σὺν [κ]ύνα πόλιν") == [("σὺν", "σὺν"), ("[κ]ύνα", "κύνα"), ("πόλιν", "πόλιν")]
     assert words("ἔχοντε[ς] νῦν") == [("ἔχοντε[ς]", "ἔχοντες"), ("νῦν", "νῦν")]
-    tokens = tokenize_span("[τὰν] πόλιν", 0, 11)
-    assert [t["text"] for t in tokens][:3] == ["[", "τὰν", "]"]   # whole-word supplement unchanged
+    tokens = tokenize_span("[κύνα] πόλιν", 0, 12)
+    assert [t["text"] for t in tokens][:3] == ["[", "κύνα", "]"]   # whole-word supplement unchanged
     for t in tokens:
-        assert "[τὰν] πόλιν"[t["start"]:t["end"]] == t["text"]
+        assert "[κύνα] πόλιν"[t["start"]:t["end"]] == t["text"]
 
 
 def test_editorial_lookup_form_strips_marks_inside_one_word():
     from backend.passage_analysis import editorial_lookup_form
     assert editorial_lookup_form("ἄ[ρι]στος") == "ἄριστος"
     assert editorial_lookup_form("ἀμφι⟨βάλων⟩") == "ἀμφιβάλων"
-    assert editorial_lookup_form(nfc("τὸ̣ν")) == "τὸν"
-    assert editorial_lookup_form("ἀλλ’") == "ἀλλ’"
-    assert editorial_lookup_form("[ ]") == "[ ]" and editorial_lookup_form("οὐ [κ]") == "οὐ [κ]"
+    assert editorial_lookup_form(nfc("τοῦ̣")) == "τοῦ"
+    assert editorial_lookup_form("ἔπειτ’") == "ἔπειτ’"
+    assert editorial_lookup_form("[ ]") == "[ ]" and editorial_lookup_form("ἐκ [κ]") == "ἐκ [κ]"
