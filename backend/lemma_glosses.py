@@ -436,7 +436,39 @@ def _restore_elided(lemma, row, predictions, cached):
     return None, None
 
 
-def attach_lemma_glosses(interlinear, lookup, limit=MAX_LOOKUPS, *, syntax=None, form_lemmas=None):
+ATTESTED_MIN_FORMS = 5
+
+
+def attested_tie_lemma(row, attestations):
+    """One lemma of a top-ranked tie that the source index attests when no other does.
+
+    The tie group is the ranked parses within the homograph margin (as row_lemma).
+    A lemma is chosen only if it has at least ATTESTED_MIN_FORMS recorded forms and
+    every other tied lemma has none (κάτεσσαν: καθίζω, 32 recorded forms, against a
+    parser-generated compound that no source records). Real ambiguities stay open.
+    """
+    ranking = row.get("morphology_ranking") or []
+    if not ranking or not isinstance(ranking[0].get("score"), (int, float)):
+        return None
+    top = ranking[0]["score"]
+    lemmas = {_nfc(item["lemma"]) for item in ranking if item.get("lemma")
+              and isinstance(item.get("score"), (int, float)) and top - item["score"] < 0.5}
+    if len(lemmas) < 2:
+        return None
+    counts = {}
+    for lemma in lemmas:
+        try:
+            counts[lemma] = int(attestations(lemma) or 0)
+        except Exception:
+            return None
+    attested = [lemma for lemma, count in counts.items() if count >= ATTESTED_MIN_FORMS]
+    if len(attested) == 1 and all(count == 0 for lemma, count in counts.items() if lemma != attested[0]):
+        return attested[0]
+    return None
+
+
+def attach_lemma_glosses(interlinear, lookup, limit=MAX_LOOKUPS, *, syntax=None, form_lemmas=None,
+                         lemma_attestations=None):
     """Fill missing glosses from the parse lemma's dictionary headword.
 
     ``lookup(lemma)`` returns Morphology.headword_entries(lemma);
@@ -480,6 +512,14 @@ def attach_lemma_glosses(interlinear, lookup, limit=MAX_LOOKUPS, *, syntax=None,
             gloss = row.get("gloss") or {}
             lemma, basis = row_lemma(row)
             model = None
+            if not lemma and lemma_attestations is not None:
+                lemma = attested_tie_lemma(row, lemma_attestations)
+                if lemma:
+                    basis = "top_ranked_tie_only_attested_lemma"
+                    row["lemma"] = lemma
+                    row["lemma_source"] = {"basis": basis, "note": (
+                        "The top-ranked parses tie on several lemmas; only this one is attested in the "
+                        "indexed source texts. The other parses stay listed.")}
             if not lemma:
                 model = _model_lemma(row, predictions)
                 # Parser lemmas, when there are any, bound the choice: a model

@@ -101,6 +101,14 @@ def request_url(form, endpoint=ENDPOINT):
     return endpoint + "?" + urllib.parse.urlencode(parameters)
 
 
+def engine_label(result):
+    """Readable engine name for a machine result, from its receipt."""
+    receipt = (result or {}).get("receipt") or {}
+    if receipt.get("parser_version") == LOCAL_PARSER_VERSION:
+        return f"Morpheus, local build ({str(receipt.get('engine_revision') or '').split(' ')[0]})"
+    return "Morpheus via the Alpheios service"
+
+
 def local_endpoint():
     """The configured local engine URL, or None. Only plain http(s) URLs are used."""
     value = os.getenv("MELOS_MORPHEUS_LOCAL", "").strip()

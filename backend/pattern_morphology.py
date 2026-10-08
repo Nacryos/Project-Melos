@@ -72,26 +72,102 @@ VERBAL = [
     ("μαι", [("1", "Sing", "Pres", "Ind", "Mid")]),
     ("σθαι", [(None, None, "Pres", None, "Mid")]),
     ("ην", [(None, None, "Pres", None, "Act")]),
+    ("σθω", [("3", "Sing", "Pres", "Imp", "Mid")]),
+    ("σθων", [("3", "Plur", "Pres", "Imp", "Mid")]),
+    ("ντων", [("3", "Plur", "Pres", "Imp", "Act")]),
+    ("τω", [("3", "Sing", "Pres", "Imp", "Act")]),
 ]
+# Longest ending first, so -σαν is read before -σα and -σθω before -ω.
+VERBAL.sort(key=lambda row: -len(row[0]))
+# Participles: (ending, Voice, Tense or None, [(Case, Number, Gender or None), ...]).
+# Middle-passive -μεν- forms and active -ουσ-/-οισ-/-οντ-/-σαντ- forms are
+# participial whatever the context; they are read before the finite table.
+PARTICIPLE = [
+    ("μενοισι", "Mid", None, [("Dat", "Plur", "Masc"), ("Dat", "Plur", "Neut")]),
+    ("μεναισι", "Mid", None, [("Dat", "Plur", "Fem")]),
+    ("μενοις", "Mid", None, [("Dat", "Plur", "Masc"), ("Dat", "Plur", "Neut")]),
+    ("μεναις", "Mid", None, [("Dat", "Plur", "Fem")]),
+    ("μενους", "Mid", None, [("Acc", "Plur", "Masc")]),
+    ("μενος", "Mid", None, [("Nom", "Sing", "Masc")]),
+    ("μενον", "Mid", None, [("Acc", "Sing", "Masc"), ("Nom", "Sing", "Neut"), ("Acc", "Sing", "Neut")]),
+    ("μενου", "Mid", None, [("Gen", "Sing", "Masc"), ("Gen", "Sing", "Neut")]),
+    ("μενων", "Mid", None, [("Gen", "Plur", None)]),
+    ("μενης", "Mid", None, [("Gen", "Sing", "Fem")]),
+    ("μενας", "Mid", None, [("Acc", "Plur", "Fem"), ("Gen", "Sing", "Fem")]),
+    ("μενην", "Mid", None, [("Acc", "Sing", "Fem")]),
+    ("μεναν", "Mid", None, [("Acc", "Sing", "Fem")]),
+    ("μενοι", "Mid", None, [("Nom", "Plur", "Masc")]),
+    ("μεναι", "Mid", None, [("Nom", "Plur", "Fem")]),
+    ("μενῳ", "Mid", None, [("Dat", "Sing", "Masc"), ("Dat", "Sing", "Neut")]),
+    ("μενῃ", "Mid", None, [("Dat", "Sing", "Fem")]),
+    ("μενᾳ", "Mid", None, [("Dat", "Sing", "Fem")]),
+    ("μενη", "Mid", None, [("Nom", "Sing", "Fem")]),
+    ("μενα", "Mid", None, [("Nom", "Sing", "Fem"), ("Nom", "Plur", "Neut"), ("Acc", "Plur", "Neut")]),
+    ("σαντος", "Act", "Aor", [("Gen", "Sing", "Masc"), ("Gen", "Sing", "Neut")]),
+    ("σαντες", "Act", "Aor", [("Nom", "Plur", "Masc")]),
+    ("σαντα", "Act", "Aor", [("Acc", "Sing", "Masc"), ("Nom", "Plur", "Neut"), ("Acc", "Plur", "Neut")]),
+    ("σασα", "Act", "Aor", [("Nom", "Sing", "Fem")]),
+    ("σαισα", "Act", "Aor", [("Nom", "Sing", "Fem")]),
+    ("ουσαν", "Act", "Pres", [("Acc", "Sing", "Fem")]),
+    ("ουσαι", "Act", "Pres", [("Nom", "Plur", "Fem")]),
+    ("ουσης", "Act", "Pres", [("Gen", "Sing", "Fem")]),
+    ("ουσας", "Act", "Pres", [("Acc", "Plur", "Fem"), ("Gen", "Sing", "Fem")]),
+    ("ουσῃ", "Act", "Pres", [("Dat", "Sing", "Fem")]),
+    ("ουσᾳ", "Act", "Pres", [("Dat", "Sing", "Fem")]),
+    ("ουσα", "Act", "Pres", [("Nom", "Sing", "Fem")]),
+    ("οισαν", "Act", "Pres", [("Acc", "Sing", "Fem")]),
+    ("οισα", "Act", "Pres", [("Nom", "Sing", "Fem")]),
+    ("οντος", "Act", "Pres", [("Gen", "Sing", "Masc"), ("Gen", "Sing", "Neut")]),
+    ("οντων", "Act", "Pres", [("Gen", "Plur", None)]),
+    ("οντες", "Act", "Pres", [("Nom", "Plur", "Masc")]),
+    ("οντας", "Act", "Pres", [("Acc", "Plur", "Masc")]),
+    ("οντι", "Act", "Pres", [("Dat", "Sing", "Masc"), ("Dat", "Sing", "Neut")]),
+    ("οντα", "Act", "Pres", [("Acc", "Sing", "Masc"), ("Nom", "Plur", "Neut"), ("Acc", "Plur", "Neut")]),
+]
+PARTICIPLE.sort(key=lambda row: -len(row[0]))
 NOMINAL_POS = {"NOUN", "PROPN", "ADJ", "DET", "PRON", "NUM"}
 VERBAL_POS = {"VERB", "AUX"}
 
 
 def _bare(form):
-    """Letters only, lower-cased, accents stripped, final elision mark dropped."""
+    """Letters only, lower-cased, accents stripped, final elision mark dropped.
+    The iota subscript is kept (-ῳ, -ῃ, -ᾳ are endings)."""
     text = unicodedata.normalize("NFD", form)
-    text = "".join(c for c in text if unicodedata.category(c).startswith("L")).lower()
+    text = "".join(c for c in text if unicodedata.category(c).startswith("L") or c == "ͅ").lower()
     return unicodedata.normalize("NFC", text)
 
 
-def pattern_candidates(form, predicted_pos=None, limit=6):
-    """Labelled ending-based analyses of ``form``; empty when nothing fits."""
+def _participles(form, bare, predicted_pos):
+    for ending, voice, tense, readings in PARTICIPLE:
+        if bare.endswith(ending) and len(bare) > len(ending) + 1:
+            out = []
+            for case, number, gender in readings:
+                features = {"case": case, "num": number, "voice": voice, "verbform": "Part"}
+                if gender:
+                    features["gend"] = gender
+                if tense:
+                    features["tense"] = tense
+                out.append(_candidate(form, ending, features, "VERB"))
+            return out
+    return []
+
+
+def pattern_candidates(form, predicted_pos=None, limit=6, predicted_verbform=None):
+    """Labelled ending-based analyses of ``form``; empty when nothing fits.
+
+    A participial ending (or a contextual prediction of a participle with one)
+    is read as a participle before the finite-verb and nominal tables.
+    """
     bare = _bare(form)
     if len(bare) < 3:
         return []
     use_nominal = predicted_pos in NOMINAL_POS or predicted_pos is None
     use_verbal = predicted_pos in VERBAL_POS or predicted_pos is None
     found, seen = [], set()
+    if predicted_pos in VERBAL_POS or predicted_pos is None or predicted_verbform == "Part":
+        participles = _participles(form, bare, predicted_pos)
+        if participles:
+            return participles[:limit]
     capitalised = form[:1] != form[:1].lower()
     if use_nominal and capitalised and bare.endswith("ιδα") and len(bare) > 5:
         # A capitalised patronymic in -ίδας: Lesbian/Doric genitive -ίδα

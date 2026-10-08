@@ -171,11 +171,26 @@ def corroborated_choice(groups):
     the caller keeps the plain first sense. Nothing is reworded.
     """
     groups = [group for group in groups if group[1] and group[2]]
+    # Lower-case head phrases printed by any dictionary's first sense: a capitalised
+    # "God" yields to another dictionary's "god" for a common word; a proper name is
+    # capitalised everywhere and is unaffected.
+    lowered = {_phrase_key(phrase) for _, senses, _ in groups for phrase in _phrases(senses[0].get("text"))
+               if phrase[:1].islower()}
     for source, senses, others in groups:
         sense = senses[0]
+        best, best_count = None, 0
         for phrase in _phrases(sense.get("text")):
-            if corroborated(phrase, others):
-                return sense, phrase
+            if phrase[:1].isupper() and phrase not in ("I", "O") and _phrase_key(phrase) in lowered:
+                continue
+            if not corroborated(phrase, others):
+                continue
+            # The phrase confirmed by the most other dictionaries wins; ties keep
+            # the earlier phrase ("otherwise, but": "but" is in three, "otherwise" in one).
+            count = sum(corroborated(phrase, [text]) for text in others)
+            if count > best_count:
+                best, best_count = phrase, count
+        if best is not None:
+            return sense, best
     return None
 
 

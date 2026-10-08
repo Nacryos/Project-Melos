@@ -112,6 +112,15 @@ def _rough_initial(form):
     return "̔" in head
 
 
+def _label_engine(result, into=None):
+    """Record which engine produced a result's candidates: ``engines`` maps receipt id to a
+    readable name. Candidates themselves stay exactly the verified receipt projection."""
+    target = result if into is None else into
+    if isinstance(result, dict) and result.get("machine_candidates") and result.get("receipt") and isinstance(target, dict):
+        from .machine_morphology import engine_label
+        target["engines"] = {**(target.get("engines") or {}), result["receipt"]["id"]: engine_label(result)}
+
+
 def _local_parser():
     """Generate-and-test normalisation only runs against the local Morpheus build
     (MELOS_GENERATED_NORMALISATION=0 switches it off for measurement)."""
@@ -375,7 +384,8 @@ def _context(passage):
 
 class PassageAnalysisService:
     def __init__(self, passage_lookup, word_lookup, *, machine_service=None, syntax_provider=None, ranker=None, sense_ranker=None,
-                 machine_subentry_lookup=None, headword_lookup=None, form_lemma_lookup=None):
+                 machine_subentry_lookup=None, headword_lookup=None, form_lemma_lookup=None,
+                 lemma_attestation_lookup=None):
         self.passage_lookup, self.word_lookup = passage_lookup, word_lookup
         # Optional: Morphology.headword_entries, used only to give a parse
         # lemma its dictionary headword meaning when no entry was joined.
@@ -383,6 +393,9 @@ class PassageAnalysisService:
         # Optional: Morphology.form_lemmas, to read a parser lemma that is itself
         # an inflected form back to its headword.
         self.form_lemma_lookup = form_lemma_lookup
+        # Optional: lemma -> number of recorded forms (Morphology.forms_for_lemma), to
+        # settle a top-ranked lemma tie only when exactly one lemma is attested.
+        self.lemma_attestation_lookup = lemma_attestation_lookup
         self.machine_service, self.syntax_provider, self.ranker = machine_service, syntax_provider, ranker
         self.sense_ranker = sense_ranker
         # Explicit deployment dependency only. The callback must wrap the
@@ -555,6 +568,7 @@ class PassageAnalysisService:
                                 machine = {**machine, "status": "request_limit", "warnings": ["At most three uncached computational forms are fetched per explicit passage request."]}
                     except Exception:
                         machine["warnings"] = ["Computational morphology is unavailable; source alternatives remain available."]
+                _label_engine(machine)
                 from .aeolic_variants import LEXICAL
                 if (machine.get("status") == "no_analyses" or (form in LEXICAL and machine.get("status") == "ok")) and self.machine_service is not None:
                     # The exact printed form is unknown to the parser. Query a few
@@ -576,6 +590,7 @@ class PassageAnalysisService:
                                  "candidate_count": len(result.get("machine_candidates") or []),
                                  "receipt_id": (result.get("receipt") or {}).get("id")}
                         machine["normalised_queries"].append(entry)
+                        _label_engine(result, machine)
                         for candidate in result.get("machine_candidates") or []:
                             machine["machine_candidates"].append({
                                 **candidate, "basis": "machine_analysis", "candidate_kind": "machine_analysis",
@@ -650,7 +665,7 @@ class PassageAnalysisService:
             from .lemma_glosses import attach_lemma_glosses
             result["limits"]["lemma_dictionary"] = attach_lemma_glosses(
                 result["interlinear"], self.headword_lookup, syntax=result.get("syntax"),
-                form_lemmas=self.form_lemma_lookup)
+                form_lemmas=self.form_lemma_lookup, lemma_attestations=self.lemma_attestation_lookup)
         result["sense_ranking"] = {"status": "not_requested"}
         if request.get('rerank') and self.sense_ranker is not None:
             from .sense_ranker import apply_sense_ranking
@@ -702,6 +717,7 @@ class PassageAnalysisService:
             return result
         candidates = list(machine.get("machine_candidates") or [])
         for spelling, rules, found in accepted:
+            _label_engine(found, result)
             note = describe(rules)
             for candidate in found["machine_candidates"]:
                 candidates.append({**candidate, "basis": "machine_analysis", "candidate_kind": "machine_analysis",
@@ -835,7 +851,8 @@ class PassageAnalysisService:
                 token["warnings"].append("Surviving letters beside a lacuna that no analysis fits; not a complete word.")
                 continue
             predicted = by_span.get((token["start"], token["end"])) or by_span.get((token["start"], token["end"] - 1))
-            candidates = pattern_candidates(form, predicted.get("upos") if predicted else None)
+            candidates = pattern_candidates(form, predicted.get("upos") if predicted else None,
+                                            predicted_verbform=((predicted or {}).get("features") or {}).get("VerbForm"))
             if candidates:
                 for candidate in candidates:
                     candidate["id"] = candidate_identity(candidate)

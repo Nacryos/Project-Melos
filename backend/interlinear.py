@@ -303,6 +303,28 @@ def _affinity(candidate, syntax):
     return score
 
 
+def parse_source(chosen, group=None, predicted=None, engines=None):
+    """Which source supplied the shown parse, as a readable label (never an internal id)."""
+    item = chosen or (group[0] if group else None)
+    if item is None:
+        return ({'kind': 'contextual_model', 'label': 'Contextual model prediction (odyCy), not a source parse'}
+                if predicted else None)
+    kind = item.get('candidate_kind') or item.get('basis') or 'source_analysis'
+    if kind == 'pattern_analysis':
+        label = 'Ending pattern only (no dictionary or parser knows the word)'
+    elif kind == 'machine_analysis' or item.get('basis') == 'machine_analysis':
+        label = (engines or {}).get(item.get('receipt_id')) or 'Morpheus parser'
+        if item.get('normalised_query'):
+            label += f", parsing the normalised spelling {item['normalised_query']}"
+    elif kind == 'source_analysis_normalised':
+        label = f"{item.get('source') or 'Recorded analysis'}, of the variant spelling {item.get('normalised_query')}"
+    else:
+        label = item.get('source') or 'Recorded source analysis'
+    if not chosen:
+        label += ' (tied parses agree on these features)'
+    return {'kind': kind, 'label': label}
+
+
 def candidate_basis(item):
     if item.get('candidate_kind') == 'source_analysis_normalised':
         return 'source_analysis_normalised'
@@ -605,7 +627,14 @@ def _gloss(candidate, token):
         matching = [sense for sense in eligible
                     if sense_class_compatible(sense, entry_of.get(sense.get('lexicon_entry_id') or sense.get('entry_id')) or {}, pos)]
         eligible = matching or eligible
-        choice = corroborated_choice(_corroboration_groups(structured, eligible))
+        pool = _corroboration_pool(entries, structured, candidate)
+        pool_texts = [_entry_text(entry) for entry in pool]
+        groups = [(source, own, [*others, *pool_texts]) for source, own, others in _corroboration_groups(structured, eligible)]
+        # Other dictionaries' entries for the same lemma confirm phrases and, after the
+        # bound entries, may supply the gloss when no bound phrase is confirmed.
+        groups += [(entry.get('source'), _first_meaning(entry),
+                    [_entry_text(other) for other in [*structured, *pool] if other is not entry]) for entry in pool]
+        choice = corroborated_choice(groups)
         if choice:
             return gloss_from_sense(choice[0], senses, phrase=choice[1])
         return gloss_from_sense(eligible[0], senses)
@@ -629,6 +658,29 @@ def _gloss(candidate, token):
         # Prefer a complete sourced sense over an arbitrary word cap. Long
         # senses may wrap in the reader, but their meaning is never clipped.
         short = first or None
+        same_lemma = [entry for entry in entries
+                      if _lemma_key(entry.get('lemma')) == _lemma_key(candidate.get('entry_headword') or candidate.get('lemma'))]
+        source = row.get('gloss_source') or row.get('source')
+        if short and same_lemma:
+            # The same corroboration as structured entries: the head phrase another
+            # dictionary confirms most ("otherwise, but" -> "but"); a capitalised
+            # "God" yields to another dictionary's lower-case "god".
+            groups = [(source, [{'text': short}], [_entry_text(entry) for entry in same_lemma if entry.get('source') != source]),
+                      *[(entry.get('source'), [sense for sense in (entry.get('dictionary_senses') or [])[:1]
+                                                if isinstance(sense, dict) and sense.get('id') and isinstance(sense.get('text'), str)],
+                         [_entry_text(other) for other in same_lemma if other is not entry])
+                        for entry in same_lemma if entry.get('source') != source]]
+            choice = corroborated_choice(groups)
+            if choice and choice[0].get('id'):
+                return gloss_from_sense(choice[0], [], phrase=choice[1])
+            if choice:
+                head = short_head(choice[1])
+                if head:
+                    return {**missing, 'text': short, 'full_text': full, 'short_text': head['text'],
+                            'short_text_method': 'corroborated_phrase', 'status': 'available', 'source': source,
+                            'source_url': row.get('gloss_source_url') or row.get('source_url'),
+                            'entry_id': row.get('gloss_entry_id') or row.get('id'),
+                            'selection_basis': 'first_dictionary_sense_not_contextual_sense'}
         return {**missing, 'text': short, 'full_text': full, **_short_fields(short),
                 'status': 'available' if short else 'long_definition',
                 'source': row.get('gloss_source') or row.get('source'),
@@ -640,6 +692,30 @@ def _gloss(candidate, token):
 
 def _entry_text(entry):
     return str(entry.get('rendered_entry_text') or entry.get('entry_text') or '')
+
+
+def _lemma_key(value):
+    return re.sub(r'\d+$', '', _identity(value) or '') if value else ''
+
+
+def _corroboration_pool(entries, bound, candidate):
+    """One unambiguous entry per other dictionary for the candidate's lemma (homograph digits ignored)."""
+    lemma = _lemma_key(candidate.get('entry_headword') or candidate.get('lemma'))
+    families = {_dictionary_family(entry) for entry in bound}
+    by_family = {}
+    for entry in entries:
+        family = _dictionary_family(entry)
+        if (lemma and family and family not in families and entry.get('dictionary_senses')
+                and _lemma_key(entry.get('lemma')) == lemma):
+            by_family.setdefault(family, []).append(entry)
+    return [rows[0] for rows in by_family.values() if len(rows) == 1]
+
+
+def _first_meaning(entry):
+    return [sense for sense in entry.get('dictionary_senses') or []
+            if isinstance(sense, dict) and sense.get('id') and isinstance(sense.get('text'), str) and sense['text'].strip()
+            and _english(sense) and sense.get('evidence_type') == 'dictionary_sense'
+            and not metalanguage_only(sense['text'])][:1]
 
 
 def _corroboration_groups(entries, eligible):
@@ -1308,6 +1384,9 @@ def interlinear_reading(result):
         if lexical_conflict:
             row['lexical_prediction_check'] = lexical_conflict
         row['syntax_conflict'] = conflict
+        if not partial and row.get('features'):
+            row['parse_source'] = parse_source(chosen, consensus_group or (candidates if consensus else None),
+                                               predicted, (token.get('machine') or {}).get('engines'))
         # Every full parse, ranked by its fit to the contextual prediction.
         # The order is a proposal; all alternatives stay visible.
         row['morphology_ranking'] = [
@@ -1397,7 +1476,8 @@ def interlinear_reading(result):
         row.update(lemma=chosen.get('lemma'), features=features, parse_short=compact_parse(features),
                    gloss=_gloss(chosen, token), status='selected', selection_basis='morphology_ranked_by_neighbour_parse',
                    candidate_id=chosen.get('id'), alternative_count=count, source_candidate=deepcopy(chosen),
-                   neighbour_evidence=[{'text': n['text'], 'features': n['features']} for n in neighbours])
+                   neighbour_evidence=[{'text': n['text'], 'features': n['features']} for n in neighbours],
+                   parse_source=parse_source(chosen, engines=(token.get('machine') or {}).get('engines')))
         row.pop('supporting_parse_candidate_ids', None)
         record_precedent(_form(token), chosen)
     edges = []

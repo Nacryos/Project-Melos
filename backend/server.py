@@ -332,7 +332,8 @@ def with_visual_themes(record, con):
     def lookup(passage_id):
         row = con.execute('SELECT data FROM passages WHERE id=?', (passage_id,)).fetchone()
         return json.loads(row['data']) if row else None
-    return attach_visual_themes(record, lookup=lookup)
+    from .source_labels import with_source_label
+    return with_source_label(attach_visual_themes(record, lookup=lookup))
 
 
 @lru_cache(maxsize=4)
@@ -577,6 +578,7 @@ def wiktionary(form:str='',limit:int=Query(8,ge=1,le=20)):
 
 @app.get('/api/status')
 def status():
+    from .source_labels import source_label
     if not DB.exists():
         return {'passages':0,'authors':0,'author_labels':0,'works':0,'sources':[],'languages':[],
                 'embeddings':{'ready':False},'warnings':['Collectors are running; the corpus index has not yet been built.']}
@@ -594,7 +596,8 @@ def status():
     except (ImportError,OSError,RuntimeError,sqlite3.Error) as exc:
         evidence_status={'ready':False,'claims':0,'warning':safe_error(exc)}
     return {'passages':manifest['passages'],'authors':authors,'author_labels':labels_count,'works':manifest['works'],
-            'sources':sources,'languages':langs,'embeddings':embedding,'quality':quality,
+            'sources':[{**item,'label':source_label(item.get('source'))} if isinstance(item,dict) else item
+                       for item in sources],'languages':langs,'embeddings':embedding,'quality':quality,
             'evidence':evidence_status,'classifier':classifier_status(),
             'publication_policy':('restricted' if publication_restricted() else 'source-labels') if public_deployment() else 'local',
             'searchable_qualities':list(SEARCHABLE_QUALITIES),'schema':manifest.get('schema',1),
@@ -738,13 +741,15 @@ def occurrences(keys,author='',limit=30,con=None):
     own = con is None
     con = con or connect()
     marks = ','.join('?' for _ in keys)
-    sql = f'SELECT DISTINCT p.data FROM passages p JOIN tokens t ON t.passage_id=p.id WHERE t.normalized IN ({marks})'
+    # De-duplicate by passage id in a subquery: DISTINCT over whole passage blobs
+    # spilled a temporary b-tree past the container's /tmp for frequent words (καὶ, δ’).
+    sql = f'SELECT p.data FROM passages p WHERE p.id IN (SELECT t.passage_id FROM tokens t WHERE t.normalized IN ({marks}))'
     params = list(keys)
     if author:
         labels=author_filter_keys(author)
         sql += ' AND '+author_member_clause(labels)('p')
         params.extend(labels)
-    sql += " ORDER BY CASE WHEN p.language='grc' THEN 0 ELSE 1 END,p.author,p.work,p.sequence LIMIT ?"
+    sql += " ORDER BY CASE WHEN p.language='grc' THEN 0 ELSE 1 END,p.author,p.work,p.sequence,p.id LIMIT ?"
     try:
         return [unpack(r) for r in con.execute(sql,params+[limit])]
     finally:
@@ -874,7 +879,7 @@ def word(form: str, passage_id: str=''):
 
 
 @app.get('/api/word')
-def word_request(form: str, passage_id: str=''):
+def word_request(form: str, passage_id: str='', lemma: str=''):
     # Keep internal word/headword lookups source-only. Cached machine evidence
     # is added only at the ordinary user-facing HTTP boundary.
     from .passage_analysis import editorial_lookup_form
@@ -882,6 +887,37 @@ def word_request(form: str, passage_id: str=''):
     result = word(form, passage_id)
     if printed != form:
         result['printed_form'] = printed
+    status = result.get('analysis_match_status')
+    if status in ('spelling_suggestions_only', 'no_match', 'headword_only') and not result.get('contextual_candidates'):
+        # No indexed source analyses this exact form: ask the parser, through the same
+        # local Morpheus and generated-spelling path the in-poem analysis uses.
+        try:
+            from .machine_morphology import get_service
+            from .word_parser_candidates import parser_candidates
+            rows = parser_candidates(form, get_service(), lambda lemma: morph_service().headword_entries(lemma),
+                                     lambda value: morph_service().form_lemmas(value))
+        except Exception:
+            rows = []
+        if rows:
+            if status == 'spelling_suggestions_only':
+                # Nearby spellings stay available, apart from the analyses of this form.
+                result['spelling_suggestions'] = result.get('candidates') or []
+                result['candidates'] = []
+            result['candidates'] = [*(result.get('candidates') or []), *rows]
+            result['analysis_match_status'] = 'parser_analysis_only' if status != 'headword_only' else status
+            result['warnings'] = [*(result.get('warnings') or []),
+                'No indexed source text records this exact form; the parses shown are machine analyses (Morpheus), '
+                'some of them of a labelled standard spelling.']
+    if lemma:
+        # The caller's headword (the passage row's lemma) leads: its dictionary entries and
+        # candidates come first, so the panel's dictionary matches its headline. Nothing is removed.
+        import unicodedata as _ud
+        key = lambda value: _ud.normalize('NFC', str(value or '')).rstrip('0123456789')
+        wanted = key(lemma)
+        for field in ('lexicon_entries', 'candidates'):
+            if isinstance(result.get(field), list):
+                result[field] = sorted(result[field], key=lambda item: key((item or {}).get('lemma')) != wanted)
+        result['selected_lemma'] = lemma
     if os.environ.get('MELOS_MACHINE_SUBENTRIES_ENABLED') == '1':
         from .passage_analysis import machine_dictionary_lookup
         from .machine_morphology import get_service
@@ -1088,6 +1124,7 @@ app.include_router(_passage_router(
                             if os.environ.get('MELOS_MACHINE_SUBENTRIES_ENABLED') == '1' else None),
     headword_lookup=lambda lemma: morph_service().headword_entries(lemma),
     form_lemma_lookup=lambda form: morph_service().form_lemmas(form),
+    lemma_attestation_lookup=lambda lemma: len(morph_service().forms_for_lemma(lemma)),
 ))
 
 
@@ -1141,6 +1178,9 @@ def search_response(q:str='',mode:str='words',author:str='',language:str='',edit
         except (sqlite3.Error,ValueError,OSError):
             result['warnings']=[*result.get('warnings',[]),
                 'Published translation previews are unavailable; passage search results are unchanged.']
+    from .source_labels import with_source_label
+    for record in result.get('results') or []:
+        with_source_label(record)
     return result
 
 

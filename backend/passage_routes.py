@@ -19,12 +19,13 @@ class PassageRequest(BaseModel):
     fetch_machine: StrictBool = False
 
 
-def create_router(passage_lookup, word_lookup, *, machine_service=None, syntax_provider=None, ranker=None, sense_ranker=None, rerank_allowed=None, machine_subentry_lookup=None, headword_lookup=None, form_lemma_lookup=None):
+def create_router(passage_lookup, word_lookup, *, machine_service=None, syntax_provider=None, ranker=None, sense_ranker=None, rerank_allowed=None, machine_subentry_lookup=None, headword_lookup=None, form_lemma_lookup=None, lemma_attestation_lookup=None):
     router = APIRouter()
     service = PassageAnalysisService(passage_lookup, word_lookup, machine_service=machine_service,
                                     syntax_provider=syntax_provider, ranker=ranker, sense_ranker=sense_ranker,
                                     machine_subentry_lookup=machine_subentry_lookup, headword_lookup=headword_lookup,
-                                    form_lemma_lookup=form_lemma_lookup)
+                                    form_lemma_lookup=form_lemma_lookup,
+                                    lemma_attestation_lookup=lemma_attestation_lookup)
 
     def run(payload, request):
         if payload.rerank and (rerank_allowed is None or not rerank_allowed(request)):
