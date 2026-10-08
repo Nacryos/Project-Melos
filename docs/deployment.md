@@ -2,37 +2,52 @@
 
 ## Prepared, NOT deployed: release GLP — every poem in Campbell's *Greek Lyric Poetry* (2026-10-08)
 
-Adds the 232 remaining Campbell poems (`campbell-glp:*`; audit `docs/audits/campbell-glp-full.md`)
-and public-domain comparison translations for 209 of them. Live K3 is unchanged until this is run.
+Adds the 232 remaining Campbell poems (`campbell-glp:*`; audit `docs/audits/campbell-glp-full.md`),
+public-domain comparison translations for 209 of them, and corrects 11 lines of the five live Alcaeus
+passages (34a, 129, 130b) to the page images. Live K3 is unchanged until this is run.
 
 What ships (branch `worktree-agent-a6e935236d3ca4e7c`, on top of K3 source `b0934b4`):
-- Corpus: `data/campbell_glp/campbell_glp.jsonl` imported into a copy of the live corpus by
-  `scripts/import_campbell_glp.py` (idempotent; refuses to overwrite a differing row; the five approved
-  Alcaeus rows are not touched). Passages **288,589 → 288,821**. Semantic manifest rebound to the new
-  corpus (existing vectors kept; the 232 new ids listed as pending embedding, so they are found by word
-  search and reading, not yet by semantic search).
-- Backend code: `backend/translation_comparisons.py` (GLP sidecar loader) and
-  `backend/translation_comparisons_glp_data.json` (sha256 pinned in the module). No frontend change: the
-  reader's existing "English translation · another edition" panel renders these items.
+- Corpus: `scripts/correct_campbell_five.py corpus` rewrites the five approved rows to
+  `data/campbell_glp/alcaeus_five_corrected.jsonl` (idempotent; refuses a row that is neither the approved
+  original nor the corrected text), then `scripts/import_campbell_glp.py` adds
+  `data/campbell_glp/campbell_glp.jsonl` (idempotent; refuses to overwrite a differing row). Passages
+  **288,589 → 288,821**. Semantic manifest rebound to the new corpus (existing vectors kept; the 232 new
+  ids listed as pending embedding: found by word search and reading, not yet by semantic search).
+- Backend code and sidecars, all re-pinned: `translation_comparisons.py` + `translation_comparisons_data.json`
+  (re-anchored) + `translation_comparisons_glp_data.json` (new), `edition_commentary.py` +
+  `edition_commentary_data.json`, `source_line_english.py` + `source_line_english_data.json`,
+  `editorial_readings.py`. No frontend change.
+- Morpheus receipts for the corrected forms (e.g. ὤς): `runtime/dev/glp-receipts-bundle.json` in the laptop
+  worktree (sha256 `bb8fccc3…`), exported with `deploy/sync_morphology_receipts.py export`.
 
 Steps on Basecamp (needs ~1.7 GB free; disk was 98 % full on 2026-10-07):
-1. Copy the source tarball of this branch to the box and unpack into `/home/alvin/melos-glp/src`.
+1. `git archive` this branch, copy it to the box and unpack into `/home/alvin/melos-glp/src`; copy the
+   receipts bundle to `/home/alvin/melos-glp/receipts-bundle.json`.
 2. `sh /home/alvin/melos-glp/src/deploy/release_glp.sh stage` — copies the live corpus
-   (`releases/campbell-20261007b/candidate-data/corpus.sqlite`) to `/home/alvin/melos-glp/data/`, imports,
-   rebinds `manifest.json`, then `verify_campbell_glp.py --corpus … --expected-passages 288821` must report
-   `failures: 0` (receipts `import-receipt.json`, `verify-corpus.json`). Do not copy or touch the staged
-   corpus afterwards (the manifest is bound to its mtime and size).
-3. `… release_glp.sh build` (image `melos-api:20261008glp` from `Dockerfile.patch` atop QA29, as K).
-4. `… release_glp.sh canary`, then on the box:
-   `python3 deploy/smoke_backend.py --origin http://127.0.0.1:8792 --expected-passages 288821` and
-   `python3 scripts/verify_campbell_glp.py --origin http://127.0.0.1:8792 --expected-passages 288821 --analyze sample`.
-5. `… release_glp.sh promote` (K3 kept stopped as `melos-api-before-glp`; `rollback` restores it).
-6. From anywhere: `python deploy/smoke_backend.py --origin https://greeklyric.com --expected-passages 288821`
+   (`releases/campbell-20261007b/candidate-data/corpus.sqlite`) to `/home/alvin/melos-glp/data/`, corrects
+   the five rows, imports the 232, rebinds `manifest.json`, then
+   `verify_campbell_glp.py --corpus … --expected-passages 288821` must report all **237** identical and
+   `failures: 0` (receipts `correct-five-receipt.json`, `import-receipt.json`, `verify-corpus.json`). Do not
+   copy or touch the staged corpus afterwards (the manifest is bound to its mtime and size).
+3. `… release_glp.sh receipts` (imports absent Morpheus receipts only).
+4. `… release_glp.sh build` (image `melos-api:20261008glp` from `Dockerfile.patch` atop QA29, as K).
+5. `… release_glp.sh canary`, then on the box:
+   `python3 deploy/smoke_backend.py --origin http://127.0.0.1:8792 --expected-passages 288821`,
+   `python3 scripts/verify_campbell_glp.py --origin http://127.0.0.1:8792 --expected-passages 288821 --analyze sample`
+   and `python3 scripts/check_span_parses.py --base http://127.0.0.1:8792 --random 30` (expect 0 failures).
+6. `… release_glp.sh promote` (K3 kept stopped as `melos-api-before-glp`; `rollback` restores it).
+7. From anywhere: `python deploy/smoke_backend.py --origin https://greeklyric.com --expected-passages 288821`
    and `python scripts/verify_campbell_glp.py --origin https://greeklyric.com --expected-passages 288821`.
    From then on the production smoke expectation is **288,821**.
 
-Not in this release: corrections to the five live Alcaeus texts (see the audit's findings table), BGE-M3
-vectors for the 232 new passages.
+Local checks (2026-10-08, dev server on the corrected texts): all 237 passages identical to the verified
+texts; `check_span_parses.py --random 30`: 227 spans, 816 word rows, **0 failures** (3 failures on ὤς
+until its Morpheus receipt was warmed, hence step 3); five-poem audit (`runtime/dev/audit-glp-corrected`):
+303 of 303 intact words with complete parse fields, 18 damaged pieces labelled (glosses are not
+measurable locally: the laptop dev corpus has no dictionary index).
+
+Not in this release: BGE-M3 vectors for the 232 new passages (the five keep their existing vectors,
+computed on the pre-correction text; the differences are diacritics and three letters).
 
 ## Current: release K3 — every intact word fully parsed (2026-10-07, night)
 

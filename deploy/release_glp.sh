@@ -3,11 +3,14 @@
 # Greek Lyric Poetry on the live reader, plus public-domain comparison translations.
 #
 # Adds 232 passages (campbell-glp:*) to the live K3 corpus (288,589 -> 288,821) and
-# ships backend/translation_comparisons.py + backend/translation_comparisons_glp_data.json.
-# The five owner-approved Alcaeus passages are untouched (verified present).
+# corrects 11 lines of the five approved Alcaeus passages to the page images, and ships the
+# re-anchored backend sidecars (commentary, comparisons, source-line English, editorial readings)
+# plus backend/translation_comparisons_glp_data.json.
+# Verification covers all 237 poems.
 #
 # Run on Basecamp after this branch's source tarball is unpacked into $G/src:
 #   sh /home/alvin/melos-glp/src/deploy/release_glp.sh stage     # corpus copy + idempotent import + semantic rebind + verify
+#   sh /home/alvin/melos-glp/src/deploy/release_glp.sh receipts  # import Morpheus receipts for corrected forms (absent keys only)
 #   sh /home/alvin/melos-glp/src/deploy/release_glp.sh build     # image (Dockerfile.patch atop the QA29 base, like K)
 #   sh /home/alvin/melos-glp/src/deploy/release_glp.sh canary    # melos-api-canary on 127.0.0.1:8792
 #   sh /home/alvin/melos-glp/src/deploy/release_glp.sh promote   # keep live container stopped, start GLP on 8791
@@ -60,6 +63,9 @@ case "$step" in
     mkdir -p "$DATA"
     cp "$LIVE_DATA/corpus.sqlite" "$DATA/corpus.sqlite"
     cd "$SRC"
+    # Correct the five approved Alcaeus rows to the page images (idempotent; refuses rows that are
+    # neither the approved original nor the corrected text). Must run before the semantic rebind.
+    python3 scripts/correct_campbell_five.py corpus --corpus "$DATA/corpus.sqlite" | tee "$DATA/correct-five-receipt.json"
     # Idempotent: rows already present must be identical; a re-run adds nothing.
     python3 scripts/import_campbell_glp.py --corpus "$DATA/corpus.sqlite" \
       --semantic-manifest "$LIVE_DATA/manifest.json" --semantic-output "$DATA/manifest.json" \
@@ -69,6 +75,12 @@ case "$step" in
     python3 scripts/verify_campbell_glp.py --corpus "$DATA/corpus.sqlite" --expected-passages 288821 \
       | tee "$DATA/verify-corpus.json"
     sha256sum "$DATA/corpus.sqlite" "$DATA/manifest.json"
+    ;;
+  receipts)
+    # Morpheus receipts for the corrected Alcaeus forms (e.g. ὤς, τωνδέων, ἔγωγ’), exported from the
+    # laptop cache with deploy/sync_morphology_receipts.py export; inserts absent keys only.
+    test -f "$G/receipts-bundle.json"
+    cd "$SRC" && python3 deploy/sync_morphology_receipts.py import /home/alvin/services/melos/runtime/machine_morphology.sqlite "$G/receipts-bundle.json" --apply
     ;;
   build)
     test -f "$SRC/deploy/Dockerfile.patch"
@@ -93,5 +105,5 @@ case "$step" in
     sleep 8; curl -fsS http://127.0.0.1:8791/api/status | head -c 300; echo
     ;;
   *)
-    echo "usage: release_glp.sh stage|build|canary|promote|rollback" >&2; exit 1;;
+    echo "usage: release_glp.sh stage|receipts|build|canary|promote|rollback" >&2; exit 1;;
 esac

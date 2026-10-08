@@ -57,25 +57,42 @@ stored in each poem's `metadata.transcription_uncertainty`: **36 notes on 28 poe
 on the five already-approved poems both new passes agreed with each other where they disagreed with
 the live text, and the image confirmed the new reading in the clear cases below.
 
-## Findings on the five live Alcaeus texts (not changed; owner decision needed)
+## Corrections to the five live Alcaeus texts (applied on this branch, 2026-10-08)
 
 An image check of every line where the new transcriptions differ from the live texts
-(`evidence/adjudication/out_J9.json`) found clear transcription errors in the live, owner-approved rows:
+(`evidence/adjudication/out_J9.json`) found transcription errors in the live, owner-approved rows.
+Each was re-checked on 5–10× crops of the page; the coordinator confirmed PDF pp. 89–90; the owner asked
+for faithful texts. The 11 high-confidence corrections (`data/campbell_glp/alcaeus_five_corrections.json`):
 
-| Poem | Live text | Campbell prints |
+| Poem, printed line (PDF p.) | Live text | Campbell prints |
 |---|---|---|
-| 130b l. 21 | πεδὰ τυνδέων | πεδὰ **τωνδέων** |
-| 130b l. 23 | ἔγ[ων’ ἀ]πὺ | ἔγ[**ωγ**’ ἀ]πὺ |
-| 34a l. 10 | τ]ήλοθεν … πρό[τον’ ὀν]τρ[έχο]ντες | **π**]ήλοθεν … πρό̣[τον’ ὀν]τρ̣[έχο]ντες |
-| 129 l. 16 | τῶν ἐταίρων | **τὼν** ἐταίρων |
-| 129 l. 18 | κεῖσεσθ’ … οἰ τότ’ ἔπικ | **κείσεσθ’** … **οἶ** τότ’ **ἐπικ** |
-| 129 l. 22–23 | βραιδίως; δάπτει | **βραϊδίως**; **δ̣άπτει** |
-| 129 l. 27 | γεγρᾶ . [ | **γεγρά** . [ |
-| 129 l. 6 | Αἰολήαν | **Αἰολῄαν** |
+| 34a l. 10 (p. 86) | τ]ήλοθεν … πρό[τον’ ὀν]τρ[έχο]ντες | **π**]ήλοθεν … πρό̣[τον’ ὀν]τρ̣[έχο]ντες |
+| 129 l. 6 (p. 88) | Αἰολήαν | **Αἰολῄαν** |
+| 129 l. 14 (p. 89) | ὠς ποτ’ | **ὤς** ποτ’ |
+| 129 l. 16 (p. 89) | τῶν ἐταίρων | **τὼν** ἐταίρων |
+| 129 l. 18 (p. 89) | κεῖσεσθ’ … οἰ τότ’ ἔπικ | **κείσεσθ’** … **οἶ** τότ’ **ἐπικ** |
+| 129 l. 22 (p. 89) | βραιδίως | **βραϊδίως** |
+| 129 l. 27 (p. 89) | γεγρᾶ . [ | **γεγρά** . [ |
+| 130b l. 16 (p. 89) | ἄγνοις̣ . . ς̣βιότοις̣ . . ις ὁ | **ἀγνοι̣ς̣** . . ς̣**βιότοις** . . ις **ὀ** |
+| 130b l. 21 (p. 90) | πεδὰ τυνδέων | πεδὰ **τωνδέων** |
+| 130b l. 23 (p. 90) | ἔγ[ων’ ἀ]πὺ | ἔγ[**ωγ**’ ἀ]πὺ |
+| 130b l. 29 (p. 90) | ἔοι̣[ | **ἐοι̣**[ |
 
-Lower-confidence differences (accent/breathing on ὠς/ὤς, underdots, a final ·) are listed in the same
-file. Correcting the live rows changes their text hashes, which the approved commentary, editorial
-readings and translation-comparison sidecars are pinned to; it needs its own release.
+Left as approved (scan cannot decide): the underdot on νᾶ̣] and the breathing of οἳ in 34a, the
+spacing `. ]` in 129 l. 15, a 1-px speck under δ of δάπτει (129 l. 23; not an underdot), and the final
+raised dot after θέων· (130b l. 28). The CHS comparison edition independently prints several of the
+corrected readings (ἀγνοι̣σ̣ … ὀ, τωνδέων, βραϊδίως, ὤς).
+
+Re-anchoring (everything pinned to the old wording): corrected package
+`data/campbell_glp/alcaeus_five_corrected.jsonl` (sha256 `ab2e1487…`; each record carries
+`metadata.text_corrections` with "corrected to Campbell page image, PDF p.N" and `previous_text_sha256`);
+re-approval entry in `docs/audits/campbell-assignment-approval.json` (`revisions`); commentary sidecar
+(`parent_text_sha256`; paragraph anchors are printed line labels and lemmas, unchanged) and comparison
+sidecar rebuilt by their builders (token differences reproduced against the old text, then recomputed
+against the corrected one and marked `campbell_text_reanchored`); source-line English re-anchored (the six
+paired lines are unchanged; only hashes moved); editorial-readings uncertainty receipt rebound (its ranges
+precede the corrected line). `scripts/correct_campbell_five.py corpus` applies the same change to corpus
+rows idempotently. Historical extraction scripts and saved experiment packets stay bound to the old text.
 
 ## Translations (`backend/translation_comparisons_glp_data.json`)
 
