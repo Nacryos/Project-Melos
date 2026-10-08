@@ -25,7 +25,7 @@ VERSION = "tei-definition-spans-v4"
 SOURCES = frozenset(SOURCE_FORMATS)
 BLOCKED = {"bibl", "cit", "quote", "etym", "xr", "foreign", "orth",
            "itype", "pron", "gram", "gramGrp"}
-NON_ENGLISH = re.compile(r"\b(?:Skt\.|Sanskrit|Lat\.|Latin|Germ\.|Goth\.|I\.-\s*E\.|Lith\.|Zend|root\b)", re.I)
+NON_ENGLISH = re.compile(r"\b(?:Skt\.|Sanskrit|Lat\.|Lat(?=\s|$)|Latin|Germ\.|Goth\.|I\.-\s*E\.|Lith\.|Zend|root\b)", re.I)
 OPPOSITION = re.compile(r"\b(?:opp\.|opposed to|as opposed to)(?:\s+to)?\s*$", re.I)
 GREEK = re.compile(r"[\u0370-\u03ff\u1f00-\u1fff]")
 GRAMMATICAL_LEAD = re.compile(r"\b(?:gen\.|dat\.|acc\.|nom\.|voc\.|dual|Adv\.|strengthd\.)", re.I)
@@ -288,7 +288,10 @@ def _parse_entry(entry, entities, record, fmt):
                  for start, end in parentheses):
             reason = "comparative_or_etymological_note"
         else:
-            prefix = _plain(text[max(0, a - 180):a])
+            # Middle Liddell: an etymology preamble ("Root *akov") belongs to
+            # the entry, not to the first sense's definition.
+            floor = spans[_scope(node, entry)][0] if example_rule == "sense_scoped" else 0
+            prefix = _plain(text[max(floor, a - 180):a])
             if NON_ENGLISH.search(re.split(r"[:;\u2014)]", prefix)[-1]):
                 reason = "explicit_non_english_comparison"
             elif OPPOSITION.search(prefix):

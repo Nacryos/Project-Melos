@@ -1,7 +1,11 @@
 # Perseus lexica ingestion: Middle Liddell, Cunliffe (Slater blocked)
 
-Status: **staged only**. Nothing in `data/lexica/` has been changed, and no
-backend code reads these files yet. Script: `scripts/ingest_perseus_lexica.py`.
+Status (2026-10-08): **wired into lookup** through the open-lexica supplement,
+together with LSJ (Logeion edition) and Dodson. See
+[`docs/lexica-open-supplement.md`](lexica-open-supplement.md) for what is now
+read, the dictionary order, the short-gloss rules, coverage numbers and the
+deploy steps. The staging description below is still accurate for the two
+Perseus sources. Script: `scripts/ingest_perseus_lexica.py`.
 
 ```
 python -I scripts/ingest_perseus_lexica.py --download --report   # fetch missing pinned raws, parse, print counts + 5 samples each

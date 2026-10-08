@@ -59,6 +59,11 @@ ML_ENTRIES = [
     '<entry key="a)gro/teros" type="main" id="n2"><form><orth extent="full" lang="greek">a)gro/teros</orth></form>'
     '<sense level="2" n="I" id="n2.0">poet. for <foreign lang="greek">a)/grios</foreign>, <trans><tr>wild</tr></trans>,'
     ' of animals</sense></entry>',
+    '<entry key="a)kou/w" type="main" id="n3"><form><orth extent="full" lang="greek">a)kou/w</orth></form>'
+    '<etym>Root <!-- ! --><foreign lang="greek">*a*k*o*v</foreign></etym><sense level="2" n="I" id="n3.0">'
+    '<trans><tr>to hear</tr></trans>, <usg>Hom.</usg></sense></entry>',
+    '<entry key="e)gw/" type="main" id="n4"><form><orth extent="full" lang="greek">e)gw/</orth></form>'
+    '<sense level="0" n="0" id="n4.0">pron. of the first person, Lat <trans><tr>ego</tr></trans></sense></entry>',
 ]
 
 
@@ -69,6 +74,12 @@ def test_middle_liddell_definitions_examples_and_references(raw):
     wild = dictionary_senses(record(ML, path, digest, spans[1], "n2", "ἀγρότερος", "middle-liddell:n2"))
     # "poet. for ἄγριος, wild": a referenced word, not an example.
     assert [s["text"] for s in wild["dictionary_senses"]] == ["wild"]
+    # An etymology preamble ("Root ...") does not disqualify the first sense;
+    # a Latin equivalent ("Lat ego") is not an English definition.
+    hear = dictionary_senses(record(ML, path, digest, spans[2], "n3", "ἀκούω", "middle-liddell:n3"))
+    assert hear["dictionary_senses"][0]["text"] == "to hear"
+    ego = dictionary_senses(record(ML, path, digest, spans[3], "n4", "ἐγώ", "middle-liddell:n4"))
+    assert ego["dictionary_senses"] == []
     rendered = lexicon_render.render_source_record(record(ML, path, digest, spans[1], "n2", "ἀγρότερος", "x"))
     shown = unicodedata.normalize("NFC", rendered["rendered_entry_text"])
     assert "ἀγρότερος" in shown and "ἄγριος" in shown
