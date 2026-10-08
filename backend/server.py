@@ -877,7 +877,11 @@ def word(form: str, passage_id: str=''):
 def word_request(form: str, passage_id: str=''):
     # Keep internal word/headword lookups source-only. Cached machine evidence
     # is added only at the ordinary user-facing HTTP boundary.
+    from .passage_analysis import editorial_lookup_form
+    printed, form = form, editorial_lookup_form(form)
     result = word(form, passage_id)
+    if printed != form:
+        result['printed_form'] = printed
     if os.environ.get('MELOS_MACHINE_SUBENTRIES_ENABLED') == '1':
         from .passage_analysis import machine_dictionary_lookup
         from .machine_morphology import get_service
@@ -909,7 +913,8 @@ def machine_analysis_request(request:MachineAnalysisRequest,http_request:Request
             found = con.execute('SELECT 1 FROM passages WHERE id=?',(request.passage_id,)).fetchone()
         if not found:
             raise HTTPException(404,'Passage not found')
-    result = get_service().analyze(request.form,http_request.state.machine_visitor,fetch=True)
+    from .passage_analysis import editorial_lookup_form
+    result = get_service().analyze(editorial_lookup_form(request.form),http_request.state.machine_visitor,fetch=True)
     code = _machine_response_status(result)
     headers = {'Retry-After':'60'} if code in (409,429) else None
     return JSONResponse(status_code=code,content=result,headers=headers)
@@ -934,6 +939,8 @@ def _classify_context_request(request:ContextRequest,http_request:Request,*,prov
     from .classifier import classify_context
     if (request.candidate_basis == 'machine') != bool(request.machine_receipt_id):
         raise HTTPException(422,'Machine comparison requires a machine receipt; source comparison must not supply one.')
+    from .passage_analysis import editorial_lookup_form
+    request=request.model_copy(update={'form':editorial_lookup_form(request.form)})
     analysis=word(request.form,request.passage_id)
     if not analysis.get('context'):
         raise HTTPException(404,'Passage not found')

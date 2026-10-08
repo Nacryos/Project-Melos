@@ -13,7 +13,8 @@ Usage:
       [--delay 2.0] [--limit 0] [--dry-run]
 
 Rate: one request every --delay seconds (default 2 s, i.e. 30 per minute, the
-service module's own per-minute ceiling). Failures are recorded by the service
+service module's own per-minute ceiling). With MELOS_MORPHEUS_LOCAL set, every
+miss goes to the local engine (no quota): pass --delay 0. Failures are recorded by the service
 and skipped; rerun to retry after its backoff.
 """
 from __future__ import annotations
@@ -40,8 +41,11 @@ def passages_from_records(path: Path):
             yield row["id"], row["text"]
 
 
-def passages_from_corpus(path: Path, ids):
+def passages_from_corpus(path: Path, ids, prefix=None):
     with sqlite3.connect(f"file:{path}?mode=ro", uri=True) as con:
+        if prefix:
+            ids = [*ids, *(row[0] for row in con.execute(
+                "SELECT id FROM passages WHERE substr(id,1,?)=? ORDER BY id", (len(prefix), prefix)))]
         for pid in ids:
             row = con.execute("SELECT id, text FROM passages WHERE id=?", (pid,)).fetchone()
             if row:
@@ -75,6 +79,7 @@ def main():
     parser.add_argument("--records", type=Path)
     parser.add_argument("--corpus", type=Path)
     parser.add_argument("--ids", nargs="*", default=[])
+    parser.add_argument("--id-prefix", help="every corpus passage whose id starts with this (e.g. campbell-glp:)")
     parser.add_argument("--database", type=Path, required=True)
     parser.add_argument("--delay", type=float, default=2.0)
     parser.add_argument("--limit", type=int, default=0)
@@ -86,8 +91,8 @@ def main():
     passages = []
     if args.records:
         passages += list(passages_from_records(args.records))
-    if args.corpus and args.ids:
-        passages += list(passages_from_corpus(args.corpus, args.ids))
+    if args.corpus and (args.ids or args.id_prefix):
+        passages += list(passages_from_corpus(args.corpus, args.ids, args.id_prefix))
     forms, occurrences = collect_forms(passages)
     if args.order == "frequency":
         forms.sort(key=lambda form: -len(occurrences[form]))
@@ -154,7 +159,21 @@ def main():
             record["normalised"].append({**variant, "status": cached["status"],
                                          "candidates": len(cached["machine_candidates"])})
             print(f"  {form} ~ {variant['form']} [{variant['rule']}] {cached['status']} candidates={len(cached['machine_candidates'])}", flush=True)
-    print(json.dumps({"exact": counts, "normalised": variant_counts}, ensure_ascii=False), flush=True)
+    # With the local engine: generate-and-test standard spellings for forms that
+    # nothing above analysed (backend.dialect_generate), as the reader does.
+    generated_counts = {}
+    if os.getenv("MELOS_MORPHEUS_LOCAL"):
+        from backend.dialect_generate import generate_and_test
+        for form, record in results.items():
+            if record["status"] != "no_analyses" or any(v["status"] == "ok" for v in record.get("normalised", [])):
+                continue
+            accepted, tried = generate_and_test(form, lambda spelling: service.analyze(spelling, VISITOR, fetch=False))
+            record["generated"] = {"accepted": [[s, list(r)] for s, r, _ in accepted], "tried": len(tried)}
+            key = "accepted" if accepted else "none"
+            generated_counts[key] = generated_counts.get(key, 0) + 1
+            print(f"  {form} generated tried={len(tried)} accepted={[s for s, _, _ in accepted]}", flush=True)
+    print(json.dumps({"exact": counts, "normalised": variant_counts, "generated": generated_counts},
+                     ensure_ascii=False), flush=True)
     if args.report:
         args.report.parent.mkdir(parents=True, exist_ok=True)
         args.report.write_text(json.dumps({"database": str(args.database), "counts": counts, "forms": results},

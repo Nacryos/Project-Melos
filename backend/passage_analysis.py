@@ -101,6 +101,22 @@ def _letter(char):
 
 RECONSTRUCTION_MARKS = "[]"
 UNCERTAIN_MARK = "̣"
+ELISION_MARKS = "’᾽'ʼ"
+
+
+def _rough_initial(form):
+    """True when a word begins with a rough breathing (ἵππων, ὅτι, ῥέα)."""
+    head = unicodedata.normalize("NFD", form or "")[:3]
+    return "̔" in head
+
+
+def _local_parser():
+    """Generate-and-test normalisation only runs against the local Morpheus build."""
+    try:
+        from .machine_morphology import local_endpoint
+        return bool(local_endpoint())
+    except (ImportError, ValueError):
+        return False
 
 
 def analysis_form(token):
@@ -120,6 +136,24 @@ def printed_reading(text):
     stripped = "".join(char for char in unicodedata.normalize("NFD", text)
                        if char not in RECONSTRUCTION_MARKS and char != UNCERTAIN_MARK)
     return unicodedata.normalize("NFC", stripped)
+
+
+LOOKUP_EDITORIAL_MARKS = "[]⟨⟩⟦⟧{}()〈〉<>"
+
+
+def editorial_lookup_form(form):
+    """One printed word as a lookup form: editorial brackets and underdots removed.
+
+    κ[άλ]λιστος -> κάλλιστος, ἀμφι⟨βάλων⟩ -> ἀμφιβάλων. Only for a single word
+    (no whitespace) that keeps at least one letter; elision marks stay, and any
+    other input is returned unchanged.
+    """
+    if not isinstance(form, str) or any(char.isspace() for char in form.strip()):
+        return form
+    stripped = unicodedata.normalize("NFC", "".join(
+        char for char in unicodedata.normalize("NFD", form.strip())
+        if char not in LOOKUP_EDITORIAL_MARKS and char != UNCERTAIN_MARK))
+    return stripped if any(unicodedata.category(char).startswith("L") for char in stripped) else form
 
 
 def uncertain_edge_variants(token):
@@ -216,6 +250,14 @@ def tokenize_span(text, start, end):
                         cursor = ahead
                         continue
                 break
+            # A bracket the word itself closes or opens belongs to its printed
+            # form: [σ]ὸν, λίποντε[ς] (an edge bracket with no partner stays apart).
+            inner = text[begin:cursor]
+            if (tokens and tokens[-1]["text"] == "[" and tokens[-1]["end"] == begin
+                    and inner.count("]") > inner.count("[")):
+                begin = tokens.pop()["start"]
+            if cursor < end and text[cursor] == "]" and inner.count("[") > inner.count("]"):
+                cursor += 1
         elif char.isspace():
             kind = "space"
             cursor += 1
@@ -436,6 +478,8 @@ class PassageAnalysisService:
                 except Exception:
                     dictionary_cache[key] = {'dictionary_lookup_status': 'unavailable'}
             return dictionary_cache[key]
+        words = [token for token in tokens if token["kind"] == "word"]
+        next_word = {id(a): analysis_form(b) for a, b in zip(words, words[1:])}
         for token in tokens:
             if token["kind"] != "word":
                 continue
@@ -487,7 +531,10 @@ class PassageAnalysisService:
                     token["claim_applications"][claim.get("id", "")].update(
                         word_boundary_status="uncertain", word_attestation=False,
                         application_scope="conditional_literal_string")
-            if form not in machine_cache:
+            # A final θ/φ/χ before a rough breathing is read differently: key on that too.
+            machine_key = (form, form.rstrip("".join(ELISION_MARKS))[-1:] in "θφχ"
+                           and _rough_initial(next_word.get(id(token))))
+            if machine_key not in machine_cache:
                 machine = {"status": "unavailable", "machine_candidates": [], "receipt": None}
                 if self.machine_service is not None:
                     try:
@@ -531,11 +578,15 @@ class PassageAnalysisService:
                         machine.setdefault("warnings", []).append(
                             "No analysis of the exact printed form; the parses shown come from labelled Aeolic spelling normalisations.")
                 if (not machine.get("machine_candidates") and not token.get("lacuna_boundary_uncertain")
+                        and machine.get("status") == "no_analyses" and self.machine_service is not None
+                        and _local_parser()):
+                    machine = self._generated_variants(form, next_word.get(id(token)), machine, visitor_id)
+                if (not machine.get("machine_candidates") and not token.get("lacuna_boundary_uncertain")
                         and machine.get("status") in ("cache_miss", "no_analyses", "request_limit")):
                     # The parser was consulted and has nothing for the printed form.
                     machine = self._recorded_form_variants(form, token, machine, passage_id, source_cache, variant_budget)
-                machine_cache[form] = machine
-            token["machine"] = deepcopy(machine_cache[form])
+                machine_cache[machine_key] = machine
+            token["machine"] = deepcopy(machine_cache[machine_key])
             if token["machine"].get("normalised_lexicon_entries"):
                 known = {entry.get("id") for entry in token.get("lexicon_entries") or []}
                 token.setdefault("lexicon_entries", []).extend(
@@ -617,6 +668,36 @@ class PassageAnalysisService:
                 result['editorial_analysis'] = {'version':1,'status':'unavailable','rows':[],
                     'selection_expansion_hints':[],
                     'reason':'Approved Campbell source identity is unavailable.'}
+        return result
+
+    def _generated_variants(self, form, next_form, machine, visitor_id):
+        """Generate-and-test normalisation against local Morpheus (backend.dialect_generate).
+
+        Only when the parser has no analysis of the printed form. Standard spellings
+        are generated by general dialect and elision rules and kept only if the parser
+        analyses them; each parse carries the generated spelling, the rules and a
+        note "Normalised from <dialect> via <rules>" (or "Projection: ..." for an
+        elided vowel), ranks below any analysis of the printed form, and the printed
+        form itself is unchanged.
+        """
+        from .dialect_generate import describe, generate_and_test
+        accepted, tried = generate_and_test(
+            form, lambda spelling: self.machine_service.analyze(spelling, visitor_id, fetch=False), next_form)
+        result = {**machine, "generated_queries": tried}
+        if not accepted:
+            return result
+        candidates = list(machine.get("machine_candidates") or [])
+        for spelling, rules, found in accepted:
+            note = describe(rules)
+            for candidate in found["machine_candidates"]:
+                candidates.append({**candidate, "basis": "machine_analysis", "candidate_kind": "machine_analysis",
+                                   "normalised_query": spelling, "normalised_from": form,
+                                   "normalisation_rule": "+".join(rules), "normalisation_note": note,
+                                   "tier": "generated_normalised_query"})
+        result.update(machine_candidates=candidates, status="ok_normalised",
+                      warnings=[*(machine.get("warnings") or []),
+                                "No analysis of the exact printed form; the parses shown are of generated standard "
+                                "spellings the parser recognises, each labelled with its rules."])
         return result
 
     def _recorded_form_variants(self, form, token, machine, passage_id, source_cache, budget):
