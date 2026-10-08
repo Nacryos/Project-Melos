@@ -31,7 +31,7 @@ def actual_fixture():
     resolver = MachineSubentryResolver(
         ROOT / 'data/staging/lyric-subentries-20261006-v2/subentries.sqlite', ROOT / 'data/lexica/entries.jsonl',
         expected_index_sha256=audit['reviewed_files_sha256']['data/staging/lyric-subentries-20261006-v2/subentries.sqlite'])
-    passage = next(row for line in (ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl').read_text(encoding='utf8').splitlines()
+    passage = next(row for line in (ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl').read_text(encoding='utf8').splitlines()
                    if original['form'] in (row := json.loads(line)).get('text', ''))
     class CacheOnly:
         def analyze(self, form, visitor_id, fetch=False):

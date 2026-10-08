@@ -49,7 +49,7 @@ def main():
     parser.add_argument('--form', required=True)
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    records = [json.loads(line) for line in (ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl').read_text(encoding='utf8').splitlines()]
+    records = [json.loads(line) for line in (ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl').read_text(encoding='utf8').splitlines()]
     record = next(row for row in records if row['id'] == args.passage_id)
     assert record['text'].count(args.form) == 1 and not any(c.isspace() for c in args.form)
     start = record['text'].index(args.form)

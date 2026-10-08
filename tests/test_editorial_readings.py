@@ -81,7 +81,7 @@ def test_bounded_word_and_invalid_inputs_fail_explicitly():
     assert giant['projected_text'] is None and giant['character_source_map']==[]
 
 
-SOURCE = Path(__file__).resolve().parents[1]/'runtime/campbell-assignment/campbell_assignment.jsonl'
+SOURCE = Path(__file__).resolve().parents[1]/'data/campbell_glp/alcaeus_five_corrected.jsonl'
 
 
 @pytest.mark.skipif(not SOURCE.exists(),reason='Approved source artifact is not installed in this checkout')

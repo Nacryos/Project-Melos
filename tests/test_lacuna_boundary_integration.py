@@ -18,7 +18,7 @@ from backend.passage_ranker import PassageRanker
 
 
 ROOT = Path(__file__).resolve().parents[1]
-ARTIFACT = ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl'
+ARTIFACT = ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl'
 
 
 def accepted(fragment):

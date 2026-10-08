@@ -30,6 +30,7 @@ from scripts.build_campbell_glp import to_record  # noqa: E402
 TRANSCRIPTION = ROOT / 'data/campbell_glp/transcription.json'
 RECORDS = ROOT / 'data/campbell_glp/campbell_glp.jsonl'
 SIDECAR = ROOT / 'backend/translation_comparisons_glp_data.json'
+FIVE = ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl'
 
 
 def expected() -> dict:
@@ -43,6 +44,12 @@ def expected() -> dict:
                            poem['lines'], poem['uncertain'], sha)
         out[record['id']] = record
     return out
+
+
+def expected_five() -> dict:
+    """The five previously approved Alcaeus passages, as corrected to the page images (2026-10-08)."""
+    rows = [json.loads(line) for line in FIVE.read_text(encoding='utf-8').splitlines() if line.strip()]
+    return {r['id']: r for r in rows}
 
 
 def diff_line(a: str, b: str) -> str:
@@ -114,10 +121,13 @@ def main() -> int:
     args = parser.parse_args()
     if bool(args.corpus) == bool(args.origin):
         parser.error('give exactly one of --corpus or --origin')
-    want = expected()
+    new = expected()
     records = {r['id']: r for r in map(json.loads, RECORDS.read_text(encoding='utf-8').splitlines()) if r}
-    report = {'expected_poems': len(want), 'records_file_matches_transcription': records == want}
-    failures = 0 if report['records_file_matches_transcription'] else 1
+    five = expected_five()
+    want = {**five, **new}  # all 237 poems in the book
+    report = {'expected_poems': len(want), 'records_file_matches_transcription': records == new,
+              'approved_five_corrected': sorted(five)}
+    failures = 0 if report['records_file_matches_transcription'] and len(five) == 5 and len(want) == 237 else 1
     if args.corpus:
         stored = from_corpus(args.corpus, want)
         if args.expected_passages is not None:
@@ -146,7 +156,7 @@ def main() -> int:
         report['passage_count_error'] = f"{report['passages']} != {args.expected_passages}"
     if args.origin:
         sidecar = json.loads(SIDECAR.read_text(encoding='utf-8')) if SIDECAR.exists() else {'records': []}
-        with_translation = {r['campbell_record_id'] for r in sidecar['records']}
+        with_translation = {r['campbell_record_id'] for r in sidecar['records']} | set(five)
         bad_translation = [i for i in want if i in stored and
                            ((stored[i].get('translation_comparisons') or {}).get('status') == 'available') != (i in with_translation)]
         failures += len(bad_translation)

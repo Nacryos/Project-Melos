@@ -93,3 +93,23 @@ def test_import_is_idempotent_and_preserves_existing_rows(tmp_path):
         importer.import_rows(corpus, bad)
     con.close()
     assert append.sha(corpus)
+
+
+def test_five_corrections_are_applied_bound_and_reapproved():
+    from scripts import correct_campbell_five as fix
+    rows = fix.corrected_rows()
+    corrections = fix.load_corrections()
+    assert len(rows) == 5 and len(corrections) == 11
+    by_id = {r['id']: r for r in rows}
+    for c in corrections:
+        row = by_id[c['id']]
+        assert row['lines'][c['line_index']]['text'] == c['new']
+        assert c['old'] not in row['text'].split('\n')
+        assert any(n['corrected'] == c['new'] and f"PDF p.{c['pdf_page']}" in n['reason']
+                   for n in row['metadata']['text_corrections'])
+    approval = json.loads(fix.APPROVAL.read_text(encoding='utf-8'))
+    assert approval['package']['sha256'] == hashlib.sha256(fix.CORRECTED.read_bytes()).hexdigest()
+    assert approval['revisions'][0]['previous_package_sha256'] == fix.ORIGINAL_SHA256
+    assert tc.GREEK_PACKAGE_SHA256 == approval['package']['sha256']
+    for row in rows:
+        assert tc.for_passage(deepcopy(row))['status'] == 'available'

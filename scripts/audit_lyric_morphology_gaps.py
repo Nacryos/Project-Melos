@@ -130,7 +130,7 @@ def audit_occurrence_variants(path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--report", type=Path, default=ROOT / "runtime/alcaeus-assignment-qa/canary/report.json")
-    parser.add_argument("--source", type=Path, default=ROOT / "runtime/campbell-assignment/campbell_assignment.jsonl")
+    parser.add_argument("--source", type=Path, default=ROOT / "data/campbell_glp/alcaeus_five_corrected.jsonl")
     parser.add_argument("--database", type=Path, default=ROOT / "data/wiktionary.sqlite")
     parser.add_argument("--output", type=Path)
     parser.add_argument("--occurrences", type=Path,

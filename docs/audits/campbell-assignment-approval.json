@@ -3,8 +3,8 @@
   "auditor": "/root/campbell_audit",
   "status": "package_approved_with_recorded_transformations_and_glyph_uncertainty",
   "package": {
-    "path": "runtime/campbell-assignment/campbell_assignment.jsonl",
-    "sha256": "afe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b",
+    "path": "data/campbell_glp/alcaeus_five_corrected.jsonl",
+    "sha256": "ab2e1487885431669ebff57c566419bdceb1d6af69740e6ed05e8b7190d84457",
     "verdict": "PASS",
     "records": 5,
     "display_lines": 78,
@@ -16,6 +16,12 @@
     "campbell_assignment.jsonl": {
       "verdict": "PASS",
       "sha256": "afe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b",
+      "records": 5,
+      "superseded_by": "alcaeus_five_corrected.jsonl"
+    },
+    "alcaeus_five_corrected.jsonl": {
+      "verdict": "PASS",
+      "sha256": "ab2e1487885431669ebff57c566419bdceb1d6af69740e6ed05e8b7190d84457",
       "records": 5
     }
   },
@@ -49,7 +55,9 @@
     "alcaeus-350-p93-verse-b.vision.parsed.json": {
       "verdict": "PASS",
       "sha256": "80b713b06ae06b14ad1327dd9ddd56205a6bfd05e5fd43b1e619825e0049c487",
-      "exclude_noncontent_line_indices": [0],
+      "exclude_noncontent_line_indices": [
+        0
+      ],
       "reason": "Four verse lines and printed margin label 5 visually matched. Candidate line index 0 contains only replacement characters for clipped descenders of the preceding prose line; exclude that geometrically out-of-scope artifact, retain original receipt and exclusion metadata."
     },
     "alcaeus-350-p93-verse-a.vision.parsed.json": {
@@ -91,5 +99,106 @@
       "required_uncertainty": "Line 3: possible underdots beneath mu and phi are unresolved in the scan; retained OCR omits them. The first-line alpha underdot is faint. Consult the source crop.",
       "required_facsimile": "alcaeus-34a-p85-verse-a.png"
     }
-  }
+  },
+  "revisions": [
+    {
+      "date": "2026-10-08",
+      "verdict": "PASS",
+      "previous_package_sha256": "afe89681c1641331f609120c6c3e81220d17280f87e31b3ee5f3aeda965a3e1b",
+      "package_sha256": "ab2e1487885431669ebff57c566419bdceb1d6af69740e6ed05e8b7190d84457",
+      "package_path": "data/campbell_glp/alcaeus_five_corrected.jsonl",
+      "reason": "Corrected to the Campbell page images after two independent re-transcriptions, image adjudication and coordinator confirmation (PDF pp. 89-90); see docs/audits/campbell-glp-full.md.",
+      "unchanged": "Line structure, labels, brackets elsewhere, metadata, raw source bundles and the 34a glyph-uncertainty note.",
+      "corrections": [
+        {
+          "id": "campbell-glp:alcaeus:34a",
+          "printed_line": "10",
+          "pdf_page": 86,
+          "previous": "τ]ήλοθεν λάμπροι πρό[τον’ ὀν]τρ[έχο]ντες",
+          "corrected": "π]ήλοθεν λάμπροι πρό̣[τον’ ὀν]τρ̣[έχο]ντες",
+          "reason": "corrected to Campbell page image, PDF p.86 (printed p. 54, line 10): π not τ before the bracket; underdots printed under ο of πρό̣ and ρ of τρ̣"
+        },
+        {
+          "id": "campbell-glp:alcaeus:129",
+          "printed_line": "6",
+          "pdf_page": 88,
+          "previous": "σὲ δ’ Αἰολήαν [κ]υδαλίμαν θέον",
+          "corrected": "σὲ δ’ Αἰολῄαν [κ]υδαλίμαν θέον",
+          "reason": "corrected to Campbell page image, PDF p.88 (printed p. 56, line 6): iota subscript printed under η of Αἰολῄαν"
+        },
+        {
+          "id": "campbell-glp:alcaeus:129",
+          "printed_line": "14",
+          "pdf_page": 89,
+          "previous": "κήνων Ἐ[ρίννυ]ς ὠς ποτ’ ἀπώμνυμεν",
+          "corrected": "κήνων Ἐ[ρίννυ]ς ὤς ποτ’ ἀπώμνυμεν",
+          "reason": "corrected to Campbell page image, PDF p.89 (printed p. 57, line 14): acute printed with the breathing on ὤς"
+        },
+        {
+          "id": "campbell-glp:alcaeus:129",
+          "printed_line": "16",
+          "pdf_page": 89,
+          "previous": "μηδάμα μηδένα τῶν ἐταίρων",
+          "corrected": "μηδάμα μηδένα τὼν ἐταίρων",
+          "reason": "corrected to Campbell page image, PDF p.89 (printed p. 57, line 16): grave, not circumflex, on τὼν"
+        },
+        {
+          "id": "campbell-glp:alcaeus:129",
+          "printed_line": "18",
+          "pdf_page": 89,
+          "previous": "κεῖσεσθ’ ὐπ’ ἄνδρων οἰ τότ’ ἔπικ . .́ ην",
+          "corrected": "κείσεσθ’ ὐπ’ ἄνδρων οἶ τότ’ ἐπικ . .́ ην",
+          "reason": "corrected to Campbell page image, PDF p.89 (printed p. 57, line 18): acute on κείσεσθ’; circumflex on οἶ; no accent on ἐπικ"
+        },
+        {
+          "id": "campbell-glp:alcaeus:129",
+          "printed_line": "22",
+          "pdf_page": 89,
+          "previous": "πρὸς θῦμον, ἀλλὰ βραιδίως πόσιν",
+          "corrected": "πρὸς θῦμον, ἀλλὰ βραϊδίως πόσιν",
+          "reason": "corrected to Campbell page image, PDF p.89 (printed p. 57, line 22): diaeresis printed on ϊ of βραϊδίως"
+        },
+        {
+          "id": "campbell-glp:alcaeus:129",
+          "printed_line": "27",
+          "pdf_page": 89,
+          "previous": "γεγρᾶ . [",
+          "corrected": "γεγρά . [",
+          "reason": "corrected to Campbell page image, PDF p.89 (printed p. 57, line 27): acute, not circumflex, on γεγρά"
+        },
+        {
+          "id": "campbell-glp:alcaeus:130b",
+          "printed_line": "16",
+          "pdf_page": 89,
+          "previous": "ἄγνοις̣ . . ς̣βιότοις̣ . . ις ὁ τάλαις ἔγω",
+          "corrected": "ἀγνοι̣ς̣ . . ς̣βιότοις . . ις ὀ τάλαις ἔγω",
+          "reason": "corrected to Campbell page image, PDF p.89 (printed p. 57, line 16): ἀγνοι̣ς̣ has a smooth breathing and no accent, with underdots under ι and ς; no underdot under the final ς of βιότοις; smooth breathing on ὀ"
+        },
+        {
+          "id": "campbell-glp:alcaeus:130b",
+          "printed_line": "21",
+          "pdf_page": 90,
+          "previous": "καγγ[ε]γήρασ’ ἔχοντες πεδὰ τυνδέων",
+          "corrected": "καγγ[ε]γήρασ’ ἔχοντες πεδὰ τωνδέων",
+          "reason": "corrected to Campbell page image, PDF p.90 (printed p. 58, line 21): τωνδέων (omega), not τυνδέων"
+        },
+        {
+          "id": "campbell-glp:alcaeus:130b",
+          "printed_line": "23",
+          "pdf_page": 90,
+          "previous": "ἔγ[ων’ ἀ]πὺ τούτων ἀπελήλαμαι",
+          "corrected": "ἔγ[ωγ’ ἀ]πὺ τούτων ἀπελήλαμαι",
+          "reason": "corrected to Campbell page image, PDF p.90 (printed p. 58, line 23): ἔγ[ωγ’ (gamma), not ἔγ[ων’"
+        },
+        {
+          "id": "campbell-glp:alcaeus:130b",
+          "printed_line": "29",
+          "pdf_page": 90,
+          "previous": "ἔοι̣[. . . . .] με[λ]αίνας ἐπίβαις χθόνος·",
+          "corrected": "ἐοι̣[. . . . .] με[λ]αίνας ἐπίβαις χθόνος·",
+          "reason": "corrected to Campbell page image, PDF p.90 (printed p. 58, line 29): smooth breathing only on ἐοι̣ (no acute)"
+        }
+      ]
+    }
+  ]
 }

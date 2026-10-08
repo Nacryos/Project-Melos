@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def real_result(fragment, filename):
     result = json.loads((ROOT / 'runtime/lexical-release-c/operational' / filename).read_text(encoding='utf-8'))
-    passage = next(json.loads(line) for line in (ROOT / 'runtime/campbell-assignment/campbell_assignment.jsonl').read_text(encoding='utf-8').splitlines()
+    passage = next(json.loads(line) for line in (ROOT / 'data/campbell_glp/alcaeus_five_corrected.jsonl').read_text(encoding='utf-8').splitlines()
                    if json.loads(line)['id'] == 'campbell-glp:alcaeus:' + fragment)
     for row in result['tokens']:
         if row['kind'] == 'word':

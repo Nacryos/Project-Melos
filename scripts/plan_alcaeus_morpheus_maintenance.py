@@ -16,7 +16,7 @@ from backend.machine_morphology import validate_form, ELISION_MARKS, ELISION_CON
 
 DIRECTORY = ROOT / "runtime/alcaeus-morpheus-maintenance"
 OCCURRENCES = ROOT / "runtime/alcaeus-occurrences/release-f/occurrences.json"
-SOURCE = ROOT / "runtime/campbell-assignment/campbell_assignment.jsonl"
+SOURCE = ROOT / "data/campbell_glp/alcaeus_five_corrected.jsonl"
 
 
 def sha(value):
