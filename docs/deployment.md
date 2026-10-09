@@ -1,6 +1,134 @@
 # Deployment handoff
 
-## Current: release Q — elided words, each text counted once, fragment-number concordance, sourced dates, lyric calibration classes, P frontend gaps (2026-10-09)
+## Current: release R — dialect grammar, lyric gold set, derived forms and variant links, genre/dialect calibration, reader human check (2026-10-09)
+
+Public backend: image `melos-api:20261009r2`
+(`sha256:3f3c00281e7be8b977c33d6d63c5c55e30784c04c6240e44dab1bbf48ccad308`), built on Basecamp with
+`deploy/Dockerfile.patch` atop the Q image from the R source tarball (`git archive` of `131e737`, sha256
+`00200c87f40ca33b3dfb1c7f27f6f608e55d3fe132a1098cfa6007cb9170bfa2`, unpacked in `/home/alvin/melos-r/src`).
+It replaced the first R image (`melos-api:20261009r`, `8879d03`, promoted at 09:14 UTC, kept stopped as
+`melos-api-r-superseded`) after the human check: phrase analyses failed while word prefetches held both analysis
+slots (`release_r.sh replace`).
+Recipe: `deploy/release_r.sh build|dev|canary|stop-canary|promote|replace|rollback`; checks `deploy/canary_checks_r.sh`.
+Q is kept stopped as `melos-api-before-r`, the R canaries as `melos-api-canary-r1` / `melos-api-canary-r` (stopped). **Rollback:**
+`sh /home/alvin/melos-r/src/deploy/release_r.sh rollback` (stops R, renames it `melos-api-failed-r`, restarts Q with
+its own mounts; the Morpheus sidecar is untouched), then the frontend:
+`vercel promote https://project-melos-of5xiu2tj-nacryos-projects.vercel.app --yes`.
+
+Data (read-only mounts): O's `corpus.sqlite` and `embeddings/`; Q's `citation_index.sqlite` and `metadata/`
+(unchanged); under `/home/alvin/melos-r/data`: `lemma_index.sqlite` (280 MB, reassembled from Q's staging with the R
+rules, Q's elision model), `ngrams.sqlite` (97 MB, rebuilt on it), `lemma_calibration.json` (genre/dialect groups).
+Reports in `/home/alvin/melos-r/eval` (`calibration-report-r.json`, `dump-q2.json` / `dump-final.json` with
+`scripts/eval_lyric_gold.py score`, `variant-sample.json`); canary output `/home/alvin/melos-r/canary-checks`,
+production `/home/alvin/melos-r/prod-checks`.
+
+**Lyric gold set** (`data/evaluation/lyric-gold-r.json`, `scripts/build_lyric_gold_r.py`): every printed word of
+Sappho 1, 16, 31, 34, 44, 94, 96 and Alcaeus 34a, 129, 130b, 326, 350 (the five audited poems), 346, 347 — 1,092
+tokens, each with lemma, full parse and cited evidence (LSJ entry id and verbatim quote 1,120 times, Campbell's
+note with page 517, Campbell's dialect sections pp. 262–264 or the project's Aeolic rules 267). 272 tokens are
+marked uncertain (damaged, disputed reading, Campbell undecided) and reported apart. Split by blocks of four stored
+lines alternating per poem: development half 390 certain tokens, held-out half 430. Annotated independently of the
+system output by four annotation passes; I checked a random 70 certain tokens against the text and Campbell (no
+error found; one debatable mood, πείθω). Four tokens later gained an equivalent headword where the gold
+headword's own entry is a dialect pointer (applied to every gold token, e.g. ἐλελύζω "Aeol. = ὀλολύζω").
+
+**Results** (what a click in the reader shows: `/api/analyze-passage` on the word's span with the frontend's
+headline rule; full parse = lemma right and every feature the gold states; certain tokens):
+
+| | Lemma Q | Lemma R | Full parse Q | Full parse R | Index headword Q | Index headword R |
+|---|---|---|---|---|---|---|
+| Held-out half (430) | 91.2 % | 92.6 % | 82.8 % | 86.5 % | 92.1 % | 94.2 % |
+| Development half (390) | 93.9 % | 94.9 % | 85.9 % | 89.0 % | 94.1 % | 95.4 % |
+| All certain (820) | 92.4 % | 93.7 % | 84.3 % | 87.7 % | 93.0 % | 94.8 % |
+
+The rules were developed on the development half. A first held-out run with the rules frozen gave 92.3 % / 86.1 %;
+two fixes made after that (the article rule narrowed to non-pronoun rivals, a consensus parse without a part of
+speech) are included in the final row, so the held-out half is no longer fully blind for them. Held-out errors
+the rules introduced: two elided 3rd plurals in -σι (φαῖσ’, ἄγοισ’) now read as participles or singulars.
+
+**Aeolic and Doric rules** (`backend/dialect_rules.py`, `backend/passage_dialect.py`, `backend/aeolic_variants.py`;
+details `docs/morphology.md` "Release R"): αἰ before a verb is εἰ (article needs an agreeing noun or plural verb;
+four Sappho 1 tokens fixed); ἀ, ὀ read as ὁ; οἳ / οἶ with an accent are not the proclitic article (relative ὅς);
+-ην infinitives (ἄγην = ἄγειν); -οισα participles and elided -οισ’ (χαίροισ’ = χαίροισα); -μμι verbs and dialect
+pointer headwords shown as the Attic headword (κάλημμι → καλέω, πώνωμεν → πίνω, ἔμμι → εἰμί, κε → ἄν); Lesbian
+accusative plural -αις, so first-declension -ας is genitive singular (ἄρας, φύγας, βόλλας); iota subscript is
+dative (δέρᾳ); parser dialect labels separate words (ἄγην not ἄγη, παῖσαν πᾶς not παίω, γόνα γόνυ); no dual in lyric
+(αὔτα nom. sg.); μή + imperative (δάμνα); psilosis (ἄρμ’ ἅρμα, ὀνίαισι ἀνία) and the barytone accent as fallbacks;
+πεδά = μετά, τυῖδε, -αισι/-οισι datives were already right and stay so; words divided at a line end read whole
+(ἐπί-|σχει); degree of comparison shown (μάλιστα "adverb, superlative").
+
+**Derived forms and variant links** (`backend/derived_forms.py`, `scripts/build_lemma_index.py`): a derived headword
+whose own entry names its base is counted and shown under it (ταχέως → ταχύς, κάλλιστος → καλός, ἀμείνων → ἀγαθός;
+35), dialect pointers merged into their target (387), μάλιστα → μάλα from the parser's degree (2); table
+`lemma_alias`, `/api/lemma/resolve` follows it, calibration and gold scoring compare through it. Variant links need
+the cross-reference and agreeing meanings over every dictionary's glosses, with homograph entries excluded: pairs P
+3,175 → Q 1,731 → R 2,103 (629 restored, γαῖα → γῆ among them; ἅλιος/ἥλιος, πᾶς/πατήρ, κοῦρος/κόρος, Δίιος/Ζεύς
+stay out). Hand check of 60 random restored links: 58 correct (96.7 %); the two wrong ones point at a homograph of
+the target (ἴουλος → οὖλος, παρανηνέω → παρανέω).
+
+**Calibration** (groups "genre|dialect", lyric gold development half in the fitting rows): treebank held-out
+agreement 96.7 % (Q) → 96.8 % through the links (96.5 % comparing spellings only), elided 98.0 %, ECE 0.021 raw →
+0.0018 calibrated. Lyric held-out half, index headwords (426 tokens):
+
+| Calibrated probability | Q tokens | Q predicted / observed | R tokens | R predicted / observed |
+|---|---|---|---|---|
+| < 0.50 | 23 | 0.37 / 0.39 | 2 | 0.00 / 0.00 |
+| 0.60–0.70 | 3 | 0.61 / 0.33 | 17 | 0.60 / 0.47 |
+| 0.70–0.80 | 14 | 0.73 / 1.00 | 28 | 0.79 / 0.96 |
+| 0.80–0.90 | 7 | 0.88 / 0.71 | – | – |
+| 0.90–0.95 | 150 | 0.94 / 0.97 | – | – |
+| 0.95–0.98 | 34 | 0.97 / 0.88 | 207 | 0.96 / 0.96 |
+| ≥ 0.98 | 195 | 1.00 / 0.99 | 172 | 1.00 / 0.99 |
+| All (accuracy, ECE) | 426 | 92.96 %, 0.036 | 426 | 94.84 %, 0.021 |
+
+LSJ-cited lyric gold (427 tokens, Q's report-only set): 96.5 % → 97.2 %, ECE 0.022 → 0.025.
+
+**Human check** (`scripts/human_check_reader.py`, headless Chromium, 1440×900 mouse and 390×844 touch, clicks at the
+word's position; Sappho 1, 2, 5, 16, 31, 34, 44, 94, 96, 102 and Alcaeus 6, 38a, 42, 45, 129, 130b, 326, 346, 347,
+350; every word clicked in Sappho 31, Sappho 2, Alcaeus 346, Alcaeus 42).
+
+| Finding on Q (live, before) | Change | After (live R) |
+|---|---|---|
+| Words divided at a line end (φωνεί-/σας, φώναι-/σ’, ἐπιρρόμ-/βεισι, τεθυμιάμε-/νοι) showed "2–4 possible parses": the reader looked them up without the passage | backend reads either printed part as the whole word; the reader asks for the passage reading of a divided word too | "parse not settled" clicks 13 → 3 (left: the piece να, the conjecture ’πιδεύης) |
+| The phrase breakdown failed on 3 of 20 desktop pages ("Could not load this analysis") | an analysis request waits up to 12 s for a slot instead of answering busy (image r2) | 40/40 phrase breakdowns at both sizes |
+| An unsettled word showed the first ranked parse's headword, which could differ from the backend's headline (αἰ shown as αἰακτός) | the panel shows the backend headline with that headword's own best parse; a settled word without a parse takes its ranked parse | αἰ → εἰ "conj." |
+| An indeclinable headword with no parse showed none (δύο) | named even without a parse | δύο "two" |
+| Dictionary card numbered a sense "0" (Middle Liddell "0 on rich-worked throne") | sense numbers start at 1 | no number |
+| Dialect pointer headwords had no short gloss (πώνω, κάλημι); παῖσαν read as παίω | shown as πίνω "to drink", καλέω; dialect rules | fixed, except παῖσαν in Sappho 31, where the contextual model's participle reading still wins |
+| Phone (390×844): the 44 px tap areas of a scaled-down verse line overlap the line above | none needed: taps at the word centre land on that word (word-panel.js picks the nearest word box), checked with touch taps | — |
+| No short gloss for damaged pieces (να, ρά, ]Σαρδ), for Aeolic forms without a dictionary headword (τεθνάκην θναίσκω) and for λύχν’ | not fixed (no source gloss to show) | 25 of 406 clicks |
+
+Headwords on clicked words that are in the gold set (desktop, certain tokens): 119 → 121 of 129. A frontend regex in
+reader.js that held a literal backspace where `\b` was meant (404 detection for dictionary pages) is also fixed.
+
+Frontend deploy (commit `8879d03`): https://project-melos-275si4on9-nacryos-projects.vercel.app (aliased
+greeklyric.com); rollback `vercel promote https://project-melos-of5xiu2tj-nacryos-projects.vercel.app --yes`.
+
+Canary (8792) before promotion: smoke pass; `verify_campbell_glp.py --analyze sample`: 237/237 identical, 50 lines
+analysed, 0 failures; `check_span_parses.py --random 30`: 227 spans, 816 word rows, **0 failures** (the first image
+had 2, παῖσαν in a span, fixed by `8879d03`). Search evaluation (42 queries): nDCG@10 development 0.707, held out
+0.578, all 0.664 (Q 0.707 / 0.577 / 0.664). Sampler vs Q: seed 101 (421 rows) lemma 96.4 → 97.2 %, gloss 93.6 →
+94.1 %, plausible lemma 94.5 → 94.8 %, complete parse 96.9 → 96.2 %, all-ok 89.3 → 88.4 % (3 rows gain, 6 lose:
+the line-divided ἐπιρρόμ-|βεισι and μαλί[αν] now have the right headword with the parse left to the ranked list,
+γείτων read as Ἀριστογείτων across the line break, χρύσεον keeps acc. sg. without a gender); held-out seed
+20261008 (487 rows) lemma 96.7 → 97.1 %, gloss 93.4 → 93.8 %, plausible lemma 92.6 → 93.2 %, complete parse 99.0
+→ 98.8 %, all-ok 88.1 → 88.5 % (4 gain, 2 lose). The r2 canary: smoke pass, 237/237 identical, 0 failures, span
+check 227 spans, 816 rows, 0 failures.
+Citation test 35/35. Memory: canary 3.3 GiB of 8 GiB. Backend tests: 2,038 pass; the same 5 fail as on Q's HEAD.
+
+Verified on https://greeklyric.com after promotion (`deploy/canary_checks_r.sh`, output in
+`/home/alvin/melos-r/prod-checks`): smoke pass; 237/237 identical, 0 failures; search evaluation 0.707 / 0.578 /
+0.664; citations 35/35; all 17 endpoints 200 through the public route (0.1–0.6 s; diachrony 1.0 s); span check 227
+spans, 816 rows, 0 failures (`span-rerun.txt`; the first run hit 6 "busy" answers while the human check was
+loading the same server, which `131e737` addresses). Single-word analysis on production: median 0.4 s, 90th
+percentile 1.0–1.3 s (Q measured 0.23 s for one word). Memory: R 3.8 GiB of 8 GiB.
+
+Known gaps: the -σι elision rule is too broad for 3rd plurals (φαῖσ’); senses that need meaning, not grammar,
+remain (κὤττι ὅ τι / ὅτι, παχέων πῆχυς / παχύς, περρέχοισ’ ὑπερ- / περι-, ὂν = ἀνά before an article); two-termination
+adjectives default to the masculine (δολόπλοκε of Aphrodite); the Doric and Boeotian passages get the shared rules
+but have no gold of their own; Morpheus' own lemma for some Aeolic athematic forms (δίννημι read as δινεύω) is kept.
+
+## Historical: release Q — elided words, each text counted once, fragment-number concordance, sourced dates, lyric calibration classes, P frontend gaps (2026-10-09)
 
 Public backend: image `melos-api:20261009q`
 (`sha256:bf2bc81cf79cb27cd21b50f959918740bd95589c81d803f7380b11d9410b2647`), built on Basecamp with
