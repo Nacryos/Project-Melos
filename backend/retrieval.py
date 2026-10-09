@@ -266,6 +266,9 @@ def fuse(
     }
 
 
+_QUALITY_RANK = {"source_text": 0, "machine_corrected_ocr": 1}
+
+
 def _content_words(text: Any) -> set[str]:
     from .textutils import normalize
     import re as _re
@@ -298,8 +301,19 @@ def group_editions(results: list[dict[str, Any]], *, author_key: Callable[[Any],
                 target = primary
                 break
         if target is not None:
-            target.setdefault("editions", []).append({
-                key: item.get(key) for key in ("id", "edition", "source", "citation", "quality", "work")})
+            edition = {key: item.get(key) for key in ("id", "edition", "source", "citation", "quality", "work")}
+            if _QUALITY_RANK.get(item.get("quality"), 2) < _QUALITY_RANK.get(target.get("quality"), 2):
+                # An edited text represents the group in place of a corrected-OCR copy; the
+                # group keeps the rank the OCR copy earned.
+                position = kept.index(target)
+                editions = target.pop("editions", [])
+                previous = {key: target.get(key) for key in ("id", "edition", "source", "citation", "quality", "work")}
+                item["editions"] = [previous, *editions]
+                item["edition_count"] = 1 + len(item["editions"])
+                kept[position] = item
+                folded += 1
+                continue
+            target.setdefault("editions", []).append(edition)
             target["edition_count"] = 1 + len(target["editions"])
             folded += 1
             continue

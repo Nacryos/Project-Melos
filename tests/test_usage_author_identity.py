@@ -16,7 +16,7 @@ def test_usage_projection_reuses_owner_aliases_and_preserves_source_identity(mon
     result = server.usage_space(q='αβ', author='', limit=80)
     assert [point['author'] for point in result['points']] == labels
     assert [point['author_canonical'] for point in result['points']] == [
-        'Ibycus', 'Ibycus', 'Homer', 'Homer', 'scholia-in-homerum',
+        'Ibycus', 'Ibycus', 'Homer', 'Homer', 'Scholia on Homer',  # merged by the release O alias table
         'Sappho / Alcaeus', 'Unmapped synthetic author', '']
     for record, point in zip(records, result['points']):
         assert point['citation'] == record['citation']

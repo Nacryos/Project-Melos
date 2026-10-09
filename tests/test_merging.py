@@ -129,9 +129,12 @@ def test_fuzzy_and_fulltext_paths_also_group_copies(client: TestClient):
     assert top["id"] == "z-direct" and top["mirror_count"] == 3
     hybrid = client.get("/api/search", params={"q": "πολυστέφανε", "mode": "hybrid", "author": "Alcaeus"}).json()
     ids = [row["id"] for row in hybrid["results"]]
-    assert "z-direct" in ids and "a-mirror" not in ids and "b-mirror" not in ids
-    grouped = next(row for row in hybrid["results"] if row["id"] == "z-direct")
-    assert set(grouped["mirrored_ids"]) == {"a-mirror", "b-mirror"}
+    # Release O: other editions of one passage (same author, most words shared) fold under
+    # the first-ranked copy; identical copies stay in mirrored_ids of their representative.
+    shown = {e["id"] for row in hybrid["results"] for e in row.get("editions", [])} | set(ids)
+    assert "z-direct" in shown and "a-mirror" not in shown and "b-mirror" not in shown
+    group = next(row for row in hybrid["results"] if "z-direct" in {row["id"], *(e["id"] for e in row.get("editions", []))})
+    assert group["edition_count"] == 1 + len(group["editions"])
 
 
 def test_machine_corrected_ocr_is_searchable_and_raw_ocr_is_not(client: TestClient):
@@ -173,4 +176,5 @@ def test_old_schema_index_still_merges_authors_without_grouping(client: TestClie
     passage = client.get("/api/passage", params={"id": "b-mirror"}).json()
     assert passage["mirrors"] == [] and passage["author_canonical"] == "Alcaeus"
     hybrid = client.get("/api/search", params={"q": "πολυστέφανε", "mode": "hybrid", "author": "Alcaeus"}).json()
-    assert {row["id"] for row in hybrid["results"]} >= {"z-direct"}
+    shown = {e["id"] for row in hybrid["results"] for e in row.get("editions", [])} | {row["id"] for row in hybrid["results"]}
+    assert shown >= {"z-direct"}
