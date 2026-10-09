@@ -12,21 +12,59 @@
     const text = key => String(params.get(key) || '').trim().slice(0, 100);
     const page = Number(params.get('page'));
     return { lemma: text('lemma'), q: text('q'), order: params.get('order') === 'author' ? 'author' : 'chronological',
-      author: text('author'), page: Number.isInteger(page) && page > 0 && page < 10000 ? page : 1 };
+      author: text('author'), period: text('period'), variants: params.get('variants') === '1',
+      page: Number.isInteger(page) && page > 0 && page < 10000 ? page : 1 };
   }
   function writeState(href, state) {
     const url = new URL(href);
-    for (const key of ['lemma', 'q', 'order', 'author', 'page']) url.searchParams.delete(key);
+    for (const key of ['lemma', 'q', 'order', 'author', 'period', 'variants', 'page']) url.searchParams.delete(key);
     if (state.lemma) url.searchParams.set('lemma', state.lemma); else if (state.q) url.searchParams.set('q', state.q);
     if (state.order === 'author') url.searchParams.set('order', 'author');
     if (state.author) url.searchParams.set('author', state.author);
+    if (state.period) url.searchParams.set('period', state.period);
+    if (state.variants) url.searchParams.set('variants', '1');
     if (state.page > 1) url.searchParams.set('page', String(state.page));
     return url;
+  }
+  // Concordance period filter: a period label, or "undated" for authors with
+  // no recorded date (release P `period=` / `undated=true`).
+  const PERIODS = ['Archaic (to 480 BCE)', 'Classical (480–323 BCE)', 'Hellenistic (323–31 BCE)', 'Roman imperial (31 BCE–300 CE)', 'Late antique (300–600 CE)'];
+  function periodParams(period) {
+    if (!period) return {};
+    return period === 'undated' ? { undated: 'true' } : { period };
+  }
+  // Variant headwords (release P `variant_group`) in words, from the page's
+  // headword: "ἔρος is a poetic form of ἔρως". One line per other member.
+  const RELATION = { 'poet.': 'poetic form', 'Ep.': 'epic form', 'Ion.': 'Ionic form', 'Dor.': 'Doric form', 'Aeol.': 'Aeolic form',
+    'Att.': 'Attic form', 'Lesb.': 'Lesbian form', 'Boeot.': 'Boeotian form', 'Lacon.': 'Laconian form', 'Thess.': 'Thessalian form', 'Cret.': 'Cretan form' };
+  function relationText(variant, base, relation) {
+    const rel = String(relation || '').trim();
+    if (rel === '=' || !rel) return `${variant} is listed as another form of ${base}`;
+    const words = RELATION[rel] || (/form/i.test(rel) ? rel : `${rel.replace(/\.$/, '')} form`);
+    return `${variant} is ${/^[aeiouAEIOU]/.test(words) ? 'an' : 'a'} ${words} of ${base}`;
+  }
+  function variantLines(lemma, group) {
+    const members = Array.isArray(group?.members) ? group.members : [];
+    const same = value => String(value || '').normalize('NFC') === String(lemma || '').normalize('NFC');
+    if (members.length < 2 || !members.some(member => same(member.lemma))) return [];
+    const out = [];
+    for (const member of members) {
+      if (same(member.lemma)) continue;
+      const links = (Array.isArray(member.links) ? member.links : []);
+      // Prefer the link that joins this member to the page's headword.
+      const link = links.find(item => same(item.lemma)) || links[0];
+      if (!link) continue;
+      const [variant, base] = link.direction === 'variant_of' ? [member.lemma, link.lemma] : [link.lemma, member.lemma];
+      const dictionaries = [...new Set(links.filter(item => item.lemma === link.lemma).map(item => window.MelosWordPanel?.plainSource?.(item.dictionary) || item.dictionary).filter(Boolean))];
+      out.push({ lemma: member.lemma, gloss: member.gloss || '', tokens: Number(member.tokens_all_records) || 0,
+        text: relationText(variant, base, link.relation), dictionaries, evidence: String(link.evidence || '').trim() });
+    }
+    return out;
   }
   // What a reading of the query is, in words.
   function viaText(reading) {
     return ({ headword: 'the headword', headword_without_accents: 'the unaccented spelling of',
-      printed_form_reading: 'a form of', english_dictionary_gloss: 'an English meaning of' })[reading?.via] || 'a reading of';
+      printed_form_reading: 'a form of', english_dictionary_gloss: 'an English meaning of', english_dictionary_head_meaning: 'an English meaning of' })[reading?.via] || 'a reading of';
   }
   // Collocate strength in words: how many times more often than chance.
   function timesChance(item) {
@@ -36,7 +74,7 @@
   }
 
   if (typeof document === 'undefined' || !document.getElementById?.('entry')) {
-    window.MelosLemmaPage = Object.freeze({ readState, writeState, viaText, timesChance });
+    window.MelosLemmaPage = Object.freeze({ readState, writeState, viaText, timesChance, periodParams, relationText, variantLines, PERIODS });
     return;
   }
 
@@ -105,7 +143,7 @@
     actions.append(link(L.searchHref(lemma), 'Search passages with any form →'), link(L.conceptHref(lemma), 'This meaning through time →'));
     head.append(actions);
     const jump = node('nav', 'jump'); jump.setAttribute('aria-label', 'Sections');
-    for (const [id, label] of [['dictionaries', 'Dictionaries'], ['frequency', 'Frequency'], ['concordance', 'In context'], ['collocations', 'Keeps company with'], ['forms', 'Forms']]) {
+    for (const [id, label] of [['dictionaries', 'Dictionaries'], ['frequency', 'Frequency'], ['concordance', 'In context'], ['collocations', 'Keeps company with'], ['phrases', 'Common phrases'], ['forms', 'Forms']]) {
       jump.append(link(`#${id}`, label));
     }
     const dictionaries = section('dictionaries', 'Dictionaries');
@@ -113,18 +151,64 @@
     const concordance = section('concordance', 'In context', 'Every occurrence of any form of the word, with the words around it. Choose a line to read the whole passage.');
     const collocations = section('collocations', 'Keeps company with');
     const forms = section('forms', 'Forms that occur', 'Each spelling in the corpus that was read as this headword, with how often it occurs. Choose one to search for it.');
-    ui.entry.append(head, jump, dictionaries.box, frequency.box, concordance.box, collocations.box, forms.box);
-    for (const part of [dictionaries, frequency, collocations, forms]) L.loading(part.body, 'Loading…');
-    current = { lemma, q, concordance: concordance.body };
+    const phrases = section('phrases', 'Common phrases', `Runs of headwords with ${lemma} that recur in one author, genre or period. Choose a phrase to find every passage with it.`);
+    ui.entry.append(head, jump, dictionaries.box, frequency.box, concordance.box, collocations.box, phrases.box, forms.box);
+    for (const part of [dictionaries, frequency, collocations, phrases, forms]) L.loading(part.body, 'Loading…');
+    current = { lemma, q, concordance: concordance.body, frequency: frequency.body, signal };
 
-    const freq = api('/api/lemma/frequency', { q }, signal);
-    freq.then(data => renderHead(data, gloss), () => { gloss.classList.remove('melos-loading'); gloss.textContent = ''; });
-    freq.then(data => renderFrequency(frequency.body, data), error => L.failure(frequency.body, error));
+    const freq = loadFrequency(signal);
+    freq.then(data => { renderHead(data, gloss); renderVariants(head, lemma, data); }, () => { gloss.classList.remove('melos-loading'); gloss.textContent = ''; });
+    freq.then(data => loadPhrases(phrases.body, lemma, data, signal), error => L.failure(phrases.body, error));
     api('/api/word', { form: lemma, lemma }, signal).then(data => renderDictionaries(dictionaries.body, lemma, data), error => L.failure(dictionaries.body, error));
     loadConcordance();
     api('/api/lemma/collocations', { q }, signal).then(data => renderCollocations(collocations.body, data), error => L.failure(collocations.body, error));
     api('/api/lemma/search', { q, limit: 1 }, signal).then(data => renderForms(forms.body, data), error => L.failure(forms.body, error));
     await freq.catch(() => null);
+  }
+
+  // Frequency, counting the variant headwords with this one when asked.
+  function loadFrequency(signal = current?.signal) {
+    const host = current.frequency;
+    const request = api('/api/lemma/frequency', { q: current.q, ...(state.variants ? { combine_variants: 'true' } : {}) }, signal);
+    request.then(data => renderFrequency(host, data), error => { if (!signal?.aborted) L.failure(host, error, () => loadFrequency()); });
+    return request;
+  }
+
+  // "Related spellings": the dictionaries' variant links, each a lexicon link.
+  function renderVariants(head, lemma, data) {
+    const lines = variantLines(lemma, data?.variant_group);
+    if (!lines.length) return;
+    const box = node('div', 'variants');
+    box.append(node('span', 'variants-label', lines.length === 1 ? 'Related spelling' : 'Related spellings'));
+    const list = node('ul', 'variants-list');
+    for (const line of lines) {
+      const li = node('li');
+      const a = link(L.lemmaHref(line.lemma), '', 'variant-link'); a.append(greek('span', '', line.lemma));
+      if (line.gloss) a.append(node('span', 'chip-note', ` ${line.gloss}`));
+      li.append(a, node('span', 'variant-text', ` — ${line.text}${line.dictionaries.length ? ` (${line.dictionaries.join(', ')})` : ''}${line.tokens ? ` · ${plural(line.tokens, 'occurrence')} in all records` : ''}`));
+      if (line.evidence) li.title = `Dictionary text: “${line.evidence}”`;
+      list.append(li);
+    }
+    box.append(list);
+    head.insertBefore(box, head.querySelector('.entry-actions'));
+  }
+
+  // Common phrases with this headword: the corpus list and the lists of the
+  // authors and genres that use it most (the service keeps the strongest
+  // phrases of each group, so a headword's phrases are spread among them).
+  async function loadPhrases(host, lemma, freq, signal) {
+    const P = window.MelosPhrases;
+    if (!P) { clear(host); return; }
+    const groups = [{ kind: 'corpus', name: 'all', label: 'the whole corpus' },
+      ...(freq?.by_author || []).slice(0, 4).map(row => ({ kind: 'author', name: row.author, label: row.author })),
+      ...(freq?.by_genre || []).slice(0, 2).map(row => ({ kind: 'genre', name: row.genre, label: `${row.genre}` }))];
+    const lists = await P.listsFor(groups, { load: () => api('/api/lemma/ngrams/groups'),
+      fetchGroup: group => api('/api/lemma/ngrams', { kind: group.kind, name: group.name, q: lemma, limit: 20 }, signal) });
+    if (signal?.aborted) return;
+    clear(host);
+    P.render(host, P.merge(lists), { node, shown: 8, highlight: lemma,
+      empty: `No phrase with ${lemma} recurs often enough to list (three times in one author, five in a genre or period).` });
+    host.append(node('p', 'fine', P.NOTE));
   }
 
   function renderHead(data, gloss) {
@@ -177,6 +261,21 @@
 
   function renderFrequency(host, data) {
     clear(host);
+    // "Count variants together": only when the dictionaries link this
+    // headword to another (ἔρως and its poetic form ἔρος).
+    const members = (data?.variant_group?.members || []).map(member => member.lemma).filter(Boolean);
+    if (members.length > 1) {
+      const toggle = node('label', 'variant-toggle');
+      const box = node('input'); box.type = 'checkbox'; box.checked = state.variants;
+      box.addEventListener('change', () => {
+        state.variants = box.checked; history.replaceState(null, '', writeState(location.href, state));
+        L.loading(host, box.checked ? `Counting ${members.join(' and ')} together…` : 'Counting this headword alone…');
+        loadFrequency();
+      });
+      toggle.append(box, ' ', node('span', '', `Count variants together (${members.join(' + ')})`));
+      host.append(toggle);
+      if (state.variants) host.append(node('p', 'fine', `The figures below count ${members.join(', ')} as one word; the dictionaries list them as forms of one another, but the corpus keeps them as separate headwords.`));
+    }
     if (!data?.tokens) {
       host.append(node('p', 'notice', 'This headword does not occur in the searchable Greek texts.'));
       return;
@@ -190,35 +289,49 @@
     if (data.possible_additional_tokens > 0) {
       host.append(node('p', 'fine', `${number(data.possible_additional_tokens)} more words have a spelling that could also be this headword, but were read as another; they are not counted.`));
     }
-    const authorRow = row => ({ label: row.author, value: row.count, rate: row.per_10k, note: L.authorDate(row.date), raw: row, author: row.author,
-      title: `${row.author}: ${plural(row.count, 'occurrence')}, ${rate(row.per_10k)} per 10,000 of their words. Show these lines.` });
-    const value = row => `${number(row.value)} · ${rate(row.rate)} per 10k`;
+    // Rates carry their 95% interval (where the true rate probably lies);
+    // groups under 50,000 words are faded and marked "few texts".
+    const withRange = row => { const ci = L.interval(row.raw?.per_10k_ci95); return ci ? ` (${L.rangeText(ci)})` : ''; };
+    const authorRow = row => {
+      const few = L.smallSample(row);
+      return { label: row.author, value: row.count, rate: row.per_10k, raw: row, author: row.author, muted: few,
+        note: [L.authorDate(row.date), few ? 'few texts' : ''].filter(Boolean).join(' · '),
+        title: `${row.author}: ${plural(row.count, 'occurrence')}, ${rate(row.per_10k)} per 10,000 of their words${L.interval(row.per_10k_ci95) ? ` (probably between ${L.rangeText(L.interval(row.per_10k_ci95))})` : ''}${few ? '; few texts, so the rate is unreliable' : ''}. Show these lines.` };
+    };
+    const countValue = row => `${number(row.value)} · ${rate(row.rate)} per 10k${withRange(row)}`;
     const select = row => { state.author = row.author; state.page = 1; loadConcordance(true); };
     const authors = (data.by_author || []).map(authorRow);
     const authorBox = node('div', 'chart-box');
     const drawAuthors = all => {
       clear(authorBox);
-      authorBox.append(L.barChart(all ? authors : authors.slice(0, 12), { caption: 'Occurrences · rate per 10,000 of the author’s words. Choose an author to see the lines.', valueLabel: value, onSelect: select, selectLabel: 'Show these lines' }));
+      authorBox.append(L.barChart(all ? authors : authors.slice(0, 12), { caption: 'Occurrences · rate per 10,000 of the author’s words (95% range in brackets). Choose an author to see the lines.', valueLabel: countValue, onSelect: select, selectLabel: 'Show these lines' }));
       if (authors.length > 12) {
         const more = node('button', 'quiet', all ? 'Show fewer authors' : `Show all ${authors.length} authors`); more.type = 'button';
         more.addEventListener('click', () => drawAuthors(!all)); authorBox.append(more);
       }
     };
     drawAuthors(false);
-    const genres = (data.by_genre || []).map(row => ({ label: row.genre, value: row.count, rate: row.per_10k,
-      title: `${row.genre}: ${plural(row.count, 'occurrence')} in ${number(row.tokens_in_group)} words` }));
+    // Genres and periods compare rates, so their bars are rates with a
+    // whisker for the 95% interval.
+    const rateRow = (row, name, extra = {}) => {
+      const few = L.smallSample(row), ci = L.interval(row.per_10k_ci95);
+      return { label: name, value: Number(row.per_10k) || 0, count: row.count, interval: ci, muted: few, raw: row, ...extra,
+        note: [extra.note, few ? 'few texts, rate unreliable' : ''].filter(Boolean).join(' · '),
+        title: `${name}: ${plural(row.count, 'occurrence')} in ${number(row.tokens_in_group)} words; ${rate(row.per_10k)} per 10,000${ci ? `, probably between ${L.rangeText(ci)}` : ''}${few ? '. Few texts, so the rate is unreliable.' : ''}` };
+    };
+    const rateValue = row => `${rate(row.value)} per 10k${row.interval ? ` (${L.rangeText(row.interval)})` : ''} · ${number(row.count)}`;
+    const genres = (data.by_genre || []).map(row => rateRow(row, row.genre));
     const genreBox = node('div', 'chart-box');
-    genreBox.append(L.barChart(genres, { caption: 'Occurrences · rate per 10,000 words of the genre.', valueLabel: value }),
+    genreBox.append(L.barChart(genres, { caption: 'Rate per 10,000 words of the genre; the thin line is the 95% range, then the number of occurrences.', valueLabel: rateValue }),
       node('p', 'fine', 'Genres are an editorial grouping of authors, not a property of each poem.'));
     const periods = (data.by_period || []).map(row => {
       const part = L.periodParts(row.period);
-      const few = !part.undated && Number(row.tokens_in_group) < 50000;
-      return { label: part.name, note: few ? `${part.span} · few texts, rate unreliable` : part.span, value: row.count, rate: row.per_10k, separate: part.undated, muted: few,
-        title: `${part.name}: ${plural(row.count, 'occurrence')} in ${number(row.tokens_in_group)} words` };
+      return rateRow(row, part.name, { note: part.span, separate: part.undated, period: part.undated ? 'undated' : row.period });
     });
     const periodBox = node('div', 'chart-box');
-    periodBox.append(L.barChart(periods, { caption: 'Occurrences · rate per 10,000 words written in that period.', valueLabel: value }),
-      node('p', 'fine', `${L.DATE_NOTE} Authors with no recorded date are counted separately and never placed in a period.`));
+    periodBox.append(L.barChart(periods, { caption: 'Rate per 10,000 words written in that period; the thin line is the 95% range. Choose a period to see its lines.', valueLabel: rateValue,
+      onSelect: row => { state.period = row.period; state.page = 1; loadConcordance(true); }, selectLabel: 'Show the lines from this period' }),
+      node('p', 'fine', `${L.DATE_NOTE} Authors with no recorded date are counted separately and never placed in a period. A wide range means few words survive, so one poem can move the rate a lot.`));
     const tabsHost = node('div', 'chart-tabs'); tabsHost.id = 'frequency-tabs';
     L.tabs(tabsHost, [{ label: 'By author', content: authorBox }, { label: 'By genre', content: genreBox }, { label: 'By period', content: periodBox }], { label: 'Frequency' });
     host.append(tabsHost);
@@ -241,6 +354,19 @@
     sort.addEventListener('change', () => { state.order = sort.value; state.page = 1; loadConcordance(); });
     sortLabel.append(sort);
     controls.append(sortLabel);
+    // Period filter (release P): the dated periods, or authors with no date.
+    const periodLabel = node('label', '', 'Period ');
+    const period = node('select');
+    for (const [value, text] of [['', 'all periods'], ...PERIODS.map(label => [label, L.periodParts(label).name]), ['undated', 'undated authors']]) {
+      const option = node('option', '', text); option.value = value; period.append(option);
+    }
+    if (state.period && ![...period.options].some(option => option.value === state.period)) {
+      const option = node('option', '', L.periodParts(state.period).name); option.value = state.period; period.append(option);
+    }
+    period.value = state.period;
+    period.addEventListener('change', () => { state.period = period.value; state.page = 1; loadConcordance(); });
+    periodLabel.append(period);
+    controls.append(periodLabel);
     if (state.author) {
       const chip = node('button', 'chip chip-remove', `Only ${state.author} ×`); chip.type = 'button';
       chip.title = 'Show every author again';
@@ -253,11 +379,11 @@
     const list = node('ol', 'kwic'); host.append(list);
     if (scroll) host.closest('section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     try {
-      const data = await api('/api/lemma/concordance', { q: current.q, order: state.order, author: state.author, limit: PAGE, offset: (state.page - 1) * PAGE }, signal);
+      const data = await api('/api/lemma/concordance', { q: current.q, order: state.order, author: state.author, ...periodParams(state.period), limit: PAGE, offset: (state.page - 1) * PAGE }, signal);
       const lines = Array.isArray(data.lines) ? data.lines : [];
       const total = Number(data.total || 0);
       count.classList.remove('melos-loading');
-      if (!total) { count.textContent = ''; list.replaceWith(node('p', 'notice', 'No lines found.')); return; }
+      if (!total) { count.textContent = ''; list.replaceWith(node('p', 'notice', state.period || state.author ? 'No lines found with these filters.' : 'No lines found.')); return; }
       const first = (state.page - 1) * PAGE + 1;
       count.textContent = `Lines ${number(first)}–${number(first + lines.length - 1)} of ${number(total)}`;
       const seen = new Map();
@@ -299,7 +425,14 @@
     const text = node('span', 'kwic-text'); text.lang = 'grc';
     text.append(node('span', 'kwic-left', line.left || ''), node('mark', 'kwic-key', line.keyword || ''), node('span', 'kwic-right', line.right || ''));
     a.append(where, text);
-    if (Number(line.confidence) < 0.8) {
+    // Calibrated probability (release P) in words; the raw score when absent.
+    const panel = window.MelosWordPanel, likely = panel?.probabilityText?.(line.probability) || '';
+    if (likely) {
+      const low = panel.lowProbability(line.probability);
+      where.append(node('span', `kwic-prob${low ? ' is-low' : ''}`, low ? `reading ${likely} · may be another word` : `reading ${likely}`));
+      a.title = `Read the whole passage. The machine reading of this word as the headword is ${likely} to be right.`;
+      if (low) item.classList.add('kwic-uncertain');
+    } else if (Number(line.confidence) < 0.8) {
       a.append(node('span', 'kwic-flag', 'reading uncertain'));
       a.title = 'Read the whole passage. The machine reading of this word is less certain; it may belong to another headword.';
     }
@@ -358,7 +491,7 @@
     event.preventDefault();
     const value = ui.input.value.trim();
     if (!value) { ui.input.focus(); return; }
-    state = { ...readState(location.href), lemma: '', q: value, page: 1, author: '' };
+    state = { ...readState(location.href), lemma: '', q: value, page: 1, author: '', period: '', variants: false };
     history.pushState(null, '', writeState(location.href, state));
     start();
   });

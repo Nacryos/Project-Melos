@@ -13,8 +13,10 @@ test('homepage discovery links preserve hero and reader, with themes in a new ta
 test('all focused routes have build assets and exact Vercel rewrites', () => {
   const build = read('scripts/build_frontend.mjs');
   const config = JSON.parse(read('vercel.json'));
+  // /lexicon serves the headword page (lemma.html) since the lemma UI release.
+  const page = { lexicon: 'lemma' };
   for (const route of ['lexicon','authors','themes']) {
-    assert.ok(config.rewrites.some(r => r.source === `/${route}` && r.destination === `/${route}.html`));
+    assert.ok(config.rewrites.some(r => r.source === `/${route}` && r.destination === `/${page[route] || route}.html`));
     assert.ok(build.includes(`${route}-page.js`));
     assert.ok(build.includes(`${route}-page.css`));
   }

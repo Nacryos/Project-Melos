@@ -55,6 +55,19 @@
     return v === 0 ? '0' : v >= 10 ? v.toFixed(0) : v >= 1 ? v.toFixed(1) : v.toFixed(2);
   }
   const plural = (count, one, many = `${one}s`) => `${number(count)} ${Number(count) === 1 ? one : many}`;
+  // A 95% interval [low, high] (release P `per_10k_ci95`), or null.
+  function interval(value) {
+    if (!Array.isArray(value) || value.length !== 2) return null;
+    const [low, high] = value.map(Number);
+    return Number.isFinite(low) && Number.isFinite(high) && high >= low ? [low, high] : null;
+  }
+  const rangeText = ci => ci ? `${rate(ci[0])}–${rate(ci[1])}` : '';
+  // Groups under 50,000 words: the API's `small_sample`, else the word count.
+  const SMALL_SAMPLE = 50000;
+  function smallSample(row, tokens = row?.tokens_in_group ?? row?.tokens_in_period) {
+    if (typeof row?.small_sample === 'boolean') return row.small_sample;
+    return Number.isFinite(Number(tokens)) && Number(tokens) > 0 && Number(tokens) < SMALL_SAMPLE;
+  }
 
   // "Archaic (to 480 BCE)" -> { name: "Archaic", span: "to 480 BCE" }
   function periodParts(label) {
@@ -91,7 +104,8 @@
   function barChart(rows, { caption = '', valueLabel = row => row.value, onSelect = null, selectLabel = '' } = {}) {
     const figure = node('figure', 'bar-chart');
     if (caption) figure.append(node('figcaption', 'chart-caption', caption));
-    const max = Math.max(1, ...rows.map(row => Number(row.value) || 0));
+    // Bars may carry a 95% interval (same units as the bar): a thin whisker.
+    const max = Math.max(rows.some(row => row.interval) ? 0.01 : 1, ...rows.map(row => Math.max(Number(row.value) || 0, row.interval ? row.interval[1] : 0)));
     const list = node('ol', 'bar-list');
     for (const row of rows) {
       const item = node('li', `bar-row${row.separate ? ' bar-separate' : ''}${row.muted ? ' bar-muted' : ''}`);
@@ -102,6 +116,13 @@
       const fill = node('span', 'bar-fill');
       fill.style.width = `${Math.max(row.value > 0 ? 1.5 : 0, (Number(row.value) || 0) / max * 100)}%`;
       track.append(fill);
+      if (row.interval) {
+        const whisker = node('span', 'bar-ci');
+        whisker.style.left = `${row.interval[0] / max * 100}%`;
+        whisker.style.width = `${Math.max(0.5, (row.interval[1] - row.interval[0]) / max * 100)}%`;
+        whisker.title = `95% interval ${rangeText(row.interval)} per 10,000 words`;
+        track.append(whisker);
+      }
       const value = node('span', 'bar-value', valueLabel(row));
       if (onSelect && row.selectable !== false) {
         const button = node('button', 'bar-button');
@@ -138,7 +159,10 @@
     const step = plotWidth / (columns + gap - 0.5);
     const xAt = index => left + step * (index + 0.5) + (index >= periods.length ? step * gap : 0);
     const values = series.flatMap(s => [...s.points.map(p => p.value), s.undated?.value]).filter(v => Number.isFinite(v));
-    const rawMax = Math.max(0.1, ...values);
+    // Interval tops widen the scale, but never past 1.6× the largest rate (a
+    // whisker that reaches the top edge runs on beyond it).
+    const tops = series.flatMap(s => [...s.points, s.undated].map(p => p?.ci?.[1])).filter(v => Number.isFinite(v));
+    const rawMax = Math.max(0.1, ...values, ...tops.map(v => Math.min(v, Math.max(0.1, ...values) * 1.6)));
     const magnitude = 10 ** Math.floor(Math.log10(rawMax));
     const niceMax = [1, 2, 2.5, 5, 10].map(m => m * magnitude).find(m => m >= rawMax) || rawMax;
     const yAt = value => top + (height - top - bottom) * (1 - value / niceMax);
@@ -198,10 +222,18 @@
         ...(s.undated && Number.isFinite(s.undated.value) ? [{ ...s.undated, x: periods.length, undated: true }] : [])];
       for (const p of marks) {
         const cx = xAt(p.x), cy = yAt(p.value);
-        const thin = !p.undated && periods[p.x]?.small;
+        const thin = p.undated ? Boolean(p.small) : Boolean(periods[p.x]?.small);
+        if (p.ci) {
+          const y1 = Math.max(top, yAt(p.ci[1])), y2 = Math.min(height - bottom, yAt(p.ci[0]));
+          const bar = svg('g', { class: 'chart-ci', opacity: thin ? 0.45 : 0.8 });
+          bar.append(svg('line', { x1: cx, x2: cx, y1, y2, stroke: s.color, 'stroke-width': 1.5 }));
+          if (y1 > top) bar.append(svg('line', { x1: cx - 4, x2: cx + 4, y1, y2: y1, stroke: s.color, 'stroke-width': 1.5 }));
+          bar.append(svg('line', { x1: cx - 4, x2: cx + 4, y1: y2, y2, stroke: s.color, 'stroke-width': 1.5 }));
+          group.append(bar);
+        }
         const dot = svg('circle', { cx, cy, r: 5, fill: p.undated ? '#fff' : s.color, stroke: p.undated ? s.color : '#fff', 'stroke-width': 2, class: 'chart-dot', opacity: thin ? 0.45 : 1 });
         const where = p.undated ? 'authors with no recorded date' : periodParts(periods[p.x].label).name;
-        const text = `${s.label} · ${where}: ${rate(p.value)} per 10,000 words (${plural(p.count, 'occurrence')} in ${number(p.total)} words)${thin ? '. Few texts survive from this period, so this rate is unreliable.' : ''}`;
+        const text = `${s.label} · ${where}: ${rate(p.value)} per 10,000 words${p.ci ? `, probably between ${rangeText(p.ci)}` : ''} (${plural(p.count, 'occurrence')} in ${number(p.total)} words)${thin ? '. Few texts, so this rate is unreliable.' : ''}`;
         const title = svg('title'); title.textContent = text; dot.append(title);
         const hit = svg('circle', { cx, cy, r: 13, fill: 'transparent', class: 'chart-hit' });
         hit.addEventListener('pointerenter', event => show(event, text));
@@ -259,6 +291,6 @@
     host.append(box);
   }
 
-  window.MelosLemma = Object.freeze({ node, svg, clear, link, greek, api, ApiError, errorText, number, rate, plural, periodParts,
+  window.MelosLemma = Object.freeze({ node, svg, clear, link, greek, api, ApiError, errorText, number, rate, plural, interval, rangeText, smallSample, SMALL_SAMPLE, periodParts,
     authorDate, DATE_NOTE, readerHref, lemmaHref, conceptHref, searchHref, citation, barChart, timelineChart, tabs, loading, failure, SERIES });
 })();

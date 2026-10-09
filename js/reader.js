@@ -226,9 +226,43 @@
           list.append(workButton);
         }
         row.append(list);
+        if (works?.length && window.MelosPhrases && (!state.ngramGroups || state.ngramGroups.has(`author|${author}`))) row.append(authorPhrases(author));
       }
       ui.authors.append(row);
     }
+  }
+  // "Common phrases" for an author (release P n-grams), loaded when opened.
+  function authorPhrases(author) {
+    const box = node('details', 'author-phrases');
+    box.append(node('summary', '', `Common phrases in ${author}`));
+    const body = node('div', 'author-phrases-body');
+    box.append(body);
+    state.authorPhrases ||= new Map();
+    box.addEventListener('toggle', async () => {
+      state.authorPhrasesOpen = box.open ? author : '';
+      if (!box.open || body.dataset.loaded) return;
+      body.dataset.loaded = '1';
+      body.append(node('p', 'panel-placeholder melos-loading', 'Finding the phrases…'));
+      try {
+        let data = state.authorPhrases.get(author);
+        const have = await window.MelosPhrases.knownGroups(() => api('/api/lemma/ngrams/groups'));
+        if (!data && have && !have.has(`author|${author}`)) data = { ngrams: [], missing: true };
+        if (!data) { data = await api('/api/lemma/ngrams', { kind: 'author', name: author, limit: 30 }); state.authorPhrases.set(author, data); }
+        if (data.missing) throw new Error('404: no phrase list');
+        clear(body);
+        window.MelosPhrases.render(body, window.MelosPhrases.trim(data.ngrams), { node, shown: 6,
+          empty: `No phrase recurs often enough in ${author} to list (three times at least).` });
+        body.append(node('p', 'candidate-reason', window.MelosPhrases.NOTE));
+      } catch (error) {
+        clear(body);
+        const missing = /^404|returned 404/.test(String(error?.message));
+        body.append(node('p', 'panel-placeholder', missing ? `No phrase list is kept for ${author}: too few edited texts, or texts only in reference records.` : `Could not load the phrases: ${errorText(error)}`));
+        if (!missing) delete body.dataset.loaded;
+      }
+    });
+    // The list is redrawn often; a phrase box the reader opened stays open.
+    if (state.authorPhrasesOpen === author) box.open = true;
+    return box;
   }
   async function selectAuthor(author, openFirst = false) {
     if (state.selectedAuthor === author && !openFirst) {
@@ -237,6 +271,8 @@
       return;
     }
     state.selectedAuthor = author;
+    // Which authors have a phrase list (fetched once, beside the works).
+    window.MelosPhrases?.knownGroups(() => api('/api/lemma/ngrams/groups')).then(groups => { state.ngramGroups = groups; });
     (state.loadingWorks ??= new Set()).add(author);
     renderAuthors();
     try {
@@ -1485,7 +1521,11 @@
     excerpt.append(node('span', 'kwic-left', before.length > 70 ? `…${before.slice(-70).replace(/^\S*\s/u, '')}` : before), node('mark', 'kwic-key', key || ''),
       node('span', 'kwic-right', after.length > 70 ? `${after.slice(0, 70).replace(/\s\S*$/u, '')}…` : after));
     body.append(excerpt);
-    if (Number(record.confidence) < 0.8) body.append(node('span', 'result-reason', 'The machine reading of this word is less certain; it may belong to another headword.'));
+    // Calibrated probability (release P) in words; the raw score when absent.
+    const panel = window.MelosWordPanel, likely = panel?.probabilityText?.(record.probability) || '';
+    if (likely && panel.lowProbability(record.probability)) body.append(node('span', 'result-reason result-uncertain', `This word is ${likely} to be the headword; it may belong to another.`));
+    else if (!likely && Number(record.confidence) < 0.8) body.append(node('span', 'result-reason', 'The machine reading of this word is less certain; it may belong to another headword.'));
+    if (likely) button.title = `The machine reading of this word is ${likely} to be right.`;
     button.append(source, body);
     button.addEventListener('click', () => openPassage(record.id));
     return button;
@@ -1550,7 +1590,8 @@
     const first = resolution?.[0];
     if (!first) return null;
     const via = { printed_form_reading: `“${query}” read as a form of ${first.lemma}`, headword_without_accents: `“${query}” read as ${first.lemma}`,
-      english_dictionary_gloss: `“${query}” is a meaning of ${first.lemma} in the dictionaries` }[first.via];
+      english_dictionary_gloss: `“${query}” is a meaning of ${first.lemma} in the dictionaries`,
+      english_dictionary_head_meaning: `“${query}” is a meaning of ${first.lemma} in the dictionaries` }[first.via];
     const others = resolution.slice(1, 6);
     if (!via && !others.length) return null;
     const note = node('p', 'candidate-reason lemma-reading-note', via ? `${via}.` : '');
@@ -2397,16 +2438,20 @@
     const drawDictionaries = () => {
       if (sequence !== state.wordSequence) return;
       const lemma = headlineValue?.lemma || '';
-      const blocks = lemma && panel?.dictionaryBlocks ? panel.dictionaryBlocks(lemma, wordData?.lexicon_entries || [], lemmaEntries.get(lemma) || []) : [];
+      // Full entries first, then the compact dictionary lookup, then the one
+      // dictionary that came with the passage's batch headwords (release P).
+      const batchEntries = lemma && state.batchHeadlines?.passageId === passageId ? state.batchHeadlines.dictionaries?.get?.(lemma) || [] : [];
+      const blocks = lemma && panel?.dictionaryBlocks ? panel.dictionaryBlocks(lemma, wordData?.lexicon_entries || [], lemmaEntries.get(lemma) || [], batchEntries) : [];
       clear(dictionaryHost);
       if (blocks.length) { panel.renderDictionaryBlocks(dictionaryHost, blocks, node, safeLink); return; }
       if (wordData) renderDictionaryPreview(dictionaryHost, wordData, { openEntries: false, wiktionary: wiktionaryData });
       else if (!dictionaryLookupFailed) dictionaryHost.append(node('p', 'inspector-message melos-loading word-dictionary-pending', 'Looking up the dictionaries…'));
-      // As soon as a headword is known: its dictionary-only lookup (`lemma=`
-      // fast path, a few milliseconds) runs beside the slower form analysis.
+      // As soon as a headword is known: its compact dictionary-only lookup
+      // (`lemma=` fast path, every dictionary, a few KB) runs beside the slower
+      // form analysis.
       if (lemma && panel?.dictionaryBlocks && !lemmaEntries.has(lemma)) {
         lemmaEntries.set(lemma, []);
-        wordLookup({ form: lemma, lemma }).then(data => {
+        wordLookup(dictionaryParams(lemma)).then(data => {
           lemmaEntries.set(lemma, Array.isArray(data?.lexicon_entries) ? data.lexicon_entries : []); drawDictionaries(); refreshHeadline();
           if (sequence === state.wordSequence && wordData && !dictionaryHost.querySelector('.word-dictionaries, .dictionary-glimpse')) {
             clear(dictionaryHost); message(dictionaryHost, `No dictionary entry for ${lemma} was found.`);
@@ -2433,6 +2478,11 @@
       if (!renderHeadline || !value || sequence !== state.wordSequence || headlineSettled) return;
       const previous = headlineValue?.lemma || '';
       headlineSettled = final; headlineValue = panel?.withAlternativeGlosses?.(value, loadedEntries()) || value;
+      // The index's calibrated probability belongs to its headword; a passage
+      // reading that agrees keeps it, one that differs does not.
+      const indexed = button && !joined && !fragmentSegment ? batchHeadline(button) : null;
+      if (headlineValue.probability == null && indexed?.probability != null && indexed.lemma && headlineValue.lemma
+        && indexed.lemma.normalize('NFC') === headlineValue.lemma.normalize('NFC')) headlineValue = { ...headlineValue, probability: indexed.probability };
       renderHeadline(headlineHost, headlineValue, node);
       // A later headword (the passage reading after the index's) swaps the dictionaries.
       if (!previous || previous !== headlineValue.lemma || final) drawDictionaries();
@@ -2650,7 +2700,10 @@
     return status ? [status.api_version || status.release || status.version || '', status.passages || ''].join('.') : '';
   }
   const headlineKey = (passageId, start) => `head|${apiVersion()}|${passageId}|${start}`;
-  const wordKey = params => `word|${apiVersion()}|${params.passage_id || ''}|${params.form}|${params.lemma || ''}`;
+  const wordKey = params => `word|${apiVersion()}|${params.passage_id || ''}|${params.form}|${params.lemma || ''}${params.compact ? '|compact' : ''}`;
+  // The compact dictionary-only lookup of a headword (release P): every
+  // dictionary's gloss, first senses and the start of the entry, a few KB.
+  const dictionaryParams = lemma => ({ form: lemma, lemma, compact: true, senses: 6 });
   // A headline value from one interlinear row, or null.
   function headlineFromInterlinearRow(row) {
     const base = window.MelosPassageAnalysis?.headlineFromRow?.(row);
@@ -2683,6 +2736,12 @@
     const batch = state.batchHeadlines?.passageId === passage.id ? state.batchHeadlines.values.get(`${start}:${end}`) : null;
     return batch?.lemma ? { value: batch, final: false } : null;
   }
+  // The corpus index's own headline for a passage word (batch), or null.
+  function batchHeadline(button) {
+    const start = Number(button?.dataset?.sourceStart), end = Number(button?.dataset?.sourceEnd), passage = state.passage;
+    if (!passage?.id || state.batchHeadlines?.passageId !== passage.id) return null;
+    return state.batchHeadlines.values.get(`${start}:${end}`) || null;
+  }
   // Headline for a passage word: the exact-span interlinear row (headword,
   // short dictionary gloss, contextually ranked parse) from the same endpoint
   // as the phrase reading. Cached per span; null when no row is returned.
@@ -2709,7 +2768,7 @@
     const exact = cache.peek(wordKey(params));
     if (exact) return Promise.resolve(exact);
     if (params.lemma) {
-      const plain = { ...params, lemma: '' }, loose = cache.peek(wordKey(plain));
+      const plain = { ...params, lemma: '', compact: undefined, senses: undefined }, loose = cache.peek(wordKey(plain));
       if (loose) return Promise.resolve(loose);
       if (cache.pending(wordKey(plain)) && priority === 'high') return cache.load(wordKey(plain), () => api('/api/word', plain), { priority, claim });
     }
@@ -2731,7 +2790,7 @@
       const needHead = !known?.final && !cache.pending(headlineKey(passage.id, start));
       const needWord = !cache.peek(wordKey(params)) && !cache.peek(wordKey({ ...params, lemma: '' })) && !cache.pending(wordKey(params));
       // The headword's dictionaries (fast `lemma=` path), so they open with the click.
-      const headword = known?.value?.lemma || '', dictionary = headword ? { form: headword, lemma: headword } : null;
+      const headword = known?.value?.lemma || '', dictionary = headword ? dictionaryParams(headword) : null;
       const needDictionary = dictionary && !cache.peek(wordKey(dictionary)) && !cache.pending(wordKey(dictionary));
       if ((!needHead && !needWord && !needDictionary) || (state.hoverBudget ?? 0) <= 0) return;
       state.hoverBudget -= 1;
@@ -2751,7 +2810,7 @@
     if (!cache || !tools || !id || absent()) return Promise.resolve(null);
     if (tools.networkPolicy && !tools.networkPolicy(navigator.connection).batch) return Promise.resolve(null);
     return cache.load(`batch|${apiVersion()}|${id}`, async ({ signal, priority: hint } = {}) => {
-      try { return await apiPost('/api/words/headlines', { passage_id: id }, { signal, priority: hint }); }
+      try { return await apiPost('/api/words/headlines', { passage_id: id, dictionary: true }, { signal, priority: hint }); }
       catch (error) {
         if (error?.status === 405 || error?.status === 501 || (error?.status === 404 && /^not found$/i.test(String(error.response?.detail || '')))) {
           try { window.sessionStorage?.setItem(flag, String(Date.now())); } catch { /* memory only */ }
@@ -2765,7 +2824,8 @@
     const tools = window.MelosWordPrefetch;
     const payload = await requestBatchHeadlines(passage.id);
     if (!tools || !payload || payload.none) return null;
-    return { passageId: passage.id, values: tools.batchHeadlines(payload, passage.text, window.MelosWordPanel?.plainParse) };
+    return { passageId: passage.id, values: tools.batchHeadlines(payload, passage.text, window.MelosWordPanel?.plainParse),
+      dictionaries: tools.batchDictionaries ? tools.batchDictionaries(payload) : new Map() };
   }
   // On opening a passage: the batch headlines (one request, already started
   // with the passage request) as soon as they arrive; then, in idle time, the
@@ -2990,7 +3050,17 @@
     if (!preferred) renderPassageEmpty('The corpus has no indexed authors yet.');
   }
 
-  ui.searchForm.addEventListener('submit', event => { event.preventDefault(); search(ui.searchInput.value); });
+  ui.searchForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const query = ui.searchInput.value;
+    // A citation ("Il. 1.1", "Sappho fr. 31") opens its passage directly.
+    if (!citations?.looksLikeCitation(query)) { search(query); return; }
+    citations.jump(query).then(opened => { if (!opened) search(query); });
+  });
+  const citations = window.MelosCitation?.mount({ form: ui.searchForm, input: ui.searchInput,
+    lookup: q => api('/api/cite', { q, limit: 5 }),
+    go: id => { ui.results.hidden = true; showSearchQueryIssue(''); openPassage(id); },
+    search: q => { ui.searchInput.value = q; search(q); } }) || null;
   for (const radio of document.querySelectorAll('input[name="search-mode"]')) radio.addEventListener('change', updateBridgeNote);
   ui.lemmaNear?.addEventListener('change', updateFormsControls);
   ui.formsRelation.addEventListener('change', updateFormsControls);

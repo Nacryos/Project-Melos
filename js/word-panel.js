@@ -184,21 +184,45 @@
     const path = Array.isArray(sense?.sense_path) ? sense.sense_path : [];
     return path.map(step => step?.n).filter(value => typeof value === 'string' && /^(?:[A-Za-z]|[IVXivx]{1,6}|\d{1,3})$/.test(value.trim())).join('.');
   }
+  // A calibrated probability (release P) in words: "about 94% likely".
+  function probabilityText(value) {
+    const p = Number(value);
+    if (value === null || value === undefined || value === '' || !Number.isFinite(p) || p < 0 || p > 1) return '';
+    if (p >= 0.995) return 'over 99% likely';
+    return `about ${Math.max(1, Math.round(p * 100))}% likely`;
+  }
+  // Headwords under this probability get a quiet "less certain" marker.
+  const LOW_PROBABILITY = 0.8;
+  const lowProbability = value => value !== null && value !== undefined && value !== '' && Number.isFinite(Number(value)) && Number(value) < LOW_PROBABILITY;
+  // Compact entries (release P: batch `dictionaries`, `/api/word … compact=true`)
+  // carry `senses: [{label, text}]` and a short `entry_excerpt`; full entries
+  // carry `dictionary_senses` and the whole `rendered_entry_text`.
+  function entrySenses(entry) {
+    if (Array.isArray(entry.dictionary_senses)) return entry.dictionary_senses
+      .filter(sense => typeof sense?.text === 'string' && sense.text.trim())
+      .map(sense => ({ label: senseLabel(sense), text: sense.text.trim() }));
+    return (Array.isArray(entry.senses) ? entry.senses : [])
+      .filter(sense => typeof sense?.text === 'string' && sense.text.trim())
+      .map(sense => ({ label: typeof sense.label === 'string' && /^(?:[A-Za-z]|[IVXivx]{1,6}|\d{1,3})$/.test(sense.label.trim()) ? sense.label.trim() : '', text: sense.text.trim() }));
+  }
   // One block per dictionary for the given headword, from the lexicon entries
-  // the API already returned (several payloads may be merged).
+  // the API already returned (several payloads may be merged; for one entry id
+  // the first list that has it wins, so pass full entries before compact ones).
   function dictionaryBlocks(lemma, ...entryLists) {
     const want = identity(lemma), seen = new Set(), bySource = new Map();
     if (!want) return [];
     for (const entry of entryLists.flat()) {
       if (!entry || identity(entry.lemma) !== want || seen.has(entry.id)) continue;
       seen.add(entry.id);
-      const name = dictionaryName(entry.source), key = name.title;
-      if (!bySource.has(key)) bySource.set(key, { ...name, source: entry.source, lemma: entry.lemma, entries: [] });
-      const senses = (Array.isArray(entry.dictionary_senses) ? entry.dictionary_senses : [])
-        .filter(sense => typeof sense?.text === 'string' && sense.text.trim())
-        .map(sense => ({ label: senseLabel(sense), text: sense.text.trim() }));
+      const name = dictionaryName(entry.source || entry.dictionary), key = name.title;
+      if (!bySource.has(key)) bySource.set(key, { ...name, source: entry.source || entry.dictionary, lemma: entry.lemma, entries: [] });
+      const senses = entrySenses(entry);
       if (!senses.length && typeof entry.gloss === 'string' && entry.gloss.trim()) senses.push({ label: '', text: entry.gloss.trim() });
-      bySource.get(key).entries.push({ senses, text: entry.rendered_entry_text || '', url: entry.entry_url || entry.source_url || '' });
+      const full = typeof entry.rendered_entry_text === 'string' && entry.rendered_entry_text.trim();
+      const excerpt = !full && typeof entry.entry_excerpt === 'string' ? entry.entry_excerpt.trim() : '';
+      const total = Number(entry.sense_count);
+      bySource.get(key).entries.push({ senses, text: full || excerpt, excerpt: Boolean(excerpt), url: entry.entry_url || entry.source_url || '',
+        moreSenses: !Array.isArray(entry.dictionary_senses) && Number.isInteger(total) && total > senses.length ? total - senses.length : 0 });
     }
     return [...bySource.values()].filter(block => block.entries.some(entry => entry.senses.length || entry.text))
       .sort((a, b) => a.rank - b.rank);
@@ -232,10 +256,11 @@
         if (moreList.children.length) {
           more.append(node('summary', '', `${entry.senses.length - SENSES_SHOWN} more senses`), moreList); box.append(more);
         }
+        if (entry.moreSenses) box.append(node('p', 'word-dictionary-partial', `${entry.moreSenses} more ${entry.moreSenses === 1 ? 'sense' : 'senses'} in the full entry.`));
         if (entry.text) {
           const full = node('details', 'word-more');
           const text = entry.text.length > ENTRY_CHARS ? `${entry.text.slice(0, ENTRY_CHARS).replace(/\s+\S*$/, '')} …` : entry.text;
-          full.append(node('summary', '', 'Full entry'), node('p', 'word-dictionary-entry', text));
+          full.append(node('summary', '', entry.excerpt ? 'Start of the entry' : 'Full entry'), node('p', 'word-dictionary-entry', text));
           full.lastChild.setAttribute?.('lang', 'en');
           box.append(full);
         }
@@ -266,6 +291,18 @@
       more.className = 'word-headline-lexicon'; more.href = link.href;
       more.textContent = 'All forms, frequency and passages in the lexicon →';
       head.append(more);
+    }
+    // How likely the machine reading is (calibrated against hand-checked
+    // treebank lemmas), in words; a less certain headword gets a quiet marker.
+    const likely = value.lemma ? probabilityText(value.probability) : '';
+    if (likely) {
+      const low = lowProbability(value.probability);
+      const line = node('p', `word-headline-probability${low ? ' is-low' : ''}`,
+        `Headword ${likely}${low ? ' — another headword is possible' : ''}`);
+      line.title = 'How often a machine reading this sure was right when checked against hand-made treebank lemmas (Homer, Hesiod, Sophocles, Aeschylus).';
+      if (low) head.classList?.add?.('word-headline-uncertain');
+      const parseLine = head.querySelector?.('.word-headline-parse');
+      if (parseLine?.after) parseLine.after(line); else head.append(line);
     }
     const parse = head.querySelector?.('.word-headline-parse');
     const short = typeof value.parse === 'string' ? value.parse : '';
@@ -406,7 +443,7 @@
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
   }
   window.MelosWordPanel = Object.freeze({ plainParse, parseSource, readableSourceLabel, alternatives, headlineDetail, entryGloss, withAlternativeGlosses, dictionaryName, plainSource,
-    dictionaryBlocks, renderDictionaryBlocks, decorateHeadline, nearestWord, retargetTaps, plainKey, readableValue, humanizeReceipt, watchReceipts });
+    probabilityText, lowProbability, LOW_PROBABILITY, dictionaryBlocks, renderDictionaryBlocks, decorateHeadline, nearestWord, retargetTaps, plainKey, readableValue, humanizeReceipt, watchReceipts });
 })();
 
 // Word-panel loading: an in-memory LRU backed by sessionStorage, one request
@@ -417,7 +454,7 @@
   'use strict';
 
   // Bump when the cached shapes change; old session entries are then ignored.
-  const VERSION = 'wp1';
+  const VERSION = 'wp2';
 
   function createLru(max) {
     const map = new Map();
@@ -542,10 +579,23 @@
               form: [alt.restored, alt.reading, alt.restored_form, alt.form_restored].find(item => typeof item === 'string' && item.trim()) || '' };
           }),
       ];
+      const probability = Number(token.probability);
       const value = { lemma, gloss: firstText(token.gloss), form: printed || restored || '', reading: restored && restored !== printed ? restored : '',
         parse: parses[0] || '', pos: typeof token.pos === 'string' ? token.pos : '', alternatives, ranked: true, tie: token.tie === true,
-        properName: capitalised(lemma), provisional: true, source: lemma ? 'Headword from the corpus index; checking it against this passage.' : '' };
+        properName: capitalised(lemma), provisional: true, source: lemma ? 'Headword from the corpus index; checking it against this passage.' : '',
+        ...(token.probability != null && Number.isFinite(probability) ? { probability } : {}) };
       out.set(`${utf16[0]}:${utf16[1]}`, value);
+    }
+    return out;
+  }
+  // The batch payload's headline dictionaries (release P, `dictionary: true`):
+  // headword -> [one compact entry], the first dictionary with a gloss or senses.
+  function batchDictionaries(payload) {
+    const out = new Map(), given = payload?.dictionaries;
+    if (!given || typeof given !== 'object') return out;
+    for (const [lemma, entry] of Object.entries(given)) {
+      if (!entry || typeof entry !== 'object' || !lemma) continue;
+      out.set(lemma, [{ ...entry, lemma: entry.lemma || lemma, id: entry.id || `batch:${lemma}:${entry.dictionary || ''}` }]);
     }
     return out;
   }
@@ -643,5 +693,5 @@
     return setTimeout(fn, 200);
   }
 
-  window.MelosWordPrefetch = Object.freeze({ VERSION, createLru, createStore, networkPolicy, rankWords, fold, utf16Offsets, batchHeadlines, create, whenIdle });
+  window.MelosWordPrefetch = Object.freeze({ VERSION, createLru, createStore, networkPolicy, rankWords, fold, utf16Offsets, batchHeadlines, batchDictionaries, create, whenIdle });
 })();

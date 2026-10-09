@@ -134,7 +134,7 @@ if (dither) {
   hero.addEventListener('pointerleave', event => { if (event.pointerType === 'mouse') dither.pointer(null); });
 }
 new ResizeObserver(() => { applyFocus(); if (current >= 0) sharpen(current).catch(() => {}); }).observe(hero);
-if (matchMedia('(max-width: 640px)').matches) $('#search-input').placeholder = 'Greek, Beta Code or English';
+if (matchMedia('(max-width: 640px)').matches) $('#search-input').placeholder = 'Greek, English, or Il. 1.1';
 go(0, true).then(warm).catch(() => {}).finally(() => {
   window.MelosHeroAssetsReady = true;
   window.dispatchEvent(new Event('melos:hero-assets-ready'));

@@ -71,7 +71,7 @@ test('pages use safe DOM building, plain words and a pinned cache-bust tag', () 
   for (const page of ['lemma.html', 'concept.html']) {
     const html = read(page);
     assert.match(html, /<nav aria-label="Main navigation">.*href="lemma\.html".*>Lexicon<.*href="concept\.html".*>Concepts</s, page);
-    assert.match(html, /lemma-common\.js\?v=lemma-\d{8}/, page);
+    assert.match(html, /lemma-common\.js\?v=(?:lemma|release-[a-z])-\d{8}/, page);
     assert.doesNotMatch(html, /<script[^>]+src="https?:/, `${page} loads no third-party script`);
   }
   assert.match(read('js/concept-page.js'), /Dates are author lifetimes|DATE_NOTE/);
