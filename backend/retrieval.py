@@ -264,3 +264,47 @@ def fuse(
         "method": "Reciprocal rank fusion of word, form, and dense candidates; linked evidence grouped by explicit parent ID.",
         "warnings": warnings,
     }
+
+
+def _content_words(text: Any) -> set[str]:
+    from .textutils import normalize
+    import re as _re
+    return {w for w in _re.findall(r"\w+", normalize(text or "")) if len(w) >= 4 and not w.isdigit()}
+
+
+def group_editions(results: list[dict[str, Any]], *, author_key: Callable[[Any], str] = _key,
+                   threshold: float = 0.5, window: int = 300) -> tuple[list[dict[str, Any]], int]:
+    """Fold other editions of one passage into the first-ranked copy (release O).
+
+    Two results are one work/fragment when they have the same canonical author and
+    language, and at least ``threshold`` of the shorter text's words (four letters or
+    more, accent-free) occur in the other. Folded copies are listed in ``editions``
+    (id, edition, source, citation, quality); nothing is merged across authors. Only
+    the first ``window`` results are compared; returns (results, number folded).
+    """
+    head, tail = results[:window], results[window:]
+    kept: list[dict[str, Any]] = []
+    signatures: list[tuple[str, Any, set[str]]] = []
+    folded = 0
+    for item in head:
+        words = _content_words(item.get("text"))
+        author = author_key(item.get("author"))
+        target = None
+        for (other_author, language, other_words), primary in zip(signatures, kept):
+            if other_author != author or language != item.get("language") or not words or not other_words:
+                continue
+            smaller = min(len(words), len(other_words))
+            if smaller >= 3 and len(words & other_words) / smaller >= threshold:
+                target = primary
+                break
+        if target is not None:
+            target.setdefault("editions", []).append({
+                key: item.get(key) for key in ("id", "edition", "source", "citation", "quality", "work")})
+            target["edition_count"] = 1 + len(target["editions"])
+            folded += 1
+            continue
+        item.setdefault("editions", [])
+        item["edition_count"] = 1 + len(item["editions"])
+        kept.append(item)
+        signatures.append((author, item.get("language"), words))
+    return kept + tail, folded

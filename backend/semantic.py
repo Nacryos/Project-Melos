@@ -16,7 +16,13 @@ import unicodedata
 import numpy as np
 from .translation_languages import translation_allowed_in_search
 
+import os
+
 MODEL_NAME = "BAAI/bge-m3"
+# Hub correction (release O): a passage vector close to the corpus centroid (long, generic
+# fragments) is near every query. Its centroid similarity, times this weight, is subtracted
+# before ranking (a CSLS-style correction). 0 restores plain cosine ranking.
+HUB_WEIGHT = float(os.getenv("MELOS_DENSE_HUB_WEIGHT", "0.5"))
 MODEL_REVISION = "5617a9f61b028005a4858fdac845db406aefb181"
 INDEX_VERSION = 1
 
@@ -70,6 +76,7 @@ class SemanticIndex:
         self._encode_lock = Lock()
         self._state_lock = RLock()
         self._manifest_mtime_ns: int | None = None
+        self._hub: np.ndarray | None = None
         self._load_index()
 
     def _load_index(self) -> None:
@@ -104,6 +111,7 @@ class SemanticIndex:
                 row.get("kind") in {"reference", "apparatus"} for row in rows
             ], dtype=bool)
             self._manifest_mtime_ns = manifest_path.stat().st_mtime_ns
+            self._hub = None
 
     def _refresh(self) -> None:
         path = self.index_dir / "manifest.json"
@@ -178,6 +186,7 @@ class SemanticIndex:
         author: str | list[str] | None = None,
         language: str | None = None,
         include_reference: bool = False,
+        hub_weight: float | None = None,
     ) -> list[dict[str, Any]]:
         if not self.ready:
             raise RuntimeError("Local semantic index not built or stale")
@@ -207,15 +216,17 @@ class SemanticIndex:
         if query_vector.shape != (vectors.shape[1],):
             raise ValueError("Query embedding dimension differs from index; rebuild embeddings")
         scores = np.asarray(vectors @ query_vector, dtype=np.float32)
-        # Keep exactly the same full-matrix scores and stable index-order ties,
-        # but sort only eligible rows. Never truncate the search candidate set.
-        order = positions[np.argsort(-scores[positions], kind="stable")[:limit]]
+        hub_weight = HUB_WEIGHT if hub_weight is None else hub_weight
+        ranking = scores - np.float32(hub_weight) * self.hub_scores() if hub_weight else scores
+        # Stable index-order ties; sort only eligible rows. Never truncate the candidate set.
+        order = positions[np.argsort(-ranking[positions], kind="stable")[:limit]]
         output = []
         for index in order:
             row = rows[int(index)]
             output.append({
                 "id": row["id"],
                 "score": round(float(scores[index]), 6),
+                "hub_corrected_score": round(float(ranking[index]), 6),
                 "indexed_language": row.get("language"),
                 "indexed_kind": row.get("kind"),
                 "parent_id": row.get("parent_id"),
@@ -227,6 +238,21 @@ class SemanticIndex:
                 ),
             })
         return output
+
+    def hub_scores(self) -> np.ndarray:
+        """Cosine of each passage vector with the normalised mean of all vectors (cached)."""
+        with self._state_lock:
+            if self._hub is None:
+                vectors = self._vectors
+                total = np.zeros(vectors.shape[1], dtype=np.float64)
+                for start in range(0, vectors.shape[0], 8192):
+                    total += np.asarray(vectors[start:start + 8192], dtype=np.float32).sum(axis=0)
+                centroid = (total / max(np.linalg.norm(total), 1e-12)).astype(np.float32)
+                hub = np.empty(vectors.shape[0], dtype=np.float32)
+                for start in range(0, vectors.shape[0], 8192):
+                    hub[start:start + 8192] = np.asarray(vectors[start:start + 8192], dtype=np.float32) @ centroid
+                self._hub = hub
+            return self._hub
 
     def vectors_for(self, ids: list[str]) -> tuple[list[str], np.ndarray]:
         """Return true indexed vectors for requested IDs in request order."""

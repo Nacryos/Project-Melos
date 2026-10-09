@@ -33,15 +33,40 @@ ENTITIES = {
     "Simonides": "Q273003",
     "Pindar": "Q134929",
     "Bacchylides": "Q310681",
+    # Release O (2026-10-09): the other poets and authors in the corpus, selected by
+    # wbsearchentities label + description (an ancient Greek poet/author of that name).
+    "Homer": "Q6691", "Hesiod": "Q44233", "Theognis": "Q336115", "Solon": "Q133337",
+    "Tyrtaeus": "Q316094", "Mimnermus": "Q316129", "Callinus": "Q334235", "Semonides": "Q381049",
+    "Hipponax": "Q367377", "Xenophanes": "Q131671", "Corinna": "Q241132", "Aeschylus": "Q40939",
+    "Sophocles": "Q7235", "Euripides": "Q48305", "Aristophanes": "Q43353", "Callimachus": "Q192417",
+    "Theocritus": "Q219484", "Apollonius Rhodius": "Q192638", "Aratus": "Q180671", "Lycophron": "Q432737",
+    "Nicander": "Q363818", "Moschus": "Q957548", "Bion": "Q463364", "Oppian": "Q116508",
+    "Quintus Smyrnaeus": "Q352702", "Nonnus": "Q312916", "Musaeus": "Q1954009",
+    "Agathias Scholasticus": "Q233136", "Phocylides": "Q972799", "Timocreon": "Q3555985",
+    "Praxilla": "Q278711", "Pratinas": "Q1362371", "Posidippus": "Q1392801",
+    "Dionysius Periegetes": "Q1226993", "Hephaestion": "Q549010", "Telesilla": "Q287216",
+    "Timotheus": "Q669691", "Erinna": "Q256241", "Terpander": "Q113417", "Lasus": "Q1128200",
+    "Philoxenus": "Q138664", "Ananius": "Q3615044", "Telestes": "Q2364741", "Porphyry": "Q203445",
+    "Demodocus": "Q3558606",
 }
 PROPERTIES = {"P569": "birth", "P570": "death", "P1317": "floruit", "P2031": "work_period_start", "P2032": "work_period_end"}
 
 
 def fetch() -> bytes:
+    """All entities, 50 per request (the API limit), merged into one saved payload."""
+    ids = list(ENTITIES.values())
+    merged = {"entities": {}}
+    for start in range(0, len(ids), 50):
+        payload = json.loads(_fetch(ids[start:start + 50]))
+        merged["entities"].update(payload["entities"])
+    return json.dumps(merged, ensure_ascii=False, sort_keys=True).encode("utf-8")
+
+
+def _fetch(ids) -> bytes:
     session = requests.Session()
     session.headers.update({"User-Agent": "MelosCorpus/0.1 (research corpus; https://github.com/PerseusDL)"})
     params = {
-        "action": "wbgetentities", "ids": "|".join(ENTITIES.values()),
+        "action": "wbgetentities", "ids": "|".join(ids),
         "format": "json", "props": "labels|aliases|descriptions|claims",
         "languages": "en|el|grc", "languagefallback": "0",
     }
@@ -51,7 +76,7 @@ def fetch() -> bytes:
             response = session.get(API, params=params, timeout=45)
             response.raise_for_status()
             payload = response.json()
-            if set(ENTITIES.values()) - set(payload.get("entities", {})):
+            if set(ids) - set(payload.get("entities", {})):
                 raise ValueError("Wikidata omitted requested entities")
             return response.content
         except (requests.RequestException, ValueError) as exc:
