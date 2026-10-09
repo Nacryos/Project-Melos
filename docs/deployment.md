@@ -1,12 +1,24 @@
 # Deployment handoff
 
-## Pending: release U — composer-ready backend: draft analysis, dialect spellings, each fragment counted once, fast-lookup and analysis fixes, concept and line-level parallels, word latency (2026-10-09)
+## Current: release U — composer-ready backend: draft analysis, dialect spellings, each fragment counted once, fast-lookup and analysis fixes, concept and line-level parallels, word latency (2026-10-09)
 
-**Status: built and measured on a development container; not canaried or promoted.** The queue is S → T → U and
-release T was not live when this was written (S promoted about 16:10 CEST; T's tree on the box unchanged since
-12:41). The U branch `release-u` is rebased on S (`semantic-search-s`) and must be rebased on T before its canary.
-All numbers below come from `melos-api-dev-u2` (127.0.0.1:8799): the live S image with the U backend mounted and
-the U data mounts, on a box at load 40 (other sessions).
+Public backend: image `melos-api:20261009u`
+(`sha256:480b81cdfb6157700f278aef2229da9205832432929e26eee3a56d67b68db666`), built on Basecamp with
+`deploy/Dockerfile.u` atop the live T image `melos-api:20261009t` from the `release-u` tree (rebased on T `734f075`),
+promoted at 18:12 UTC after the canary `melos-api-canary-u` (127.0.0.1:8792, kept stopped). T is kept stopped as
+`melos-api-before-u`. **Rollback:** `sh /home/alvin/melos-u/src/deploy/release_u.sh rollback` (stops U, renames it
+`melos-api-failed-u`, restarts T with its own mounts; the Morpheus sidecar is untouched), then the frontend:
+`vercel promote https://project-melos-14vcxsj88-nacryos-projects.vercel.app --yes`.
+
+Frontend: production `https://project-melos-4a8fitbqt-nacryos-projects.vercel.app` (aliased to greeklyric.com),
+deployed from the site-menu source (`510d157`) plus U's three frontend files only (`about.html`: accuracy from R's
+treebank check and the lyric gold set; `js/lemma-page.js`: no "(null)" variant label; `js/passage-analysis.js`:
+partial translation labels). Release T's owner pages (`owner.html`, `js/owner*.js`, `vercel.json`) are in the U
+tree but were not deployed: that is T's frontend release. Since T, `tests/site-menu.test.mjs` fails on the tool-page
+list in `scripts/build_frontend.mjs` (T added `owner.html`); left to T.
+
+Checks: canary `/home/alvin/melos-u/canary-checks`, production `/home/alvin/melos-u/prod-checks`, development runs
+`/home/alvin/melos-u/dev-checks` and `/home/alvin/melos-u/eval`.
 
 Recipe: `deploy/release_u.sh build|dev|canary|stop-canary|promote|rollback` (release T's pattern: a code-only
 image `deploy/Dockerfile.u` atop the live image; canary and promote copy the live container's mounts, environment
@@ -38,23 +50,25 @@ The lemma index, calibration and corpus are R's and S's, unchanged.
 | 8 Latency | Memoised static lookups (rendered entries, headword entries, evidence answers, occurrences, settled parser results, linked dictionary), file-cache sizes that had thrashed (entry offsets 8 → 512 files, file digests 8 → 512), precomputed renderings, a JSON-tree copy in place of `copy.deepcopy`, `gc.freeze()` after a background warm-up of the 600 commonest Campbell words, generate-and-test bounded to 2 s in a word lookup |
 | Coordinator | 17 public-domain English comparison translations (partial ones labelled); variant links never carry a null label (the lexicon page printed "(null)") |
 
-**Measurements** (development container; the canary repeats them):
+**Measurements** (canary unless stated; "before" is the live release at the time, R, S or T as named):
 
 | Check | Before | U |
 |---|---|---|
-| Lyric gold, held-out certain (430): headword / full parse / index | 92.6 % / 86.5 % (R, same scorer) | 93.3 % / 87.0 % / 94.2 % |
-| Lyric gold, development certain (390) | 94.9 % / 89.0 % / 95.4 % | unchanged |
-| Sampler seed 101 / held-out seed 20261008 (all-ok rows) | 88.4 % / 88.6 % (S) | identical, 0 rows gained or lost |
-| Search, 42 queries (nDCG@10 all / held) | 0.794 / 0.675 (S) | identical per query |
-| Search, S's 120 queries (nDCG@10 all / held) | 0.581 / 0.527 (S) | identical |
+| Lyric gold, held-out certain (430): headword / full parse / index | R 92.6 % / 86.5 % / 94.2 % | 93.3 % / 87.0 % / 94.2 % |
+| Lyric gold, development certain (390) | R 94.9 % / 89.0 % / 95.4 % | unchanged |
+| Sampler seed 101 / held-out seed 20261008 (all-ok rows) | S 88.4 % / 88.6 % | identical, 0 rows gained or lost |
+| Search, 42 queries: nDCG@10 all / held; mean time | S 0.794 / 0.675; 2.2 s | identical per query; 1.47 s |
+| Search, S's 120 queries: nDCG@10 all / held; mean time | S 0.581 / 0.527; 2.3 s | identical; 1.48 s |
 | Citations | 35/35 | 35/35 |
 | 237-poem identity check | 237 identical | 237 identical, 231 translations (214 + 17), 50 lines analysed, 0 failures |
 | Span check | 0 failures | 227 spans, 816 word rows, 0 failures |
-| `/api/word` click (form + passage + headword, 80 words, seeds 7/11/13): median / p90 | R live: 370 / 1,396 ms | 186 / 405, 164 / 374, 180 / 377 ms |
-| `/api/word` (S's method, 42 forms): median / p90 | S canary: 0.22 / 1.14 s | 0.12 / 0.48 s |
-| `/api/analyze-text`, exercise stanza (4 lines, 21 words) | — | 3.8 s first, 0.9–1.1 s warm (target 300 ms not met) |
-| `/api/dialectize`, 6 forms | — | 97 ms first, 22 ms warm |
-| Memory (API container) | S live 4.7 GiB | 5.6 GiB (limit 8 GiB) |
+| `/api/word` click (form + passage + headword; 80 words; seeds 7/11/13): median / p90 | live T: 298 / 1,203, 299 / 833, 298 / 937 ms (R live: 370 / 1,396) | 114 / 278, 141 / 289, 129 / 267 ms |
+| `/api/word`, S's method (42 forms): median / p90 | live T 0.18 / 0.97 s (S canary 0.22 / 1.14 s) | 0.10 / 0.33 s |
+| `/api/word` through greeklyric.com (from the box: out through Vercel and back in through Funnel) | — | 589 / 1,056 ms |
+| `/api/analyze-text`, exercise stanza (4 lines, 21 words) | — | 2.0 s first, 0.45–1.1 s warm (median 0.82 s); production 3.3 s / 0.83 s. Target 300 ms not met |
+| `/api/dialectize`, 6 forms | — | 31 ms first, 12 ms warm |
+| Release U checks (`scripts/check_release_u.py`) | — | 14/14 canary, 14/14 production |
+| Memory (API container) | T live 4.6 GiB | 5.0 GiB after promotion; the canary reached 6.8 GiB of its 8 GiB after the full check run (memo caches grow with use; watch it) |
 
 The held-out gains are named in the brief (φαῖσ’, ἄγοισ’, παῖσαν, τεθνάκην ×2), so the held-out half is no longer
 blind for these forms; the development half is unchanged. The draft analysis target was not met: in a warm
@@ -78,6 +92,97 @@ Drafts agree with the stored-passage reading on 87.5 % of words over 40 gold lin
 
 **Owner rulings:** the seven open questions of docs/composer/loop-design.md § 7 are unchanged.
 
+## Historical: release S — stacked semantic search, Ancient Greek sentence vectors, commentary notes, 120-query evaluation (2026-10-09)
+
+Public backend: image `melos-api:20261009s`
+(`sha256:b77b0c2925137094d520ecee3ad5a892fed7af84cdcca7bf22afb9ee1f516d73`), built on Basecamp with
+`deploy/Dockerfile.patch` atop the R image `melos-api:20261009r2` from the S source tarball (`git archive` of
+`6a82c95`, sha256 `c7d3b096feb4d58c23dec575f1283daf8a4c2c960140248c3184990555c9a80c`, unpacked in
+`/home/alvin/melos-s/src`). Recipe: `deploy/release_s.sh build|dev|canary|stop-canary|promote|rollback`; checks
+`deploy/canary_checks_s.sh`. R (r2) is kept stopped as `melos-api-before-s`, the S canary as
+`melos-api-canary-s` (stopped; port 8792 free). **Rollback:** `sh /home/alvin/melos-s/src/deploy/release_s.sh
+rollback` (stops S, renames it `melos-api-failed-s`, restarts R with its own mounts; the Morpheus sidecar is
+untouched). `MELOS_SEARCH_STACK=0` on the S container also restores R's fusion. No frontend change.
+
+Data (read-only mounts): O's corpus and `embeddings/`, R's headword index, n-grams and calibration, Q's citation
+index and metadata (all unchanged), and under `/home/alvin/melos-s`: `data/embeddings-s/shlm/` (116,428 float16
+vectors, 179 MB; `bge-m3/` is a manifest pointing at O's BGE-M3 files), `data/commentary_context.sqlite` (22 MB),
+`models/` (pinned `kevinkrahn/shlm-grc-en` snapshot `bfc43f7`, 362 MB). Lab reports: `docs/audits/search-lab-s.json`;
+live R on the new set: `/home/alvin/melos-s/eval/search-eval-s-R-live.json`.
+
+**What S adds** (details: `docs/retrieval.md` "Release S", `docs/api-contract.md` "Release S additions"):
+
+- **Evaluation set** `data/evaluation/search-eval-s.json`: release O's 42 queries (first, unchanged) and 78 new
+  ones written before any S retriever ran (draft sha256 in the file): English concepts, Greek headwords and
+  phrases, epithets, imagery and motifs (every pattern in `all_of` must match), English renderings and
+  Latin-script spellings of Greek formulas, and allusions to well-known lines. Each query carries its evidence,
+  read from the data: headword head meanings with their dictionary, and up to four corpus loci (lyric poets first;
+  for allusions, a check that the alluded poet's passage matches). Every third query held out (40); the weights
+  were fitted without reading them. New metric recall@50 (relevant passages in the first 50 / min(50, relevant)).
+- **Encoders** (each of 116,428 records embedded on the laptop GPU, word windows of 160; Greek-text list alone,
+  nDCG@10 over 120 queries): shlm-grc-en (Krahn et al., MIT) 0.453, BGE-M3 0.318, Qwen3-Embedding-0.6B
+  (Apache-2.0) 0.269, SPhilBERTa (Apache-2.0) 0.123. Deployed shlm-grc-en next to BGE-M3; Qwen3 also needs a newer
+  `transformers` than the image; SPhilBERTa was weakest everywhere.
+- **Stacked lists** with weights fitted per query class (coordinate ascent on development nDCG@10):
+  keyword BM25 with dialect/spelling variants (Greek queries 0.5), headwords widened to variant groups (English
+  0.5), vectors per record kind (Greek text, English translation, commentary; shlm Greek text 3.0 for English
+  queries), commentary notes (English 1.0); release R's lists keep their place (headword list 2 / 3, lexical 1).
+- **Rerankers rejected on evidence:** mMiniLMv2 mMARCO and BGE-reranker-v2-m3 on the first 50 lowered
+  development nDCG@10 at every blend weight; none runs (Qwen3-Reranker could not load with the image's libraries).
+- **Commentary notes** (`/api/commentary/status`, `/api/commentary/notes`), all public domain, fetched with the
+  generic User-Agent from open repositories:
+
+  | Source | Repository | Notes | Notes linked | Passages |
+  |---|---|---|---|---|
+  | Gildersleeve, Pindar O./P. (1885) | Perseus 1999.04.0101 (encoding CC BY-SA 3.0 US) | 439 | 395 | 1,041 |
+  | Allen & Sikes, Homeric Hymns (1904) | Perseus 1999.04.0029 | 233 | 140 | 259 |
+  | Cholmeley, Theocritus (1901) | Perseus 1999.04.0069 | 337 | 291 | 654 |
+  | Smyth, Greek Melic Poets (1900) | Internet Archive greekmelicpoets00smytuoft (page-level) | 514 | 213 | 594 |
+  | Jebb, Bacchylides (1905) | Internet Archive bacchylidespoems00bacciala (page-level) | 529 | 268 | 456 |
+  | Wharton, Sappho (1887) | Internet Archive sapphomemoirtext00sappiala | 221 | 0 (OCR has no Greek) | 0 |
+
+  Owner PDFs: `data/commentary_inbox/` (page-level notes; in copyright unless the sidecar JSON says public
+  domain: search signals only, at most a 30-word quotation with citation and link). Edmonds' *Lyra Graeca* is
+  already in the corpus; not re-ingested.
+
+Search evaluation (`scripts/search_eval.py`, hybrid, nDCG@10 / recall@50):
+
+| Set | Split | R (live, same day) | S canary | S live |
+|---|---|---|---|---|
+| 120 queries | development (80) | 0.499 / 0.392 | 0.608 / 0.496 | 0.608 / 0.496 |
+| | held out (40) | 0.479 / 0.344 | 0.527 / 0.439 | 0.527 / 0.439 |
+| | all | 0.492 / 0.376 | 0.581 / 0.477 | 0.581 / 0.477 |
+| O's 42 queries | development (28) | 0.707 | 0.854 | 0.854 |
+| | held out (14) | 0.577 | 0.675 | 0.675 |
+| | all | 0.664 | 0.794 | 0.794 |
+
+By type (120, R → S): English concepts 0.549 → 0.788, Greek headwords 0.988 → 0.996, Greek phrases 0.541 → 0.595,
+imagery 0.109 → 0.214, motifs 0.029 → 0.097, allusions 0.131 → 0.177; lower: epithets 0.643 → 0.613,
+cross-lingual 0.275 → 0.225. Imagery, motifs and allusions remain weak.
+
+Latency: hybrid search mean 1.78 s (R) → 2.29 s (S canary, 120 queries; 2.54 s live through the public route);
+the stack lists add 0.3–1.1 s (shlm query 0.1–0.2 s, BGE-M3 per-kind lists 0.2 s, keyword variants 0.4 s for Greek
+queries). Encoders and matrices are warmed in a startup thread (a cold first search took 56 s). Word clicks are
+unchanged: `/api/word` median 0.22 s, p90 1.14 s on the canary (R at the same time 0.23 / 1.23; S live on
+127.0.0.1 0.18–0.19 / 0.90–0.94; through the public route from the box, load average 39, 0.64–0.79 / 2.3);
+`/api/words/headlines` median 0.013 s (both). Memory: S 4.0–4.7 GiB of 8 GiB (R 3.5 GiB).
+
+Canary (8792) before promotion: smoke pass; `verify_campbell_glp.py --analyze sample` 237/237 identical,
+0 failures; `check_span_parses.py --random 30` 227 spans, 816 rows, 0 failures; citations 35/35; sampler vs R:
+seed 101 (421 rows) identical, held-out seed (484 aligned) no row gains or loses; the lyric-gold dump was stopped
+to free port 8792 (S changes no parsing). Backend tests: the new `tests/test_search_stack.py` 6/6; the full suite in
+the worktree fails only data-dependent files that also need the untracked data (the same files pass in the main
+tree except R's known 5).
+
+Verified on https://greeklyric.com after promotion (`/home/alvin/melos-s/prod-checks`): smoke pass; 237/237
+identical, 0 failures; span check 227 / 816 / 0 failures; search evaluation as the canary (table above);
+citations 35/35; 20/20 endpoints 200 (commentary 0.16 s, "the moon among the stars" 1.8 s, diachrony 2.7 s).
+
+Known gaps: imagery, motif and allusion queries still score low (no reranker helped); cross-lingual and epithet
+queries lost a little; the Greek-query weights rest on 20 development queries; Wharton's Sappho is unlinked (no
+Greek in the OCR); Smyth and Jebb notes are linked by quoted Greek only (41 % and 51 % of pages); the frontend
+does not show commentary notes yet.
+
 ## Frontend: site menu (commit `473e440`, 2026-10-09)
 
 The hamburger menu (every page: design studio, visual controls (dither, background painting), About page, the
@@ -87,7 +192,7 @@ a frontend-only Vercel deploy: production `https://project-melos-14vcxsj88-nacry
 to greeklyric.com; no backend change). It replaced R's frontend `project-melos-275si4on9`. **Rollback:**
 `vercel promote https://project-melos-275si4on9-nacryos-projects.vercel.app --yes`.
 
-## Current: release R — dialect grammar, lyric gold set, derived forms and variant links, genre/dialect calibration, reader human check (2026-10-09)
+## Historical: release R — dialect grammar, lyric gold set, derived forms and variant links, genre/dialect calibration, reader human check (2026-10-09)
 
 Public backend: image `melos-api:20261009r2`
 (`sha256:3f3c00281e7be8b977c33d6d63c5c55e30784c04c6240e44dab1bbf48ccad308`), built on Basecamp with
