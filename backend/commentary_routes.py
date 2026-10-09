@@ -1,9 +1,29 @@
-"""Release S: commentary notes linked to a passage, under the display rule of backend.commentary_context."""
+"""Release S: commentary notes linked to a passage, under the display rule of backend.commentary_context.
+
+Also warms the stacked search at startup (in a background thread): the encoders and vector matrices load
+in about a minute on the box, which the first visitor's search would otherwise wait for.
+"""
+import os
+import threading
+
 from fastapi import APIRouter, Query
 
 from . import commentary_context
 
-router = APIRouter()
+
+def _warm():
+    def run():
+        try:
+            from .server import hybrid_search
+            hybrid_search("moon", limit=1)
+            hybrid_search("σελήνη", limit=1)
+        except Exception:  # noqa: BLE001 - warming is an optimisation only
+            pass
+    if os.getenv("MELOS_SEARCH_WARM", "1") != "0":
+        threading.Thread(target=run, daemon=True).start()
+
+
+router = APIRouter(on_startup=[_warm])
 
 
 @router.get("/api/commentary/status")
