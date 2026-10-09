@@ -78,3 +78,11 @@ def test_composer_paths_never_apply_the_metre_lock():
     for path in ("backend/compose_routes.py", "backend/scansion/api.py", "js/composer.js"):
         src = (ROOT / path).read_text(encoding="utf-8")
         assert not re.search(r"scansion\.lock|lock_line|recorded_metre|/api/scan/passage|reader_scan", src), path
+
+
+def test_scan_of_a_line_that_does_not_parse_is_valid_json():
+    app = FastAPI()
+    app.include_router(scan_api.router)
+    r = TestClient(app).post("/api/scan", json={"text": "ποικιλόθρον’ ἀθανάτ’", "metre": "sapphic"})
+    assert r.status_code == 200
+    assert r.json()["fit"][0]["ok"] is False and r.json()["fit"][0]["log_likelihood"] is None

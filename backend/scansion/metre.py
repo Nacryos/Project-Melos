@@ -80,8 +80,10 @@ class Fit:
     message: str = ""
 
     def as_dict(self) -> dict:
+        finite = math.isfinite(self.log_likelihood)    # a line that does not parse has -inf: JSON null
         return {"metre": self.metre, "template": self.template, "ok": self.ok,
-                "log_likelihood": round(self.log_likelihood, 3), "per_syllable": round(self.per_syllable, 4),
+                "log_likelihood": round(self.log_likelihood, 3) if finite else None,
+                "per_syllable": round(self.per_syllable, 4) if finite else None,
                 "pattern": self.pattern, "assignment": self.assignment,
                 "posterior_p_long": [round(p, 3) for p in self.posterior], "violations": self.violations,
                 "message": self.message}
