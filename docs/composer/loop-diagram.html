@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Melos Composer Loop</title>
+<meta name="description" content="The Melos verse-composer loop: input, style profile, retrieval, LLM proposal, deterministic linter bank, scansion, repair, live editor, cited output.">
+<style>
+:root{
+  --bg:#f7f5f0; --card:#ffffff; --ink:#1d1b18; --muted:#5f5a52; --line:#d8d2c6; --accent:#3a5a8c;
+  --ok:#2e7d4f; --ok-bg:#e3f2e8; --part:#9a6a00; --part-bg:#fbf0d6; --miss:#b3261e; --miss-bg:#fbe3e1;
+  --loop:#7a4fa3; --human:#00796b;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141412; --card:#1f1e1b; --ink:#ece8e1; --muted:#a8a197; --line:#3a3731; --accent:#8fb1e6;
+    --ok:#7fd3a0; --ok-bg:#1d3326; --part:#f0c35a; --part-bg:#3a3018; --miss:#f2918a; --miss-bg:#3e1f1d;
+    --loop:#c3a2e6; --human:#6fd1c2;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141412; --card:#1f1e1b; --ink:#ece8e1; --muted:#a8a197; --line:#3a3731; --accent:#8fb1e6;
+  --ok:#7fd3a0; --ok-bg:#1d3326; --part:#f0c35a; --part-bg:#3a3018; --miss:#f2918a; --miss-bg:#3e1f1d;
+  --loop:#c3a2e6; --human:#6fd1c2;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:980px;margin:0 auto;padding:24px 16px 48px}
+h1{font-size:1.5rem;margin:0 0 4px}
+.sub{color:var(--muted);margin:0 0 16px}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:20px}
+.legend{display:flex;flex-wrap:wrap;gap:8px}
+.pill{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:2px 10px;font-size:.8rem;font-weight:600;border:1px solid transparent}
+.exists{color:var(--ok);background:var(--ok-bg);border-color:var(--ok)}
+.partial{color:var(--part);background:var(--part-bg);border-color:var(--part)}
+.missing{color:var(--miss);background:var(--miss-bg);border-color:var(--miss)}
+button.theme{margin-left:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:4px 10px;cursor:pointer}
+.flow{display:grid;grid-template-columns:1fr 220px;gap:0 20px}
+.col{display:flex;flex-direction:column}
+.stage{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;position:relative}
+.stage h2{font-size:1rem;margin:0 0 6px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.stage p{margin:0;color:var(--muted);font-size:.88rem}
+.stage ul{margin:6px 0 0;padding-left:18px;font-size:.88rem}
+.num{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--card);font-size:.75rem;font-weight:700}
+.arrow{height:26px;display:flex;justify-content:center}
+.arrow svg{height:26px;width:20px}
+.arrow path{stroke:var(--muted);fill:none;stroke-width:2}
+.arrow polygon{fill:var(--muted)}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+.chip{border:1px solid var(--line);border-radius:8px;padding:6px 8px;font-size:.84rem;background:var(--bg)}
+.chip b{display:block;font-size:.85rem}
+.chip .pill{margin-top:4px;font-size:.7rem;padding:0 7px}
+.bank{border:2px solid var(--accent)}
+.lint{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:8px;margin-top:8px}
+.lint .chip{border-left-width:4px}
+.lint .chip.e{border-left-color:var(--ok)} .lint .chip.p{border-left-color:var(--part)} .lint .chip.m{border-left-color:var(--miss)}
+.side{display:flex;flex-direction:column;gap:12px;position:sticky;top:12px;align-self:start}
+.loopbox{border:2px dashed var(--loop);border-radius:12px;padding:10px 12px;background:var(--card)}
+.loopbox h3{margin:0 0 4px;font-size:.95rem;color:var(--loop)}
+.humanbox{border:2px solid var(--human);border-radius:12px;padding:10px 12px;background:var(--card)}
+.humanbox h3{margin:0 0 4px;font-size:.95rem;color:var(--human)}
+.loopbox p,.humanbox p{margin:0;font-size:.85rem;color:var(--muted)}
+.loopbox ol,.humanbox ul{margin:6px 0 0;padding-left:18px;font-size:.84rem}
+.verdict{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;font-size:.8rem}
+.verdict span{border-radius:6px;padding:2px 8px;border:1px solid var(--line)}
+.greek{font-family:"Gentium Plus","GFS Didot","Noto Serif",Georgia,serif;font-size:1rem;color:var(--ink)}
+.scan{font-family:ui-monospace,Consolas,monospace;font-size:.85rem;color:var(--muted)}
+.back{color:var(--loop);font-weight:600;font-size:.82rem;margin-top:6px}
+.backh{color:var(--human);font-weight:600;font-size:.82rem;margin-top:6px}
+footer{margin-top:24px;color:var(--muted);font-size:.82rem}
+@media (max-width:760px){
+  .flow{grid-template-columns:1fr}
+  .side{position:static;margin-top:16px}
+  .row{grid-template-columns:1fr 1fr}
+}
+@media (max-width:420px){ .row{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+<main>
+  <h1>Melos composer loop</h1>
+  <p class="sub">The LLM proposes; deterministic linters built on the corpus, lexica, parser and scanner decide; the owner edits live; every word cites its passages. Design draft, 2026-10-09 — see <a href="loop-design.md">loop-design.md</a>.</p>
+  <div class="bar">
+    <div class="legend" aria-label="legend">
+      <span class="pill exists">exists</span>
+      <span class="pill partial">partial</span>
+      <span class="pill missing">missing</span>
+    </div>
+    <button class="theme" id="t" type="button">Theme: auto</button>
+  </div>
+
+  <div class="flow">
+    <div class="col">
+
+      <section class="stage">
+        <h2><span class="num">1</span> Input</h2>
+        <div class="row">
+          <div class="chip"><b>English poem</b>line by line, stanza as shared context</div>
+          <div class="chip"><b>Free theme</b>concept → images → stanza</div>
+          <div class="chip"><b>Owner's draft</b>lint first, LLM only on request</div>
+        </div>
+      </section>
+      <div class="arrow" aria-hidden="true"><svg viewBox="0 0 20 26"><path d="M10 0V18"/><polygon points="4,16 16,16 10,26"/></svg></div>
+
+      <section class="stage">
+        <h2><span class="num">2</span> Target style profile <span class="pill partial">partial</span></h2>
+        <p>Per author (Sappho, Alcaeus, Anacreon, Pindar, Homer…), built offline from the corpus.</p>
+        <div class="row">
+          <div class="chip"><b>Lexicon &amp; keyness</b>rates per 10k with CI<br><span class="pill partial">partial: per-record counts</span></div>
+          <div class="chip"><b>Form inventory</b><code>forms_found</code> by locus<br><span class="pill partial">partial</span></div>
+          <div class="chip"><b>Dialect rules</b>psilosis, ᾱ, -οισα, recessive accent<br><span class="pill partial">parse-only today</span></div>
+          <div class="chip"><b>Collocations, phrases</b>G², n-grams<br><span class="pill partial">partial: ×3–4 inflated</span></div>
+          <div class="chip"><b>Images &amp; similes</b>theme clusters<br><span class="pill missing">missing</span></div>
+          <div class="chip"><b>Metres &amp; line shapes</b>templates, word-ends<br><span class="pill missing">missing</span></div>
+        </div>
+      </section>
+      <div class="arrow" aria-hidden="true"><svg viewBox="0 0 20 26"><path d="M10 0V18"/><polygon points="4,16 16,16 10,26"/></svg></div>
+
+      <section class="stage">
+        <h2><span class="num">3</span> Retrieval (RAG over corpus &amp; commentary)</h2>
+        <div class="row">
+          <div class="chip"><b>Concept diachrony</b>English → headwords<br><span class="pill partial">partial: no author filter</span></div>
+          <div class="chip"><b>Theme / hybrid search</b>the poet's images<br><span class="pill exists">exists</span></div>
+          <div class="chip"><b>Proximity &amp; concordance</b>image pairs, KWIC<br><span class="pill partial">partial: variants off</span></div>
+          <div class="chip"><b>Dictionaries</b>LSJ, Middle Liddell, Autenrieth<br><span class="pill exists">exists</span></div>
+          <div class="chip"><b>Citations</b>fragment concordance<br><span class="pill partial">partial: no line spans</span></div>
+          <div class="chip"><b>Commentary passages</b>as evidence, not bridge<br><span class="pill partial">partial</span></div>
+        </div>
+      </section>
+      <div class="arrow" aria-hidden="true"><svg viewBox="0 0 20 26"><path d="M10 0V18"/><polygon points="4,16 16,16 10,26"/></svg></div>
+
+      <section class="stage">
+        <h2><span class="num">4</span> LLM proposal <span class="pill missing">missing</span></h2>
+        <p>k = 3–5 candidates per line; JSON <code>{greek, words:[{form, lemma, draws_from}]}</code>; any <code>draws_from</code> not in the retrieved set is flagged “composer recall”.</p>
+      </section>
+      <div class="arrow" aria-hidden="true"><svg viewBox="0 0 20 26"><path d="M10 0V18"/><polygon points="4,16 16,16 10,26"/></svg></div>
+
+      <section class="stage bank">
+        <h2><span class="num">5</span> Deterministic linter bank</h2>
+        <p>Each returns pass / warn / fail with a span and evidence (passage id, citation, quote). Only L1, L2, L7, L8 block.</p>
+        <div class="lint">
+          <div class="chip p"><b>L1 Form exists</b>headline index → Morpheus → dialect generate-and-test<br><span class="pill partial">partial</span></div>
+          <div class="chip p"><b>L2 Dialect consistency</b>Lesbian ᾱ, psilosis; reject Ionic μοῦνα<br><span class="pill partial">partial</span></div>
+          <div class="chip m"><b>L3 Agreement</b>case · number · gender; subject–verb; prep + case<br><span class="pill missing">missing</span></div>
+          <div class="chip p"><b>L4 Lexical attestation</b>author › genre › corpus, rate per 10k<br><span class="pill partial">partial</span></div>
+          <div class="chip p"><b>L5 Collocation</b>G² &gt; 0 or a cited parallel<br><span class="pill partial">partial</span></div>
+          <div class="chip p"><b>L6 Image authenticity</b>≥ 1 parallel in the author<br><span class="pill partial">partial</span></div>
+          <div class="chip p"><b>L7 Metre (scanner)</b>p_long per unit vs template; breaking units named<br><span class="pill partial">partial · branch</span></div>
+          <div class="chip p"><b>L8 Elision &amp; hiatus</b>elision model, digamma list<br><span class="pill partial">partial</span></div>
+          <div class="chip m"><b>L9 Accentuation</b>recessive Lesbian; enclitic throw-back<br><span class="pill missing">missing</span></div>
+          <div class="chip m"><b>L10 Particles &amp; order</b>postpositives, μέν/δέ, κε/ἄν<br><span class="pill missing">missing</span></div>
+          <div class="chip p"><b>L11 Novelty</b>≥ 4-token verbatim runs<br><span class="pill partial">partial</span></div>
+        </div>
+        <div class="verdict"><span class="exists">pass</span><span class="partial">warn</span><span class="missing">fail</span></div>
+      </section>
+      <div class="arrow" aria-hidden="true"><svg viewBox="0 0 20 26"><path d="M10 0V18"/><polygon points="4,16 16,16 10,26"/></svg></div>
+
+      <section class="stage">
+        <h2><span class="num">6</span> Scan &amp; rank <span class="pill partial">partial</span></h2>
+        <p>Show the stanza scanned unit by unit; rank by authenticity (L4–L6 evidence); keep ≥ 2 candidates.</p>
+        <div class="greek" lang="grc" style="margin-top:6px">φαίνεται πόντῳ πέρι νῦν σελάννα</div>
+        <div class="scan">–⏑–––⏑⏑–⏑––  fits · ρι p_long 0.55 (open)</div>
+        <p class="back">fail → ↺ repair loop (right)</p>
+      </section>
+      <div class="arrow" aria-hidden="true"><svg viewBox="0 0 20 26"><path d="M10 0V18"/><polygon points="4,16 16,16 10,26"/></svg></div>
+
+      <section class="stage">
+        <h2><span class="num">7</span> Output with citations <span class="pill missing">missing</span></h2>
+        <ul>
+          <li>Greek stanza + scansion + per-unit rules</li>
+          <li>Per word: lemma, parse, dialect basis, attested-in (loci, quotes), draws_from</li>
+          <li>Append-only audit log of proposals, linter records, overrides</li>
+        </ul>
+      </section>
+    </div>
+
+    <aside class="side">
+      <div class="loopbox">
+        <h3>↺ Repair loop</h3>
+        <p>Entered from stage 5–6 on any blocking fail.</p>
+        <ol>
+          <li>Deterministic fixes: dialectize (τηλόθεν → πήλοθεν), accent / psilosis, slot swap of right shape</li>
+          <li>LLM repair with the failing linter records + slot suggestions → back to <b>4</b></li>
+        </ol>
+        <p style="margin-top:6px"><b>Stop:</b> no blocking fails · or 3 LLM rounds · or 90 s/line · or score flat for 2 rounds. Halted candidates still shown; overrides need a typed reason.</p>
+      </div>
+      <div class="humanbox">
+        <h3>✎ Live editor (human in the loop)</h3>
+        <p>The owner edits a word → lint stage 5 only, debounced 120 ms.</p>
+        <ul>
+          <li>Scan + L1/L2/L7/L8/L9 ≤ 150 ms</li>
+          <li>Click a word: slot suggestions of the right metrical shape, same concept, attested in the author, ranked, each with its parallel <span class="pill missing">missing</span></li>
+          <li>Click a form: other cases / dialect spellings that fit</li>
+        </ul>
+        <p class="backh">edit → back to 5, never to the LLM unless asked</p>
+      </div>
+      <div class="loopbox" style="border-color:var(--line)">
+        <h3 style="color:var(--ink)">Latency budgets (p95)</h3>
+        <ul style="margin:6px 0 0;padding-left:18px;font-size:.84rem">
+          <li>keystroke lint ≤ 150 ms</li>
+          <li>slot suggestions ≤ 500 ms</li>
+          <li>full lint ≤ 1.5 s</li>
+          <li>retrieval ≤ 4 s / line</li>
+          <li>LLM proposal ≤ 20 s</li>
+          <li>repair ≤ 90 s / line</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <footer>Status legend reflects greeklyric.com releases L–R and the unmerged <code>scansion</code> branch as of 2026-10-09. Evidence for each label: <a href="exercise-log.md">exercise-log.md</a>.</footer>
+</main>
+<script>
+(function(){
+  var b=document.getElementById('t'), modes=['auto','light','dark'], i=0;
+  try{var s=localStorage.getItem('composer-theme'); if(s){i=Math.max(0,modes.indexOf(s));}}catch(e){}
+  function apply(){var m=modes[i]; if(m==='auto'){document.documentElement.removeAttribute('data-theme');}else{document.documentElement.setAttribute('data-theme',m);} b.textContent='Theme: '+m;}
+  b.addEventListener('click',function(){i=(i+1)%3; try{localStorage.setItem('composer-theme',modes[i]);}catch(e){} apply();});
+  apply();
+})();
+</script>
+</body>
+</html>
