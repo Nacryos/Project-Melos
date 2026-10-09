@@ -12,8 +12,8 @@ import re
 import unicodedata
 
 from .morphology import describe_postag
-from .short_gloss import (NON_NUMERAL_POS, corroborated_choice, dictionary_rank, letter_or_numeral_entry,
-                          metalanguage_only, short_head)
+from .short_gloss import (NON_NUMERAL_POS, being_senses_first, corroborated_choice, dictionary_rank,
+                          letter_or_numeral_entry, metalanguage_only, short_head)
 from .translation_languages import is_english_language
 
 _VALUES = {
@@ -670,6 +670,10 @@ def _gloss(candidate, token):
         matching = [sense for sense in eligible
                     if sense_class_compatible(sense, entry_of.get(sense.get('lexicon_entry_id') or sense.get('entry_id')) or {}, pos)]
         eligible = matching or eligible
+        if _first_letter_upper(_form(token)) or pos == 'PROPN':
+            # A capitalised printed word (a name) takes the sense that names the being
+            # (Νύμφαις "a Nymph"), not a common noun's first sense ("bride").
+            eligible = being_senses_first(eligible)
         pool = _corroboration_pool(entries, structured, candidate)
         pool_texts = [_entry_text(entry) for entry in pool]
         groups = [(source, own, [*others, *pool_texts]) for source, own, others in _corroboration_groups(structured, eligible)]
@@ -926,6 +930,53 @@ def sense_form_compatible(sense, token, *, candidate=None):
     return True
 
 
+def _printed_headword_reading(token, candidates, syntax):
+    """The dictionary's own reading of a printed form that is itself a headword, over a model guess.
+
+    ἴψοι is printed in LSJ as a headword ("ἴψοι, Aeol. for ὑψοῦ"); the parser also reads the
+    letters as ἴπτομαι, and the contextual model's VERB guess favours that parse. When the only
+    recorded (non-parser) match of the form is that headword and no recorded analysis states
+    a parse, the model may not move the reading to another lemma unless it names that lemma
+    itself (its lemma equals the candidate's) or agrees with that parse on every feature both
+    state (no contradicted feature). The parse kept is a parser analysis of the
+    headword or of the target its entry points to ("for ὑψοῦ"), else the headword itself.
+    Elided forms (σ’) are left to the ranking; their LSJ headword is only the elided spelling.
+    """
+    form = _form(token)
+    if not syntax or not canonical_features(syntax) or not form or form[-1:] in _ELIDED:
+        return None
+    recorded = [row for row in candidates if candidate_basis(row) == 'source_alternative']
+    if any(canonical_features(row) for row in recorded):
+        return None
+    heads = [row for row in recorded if _identity(row.get('lemma')) == _identity(form)]
+    if not heads or len({_identity(row.get('lemma')) for row in recorded}) != 1:
+        return None
+    others = [row for row in candidates if row not in heads]
+    if not others:
+        return None
+    own = _lemma_letters(heads[0].get('lemma'))
+    if any(_lemma_agrees(row, syntax) for row in others if _lemma_letters(row.get('lemma')) != own):
+        return None  # the model names that lemma itself: strong evidence, ordinary ranking applies
+    targets = {own}
+    try:
+        from .lemma_glosses import _cross_reference
+        pointer = _cross_reference([entry for entry in token.get('lexicon_entries') or []
+                                    if isinstance(entry, dict) and _identity(entry.get('lemma')) == _identity(form)])
+    except Exception:
+        pointer = None
+    if pointer:
+        targets.update(_lemma_letters(target) for target in pointer[1])
+    ranked = rank_candidates(candidates, syntax)
+    if _lemma_letters(ranked[0]['candidate'].get('lemma')) in targets:
+        return None  # the ranking already agrees with the dictionary
+    if not _contradicts(ranked[0]['candidate'], syntax):
+        # The prediction agrees with the other lemma's whole parse (ναῦον: ναός acc. masc. sg.,
+        # gender and all), not just its word class: that is strong evidence.
+        return None
+    consistent = [row for row in others if canonical_features(row) and _lemma_letters(row.get('lemma')) in targets]
+    return rank_candidates(consistent, syntax)[0]['candidate'] if consistent else heads[0]
+
+
 def _choose(token, syntax, rank):
     _CURRENT_FORM[0] = _form(token)
     if syntax and not canonical_features(syntax) and not syntax.get('agreement_partners'):
@@ -990,6 +1041,9 @@ def _choose(token, syntax, rank):
                     and canonical_features(chosen) == canonical_features(packet_choice)):
                 basis = 'jev_syntax_compatible' if syntax and _compatible(chosen, syntax) else 'jev_contextual_candidate'
                 return chosen, basis, len(identities)
+    guarded = _printed_headword_reading(token, candidates, syntax)
+    if guarded is not None:
+        return guarded, 'printed_form_dictionary_headword_over_model', len(candidates)
     if len(identities) == 1:
         only = next(iter(identities.values()))
         return (_fullest_reading([{'candidate': only}], syntax, bool(syntax), candidates),
@@ -1537,6 +1591,15 @@ def interlinear_reading(result):
         augmented = {'agreement_partners': neighbours}
         chosen, basis, count = _choose(token, augmented, None)
         if not chosen:
+            continue
+        model_pos = canonical_features(predicted or {}).get('POS')
+        chosen_pos = canonical_features(chosen).get('POS')
+        if (model_pos and chosen_pos and not _feature_agrees('POS', chosen_pos, model_pos)
+                and any((item.get('features') or {}).get('POS')
+                        and _feature_agrees('POS', item['features']['POS'], model_pos)
+                        for item in row.get('candidate_meanings') or [])):
+            # A neighbour's case agreement does not overturn the model's word class when a
+            # parse of that class exists (σ’ PRON before voc. ἐλαφηβόλε: σύ, not σός voc.).
             continue
         features = canonical_features(chosen)
         row.update(lemma=chosen.get('lemma'), features=features, parse_short=compact_parse(features),

@@ -310,3 +310,73 @@ printed word prefers a proper-name headword of the same parse, and a proper name
 borrows a common noun's entry. The ranked parse list shows one line per headword ignoring
 breathing and case. The occurrence query no longer sorts passage blobs (`/api/word` HTTP 500
 "database or disk is full" for καὶ, δ’).
+
+## Release O parser fixes (2026-10-08)
+
+General rules only; the unit tests (`tests/test_release_o_parser_rules.py`) use other words.
+
+**Printed form that is itself a dictionary headword** (`interlinear._printed_headword_reading`).
+When the only recorded (non-parser) match of a printed form is a dictionary headword of
+exactly that spelling and no recorded analysis states its parse, the contextual model may not
+move the reading to another lemma on a part-of-speech guess. The model overrides only with
+strong evidence: its own lemma equals the other candidate's lemma, or it agrees with that
+candidate's whole parse (no contradicted feature: ναῦον stays ναός acc. masc. sg.). Otherwise
+the row keeps a parser analysis of the headword or of the target its entry points to ("ἴψοι,
+Aeol. for ὑψοῦ" → ὑψοῦ adv. "aloft"), else the bare headword; `selection_basis:
+printed_form_dictionary_headword_over_model`. Elided forms are left to the ranking.
+
+**Names take the sense that names the being** (`short_gloss.sense_names_a_being`,
+`being_senses_first`; used in `lemma_glosses.choose` and `interlinear._gloss`). For a
+capitalised printed word (or a PROPN reading), a common headword's senses whose head phrase is
+a capitalised name ("a Nymph", "the Graces"; not "used of Apollo", not "Also …") come first:
+Νύμφαις shows νύμφη "a Nymph", not the first sense "bride".
+
+**Neighbour pass keeps the model's word class.** The second pass (a word settled by its
+neighbours' chosen parses) no longer picks a parse whose part of speech the contextual model
+contradicts when another exact parse of the model's class exists (σ’ PRON before voc.
+ἐλαφηβόλε stays σύ, not σός voc.; ὅτι SCONJ stays ὅτι "that", not ὅστις).
+
+**One ranked headline headword per word row** (`lemma_glosses.headline_choice`, run for every
+word row of `/api/analyze-passage` after the glosses). New row fields, always present when
+the row has a lemma or ranked parses:
+
+| Field | Meaning |
+|---|---|
+| `headline_lemma` | The headword to show and to look up (never empty when candidates exist). |
+| `headline_basis` | Why: the row's selection basis or `lemma_source.basis` for a selected row; else `top_ranked_parse_lemma`, `tie_broken_by_context_model_lemma`, `tie_broken_by_context_model_pos`, `tie_broken_by_frequency_prior`, `tie_broken_by_ranking_order`. |
+| `headline_tie_broken` | True when several lemmas were within the 0.5 ranking margin. |
+| `headline_alternatives` | The other headwords, in ranked order. |
+| `headline_evidence` | Labels: `elided_before_vowel` / `elided`, `parse_lemma_read_as_headword`, `capitalised_printed_form_proper_headword`. |
+| `headline_readings` | Every headword in ranked order with its parses `[{parse, restored_form}]` (`restored_form` only for a generated completion); for unselected rows also rank, score, model lemma / POS agreement and recorded forms. A tie is listed, never hidden. |
+
+A selected row's headline is its lemma, read through to the dictionary headword when the parse
+lemma is an inflected form (Νύμφαι → νύμφη), capitalised when a dictionary prints the
+capitalised headword and the printed word is capitalised (→ Νύμφη). An unselected row's
+lemmas are grouped from `morphology_ranking`; when the printed word is elided (σ’) a lemma
+that is only the elided spelling is not a headword (and an elision before a vowel, read from
+the passage text after the word, is labelled); the best ranking score leads, and lemmas within
+0.5 of it are ordered by the contextual model's lemma, then its part of speech, then the
+frequency prior (number of recorded forms of the lemma in the source index). `row.lemma` and
+`status` are unchanged (an unsettled row stays unsettled); the frontend should prefer
+`row.headline_lemma` over its own `row.lemma || unique ranking lemma`.
+
+**`/api/word` headline** (`word_parser_candidates.word_headline`). The same response now
+carries `headline_lemma`, `headline_basis`, `headline_alternatives`, `headline_tie_broken`,
+`headline_evidence`, `alternatives` (each ranked headword with its readings; for an elided
+word the spellings with the elided vowel or diphthong restored that the parser analyses: σ’ →
+σε/σέ σύ acc., σά σός neut. pl.) and `lookup_mode`, so the frontend needs no second request
+and no wait for the passage analysis. With `lemma=` the headline is that lemma (`caller_lemma`;
+the ranking stays in `alternatives`); with `lemma=` equal to `form` the dictionary-only fast
+path answers (`lookup_mode: lemma_dictionary_fast_path`, same top-level fields; see
+`docs/api-contract.md`, "/api/word (release O)"). Otherwise (no contextual model; it stays fast) each lemma of the exact-form candidates is
+weighed: a source analysis recorded for this passage 3, a recorded analysis of the exact form
+2, the dictionary reading of a printed headword 1.5 (see above; `dictionary_reading_of_printed_form`),
+a parser analysis 1, a bare headword 0.5. Rows for another spelling (spelling suggestions,
+length-marked forms) do not count; elision marks (’ ᾽ ʼ) compare equal; elided spellings are
+dropped as above; lemmas with a dictionary entry outrank those without; then the row count
+decides, and lemmas of the top weight with at least half the best row count are a tie broken by
+the frequency prior (`tie_broken_by_frequency_prior`; καὶ with one stray row for another lemma
+is not a tie). A
+capitalised printed word takes the capitalised headword when a dictionary prints it. The
+headline's dictionary entries are always fetched into `lexicon_entries`. Existing fields are
+unchanged (`selected_lemma` is still set only from `lemma=`).

@@ -89,8 +89,11 @@ def test_actual_server_route_with_archived_receipt_and_source(mode, endpoint, re
         if mode == 'disabled':
             # Release N: /api/word adds labelled parser candidates (local Morpheus) and the
             # dictionary entries of their headwords; machine subentries stay off.
+            # Release O: the ranked headline headword and its alternatives travel in the same response.
             extra = set(result) - {'form', 'source_only_fixture'}
-            assert extra <= {'parser_candidates', 'parse_source', 'lexicon_entries'}
+            assert extra <= {'parser_candidates', 'parse_source', 'lexicon_entries', 'lookup_mode',
+                             'headline_lemma', 'headline_basis', 'headline_evidence', 'headline_alternatives',
+                             'headline_tie_broken', 'alternatives'}
             assert 'machine_dictionary' not in result
             assert all(row['candidate_kind'] == 'machine_analysis' for row in result.get('parser_candidates', []))
             return

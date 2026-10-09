@@ -43,7 +43,8 @@ def lemma_key(value):
     return unicodedata.normalize("NFC", str(value or "")).lstrip("†").rstrip("0123456789").strip()
 
 
-def enrich_word_result(result, form, *, machine_service, headword_lookup=None, form_lemmas=None, lemma=""):
+def enrich_word_result(result, form, *, machine_service, headword_lookup=None, form_lemmas=None, lemma="",
+                       lemma_attestations=None):
     """/api/word additions; the source-only `word()` result is extended, never rewritten.
 
     - lemmas in NFC (the stored spelling stays in lemma_raw), so one headword is one key;
@@ -51,9 +52,12 @@ def enrich_word_result(result, form, *, machine_service, headword_lookup=None, f
       separately; merged into `candidates` only when no indexed source analyses the form;
     - parse_source: which source the candidates' parses come from, as a readable label;
     - the dictionary entries of the headwords the candidates parse to (and of `lemma`);
-    - `lemma` (the caller's headline headword) first among entries and candidates.
+    - `lemma` (the caller's headline headword) first among entries and candidates;
+    - headline_lemma / headline_basis / headline_alternatives (word_headline), so the
+      caller needs no second request for the headword.
     """
     from copy import deepcopy
+    result.setdefault("lookup_mode", "form_analysis")
     if isinstance(result.get("lexicon_entries"), list):
         result["lexicon_entries"] = [clean_sense_labels(deepcopy(entry)) for entry in result["lexicon_entries"]]
     for field in ("lexicon_entries", "candidates", "contextual_candidates"):
@@ -88,8 +92,19 @@ def enrich_word_result(result, form, *, machine_service, headword_lookup=None, f
         result["parse_source"] = {"kind": "source_analysis", "label": "; ".join(labels[:4]) or "Recorded source analyses"}
     else:
         result["parse_source"] = None
+    try:
+        restorations = elision_restorations(result.get("printed_form") or form, form, machine_service)
+    except Exception:
+        restorations = {}
+    try:
+        result.update(word_headline(result, form, lemma=lemma, attestations=lemma_attestations,
+                                    headword_lookup=headword_lookup, restorations=restorations))
+    except Exception:
+        result.update(headline_lemma=lemma or None, headline_basis="caller_lemma" if lemma else None,
+                      headline_evidence=[], headline_alternatives=[], headline_tie_broken=False, alternatives=[])
     if headword_lookup is not None:
-        wanted = [lemma] if lemma else []
+        # The headline's own entries are always fetched (first), then the parsed headwords'.
+        wanted = [lemma or result.get("headline_lemma")] if (lemma or result.get("headline_lemma")) else []
         for item in [*shown, *rows]:
             if item.get("lemma") and lemma_key(item["lemma"]) not in {lemma_key(w) for w in wanted}:
                 wanted.append(item["lemma"])
@@ -120,6 +135,236 @@ def enrich_word_result(result, form, *, machine_service, headword_lookup=None, f
                 result[field] = sorted(result[field], key=lambda item: lemma_key((item or {}).get("lemma")) != target)
         result["selected_lemma"] = lemma
     return result
+
+
+ELISION = "’᾽'ʼ"
+# Evidence weight of one candidate row for the headline, strongest first.
+_WEIGHT = {"contextual": 3, "source_analysis": 2, "dictionary_reading": 1.5, "parser": 1, "headword": 0.5}
+
+
+def _starts_with_vowel(text):
+    """The text (after spaces and punctuation) starts with a vowel."""
+    for ch in unicodedata.normalize("NFD", str(text or "")):
+        if unicodedata.category(ch).startswith("L"):
+            return ch.lower() in "αεηιουω"
+    return False
+
+
+def _spelling(value):
+    """NFC with one elision mark, for comparing printed spellings (σ’ / σ᾽ / σʼ)."""
+    text = unicodedata.normalize("NFC", str(value or "")).strip()
+    return text[:-1] + "’" if text[-1:] in ELISION else text
+
+
+def _following_text(result, form):
+    """The printed text right after the first occurrence of the form in the passage, if known."""
+    context = result.get("context") if isinstance(result.get("context"), dict) else {}
+    text = unicodedata.normalize("NFC", str(context.get("text") or ""))
+    for probe in (result.get("printed_form"), form):
+        probe = unicodedata.normalize("NFC", str(probe or ""))
+        at = text.find(probe) if probe else -1
+        if at >= 0:
+            return text[at + len(probe):at + len(probe) + 40].lstrip()
+    return ""
+
+
+def _headword_entries(headword_lookup, value, exact=False):
+    try:
+        found = headword_lookup(value) or {}
+    except Exception:
+        return []
+    if exact and found.get("match") not in (None, "exact_headword"):
+        return []
+    return found.get("entries") or []
+
+
+def word_headline(result, form, *, lemma="", attestations=None, headword_lookup=None, restorations=None):
+    """One ranked headline headword for /api/word, without a second request.
+
+    `lemma=` from the caller (the passage row's headword) is the headline as given (the others
+    stay ranked as alternatives). Otherwise each lemma of the exact-form candidates is weighed by its strongest evidence: a source
+    analysis recorded for this passage (contextual_candidates) 3, a recorded analysis of the
+    exact form 2, a parser analysis 1, a bare dictionary headword 0.5. Rows recorded for
+    another spelling (spelling suggestions, length-marked or differently accented forms) do
+    not count; elision marks are compared as one. When the printed form is itself a
+    dictionary headword and no recorded analysis states its parse, the dictionary's reading
+    (that headword, or the target its entry points to: "ἴψοι, Aeol. for ὑψοῦ") outranks the
+    parser's other lemmas (1.5). When the printed word is elided (σ’) a lemma that is only the
+    elided spelling is not a headword, and an elision before a vowel is labelled as evidence.
+    Lemmas with a dictionary headword outrank those without. Then the number of rows naming
+    the lemma decides; lemmas of the top weight with at least half the best row count are a
+    tie, broken by the frequency prior (recorded forms of the lemma in the source index). A capitalised printed word takes the capitalised headword of
+    the same letters when a dictionary prints one (Νύμφαις: Νύμφη).
+
+    `alternatives` lists every ranked headword with its parses and, for an elided word, the
+    restored spellings the parser analyses as that headword (``restorations``, from
+    elision_restorations: σ’ → σέ σύ acc. sg.; σά σός neut. pl.). A tie is never hidden.
+    """
+    from .lemma_glosses import _cross_reference, headword_key
+    printed = _spelling(result.get("printed_form") or form)
+    groups = {}
+
+    def add(item, kind):
+        name = unicodedata.normalize("NFC", str((item or {}).get("lemma") or "")).strip()
+        if not name or (item.get("edit_distance") or 0) not in (0, None):
+            return
+        spelled = [item.get(key) for key in ("matched_form", "form", "attested_form") if item.get(key)]
+        if spelled and all(_spelling(value) != printed for value in spelled):
+            return
+        if kind == "source_analysis" and not (item.get("analysis") or item.get("analysis_text")
+                                               or item.get("features") or item.get("postag")):
+            kind = "headword"
+        key = headword_key(name)
+        group = groups.setdefault(key, {"lemma": key, "weight": 0, "rows": 0, "parses": []})
+        group["weight"] = max(group["weight"], _WEIGHT[kind])
+        group["rows"] += 1
+        parse = item.get("analysis_text") if kind == "parser" else None
+        if parse and parse not in group["parses"]:
+            group["parses"].append(parse)
+
+    for item in result.get("contextual_candidates") or []:
+        add(item, "contextual")
+    for item in result.get("candidates") or []:
+        add(item, "parser" if item.get("candidate_kind") == "machine_analysis" else "source_analysis")
+    for item in result.get("parser_candidates") or []:
+        if item not in (result.get("candidates") or []):
+            add(item, "parser")
+    evidence = []
+    if printed[-1:] in ELISION:
+        evidence.append("elided_before_vowel" if _starts_with_vowel(_following_text(result, form)) else "elided")
+        full = {key: group for key, group in groups.items() if key[-1:] not in ELISION}
+        if full:
+            groups = full
+    elif headword_lookup is not None and printed in groups and max(g["weight"] for g in groups.values()) < 2:
+        # The printed form is itself a headword and nothing recorded states its parse.
+        targets = {printed}
+        pointer = _cross_reference(_headword_entries(headword_lookup, printed, exact=True))
+        if pointer:
+            targets.update(headword_key(target) for target in pointer[1])
+        readings = [group for key, group in groups.items() if key in targets and group["weight"] >= 1] \
+            or [groups[printed]]
+        for group in readings:
+            group["weight"] = max(group["weight"], _WEIGHT["dictionary_reading"])
+        evidence.append("printed_form_is_dictionary_headword")
+    if headword_lookup is not None and len(groups) > 1:
+        known = {key: group for key, group in groups.items() if _headword_entries(headword_lookup, key)}
+        if known:
+            groups = known
+    if not groups:
+        return {"headline_lemma": lemma or None, "headline_basis": "caller_lemma" if lemma else None,
+                "headline_evidence": evidence, "headline_alternatives": [], "headline_tie_broken": False,
+                "alternatives": []}
+
+    def counted(name):
+        try:
+            return int(attestations(name) or 0) if attestations is not None else 0
+        except Exception:
+            return 0
+
+    ordered = sorted(groups.values(), key=lambda g: (-g["weight"], -g["rows"]))
+    top, most = ordered[0]["weight"], ordered[0]["rows"]
+    # A tie: the same evidence weight and at least half as many rows as the best (σ’: σύ 5, σός 4);
+    # καὶ with one stray row for another lemma is not a tie.
+    tied = [group for group in ordered if group["weight"] == top and group["rows"] * 2 > most]
+    for group in ordered:
+        group["attested_forms"] = counted(group["lemma"]) if len(tied) > 1 and group in tied else None
+    if len(tied) > 1:
+        rest = [group for group in ordered if group not in tied]
+        ordered = sorted(tied, key=lambda g: (-g["attested_forms"], -g["rows"])) + rest
+        first, second = ordered[0], ordered[1]
+        basis = ("tie_broken_by_frequency_prior" if first["attested_forms"] != second["attested_forms"]
+                 else "tie_broken_by_evidence_count" if first["rows"] != second["rows"] else "tie_broken_by_listing_order")
+    elif len(ordered) > 1 and ordered[1]["weight"] == top:
+        basis = "most_supported_reading"
+    else:
+        basis = {3: "passage_source_analysis", 2: "recorded_analysis_of_form", 1.5: "dictionary_reading_of_printed_form",
+                 1: "parser_analysis", 0.5: "dictionary_headword_of_form"}[top]
+    headline = ordered[0]["lemma"]
+    if lemma:
+        # The caller's headword (from the passage reading) leads; the ranking stays listed.
+        headline, basis = lemma, "caller_lemma"
+        ordered = sorted(ordered, key=lambda g: g["lemma"] != headword_key(lemma))
+    elif headword_lookup is not None and printed[:1] != printed[:1].lower() and headline[:1] == headline[:1].lower():
+        capital = headline[:1].upper() + headline[1:]
+        if _headword_entries(headword_lookup, capital, exact=True):
+            headline = capital
+            evidence.append("capitalised_printed_form_proper_headword")
+    restored = restorations or {}
+    alternatives = [{"lemma": g["lemma"], "rank": rank, "headline": rank == 1,
+                     "readings": restored.get(g["lemma"]) or [{"restored_form": None, "parse": parse} for parse in g["parses"]],
+                     "weight": g["weight"], "rows": g["rows"], "attested_forms": g.get("attested_forms")}
+                    for rank, g in enumerate(ordered, 1)]
+    return {"headline_lemma": headline, "headline_basis": basis, "headline_evidence": evidence,
+            "headline_alternatives": [g["lemma"] for g in ordered[1:] if g["lemma"] != headline],
+            "headline_tie_broken": len(tied) > 1 and not lemma, "alternatives": alternatives}
+
+
+def lemma_dictionary_result(form, lemma, headword_lookup):
+    """/api/word fast path for `lemma=` when the form is that headword (the dictionary lookup
+    of a headline headword): the lemma's dictionary entries without the form analysis
+    (occurrences, source claims, parallel texts, parser). Every top-level field of the full
+    response is present, empty, so the shape stays compatible; `lookup_mode` says which."""
+    from copy import deepcopy
+    entries, seen = [], set()
+    swapped = lemma[:1].lower() + lemma[1:] if lemma[:1] != lemma[:1].lower() else lemma[:1].upper() + lemma[1:]
+    # The headword itself, then the same letters with the other initial case (νύμφη / Νύμφη).
+    found = [*_headword_entries(headword_lookup, lemma), *_headword_entries(headword_lookup, swapped, exact=True)]
+    for entry in found:
+        if entry.get("id") in seen:
+            continue
+        seen.add(entry.get("id"))
+        entry = clean_sense_labels(deepcopy(entry))
+        if isinstance(entry.get("lemma"), str) and unicodedata.normalize("NFC", entry["lemma"]) != entry["lemma"]:
+            entry["lemma_raw"], entry["lemma"] = entry["lemma"], unicodedata.normalize("NFC", entry["lemma"])
+        entries.append(dict(entry, headword_of_parse=lemma))
+    return {"form": form, "normalized": None, "match_status": "lemma_dictionary_only",
+            "analysis_match_status": "headword_only" if entries else "no_match", "candidates": [],
+            "quarantined_source_analyses": [], "expansion_lemmas": [], "lexicon_entries": entries,
+            "lexical_evidence": {}, "observed_form_groups": [], "attested_forms": [],
+            "attested_forms_policy": None, "attested_forms_total": 0, "attested_forms_truncated": False,
+            "occurrences": [], "context": None, "method": "dictionary entries of the requested headword (lemma= fast path)",
+            "warnings": [], "author_profile": None, "occurrence_preview_groups": [],
+            "structured_evidence": {"claims": []}, "context_analysis_status": "not_requested",
+            "generic_lookup_warnings": [], "contextual_candidates": [], "contextual_supporting_claims": [],
+            "contextual_unresolved_claim_ids": [], "contextual_candidate_method": None, "lexical_variants": [],
+            "dictionary_crossreferences": [], "lexical_variant_supporting_claims": [],
+            "lexical_variant_status": "not_requested", "linked_dictionary": None,
+            "linked_dictionary_status": "not_requested", "parallel_contexts": [], "parser_candidates": [],
+            "parse_source": None, "selected_lemma": lemma, "lookup_mode": "lemma_dictionary_fast_path",
+            "headline_lemma": lemma, "headline_basis": "caller_lemma", "headline_evidence": [],
+            "headline_alternatives": [], "headline_tie_broken": False, "alternatives": []}
+
+
+ELISION_RESTORATIONS = ("ε", "έ", "α", "ά", "ο", "ό", "ι", "ί", "αι", "αί", "οι", "οί")
+
+
+def elision_restorations(printed, form, machine_service):
+    """For an elided word (σ’), the spellings with the elided vowel or diphthong restored that
+    the parser analyses, by headword: {lemma: [{restored_form, parse}]}. Only vowels and the
+    diphthongs αι, οι are restored (elision removes nothing else); nothing is generated beyond
+    asking the parser about these spellings. Empty when the word is not elided."""
+    text = unicodedata.normalize("NFC", str(printed or form or "")).strip()
+    if text[-1:] not in ELISION or machine_service is None:
+        return {}
+    from .interlinear import canonical_features, compact_parse
+    from .lemma_glosses import headword_key
+    stem, found = text[:-1], {}
+    for ending in ELISION_RESTORATIONS:
+        spelling = stem + ending
+        try:
+            analysed = machine_service.analyze(spelling, None, fetch=False)
+        except Exception:
+            continue
+        if analysed.get("status") != "ok":
+            continue
+        for candidate in analysed.get("machine_candidates") or []:
+            if not candidate.get("lemma"):
+                continue
+            reading = {"restored_form": spelling, "parse": compact_parse(canonical_features(candidate))}
+            rows = found.setdefault(headword_key(candidate["lemma"]), [])
+            if reading not in rows:
+                rows.append(reading)
+    return found
 
 
 def parser_candidates(form, machine_service, headword_lookup=None, form_lemmas=None):

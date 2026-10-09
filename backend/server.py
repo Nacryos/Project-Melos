@@ -712,6 +712,8 @@ def passage(id: str):
         result['mirrors'] = [{key:record.get(key) for key in ('id','source','author','work','edition','citation','language','kind','quality','license','source_url')}
                              for record in (json.loads(r['data']) for r in copies)]
     result['author_canonical']=canonical_author(row['author'])
+    from .author_catalogue import display_fields
+    result.update(display_fields(result))
     result['structured_evidence']=evidence_lookup(passage_id=id)
     result['author_profile']=author_profile(result.get('author',''))
     from .translation_previews import project as translation_previews
@@ -884,6 +886,10 @@ def word_request(form: str, passage_id: str='', lemma: str=''):
     # is added only at the ordinary user-facing HTTP boundary.
     from .passage_analysis import editorial_lookup_form
     printed, form = form, editorial_lookup_form(form)
+    from .word_parser_candidates import lemma_dictionary_result, lemma_key
+    if lemma and lemma_key(form) == lemma_key(lemma):
+        # lemma= fast path: the dictionary of a headline headword, without the form analysis.
+        return lemma_dictionary_result(printed, lemma, lambda value: morph_service().headword_entries(value))
     result = word(form, passage_id)
     if printed != form:
         result['printed_form'] = printed
@@ -893,7 +899,8 @@ def word_request(form: str, passage_id: str='', lemma: str=''):
     from .word_parser_candidates import enrich_word_result
     enrich_word_result(result, form, machine_service=get_service(),
                        headword_lookup=lambda value: morph_service().headword_entries(value),
-                       form_lemmas=lambda value: morph_service().form_lemmas(value), lemma=lemma)
+                       form_lemmas=lambda value: morph_service().form_lemmas(value), lemma=lemma,
+                       lemma_attestations=lambda value: len(morph_service().forms_for_lemma(value)))
     if os.environ.get('MELOS_MACHINE_SUBENTRIES_ENABLED') == '1':
         from .passage_analysis import machine_dictionary_lookup
         from .machine_morphology import get_service
@@ -1155,8 +1162,10 @@ def search_response(q:str='',mode:str='words',author:str='',language:str='',edit
             result['warnings']=[*result.get('warnings',[]),
                 'Published translation previews are unavailable; passage search results are unchanged.']
     from .source_labels import with_source_label
+    from .author_catalogue import display_fields
     for record in result.get('results') or []:
         with_source_label(record)
+        record.update(display_fields(record))
     return result
 
 
@@ -1335,8 +1344,12 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
         warnings.append('Dense candidates are ranked and grouped by explicit Greek parent IDs; linked commentary/translation remains separately attributed evidence, not a word-level alignment or verified sense equivalence.')
         if include_reference:
             warnings.append('Unlinked page/source-section notes may appear as separate reference results; a shared URL is never used to assign one Greek passage.')
+        from .retrieval import group_editions
+        results,folded=group_editions(order_results(results,order),author_key=canonical_key)
+        if folded:
+            warnings.append('Other editions of the same passage (same author, most words shared) are listed under the first-ranked copy in editions.')
         total=len(results)
-        return {'results':order_results(results,order)[offset:offset+limit],'total':total,'mode':mode,
+        return {'results':results[offset:offset+limit],'total':total,'mode':mode,
             'method':'Local multilingual dense rank grouped by explicit parent IDs; rank is not confidence or influence evidence.','warnings':warnings}
     keys=variants(q)
     if not keys:
@@ -1524,6 +1537,66 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
     return {'results':results,'total':total,'mode':mode,'method':method,'warnings':list(dict.fromkeys(warnings)),**excluded,**fallback_provenance}
 
 
+def rank_by_wording(results,q):
+    """Stable re-ranking of matched records by query-word occurrences, BM25-style length normalised."""
+    keys=[k for k in dict.fromkeys(basic_normalize(t) for t in tokenize(q)) if k]
+    if not results or not keys:
+        return results
+    patterns=[phrase_pattern(k) for k in keys]
+    lengths=[max(1,len(str(r.get('text') or '').split())) for r in results]
+    average=sum(lengths)/len(lengths)
+    def score(pair):
+        record,length=pair
+        text=basic_normalize(record.get('text') or '')
+        total=0.0
+        for pattern in patterns:
+            tf=len(pattern.findall(text))
+            total+=tf*2.2/(tf+1.2*(0.25+0.75*length/average)) if tf else 0.0
+        return total
+    scored=[(score(pair),i) for i,pair in enumerate(zip(results,lengths))]
+    order=sorted(range(len(results)),key=lambda i:(-scored[i][0],i))
+    return [results[i] for i in order]
+
+
+LEMMA_WEIGHT_ENGLISH=float(os.getenv('MELOS_LEMMA_WEIGHT_ENGLISH','3.0'))
+LEMMA_WEIGHT_GREEK=float(os.getenv('MELOS_LEMMA_WEIGHT_GREEK','2.0'))
+
+
+def lemma_signal(q,*,greek,english):
+    """Ranked passages containing the query's headwords (release O lemma index), and the headwords used.
+
+    Greek words are read as their headwords (a printed form's top reading); an English query is
+    read through dictionary glosses (moon -> σελήνη). Returns ([], None) when the index is absent."""
+    try:
+        from .lemma_index import get_index
+        index=get_index()
+    except (ImportError,OSError,FileNotFoundError,sqlite3.Error):
+        return [],None
+    groups,used=[],[]
+    if greek:
+        for token in tokenize(q)[:8]:
+            readings=index.resolve(token,limit=3)
+            if not readings:
+                continue
+            group={i:1.0 for i in index.case_variants(readings[0]['lemma_id'])}
+            for extra in readings[1:]:
+                if extra.get('form_probability') and extra['form_probability']>=0.25:
+                    group[extra['lemma_id']]=float(extra['form_probability'])
+            groups.append(group)
+            used.extend({'word':token,**r} for r in readings[:1])
+    elif english:
+        readings=index.english_lemmas(q)
+        if readings:
+            groups.append({r['lemma_id']:float(r['gloss_match']) for r in readings})
+            used.extend(readings)
+    if not groups:
+        return [],None
+    hits=index.passage_signal(groups,limit=400)
+    for hit in hits:
+        hit['match_reason']=f"Contains the headword(s) of {hit.pop('groups_matched')} of {len(groups)} query word group(s)"
+    return hits,used
+
+
 def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
                   match='fuzzy',limit=30,order='relevance',offset=0,commentary_assisted=True):
     """Rank fusion, not arithmetic on unrelated cosine and lexical scores.
@@ -1544,6 +1617,10 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
     # Long descriptions are not sequences of Greek morphological queries.
     greek=any(c.isalpha() and ('\u0370'<=c<='\u03ff' or '\u1f00'<=c<='\u1fff') for c in q)
     forms=search(q=q,mode='forms',_legacy_multiword_forms=True,**common) if greek or len(tokenize(q))<=2 else {'results':[],'warnings':[]}
+    # Word and form matches come back in catalogue order (author, work); fusion needs a
+    # relevance order, so both lists are ranked by query-word frequency with length normalisation.
+    lexical['results']=rank_by_wording(lexical.get('results') or [],q)
+    forms['results']=rank_by_wording(forms.get('results') or [],q)
     warnings=lexical.get('warnings',[])+forms.get('warnings',[])
     try:
         dense=semantic_service().search(q,limit=1000,author=author_labels(author) if author else None,
@@ -1559,8 +1636,11 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
             return unpack(con.execute('SELECT data FROM passages WHERE id=?',(identifier,)).fetchone())
         # A Latin-script query that the exact wording path already matched is a
         # transliteration of Greek, not an English description.
-        exact_lexical=lexical.get('total',0)>0 and (str(lexical.get('method','')).startswith('Accent-insensitive')
-                                                 or bool(lexical.get('transliteration_phrase')))
+        # Latin letters that match Greek wording are a transliteration; an English word that only
+        # matches English translations is still an English query.
+        exact_lexical=lexical.get('total',0)>0 and (bool(lexical.get('transliteration_phrase')) or (
+            str(lexical.get('method','')).startswith('Accent-insensitive')
+            and any(item.get('language')=='grc' and item.get('kind')=='text' for item in lexical.get('results') or [])))
         if not greek and not exact_lexical and commentary_assisted:
             # English queries: Greek vectors alone find the judged passage about
             # one time in ten (retrieval lab, 2026-09-30). Linked English
@@ -1570,12 +1650,25 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
             extra['bm25_bridge']=bm25_bridge_hits(con,q,limit=pool)
             weights=ENGLISH_QUERY_WEIGHTS
             warnings.append('English query: linked translations and commentary (BM25 over English records) are fused with the word, form and Greek-vector signals and projected to their Greek passages.')
+        query_lemmas=None
+        if commentary_assisted or greek:
+            lemma_hits,query_lemmas=lemma_signal(q,greek=greek,english=not greek and not exact_lexical)
+            if lemma_hits:
+                extra['lemma']=lemma_hits
+                weights={**(weights or {}),'lemma':LEMMA_WEIGHT_GREEK if greek else LEMMA_WEIGHT_ENGLISH}
+                warnings.append('Headword signal: passages containing any inflected form of the query’s headwords '
+                                +('(read from the Greek words)' if greek else '(Greek headwords whose dictionary glosses use the English words)')
+                                +' are fused as a ranked list, weighted above the other signals.')
         fused=fuse(q,lexical['results'],forms['results'],dense,fetch_record,
                    author=author,language=language,edition=edition,
                    include_reference=include_reference,limit=2*pool+1000,offset=0,
                    commentary_assisted=commentary_assisted,author_labels=author_labels(author) if author else (),
                    author_key=canonical_key,author_keys=component_keys,weights=weights,extra=extra)
     ranked=order_results(fused['results'],order)
+    from .retrieval import group_editions
+    ranked,folded=group_editions(ranked,author_key=canonical_key)
+    if folded:
+        warnings.append('Other editions of the same passage (same author, most words shared) are listed under the first-ranked copy in editions.')
     if lexical.get('transliteration_phrase') and order=='relevance':
         # A proved complete source phrase outranks an unrelated dense-only hit.
         # Preserve RRF ordering inside each tier; scores remain RRF, not a
@@ -1596,7 +1689,9 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
         provenance['transliteration_phrase']=dict(lexical['transliteration_phrase'],
             ranking_policy=('Confirmed source phrases first; reciprocal-rank-fusion order within each tier.'
                             if order=='relevance' else 'Requested chronology retained; no phrase-priority override.'))
-    return {**fused,'results':ranked[offset:offset+limit],'mode':'hybrid',
+    if query_lemmas:
+        provenance['query_lemmas']=query_lemmas
+    return {**fused,'results':ranked[offset:offset+limit],'total':len(ranked),'mode':'hybrid',
             'commentary_assisted':commentary_assisted,'warnings':list(dict.fromkeys(warnings)),**excluded,**provenance}
 
 
@@ -1713,6 +1808,10 @@ def legacy_sample():
 
 from .discovery import router as discovery_router
 app.include_router(discovery_router)
+from .lemma_routes import router as lemma_router
+app.include_router(lemma_router)
+from .word_headlines import router as headlines_router
+app.include_router(headlines_router)
 
 for directory in ('js','css'):
     app.mount('/'+directory,StaticFiles(directory=ROOT/directory),name=directory)

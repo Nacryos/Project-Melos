@@ -16,7 +16,8 @@ import re
 import unicodedata
 
 from .interlinear import gloss_from_sense, sense_class_compatible, sense_form_compatible, canonical_features
-from .short_gloss import NON_NUMERAL_POS, corroborated_choice, dictionary_rank, letter_or_numeral_entry, metalanguage_only
+from .short_gloss import (NON_NUMERAL_POS, being_senses_first, corroborated_choice, dictionary_rank,
+                          letter_or_numeral_entry, metalanguage_only)
 
 VERSION = "parser-lemma-headword-gloss-v2"
 MAX_LOOKUPS = 80
@@ -91,6 +92,7 @@ def choose(entries, row, *, homograph_marked, homograph_number=None, headword=No
                            "entry_ids": [r.get("id") for r in rows]} for source, rows in by_source.items() if len(rows) > 1]
     token = {"text": row.get("text"), "form": row.get("form") or row.get("text")}
     candidate = {"features": deepcopy(row.get("features") or {})}
+    names_being = _initial_upper(row.get("form") or row.get("text")) or pos == "PROPN"
     usable = []
     for source, rows in by_source.items():
         if pos in NON_NUMERAL_POS:
@@ -104,6 +106,10 @@ def choose(entries, row, *, homograph_marked, homograph_number=None, headword=No
                     and not metalanguage_only(sense["text"])]
         # A preposition skips the dictionary's adverb-labelled senses and vice versa.
         eligible = [sense for sense in eligible if sense_class_compatible(sense, rows[0], pos)] or eligible
+        if names_being and not _initial_upper(rows[0].get("lemma")):
+            # A capitalised printed word (or a proper-noun reading) takes the sense of a
+            # common headword that names the being: Νύμφαις "a Nymph", not νύμφη "bride".
+            eligible = being_senses_first(eligible)
         if not eligible:
             skipped.append({"source": source, "reason": "no_extracted_dictionary_sense", "entry_ids": [rows[0].get("id")]})
             continue
@@ -485,7 +491,7 @@ def attested_tie_lemma(row, attestations):
 
 
 def attach_lemma_glosses(interlinear, lookup, limit=MAX_LOOKUPS, *, syntax=None, form_lemmas=None,
-                         lemma_attestations=None):
+                         lemma_attestations=None, text=None):
     """Fill missing glosses from the parse lemma's dictionary headword.
 
     ``lookup(lemma)`` returns Morphology.headword_entries(lemma);
@@ -600,7 +606,147 @@ def attach_lemma_glosses(interlinear, lookup, limit=MAX_LOOKUPS, *, syntax=None,
             from .short_gloss import normalise_gloss_case
             row["gloss"] = normalise_gloss_case(chosen, row.get("lemma"))
             summary["filled"] += 1
+    attach_headlines(interlinear, predictions=predictions, attestations=lemma_attestations, text=text, lookup=cached)
     return summary
+
+
+def _starts_with_vowel(text):
+    """The text (after spaces/punctuation) starts with a vowel or a rough/smooth-breathed vowel."""
+    for ch in unicodedata.normalize("NFD", str(text or "")):
+        if unicodedata.category(ch).startswith("L"):
+            return ch.lower() in "αεηιουω"
+    return False
+
+
+def headline_choice(row, *, prediction=None, attestations=None, next_text="", lookup=None):
+    """One ranked headline headword for a word row, with its basis and the alternatives.
+
+    A selected (or tie-resolved) lemma is the headline. Otherwise the lemmas of the ranked
+    parses are grouped; a lemma that is only the printed elided spelling (σ’) is not a
+    headword when the word is elided, and an elided form before a vowel is labelled as such
+    (elision evidence). The group with the best ranking score leads; groups within the
+    homograph margin (0.5) are separated by, in order, the contextual model's lemma, its part
+    of speech, and how many recorded forms the source index has for each lemma (frequency
+    prior). Returns {} when the row has no lemma or ranked parse at all.
+    """
+    scores = {}
+    meanings ={item.get("candidate_id"): item for item in row.get("candidate_meanings") or [] if isinstance(item, dict)}
+    for item in row.get("morphology_ranking") or []:
+        lemma = _nfc(item.get("lemma"))
+        if not lemma or not isinstance(item.get("score"), (int, float)):
+            continue
+        key = headword_key(lemma)
+        group = scores.setdefault(key, {"lemma": key, "score": item["score"], "pos": set(), "readings": []})
+        group["score"] = max(group["score"], item["score"])
+        reading = {"parse": item.get("parse_short") or None, "restored_form": item.get("normalised_query")}
+        if reading["parse"] and reading not in group["readings"]:
+            group["readings"].append(reading)
+        pos = ((meanings.get(item.get("candidate_id")) or {}).get("features") or {}).get("POS")
+        if pos:
+            group["pos"].add(pos)
+    printed = _nfc(row.get("text"))
+    evidence = []
+    if printed[-1:] in ELISION_MARKS:
+        evidence.append("elided_before_vowel" if _starts_with_vowel(next_text or "") else "elided")
+        full = {key: group for key, group in scores.items() if key[-1:] not in ELISION_MARKS}
+        if full:
+            scores = full
+    selected = _nfc(row.get("lemma"))
+    if selected:
+        basis = (row.get("lemma_source") or {}).get("basis") or row.get("selection_basis") or "selected_reading"
+        info = (row.get("gloss") or {}).get("lemma_dictionary") or {}
+        target = (info.get("lemma_normalisation") or {}).get("to") if info.get("status") == "available" else None
+        if target and _fold(info.get("lemma")) == _fold(selected):
+            # The selected parse lemma is itself an inflected form (Νύμφαι): the headline is
+            # the dictionary headword it was read through (νύμφη).
+            selected = _nfc(target)
+            evidence.append("parse_lemma_read_as_headword")
+        if _initial_upper(printed) and not _initial_upper(selected) and lookup is not None:
+            capital = selected[:1].upper() + selected[1:]
+            found = lookup(capital) or {}
+            if found.get("match") == "exact_headword" and found.get("entries"):
+                selected = capital
+                evidence.append("capitalised_printed_form_proper_headword")
+        others = [group["lemma"] for key, group in sorted(scores.items(), key=lambda kv: -kv[1]["score"])
+                  if _fold(key) != _fold(selected)]
+        return {"headline_lemma": selected, "headline_basis": basis, "headline_evidence": evidence,
+                "headline_alternatives": others, "headline_tie_broken": False,
+                "headline_readings": [{"lemma": group["lemma"], "readings": group["readings"]}
+                                      for group in sorted(scores.values(), key=lambda g: -g["score"])]}
+    if not scores:
+        fallback, basis = row_lemma(row)
+        info = (row.get("gloss") or {}).get("lemma_dictionary") or {}
+        fallback = fallback or info.get("lemma")
+        return ({"headline_lemma": fallback, "headline_basis": basis or "dictionary_headword_of_parse_lemma",
+                 "headline_evidence": evidence, "headline_alternatives": []} if fallback else {})
+    model_lemma = _fold(headword_key((prediction or {}).get("lemma") or ""))
+    model_pos = canonical_features(prediction or {}).get("POS") if prediction else None
+
+    def counted(lemma):
+        if attestations is None:
+            return 0
+        try:
+            return int(attestations(lemma) or 0)
+        except Exception:
+            return 0
+
+    groups = sorted(scores.values(), key=lambda group: -group["score"])
+    top = groups[0]["score"]
+    tied = [group for group in groups if top - group["score"] < 0.5]
+    for group in groups:
+        group["model_lemma"] = bool(model_lemma) and _fold(group["lemma"]) == model_lemma
+        group["model_pos"] = bool(model_pos) and any(
+            pos == model_pos or {pos, model_pos} in ({"NOUN", "PROPN"}, {"VERB", "AUX"}, {"DET", "PRON"}, {"CCONJ", "SCONJ"})
+            for pos in group["pos"])
+        group["attested_forms"] = counted(group["lemma"]) if len(tied) > 1 else None
+    if len(tied) == 1:
+        basis = "top_ranked_parse_lemma"
+        order = groups
+    else:
+        order = sorted(tied, key=lambda g: (-g["model_lemma"], -g["model_pos"], -(g["attested_forms"] or 0), -g["score"]))
+        order += [group for group in groups if group not in tied]
+        first, second = order[0], order[1]
+        if first["model_lemma"] != second["model_lemma"]:
+            basis = "tie_broken_by_context_model_lemma"
+        elif first["model_pos"] != second["model_pos"]:
+            basis = "tie_broken_by_context_model_pos"
+        elif (first["attested_forms"] or 0) != (second["attested_forms"] or 0):
+            basis = "tie_broken_by_frequency_prior"
+        else:
+            basis = "tie_broken_by_ranking_order"
+    return {"headline_lemma": order[0]["lemma"], "headline_basis": basis, "headline_evidence": evidence,
+            "headline_tie_broken": len(tied) > 1,
+            "headline_alternatives": [group["lemma"] for group in order[1:]],
+            "headline_readings": [{"lemma": g["lemma"], "rank": rank, "readings": g["readings"],
+                                   "score": round(g["score"], 3), "model_lemma": g["model_lemma"],
+                                   "model_pos": g["model_pos"], "attested_forms": g["attested_forms"]}
+                                  for rank, g in enumerate(order, 1)]}
+
+
+def attach_headlines(interlinear, *, predictions=None, attestations=None, text=None, lookup=None):
+    """headline_lemma / headline_basis / headline_alternatives on every word row with candidates.
+
+    ``text`` (optional) is the passage text the rows' offsets point into, so a word at the
+    end of the selection still sees the letter that follows it (elision before a vowel)."""
+    for reading in (interlinear or {}).get("readings") or []:
+        tokens = reading.get("tokens") or []
+        for index, row in enumerate(tokens):
+            if row.get("kind") != "word":
+                continue
+            following = next((other.get("text") or "" for other in tokens[index + 1:]
+                              if other.get("kind") == "word" or (other.get("text") or "").strip()), "")
+            if isinstance(text, str) and isinstance(row.get("end"), int) and 0 <= row["end"] <= len(text):
+                following = text[row["end"]:row["end"] + 40].lstrip() or following
+            prediction = None
+            if predictions:
+                prediction = predictions.get((row.get("start"), row.get("end"))) or \
+                    predictions.get((row.get("start"), (row.get("end") or 0) - 1))
+            try:
+                found = headline_choice(row, prediction=prediction, attestations=attestations, next_text=following,
+                                        lookup=lookup)
+            except Exception:
+                found = {}
+            row.update(found)
 
 
 __all__ = ["attach_lemma_glosses", "row_lemma", "choose", "resolve", "headword_key", "dialect_headword_variants",

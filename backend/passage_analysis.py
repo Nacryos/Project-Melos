@@ -665,7 +665,7 @@ class PassageAnalysisService:
             from .lemma_glosses import attach_lemma_glosses
             result["limits"]["lemma_dictionary"] = attach_lemma_glosses(
                 result["interlinear"], self.headword_lookup, syntax=result.get("syntax"),
-                form_lemmas=self.form_lemma_lookup, lemma_attestations=self.lemma_attestation_lookup)
+                form_lemmas=self.form_lemma_lookup, lemma_attestations=self.lemma_attestation_lookup, text=text)
         result["sense_ranking"] = {"status": "not_requested"}
         if request.get('rerank') and self.sense_ranker is not None:
             from .sense_ranker import apply_sense_ranking

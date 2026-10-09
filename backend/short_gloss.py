@@ -227,5 +227,31 @@ def entry_names_a_being(entry):
     return bool(_NAMED_IN_TEXT.search(text))
 
 
-__all__ = ["DICTIONARY_ORDER", "normalise_gloss_case", "entry_names_a_being", "corroborated", "corroborated_choice", "DICTIONARY_LABELS", "dictionary_rank", "letter_or_numeral_entry",
+_BEING_HEAD = re.compile(r"(?:(?:a|an|the)\s+)?[A-Z][a-z]{3,}s?")
+
+
+def sense_names_a_being(sense):
+    """One sense whose head phrase is the name of a being: a capitalised noun, with or without
+    an article ("a Nymph", "Nymph", "the Graces"). "used of Apollo" is a use, not a name."""
+    phrases = _phrases(str((sense or {}).get("text") or ""), limit=1)
+    if not phrases or metalanguage_only(phrases[0]):
+        return False
+    head = phrases[0].strip(" .")
+    return bool(_BEING_HEAD.fullmatch(head)) and head.split()[-1].rstrip("s").lower() not in _NOT_NAMES
+
+
+# Capitalised words that open a dictionary sense without naming anyone.
+_NOT_NAMES = {"also", "then", "hence", "metaph", "pass", "prov", "absol", "poet", "generally", "later", "esp",
+              "often", "rarely", "mostly", "usually", "properly", "strictly", "freq", "with", "without", "like",
+              "used", "only", "once", "very", "more", "most", "that", "this", "when", "where", "thou", "thee"}
+
+
+def being_senses_first(senses):
+    """The senses that name a being, in their order, before the rest (for a capitalised printed
+    word or a proper-noun reading: Νύμφαις "Nymph", not νύμφη's first sense "bride")."""
+    named = [sense for sense in senses if sense_names_a_being(sense)]
+    return [*named, *[sense for sense in senses if sense not in named]] if named else list(senses)
+
+
+__all__ = ["DICTIONARY_ORDER", "normalise_gloss_case", "entry_names_a_being", "sense_names_a_being", "being_senses_first", "corroborated", "corroborated_choice", "DICTIONARY_LABELS", "dictionary_rank", "letter_or_numeral_entry",
            "meaningful", "metalanguage_only", "short_head", "NON_NUMERAL_POS"]

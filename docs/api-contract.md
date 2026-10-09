@@ -137,3 +137,79 @@ author)` plus `close()`. Main owns server, database and integration. Morphology
 developer owns `backend/morphology.py` and communicates callable contract. Encoder
 developer owns `backend/semantic.py` and `scripts/build_embeddings.py`; coordinate
 input schema and index paths with main before launching encoding.
+
+## POST /api/words/headlines (release O)
+
+Headline data for every word of a passage in one call, for prefetching in the reader. Read from
+the corpus headword index (`docs/lemma-index.md`); no parser or model runs per request, so a
+warm call takes a few milliseconds (measured 2–3 ms for Anacreon 348 on the box; the first call
+after start-up also opens the index).
+
+Request (JSON): `{"passage_id": "campbell-glp:anacreon:348"}` or `{"forms": ["σ’", "ἐλαφηβόλε", ...]}`
+(at most 400 forms; forms without a passage give context-free readings). `GET
+/api/words/headlines?passage_id=...` returns the same payload for caching proxies.
+
+Response headers: `ETag` (= `hash`) and `Cache-Control: public, max-age=3600`.
+
+```
+{passage_id, index_version, index_built_at, hash, method,
+ tokens: [{i, start, end, printed, form, form_status,
+           lemma, lemma_id, gloss, gloss_source, pos, parses: [...], confidence, basis: [...],
+           alternatives: [{lemma, lemma_id, gloss, form_probability, parses: [...]}], tie}]}
+```
+
+- One entry per Greek word token of the stored passage text, in order. `start`/`end` are code
+  points in `/api/passage` `text` (the same text the reader renders); `printed` is that slice
+  (brackets and underdots included), `form` the lookup spelling (brackets/underdots removed,
+  elision as U+2019).
+- `lemma` is the headline headword (always given when any reading exists, also for ties);
+  `parses` are the parser's compact parses of this spelling for that headword (for example
+  `["acc. 2nd sg."]`), possibly several when the spelling is ambiguous; a parse from a generated
+  dialect/elision spelling says `(from <spelling>)`.
+- `alternatives` lists every other reading of the spelling with its own parses and its
+  spelling-level probability; `tie` is true when the second reading scores at least 0.8 of the
+  first. A tie is never returned as "no headword".
+- `confidence` is the normalised evidence score of the headline for this token (0–1, not a
+  calibrated probability); `basis` names the evidence (`parser`, `recorded_form`,
+  `generated_spelling`, `printed_headword`, `context_agrees`, `context_chose`, `damaged_word`).
+- `form_status`: `parsed`, `generated`, `recorded`, `headword` or `unknown` (no reading:
+  `lemma` null, `alternatives` empty).
+- `hash` changes when the index is rebuilt or the passage text changes; cache on it.
+- 404 when the passage is not in the index (not Greek, or unknown id); 503 when the index is not
+  deployed. `/api/word` remains the full, contextual analysis of a clicked word.
+
+## /api/word (release O)
+
+`GET /api/word?form=...&passage_id=...&lemma=...`. All earlier fields are unchanged; release O
+adds the headline headword so no second request is needed (rules: `docs/morphology.md`,
+"Release O parser fixes").
+
+- `headline_lemma`: one headword, never null when any exact-form candidate exists (null only
+  when there is none). With `lemma=` it is that lemma.
+- `headline_basis`: `caller_lemma`, `passage_source_analysis`, `recorded_analysis_of_form`,
+  `dictionary_reading_of_printed_form` (the printed form is a dictionary headword: its reading,
+  e.g. ἴψοι → ὑψοῦ), `parser_analysis`, `dictionary_headword_of_form`, `most_supported_reading`,
+  or for a tie `tie_broken_by_frequency_prior` / `tie_broken_by_evidence_count` /
+  `tie_broken_by_listing_order`.
+- `headline_tie_broken`: true when several headwords tied (same evidence weight, at least half
+  the best row count) and one was chosen; the others are not hidden.
+- `headline_alternatives`: the other headwords, ranked (strings).
+- `headline_evidence`: labels such as `elided_before_vowel`, `elided`,
+  `printed_form_is_dictionary_headword`, `capitalised_printed_form_proper_headword`.
+- `alternatives`: every ranked headword, headline first: `{lemma, rank, headline, readings:
+  [{restored_form, parse}], weight, rows, attested_forms}`. For an elided word the readings are
+  the spellings with the elided vowel or diphthong restored (α ε ι ο αι οι, plain or acute;
+  nothing else is generated) that the parser analyses as that headword: σ’ → σύ {σε/σέ acc.
+  2nd sg., σοι dat.}, σός {σέ voc. masc. sg., σά nom./acc. neut. pl., …}. Otherwise the readings
+  are the parser parses of the printed form (`restored_form` null).
+- `lookup_mode`: `form_analysis` (the full lookup) or `lemma_dictionary_fast_path`.
+
+**`lemma=` fast path.** When `lemma` is given and `form` is that same headword (the reader's
+dictionary lookup of a headline headword: `form=<lemma>&lemma=<lemma>`), the response is built
+from the dictionary alone (the headword's entries, plus the same letters with the other initial
+case, e.g. νύμφη / Νύμφη) without the form analysis (occurrences, source claims, parallel texts,
+parser): ~10 ms instead of a full lookup. Every top-level field of the full response is present
+(empty lists / null / `not_requested`), `lexicon_entries` carries the entries, `selected_lemma`
+and `headline_lemma` are the lemma. With a different `form` (the clicked word plus the passage
+headline as `lemma=`) the full analysis runs as before and `lemma` only leads the headline,
+entries and candidates.
