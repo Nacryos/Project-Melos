@@ -1,0 +1,553 @@
+{
+ "source": "Hypotactic Iliad scansion (David Chamberlain, CC BY 4.0), books 1-12",
+ "method": "share of gold-long syllables per decision-tree leaf (Jeffreys-smoothed: (long+0.5)/(n+1)); SYN-CAND entries are the share of candidates merged into one gold syllable",
+ "lines": 7580,
+ "built": "2026-10-09",
+ "leaves": {
+  "ACC-PAROX-LONG": {
+   "n": 90,
+   "long": 89,
+   "p": 0.9835
+  },
+  "ACC-PAROX-SHORT": {
+   "n": 709,
+   "long": 2,
+   "p": 0.0035
+  },
+  "ACC-PAROX-SHORT-AIOI": {
+   "n": 98,
+   "long": 5,
+   "p": 0.0556
+  },
+  "ACC-PROPAROX": {
+   "n": 1596,
+   "long": 14,
+   "p": 0.0091
+  },
+  "ACC-PROPERISP": {
+   "n": 605,
+   "long": 7,
+   "p": 0.0124
+  },
+  "CONS-VOW": {
+   "n": 7853,
+   "long": 181,
+   "p": 0.0231
+  },
+  "COR-EXT": {
+   "n": 3077,
+   "long": 811,
+   "p": 0.2636
+  },
+  "COR-EXT:diph": {
+   "n": 54,
+   "long": 31,
+   "p": 0.5727
+  },
+  "COR-EXT:diph:dig": {
+   "n": 11,
+   "long": 10,
+   "p": 0.875
+  },
+  "COR-EXT:eta": {
+   "n": 329,
+   "long": 230,
+   "p": 0.6985
+  },
+  "COR-EXT:eta:dig": {
+   "n": 44,
+   "long": 43,
+   "p": 0.9667
+  },
+  "COR-EXT:isub": {
+   "n": 397,
+   "long": 262,
+   "p": 0.6595
+  },
+  "COR-EXT:isub:dig": {
+   "n": 15,
+   "long": 13,
+   "p": 0.8438
+  },
+  "COR-EXT:long": {
+   "n": 10,
+   "long": 7,
+   "p": 0.6818
+  },
+  "COR-EXT:αι": {
+   "n": 1295,
+   "long": 92,
+   "p": 0.0714
+  },
+  "COR-EXT:αι:dig": {
+   "n": 56,
+   "long": 38,
+   "p": 0.6754
+  },
+  "COR-EXT:ει": {
+   "n": 184,
+   "long": 43,
+   "p": 0.2351
+  },
+  "COR-EXT:ει:dig": {
+   "n": 8,
+   "long": 7,
+   "p": 0.8333
+  },
+  "COR-EXT:οι": {
+   "n": 611,
+   "long": 85,
+   "p": 0.1397
+  },
+  "COR-EXT:οι:dig": {
+   "n": 41,
+   "long": 28,
+   "p": 0.6786
+  },
+  "COR-EXT:ου": {
+   "n": 197,
+   "long": 61,
+   "p": 0.3106
+  },
+  "COR-EXT:ου:dig": {
+   "n": 9,
+   "long": 6,
+   "p": 0.65
+  },
+  "COR-INT": {
+   "n": 4287,
+   "long": 4273,
+   "p": 0.9966
+  },
+  "COR-INT:diph": {
+   "n": 509,
+   "long": 495,
+   "p": 0.9716
+  },
+  "COR-INT:eta": {
+   "n": 1391,
+   "long": 1391,
+   "p": 0.9996
+  },
+  "COR-INT:αι": {
+   "n": 873,
+   "long": 873,
+   "p": 0.9994
+  },
+  "COR-INT:ει": {
+   "n": 688,
+   "long": 688,
+   "p": 0.9993
+  },
+  "COR-INT:οι": {
+   "n": 806,
+   "long": 806,
+   "p": 0.9994
+  },
+  "COR-INT:ου": {
+   "n": 20,
+   "long": 20,
+   "p": 0.9762
+  },
+  "CRA-1": {
+   "n": 13,
+   "long": 13,
+   "p": 0.9643
+  },
+  "DICH-UNK": {
+   "n": 1216,
+   "long": 229,
+   "p": 0.1886
+  },
+  "DICH-UNK:α": {
+   "n": 700,
+   "long": 73,
+   "p": 0.1049
+  },
+  "DICH-UNK:α:final": {
+   "n": 38,
+   "long": 7,
+   "p": 0.1923
+  },
+  "DICH-UNK:α:medial": {
+   "n": 662,
+   "long": 66,
+   "p": 0.1003
+  },
+  "DICH-UNK:ι": {
+   "n": 338,
+   "long": 72,
+   "p": 0.2139
+  },
+  "DICH-UNK:ι:final": {
+   "n": 13,
+   "long": 1,
+   "p": 0.1071
+  },
+  "DICH-UNK:ι:medial": {
+   "n": 325,
+   "long": 71,
+   "p": 0.2193
+  },
+  "DICH-UNK:υ": {
+   "n": 178,
+   "long": 84,
+   "p": 0.4721
+  },
+  "DICH-UNK:υ:final": {
+   "n": 5,
+   "long": 1,
+   "p": 0.25
+  },
+  "DICH-UNK:υ:medial": {
+   "n": 173,
+   "long": 83,
+   "p": 0.4799
+  },
+  "DIG-LEN": {
+   "n": 363,
+   "long": 95,
+   "p": 0.2624
+  },
+  "HIA-SHORT": {
+   "n": 814,
+   "long": 19,
+   "p": 0.0239
+  },
+  "HIA-SHORT:dig": {
+   "n": 398,
+   "long": 7,
+   "p": 0.0188
+  },
+  "LEX-CONFLICT": {
+   "n": 2353,
+   "long": 332,
+   "p": 0.1412
+  },
+  "LEX-CONFLICT:dictL": {
+   "n": 25,
+   "long": 25,
+   "p": 0.9808
+  },
+  "LEX-CONFLICT:dictS": {
+   "n": 1069,
+   "long": 54,
+   "p": 0.0509
+  },
+  "LEX-CONFLICT:dictS:elision_restored": {
+   "n": 98,
+   "long": 0,
+   "p": 0.0051
+  },
+  "LEX-CONFLICT:elision_restored": {
+   "n": 306,
+   "long": 12,
+   "p": 0.0407
+  },
+  "LEX-ENDING": {
+   "n": 186,
+   "long": 2,
+   "p": 0.0134
+  },
+  "LEX-L": {
+   "n": 2556,
+   "long": 2337,
+   "p": 0.9142
+  },
+  "LEX-L:both": {
+   "n": 1641,
+   "long": 1601,
+   "p": 0.9753
+  },
+  "LEX-L:both:elision_restored": {
+   "n": 25,
+   "long": 25,
+   "p": 0.9808
+  },
+  "LEX-L:dict": {
+   "n": 568,
+   "long": 491,
+   "p": 0.8638
+  },
+  "LEX-L:dict:elision_restored": {
+   "n": 12,
+   "long": 9,
+   "p": 0.7308
+  },
+  "LEX-L:morph": {
+   "n": 347,
+   "long": 245,
+   "p": 0.7055
+  },
+  "LEX-L:morph:elision_restored": {
+   "n": 4,
+   "long": 2,
+   "p": 0.5
+  },
+  "LEX-S": {
+   "n": 11152,
+   "long": 116,
+   "p": 0.0104
+  },
+  "LEX-S:both": {
+   "n": 2,
+   "long": 0,
+   "p": 0.1667
+  },
+  "LEX-S:dict": {
+   "n": 11149,
+   "long": 116,
+   "p": 0.0104
+  },
+  "LEX-S:dict:elision_restored": {
+   "n": 128,
+   "long": 5,
+   "p": 0.0426
+  },
+  "LEX-S:morph": {
+   "n": 1,
+   "long": 0,
+   "p": 0.25
+  },
+  "LEX-UNMARKED": {
+   "n": 3780,
+   "long": 178,
+   "p": 0.0472
+  },
+  "LEX-UNMARKED:both": {
+   "n": 498,
+   "long": 22,
+   "p": 0.0451
+  },
+  "LEX-UNMARKED:both:elision_restored": {
+   "n": 16,
+   "long": 0,
+   "p": 0.0294
+  },
+  "LEX-UNMARKED:dict": {
+   "n": 11,
+   "long": 2,
+   "p": 0.2083
+  },
+  "LEX-UNMARKED:dict:elision_restored": {
+   "n": 11,
+   "long": 2,
+   "p": 0.2083
+  },
+  "LEX-UNMARKED:morph": {
+   "n": 3271,
+   "long": 154,
+   "p": 0.0472
+  },
+  "LEX-UNMARKED:morph:elision_restored": {
+   "n": 46,
+   "long": 1,
+   "p": 0.0319
+  },
+  "MCL-INIT": {
+   "n": 1009,
+   "long": 886,
+   "p": 0.8777
+  },
+  "MCL-INIT:aspirateL": {
+   "n": 181,
+   "long": 177,
+   "p": 0.9753
+  },
+  "MCL-INIT:aspirateN": {
+   "n": 6,
+   "long": 6,
+   "p": 0.9286
+  },
+  "MCL-INIT:voicedL": {
+   "n": 101,
+   "long": 83,
+   "p": 0.8186
+  },
+  "MCL-INIT:voicedN": {
+   "n": 11,
+   "long": 11,
+   "p": 0.9583
+  },
+  "MCL-INIT:voicelessL": {
+   "n": 692,
+   "long": 591,
+   "p": 0.8535
+  },
+  "MCL-INIT:voicelessN": {
+   "n": 18,
+   "long": 18,
+   "p": 0.9737
+  },
+  "MCL-WORD": {
+   "n": 1880,
+   "long": 1844,
+   "p": 0.9806
+  },
+  "MCL-WORD:aspirateL": {
+   "n": 394,
+   "long": 377,
+   "p": 0.9557
+  },
+  "MCL-WORD:aspirateN": {
+   "n": 87,
+   "long": 87,
+   "p": 0.9943
+  },
+  "MCL-WORD:voicedL": {
+   "n": 209,
+   "long": 204,
+   "p": 0.9738
+  },
+  "MCL-WORD:voicedN": {
+   "n": 133,
+   "long": 133,
+   "p": 0.9963
+  },
+  "MCL-WORD:voicelessL": {
+   "n": 890,
+   "long": 876,
+   "p": 0.9837
+  },
+  "MCL-WORD:voicelessN": {
+   "n": 167,
+   "long": 167,
+   "p": 0.997
+  },
+  "NAT-CIRC": {
+   "n": 1969,
+   "long": 1969,
+   "p": 0.9997
+  },
+  "NAT-DIPH": {
+   "n": 10714,
+   "long": 10713,
+   "p": 0.9999
+  },
+  "NAT-EO": {
+   "n": 23660,
+   "long": 73,
+   "p": 0.0031
+  },
+  "NAT-ETA": {
+   "n": 7880,
+   "long": 7880,
+   "p": 0.9999
+  },
+  "NAT-ISUB": {
+   "n": 961,
+   "long": 961,
+   "p": 0.9995
+  },
+  "POS-ACROSS": {
+   "n": 8069,
+   "long": 8069,
+   "p": 0.9999
+  },
+  "POS-DOUBLE": {
+   "n": 1775,
+   "long": 1771,
+   "p": 0.9975
+  },
+  "POS-INIT": {
+   "n": 932,
+   "long": 922,
+   "p": 0.9887
+  },
+  "POS-WORD": {
+   "n": 11527,
+   "long": 11525,
+   "p": 0.9998
+  },
+  "SYN-CAND": {
+   "n": 3770,
+   "long": 189,
+   "p": 0.0503,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:εα": {
+   "n": 516,
+   "long": 43,
+   "p": 0.0841,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:εε": {
+   "n": 408,
+   "long": 0,
+   "p": 0.0012,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:εη": {
+   "n": 149,
+   "long": 1,
+   "p": 0.01,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:ει": {
+   "n": 335,
+   "long": 0,
+   "p": 0.0015,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:εο": {
+   "n": 849,
+   "long": 30,
+   "p": 0.0359,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:ευ": {
+   "n": 106,
+   "long": 0,
+   "p": 0.0047,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:εω": {
+   "n": 384,
+   "long": 71,
+   "p": 0.1857,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:ηα": {
+   "n": 216,
+   "long": 1,
+   "p": 0.0069,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:ηε": {
+   "n": 251,
+   "long": 0,
+   "p": 0.002,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:ηη": {
+   "n": 15,
+   "long": 0,
+   "p": 0.0312,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:ηι": {
+   "n": 257,
+   "long": 17,
+   "p": 0.0678,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:ηο": {
+   "n": 150,
+   "long": 2,
+   "p": 0.0166,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:ηυ": {
+   "n": 41,
+   "long": 0,
+   "p": 0.0119,
+   "kind": "merge_rate"
+  },
+  "SYN-CAND:ηω": {
+   "n": 93,
+   "long": 24,
+   "p": 0.2606,
+   "kind": "merge_rate"
+  }
+ }
+}

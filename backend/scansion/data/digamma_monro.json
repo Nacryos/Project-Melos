@@ -1,0 +1,714 @@
+{
+ "source": "D. B. Monro, A Grammar of the Homeric Dialect (2nd ed., Oxford 1891), §§390-395",
+ "edition": "Dickinson College Commentaries, ed. Meagan Ayer (2014), ISBN 978-1-947822-04-7",
+ "license": "CC BY-SA (Dickinson College Commentaries terms of use); Monro 1891 is public domain",
+ "raw_sha256": {
+  "words-initial-w.html": "cf74f7bc676ec2f541f07504644b5801f9286d9b4c2dec756b6e7e76fb505f12",
+  "words-initial-sw.html": "bee3a45a36d346c0091d5d9e296f6cdef5287615cd5ba359728a710a7fc55af9",
+  "meter-only.html": "6d1b15961741000093a56782fa7fdcdad70c3b7d2384de6bcea6a973a74a58ca",
+  "words-initial-dw.html": "14171ec6b337fc0790b51443a9313dd2b30c303887164918d71e0110697cc2ab",
+  "words-initial-w-rho.html": "205c80505826c317322fe6ea34a00c66afd084470da61a4aabb343f959947e5a"
+ },
+ "extraction": "scripts/scansion_fetch_digamma.py",
+ "rows": [
+  {
+   "word": "ἄγνυμι",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἄγνυμι",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἄναξ",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἄναξ (ἄνασσα, ἀνάσσειν)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἄνασσα",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἄναξ (ἄνασσα, ἀνάσσειν)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἀνάσσειν",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἄναξ (ἄνασσα, ἀνάσσειν)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἄρνα",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἄρνα (ἄρνες, etc.)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἄρνες",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἄρνα (ἄρνες, etc.)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἄστυ",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἄστu",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)",
+   "transcription_note": "Latin letter(s) in the online transcription read as Greek: ἄστu → ἄστυ"
+  },
+  {
+   "word": "ἔαρ",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἔαρ, εἰαρινός",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "εἰαρινός",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἔαρ, εἰαρινός",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "εἴκοσι",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "εἴκοσι",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "εἴκω",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "εἴκω",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἕοικα",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἕοικα, ἐίσκω, εἶκελος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἐίσκω",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἕοικα, ἐίσκω, εἶκελος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "εἶκελος",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἕοικα, ἐίσκω, εἶκελος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἑκών",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἑκών, ἕκητι, ἕκηλος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἕκητι",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἑκών, ἕκητι, ἕκηλος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἕκηλος",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἑκών, ἕκητι, ἕκηλος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἑκάς",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἑκάς, ἕκατος, etc.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἕκατος",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἑκάς, ἕκατος, etc.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἕκαστος",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἕκαστος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "εἴλω",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "εἴλω (ἔλσαι, ἐάλην), ἁλῶναι, ἅλις",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔλσαι",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "εἴλω (ἔλσαι, ἐάλην), ἁλῶναι, ἅλις",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἐάλην",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "εἴλω (ἔλσαι, ἐάλην), ἁλῶναι, ἅλις",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἁλῶναι",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "εἴλω (ἔλσαι, ἐάλην), ἁλῶναι, ἅλις",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἅλις",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "εἴλω (ἔλσαι, ἐάλην), ἁλῶναι, ἅλις",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἑλίσσω",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἑλίσσω, εἰλύω",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "εἰλύω",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἑλίσσω, εἰλύω",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔλπω",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἔλπω (ἔολπα)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔολπα",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἔλπω (ἔολπα)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔπος",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἔπος, εἰπεῖν",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "εἰπεῖν",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἔπος, εἰπεῖν",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔρδω",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἔρδω, ἔργον, etc.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔργον",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἔρδω, ἔργον, etc.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "εἴρω",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "εἴρω, ἐρέω",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἐρέω",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "εἴρω, ἐρέω",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἕννυμι",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἕννυμι, εἷμα, ἐσθής",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "εἷμα",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἕννυμι, εἷμα, ἐσθής",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἐσθής",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἕννυμι, εἷμα, ἐσθής",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἐμέω",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἐμέω",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἕσπερος",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἕσπερος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔτος",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἔτος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἰάχω",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἰάxω, ἰαxὴ, ἠxὴ",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)",
+   "transcription_note": "Latin letter(s) in the online transcription read as Greek: ἰάxω → ἰάχω"
+  },
+  {
+   "word": "ἰαχὴ",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἰάxω, ἰαxὴ, ἠxὴ",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)",
+   "transcription_note": "Latin letter(s) in the online transcription read as Greek: ἰαxὴ → ἰαχὴ"
+  },
+  {
+   "word": "ἠχὴ",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἰάxω, ἰαxὴ, ἠxὴ",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)",
+   "transcription_note": "Latin letter(s) in the online transcription read as Greek: ἠxὴ → ἠχὴ"
+  },
+  {
+   "word": "ἰδεῖν",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἰδεῖν, οἶδα, εἷος.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "οἶδα",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἰδεῖν, οἶδα, εἷος.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "εἷος",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἰδεῖν, οἶδα, εἷος.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἴον",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἴον (ἰόεις, ἰοδνεφές)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἰόεις",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἴον (ἰόεις, ἰοδνεφές)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἰοδνεφές",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἴον (ἰόεις, ἰοδνεφές)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἴς",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἴς, ἶφι (ἴφια), ἶνες.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἶφι",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἴς, ἶφι (ἴφια), ἶνες.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἴφια",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἴς, ἶφι (ἴφια), ἶνες.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἶνες",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἴς, ἶφι (ἴφια), ἶνες.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἶσος",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἶσος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἴτυς",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἴτυς, ἰτέῃ.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἰτέῃ",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "ἴτυς, ἰτέῃ.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "οἶκος",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "οἶκος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "οἶνος",
+   "section": "§390 Words with initial ϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D",
+   "quote": "οἶνος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἕο",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἕο, οἷ, ἕ, ὅς, etc.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "οἷ",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἕο, οἷ, ἕ, ὅς, etc.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἕ",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἕο, οἷ, ἕ, ὅς, etc.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ὅς",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἕο, οἷ, ἕ, ὅς, etc.",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)",
+   "match": false,
+   "match_note": "homograph of the relative pronoun ὅς, which had no ϝ; a spelling cannot tell them apart"
+  },
+  {
+   "word": "ἁνδάνω",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἁνδάνω, ἡδός, ἦδος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἡδός",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἁνδάνω, ἡδός, ἦδος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἦδος",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἁνδάνω, ἡδός, ἦδος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔθος",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἔθος, ἦθος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἦθος",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἔθος, ἦθος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἑκυρός",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἑκυρός",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἕξ",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἕξ",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔτης",
+   "section": "§391 Words with initial σϝ-",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%83%CF%9D",
+   "quote": "ἔτης",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἀραιός",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "ἀραιός",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔθνος",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "ἔθνος (perhaps akin to ἔθος, ἦθος)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔθος",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "ἔθνος (perhaps akin to ἔθος, ἦθος)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἦθος",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "ἔθνος (perhaps akin to ἔθος, ἦθος)",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἐρύω",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "ἐρύω, ἔρρω",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔρρω",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "ἐρύω, ἔρρω",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἦνοψ",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "ἦνοψ",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἦρα",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "ἦρα",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἠρίον",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "ἠρίον",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἵεμαι",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "ἵεμαι",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "Ἴλιος",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "Ἴλιος",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "Ἶρος",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "Ἶρος, Ἶρις",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "Ἶρις",
+   "section": "§392 ϝ inferred from meter only",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
+   "quote": "Ἶρος, Ἶρις",
+   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
+  },
+  {
+   "word": "ἔδεισα",
+   "section": "§394 Words with initial δϝ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
+   "quote": "δϝει- (δϝι-)ἔδεισα[fn]So Ar.[/fn] δεὸς δεινός δειλός, etc.",
+   "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
+  },
+  {
+   "word": "δεὸς",
+   "section": "§394 Words with initial δϝ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
+   "quote": "δϝει- (δϝι-)ἔδεισα[fn]So Ar.[/fn] δεὸς δεινός δειλός, etc.",
+   "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
+  },
+  {
+   "word": "δεινός",
+   "section": "§394 Words with initial δϝ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
+   "quote": "δϝει- (δϝι-)ἔδεισα[fn]So Ar.[/fn] δεὸς δεινός δειλός, etc.",
+   "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
+  },
+  {
+   "word": "δειλός",
+   "section": "§394 Words with initial δϝ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
+   "quote": "δϝει- (δϝι-)ἔδεισα[fn]So Ar.[/fn] δεὸς δεινός δειλός, etc.",
+   "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
+  },
+  {
+   "word": "δὴν",
+   "section": "§394 Words with initial δϝ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
+   "quote": "δὴν, δηρόν, δηθά",
+   "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
+  },
+  {
+   "word": "δηρόν",
+   "section": "§394 Words with initial δϝ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
+   "quote": "δὴν, δηρόν, δηθά",
+   "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
+  },
+  {
+   "word": "δηθά",
+   "section": "§394 Words with initial δϝ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
+   "quote": "δὴν, δηρόν, δηθά",
+   "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
+  },
+  {
+   "word": "ῥήγνυμι",
+   "section": "§395 Initial ϝρ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
+   "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
+   "effect": "initial ϝρ: always lengthens a preceding short syllable"
+  },
+  {
+   "word": "ῥίπτω",
+   "section": "§395 Initial ϝρ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
+   "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
+   "effect": "initial ϝρ: always lengthens a preceding short syllable"
+  },
+  {
+   "word": "ῥάκος",
+   "section": "§395 Initial ϝρ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
+   "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
+   "effect": "initial ϝρ: always lengthens a preceding short syllable"
+  },
+  {
+   "word": "ῥινός",
+   "section": "§395 Initial ϝρ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
+   "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
+   "effect": "initial ϝρ: always lengthens a preceding short syllable"
+  },
+  {
+   "word": "ῥίζα",
+   "section": "§395 Initial ϝρ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
+   "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
+   "effect": "initial ϝρ: always lengthens a preceding short syllable"
+  },
+  {
+   "word": "ῥέζω",
+   "section": "§395 Initial ϝρ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
+   "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
+   "effect": "initial ϝρ: lengthening of a preceding short syllable optional"
+  },
+  {
+   "word": "ῥιγέω",
+   "section": "§395 Initial ϝρ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
+   "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
+   "effect": "initial ϝρ: lengthening of a preceding short syllable optional"
+  },
+  {
+   "word": "ῥεῖα",
+   "section": "§395 Initial ϝρ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
+   "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
+   "effect": "initial ϝρ: lengthening of a preceding short syllable optional"
+  }
+ ]
+}
