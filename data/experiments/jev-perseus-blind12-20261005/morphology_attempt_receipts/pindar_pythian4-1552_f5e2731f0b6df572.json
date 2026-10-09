@@ -1,0 +1,9 @@
+{
+  "id": "pindar_pythian4-1552",
+  "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=i%29%2Fu%2Bgga&la=greek&can=i%29%2Fu%2Bgga0&prior=poiki/lan&d=Perseus:text:1999.01.0161:book=P.:poem=4&i=1",
+  "sampling_sha256": "454885d1d4067daec90bb7f184044916284326168a02a08609809c7568a7dd1e",
+  "started_utc": "2026-10-05T23:49:23.665484+00:00",
+  "status": "failed",
+  "error_type": "RuntimeError",
+  "error": "Source returned HTTP 429"
+}

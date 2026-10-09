@@ -1,0 +1,27 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0134%3Abook%3D1%3Acard%3D1",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0134%3Abook%3D1%3Acard%3D1",
+  "status": 200,
+  "downloaded_at": "2026-10-05T22:47:04.116408+00:00",
+  "sha256": "b79049aa437bf3924abe75a7356050d12d382d4c3c90292b46600987ffa076b0",
+  "bytes": 97585,
+  "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\iliad_english.html",
+  "request_headers": {
+    "User-Agent": "Mozilla/5.0",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept": "*/*",
+    "Connection": "keep-alive",
+    "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0133:book=1:card=1"
+  },
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 15:07:06 GMT",
+    "Content-Type": "text/html;charset=UTF-8",
+    "Content-Language": "en-GB",
+    "Content-Encoding": "gzip",
+    "Vary": "Accept-Encoding",
+    "Age": "27597",
+    "Accept-Ranges": "bytes",
+    "Content-Length": "14540",
+    "Connection": "keep-alive"
+  }
+}

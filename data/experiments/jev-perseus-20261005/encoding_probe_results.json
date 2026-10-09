@@ -1,0 +1,50 @@
+[
+  {
+    "original_attempt": {
+      "passage_id": "odyssey",
+      "word_index_zero_based": 0,
+      "target": "ἄνδρα",
+      "source_href": "morph?l=a%29%2Fndra&la=greek&can=a%29%2Fndra0",
+      "source_onclick": "m(this,1,0); return false",
+      "morph_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Fndra&la=greek&can=a%29%2Fndra0&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+      "sample_role": "availability_sample",
+      "result": "unavailable_omitted",
+      "error": "HTTPSConnectionPool(host='www.perseus.tufts.edu', port=443): Read timed out. (read timeout=15)"
+    },
+    "encoded_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Fndra&la=greek&can=a%29%2Fndra0&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1",
+    "result": "failed",
+    "error": "503 Server Error: Backend fetch failed for url: https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Fndra&la=greek&can=a%29%2Fndra0&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1"
+  },
+  {
+    "original_attempt": {
+      "passage_id": "odyssey",
+      "word_index_zero_based": 1,
+      "target": "μοι",
+      "source_href": "morph?l=moi&la=greek&can=moi0&prior=a)/ndra",
+      "source_onclick": "m(this,1,0); return false",
+      "morph_url": "https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a)/ndra&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+      "sample_role": "availability_sample",
+      "result": "unavailable_omitted",
+      "error": "503 Server Error: Backend fetch failed for url: https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a)/ndra&d=Perseus:text:1999.01.0135:book=1:card=1&i=1"
+    },
+    "encoded_url": "https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a%29%2Fndra&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1",
+    "result": "failed",
+    "error": "503 Server Error: Backend fetch failed for url: https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a%29%2Fndra&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1"
+  },
+  {
+    "original_attempt": {
+      "passage_id": "odyssey",
+      "word_index_zero_based": 3,
+      "target": "μοῦσα",
+      "source_href": "morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e)/nnepe",
+      "source_onclick": "m(this,1,0); return false",
+      "morph_url": "https://www.perseus.tufts.edu/hopper/morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e)/nnepe&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+      "sample_role": "availability_sample",
+      "result": "unavailable_omitted",
+      "error": "503 Server Error: Backend fetch failed for url: https://www.perseus.tufts.edu/hopper/morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e)/nnepe&d=Perseus:text:1999.01.0135:book=1:card=1&i=1"
+    },
+    "encoded_url": "https://www.perseus.tufts.edu/hopper/morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e%29%2Fnnepe&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1",
+    "result": "failed",
+    "error": "503 Server Error: Backend fetch failed for url: https://www.perseus.tufts.edu/hopper/morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e%29%2Fnnepe&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1"
+  }
+]

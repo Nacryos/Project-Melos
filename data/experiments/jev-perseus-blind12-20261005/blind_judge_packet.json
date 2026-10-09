@@ -1,0 +1,77 @@
+{
+  "status": "Provisional blind adjudication inputs; no source scores or model predictions",
+  "instructions": "Return cases with id, acceptable_candidate_ids (opaque IDs, or none_of_these only when no supplied analysis fits), rationale, confidence, correct_option_absent boolean. Accept all linguistically defensible rows. Published translation is passage-scoped, not token-aligned. Empty accepted set means unresolved and is not a wrong prediction. Do not inspect any other experiment artifact.",
+  "cases": [
+    {
+      "id": "bacchylides_ep5-0578",
+      "target": "ἀδεισιβόαν",
+      "greek_context": "Ode 5 Τῷ Αὐτῷ Κέλητι Ολύμπια . εὔμοιρε Συρακοσίων ἱπποδινήτων στραταγέ , γνώσει μὲν ἰοστεφάνων Μοισᾶν γλυκύδωρον ἄγαλμα , τῶν γε νῦν 5 αἴ τις ἐπιχθονίων , ὀρθῶς : φρένα δ᾽ εὐθύδικον ἀτρέμ᾽ ἀμπαύσας μεριμνᾶν δεῦρ᾽ ἐπάθρησον νόῳ , ᾗ σὺν Χαρίτεσσι βαθυζώνοις ὑφάνας 10 ὕμνον ἀπὸ ζαθέας νάσου ξένος ὑμετέραν πέμ- πει κλεεννὰν ἐς πόλιν , χρυσάμπυκος Οὐρανίας κλει- νὸς θεράπων : ἐθέλει δὲ 15 γᾶρυν ἐκ στηθέων χέων αἰνεῖν Ἱέρωνα . βαθὺν δ᾽ αἰθέρα ξουθαῖσι τάμνων ὑψοῦ πτερύγεσσι ταχεί- αις αἰετὸς εὐρυάνακτος ἄγγελος 20 Ζηνὸς ἐρισφαράγου θαρσεῖ κρατερᾷ πίσυνος ἰσχύϊ , πτάσσοντι δ᾽ ὄρνι- χες λιγύφθογγοι φόβῳ : οὔ νιν κορυφαὶ μεγάλας ἴσχουσι γαίας , 25 οὐδ᾽ ἁλὸς ἀκαμάτας 1 δυσπαίπαλα κύματα : νωμᾶ- ται δ᾽ ἐν ἀτρύτῳ χάει λεπτότριχα σὺν ζεφύρου πνοι- αῖσιν ἔθειραν ἀρίγνω- 30 τος μετ᾽ ἀνθρώποις ἰδεῖν : τὼς νῦν καὶ ἐμοὶ μυρία πάντᾳ κέλευθος ὑμετέραν ἀρετὰν ὑμνεῖν , κυανοπλοκάμου θ᾽ ἕκατι Νίκας χαλκεοστέρνου τ᾽ Ἄρηος , 35 Δεινομένευς ἀγέρω- χοι παῖδες : εὖ ἔρδων δὲ μὴ κάμοι θεός . ξανθότριχα μὲν Φερένικον Ἀλφεὸν παρ᾽ εὐρυδίναν πῶλον ἀελλοδρόμαν 40 εἶδε νικάσαντα χρυσόπαχυς Ἀώς , Πυθῶνί τ᾽ ἐν ἀγαθέᾳ : γᾷ δ᾽ ἐπισκήπτων πιφαύσκω : οὔπω νιν ὑπὸ προτέρων ἵππων ἐν ἀγῶνι κατέχρανεν κόνις 45 πρὸς τέλος ὀρνύμενον : ῥιπᾷ γὰρ ἴσος βορέα ὃν κυβερνήταν φυλάσσων ἵεται νεόκροτον νίκαν Ἱέρωνι φιλοξείνῳ τιτύσκων . 50 ὄλβιος ᾧτινι θεὸς μοῖράν τε καλῶν ἔπορεν σύν τ᾽ ἐπιζήλῳ τύχᾳ ἀφνεὸν βιοτὰν διάγειν : οὐ γάρ τις ἐπιχθονίων 55 πάντα γ᾽ εὐδαίμων ἔφυ . καὶ μάν π]οτ᾽ ἐρειψιπύλαν παῖδ᾽ ἀνίκ]ατον λέγουσιν δῦναι Διὸς] ἀργικεραύ- 2 νου δώματα Φερσεφόνας τανισφύρου , 60 καρχαρόδοντα κύν᾽ ἄ- ξοντ᾽ ἐς φάος ἐξ Ἀΐδα , υἱὸν ἀπλάτοι᾽ Ἐχίδνας : ἔνθα δυστάνων βροτῶν ψυχὰς ἐδάη παρὰ Κωκυτοῦ ῥεέθροις , 65 οἷά τε φύλλ᾽ ἄνεμος Ἴδας ἀνὰ μηλοβότους πρῶνας ἀργηστὰς δονεῖ . ταῖσιν δὲ μετέπρεπεν εἴδω- λον θρασυμέμνονος ἐγ- 70 χεσπάλου Πορθανίδα : τὸν δ᾽ ὡς ἴδεν Ἀλκμήνιος θαυμαστὸς ἥρως τεύχεσι λαμπόμενον , νευρὰν ἐπέβασε λιγυκλαγγῆ κορώνας , χαλκεόκρανον δ᾽ ἔπειτ᾽ ἐξ- 75 είλετο ϝιὸν ἀνα- πτύξας φαρέτρας πῶμα : τῷ δ᾽ ἐναντία ψυχὰ προφάνη Μελεάγρου καί νιν εὖ εἰδὼς προσεῖπεν : υἱὲ Διὸς μεγάλου , 80 στᾶθί τ᾽ ἐν χώρᾳ , γελανώσας τε θυμόν μὴ ταΰσιον προΐει τραχὺν ἐκ χειρῶν ὀϊστὸν ψυχαῖσιν ἔπι φθιμένων : οὔτοι δέος . ὣς φάτο : θάμβησεν δ᾽ ἄναξ 85 Ἀμφιτρυωνιάδας , εἶπέν τε : τίς ἀθανάτων ἢ βροτῶν τοιοῦτον ἔρνος θρέψεν ἐν ποίᾳ χθονί ; τίς δ᾽ ἔκτανεν ; ἦ τάχα καλλίζωνος Ἥρα 90 κεῖνον ἐφ᾽ ἁμετέρᾳ πέμψει κεφαλᾷ : τὰ δέ που 3 Παλλάδι ξανθᾷ μέλει . τὸν δὲ προσέφα Μελέαγρος δακρυόεις : χαλεπὸν 95 θεῶν παρατρέψαι νόον ἄνδρεσσιν ἐπιχθονίοις . καὶ γὰρ ἂν πλάξιππος Οἰνεὺς παῦσεν καλυκοστεφάνου σεμνᾶς χόλον Ἀρτέμιδος λευκωλένου 100 λισσόμενος πολέων τ᾽ αἰγῶν θυσίαισι πατὴρ καὶ βοῶν φοινικονώτων : ἀλλ᾽ ἀνίκατον θεὰ ἔσχεν χόλον : εὐρυβίαν δ᾽ ἔσσευε κούρα 105 κάπρον ἀναιδομάχαν ἐς καλλίχορον Καλυδῶ- ν᾽ , ἔνθα πλημύρων σθένει ὄρχους ἐπέκειρεν ὀδόντι , σφάζε τε μῆλα , βροτῶν 110 θ᾽ ὅστις εἰσάνταν μόλοι . τῷ δὲ στυγερὰν δῆριν Ἑλλάνων ἄριστοι στασάμεθ᾽ ἐνδυκέως ἓξ ἄματα συνεχέως : ἐπεὶ δὲ δαίμων κάρτος Αἰτωλοῖς ὄρεξεν , 115 θάπτομεν οὓς κατέπε- φνεν σῦς ἐριβρύχας ἐπαΐσσων βίᾳ , Ἀγκαῖον ἐμῶν τ᾽ Ἀγέλαον φ[έρτ]ατον κεδνῶν ἀδελφεῶν , οὓς τέ]κεν ἐν μεγάροις 120 πατρὸ]ς Ἀλθαία περικλειτοῖσιν Οἰνέος : τῶν δ᾽ ὤ]λεσε μοῖρ᾽ ὀλοὰ πλεῦνα]ς : οὐ γάρ πω δαΐφρων παῦσεν] χόλον ἀγροτέρα 4 Λατοῦς θυγάτηρ : περὶ δ᾽ αἴθωνος δορᾶς 125 μαρνάμεθ᾽ ἐνδυκέως Κουρῆσι μενεπτολέμοις : ἔνθ᾽ ἐγὼ πολλοῖς σὺν ἄλλοις Ἴφικλον κατέκτανον ἐσθλόν τ᾽ Ἀφάρητα , θοοὺς μάτρωας : οὐ γὰρ 130 καρτερόθυμος Ἄρης κρίνει φίλον ἐν πολέμῳ : τυφλὰ δ᾽ ἐκ χειρῶν βέλη ψυχαῖς ἔπι δυσμενέων φοι- τᾷ θάνατόν τε φέρει 135 τοῖσιν ἂν δαίμων θέλῃ : ταῦτ᾽ οὐκ ἐπιλεξαμένα Θεστίου κούρα δαΐφρων μάτηρ κακόποτμος ἐμοὶ βούλευσεν ὄλεθρον ἀτάρβακτος γυνά : 140 καῖέ τε δαιδαλέας ἐκ λάρνακος ὠκύμορον φιτρὸν ἀγκλαύσασα , τὸν δὴ μοῖρ᾽ ἐπέκλωσεν τότε ζωᾶς ὅρον ἁμετέρας ἔμμεν . τύχον μὲν 145 Δαϊπύλου Κλύμενον παῖδ᾽ ἄλκιμον ἐξεναρί- ζων ἀμώμητον δέμας , πύργων προπάροιθε κιχήσας : τοὶ δὲ πρὸς εὐκτιμέναν 150 φεῦγον ἀρχαίαν πόλιν Πλευρῶνα : μινύνθη δέ μοι ψυχὰ γλυκεῖα , γνῶν δ᾽ ὀλιγοσθενέων : αἰαῖ : πύματον δὲ πνέων δάκρυσα τλ[άμων ἀγλαὰν ἥβαν προλείπων . 155 φασὶν ἀδεισιβόαν 5 Ἀμφιτρύωνος παῖδα μοῦνον δὴ τότε τέγξαι βλέφαρον , ταλαπενθέος πότμον οἰκτίροντα φωτός : καί νιν ἀμειβόμενος 160 τοῖ᾽ ἔφα : θνατοῖσι μὴ φῦναι φέριστον , μηδ᾽ ἀελίου προσιδεῖν φέγγος : ἀλλ᾽ οὐ γάρ τίς ἐστιν πρᾶξις τάδε μυρομένοις , χρὴ κεῖνο λέγειν ὅ , τι καὶ μέλλει τελεῖν . 165 ἦ ῥα τις ἐν μεγάροις Οἰνῆος ἀρηϊφίλου ἔστιν ἀδμήτα θυγάτρων , σοὶ φυὰν ἀλιγκία ; τάν κεν λιπαρὰν ἐθέλων θείμαν ἄκοιτιν . 170 τὸν δὲ μενεπτολέμου ψυχὰ προσέφα Μελεά- γρου : λίπον χλωραύχενα ἐν δώμασι Δαϊάνειραν , νῆϊν ἔτι χρυσέας 175 Κύπριδος θελξιμβρότου . λευκώλενε Καλλιόπα , στᾶσον εὐποίητον ἅρμα αὐτοῦ : Δία τε Κρονίδαν ὕμνησον Ὀλύμπιον ἀρχαγὸν θεῶν , 180 τόν τ᾽ ἀκαμαντορόαν Ἀλφεόν , Πέλοπός τε βίαν , καὶ Πίσαν , ἔνθ᾽ ὁ κλεεννὸς ποσσὶ νικάσας δρόμῳ ἦλθ]εν Φερένικος ἐς εὐπύργους Συρακόσ- 185 σας Ἱέρωνι φέρων εὐδ]αιμονίας πέταλον . χρὴ δ᾽ ἀλαθείας χάριν 6 αἰνεῖν , φθόνον ἀμφοτέραισιν χερσὶν ἀπωσάμενον , 190 εἴ τις εὖ πράσσοι βροτῶν . Βοιωτὸς ἀνὴρ τᾷδε φών[ησεν , γλυκειᾶν Ἡσίοδος πρόπολος Μουσᾶν , ὃν ἂν ἀθάνατοι τι[μῶσι , τούτῳ καὶ βροτῶν φήμαν ἕπ[εσθαι . 195 πείθομαι εὐμαρέως εὐκλέα κελεύθου γλῶσσαν οὐ[κ ἐκτὸς δίκας πέμπειν Ἱέρωνι : τόθεν γὰρ πυθμένες θάλλουσιν ἐσθλ[ῶν , τοὺς ὁ μεγιστοπάτωρ 200 Ζεὺς ἀκινήτους ἐν εἰρήν[ᾳ φυλάσσοι .",
+      "citation": "http://data.perseus.org/citations/urn:cts:greekLit:tlg0199.tlg001.perseus-grc1:5",
+      "source_title": "Bacchylides, Epinicians, Ode 5 *tw=| *au)tw=| *ke/lhti *olu/mpia.",
+      "target_word_index_zero_based": 578,
+      "target_neighbors_before": [
+        "πόλιν",
+        "Πλευρῶνα",
+        "μινύνθη",
+        "δέ",
+        "μοι",
+        "ψυχὰ",
+        "γλυκεῖα",
+        "γνῶν",
+        "δ᾽",
+        "ὀλιγοσθενέων",
+        "αἰαῖ",
+        "πύματον",
+        "δὲ",
+        "πνέων",
+        "δάκρυσα",
+        "τλ[άμων",
+        "ἀγλαὰν",
+        "ἥβαν",
+        "προλείπων",
+        "φασὶν"
+      ],
+      "target_neighbors_after": [
+        "Ἀμφιτρύωνος",
+        "παῖδα",
+        "μοῦνον",
+        "δὴ",
+        "τότε",
+        "τέγξαι",
+        "βλέφαρον",
+        "ταλαπενθέος",
+        "πότμον",
+        "οἰκτίροντα",
+        "φωτός",
+        "καί",
+        "νιν",
+        "ἀμειβόμενος",
+        "τοῖ᾽",
+        "ἔφα",
+        "θνατοῖσι",
+        "μὴ",
+        "φῦναι",
+        "φέριστον"
+      ],
+      "translation": {
+        "text": "Ode 5 For Hieron of Syracuse Single-horse victory at Olympia 476 B. C. Fortunate in your fate, commander of the Syracusans, riders of whirling horses: you, [5] if any man on earth today, will rightly understand this honor, sweet gift of the violet-garlanded Muses. Now, calm your righteous mind; rest it from cares, and consider: a hymn, woven with the help of the deep-waisted Graces, [10] is sent from the holy island 1 to your glorious city by your guest-friend, the brilliant servant of Ourania with her golden headband. He wants [15] to pour forth his voice from his heart to praise Hieron. High above, slicing the deep air with his swift golden wings, the eagle, messenger of loud-thundering, wide-ruling [20] Zeus, trusts boldly in his powerful strength, and thin-voiced birds crouch in fear. The peaks of the great earth do not restrain him, [25] nor the rough, choppy waves of the untiring sea. In the everlasting void he shifts his delicate wings, riding the gusts of the west wind, [30] a conspicuous sight for men. So now for me there are countless paths of song leading in every direction, thanks to dark-haired Nike and Ares with his bronze breastplate, to sing of your excellence, [35] noble sons of Deinomenes. May the god not tire of doing good. Beside the wide-whirling Alpheus, golden-armed Dawn saw the victory of the chestnut horse Pherenicus, a runner swift as a wind-storm, [40] and she saw him win in very holy Pytho . Laying my hand on the earth, I make this declaration: never in any contest has he been fouled by the dust of faster horses [45] as he strained toward the finish-line. In force he is like Boreas; obeying his rider, he speeds a new victory and new applause to hospitable Hieron. [50] Prosperous is he to whom a god has given a share of fine things, and a rich life to live out with enviable luck. For no man on earth [55] was born to be fortunate in everything. So it was, they say, that the gate-destroying unconquerable son 2 of Zeus of the flashing thunderbolt went down to the halls of slender-ankled Persephone [60] to bring up into the light from Hades the razor-toothed dog, 3 son of the fearsome Echidna. There he saw the souls of miserable mortals by the streams of Cocytus, [65] like leaves swirled by the wind along the sheep-pasturing headlands of shining Ida. Among them, the shade of Porthaon's bold, [70] spear-wielding descendant 4 stood out. When the marvellous hero, son of Alcmene, 5 saw him shining in his armor, he stretched the clear-sounding bowstring onto his bow, and opened the lid of his quiver and drew out a bronze-tipped [75] arrow. But the soul of Meleager appeared in front of him and spoke to him, knowing him well: “Son of great Zeus, [80] stand where you are, and calm your spirit— Do not shoot a harsh arrow from your hands in vain against the souls of those who have perished. You have no need to fear.” So he spoke. And the son of Amphitryon 6 was astonished, [85] and said, “What god or mortal raised such a fine young plant as you? In what land? Who killed you? No doubt Hera with her beautiful belt will soon [90] send that killer after me. But that must be the concern of golden-haired Pallas.” And Meleager answered him, in tears, “It is hard [95] for men on earth to sway the minds of the gods; for otherwise my father, horse-driving Oineus, would have appeased the anger of holy, white-armed Artemis with her garland of buds, [100] when he entreated her with sacrifices of many goats and red-backed cattle. But the maiden goddess' anger was unconquerable; she sent an immensely violent [105] boar, a ruthless fighter, to Calydon, the place of lovely choruses; there, his strength raging like a flood, he cut down vine-rows with his tusk, and slaughtered flocks, and whatever mortals [110] came across his path. We, the best of the Hellenes, fought hard to sustain the hateful battle against him, for six days continuously. But when some god gave the upper hand to the Aetolians, [115] we buried those whom the loud-roaring boar had killed in his violent attacks: Ancaeus, and Agelaus, the best of my dear brothers, whom [120] Althaea bore in the far-famed halls of Oineus. Ruinous fate destroyed ... 7 For not yet did the hostile goddess, the savage daughter of Leto, [stop] her anger. We fought hard for the beast's fiery hide [125] with the Couretes, steadfast in battle. Then I killed, among many others, Iphiclus and noble Aphares, my mother's swift brothers; for [130] strong-spirited Ares does not discern a friend in battle—shafts fly blindly from the hands against the souls of the enemy, and bring death [135] to whomever the god wishes. My mother, the hostile daughter of Thestius, did not take this into account; she brought about my evil fate, the fearless woman, and planned my destruction. [140] She took the log of my swift doom out of the ornate chest, and burned it. Fate had marked off that this should be the boundary of my life. I happened to be slaying [145] Clymenus, Daïpylus' valiant son, whose body was flawless; I had overtaken him in front of the towers. The others [150] were fleeing to the well-built ancient city of Pleuron . And my sweet soul diminished; I knew that my strength was gone, aiai! I breathed my last breath in tears, as I left behind splendid youth.” [155] They say that was the only time that the son of Amphitryon, fearless in battle, ever wetted his eyes with tears, pitying the fate of the man who endured grief. And he answered him in this way: [160] “For mortals it is best never to be born, never to look on the light of the sun. But there is no profit in lamenting this; one must speak of what can be accomplished. [165] Is there, in the halls of battle-loving Oineus, any daughter, unsubdued by love, whose appearance is like yours? I would gladly make her my splendid bride.” [170] And to him the soul of Meleager, steadfast in battle, answered: “I left behind at home Deianeira, 8 with her neck like a fresh olive; golden [175] Cypris, charmer of mortals, is still unknown to her.” White-armed Calliope, stop your well-made chariot right there. Sing of the Olympian ruler of the gods, Zeus son of Cronus, [180] and the untiring stream of the Alpheus, and the strength of Pelops, and Pisa , where glorious Pherenicus won victory in the race with his feet, and returned to Syracuse with its fine towers, [185] bringing to Hieron the leaf of good fortune. For the sake of truth we must give praise, pushing away envy with both hands, [190] if any mortal man does well. A Boeotian man, Hesiod, attendant of the sweet Muses, said this: “He whom the gods honor has a good name among men as well.” [195] I am easily persuaded to send to Hieron my illustrious voice, not ... from the path ... . 9 For in this way the roots of fine fortune flourish; may the great father [200] Zeus guard them, undisturbed, in peace.",
+        "context_scope": "5",
+        "edition_alignment_status": "Source-linked parallel edition; identical CTS range"
+      },
+      "candidates": [
+        {
+          "id": "o_9186561951",
+          "lemma": "ἀδεισιβόας",
+          "morphology": "noun sg masc acc epic doric aeolic",
+          "gloss": "not fearing the battle-cry"
+        },
+        {
+          "id": "o_d794951f59",
+          "lemma": "ἀδεισιβόας",
+          "morphology": "noun pl masc gen doric aeolic",
+          "gloss": "not fearing the battle-cry"
+        }
+      ]
+    }
+  ]
+}

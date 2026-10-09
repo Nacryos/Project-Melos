@@ -1,0 +1,22 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0135%3Abook%3D7%3Acard%3D152",
+  "started_utc": "2026-10-05T23:44:05.717547+00:00",
+  "raw_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\odyssey7_152_greek_20261005T234405717190.html",
+  "status": 200,
+  "capture_type": "direct_http",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0135%3Abook%3D7%3Acard%3D152",
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 18:34:41 GMT",
+    "Content-Type": "text/html;charset=UTF-8",
+    "Content-Language": "fr-CA",
+    "Content-Encoding": "gzip",
+    "Vary": "Accept-Encoding",
+    "Age": "18565",
+    "Accept-Ranges": "bytes",
+    "Content-Length": "18127",
+    "Connection": "keep-alive"
+  },
+  "wire_bytes_preserved": true,
+  "sha256": "a7e12ce5deff051f65dd607186af34b94564d91f2f7704e83979b8e58e8a6c3d",
+  "bytes": 121918
+}

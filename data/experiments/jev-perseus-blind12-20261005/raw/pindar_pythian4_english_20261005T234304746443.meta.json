@@ -1,0 +1,22 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0162%3Abook%3DP.%3Apoem%3D4",
+  "started_utc": "2026-10-05T23:43:04.747014+00:00",
+  "raw_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\pindar_pythian4_english_20261005T234304746443.html",
+  "status": 200,
+  "capture_type": "direct_http",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0162%3Abook%3DP.%3Apoem%3D4",
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 19:58:44 GMT",
+    "Content-Type": "text/html;charset=UTF-8",
+    "Content-Language": "en-US",
+    "Content-Encoding": "gzip",
+    "Vary": "Accept-Encoding",
+    "Age": "13460",
+    "Accept-Ranges": "bytes",
+    "Content-Length": "17637",
+    "Connection": "keep-alive"
+  },
+  "wire_bytes_preserved": true,
+  "sha256": "326735b45ed875bfec253ab86086e5b0e7cb0f16499e8ccd3d590d62f44fbc2f",
+  "bytes": 76249
+}

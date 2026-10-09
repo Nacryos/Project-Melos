@@ -1,0 +1,24 @@
+{
+ "experimental": true,
+ "vectors": [
+  116191,
+  1024
+ ],
+ "float32_mb": 453.9,
+ "int8_mb": 113.5,
+ "binary_mb": 14.2,
+ "load_seconds": 0.0,
+ "queries": 100,
+ "k": 100,
+ "rescore_pool": 400,
+ "median_ms": {
+  "float32": 29.3,
+  "int8": 238.2,
+  "binary_rescore": 65.3
+ },
+ "mean_overlap_at_k_vs_float32": {
+  "int8": 0.9917,
+  "binary_rescore": 0.9444
+ },
+ "note": "int8 timing here dequantises in numpy; a native int8 kernel (usearch/sqlite-vec) would be faster. Overlap is agreement with the exact scan, not relevance."
+}

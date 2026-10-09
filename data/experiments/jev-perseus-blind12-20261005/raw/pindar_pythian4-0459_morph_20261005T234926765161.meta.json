@@ -1,0 +1,23 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=*%29arkesi%2Flas&la=greek&can=*%29arkesi%2Flas0&prior=me/ros&d=Perseus:text:1999.01.0161:book=P.:poem=4&i=1",
+  "started_utc": "2026-10-05T23:49:26.765403+00:00",
+  "raw_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\pindar_pythian4-0459_morph_20261005T234926765161.html",
+  "status": 429,
+  "capture_type": "direct_http",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=*%29arkesi%2Flas&la=greek&can=*%29arkesi%2Flas0&prior=me/ros&d=Perseus:text:1999.01.0161:book=P.:poem=4&i=1",
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 23:49:27 GMT",
+    "Server": "Varnish",
+    "X-Varnish": "456950029",
+    "Content-Type": "text/html; charset=utf-8",
+    "Retry-After": "5",
+    "Content-Length": "277",
+    "Connection": "keep-alive"
+  },
+  "preserved_response_body": true,
+  "sha256": "8ec809e63ddbb701906a866db99c7b46cde6f475c030508f70f28dbf93a2f37c",
+  "bytes": 277,
+  "error_type": "RuntimeError",
+  "error": "Source returned HTTP 429",
+  "completed_utc": "2026-10-05T23:49:27.396466+00:00"
+}

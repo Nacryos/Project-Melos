@@ -1,0 +1,22 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0063%3Abook%3DEp%3Apoem%3D5",
+  "started_utc": "2026-10-05T23:44:59.512487+00:00",
+  "raw_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\bacchylides_ep5_greek_20261005T234459512151.html",
+  "status": 200,
+  "capture_type": "direct_http",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0063%3Abook%3DEp%3Apoem%3D5",
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 20:03:56 GMT",
+    "Content-Type": "text/html;charset=UTF-8",
+    "Content-Language": "da",
+    "Content-Encoding": "gzip",
+    "Vary": "Accept-Encoding",
+    "Age": "13263",
+    "Accept-Ranges": "bytes",
+    "Content-Length": "27631",
+    "Connection": "keep-alive"
+  },
+  "wire_bytes_preserved": true,
+  "sha256": "42c7936962f96a4bb663ef40f1db8cf4fa89aff80ab526c6d7c5fab1dab268c2",
+  "bytes": 180182
+}

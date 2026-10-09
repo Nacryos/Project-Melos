@@ -1,0 +1,26 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1",
+  "status": 200,
+  "downloaded_at": "2026-10-05T22:45:13.379782+00:00",
+  "sha256": "83feb55dda2ad623293bb895b8e1d9269c7f119e98b602966aae3751dc29b442",
+  "bytes": 124315,
+  "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_greek.html",
+  "request_headers": {
+    "User-Agent": "Mozilla/5.0",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept": "*/*",
+    "Connection": "keep-alive"
+  },
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 17:45:17 GMT",
+    "Content-Type": "text/html;charset=UTF-8",
+    "Content-Language": "pt-BR",
+    "Content-Encoding": "gzip",
+    "Vary": "Accept-Encoding",
+    "Age": "17996",
+    "Accept-Ranges": "bytes",
+    "Content-Length": "18776",
+    "Connection": "keep-alive"
+  }
+}

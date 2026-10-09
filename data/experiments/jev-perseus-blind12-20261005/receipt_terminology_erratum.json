@@ -1,0 +1,7 @@
+{
+  "status": "metadata clarification; source payloads and frozen selection unchanged",
+  "field": "wire_bytes_preserved",
+  "affected_capture_type": "direct_http",
+  "correction": "Earlier receipts containing wire_bytes_preserved=true preserve requests.Response.content, the decoded/decompressed HTTP response body, not exact transport wire bytes. Treat this field as preserved_response_body=true. Later receipts use the corrected field name.",
+  "reason": "Independent acquisition audit identified inaccurate transport terminology. No source bytes, hashes, passage extraction, or sampling values changed."
+}

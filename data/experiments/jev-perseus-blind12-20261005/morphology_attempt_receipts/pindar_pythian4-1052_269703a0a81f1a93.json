@@ -1,0 +1,9 @@
+{
+  "id": "pindar_pythian4-1052",
+  "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=o%28mogo%2Fnois&la=greek&can=o%28mogo%2Fnois0&prior=]&d=Perseus:text:1999.01.0161:book=P.:poem=4&i=1",
+  "sampling_sha256": "454885d1d4067daec90bb7f184044916284326168a02a08609809c7568a7dd1e",
+  "started_utc": "2026-10-05T23:49:22.178470+00:00",
+  "status": "failed",
+  "error_type": "RuntimeError",
+  "error": "Source returned HTTP 429"
+}

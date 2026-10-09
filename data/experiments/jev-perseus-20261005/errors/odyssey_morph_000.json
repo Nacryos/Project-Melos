@@ -1,0 +1,5 @@
+{
+  "url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Fndra&la=greek&can=a%29%2Fndra0&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+  "time": "2026-10-05T22:45:15.762208+00:00",
+  "error": "HTTPSConnectionPool(host='www.perseus.tufts.edu', port=443): Read timed out. (read timeout=60)"
+}

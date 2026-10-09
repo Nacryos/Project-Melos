@@ -1,0 +1,29 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/js/hopper.js",
+  "effective_url": "https://www.perseus.tufts.edu/js/hopper.js",
+  "status": 200,
+  "downloaded_at": "2026-10-05T22:45:11.518366+00:00",
+  "sha256": "a362be53d0d782cd896210894c6ebd115ca0de3af9d3418a1dd3c89d0652a718",
+  "bytes": 6977,
+  "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\hopper_js.html",
+  "request_headers": {
+    "User-Agent": "Mozilla/5.0",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept": "*/*",
+    "Connection": "keep-alive"
+  },
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 14:04:02 GMT",
+    "Last-Modified": "Wed, 14 Feb 2024 14:59:15 GMT",
+    "Content-Type": "application/javascript",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+    "ETag": "W/\"1b41-61158c11d96c0\"",
+    "Content-Encoding": "gzip",
+    "Vary": "Accept-Encoding",
+    "Age": "31270",
+    "Accept-Ranges": "bytes",
+    "Content-Length": "2220",
+    "Connection": "keep-alive"
+  }
+}

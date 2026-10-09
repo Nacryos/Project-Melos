@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Melos — Nature studies</title>
+  <link rel="stylesheet" href="/gallery.css">
+  <script src="/gallery.js" defer></script>
+</head>
+<body>
+  <header class="masthead"><a class="wordmark" href="/">melos<span id="collection-name">nature studies</span></a><span class="local-label">PRIVATE COLLECTION</span></header>
+  <main>
+    <section class="introduction"><div class="eyebrow">A landscape for every reading</div><h1 id="collection-heading">A little closer<br>to nature.</h1><div class="intro-bottom"><p id="collection-intro">Five worlds, painted in light. Find the ones you love,<br class="desktop-break"> leave a thought, and shape what comes next.</p><div class="collection-count"><strong id="ready-count">00</strong><span>paintings<br>in the collection</span></div></div></section>
+    <nav class="theme-nav" aria-label="Nature themes" id="theme-nav"></nav>
+    <div class="collection-toolbar"><span id="collection-summary">Preparing the collection</span><label class="crop-toggle"><input id="header-crop" type="checkbox"><span>Preview as page header</span></label></div>
+    <div id="gallery" aria-live="polite"></div>
+    <footer class="footer"><span id="collection-footer">MELOS / NATURE STUDIES</span><span>Your favourites and notes are saved on this computer.</span></footer>
+  </main>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <dialog id="painting-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-layout">
+      <div class="dialog-art"><img id="dialog-image" alt=""><div id="dialog-placeholder" class="dialog-placeholder" hidden>Painting in progress</div></div>
+      <aside class="dialog-panel">
+        <button class="close-button" id="close-dialog" aria-label="Close painting preview">Close <span aria-hidden="true">×</span></button>
+        <div class="eyebrow" id="dialog-theme"></div><h2 id="dialog-title">Painting study</h2><span class="status" id="dialog-status"></span>
+        <p class="feedback-intro">What draws you in? What would you change?</p>
+        <label class="notes-label" for="painting-notes">Your feedback</label>
+        <textarea id="painting-notes" maxlength="2000" placeholder="Softer light, a quieter sky, more blue…" rows="6"></textarea>
+        <div class="dialog-actions"><button id="dialog-favourite" class="secondary">Favourite</button><button id="save-notes" class="primary">Save feedback</button></div>
+        <div class="regenerate-area">
+          <button id="regenerate-image" class="text-button">Generate one more <svg class="arrow-icon" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 13 13 3M4 3h9v9"/></svg></button>
+          <p>Creates one new variation with a paid image request. Your notes are saved; this painting stays in the collection.</p>
+        </div>
+        <details class="prompt-details"><summary>Artist direction</summary><p id="dialog-prompt"></p></details>
+        <p class="inline-status" id="dialog-message" role="status"></p>
+      </aside>
+    </div>
+  </dialog>
+</body>
+</html>

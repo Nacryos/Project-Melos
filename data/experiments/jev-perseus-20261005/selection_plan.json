@@ -1,0 +1,16 @@
+{
+  "frozen_at": "2026-10-05T22:45:11.517196+00:00",
+  "plan": {
+    "rule": "First 5 ambiguous successful occurrences in document order per source; maximum first 40 occurrences",
+    "ambiguous": "At least two distinct (source lemma id, morphology) rows",
+    "max_per_source": 5,
+    "max_occurrences_per_source": 40,
+    "exclude_prior_inspected_query_l": "e)/nnepe",
+    "errors": "Save failed HTTP responses and stop; do not substitute data",
+    "source_order": [
+      "odyssey",
+      "iliad"
+    ],
+    "purpose": "Experimental comparison only; no corpus integration"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29deisibo%2Fan&la=greek&can=a%29deisibo%2Fan0&prior=fasi\\n&d=Perseus:text:1999.01.0063:book=Ep:poem=5&i=1",
+  "started_utc": "2026-10-05T23:46:38.513450+00:00",
+  "raw_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\bacchylides_ep5-0578_morph_20261005T234638513105.html",
+  "status": "pending",
+  "capture_type": "direct_http",
+  "error_type": "ReadTimeout",
+  "error": "HTTPSConnectionPool(host='www.perseus.tufts.edu', port=443): Read timed out. (read timeout=20)",
+  "completed_utc": "2026-10-05T23:46:59.273420+00:00"
+}

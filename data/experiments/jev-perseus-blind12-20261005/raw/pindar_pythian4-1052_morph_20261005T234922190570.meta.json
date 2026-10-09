@@ -1,0 +1,23 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=o%28mogo%2Fnois&la=greek&can=o%28mogo%2Fnois0&prior=]&d=Perseus:text:1999.01.0161:book=P.:poem=4&i=1",
+  "started_utc": "2026-10-05T23:49:22.190953+00:00",
+  "raw_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\pindar_pythian4-1052_morph_20261005T234922190570.html",
+  "status": 429,
+  "capture_type": "direct_http",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=o%28mogo%2Fnois&la=greek&can=o%28mogo%2Fnois0&prior=%5D&d=Perseus:text:1999.01.0161:book=P.:poem=4&i=1",
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 23:49:23 GMT",
+    "Server": "Varnish",
+    "X-Varnish": "441746115",
+    "Content-Type": "text/html; charset=utf-8",
+    "Retry-After": "5",
+    "Content-Length": "277",
+    "Connection": "keep-alive"
+  },
+  "preserved_response_body": true,
+  "sha256": "799591d951f9749cb828a49c86786b48cfca43b1d571c45cd71341df31721ced",
+  "bytes": 277,
+  "error_type": "RuntimeError",
+  "error": "Source returned HTTP 429",
+  "completed_utc": "2026-10-05T23:49:22.876036+00:00"
+}

@@ -1,0 +1,401 @@
+[
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Fndra&la=greek&can=a%29%2Fndra0&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Fndra&la=greek&can=a%29%2Fndra0&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1",
+    "status": 503,
+    "downloaded_at": "2026-10-05T22:48:32.853745+00:00",
+    "sha256": "0aceca876fc4d11eea5f360411924568aa19218c342ffb1018a6db195521d8ea",
+    "bytes": 286,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\encoding_probe_odyssey_000.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 22:48:33 GMT",
+      "content-type": "text/html; charset=utf-8",
+      "Retry-After": "5",
+      "Age": "0",
+      "Content-Length": "286",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a%29%2Fndra&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a%29%2Fndra&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1",
+    "status": 503,
+    "downloaded_at": "2026-10-05T22:48:34.669600+00:00",
+    "sha256": "ab3cbdb7e94794335b9b8c642fa890f193d15e516b59b5d27da79489697db9ef",
+    "bytes": 286,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\encoding_probe_odyssey_001.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 22:48:34 GMT",
+      "content-type": "text/html; charset=utf-8",
+      "Retry-After": "5",
+      "Age": "0",
+      "Content-Length": "286",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e%29%2Fnnepe&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e%29%2Fnnepe&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1",
+    "status": 503,
+    "downloaded_at": "2026-10-05T22:48:35.863826+00:00",
+    "sha256": "588cb65d31cadf4c0f1105174f7760592728ea11ae1c56a75df2eeafc094bcdd",
+    "bytes": 286,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\encoding_probe_odyssey_003.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 22:48:36 GMT",
+      "content-type": "text/html; charset=utf-8",
+      "Retry-After": "5",
+      "Age": "0",
+      "Content-Length": "286",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/js/hopper.js",
+    "effective_url": "https://www.perseus.tufts.edu/js/hopper.js",
+    "status": 200,
+    "downloaded_at": "2026-10-05T22:45:11.518366+00:00",
+    "sha256": "a362be53d0d782cd896210894c6ebd115ca0de3af9d3418a1dd3c89d0652a718",
+    "bytes": 6977,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\hopper_js.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 14:04:02 GMT",
+      "Last-Modified": "Wed, 14 Feb 2024 14:59:15 GMT",
+      "Content-Type": "application/javascript",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+      "ETag": "W/\"1b41-61158c11d96c0\"",
+      "Content-Encoding": "gzip",
+      "Vary": "Accept-Encoding",
+      "Age": "31270",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "2220",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0134%3Abook%3D1%3Acard%3D1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0134%3Abook%3D1%3Acard%3D1",
+    "status": 200,
+    "downloaded_at": "2026-10-05T22:47:04.116408+00:00",
+    "sha256": "b79049aa437bf3924abe75a7356050d12d382d4c3c90292b46600987ffa076b0",
+    "bytes": 97585,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\iliad_english.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0133:book=1:card=1"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 15:07:06 GMT",
+      "Content-Type": "text/html;charset=UTF-8",
+      "Content-Language": "en-GB",
+      "Content-Encoding": "gzip",
+      "Vary": "Accept-Encoding",
+      "Age": "27597",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "14540",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0133:book=1:card=1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0133:book=1:card=1",
+    "status": 200,
+    "downloaded_at": "2026-10-05T22:47:02.502511+00:00",
+    "sha256": "5b27019dcf0bda573559587c0478b1849c73a25d996612cc1aa5e2ae10f4fc77",
+    "bytes": 130939,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\iliad_greek.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 21:54:10 GMT",
+      "Content-Type": "text/html;charset=UTF-8",
+      "Content-Language": "en-US",
+      "Content-Encoding": "gzip",
+      "Vary": "Accept-Encoding",
+      "Age": "3172",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "18821",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=mh%3Dnin&la=greek&can=mh%3Dnin0&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=mh%3Dnin&la=greek&can=mh%3Dnin0&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+    "status": 503,
+    "downloaded_at": "2026-10-05T22:47:06.936828+00:00",
+    "sha256": "10ecee0ad522c4975fbec08634bde9ff91eee65295f1351842096ca026165e8b",
+    "bytes": 286,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\iliad_morph_000.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0133:book=1:card=1"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 22:47:07 GMT",
+      "content-type": "text/html; charset=utf-8",
+      "Retry-After": "5",
+      "Age": "0",
+      "Content-Length": "286",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Feide&la=greek&can=a%29%2Feide0&prior=mh=nin&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Feide&la=greek&can=a%29%2Feide0&prior=mh=nin&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+    "status": 503,
+    "downloaded_at": "2026-10-05T22:47:08.142354+00:00",
+    "sha256": "8d2a1747453055a414371fd376a22706d78141f8c3cafd8c5abc20b7abc11e50",
+    "bytes": 286,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\iliad_morph_001.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0133:book=1:card=1"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 22:47:08 GMT",
+      "content-type": "text/html; charset=utf-8",
+      "Retry-After": "5",
+      "Age": "0",
+      "Content-Length": "286",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=qea%5C&la=greek&can=qea%5C0&prior=a)/eide&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=qea%5C&la=greek&can=qea%5C0&prior=a)/eide&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+    "status": 503,
+    "downloaded_at": "2026-10-05T22:47:09.348889+00:00",
+    "sha256": "44c4aaab3d759e5c00683745c1fa5c8f04091ff4c7f912709bcb2917b3e2814e",
+    "bytes": 286,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\iliad_morph_002.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0133:book=1:card=1"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 22:47:09 GMT",
+      "content-type": "text/html; charset=utf-8",
+      "Retry-After": "5",
+      "Age": "0",
+      "Content-Length": "286",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0136%3Abook%3D1%3Acard%3D1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0136%3Abook%3D1%3Acard%3D1",
+    "status": 200,
+    "downloaded_at": "2026-10-05T22:45:14.566466+00:00",
+    "sha256": "4e381f403c728ceeb1e90e365f68f820754de86ee65224a45e3ac110443242f7",
+    "bytes": 78248,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_english.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 14:16:52 GMT",
+      "Content-Type": "text/html;charset=UTF-8",
+      "Content-Language": "en-GB",
+      "Content-Encoding": "gzip",
+      "Vary": "Accept-Encoding",
+      "Age": "30501",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "12963",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1",
+    "status": 200,
+    "downloaded_at": "2026-10-05T22:45:13.379782+00:00",
+    "sha256": "83feb55dda2ad623293bb895b8e1d9269c7f119e98b602966aae3751dc29b442",
+    "bytes": 124315,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_greek.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 17:45:17 GMT",
+      "Content-Type": "text/html;charset=UTF-8",
+      "Content-Language": "pt-BR",
+      "Content-Encoding": "gzip",
+      "Vary": "Accept-Encoding",
+      "Age": "17996",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "18776",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a)/ndra&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a)/ndra&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+    "status": 503,
+    "downloaded_at": "2026-10-05T22:46:59.451333+00:00",
+    "sha256": "6894b5b4e50ca4a805f4265bac1e503c91f7894be50dee518ad9160f984cc961",
+    "bytes": 286,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_morph_001.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 22:47:00 GMT",
+      "content-type": "text/html; charset=utf-8",
+      "Retry-After": "5",
+      "Age": "0",
+      "Content-Length": "286",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=e%29%2Fnnepe&la=greek&can=e%29%2Fnnepe0&prior=moi&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=e%29%2Fnnepe&la=greek&can=e%29%2Fnnepe0&prior=moi&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+    "status": 200,
+    "downloaded_at": "2026-10-05T22:46:42.601612+00:00",
+    "sha256": "1c6471075bf0ecd74208d5bdbae9ab3fb0b09c571a02917da822c199cbbd2f04",
+    "bytes": 15771,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_morph_002.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 20:06:35 GMT",
+      "Content-Type": "text/html;charset=UTF-8",
+      "Content-Language": "zh-CN",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+      "Content-Encoding": "gzip",
+      "Vary": "Accept-Encoding",
+      "Age": "9593",
+      "Accept-Ranges": "bytes",
+      "Content-Length": "3833",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e)/nnepe&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+    "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e)/nnepe&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+    "status": 503,
+    "downloaded_at": "2026-10-05T22:47:01.298454+00:00",
+    "sha256": "aeacb5954f9ecb46d7664df5c91455af6c47591f09c0f015ee559403c164a309",
+    "bytes": 286,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_morph_003.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive",
+      "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1"
+    },
+    "response_headers": {
+      "Date": "Mon, 05 Oct 2026 22:47:01 GMT",
+      "content-type": "text/html; charset=utf-8",
+      "Retry-After": "5",
+      "Age": "0",
+      "Content-Length": "286",
+      "Connection": "keep-alive"
+    }
+  },
+  {
+    "requested_url": "https://raw.githubusercontent.com/PerseusDL/canonical/master/README.md",
+    "effective_url": "https://raw.githubusercontent.com/PerseusDL/canonical/master/README.md",
+    "status": 200,
+    "downloaded_at": "2026-10-05T22:46:40.941566+00:00",
+    "sha256": "3e1df48875af7854bf4f9c77cfbbb63c29e8d1c5118333e7556834df04bccca3",
+    "bytes": 3403,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\perseus_official_copyright.html",
+    "request_headers": {
+      "User-Agent": "Mozilla/5.0",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept": "*/*",
+      "Connection": "keep-alive"
+    },
+    "response_headers": {
+      "Connection": "keep-alive",
+      "Content-Length": "1327",
+      "Cache-Control": "max-age=300",
+      "Content-Security-Policy": "default-src 'none'; style-src 'unsafe-inline'; sandbox",
+      "Content-Type": "text/plain; charset=utf-8",
+      "ETag": "W/\"e3a733f701ac253b1b95fd958afa769adbfb08d9f81c4b313285e947ec0d331e\"",
+      "Strict-Transport-Security": "max-age=31536000",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "deny",
+      "X-XSS-Protection": "1; mode=block",
+      "X-GitHub-Request-Id": "9A42:3CB87:1FA21:C8EDC:6AC428CF",
+      "x-github-edge-region": "westus3",
+      "Content-Encoding": "gzip",
+      "Accept-Ranges": "bytes",
+      "Date": "Mon, 05 Oct 2026 22:46:41 GMT",
+      "Via": "1.1 varnish",
+      "X-Served-By": "cache-sjc10033-SJC",
+      "X-Cache": "MISS",
+      "X-Cache-Hits": "0",
+      "X-Timer": "S1791240402.639817,VS0,VE102",
+      "Vary": "Authorization,Accept-Encoding",
+      "Access-Control-Allow-Origin": "*",
+      "Cross-Origin-Resource-Policy": "cross-origin",
+      "X-Fastly-Request-ID": "9db6131dc73adafecdad11f9d47823031a0f8bc5",
+      "Expires": "Mon, 05 Oct 2026 22:51:41 GMT",
+      "Source-Age": "0"
+    }
+  }
+]

@@ -1,0 +1,29 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=e%29%2Fnnepe&la=greek&can=e%29%2Fnnepe0&prior=moi&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=e%29%2Fnnepe&la=greek&can=e%29%2Fnnepe0&prior=moi&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+  "status": 200,
+  "downloaded_at": "2026-10-05T22:46:42.601612+00:00",
+  "sha256": "1c6471075bf0ecd74208d5bdbae9ab3fb0b09c571a02917da822c199cbbd2f04",
+  "bytes": 15771,
+  "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_morph_002.html",
+  "request_headers": {
+    "User-Agent": "Mozilla/5.0",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept": "*/*",
+    "Connection": "keep-alive",
+    "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1"
+  },
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 20:06:35 GMT",
+    "Content-Type": "text/html;charset=UTF-8",
+    "Content-Language": "zh-CN",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+    "Content-Encoding": "gzip",
+    "Vary": "Accept-Encoding",
+    "Age": "9593",
+    "Accept-Ranges": "bytes",
+    "Content-Length": "3833",
+    "Connection": "keep-alive"
+  }
+}

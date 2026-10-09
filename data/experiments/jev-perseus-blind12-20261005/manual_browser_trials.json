@@ -1,0 +1,82 @@
+{
+  "recorded_at": "2026-10-05T23:50:39.805576+00:00",
+  "sampling_sha256": "454885d1d4067daec90bb7f184044916284326168a02a08609809c7568a7dd1e",
+  "manual_clicks": 12,
+  "successes": 1,
+  "browser_HTTP_503": 11,
+  "source": "Parent agent manually clicked every selected occurrence and supplied resulting popup URLs; successful analysis DOM cached separately",
+  "trials": [
+    {
+      "id": "bacchylides_ep5-0087",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=i%29%2Fsxousi&la=greek&can=i%29%2Fsxousi0&prior=mega/las&d=Perseus:text:1999.01.0063:book=Ep:poem=5&i=1",
+      "browser_result_reported_by_parent": "HTTP 503",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    },
+    {
+      "id": "bacchylides_ep5-0336",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=kalli%2Fzwnos&la=greek&can=kalli%2Fzwnos0&prior=ta/xa&d=Perseus:text:1999.01.0063:book=Ep:poem=5&i=1",
+      "browser_result_reported_by_parent": "HTTP 503",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    },
+    {
+      "id": "bacchylides_ep5-0445",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=patro%5C%5Ds&la=greek&can=patro%5C%5Ds0&prior=mega/rois&d=Perseus:text:1999.01.0063:book=Ep:poem=5&i=1",
+      "browser_result_reported_by_parent": "HTTP 503",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    },
+    {
+      "id": "bacchylides_ep5-0578",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29deisibo%2Fan&la=greek&can=a%29deisibo%2Fan0&prior=fasi\\n&d=Perseus:text:1999.01.0063:book=Ep:poem=5&i=1",
+      "browser_result_reported_by_parent": "success",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    },
+    {
+      "id": "odyssey7_152-0106",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Fkous%27&la=greek&can=a%29%2Fkous%270&prior=g%27&d=Perseus:text:1999.01.0135:book=7:card=152&i=1",
+      "browser_result_reported_by_parent": "HTTP 503",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    },
+    {
+      "id": "odyssey7_152-0179",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=kerassa%2Fmenos&la=greek&can=kerassa%2Fmenos0&prior=krhth=ra&d=Perseus:text:1999.01.0135:book=7:card=152&i=1",
+      "browser_result_reported_by_parent": "HTTP 503",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    },
+    {
+      "id": "odyssey7_152-0134",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=file%2Fesken&la=greek&can=file%2Fesken0&prior=min&d=Perseus:text:1999.01.0135:book=7:card=152&i=1",
+      "browser_result_reported_by_parent": "HTTP 503",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    },
+    {
+      "id": "odyssey7_152-0177",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=*ponto%2Fnoe&la=greek&can=*ponto%2Fnoe0&prior=*)alkino/oio&d=Perseus:text:1999.01.0135:book=7:card=152&i=1",
+      "browser_result_reported_by_parent": "HTTP 503",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    },
+    {
+      "id": "pindar_pythian4-1052",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=o%28mogo%2Fnois&la=greek&can=o%28mogo%2Fnois0&prior=]&d=Perseus:text:1999.01.0161:book=P.:poem=4&i=1",
+      "browser_result_reported_by_parent": "HTTP 503",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    },
+    {
+      "id": "pindar_pythian4-1552",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=i%29%2Fu%2Bgga&la=greek&can=i%29%2Fu%2Bgga0&prior=poiki/lan&d=Perseus:text:1999.01.0161:book=P.:poem=4&i=1",
+      "browser_result_reported_by_parent": "HTTP 503",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    },
+    {
+      "id": "pindar_pythian4-1570",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=*ai%29soni%2Fdan&la=greek&can=*ai%29soni%2Fdan0&prior=sofo\\n&d=Perseus:text:1999.01.0161:book=P.:poem=4&i=1",
+      "browser_result_reported_by_parent": "HTTP 503",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    },
+    {
+      "id": "pindar_pythian4-0459",
+      "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=*%29arkesi%2Flas&la=greek&can=*%29arkesi%2Flas0&prior=me/ros&d=Perseus:text:1999.01.0161:book=P.:poem=4&i=1",
+      "browser_result_reported_by_parent": "HTTP 503",
+      "evidence_type": "Parent agent report of manual browser word click; separate from direct HTTP receipt"
+    }
+  ]
+}

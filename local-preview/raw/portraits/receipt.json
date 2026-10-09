@@ -1,0 +1,6 @@
+{
+  "url": "https://commons.wikimedia.org/w/api.php?action=query&format=json&redirects=1&prop=imageinfo&iiprop=url%7Cextmetadata%7Csha1%7Cmime%7Csize&iiurlwidth=640&titles=File%3AArchilochus+01+pushkin.jpg%7CFile%3AMosaic+Portrait+of+the+Poet+Alcman+%28cropped%29.jpg%7CFile%3AMalarz+Safony+-+Kalpis+wykonana+technik%C4%85+Six.jpg%7CFile%3ASir+Lawrence+Alma-Tadema%2C+RA%2C+OM+-+Sappho+and+Alcaeus+-+Walters+37159.jpg%7CFile%3AStesichorus.jpg%7CFile%3AReggio+calabria+monumento+ibico.jpg%7CFile%3AAnacreon+Louvre.jpg%7CFile%3ANuremberg+chronicles+f+60r+3.png%7CFile%3ABust+of+Pindar.jpg%7CFile%3ABacchylides%2C+Dithyrambs%2C+Papyrus+733.jpg",
+  "fetched_at": "2026-10-06T02:51:30.817021+00:00",
+  "status": 200,
+  "sha256": "d2d96120f3d9d0c9ea2896139d52d546000003c50b2652e02042aa65f20cc5b8"
+}

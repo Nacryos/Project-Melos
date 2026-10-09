@@ -1,0 +1,12 @@
+{
+  "judge_type": "provisional_blind_model",
+  "cases": [
+    {
+      "id": "bacchylides_ep5-0578",
+      "acceptable_candidate_ids": ["o_9186561951"],
+      "correct_option_absent": false,
+      "reason": "The epithet describes Amphitryon's son, the singular masculine accusative subject of the infinitive after 'they say'; it agrees or stands in apposition with paida. The genitive plural reading has no syntactic support here.",
+      "confidence": "high"
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+{
+  "status": "completed_bounded_positive_control_not_general_benchmark",
+  "unique_occurrences": 1,
+  "judge_model": "gpt-5.6-sol",
+  "judge_status": "provisional_model_judgments_not_verified_annotations",
+  "perseus": [
+    {
+      "id": "odyssey-002",
+      "target": "ἔννεπε",
+      "sample_role": "previously_inspected_positive_control",
+      "top_candidate_ids": [
+        "p2"
+      ],
+      "top_score_percent_not_calibrated_probability": 94.7,
+      "all_top_ties_accepted_by_judge": true,
+      "at_least_one_top_tie_accepted_by_judge": true,
+      "judge_acceptable_source_ids": [
+        "p2",
+        "p3"
+      ],
+      "score_mass_on_judge_acceptable_candidates": 97.3
+    }
+  ],
+  "jev": [
+    {
+      "id": "odyssey-002",
+      "arm": "form_only",
+      "status": "success",
+      "latency_seconds": 0.2497,
+      "model": "jev-1.13.0",
+      "choice": "option_4",
+      "choice_probability": 0.7,
+      "api_confidence": 0.63,
+      "top_choice_accepted_by_judge": true,
+      "probability_mass_on_judge_acceptable_candidates": 0.96,
+      "probabilities": {
+        "option_3": 0.01,
+        "option_2": 0.01,
+        "option_1": 0.26,
+        "none_of_these": 0.02,
+        "option_4": 0.7
+      }
+    },
+    {
+      "id": "odyssey-002",
+      "arm": "greek_context",
+      "status": "success",
+      "latency_seconds": 0.2044,
+      "model": "jev-1.13.0",
+      "choice": "option_1",
+      "choice_probability": 0.52,
+      "api_confidence": 0.39,
+      "top_choice_accepted_by_judge": true,
+      "probability_mass_on_judge_acceptable_candidates": 0.99,
+      "probabilities": {
+        "option_2": 0.0,
+        "option_4": 0.47,
+        "none_of_these": 0.01,
+        "option_3": 0.0,
+        "option_1": 0.52
+      }
+    },
+    {
+      "id": "odyssey-002",
+      "arm": "translation_context",
+      "status": "success",
+      "latency_seconds": 0.2005,
+      "model": "jev-1.13.0",
+      "choice": "option_4",
+      "choice_probability": 0.68,
+      "api_confidence": 0.59,
+      "top_choice_accepted_by_judge": true,
+      "probability_mass_on_judge_acceptable_candidates": 0.99,
+      "probabilities": {
+        "option_2": 0.0,
+        "option_4": 0.68,
+        "none_of_these": 0.01,
+        "option_3": 0.0,
+        "option_1": 0.31
+      }
+    },
+    {
+      "id": "odyssey-002",
+      "arm": "translation_reversed",
+      "status": "success",
+      "latency_seconds": 0.2007,
+      "model": "jev-1.13.0",
+      "choice": "option_4",
+      "choice_probability": 0.59,
+      "api_confidence": 0.48,
+      "top_choice_accepted_by_judge": true,
+      "probability_mass_on_judge_acceptable_candidates": 0.99,
+      "probabilities": {
+        "option_2": 0.0,
+        "option_1": 0.4,
+        "none_of_these": 0.01,
+        "option_4": 0.59,
+        "option_3": 0.0
+      }
+    }
+  ],
+  "jev_total_input_tokens": 11585,
+  "jev_estimated_cost_usd": 0.00048657,
+  "jev_pricing_source": "https://docs.typesafe.ai/models",
+  "jev_median_latency_seconds": 0.20255,
+  "limitations": [
+    "One famous previously inspected control; no generalization claim.",
+    "Six fresh source occurrences failed; three equivalent URL-encoding probes also failed.",
+    "GPT-5.6 Sol judgments are provisional, not verified source annotations.",
+    "Full-card published translation supplied, not token-aligned or sentence-isolated.",
+    "One call per arm; order and sampling effects are not separately identifiable.",
+    "All candidates retained; equivalence grouping is based on this provisional judge.",
+    "No confidence calibration can be estimated from one unique occurrence.",
+    "No semantic word-sense, dialect-generalization, or dependency-parser benchmark performed.",
+    "No corpus or production application changes."
+  ]
+}

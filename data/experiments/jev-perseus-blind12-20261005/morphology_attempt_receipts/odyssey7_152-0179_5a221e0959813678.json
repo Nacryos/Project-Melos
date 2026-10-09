@@ -1,0 +1,9 @@
+{
+  "id": "odyssey7_152-0179",
+  "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=kerassa%2Fmenos&la=greek&can=kerassa%2Fmenos0&prior=krhth=ra&d=Perseus:text:1999.01.0135:book=7:card=152&i=1",
+  "sampling_sha256": "454885d1d4067daec90bb7f184044916284326168a02a08609809c7568a7dd1e",
+  "started_utc": "2026-10-05T23:49:17.680105+00:00",
+  "status": "failed",
+  "error_type": "RuntimeError",
+  "error": "Source returned HTTP 503"
+}

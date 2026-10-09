@@ -1,0 +1,24 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Feide&la=greek&can=a%29%2Feide0&prior=mh=nin&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Feide&la=greek&can=a%29%2Feide0&prior=mh=nin&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+  "status": 503,
+  "downloaded_at": "2026-10-05T22:47:08.142354+00:00",
+  "sha256": "8d2a1747453055a414371fd376a22706d78141f8c3cafd8c5abc20b7abc11e50",
+  "bytes": 286,
+  "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\iliad_morph_001.html",
+  "request_headers": {
+    "User-Agent": "Mozilla/5.0",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept": "*/*",
+    "Connection": "keep-alive",
+    "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0133:book=1:card=1"
+  },
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 22:47:08 GMT",
+    "content-type": "text/html; charset=utf-8",
+    "Retry-After": "5",
+    "Age": "0",
+    "Content-Length": "286",
+    "Connection": "keep-alive"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=file%2Fesken&la=greek&can=file%2Fesken0&prior=min&d=Perseus:text:1999.01.0135:book=7:card=152&i=1",
+  "started_utc": "2026-10-05T23:49:19.163470+00:00",
+  "raw_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\odyssey7_152-0134_morph_20261005T234919163185.html",
+  "status": 503,
+  "capture_type": "direct_http",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=file%2Fesken&la=greek&can=file%2Fesken0&prior=min&d=Perseus:text:1999.01.0135:book=7:card=152&i=1",
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 23:49:20 GMT",
+    "content-type": "text/html; charset=utf-8",
+    "Retry-After": "5",
+    "Age": "0",
+    "Content-Length": "286",
+    "Connection": "keep-alive"
+  },
+  "preserved_response_body": true,
+  "sha256": "b52728db7830a7c61c6b92cf39266809b5c9d4bc1860a9d32a61bf12f4bd1716",
+  "bytes": 286,
+  "error_type": "RuntimeError",
+  "error": "Source returned HTTP 503",
+  "completed_utc": "2026-10-05T23:49:19.823503+00:00"
+}

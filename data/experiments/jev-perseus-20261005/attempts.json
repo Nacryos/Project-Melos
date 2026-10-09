@@ -1,0 +1,80 @@
+[
+  {
+    "passage_id": "odyssey",
+    "word_index_zero_based": 2,
+    "target": "ἔννεπε",
+    "source_href": "morph?l=e%29%2Fnnepe&la=greek&can=e%29%2Fnnepe0&prior=moi",
+    "source_onclick": "m(this,1,0); return false",
+    "morph_url": "https://www.perseus.tufts.edu/hopper/morph?l=e%29%2Fnnepe&la=greek&can=e%29%2Fnnepe0&prior=moi&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+    "sample_role": "previously_inspected_positive_control",
+    "result": "selected",
+    "candidate_count": 4,
+    "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_morph_002.html"
+  },
+  {
+    "passage_id": "odyssey",
+    "word_index_zero_based": 0,
+    "target": "ἄνδρα",
+    "source_href": "morph?l=a%29%2Fndra&la=greek&can=a%29%2Fndra0",
+    "source_onclick": "m(this,1,0); return false",
+    "morph_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Fndra&la=greek&can=a%29%2Fndra0&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+    "sample_role": "availability_sample",
+    "result": "unavailable_omitted",
+    "error": "HTTPSConnectionPool(host='www.perseus.tufts.edu', port=443): Read timed out. (read timeout=15)"
+  },
+  {
+    "passage_id": "odyssey",
+    "word_index_zero_based": 1,
+    "target": "μοι",
+    "source_href": "morph?l=moi&la=greek&can=moi0&prior=a)/ndra",
+    "source_onclick": "m(this,1,0); return false",
+    "morph_url": "https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a)/ndra&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+    "sample_role": "availability_sample",
+    "result": "unavailable_omitted",
+    "error": "503 Server Error: Backend fetch failed for url: https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a)/ndra&d=Perseus:text:1999.01.0135:book=1:card=1&i=1"
+  },
+  {
+    "passage_id": "odyssey",
+    "word_index_zero_based": 3,
+    "target": "μοῦσα",
+    "source_href": "morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e)/nnepe",
+    "source_onclick": "m(this,1,0); return false",
+    "morph_url": "https://www.perseus.tufts.edu/hopper/morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e)/nnepe&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+    "sample_role": "availability_sample",
+    "result": "unavailable_omitted",
+    "error": "503 Server Error: Backend fetch failed for url: https://www.perseus.tufts.edu/hopper/morph?l=mou%3Dsa&la=greek&can=mou%3Dsa0&prior=e)/nnepe&d=Perseus:text:1999.01.0135:book=1:card=1&i=1"
+  },
+  {
+    "passage_id": "iliad",
+    "word_index_zero_based": 0,
+    "target": "μῆνιν",
+    "source_href": "morph?l=mh%3Dnin&la=greek&can=mh%3Dnin0",
+    "source_onclick": "m(this,1,0); return false",
+    "morph_url": "https://www.perseus.tufts.edu/hopper/morph?l=mh%3Dnin&la=greek&can=mh%3Dnin0&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+    "sample_role": "availability_sample",
+    "result": "unavailable_omitted",
+    "error": "503 Server Error: Backend fetch failed for url: https://www.perseus.tufts.edu/hopper/morph?l=mh%3Dnin&la=greek&can=mh%3Dnin0&d=Perseus:text:1999.01.0133:book=1:card=1&i=1"
+  },
+  {
+    "passage_id": "iliad",
+    "word_index_zero_based": 1,
+    "target": "ἄειδε",
+    "source_href": "morph?l=a%29%2Feide&la=greek&can=a%29%2Feide0&prior=mh=nin",
+    "source_onclick": "m(this,1,0); return false",
+    "morph_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Feide&la=greek&can=a%29%2Feide0&prior=mh=nin&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+    "sample_role": "availability_sample",
+    "result": "unavailable_omitted",
+    "error": "503 Server Error: Backend fetch failed for url: https://www.perseus.tufts.edu/hopper/morph?l=a%29%2Feide&la=greek&can=a%29%2Feide0&prior=mh=nin&d=Perseus:text:1999.01.0133:book=1:card=1&i=1"
+  },
+  {
+    "passage_id": "iliad",
+    "word_index_zero_based": 2,
+    "target": "θεὰ",
+    "source_href": "morph?l=qea%5C&la=greek&can=qea%5C0&prior=a)/eide",
+    "source_onclick": "m(this,1,0); return false",
+    "morph_url": "https://www.perseus.tufts.edu/hopper/morph?l=qea%5C&la=greek&can=qea%5C0&prior=a)/eide&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+    "sample_role": "availability_sample",
+    "result": "unavailable_omitted",
+    "error": "503 Server Error: Backend fetch failed for url: https://www.perseus.tufts.edu/hopper/morph?l=qea%5C&la=greek&can=qea%5C0&prior=a)/eide&d=Perseus:text:1999.01.0133:book=1:card=1&i=1"
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "id": "bacchylides_ep5-0578",
+  "arm": "greek_context",
+  "direction": "forward",
+  "request_sha256": "db9e2d18bcf4730c717f084acbefedf4e918c6d82ecb0e72f3e40b523a1f8b02",
+  "plan_sha256": "8bf66c8dd5fe9e596da9bb1a6302db3ca61e81546d8f8a423e3d815ea9fa7bdf",
+  "started_utc": "2026-10-05T23:52:09.692609+00:00",
+  "status": "success",
+  "response": {
+    "model": "jev-1.13.0",
+    "answers": {
+      "parse": {
+        "type": "choice",
+        "choice": "o_9186561951",
+        "confidence": 0.56,
+        "probabilities": {
+          "none_of_these": 0.26,
+          "o_d794951f59": 0.03,
+          "o_9186561951": 0.71
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 6386,
+      "output_tokens": 73
+    }
+  },
+  "response_sha256": "5344b2a21ffa76bcd81411b5d689d5a8a23d87d380d2ada015d15b15d37e460f",
+  "latency_seconds": 0.21552459988743067
+}

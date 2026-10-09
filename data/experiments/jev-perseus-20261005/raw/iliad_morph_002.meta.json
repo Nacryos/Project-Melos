@@ -1,0 +1,24 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=qea%5C&la=greek&can=qea%5C0&prior=a)/eide&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=qea%5C&la=greek&can=qea%5C0&prior=a)/eide&d=Perseus:text:1999.01.0133:book=1:card=1&i=1",
+  "status": 503,
+  "downloaded_at": "2026-10-05T22:47:09.348889+00:00",
+  "sha256": "44c4aaab3d759e5c00683745c1fa5c8f04091ff4c7f912709bcb2917b3e2814e",
+  "bytes": 286,
+  "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\iliad_morph_002.html",
+  "request_headers": {
+    "User-Agent": "Mozilla/5.0",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept": "*/*",
+    "Connection": "keep-alive",
+    "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0133:book=1:card=1"
+  },
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 22:47:09 GMT",
+    "content-type": "text/html; charset=utf-8",
+    "Retry-After": "5",
+    "Age": "0",
+    "Content-Length": "286",
+    "Connection": "keep-alive"
+  }
+}

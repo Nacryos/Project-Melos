@@ -1,0 +1,359 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NEP4GYP06J"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-NEP4GYP06J');
+</script>
+<script type="text/javascript">
+    // avoid javascript errors without editing every page
+    var pageTracker = {"_trackPageview": function(page){console.log('');}}
+</script>
+
+<title>Greek Word Study Tool</title>
+<link rel="stylesheet" type="text/css" href="/css/hopper.css"/>
+<link rel="stylesheet" type="text/css" href="/css/UnicodeC.css"/>
+<script type="text/javascript" src="/js/hopper.js"></script> 
+<script type="text/javascript" src="/js/xmlhttp.js"></script>
+<script type="text/javascript" src="/js/morph.js"></script>
+</head>
+
+<body onload="document.f.l.focus(); checkRedirect();">
+<div id="header">
+	  <a id="logo" href="/hopper/"></a>
+	  <div id="header_text">
+		<h1>Greek Word Study Tool</h1>
+	  </div>
+	  <div id="header_side">
+<form action="/hopper/searchresults" class="search_form" onsubmit="return validate_form(this,q);">
+    <input name="q" />
+    <input type="Submit" value="Search" />
+    <p>("Agamemnon", "Hom. Od. 9.1", "denarius")</p>
+    <p><a href="/hopper/search">All Search Options</a> [<a href="javascript:abbrev_help()">view abbreviations</a>]</p>
+</form>	  </div>
+	</div>
+<div id="main">
+<div id="main_top">
+    <div id="tabs">
+		<a class="tab" href="/hopper/home">Home</a>
+		<a class="tab" href="/hopper/collections">Collections/Texts</a>
+		<a class="tab" target="_blank" href="http://catalog.perseus.org">Perseus Catalog</a>
+		<a class="tab" href="/hopper/research">Research</a>
+		<a class="tab" href="/hopper/grants">Grants</a>
+		<a class="tab" href="/hopper/opensource">Open Source</a>
+		<a class="tab" href="/hopper/about">About</a>
+		<a class="tab" href="/hopper/help">Help</a>
+    </div>
+</div>	<div id="content" class="1column">
+    	<div id="side_col">
+    <div class="widget secondary" id="search">
+	<div class="header">
+	    <a class="toggle" href="javascript:toggle('search')" id="search-link">hide</a>
+	    Search
+	</div>
+	<div class="contents" id="search-contents">
+<form action="" name="f" onsubmit="return validate_form(this,l);">
+	    Get Info for <input name="l" value="e)/nnepe"/> in 
+
+    <select name="la" onchange="toggleGreekDisplay(this)">
+	<option value="greek" selected="selected">Greek</option>
+	<option value="la" >Latin</option>
+	<option value="ar" >Arabic</option>
+	<option value="non" >Old Norse</option>
+    </select>
+	    <input type="submit" value="Go" />
+	</form>
+	
+	<div class="enter_greek" id="enter_greek"
+	>
+	How to enter text in Greek:<br />
+	<img src="/img/keyCaps.gif" />
+    </div>
+	</div>
+    </div>
+    <div class="widget secondary" id="disppref">
+	<div class="header">
+	    <a class="toggle" href="javascript:toggle('disppref')" id="disppref-link">hide</a>
+	    Display Preferences
+	</div>
+	<div class="contents" id="disppref-contents">
+		<form action="disppref">
+	    	<table><tr>
+				<td>Greek Display:</td>
+				<td><select name="greek.display">
+		<option value="UnicodeC" 
+			selected="selected">Unicode (precombined)</option>
+		<option value="UnicodeD" 
+			>Unicode (combining diacriticals)</option>
+		<option value="PerseusBetaCode" 
+			>Beta Code</option>
+		<option value="SPIonic" 
+			>SPIonic</option>
+		<option value="SGreek" 
+			>SGreek</option>
+		<option value="GreekKeys" 
+			>GreekKeys</option>
+		<option value="GreekXLit" 
+			>Latin transliteration</option>
+				</select></td>
+				</tr>
+				<tr>
+				<td>Arabic Display:</td>
+				<td><select name="arabic.display">
+		<option value="UnicodeC" 
+			selected="selected">Unicode</option>
+		<option value="Buckwalter" 
+			>Buckwalter transliteration</option>
+				</select></td>
+				</tr>
+				<tr>
+				<td>View by Default:</td>
+				<td><select name="language">
+		<option value="original" 
+			>Original Language</option>
+		<option value="trans" 
+			selected="selected">Translation</option>
+				</select></td>
+				</tr>
+				<tr>
+				<td>Browse Bar:</td>
+				<td><select name="navbar.display">
+		<option value="show" 
+			selected="selected">Show by default</option>
+		<option value="hide" 
+			>Hide by default</option>
+				</select></td>
+				</tr>
+				<tr><td colspan="2">
+				<input type="hidden" name="url" value="/hopper/morph?can=e%29%2Fnnepe0&d=Perseus:text:1999.01.0135:book=1:card=1&i=1&l=e%29%2Fnnepe&la=greek&prior=moi"/>
+				<input type="submit" value="Update Preferences" />
+				</td></tr>
+			</table>
+		</form>
+		</div>
+    </div>
+ 
+		</div>
+		
+		<div id="main_col">
+    	<div class="analysis">
+    	<div class="lemma" id="e)ne/pw">
+    	<div class="lemma_header">
+		<h4 class="greek">ἐνέπω</h4>
+		<span class="lemma_definition">
+		tell
+    	</span>
+    	</div>
+    	<p>
+    		(Show lexicon entry in 
+    			<a id="Perseus:text:1999.04.0057:entry=e)ne/pw-link" href="#lexicon" onclick="    				doXMLHttpRequest(loadLexiconPreCallback, loadLexiconCallback, {'doc':'Perseus:text:1999.04.0057:entry=e)ne/pw','form':'e)/nnepe','which':'1','source':'Perseus:text:1999.01.0135:book=1:card=1','lexquery':'Perseus:text:1999.04.0057:entry=e)ne/pw'});showEntry('Perseus:text:1999.04.0057:entry=e)ne/pw-contents');
+">LSJ</a>    			<a id="Perseus:text:1999.04.0058:entry=e)ne/pw-link" href="#lexicon" onclick="    				doXMLHttpRequest(loadLexiconPreCallback, loadLexiconCallback, {'doc':'Perseus:text:1999.04.0058:entry=e)ne/pw','form':'e)/nnepe','which':'1','source':'Perseus:text:1999.01.0135:book=1:card=1','lexquery':'Perseus:text:1999.04.0058:entry=e)ne/pw'});showEntry('Perseus:text:1999.04.0058:entry=e)ne/pw-contents');
+">Middle Liddell</a>    			<a id="Perseus:text:1999.04.0072:entry=e)ne/pw1-link" href="#lexicon" onclick="    				doXMLHttpRequest(loadLexiconPreCallback, loadLexiconCallback, {'doc':'Perseus:text:1999.04.0072:entry=e)ne/pw1','form':'e)/nnepe','which':'1','source':'Perseus:text:1999.01.0135:book=1:card=1','lexquery':'Perseus:text:1999.04.0072:entry=e)ne/pw1'});showEntry('Perseus:text:1999.04.0072:entry=e)ne/pw1-contents');
+">Slater</a>    			<a id="Perseus:text:1999.04.0073:entry=e)ne/pw-link" href="#lexicon" onclick="    				doXMLHttpRequest(loadLexiconPreCallback, loadLexiconCallback, {'doc':'Perseus:text:1999.04.0073:entry=e)ne/pw','form':'e)/nnepe','which':'1','source':'Perseus:text:1999.01.0135:book=1:card=1','lexquery':'Perseus:text:1999.04.0073:entry=e)ne/pw'});showEntry('Perseus:text:1999.04.0073:entry=e)ne/pw-contents');
+">Autenrieth</a>) 
+    	(<a href="searchresults?q=e)%2Fnnepe&amp;target=greek&amp;doc=Perseus%3Atext%3A1999.01.0135" target="_blank">search</a>)
+    	</p>
+    	<table>
+    		<tr >
+    		<td class="greek">ἔννεπε</td>
+    		<td>verb 3rd sg imperf ind act homeric ionic unaugmented</td>
+    		<td style="font-size: x-small">
+    			17
+    				 user votes
+    				    			    		</td> 
+    		<td>2.5%</td>
+    		</tr>
+    		<tr class="winner">
+    		<td class="greek">ἔννεπε &dagger;</td>
+    		<td>verb 2nd sg pres imperat act</td>
+    		<td style="font-size: x-small">
+    			669
+    				 user votes
+    				    			    		</td> 
+    		<td>94.7%</td>
+    		</tr>
+    	</table>
+    	</div>
+    	<p class="help_note" style="font-weight: normal;">&dagger; This form has been selected using statistical methods as the most likely one in this context. It may or may not be the <em>correct</em> form. (<a href="#votes" onclick="javascript:showVotes();">More info</a>)</p>
+    		
+    		<p style="font-size:x-small" class="word_freq">Word Frequency Statistics (<a href="wordfreq?lang=greek&amp;lookup=e)ne%2Fpw">more statistics</a>)</p>
+			<table class="data">
+			<tr>
+			<th>Words in Corpus</th>
+			<th>Max</th>
+			<th>Max/10k</th>
+			<th>Min</th>
+			<th>Min/10k</th>
+			<th>Corpus Name</th>
+			</tr>
+			<tr>
+			<td>87,185</td>
+			<td><a href="searchresults?q=e)ne%2Fpw&amp;target=greek&amp;doc=Perseus%3Atext%3A1999.01.0135&amp;expand=lemma&amp;sort=docorder" target="_blank">58</a></td>
+			<td>6.653</td>
+			<td>0</td>
+			<td>0</td>
+			<td class="work">
+	            Homer, 
+		    <a href="text?doc=Perseus%3Atext%3A1999.01.0135">Odyssey</a>
+			</td>
+			</tr>
+			</table>
+    	</div>
+    	<br/>
+    	<div class="analysis">
+    	<div class="lemma" id="e)ne/pw2">
+    	<div class="lemma_header">
+		<h4 class="greek">ἐνέπω2</h4>
+		<span class="lemma_definition">
+		say, tell
+    	</span>
+    	</div>
+    	<p>
+    		(Show lexicon entry in 
+    			<a id="Perseus:text:1999.04.0072:entry=e)ne/pw2-link" href="#lexicon" onclick="    				doXMLHttpRequest(loadLexiconPreCallback, loadLexiconCallback, {'doc':'Perseus:text:1999.04.0072:entry=e)ne/pw2','form':'e)/nnepe','which':'1','source':'Perseus:text:1999.01.0135:book=1:card=1','lexquery':'Perseus:text:1999.04.0072:entry=e)ne/pw2'});showEntry('Perseus:text:1999.04.0072:entry=e)ne/pw2-contents');
+">Slater</a>) 
+    	(<a href="searchresults?q=e)%2Fnnepe&amp;target=greek&amp;doc=Perseus%3Atext%3A1999.01.0135" target="_blank">search</a>)
+    	</p>
+    	<table>
+    		<tr >
+    		<td class="greek">ἔννεπε</td>
+    		<td>verb 2nd sg pres imperat act</td>
+    		<td style="font-size: x-small">
+    			18
+    				 user votes
+    				    			    		</td> 
+    		<td>2.6%</td>
+    		</tr>
+    		<tr >
+    		<td class="greek">ἔννεπε</td>
+    		<td>verb 3rd sg imperf ind act homeric ionic unaugmented</td>
+    		<td style="font-size: x-small">
+    			<em>no user votes</em>
+    		</td> 
+    		<td>0.1%</td>
+    		</tr>
+    	</table>
+    	</div>
+    		
+    		<p style="font-size:x-small" class="word_freq">Word Frequency Statistics (<a href="wordfreq?lang=greek&amp;lookup=e)ne%2Fpw2">more statistics</a>)</p>
+			<table class="data">
+			<tr>
+			<th>Words in Corpus</th>
+			<th>Max</th>
+			<th>Max/10k</th>
+			<th>Min</th>
+			<th>Min/10k</th>
+			<th>Corpus Name</th>
+			</tr>
+			<tr>
+			<td>87,185</td>
+			<td><a href="searchresults?q=e)ne%2Fpw&amp;target=greek&amp;doc=Perseus%3Atext%3A1999.01.0135&amp;expand=lemma&amp;sort=docorder" target="_blank">58</a></td>
+			<td>6.653</td>
+			<td>0</td>
+			<td>0</td>
+			<td class="work">
+	            Homer, 
+		    <a href="text?doc=Perseus%3Atext%3A1999.01.0135">Odyssey</a>
+			</td>
+			</tr>
+			</table>
+    	</div>
+    	<br/>
+    
+    <a href="xmlmorph?lang=greek&lookup=e)%2Fnnepe" onclick="javascript: pageTracker._trackPageview('/hopper/xmlmorph?lang=greek&lookup=e)%2Fnnepe');"><img src="/img/xml.gif" alt="view as XML" border="0"/></a><br/><br/>
+    
+    <div id="lexicon">
+    		<div class="lexicon_entry" style="display: none" id="Perseus:text:1999.04.0072:entry=e)ne/pw2-contents">
+    		<p class="new_window_link"><a href="text?doc=Perseus%3Atext%3A1999.04.0072%3Aentry%3De)ne%2Fpw2" 
+    			target="_blank">View this entry in a new window</a> / <a href="#">back to top</a></p>
+    		</div> 
+    		<div class="lexicon_entry" style="display: none" id="Perseus:text:1999.04.0072:entry=e)ne/pw1-contents">
+    		<p class="new_window_link"><a href="text?doc=Perseus%3Atext%3A1999.04.0072%3Aentry%3De)ne%2Fpw1" 
+    			target="_blank">View this entry in a new window</a> / <a href="#">back to top</a></p>
+    		</div> 
+    		<div class="lexicon_entry" style="display: none" id="Perseus:text:1999.04.0058:entry=e)ne/pw-contents">
+    		<p class="new_window_link"><a href="text?doc=Perseus%3Atext%3A1999.04.0058%3Aentry%3De)ne%2Fpw" 
+    			target="_blank">View this entry in a new window</a> / <a href="#">back to top</a></p>
+    		</div> 
+    		<div class="lexicon_entry" style="display: none" id="Perseus:text:1999.04.0057:entry=e)ne/pw-contents">
+    		<p class="new_window_link"><a href="text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De)ne%2Fpw" 
+    			target="_blank">View this entry in a new window</a> / <a href="#">back to top</a></p>
+    		</div> 
+    		<div class="lexicon_entry" style="display: none" id="Perseus:text:1999.04.0073:entry=e)ne/pw-contents">
+    		<p class="new_window_link"><a href="text?doc=Perseus%3Atext%3A1999.04.0073%3Aentry%3De)ne%2Fpw" 
+    			target="_blank">View this entry in a new window</a> / <a href="#">back to top</a></p>
+    		</div> 
+    </div>     <div id="votes">
+    	<table>
+    		<caption>Statistical votes for form <q>ἔννεπε</q></caption>
+    	<tr>
+    	<th>Results</th>
+    		<th>User-voting evaluator</th>
+    		<th>Prior-form frequency evaluator</th>
+    		<th>Word-frequency evaluator</th>
+    		<th>Tagger evaluator</th>
+    		<th>Form frequency evaluator</th>
+    	</tr>
+    	<tr class="winner">
+    	<td class="greek"><b>ἐνέπω</b> verb 2nd sg pres imperat act</td>
+				<td style="text-align:center">67,200%</td>
+				<td style="text-align:center">18.1%</td>
+				<td style="text-align:center">25%</td>
+				<td style="text-align:center">0%</td>
+				<td style="text-align:center">9%</td>
+    	</tr>
+    	<tr>
+    	<td class="greek"><b>ἐνέπω</b> verb 2nd sg pres imperat act</td>
+				<td style="text-align:center">1,800%</td>
+				<td style="text-align:center">18.1%</td>
+				<td style="text-align:center">25%</td>
+				<td style="text-align:center">0%</td>
+				<td style="text-align:center">9%</td>
+    	</tr>
+    	<tr>
+    	<td class="greek"><b>ἐνέπω</b> verb 3rd sg imperf ind act homeric ionic unaugmented</td>
+				<td style="text-align:center">1,700%</td>
+				<td style="text-align:center">31.9%</td>
+				<td style="text-align:center">25%</td>
+				<td style="text-align:center">0%</td>
+				<td style="text-align:center">41%</td>
+    	</tr>
+    	<tr>
+    	<td class="greek"><b>ἐνέπω</b> verb 3rd sg imperf ind act homeric ionic unaugmented</td>
+				<td style="text-align:center">0%</td>
+				<td style="text-align:center">31.9%</td>
+				<td style="text-align:center">25%</td>
+				<td style="text-align:center">0%</td>
+				<td style="text-align:center">41%</td>
+    	</tr>
+    	</table>
+    	<p>The possible parses for this word have been evaulated by an experimental system that attempts to determine which 
+    	parse is correct in this context. The system is composed of a number of "evaluators"--each of which uses different 
+    	criteria to score the possibilities--whose votes are weighted to determine the best answer. The percentages in the 
+    	table above show each evaluator's score for each form, which are then combined to determine each form's overall score.</p>
+		<p>This selection used the following evaluators:</p>
+		<ul>
+		 <li><strong>User-voting evaluator</strong>: Scores parses based on the number of votes each one has received from users. Weighted more heavily as more users vote for a given word in a text.</li>
+		 <li><strong>Prior-form frequency evaluator</strong>: Evaluates forms based on the preceding word in the text; finds the most likely parse among this word's possible morphological features and the preceding word's possible features based on the frequency of each possible pair.</li>
+		 <li><strong>Word-frequency evaluator</strong>: Scores parses based on how often the dictionary word appears in the Perseus corpus. Only used when a given form could be from more than one possible word.</li>
+		 <li><strong>Tagger evaluator</strong>: Evaluator based on pre-computed automatic morphological tagging</li>
+		 <li><strong>Form frequency evaluator</strong>: Scores parses based on how often their morphological features (first-person, indicative, plural, and so on) occur among all the words in the Perseus corpus.</li>
+		</ul>
+		<p>User votes are weighted more heavily than the other methods, which are all treated equally.</p>
+                <p>(This is historical data only. The voting feature is currently disabled.)</p>
+    </div>
+ 
+    </div> 
+     
+    
+    </div> 
+</div> 
+</body>
+</html>

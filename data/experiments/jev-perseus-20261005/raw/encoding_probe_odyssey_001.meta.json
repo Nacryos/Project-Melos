@@ -1,0 +1,24 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a%29%2Fndra&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=moi&la=greek&can=moi0&prior=a%29%2Fndra&d=Perseus%3Atext%3A1999.01.0135%3Abook%3D1%3Acard%3D1&i=1",
+  "status": 503,
+  "downloaded_at": "2026-10-05T22:48:34.669600+00:00",
+  "sha256": "ab3cbdb7e94794335b9b8c642fa890f193d15e516b59b5d27da79489697db9ef",
+  "bytes": 286,
+  "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\encoding_probe_odyssey_001.html",
+  "request_headers": {
+    "User-Agent": "Mozilla/5.0",
+    "Accept-Encoding": "gzip, deflate, br, zstd",
+    "Accept": "*/*",
+    "Connection": "keep-alive",
+    "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1"
+  },
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 22:48:34 GMT",
+    "content-type": "text/html; charset=utf-8",
+    "Retry-After": "5",
+    "Age": "0",
+    "Content-Length": "286",
+    "Connection": "keep-alive"
+  }
+}

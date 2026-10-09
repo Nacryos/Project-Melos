@@ -1,0 +1,32 @@
+{
+  "id": "odyssey-002",
+  "arm": "translation_reversed",
+  "request_sha256": "2da502ee1d866cfbf453a6fd68c593ef1056379e375ebceff678c0ad4d757404",
+  "plan_sha256": "c5783ecca5f55639f5212cf8cce791a52a94a0752452e8dcff93e1c6e0a8cd05",
+  "started_utc": "2026-10-05T22:49:54.139009+00:00",
+  "status": "success",
+  "model_requested": "jev-1.13.0",
+  "response": {
+    "model": "jev-1.13.0",
+    "answers": {
+      "parse": {
+        "type": "choice",
+        "choice": "option_4",
+        "confidence": 0.48,
+        "probabilities": {
+          "option_2": 0.0,
+          "option_1": 0.4,
+          "none_of_these": 0.01,
+          "option_4": 0.59,
+          "option_3": 0.0
+        }
+      }
+    },
+    "usage": {
+      "input_tokens": 3797,
+      "output_tokens": 65
+    }
+  },
+  "response_sha256": "4ab331ab33df8fad51e256c65071f24506a00e0d3f502aec1eb699c35f97a7f0",
+  "latency_seconds": 0.2007
+}

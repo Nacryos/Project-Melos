@@ -1,0 +1,15 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29deisibo%2Fan&la=greek&can=a%29deisibo%2Fan0&prior=fasi\\n&d=Perseus:text:1999.01.0063:book=Ep:poem=5&i=1",
+  "started_utc": "2026-10-05T23:50:23.193260+00:00",
+  "raw_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\bacchylides_ep5-0578_morph_20261005T235023192975.html",
+  "status": 200,
+  "capture_type": "browser_dom_fragment",
+  "cached_json_sha256": "f1110ea74a5ddc41faa4f896a74dc82126b044b5ece3802067bc2d3d501aee30",
+  "cached_json_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\browser_bacchylides_0578.json",
+  "captured_at": "2026-10-05T23:49:11.143Z",
+  "cache_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\browser_bacchylides_0578.json",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=a%29deisibo%2Fan&la=greek&can=a%29deisibo%2Fan0&prior=fasi\\n&d=Perseus:text:1999.01.0063:book=Ep:poem=5&i=1",
+  "preserved_response_body": false,
+  "sha256": "28686cefc99194170159e79e8a7b4858b4330e67dad477140ff68ab277f68402",
+  "bytes": 2392
+}

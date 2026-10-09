@@ -1,0 +1,10 @@
+{
+  "id": "bacchylides_ep5-0336",
+  "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=kalli%2Fzwnos&la=greek&can=kalli%2Fzwnos0&prior=ta/xa&d=Perseus:text:1999.01.0063:book=Ep:poem=5&i=1",
+  "sampling_sha256": "454885d1d4067daec90bb7f184044916284326168a02a08609809c7568a7dd1e",
+  "started_utc": "2026-10-05T23:46:48.857489+00:00",
+  "status": "failed",
+  "attempt": 3,
+  "error_type": "RuntimeError",
+  "error": "Source returned HTTP 503"
+}

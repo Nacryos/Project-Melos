@@ -1,0 +1,21 @@
+{
+  "judge_model": "gpt-5.6-sol",
+  "status": "provisional_model_judgments_not_verified_annotations",
+  "cases": [
+    {
+      "id": "odyssey-002",
+      "preferred_candidate_ids": [
+        "option_1",
+        "option_4"
+      ],
+      "acceptable_candidate_ids": [
+        "option_1",
+        "option_4"
+      ],
+      "unresolved": false,
+      "correct_analysis_missing": false,
+      "brief_rationale": "In the direct address to the Muse, the target means 'tell' and is a second-person singular present active imperative. The two imperative candidates differ only in dictionary-entry identity while presenting the same contextually correct morphology and sense, so both are accepted and jointly preferred. The third-person imperfect analyses do not fit the syntax.",
+      "confidence": "high"
+    }
+  ]
+}

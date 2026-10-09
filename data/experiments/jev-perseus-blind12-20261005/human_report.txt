@@ -1,0 +1,32 @@
+Perseus / Jev frozen rare-form trial
+
+Frozen sample: 12 occurrences, seed 20261005, four per source.
+Sources: whole Pindar Pythian 4 and Bacchylides Ep. 5, plus Odyssey 7.152-197.
+Rarity: exact-NFC Melos corpus counts, lowest within-source quartile with inclusive ties; first 50 linked words excluded. Corpus absence is not established Greek rarity.
+Manual browser clicks: 12; 1 success and 11 HTTP 503 (parent browser observations).
+Direct HTTP failures: HTTP 503: 6, HTTP 429: 5, timed out: 1.
+The successful browser analysis fragment was mechanically captured and parsed; failed targets were retained, never replaced.
+Evaluable morphology coverage: 1/12.
+Paid calls: 4; successful: 4. No retries or additional source trials.
+
+ἀδεισιβόαν: Perseus combined displayed top score 61.2%; blind-judge agreement all/any tied maxima: True/True. This is not a calibrated probability.
+ἀδεισιβόαν: historical user votes: NO VOTES; no empirical voting baseline.
+greek_context / forward: accepted=True; top probability=0.71; API confidence=0.56; margin=0.45; latency=0.216s.
+greek_context / reverse: accepted=True; top probability=0.7; API confidence=0.55; margin=0.44; latency=0.110s.
+translation_context / forward: accepted=True; top probability=0.73; API confidence=0.6; margin=0.50; latency=0.162s.
+translation_context / reverse: accepted=True; top probability=0.78; API confidence=0.67; margin=0.59; latency=0.159s.
+
+Reported API usage: 29288 input tokens; 292 output tokens.
+Comparison is agreement with one provisional blind model judge, not gold accuracy. Reversed-order calls are repeated controls, not independent cases. The available comparison does not establish a performance advantage.
+Correct-option-absent cases reported by judge: 0.
+No corpus or production annotations were changed.
+
+Limitations:
+- Purposive pool: whole Pindar Pythian 4 and Bacchylides Ep. 5 poems, plus Odyssey 7.152-197 card; first 50 linked words excluded from each, then random rare eligible occurrences.
+- Corpus zero counts indicate non-attestation, not proven linguistic rarity.
+- Provisional judge accepted sets are not independent expert gold.
+- Source combined scores are not calibrated probabilities; votes are a separate baseline.
+- Forward and reverse order are controls, not extra independent occurrences.
+- Published translation is full matched passage scope, not token-aligned.
+- Missing and unambiguous targets remain in the frozen denominator; no automatic replacement.
+- No statistical population accuracy, confidence calibration, or unique source winner claim.

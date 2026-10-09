@@ -1,0 +1,225 @@
+[
+  {
+    "id": "odyssey-002",
+    "target": "ἔννεπε",
+    "sample_role": "previously_inspected_positive_control",
+    "author": "Homer",
+    "work": "Odyssey",
+    "citation": "http://data.perseus.org/citations/urn:cts:greekLit:tlg0012.tlg002.perseus-grc1:1.1-1.43",
+    "greek_context": "ἄνδρα μοι ἔννεπε , μοῦσα , πολύτροπον , ὃς μάλα πολλὰ πλάγχθη , ἐπεὶ Τροίης ἱερὸν πτολίεθρον ἔπερσεν : πολλῶν δ᾽ ἀνθρώπων ἴδεν ἄστεα καὶ νόον ἔγνω , πολλὰ δ᾽ ὅ γ᾽ ἐν πόντῳ πάθεν ἄλγεα ὃν κατὰ θυμόν , 5 ἀρνύμενος ἥν τε ψυχὴν καὶ νόστον ἑταίρων . ἀλλ᾽ οὐδ᾽ ὣς ἑτάρους ἐρρύσατο , ἱέμενός περ : αὐτῶν γὰρ σφετέρῃσιν ἀτασθαλίῃσιν ὄλοντο , νήπιοι , οἳ κατὰ βοῦς Ὑπερίονος Ἠελίοιο ἤσθιον : αὐτὰρ ὁ τοῖσιν ἀφείλετο νόστιμον ἦμαρ . 10 τῶν ἁμόθεν γε , θεά , θύγατερ Διός , εἰπὲ καὶ ἡμῖν . ἔνθ᾽ ἄλλοι μὲν πάντες , ὅσοι φύγον αἰπὺν ὄλεθρον , οἴκοι ἔσαν , πόλεμόν τε πεφευγότες ἠδὲ θάλασσαν : τὸν δ᾽ οἶον νόστου κεχρημένον ἠδὲ γυναικὸς νύμφη πότνι᾽ ἔρυκε Καλυψὼ δῖα θεάων 15 ἐν σπέσσι γλαφυροῖσι , λιλαιομένη πόσιν εἶναι . ἀλλ᾽ ὅτε δὴ ἔτος ἦλθε περιπλομένων ἐνιαυτῶν , τῷ οἱ ἐπεκλώσαντο θεοὶ οἶκόνδε νέεσθαι εἰς Ἰθάκην , οὐδ᾽ ἔνθα πεφυγμένος ἦεν ἀέθλων καὶ μετὰ οἷσι φίλοισι . θεοὶ δ᾽ ἐλέαιρον ἅπαντες 20 νόσφι Ποσειδάωνος : ὁ δ᾽ ἀσπερχὲς μενέαινεν ἀντιθέῳ Ὀδυσῆι πάρος ἣν γαῖαν ἱκέσθαι . ἀλλ᾽ ὁ μὲν Αἰθίοπας μετεκίαθε τηλόθ᾽ ἐόντας , Αἰθίοπας τοὶ διχθὰ δεδαίαται , ἔσχατοι ἀνδρῶν , οἱ μὲν δυσομένου Ὑπερίονος οἱ δ᾽ ἀνιόντος , 25 ἀντιόων ταύρων τε καὶ ἀρνειῶν ἑκατόμβης . ἔνθ᾽ ὅ γ᾽ ἐτέρπετο δαιτὶ παρήμενος : οἱ δὲ δὴ ἄλλοι Ζηνὸς ἐνὶ μεγάροισιν Ὀλυμπίου ἁθρόοι ἦσαν . τοῖσι δὲ μύθων ἦρχε πατὴρ ἀνδρῶν τε θεῶν τε : μνήσατο γὰρ κατὰ θυμὸν ἀμύμονος Αἰγίσθοιο , 30 τόν ῥ᾽ Ἀγαμεμνονίδης τηλεκλυτὸς ἔκταν᾽ Ὀρέστης : τοῦ ὅ γ᾽ ἐπιμνησθεὶς ἔπε᾽ ἀθανάτοισι μετηύδα : ‘ ὢ πόποι , οἷον δή νυ θεοὺς βροτοὶ αἰτιόωνται : ἐξ ἡμέων γάρ φασι κάκ᾽ ἔμμεναι , οἱ δὲ καὶ αὐτοὶ σφῇσιν ἀτασθαλίῃσιν ὑπὲρ μόρον ἄλγε᾽ ἔχουσιν , 35 ὡς καὶ νῦν Αἴγισθος ὑπὲρ μόρον Ἀτρεΐδαο γῆμ᾽ ἄλοχον μνηστήν , τὸν δ᾽ ἔκτανε νοστήσαντα , εἰδὼς αἰπὺν ὄλεθρον , ἐπεὶ πρό οἱ εἴπομεν ἡμεῖς , Ἑρμείαν πέμψαντες , ἐύσκοπον ἀργεϊφόντην , μήτ᾽ αὐτὸν κτείνειν μήτε μνάασθαι ἄκοιτιν : 40 ἐκ γὰρ Ὀρέσταο τίσις ἔσσεται Ἀτρεΐδαο , ὁππότ᾽ ἂν ἡβήσῃ τε καὶ ἧς ἱμείρεται αἴης . ὣς ἔφαθ᾽ Ἑρμείας , ἀλλ᾽ οὐ φρένας Αἰγίσθοιο πεῖθ᾽ ἀγαθὰ φρονέων : νῦν δ᾽ ἁθρόα πάντ᾽ ἀπέτισεν . ’",
+    "target_line_before": "ἄνδρα μοι",
+    "target_line_after": ", μοῦσα, πολύτροπον, ὃς μάλα πολλὰ",
+    "word_index_zero_based": 2,
+    "word_occurrence_i": 1,
+    "source_href": "morph?l=e%29%2Fnnepe&la=greek&can=e%29%2Fnnepe0&prior=moi",
+    "source_onclick": "m(this,1,0); return false",
+    "source_doc": "Perseus:text:1999.01.0135:book=1:card=1",
+    "prior": "moi",
+    "translation": {
+      "text": "[1] Tell me, O Muse, of the man of many devices, who wandered full many ways after he had sacked the sacred citadel of Troy . Many were the men whose cities he saw and whose mind he learned, aye, and many the woes he suffered in his heart upon the sea, [5] seeking to win his own life and the return of his comrades. Yet even so he saved not his comrades, though he desired it sore, for through their own blind folly they perished—fools, who devoured the kine of Helios Hyperion; but he took from them the day of their returning. [10] Of these things, goddess, daughter of Zeus, beginning where thou wilt, tell thou even unto us. Now all the rest, as many as had escaped sheer destruction, were at home, safe from both war and sea, but Odysseus alone, filled with longing for his return and for his wife, did the queenly nymph Calypso, that bright goddess, [15] keep back in her hollow caves, yearning that he should be her husband. But when, as the seasons revolved, the year came in which the gods had ordained that he should return home to Ithaca , not even there was he free from toils, even among his own folk. And all the gods pitied him [20] save Poseidon; but he continued to rage unceasingly against godlike Odysseus until at length he reached his own land. Howbeit Poseidon had gone among the far-off Ethiopians—the Ethiopians who dwell sundered in twain, the farthermost of men, some where Hyperion sets and some where he rises, [25] there to receive a hecatomb of bulls and rams, and there he was taking his joy, sitting at the feast; but the other gods were gathered together in the halls of Olympian Zeus. Among them the father of gods and men was first to speak, for in his heart he thought of noble Aegisthus, [30] whom far-famed Orestes, Agamemnon's son, had slain. Thinking on him he spoke among the immortals, and said: “Look you now, how ready mortals are to blame the gods. It is from us, they say, that evils come, but they even of themselves, through their own blind folly, have sorrows beyond that which is ordained. [35] Even as now Aegisthus, beyond that which was ordained, took to himself the wedded wife of the son of Atreus, and slew him on his return, though well he knew of sheer destruction, seeing that we spake to him before, sending Hermes, the keen-sighted Argeiphontes, 1 that he should neither slay the man nor woo his wife; [40] for from Orestes shall come vengeance for the son of Atreus when once he has come to manhood and longs for his own land. So Hermes spoke, but for all his good intent he prevailed not upon the heart of Aegisthus; and now he has paid the full price of all.”",
+      "source_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0136%3Abook%3D1%3Acard%3D1",
+      "edition": "Homer. The Odyssey with an English Translation by A.T. Murray, PH.D. in two volumes. Cambridge, MA., Harvard University Press; London, William Heinemann, Ltd. 1919. The Annenberg CPB/Project provided support for entering this text. Purchase a copy of this text (not necessarily the same edition) from Amazon.com",
+      "citation_uri": "http://data.perseus.org/citations/urn:cts:greekLit:tlg0012.tlg002.perseus-eng1:1.1-1.43",
+      "title": "Homer, Odyssey, Book 1, line 1",
+      "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_english.html",
+      "sha256": "4e381f403c728ceeb1e90e365f68f820754de86ee65224a45e3ac110443242f7",
+      "license_urls": [
+        "https://creativecommons.org/licenses/by-sa/3.0/us/"
+      ],
+      "edition_alignment_status": "Perseus-linked parallel translation; identical CTS passage range; edition descriptions retained separately",
+      "context_scope": "1.1-1.43"
+    },
+    "greek_edition": "Homer. The Odyssey with an English Translation by A.T. Murray, PH.D. in two volumes. Cambridge, MA., Harvard University Press; London, William Heinemann, Ltd. 1919. The Annenberg CPB/Project provided support for entering this text. Purchase a copy of this text (not necessarily the same edition) from Amazon.com",
+    "candidates": [
+      {
+        "id": "p1",
+        "lemma": "ἐνέπω",
+        "morphology": "verb 3rd sg imperf ind act homeric ionic unaugmented",
+        "gloss": "tell",
+        "perseus_percent": 2.5,
+        "user_votes": 17,
+        "perseus_percent_display": "2.5%",
+        "user_votes_display": "17 user votes",
+        "perseus_selected": false,
+        "source_lemma_id": "e)ne/pw",
+        "source_row_index": 0,
+        "form_display": "ἔννεπε"
+      },
+      {
+        "id": "p2",
+        "lemma": "ἐνέπω",
+        "morphology": "verb 2nd sg pres imperat act",
+        "gloss": "tell",
+        "perseus_percent": 94.7,
+        "user_votes": 669,
+        "perseus_percent_display": "94.7%",
+        "user_votes_display": "669 user votes",
+        "perseus_selected": true,
+        "source_lemma_id": "e)ne/pw",
+        "source_row_index": 1,
+        "form_display": "ἔννεπε †"
+      },
+      {
+        "id": "p3",
+        "lemma": "ἐνέπω2",
+        "morphology": "verb 2nd sg pres imperat act",
+        "gloss": "say, tell",
+        "perseus_percent": 2.6,
+        "user_votes": 18,
+        "perseus_percent_display": "2.6%",
+        "user_votes_display": "18 user votes",
+        "perseus_selected": false,
+        "source_lemma_id": "e)ne/pw2",
+        "source_row_index": 0,
+        "form_display": "ἔννεπε"
+      },
+      {
+        "id": "p4",
+        "lemma": "ἐνέπω2",
+        "morphology": "verb 3rd sg imperf ind act homeric ionic unaugmented",
+        "gloss": "say, tell",
+        "perseus_percent": 0.1,
+        "user_votes": 0,
+        "perseus_percent_display": "0.1%",
+        "user_votes_display": "no user votes",
+        "perseus_selected": false,
+        "source_lemma_id": "e)ne/pw2",
+        "source_row_index": 1,
+        "form_display": "ἔννεπε"
+      }
+    ],
+    "morph_url": "https://www.perseus.tufts.edu/hopper/morph?l=e%29%2Fnnepe&la=greek&can=e%29%2Fnnepe0&prior=moi&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+    "source_urls": [
+      "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1",
+      "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0136%3Abook%3D1%3Acard%3D1",
+      "https://www.perseus.tufts.edu/hopper/morph?l=e%29%2Fnnepe&la=greek&can=e%29%2Fnnepe0&prior=moi&d=Perseus:text:1999.01.0135:book=1:card=1&i=1"
+    ],
+    "raw_refs": [
+      {
+        "requested_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1",
+        "effective_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1",
+        "status": 200,
+        "downloaded_at": "2026-10-05T22:45:13.379782+00:00",
+        "sha256": "83feb55dda2ad623293bb895b8e1d9269c7f119e98b602966aae3751dc29b442",
+        "bytes": 124315,
+        "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_greek.html",
+        "request_headers": {
+          "User-Agent": "Mozilla/5.0",
+          "Accept-Encoding": "gzip, deflate, br, zstd",
+          "Accept": "*/*",
+          "Connection": "keep-alive"
+        },
+        "response_headers": {
+          "Date": "Mon, 05 Oct 2026 17:45:17 GMT",
+          "Content-Type": "text/html;charset=UTF-8",
+          "Content-Language": "pt-BR",
+          "Content-Encoding": "gzip",
+          "Vary": "Accept-Encoding",
+          "Age": "17996",
+          "Accept-Ranges": "bytes",
+          "Content-Length": "18776",
+          "Connection": "keep-alive"
+        }
+      },
+      {
+        "requested_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0136%3Abook%3D1%3Acard%3D1",
+        "effective_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.01.0136%3Abook%3D1%3Acard%3D1",
+        "status": 200,
+        "downloaded_at": "2026-10-05T22:45:14.566466+00:00",
+        "sha256": "4e381f403c728ceeb1e90e365f68f820754de86ee65224a45e3ac110443242f7",
+        "bytes": 78248,
+        "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_english.html",
+        "request_headers": {
+          "User-Agent": "Mozilla/5.0",
+          "Accept-Encoding": "gzip, deflate, br, zstd",
+          "Accept": "*/*",
+          "Connection": "keep-alive",
+          "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1"
+        },
+        "response_headers": {
+          "Date": "Mon, 05 Oct 2026 14:16:52 GMT",
+          "Content-Type": "text/html;charset=UTF-8",
+          "Content-Language": "en-GB",
+          "Content-Encoding": "gzip",
+          "Vary": "Accept-Encoding",
+          "Age": "30501",
+          "Accept-Ranges": "bytes",
+          "Content-Length": "12963",
+          "Connection": "keep-alive"
+        }
+      },
+      {
+        "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=e%29%2Fnnepe&la=greek&can=e%29%2Fnnepe0&prior=moi&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+        "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=e%29%2Fnnepe&la=greek&can=e%29%2Fnnepe0&prior=moi&d=Perseus:text:1999.01.0135:book=1:card=1&i=1",
+        "status": 200,
+        "downloaded_at": "2026-10-05T22:46:42.601612+00:00",
+        "sha256": "1c6471075bf0ecd74208d5bdbae9ab3fb0b09c571a02917da822c199cbbd2f04",
+        "bytes": 15771,
+        "raw_path": "data\\experiments\\jev-perseus-20261005\\raw\\odyssey_morph_002.html",
+        "request_headers": {
+          "User-Agent": "Mozilla/5.0",
+          "Accept-Encoding": "gzip, deflate, br, zstd",
+          "Accept": "*/*",
+          "Connection": "keep-alive",
+          "Referer": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.01.0135:book=1:card=1"
+        },
+        "response_headers": {
+          "Date": "Mon, 05 Oct 2026 20:06:35 GMT",
+          "Content-Type": "text/html;charset=UTF-8",
+          "Content-Language": "zh-CN",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Origin, X-Requested-With, Content-Type, Accept",
+          "Content-Encoding": "gzip",
+          "Vary": "Accept-Encoding",
+          "Age": "9593",
+          "Accept-Ranges": "bytes",
+          "Content-Length": "3833",
+          "Connection": "keep-alive"
+        }
+      }
+    ],
+    "perseus_evaluator_table": [
+      [
+        "Results",
+        "User-voting evaluator",
+        "Prior-form frequency evaluator",
+        "Word-frequency evaluator",
+        "Tagger evaluator",
+        "Form frequency evaluator"
+      ],
+      [
+        "ἐνέπω verb 2nd sg pres imperat act",
+        "67,200%",
+        "18.1%",
+        "25%",
+        "0%",
+        "9%"
+      ],
+      [
+        "ἐνέπω verb 2nd sg pres imperat act",
+        "1,800%",
+        "18.1%",
+        "25%",
+        "0%",
+        "9%"
+      ],
+      [
+        "ἐνέπω verb 3rd sg imperf ind act homeric ionic unaugmented",
+        "1,700%",
+        "31.9%",
+        "25%",
+        "0%",
+        "41%"
+      ],
+      [
+        "ἐνέπω verb 3rd sg imperf ind act homeric ionic unaugmented",
+        "0%",
+        "31.9%",
+        "25%",
+        "0%",
+        "41%"
+      ]
+    ],
+    "perseus_explanation": "Statistical votes for form ἔννεπε Results User-voting evaluator Prior-form frequency evaluator Word-frequency evaluator Tagger evaluator Form frequency evaluator ἐνέπω verb 2nd sg pres imperat act 67,200% 18.1% 25% 0% 9% ἐνέπω verb 2nd sg pres imperat act 1,800% 18.1% 25% 0% 9% ἐνέπω verb 3rd sg imperf ind act homeric ionic unaugmented 1,700% 31.9% 25% 0% 41% ἐνέπω verb 3rd sg imperf ind act homeric ionic unaugmented 0% 31.9% 25% 0% 41% The possible parses for this word have been evaulated by an experimental system that attempts to determine which parse is correct in this context. The system is composed of a number of \"evaluators\"--each of which uses different criteria to score the possibilities--whose votes are weighted to determine the best answer. The percentages in the table above show each evaluator's score for each form, which are then combined to determine each form's overall score. This selection used the following evaluators: User-voting evaluator : Scores parses based on the number of votes each one has received from users. Weighted more heavily as more users vote for a given word in a text. Prior-form frequency evaluator : Evaluates forms based on the preceding word in the text; finds the most likely parse among this word's possible morphological features and the preceding word's possible features based on the frequency of each possible pair. Word-frequency evaluator : Scores parses based on how often the dictionary word appears in the Perseus corpus. Only used when a given form could be from more than one possible word. Tagger evaluator : Evaluator based on pre-computed automatic morphological tagging Form frequency evaluator : Scores parses based on how often their morphological features (first-person, indicative, plural, and so on) occur among all the words in the Perseus corpus. User votes are weighted more heavily than the other methods, which are all treated equally. (This is historical data only. The voting feature is currently disabled.)"
+  }
+]

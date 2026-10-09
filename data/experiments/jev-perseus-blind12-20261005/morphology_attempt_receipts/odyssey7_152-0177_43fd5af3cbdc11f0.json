@@ -1,0 +1,9 @@
+{
+  "id": "odyssey7_152-0177",
+  "observed_url": "https://www.perseus.tufts.edu/hopper/morph?l=*ponto%2Fnoe&la=greek&can=*ponto%2Fnoe0&prior=*)alkino/oio&d=Perseus:text:1999.01.0135:book=7:card=152&i=1",
+  "sampling_sha256": "454885d1d4067daec90bb7f184044916284326168a02a08609809c7568a7dd1e",
+  "started_utc": "2026-10-05T23:49:20.624928+00:00",
+  "status": "failed",
+  "error_type": "RuntimeError",
+  "error": "Source returned HTTP 429"
+}

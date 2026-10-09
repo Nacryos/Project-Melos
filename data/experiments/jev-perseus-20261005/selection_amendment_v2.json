@@ -1,0 +1,11 @@
+{
+  "frozen_at": "2026-10-05T22:46:40.925477+00:00",
+  "plan": {
+    "reason": "Original strict sampling halted on inaccessible live morphology; parent authorized availability sampling",
+    "authorization": "Parent instruction 2026-10-05; independent auditor accepted",
+    "timeout_seconds": 15,
+    "max_consecutive_morph_failures_per_passage": 3,
+    "failure_policy": "Log and omit unavailable occurrence; never supply invented candidates",
+    "positive_control": "Previously inspected Odyssey query l=e)/nnepe fetched separately, flagged non-fresh"
+  }
+}

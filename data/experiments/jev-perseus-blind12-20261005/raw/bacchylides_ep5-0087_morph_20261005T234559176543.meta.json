@@ -1,0 +1,22 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=i%29%2Fsxousi&la=greek&can=i%29%2Fsxousi0&prior=mega/las&d=Perseus:text:1999.01.0063:book=Ep:poem=5&i=1",
+  "started_utc": "2026-10-05T23:45:59.177239+00:00",
+  "raw_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\bacchylides_ep5-0087_morph_20261005T234559176543.html",
+  "status": 503,
+  "capture_type": "direct_http",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=i%29%2Fsxousi&la=greek&can=i%29%2Fsxousi0&prior=mega/las&d=Perseus:text:1999.01.0063:book=Ep:poem=5&i=1",
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 23:46:00 GMT",
+    "content-type": "text/html; charset=utf-8",
+    "Retry-After": "5",
+    "Age": "0",
+    "Content-Length": "286",
+    "Connection": "keep-alive"
+  },
+  "wire_bytes_preserved": true,
+  "sha256": "883053b4f8e8a5bf6f33c71116e727a4dc149a511a7a7ceb859169ba60582d15",
+  "bytes": 286,
+  "error_type": "RuntimeError",
+  "error": "Source returned HTTP 503",
+  "completed_utc": "2026-10-05T23:45:59.872826+00:00"
+}

@@ -1,0 +1,23 @@
+{
+  "requested_url": "https://www.perseus.tufts.edu/hopper/morph?l=*ponto%2Fnoe&la=greek&can=*ponto%2Fnoe0&prior=*)alkino/oio&d=Perseus:text:1999.01.0135:book=7:card=152&i=1",
+  "started_utc": "2026-10-05T23:49:20.640023+00:00",
+  "raw_path": "C:\\Users\\alvin\\melos\\data\\experiments\\jev-perseus-blind12-20261005\\raw\\odyssey7_152-0177_morph_20261005T234920639606.html",
+  "status": 429,
+  "capture_type": "direct_http",
+  "effective_url": "https://www.perseus.tufts.edu/hopper/morph?l=*ponto%2Fnoe&la=greek&can=*ponto%2Fnoe0&prior=*)alkino/oio&d=Perseus:text:1999.01.0135:book=7:card=152&i=1",
+  "response_headers": {
+    "Date": "Mon, 05 Oct 2026 23:49:21 GMT",
+    "Server": "Varnish",
+    "X-Varnish": "452854356",
+    "Content-Type": "text/html; charset=utf-8",
+    "Retry-After": "5",
+    "Content-Length": "277",
+    "Connection": "keep-alive"
+  },
+  "preserved_response_body": true,
+  "sha256": "735785b2621da1f58f33f48df9b708a6dea28bc19f251fa1ed5cc01c7e51286a",
+  "bytes": 277,
+  "error_type": "RuntimeError",
+  "error": "Source returned HTTP 429",
+  "completed_utc": "2026-10-05T23:49:21.352948+00:00"
+}

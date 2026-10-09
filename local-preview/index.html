@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <base href="/">
+  <title>Melos · The poets</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/branding/melos-favicon-white.svg?v=white-1">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/styles.css">
+  <link rel="stylesheet" href="/local-preview/timeline.css">
+</head>
+<body>
+  <a href="#poets" class="skip-link">Skip to poets</a>
+  <header class="masthead">
+    <a href="./" class="wordmark" aria-label="Melos home"><span lang="grc">Μέλος</span><small>A Greek Lyric Lexicon</small></a>
+    <nav aria-label="Main navigation"><button id="show-poets" type="button">The poets</button><button id="open-reader" type="button">Reading room <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></nav>
+  </header>
+  <main>
+    <div id="painting-hero"></div>
+    <section id="landing" class="landing">
+      <div class="introduction">
+        <div><p class="eyebrow">The lyric tradition</p><h1>The poets,<br><em>in time.</em></h1></div>
+        <div class="intro-search"><p class="intro-copy">Begin with a poet.<br>Follow a word through the collection.</p><form id="poet-search" role="search"><label for="query" class="sr-only">Search the collection</label><div class="search-line"><input id="query" type="search" name="q" placeholder="A word, a phrase, an idea" autocomplete="off" spellcheck="false" required maxlength="1000"><button type="submit" aria-label="Search collection"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button></div><details class="search-options"><summary>Search options <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 10 5 5 5-5"/></svg></summary><div class="option-grid"><label>Find by<select id="search-mode"><option value="hybrid">Words &amp; ideas</option><option value="exact">Exact wording</option><option value="forms">Related word forms</option><option value="fuzzy">Similar spelling</option><option value="themes">Theme or description</option></select></label><label>Within<select id="search-author"><option value="">All authors</option></select></label><label>Sort by<select id="search-order"><option value="relevance">Relevance</option><option value="chronological">Author date</option></select></label></div></details></form></div>
+      </div>
+      <section class="poet-collection" id="poets" aria-labelledby="poets-title"><div class="collection-heading"><h2 id="poets-title">Poets in the corpus</h2><span>Dates, BCE</span></div><ol id="poet-timeline" class="poet-timeline"></ol></section>
+      <footer class="page-footer"><p>Read closely. Follow the language.</p><div><a href="../index.html">The paintings <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a><button id="browse-all" type="button">Browse the full collection <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button></div><details id="image-credits"><summary>Images &amp; dates</summary><p>Dates reproduce the existing Melos poet index: some are lifespans, others a birth date or an approximate period of activity. Portraits are later depictions, not verified likenesses.</p><ul id="credit-list"></ul></details></footer>
+    </section>
+    <section id="reading-room" class="reading-room" aria-label="Reading room" hidden>
+      <div class="room-toolbar"><button id="back-to-poets" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg> The poets</button><span id="room-title">Reading room</span><button id="room-search" type="button">Search <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button><a id="standalone-reader" href="../reader.html" target="_blank" rel="noopener">Full view <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></a></div>
+      <iframe id="reader-frame" title="Melos reader — texts, dictionary and passage analysis"></iframe>
+    </section>
+    <p id="page-status" class="page-status" role="status" aria-live="polite" hidden></p>
+  </main>
+  <script src="/js/verse-fit.js"></script>
+  <script type="module" src="/local-preview/timeline.js"></script>
+</body>
+</html>
