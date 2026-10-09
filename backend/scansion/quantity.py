@@ -1,49 +1,31 @@
-"""Layer 1: metre-free syllable quantities with a longness probability per syllable.
+"""Layer 1: metre-free scansion units with a longness probability each.
 
-The decision tree (docs/scansion.md, "Decision tree") is applied to every syllable in order:
-
-1. the nucleus's nature (NAT-*), and for a bare α ι υ the dichronon branch (ACC-*, LEX-*, DIA-ETA,
-   DICH-UNK);
-2. what follows the nucleus up to the next vowel on the same line: two consonants or a double
-   consonant (POS-*), stop + liquid/nasal (MCL-*), a vowel of the next word (COR-EXT, HIA-SHORT), a
-   vowel inside the word (COR-INT), or at most one consonant (nature decides; EPL-INIT, DIG-LEN,
-   CONS-VOW refine a short syllable);
-3. flags that do not change the syllable count unless a metre is chosen: synizesis (SYN-CAND),
-   digamma (DIG-HIA), line end (FIN-ANC).
-
-The leaf reached gives the probability that the syllable is long: the share of long syllables at
-that leaf in the training half of the Hypotactic Iliad (books 1-12; backend/scansion/data/
-leaf_rates.json, scripts/scansion_calibrate.py). Grammar rules that admit no exception are given
-1.0 / 0.0 when the measured share is at least 0.98 / at most 0.02.
+A unit is a vowel nucleus plus the consonants after it up to the next nucleus on the line
+(backend/scansion/syllabify.py). For every unit the features listed in engine.FEATURES are
+computed here, and the meta-grammar (rules.yaml) is evaluated on them: the `vowel` tree gives
+p_vowel, the `unit` tree gives p_long, `flags` add annotations. Lexical vowel lengths are an
+optional hook (lexicon=...): without it the `lex` feature is "none" and the grammar falls back to
+its dichronon default.
 """
 from __future__ import annotations
 
 import json
-import unicodedata
 from dataclasses import dataclass, field
 from functools import lru_cache
 from pathlib import Path
 
 from .. import elision as project_elision
-from .greek import (
-    ACCENTS, ACUTE, CIRCUMFLEX, CONSONANTS, DICHRONA, DOUBLE_CONSONANTS, GRAVE, IOTA_SUB,
-    LIQUIDS_NASALS, ROUGH, SMOOTH, STOPS, accentless_key, key,
-)
+from . import engine
+from .greek import ACCENTS, CIRCUMFLEX, CONSONANTS, DOUBLE_CONSONANTS, IOTA_SUB, LIQUIDS_NASALS, SMOOTH, STOPS, accentless_key
 from .lexicon import DICTIONARY_SOURCES, Evidence, QuantityLexicon, lemma_keys
-from .rules import RULES
-from .syllabify import Nucleus, Syllable, Word, consonant_units, line_spans, syllabify_line, words_of
+from .syllabify import Nucleus, Syllable, Word, consonant_units, line_spans, nuclei_of, syllabify_line, words_of
 
 DATA = Path(__file__).resolve().parent / "data"
-CERTAIN = {"NAT-ETA", "NAT-DIPH", "NAT-CIRC", "NAT-ISUB", "NAT-EO", "CRA-1", "POS-WORD", "POS-DOUBLE",
-           "POS-ACROSS", "ACC-PROPAROX", "ACC-PROPERISP", "ACC-PAROX-LONG", "ACC-PAROX-SHORT"}
-# Grammar values used only when a leaf has no measurement (documented in docs/scansion.md).
-GRAMMAR_DEFAULT = {"L": 1.0, "S": 0.0, "A": 0.5}
-VOICELESS, ASPIRATE, VOICED = set("πτκ"), set("φθχ"), set("βδγ")
-EPIC_LENGTHENING_INITIALS = set("ρλμνσδ")  # Monro §371
 
 
 @dataclass
 class SyllableResult:
+    """One scansion unit (the metre layer treats it as a syllable)."""
     index: int
     line: int
     word: int
@@ -51,13 +33,18 @@ class SyllableResult:
     end: int
     text: str
     p_long: float
-    leaf: str
-    rule: str
-    vowel: dict
+    rule: str                     # deciding unit-tree node
+    path: list[str]               # unit-tree path
+    vowel: dict                   # {"rule", "path", "p_long"}
     reasons: list[dict] = field(default_factory=list)
     flags: list[dict] = field(default_factory=list)
+    nstart: int = 0               # offsets of the nucleus
+    nend: int = 0
     certain: bool = False
-    nstart: int = 0               # offset of the nucleus's first letter
+
+    @property
+    def leaf(self) -> str:
+        return self.rule
 
     @property
     def label(self) -> str:
@@ -65,17 +52,9 @@ class SyllableResult:
 
     def as_dict(self) -> dict:
         return {"i": self.index, "line": self.line, "word": self.word, "start": self.start, "end": self.end,
-                "text": self.text, "p_long": round(self.p_long, 3), "label": self.label, "rule": self.rule,
-                "leaf": self.leaf, "certain": self.certain, "vowel": self.vowel, "reasons": self.reasons,
-                "flags": self.flags}
-
-
-@lru_cache(maxsize=4)
-def load_rates(path: str | None = None) -> dict:
-    p = Path(path) if path else DATA / "leaf_rates.json"
-    if not p.exists():
-        return {}
-    return json.loads(p.read_text(encoding="utf-8")).get("leaves", {})
+                "nucleus": [self.nstart, self.nend], "text": self.text, "p_long": round(self.p_long, 3),
+                "label": self.label, "certain": self.certain, "rule": self.rule, "path": self.path,
+                "vowel": self.vowel, "reasons": self.reasons, "flags": self.flags}
 
 
 @lru_cache(maxsize=1)
@@ -85,359 +64,260 @@ def digamma_keys() -> frozenset[str]:
 
 
 class Scanner:
-    def __init__(self, lexicon: QuantityLexicon | None = None, rates: dict | None = None):
-        self.lexicon = lexicon or QuantityLexicon()
-        self.rates = load_rates() if rates is None else rates
+    """scan(text) -> list of units.  `lexicon=None` runs the core grammar only."""
 
-    # ----------------------------------------------------------------------------- public
+    def __init__(self, lexicon: QuantityLexicon | None = None, grammar: engine.Grammar | None = None,
+                 rules_path: str | Path | None = None, params: dict | None = None):
+        if grammar is None:
+            grammar, errors = engine.load(rules_path, param_overrides=params)
+            if errors:
+                raise engine.RuleError("; ".join(errors))
+        self.grammar = grammar
+        self.lexicon = lexicon
+
     def scan(self, text: str) -> list[SyllableResult]:
         out: list[SyllableResult] = []
         for line_no, (a, b) in enumerate(line_spans(text)):
             words = words_of(text, a, b)
             if not words:
                 continue
-            for w in words:
-                w.index = w.index  # indices are per line
-            sylls = syllabify_line(words, line_no, first_index=len(out))
-            ctx = _LineContext(self, text, words)
-            for s in sylls:
-                out.append(self._syllable(ctx, s, sylls))
+            units = syllabify_line(words, line_no, first_index=len(out))
+            ctx = _Line(self, text, words, units)
+            for k in range(len(units)):
+                out.append(ctx.result(k))
         return out
 
-    # ----------------------------------------------------------------------------- tree
-    def rate(self, leaf: str, fallback: str) -> tuple[float, str]:
-        """Measured share long at the most specific measured leaf key; grammar default otherwise."""
-        parts = leaf.split(":")
-        for n in range(len(parts), 0, -1):
-            k = ":".join(parts[:n])
-            if k in self.rates and self.rates[k]["n"] >= 20:
-                p = self.rates[k]["p"]
-                base = parts[0]
-                if base in CERTAIN and (p >= 0.98 or p <= 0.02):
-                    return (1.0 if p >= 0.5 else 0.0), k
-                return p, k
-        return GRAMMAR_DEFAULT[fallback], "grammar"
-
-    def _syllable(self, ctx: "_LineContext", s: Syllable, sylls: list[Syllable]) -> SyllableResult:
-        word = ctx.words[s.word]
-        vq, vrule, p_v, vreasons = ctx.nature(s.nucleus)
-        reasons = list(vreasons)
-        flags: list[dict] = []
-        units = consonant_units(s.coda)
-        cons = [c for c, _ in s.coda if c in CONSONANTS]
-        boundary_at = [i for i, (_, b) in enumerate(s.coda) if b]
-        next_word = ctx.next_word(s)
-        nature_leaf = vrule
-
-        if units >= 2:
-            mcl = (len(cons) == 2 and cons[0] in STOPS and cons[1] in LIQUIDS_NASALS
-                   and not any(b for _, b in s.coda[1:]))
-            if mcl and vq != "L":
-                where = "INIT" if s.coda[0][1] else "WORD"
-                leaf = f"MCL-{where}:{_stop_class(cons[0])}{'N' if cons[1] in 'μν' else 'L'}"
-                p_pos, used = self.rate(leaf, "A")
-                p = p_pos if vq == "S" else p_v + (1 - p_v) * p_pos
-                reasons.append(_reason(leaf.split(":")[0], f"{cons[0]} + {cons[1]}" + (" opening the next word" if where == "INIT" else "")))
-                return self._result(ctx, s, p, leaf, used, vq, vrule, p_v, reasons, flags)
-            if any(c in DOUBLE_CONSONANTS for c in cons):
-                leaf = "POS-DOUBLE"
-            elif s.coda and s.coda[0][1]:
-                leaf = "POS-INIT"
-            elif boundary_at:
-                leaf = "POS-ACROSS"
-            else:
-                leaf = "POS-WORD"
-            p, used = self.rate(leaf, "L")
-            reasons.append(_reason(leaf, _cluster_note(s.coda)))
-            return self._result(ctx, s, p, leaf, used, vq, vrule, p_v, reasons, flags)
-
-        if not s.coda and s.next_vowel_word_initial and not s.line_final:
-            dig = ctx.is_digamma(next_word)
-            if dig:
-                flags.append(_flag("DIG-HIA", f"{ctx.words[next_word].text} once began with ϝ"))
-            if vq == "L":
-                leaf = f"COR-EXT:{_nucleus_class(ctx, s.nucleus)}" + (":dig" if dig else "")
-                p, used = self.rate(leaf, "A")
-                reasons.append(_reason("COR-EXT", "before " + ctx.words[next_word].text))
-                return self._result(ctx, s, p, leaf, used, vq, vrule, p_v, reasons, flags)
-            if vq == "S":
-                leaf = "HIA-SHORT" + (":dig" if dig else "")
-                p, used = self.rate(leaf, "S")
-                reasons.append(_reason("HIA-SHORT", "before " + ctx.words[next_word].text))
-                return self._result(ctx, s, p, leaf, used, vq, vrule, p_v, reasons, flags)
-            p_cor, _ = self.rate("COR-EXT:long", "A")
-            p_hia, _ = self.rate("HIA-SHORT", "S")
-            p = p_v * p_cor + (1 - p_v) * p_hia
-            reasons.append(_reason("COR-EXT", "a long vowel here could be shortened before " + ctx.words[next_word].text))
-            return self._result(ctx, s, p, vrule, vrule, vq, vrule, p_v, reasons, flags)
-
-        if not s.coda and s.next_nucleus_same_word and vq == "L" and s.nucleus.kind == "diphthong" or (
-                not s.coda and s.next_nucleus_same_word and vq == "L" and ctx.letters(s.nucleus)[0].base in "ηω"
-                and IOTA_SUB not in ctx.letters(s.nucleus)[0].marks):
-            leaf = f"COR-INT:{_nucleus_class(ctx, s.nucleus)}"
-            p, used = self.rate(leaf, "A")
-            reasons.append(_reason("COR-INT", "before " + ctx.next_letters(s)))
-            self._synizesis_flag(ctx, s, flags)
-            return self._result(ctx, s, p, leaf, used, vq, vrule, p_v, reasons, flags)
-
-        self._synizesis_flag(ctx, s, flags)
-        if vq == "L":
-            p, used = self.rate(nature_leaf, "L")
-            return self._result(ctx, s, p, nature_leaf, used, vq, vrule, p_v, reasons, flags)
-        if vq == "S":
-            leaf = vrule
-            if s.word_final and not s.line_final and next_word is not None:
-                nxt = ctx.words[next_word]
-                first = nxt.letters[0].base
-                if ctx.is_digamma(next_word) and (cons or first in CONSONANTS):
-                    leaf = "DIG-LEN"
-                    reasons.append(_reason("DIG-LEN", f"{nxt.text} once began with ϝ"))
-                elif not cons and first in EPIC_LENGTHENING_INITIALS and len(s.coda) == 1:
-                    leaf = f"EPL-INIT:{first}"
-                    reasons.append(_reason("EPL-INIT", f"before initial {first}"))
-                elif cons and not s.coda[-1][1] and first not in CONSONANTS:
-                    leaf = "CONS-VOW"
-                    reasons.append(_reason("CONS-VOW", f"final {cons[-1]} before a vowel"))
-            p, used = self.rate(leaf, "S")
-            return self._result(ctx, s, p, leaf, used, vq, vrule, p_v, reasons, flags)
-        # dichronon in an open syllable: the vowel decides
-        return self._result(ctx, s, p_v, vrule, vrule, vq, vrule, p_v, reasons, flags)
-
-    def _synizesis_flag(self, ctx, s: Syllable, flags: list) -> None:
-        letters = ctx.letters(s.nucleus)
-        if (not s.coda and s.next_nucleus_same_word and len(letters) == 1 and letters[0].base in "εη"):
-            leaf = f"SYN-CAND:{letters[0].base}{ctx.next_letters(s)[:1]}"
-            p, used = self.rate(leaf, "A") if leaf in self.rates or "SYN-CAND" in self.rates else (None, "grammar")
-            flags.append(_flag("SYN-CAND", f"{letters[0].base} + {ctx.next_letters(s)} may form one syllable",
-                               p_merge=None if p is None else round(p, 3)))
-
-    def _result(self, ctx, s: Syllable, p: float, leaf: str, used: str, vq, vrule, p_v, reasons, flags) -> SyllableResult:
-        if s.line_final:
-            flags.append(_flag("FIN-ANC", "last syllable of the line"))
-        rule = leaf.split(":")[0]
-        if not reasons or reasons[-1]["id"] != rule:
-            if rule in RULES:
-                reasons.append(_reason(rule, ""))
-        return SyllableResult(
-            index=s.index, line=s.line, word=s.word, start=s.start, end=s.end, text=ctx.text[s.start:s.end],
-            p_long=float(p), leaf=leaf, rule=rule,
-            vowel={"quantity": vq, "rule": vrule.split(":")[0], "p_long": round(p_v, 3)},
-            reasons=reasons, flags=flags, certain=(p in (0.0, 1.0) and rule in CERTAIN and used != "grammar"),
-            nstart=ctx.letters(s.nucleus)[0].start,
-        )
+    def scan_lines(self, text: str) -> list[list[SyllableResult]]:
+        lines: dict[int, list[SyllableResult]] = {}
+        for r in self.scan(text):
+            lines.setdefault(r.line, []).append(r)
+        return [lines[k] for k in sorted(lines)]
 
 
-class _LineContext:
-    def __init__(self, scanner: Scanner, text: str, words: list[Word]):
-        self.scanner = scanner
+class _Line:
+    def __init__(self, scanner: Scanner, text: str, words: list[Word], units: list[Syllable]):
+        self.sc = scanner
         self.text = text
         self.words = words
-        self._nuclei_cache: dict[int, list[Nucleus]] = {}
-        self._evidence: dict[int, Evidence] = {}
+        self.units = units
+        self._nuclei = {w.index: nuclei_of(w) for w in words}
+        self._ev: dict[int, Evidence] = {}
+        self._dig: dict[int, bool] = {}
 
-    def letters(self, n: Nucleus):
+    # ------------------------------------------------------------------ output
+    def result(self, k: int) -> SyllableResult:
+        u = self.units[k]
+        g = self.sc.grammar
+        env = dict(g.params)
+        env.update(self.features(u))
+        p_vowel, vpath = g.decide(g.vowel, env)
+        env["p_vowel"] = p_vowel
+        p, upath = g.decide(g.unit, env)
+        flags = []
+        for f in g.flags:
+            if f.when(env):
+                d = {"id": f.id, "text": f.reason, "cite": f.cite}
+                if f.p is not None:
+                    d["p"] = round(float(f.p(env)), 3)
+                flags.append(d)
+        reasons = [{"id": vpath[-1].id, "text": vpath[-1].reason, "cite": vpath[-1].cite, "tree": "vowel"}]
+        if upath[-1].id != "NATURE":
+            reasons.append({"id": upath[-1].id, "text": upath[-1].reason, "cite": upath[-1].cite, "tree": "unit",
+                            "detail": self._detail(u, upath[-1].id)})
+        letters = self._letters(u.nucleus)
+        nstart, nend = letters[0].start, letters[-1].end
+        start = nstart if k > 0 else min(nstart, self.words[0].start)
+        end = self._interval_end(k)
+        return SyllableResult(
+            index=u.index, line=u.line, word=u.word, start=start, end=end, text=self.text[start:end],
+            p_long=p, rule=upath[-1].id, path=[n.id for n in upath],
+            vowel={"rule": vpath[-1].id, "path": [n.id for n in vpath], "p_long": round(p_vowel, 3)},
+            reasons=reasons, flags=flags, nstart=nstart, nend=nend, certain=p in (0.0, 1.0),
+        )
+
+    def _interval_end(self, k: int) -> int:
+        """End of the unit: its nucleus plus the consonants after it (with an elision mark that follows one)."""
+        end = self._letters(self.units[k].nucleus)[-1].end
+        stop = self._letters(self.units[k + 1].nucleus)[0].start if k + 1 < len(self.units) else None
+        last = end
+        for w in self.words:
+            for l in w.letters:
+                if l.start >= end and (stop is None or l.start < stop) and l.base in CONSONANTS:
+                    last = max(last, l.end)
+                    if w.elided and l is w.letters[-1]:
+                        last = max(last, w.end)
+        if stop is None or k + 1 == len(self.units):
+            w = self.words[self.units[k].word]
+            if w.elided and w.letters[-1].end <= end:
+                last = max(last, w.end)
+        return last
+
+    def _detail(self, u: Syllable, rule: str) -> str:
+        if rule.startswith(("POS", "MCL")):
+            return " ".join(("| " if b else "") + c for c, b in u.coda)
+        if rule in ("COR-EXT", "DIG-HIA", "HIA-SHORT", "DIG-LEN", "EPL-INIT", "CONS-VOW"):
+            nw = u.word + 1
+            return "before " + self.words[nw].text if nw < len(self.words) else ""
+        return ""
+
+    # ------------------------------------------------------------------ features
+    def _letters(self, n: Nucleus):
         w = self.words[n.word]
         return [w.letters[i] for i in n.letters]
 
-    def next_letters(self, s: Syllable) -> str:
-        w = self.words[s.word]
-        i = s.nucleus.letters[-1] + 1
-        return "".join(l.base for l in w.letters[i:i + 2])
-
-    def next_word(self, s: Syllable) -> int | None:
-        return s.word + 1 if s.word + 1 < len(self.words) else None
+    def features(self, u: Syllable) -> dict:
+        w = self.words[u.word]
+        n = u.nucleus
+        ls = self._letters(n)
+        marks = "".join(l.marks for l in ls)
+        cons = [c for c, _ in u.coda if c in CONSONANTS]
+        mcl = len(cons) == 2 and cons[0] in STOPS and cons[1] in LIQUIDS_NASALS and not u.coda[1][1]
+        nw = u.word + 1 if u.word + 1 < len(self.words) else None
+        nuc = self._nuclei[w.index]
+        idx = next(i for i, x in enumerate(nuc) if x.letters == n.letters)
+        last = len(nuc) - 1
+        f = {
+            "nucleus": n.kind,
+            "vowel": ls[0].base if len(ls) == 1 else "",
+            "adscript": "SYL-4" in n.rules,
+            "iota_sub": IOTA_SUB in marks,
+            "circumflex": CIRCUMFLEX in marks,
+            "crasis": n.letters[0] > 0 and SMOOTH in marks and _crasis(w, n),
+            "consonants": consonant_units(u.coda),
+            "double": any(c in DOUBLE_CONSONANTS for c in cons),
+            "mcl": mcl,
+            "stop": _stop_class(cons[0]) if mcl else "",
+            "liquid": ("nasal" if cons[1] in "μν" else "liquid") if mcl else "",
+            "boundary_inside_interval": any(b for _, b in u.coda[1:]),
+            "interval_opens_next_word": bool(u.coda) and u.coda[0][1],
+            "final_consonant_before_vowel": (len(cons) == 1 and not u.coda[0][1] and u.word_final
+                                             and not u.line_final),
+            "hiatus": "external" if (not u.coda and u.next_vowel_word_initial) else
+                      "internal" if (not u.coda and u.next_nucleus_same_word) else "none",
+            "next_initial": self.words[nw].letters[0].base if nw is not None else "",
+            "next_digamma": self.is_digamma(nw),
+            "word_final": u.word_final,
+            "word_initial": u.word_initial,
+            "line_final": u.line_final,
+            "elided": w.elided,
+            "is_ultima": idx == last and not w.elided,
+            "is_penult": idx == last - 1 and not w.elided,
+            "accent": "none" if w.elided else _accent(w, nuc),
+            "penult_long_by_nature": last >= 1 and _long_by_nature(w, nuc[last - 1]),
+            "ultima_short_by_nature": _ultima_short(w, nuc[last]),
+            "ultima_ai_oi": _ultima_ai_oi(w, nuc[last]),
+            "enclitic_compound": _enclitic_compound(w, nuc),
+            "lex": "none",
+            "lex_sources": "",
+        }
+        if self.sc.lexicon is not None and n.kind == "dichronon" and not f["circumflex"] and not f["iota_sub"]:
+            f["lex"], f["lex_sources"] = self.lex(u.word, n.letters[0])
+        return f
 
     def evidence(self, wi: int) -> Evidence:
-        if wi not in self._evidence:
+        if wi not in self._ev:
             w = self.words[wi]
-            lex = self.scanner.lexicon
+            lex = self.sc.lexicon
             ev = Evidence(False, "none", [dict() for _ in w.letters])
             if w.elided:
-                merged = Evidence(False, "none", [dict() for _ in w.letters])
                 for spelling, _rough in project_elision.restorations(w.text):
                     r = lex.lookup(spelling)
                     if not r.found:
                         continue
-                    merged.found, merged.via = True, "elision_restored"
-                    merged.lemmas |= r.lemmas
+                    ev.found, ev.via = True, "elision_restored"
+                    ev.lemmas |= r.lemmas
                     for i in range(min(len(w.letters), len(r.per_letter))):
                         for src, codes in r.per_letter[i].items():
-                            merged.per_letter[i].setdefault(src, set()).update(codes)
-                ev = merged
+                            ev.per_letter[i].setdefault(src, set()).update(codes)
             if not ev.found:
                 ev = lex.lookup(w.text)
-            self._evidence[wi] = ev
-        return self._evidence[wi]
+            self._ev[wi] = ev
+        return self._ev[wi]
+
+    def lex(self, wi: int, li: int) -> tuple[str, str]:
+        ev = self.evidence(wi)
+        if not ev.found or li >= len(ev.per_letter) or ev.via == "accentless":
+            return "none", ""
+        codes = ev.per_letter[li]
+        explicit = {src: {c for c in cs if c in "LS"} for src, cs in codes.items()}
+        explicit = {src: cs for src, cs in explicit.items() if cs}
+        vals = set().union(*explicit.values()) if explicit else set()
+        srcs = sorted(explicit)
+        kind = ("both" if any(s in DICTIONARY_SOURCES for s in srcs) and "morpheus" in srcs
+                else "dict" if any(s in DICTIONARY_SOURCES for s in srcs) else "morph" if srcs else "")
+        if len(vals) == 1:
+            return next(iter(vals)), kind
+        if len(vals) == 2:
+            return "conflict", kind
+        if any("e" in cs for cs in codes.values()):
+            return "ending", "morph"
+        if any("u" in cs for cs in codes.values()):
+            return "unmarked", ""
+        return "none", ""
 
     def is_digamma(self, wi: int | None) -> bool:
         if wi is None:
             return False
-        keys = digamma_keys()
-        w = self.words[wi]
-        if accentless_key(w.text) in keys:
-            return True
-        return bool(lemma_keys(self.evidence(wi).lemmas) & keys)
+        if wi not in self._dig:
+            keys = digamma_keys()
+            hit = accentless_key(self.words[wi].text) in keys
+            if not hit and self.sc.lexicon is not None:
+                hit = bool(lemma_keys(self.evidence(wi).lemmas) & keys)
+            self._dig[wi] = hit
+        return self._dig[wi]
 
-    # --------------------------------------------------------------------- nature of a nucleus
-    def nature(self, n: Nucleus) -> tuple[str, str, float, list[dict]]:
-        """(quantity L/S/?, rule id or leaf key, P(vowel long), reasons)."""
-        ls = self.letters(n)
-        marks = "".join(l.marks for l in ls)
-        w = self.words[n.word]
-        if n.letters[0] > 0 and SMOOTH in marks and _crasis(w, n):
-            return "L", "CRA-1", 1.0, [_reason("CRA-1", "coronis")]
-        if n.kind == "diphthong":
-            if "SYL-4" in n.rules:
-                return "L", "NAT-ISUB", 1.0, [_reason("NAT-ISUB", "iota adscript")]
-            return "L", "NAT-DIPH", 1.0, [_reason("NAT-DIPH", "".join(l.base for l in ls))]
-        if IOTA_SUB in marks:
-            return "L", "NAT-ISUB", 1.0, [_reason("NAT-ISUB", ls[0].base + "ͅ")]
-        if CIRCUMFLEX in marks:
-            return "L", "NAT-CIRC", 1.0, [_reason("NAT-CIRC", "")]
-        if n.kind == "long":
-            return "L", "NAT-ETA", 1.0, [_reason("NAT-ETA", ls[0].base)]
-        if n.kind == "short":
-            return "S", "NAT-EO", 0.0, [_reason("NAT-EO", ls[0].base)]
-        return self._dichronon(n)
 
-    def _dichronon(self, n: Nucleus) -> tuple[str, str, float, list[dict]]:
-        sc = self.scanner
-        w = self.words[n.word]
-        li = n.letters[0]
-        vowel = w.letters[li].base
-        acc = _accent_rule(self, n)
-        if acc:
-            rule, q = acc
-            p, used = sc.rate(rule, q)
-            return q, rule, p, [_reason(rule, "")]
-        ev = self.evidence(n.word)
-        codes = ev.per_letter[li] if ev.found and li < len(ev.per_letter) else {}
-        explicit = {src: {c for c in cs if c in "LS"} for src, cs in codes.items()}
-        explicit = {src: cs for src, cs in explicit.items() if cs}
-        vals = set().union(*explicit.values()) if explicit else set()
-        suffix = "" if ev.via == "exact" else ":" + ev.via
-        if len(vals) == 1:
-            q = next(iter(vals))
-            srcs = sorted(explicit)
-            kind = ("both" if any(s in DICTIONARY_SOURCES for s in srcs) and "morpheus" in srcs
-                    else "dict" if any(s in DICTIONARY_SOURCES for s in srcs) else "morph")
-            leaf = f"LEX-{q}:{kind}{suffix}"
-            p, _ = sc.rate(leaf, q)
-            return q, leaf, p, [_reason(f"LEX-{q}", ", ".join(srcs))]
-        if len(vals) == 2:
-            dict_vals = set().union(*(cs for src, cs in explicit.items() if src in DICTIONARY_SOURCES))                 if any(src in DICTIONARY_SOURCES for src in explicit) else set()
-            leaf = "LEX-CONFLICT" + (f":dict{next(iter(dict_vals))}" if len(dict_vals) == 1 else "") + suffix
-            p, _ = sc.rate(leaf, "A")
-            detail = "; ".join(f"{s}: {'/'.join(sorted(c))}" for s, c in sorted(explicit.items()))
-            return "?", leaf, p, [_reason("LEX-CONFLICT", detail)]
-        if any("e" in cs for cs in codes.values()):
-            leaf = "LEX-ENDING" + suffix
-            p, _ = sc.rate(leaf, "S")
-            return ("S" if p < 0.5 else "?"), leaf, p, [_reason("LEX-ENDING", "")]
-        unmarked = sorted({("morph" if src == "morpheus" else "dict") for src, cs in codes.items() if "u" in cs})
-        if unmarked:
-            leaf = "LEX-UNMARKED:" + ("both" if len(unmarked) == 2 else unmarked[0]) + suffix
-            p, _ = sc.rate(leaf, "A")
-            return ("S" if p <= 0.1 else "L" if p >= 0.9 else "?"), leaf, p, [_reason("LEX-UNMARKED", f"{vowel} without a length mark")]
-        if vowel == "α" and self._alpha_for_eta(w, li):
-            p, _ = sc.rate("DIA-ETA", "L")
-            return "L", "DIA-ETA", p, [_reason("DIA-ETA", "")]
-        pos = "final" if li == _last_vowel_index(w) else "medial"
-        leaf = f"DICH-UNK:{vowel}:{pos}"
-        p, _ = sc.rate(leaf, "A")
-        return "?", leaf, p, [_reason("DICH-UNK", f"{vowel} of unknown length")]
+# Enclitics that join a preceding word into one written word (Smyth §181, §186: such compounds keep
+# the accent of the first word, as if the enclitic were separate: οὔτις, ὥστε, ὅδε).
+ENCLITIC_ENDINGS = ("τε", "τις", "τι", "τινα", "τινος", "τινι", "περ", "γε", "δε")
 
-    def _alpha_for_eta(self, w: Word, li: int) -> bool:
-        """DIA-ETA: replacing this α by η gives a spelling the lexicon knows (Doric/Aeolic ᾱ = Attic η)."""
-        nfd = unicodedata.normalize("NFD", key(w.text))
-        bases = [i for i, ch in enumerate(nfd) if not unicodedata.combining(ch)]
-        if li >= len(bases):
-            return False
-        pos = bases[li]
-        variant = unicodedata.normalize("NFC", nfd[:pos] + "η" + nfd[pos + 1:])
-        return self.scanner.lexicon.lookup(variant).found
+
+def _enclitic_compound(w: Word, nuc: list[Nucleus]) -> bool:
+    if len(nuc) < 2:
+        return False
+    bases = "".join(l.base for l in w.letters)
+    for e in ENCLITIC_ENDINGS:
+        if bases.endswith(e) and len(bases) > len(e):
+            tail_start = len(w.letters) - len(e)
+            # the accent stands just before the enclitic and the enclitic part itself is unaccented
+            tail_marks = "".join(l.marks for l in w.letters[tail_start:])
+            head_marks = "".join(l.marks for l in w.letters[:tail_start])
+            if not any(a in tail_marks for a in ACCENTS) and any(a in head_marks for a in ACCENTS):
+                return True
+    return False
 
 
 def _crasis(w: Word, n: Nucleus) -> bool:
-    """A smooth breathing (coronis) on a vowel that is not word-initial marks crasis (κἀγώ)."""
     first = n.letters[0]
     return any(w.letters[i].base in CONSONANTS for i in range(first)) or first > 1
 
 
-def _last_vowel_index(w: Word) -> int:
-    for i in range(len(w.letters) - 1, -1, -1):
-        if w.letters[i].base in "αεηιουω":
-            return i
-    return -1
-
-
-def _accent_rule(ctx: _LineContext, n: Nucleus) -> tuple[str, str] | None:
-    """ACC-*: quantity of a bare α ι υ read from the word's accent (Smyth §§163-170)."""
-    w = ctx.words[n.word]
-    from .syllabify import nuclei_of
-    nuc = nuclei_of(w)
-    idx = next(i for i, x in enumerate(nuc) if x.letters == n.letters)
-    accented = [i for i, x in enumerate(nuc) if any(m in w.letters[j].marks for j in x.letters for m in ACCENTS)]
-    if not accented:
-        return None
-    acc = accented[0]                       # a second accent comes from a following enclitic (Smyth §183)
-    acc_marks = "".join(w.letters[j].marks for j in nuc[acc].letters)
-    circ = CIRCUMFLEX in acc_marks
+def _accent(w: Word, nuc: list[Nucleus]) -> str:
+    """Position of the word's first accent (a second one comes from an enclitic, Smyth §183)."""
     last = len(nuc) - 1
-    if w.elided:
-        return None                         # the printed last vowel is not the ultima
-    if idx == last and acc == last - 2 and not circ:
-        return "ACC-PROPAROX", "S"
-    if idx == last and acc == last - 1 and circ:
-        return "ACC-PROPERISP", "S"
-    if idx == last and acc == last - 1 and not circ and _long_by_nature(w, nuc[acc]):
-        return "ACC-PAROX-LONG", "L"
-    if idx == last - 1 and acc == idx and not circ:
-        ult = nuc[last]
-        ult_letters = [w.letters[j] for j in ult.letters]
-        tail_consonants = any(l.base in CONSONANTS for l in w.letters[ult.letters[-1] + 1:])
-        if len(ult_letters) == 1 and ult_letters[0].base in "εο" and IOTA_SUB not in ult_letters[0].marks:
-            return "ACC-PAROX-SHORT", "S"
-        if ult.kind == "diphthong" and "".join(l.base for l in ult_letters) in ("αι", "οι") and not tail_consonants:
-            return "ACC-PAROX-SHORT-AIOI", "S"
-    return None
+    for i, x in enumerate(nuc):
+        marks = "".join(w.letters[j].marks for j in x.letters)
+        if any(a in marks for a in ACCENTS):
+            kind = "circumflex" if CIRCUMFLEX in marks else "acute"
+            pos = {last: "ultima", last - 1: "penult", last - 2: "antepenult"}.get(i)
+            return f"{pos}_{kind}" if pos else "none"
+    return "none"
 
 
 def _long_by_nature(w: Word, n: Nucleus) -> bool:
-    ls = [w.letters[j] for j in n.letters]
-    marks = "".join(l.marks for l in ls)
+    marks = "".join(w.letters[j].marks for j in n.letters)
     return n.kind in ("diphthong", "long") or IOTA_SUB in marks or CIRCUMFLEX in marks
 
 
-def _nucleus_class(ctx: _LineContext, n: Nucleus) -> str:
-    ls = ctx.letters(n)
-    if IOTA_SUB in "".join(l.marks for l in ls):
-        return "isub"
-    if n.kind == "diphthong":
-        d = "".join(l.base for l in ls)
-        return d if d in ("αι", "οι", "ει", "ου") else "diph"
-    if n.kind == "long":
-        return "eta"
-    return "long"
+def _ultima_short(w: Word, n: Nucleus) -> bool:
+    ls = [w.letters[j] for j in n.letters]
+    return len(ls) == 1 and ls[0].base in "εο" and IOTA_SUB not in ls[0].marks
+
+
+def _ultima_ai_oi(w: Word, n: Nucleus) -> bool:
+    d = "".join(w.letters[j].base for j in n.letters)
+    return n.kind == "diphthong" and d in ("αι", "οι") and not w.letters[n.letters[-1] + 1:]
 
 
 def _stop_class(c: str) -> str:
-    return "voiceless" if c in VOICELESS else "aspirate" if c in ASPIRATE else "voiced"
-
-
-def _cluster_note(coda) -> str:
-    out = []
-    for c, b in coda:
-        out.append(("| " if b else "") + c)
-    return " ".join(out)
-
-
-def _reason(rule_id: str, detail: str) -> dict:
-    text, cite = RULES.get(rule_id, ("", ""))
-    return {"id": rule_id, "text": text, "detail": detail, "cite": cite}
-
-
-def _flag(rule_id: str, detail: str, **extra) -> dict:
-    d = _reason(rule_id, detail)
-    d.update({k: v for k, v in extra.items() if v is not None})
-    return d
+    return "voiceless" if c in "πτκ" else "aspirate" if c in "φθχ" else "voiced"

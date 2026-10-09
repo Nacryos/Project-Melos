@@ -1,0 +1,511 @@
+{
+ "gold": "Hypotactic Iliad scansion (David Chamberlain, CC BY 4.0), books 1-12",
+ "lines": 7580,
+ "built": "2026-10-09",
+ "note": "share = gold-long units / units reaching the rule; the line-final unit and synizesis mergers are left out. 'params' are the shares the tunable parameters would take if set from Homer.",
+ "without_lexicon": {
+  "unit": {
+   "CONS-VOW": {
+    "n": 12326,
+    "long": 3914,
+    "share": 0.3175
+   },
+   "COR-EXT": {
+    "n": 3256,
+    "long": 753,
+    "share": 0.2313
+   },
+   "COR-INT": {
+    "n": 4440,
+    "long": 4426,
+    "share": 0.9968
+   },
+   "DIG-HIA": {
+    "n": 182,
+    "long": 78,
+    "share": 0.4286
+   },
+   "DIG-LEN": {
+    "n": 164,
+    "long": 49,
+    "share": 0.2988
+   },
+   "EPL-INIT": {
+    "n": 4378,
+    "long": 154,
+    "share": 0.0352
+   },
+   "EPL-RHO": {
+    "n": 59,
+    "long": 25,
+    "share": 0.4237
+   },
+   "HIA-SHORT": {
+    "n": 602,
+    "long": 11,
+    "share": 0.0183
+   },
+   "HIATUS": {
+    "n": 4040,
+    "long": 842,
+    "share": 0.2084
+   },
+   "MCL": {
+    "n": 3450,
+    "long": 3291,
+    "share": 0.9539
+   },
+   "MCL-INIT": {
+    "n": 1013,
+    "long": 890,
+    "share": 0.8786
+   },
+   "MCL-LONGV": {
+    "n": 506,
+    "long": 506,
+    "share": 1.0
+   },
+   "MCL-WORD": {
+    "n": 1931,
+    "long": 1895,
+    "share": 0.9814
+   },
+   "NATURE": {
+    "n": 60525,
+    "long": 20889,
+    "share": 0.3451
+   },
+   "OPEN": {
+    "n": 77452,
+    "long": 25031,
+    "share": 0.3232
+   },
+   "POS": {
+    "n": 21742,
+    "long": 21726,
+    "share": 0.9993
+   },
+   "POS-ACROSS": {
+    "n": 8069,
+    "long": 8069,
+    "share": 1.0
+   },
+   "POS-DOUBLE": {
+    "n": 1775,
+    "long": 1771,
+    "share": 0.9977
+   },
+   "POS-INIT": {
+    "n": 546,
+    "long": 536,
+    "share": 0.9817
+   },
+   "POS-WORD": {
+    "n": 11352,
+    "long": 11350,
+    "share": 0.9998
+   }
+  },
+  "vowel": {
+   "ACC-PAROX-LONG": {
+    "n": 89,
+    "long": 88,
+    "share": 0.9888
+   },
+   "ACC-PAROX-SHORT": {
+    "n": 604,
+    "long": 2,
+    "share": 0.0033
+   },
+   "ACC-PAROX-SHORT-AIOI": {
+    "n": 98,
+    "long": 5,
+    "share": 0.051
+   },
+   "ACC-PROPAROX": {
+    "n": 1521,
+    "long": 17,
+    "share": 0.0112
+   },
+   "ACC-PROPERISP": {
+    "n": 707,
+    "long": 17,
+    "share": 0.024
+   },
+   "CRA-1": {
+    "n": 13,
+    "long": 13,
+    "share": 1.0
+   },
+   "DICH": {
+    "n": 24193,
+    "long": 3271,
+    "share": 0.1352
+   },
+   "DICH-UNK": {
+    "n": 21174,
+    "long": 3142,
+    "share": 0.1484
+   },
+   "NAT-CIRC": {
+    "n": 1861,
+    "long": 1861,
+    "share": 1.0
+   },
+   "NAT-DIPH": {
+    "n": 10714,
+    "long": 10713,
+    "share": 0.9999
+   },
+   "NAT-EO": {
+    "n": 27274,
+    "long": 149,
+    "share": 0.0055
+   },
+   "NAT-ETA": {
+    "n": 7880,
+    "long": 7880,
+    "share": 1.0
+   },
+   "NAT-ISUB": {
+    "n": 916,
+    "long": 916,
+    "share": 1.0
+   }
+  },
+  "flags": {
+   "SYN-CAND": {
+    "n": 3431,
+    "long": 188,
+    "share": 0.0548
+   }
+  },
+  "params": {
+   "correption": {
+    "n": 2980,
+    "long": 734,
+    "share": 0.2463
+   },
+   "dichronon_default": {
+    "n": 21174,
+    "long": 3142,
+    "share": 0.1484
+   },
+   "digamma_keep": {
+    "n": 94,
+    "long": 77,
+    "share": 0.8191
+   },
+   "digamma_lengthening": {
+    "n": 104,
+    "long": 29,
+    "share": 0.2788
+   },
+   "epic_lengthening": {
+    "n": 2993,
+    "long": 63,
+    "share": 0.021
+   },
+   "epic_lengthening_rho": {
+    "n": 35,
+    "long": 16,
+    "share": 0.4571
+   },
+   "internal_keep": {
+    "n": 4440,
+    "long": 4426,
+    "share": 0.9968
+   },
+   "mcl_boundary": {
+    "n": 623,
+    "long": 512,
+    "share": 0.8218
+   },
+   "mcl_word": {
+    "n": 892,
+    "long": 883,
+    "share": 0.9899
+   },
+   "synizesis": {
+    "n": 3431,
+    "long": 188,
+    "share": 0.0548
+   }
+  }
+ },
+ "with_lexicon": {
+  "unit": {
+   "CONS-VOW": {
+    "n": 12119,
+    "long": 3867,
+    "share": 0.3191
+   },
+   "COR-EXT": {
+    "n": 3081,
+    "long": 679,
+    "share": 0.2204
+   },
+   "COR-INT": {
+    "n": 4440,
+    "long": 4426,
+    "share": 0.9968
+   },
+   "DIG-HIA": {
+    "n": 357,
+    "long": 152,
+    "share": 0.4258
+   },
+   "DIG-LEN": {
+    "n": 395,
+    "long": 111,
+    "share": 0.281
+   },
+   "EPL-INIT": {
+    "n": 4373,
+    "long": 150,
+    "share": 0.0343
+   },
+   "EPL-RHO": {
+    "n": 40,
+    "long": 14,
+    "share": 0.35
+   },
+   "HIA-SHORT": {
+    "n": 602,
+    "long": 11,
+    "share": 0.0183
+   },
+   "HIATUS": {
+    "n": 4040,
+    "long": 842,
+    "share": 0.2084
+   },
+   "MCL": {
+    "n": 3450,
+    "long": 3291,
+    "share": 0.9539
+   },
+   "MCL-INIT": {
+    "n": 1013,
+    "long": 890,
+    "share": 0.8786
+   },
+   "MCL-LONGV": {
+    "n": 506,
+    "long": 506,
+    "share": 1.0
+   },
+   "MCL-WORD": {
+    "n": 1931,
+    "long": 1895,
+    "share": 0.9814
+   },
+   "NATURE": {
+    "n": 60525,
+    "long": 20889,
+    "share": 0.3451
+   },
+   "OPEN": {
+    "n": 77452,
+    "long": 25031,
+    "share": 0.3232
+   },
+   "POS": {
+    "n": 21742,
+    "long": 21726,
+    "share": 0.9993
+   },
+   "POS-ACROSS": {
+    "n": 8069,
+    "long": 8069,
+    "share": 1.0
+   },
+   "POS-DOUBLE": {
+    "n": 1775,
+    "long": 1771,
+    "share": 0.9977
+   },
+   "POS-INIT": {
+    "n": 546,
+    "long": 536,
+    "share": 0.9817
+   },
+   "POS-WORD": {
+    "n": 11352,
+    "long": 11350,
+    "share": 0.9998
+   }
+  },
+  "vowel": {
+   "ACC-PAROX-LONG": {
+    "n": 89,
+    "long": 88,
+    "share": 0.9888
+   },
+   "ACC-PAROX-SHORT": {
+    "n": 604,
+    "long": 2,
+    "share": 0.0033
+   },
+   "ACC-PAROX-SHORT-AIOI": {
+    "n": 98,
+    "long": 5,
+    "share": 0.051
+   },
+   "ACC-PROPAROX": {
+    "n": 1505,
+    "long": 17,
+    "share": 0.0113
+   },
+   "ACC-PROPERISP": {
+    "n": 689,
+    "long": 17,
+    "share": 0.0247
+   },
+   "CRA-1": {
+    "n": 13,
+    "long": 13,
+    "share": 1.0
+   },
+   "DICH": {
+    "n": 24090,
+    "long": 3247,
+    "share": 0.1348
+   },
+   "DICH-UNK": {
+    "n": 1208,
+    "long": 228,
+    "share": 0.1887
+   },
+   "LEX": {
+    "n": 19897,
+    "long": 2890,
+    "share": 0.1452
+   },
+   "LEX-CONFLICT": {
+    "n": 1831,
+    "long": 289,
+    "share": 0.1578
+   },
+   "LEX-ENDING": {
+    "n": 190,
+    "long": 6,
+    "share": 0.0316
+   },
+   "LEX-L": {
+    "n": 2525,
+    "long": 2310,
+    "share": 0.9149
+   },
+   "LEX-S": {
+    "n": 11633,
+    "long": 117,
+    "share": 0.0101
+   },
+   "LEX-UNMARKED": {
+    "n": 3718,
+    "long": 168,
+    "share": 0.0452
+   },
+   "NAT-CIRC": {
+    "n": 1861,
+    "long": 1861,
+    "share": 1.0
+   },
+   "NAT-DIPH": {
+    "n": 10714,
+    "long": 10713,
+    "share": 0.9999
+   },
+   "NAT-EO": {
+    "n": 27170,
+    "long": 126,
+    "share": 0.0046
+   },
+   "NAT-ETA": {
+    "n": 7880,
+    "long": 7880,
+    "share": 1.0
+   },
+   "NAT-ISUB": {
+    "n": 916,
+    "long": 916,
+    "share": 1.0
+   }
+  },
+  "flags": {
+   "SYN-CAND": {
+    "n": 3431,
+    "long": 188,
+    "share": 0.0548
+   }
+  },
+  "params": {
+   "correption": {
+    "n": 2890,
+    "long": 666,
+    "share": 0.2304
+   },
+   "dichronon_default": {
+    "n": 1208,
+    "long": 228,
+    "share": 0.1887
+   },
+   "digamma_keep": {
+    "n": 184,
+    "long": 145,
+    "share": 0.788
+   },
+   "digamma_lengthening": {
+    "n": 255,
+    "long": 60,
+    "share": 0.2353
+   },
+   "epic_lengthening": {
+    "n": 2992,
+    "long": 62,
+    "share": 0.0207
+   },
+   "epic_lengthening_rho": {
+    "n": 23,
+    "long": 9,
+    "share": 0.3913
+   },
+   "internal_keep": {
+    "n": 4440,
+    "long": 4426,
+    "share": 0.9968
+   },
+   "lex_long": {
+    "n": 2525,
+    "long": 2310,
+    "share": 0.9149
+   },
+   "lex_short": {
+    "n": 11633,
+    "long": 117,
+    "share": 0.0101
+   },
+   "lex_unmarked": {
+    "n": 3718,
+    "long": 168,
+    "share": 0.0452
+   },
+   "mcl_boundary": {
+    "n": 623,
+    "long": 512,
+    "share": 0.8218
+   },
+   "mcl_word": {
+    "n": 892,
+    "long": 883,
+    "share": 0.9899
+   },
+   "synizesis": {
+    "n": 3431,
+    "long": 188,
+    "share": 0.0548
+   }
+  }
+ }
+}
