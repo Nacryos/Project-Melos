@@ -1,0 +1,9 @@
+# Owner private corpus ingestion (release T). Runs with --network none: it reads the drop folder only.
+# Build context: deploy/ (nothing from the repo is copied; the source is mounted read-only at /src).
+FROM python:3.12-slim
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends poppler-utils tesseract-ocr tesseract-ocr-grc tesseract-ocr-eng \
+ && rm -rf /var/lib/apt/lists/* \
+ && pip install --no-cache-dir "pypdf==5.1.0" "betacode==1.1"
+ENV PYTHONDONTWRITEBYTECODE=1
+WORKDIR /src

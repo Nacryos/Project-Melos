@@ -386,3 +386,16 @@ token_flag bit 2 (`dialect_rule` calibration class).
 - `GET /api/commentary/notes?passage_id=…&limit=20`: notes linked to a passage: `source`, `author`, `year`,
   `locator`, `page`, `url`, `licence`, `citation`, `display` (`full` for public domain, else `quotation`) and
   `text` (at most 30 words unless public domain).
+
+## Release T additions (private mode)
+
+Owner-only routes; rules, cookies, limits and the public-search gate are in `docs/private-mode.md`.
+
+- `GET /api/owner/session`, `GET /api/owner/login-token`, `POST /api/owner/login`, `POST /api/owner/logout`
+  (404 everywhere when the box has no owner secrets file).
+- `GET /api/private/{status,documents,passage,lemma,search,page,ui.js}`: owner session only; **404** for any
+  `/api/private/*` path without one. Every payload carries `"visibility": "private-owner-only"` and each item
+  `label` ("Private — owner only"), `source` ("<citation>, p. <page>"), `page`, `pdf_page`, `kind`, `text`.
+- `GET /api/search`: unchanged fields. Results on a page may be re-ordered by private ranking signals. With
+  `MELOS_PRIVATE_PUBLIC_EXCERPTS=1` (off by default) a result may carry `reference_excerpt`
+  `{visibility: "public-excerpt", text (≤ 30 words), source, page, words}`.

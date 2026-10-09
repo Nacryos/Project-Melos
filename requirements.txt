@@ -7,3 +7,4 @@ beautifulsoup4>=4.12,<5
 numpy>=1.26,<3
 sentence-transformers>=3,<6
 betacode==1.1
+argon2-cffi>=23.1,<26

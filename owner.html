@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="same-origin">
+  <title>Melos — sign in</title>
+  <style>
+    :root { color-scheme: light dark; --ink: #222; --paper: #faf8f3; --line: #c9c2b4; --accent: #8a4b14; }
+    @media (prefers-color-scheme: dark) { :root { --ink: #e8e4dc; --paper: #1c1b19; --line: #4a463f; --accent: #e09a5a; } }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 Georgia, serif; }
+    main { max-width: 22rem; margin: 12vh auto; padding: 0 16px; }
+    h1 { font-size: 1.3rem; font-weight: normal; }
+    label { display: block; margin: 0.8rem 0 0.2rem; font-size: 0.9rem; }
+    input { width: 100%; box-sizing: border-box; padding: 0.5rem; border: 1px solid var(--line); border-radius: 4px;
+      background: transparent; color: inherit; font: inherit; }
+    button { margin-top: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--accent); border-radius: 4px;
+      background: transparent; color: var(--accent); font: inherit; cursor: pointer; }
+    #status { min-height: 1.5em; margin-top: 1rem; }
+    a { color: inherit; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Owner sign-in</h1>
+    <form id="login" autocomplete="on" hidden>
+      <label for="username">Name</label>
+      <input id="username" name="username" autocomplete="username" required maxlength="64">
+      <label for="password">Password</label>
+      <input id="password" name="password" type="password" autocomplete="current-password" required maxlength="256">
+      <button type="submit">Sign in</button>
+    </form>
+    <div id="signed-in" hidden>
+      <p id="who"></p>
+      <button id="logout" type="button">Sign out</button>
+    </div>
+    <p id="status" role="status"></p>
+    <p><a href="./">Back to the reader</a></p>
+  </main>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/owner.js"></script>
+</body>
+</html>

@@ -9,7 +9,7 @@ const localPreview = process.argv.includes('--local-preview');
 const frontendOnly = process.env.MELOS_FRONTEND_ONLY === '1';
 const readerOnly = process.argv.includes('--reader-only') || process.env.MELOS_READER_ONLY === '1';
 const discoveryPages = ['lexicon', 'authors', 'themes'];
-const toolPages = ['lemma.html', 'concept.html', 'about.html'];
+const toolPages = ['lemma.html', 'concept.html', 'about.html', 'owner.html'];
 const pages = ['index.html', 'design-studio.html', ...toolPages, ...(readerOnly ? [] : discoveryPages.map(page => `${page}.html`))];
 const excerptPages = ['34a', '129', '130b', '326', '350'].map(id => `sources/campbell-alcaeus/${id}.html`);
 const includeExcerpts = existsSync(path.join(root, 'sources/campbell-alcaeus'));
@@ -17,7 +17,7 @@ if (includeExcerpts) pages.push(...excerptPages);
 const jsFiles = [
   'api.js', 'app.js', 'dither.js', 'images.js', 'reader-hero.js', 'reader-fullscreen.js',
   'reader.js', 'word-panel.js', 'word-context.js', 'studio-live.js', 'usage-space.js', 'ui-icons.js', 'verse-fit.js', 'dictionary-preview.js', 'machine-morphology.js', 'passage-analysis.js', 'nature-preset-data.js', 'nature-presets.js',
-  'lemma-common.js', 'lemma-page.js', 'concept-page.js', 'citation-lookup.js', 'phrases.js', 'site-menu.js'
+  'lemma-common.js', 'lemma-page.js', 'concept-page.js', 'citation-lookup.js', 'phrases.js', 'site-menu.js', 'owner-loader.js', 'owner.js'
 ];
 if (!readerOnly) jsFiles.push('lexicon-page.js', 'authors-page.js', 'themes-page.js');
 const cssFiles = ['styles.css', 'reader.css', 'icons.css', 'loading.css', 'fullscreen.css', 'touch-selection.css', 'theme.css', 'lemma-page.css', 'site-menu.css'];

@@ -15,3 +15,5 @@
 !assets/paintings/*.webp
 !reader.html
 !index.html
+!backend/*.js
+!owner.html

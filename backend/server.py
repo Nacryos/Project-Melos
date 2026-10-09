@@ -34,6 +34,9 @@ from .large_json_gzip import LargeJSONGZipMiddleware
 ROOT = Path(__file__).resolve().parents[1]
 DB = ROOT / 'data/corpus.sqlite'
 app = FastAPI(title='Melos Greek Lyric Lexicon',version='0.4.0')
+# Release T private mode: its guard must be the innermost middleware (uncompressed bodies).
+from .private_mode import install as _install_private_mode
+_install_private_mode(app)
 # Keep this inner to CORS and @app.middleware('http'): a policy wrapper emits
 # ordinary JSON in streaming frames, which must not be buffered/compressed.
 # Live since release I (2026-10-07); it was patched into the release artifact only.
@@ -1171,7 +1174,9 @@ def search_response(q:str='',mode:str='words',author:str='',language:str='',edit
     for record in result.get('results') or []:
         with_source_label(record)
         record.update(display_fields(record))
-    return result
+    # Release T: the single gate for private ranking signals (docs/private-mode.md).
+    from .private_gate import apply_public_search
+    return apply_public_search(q,result)
 
 
 def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='',
