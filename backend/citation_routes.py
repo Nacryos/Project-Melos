@@ -241,8 +241,33 @@ def resolve_citation(q, *, include_reference=False, limit=20):
         text = record.get("text") or ""
         row["text_preview"] = text[:240]
         row["language"] = record.get("language")
+        line = cited_line(parsed, row, text)
+        if line:
+            row["cited_line"] = line
     result["kind"] = parsed.get("kind")
     return result
+
+
+def cited_line(parsed, row, text):
+    """Release U: the stored line a locus citation names (Il. 1.5 inside the passage 1.1-1.20), when the stored
+    passage has exactly one line per verse of its locus range; else None (no line is guessed)."""
+    from .line_spans import lines, line_at
+    locus = parsed.get("locus") or []
+    start, end = str(row.get("locus_start") or ""), str(row.get("locus_end") or "")
+    try:
+        last_part = locus[-1]
+        cited = int(last_part[0] if isinstance(last_part, (list, tuple)) else str(last_part))
+        first, last = int(start.split(".")[-1]), int(end.split(".")[-1])
+    except (ValueError, IndexError, TypeError):
+        return None
+    if start.split(".")[:-1] != end.split(".")[:-1] or not first <= cited <= last:
+        return None
+    rows = [r for r in lines(text) if r[2].strip()]
+    if len(rows) != last - first + 1:
+        return None
+    line = line_at(text, rows[cited - first][0], row.get("citation"))
+    line.update(line=cited, line_basis="locus", citation=f"{row.get('citation')} ({cited})" if row.get("citation") else None)
+    return line
 
 
 @router.get("/api/cite")

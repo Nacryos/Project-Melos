@@ -156,8 +156,10 @@ def lemma_collocations(q: str = "", lemma_id: int = 0, window: int = Query(5, ge
 @router.get("/api/lemma/proximity")
 def lemma_proximity(q: str, window: int = Query(0, ge=0, le=50), ordered: bool = True, author: str = "",
                     genre: str = "", include_reference: bool = False, limit: int = Query(30, ge=1, le=200),
-                    offset: int = Query(0, ge=0), cross_passages: bool = False, combine_variants: bool = False):
-    """Phrase (ordered, window 0) or proximity search by headword: each word is read as its headword(s)."""
+                    offset: int = Query(0, ge=0), cross_passages: bool = False, combine_variants: bool = True):
+    """Phrase (ordered, window 0) or proximity search by headword: each word is read as its headword(s).
+    Release U: a word's dialect/poetic variant group is searched with it by default (Ἔρος with ἔρος, ἔρως);
+    combine_variants=false searches the one headword (and its capitalisation)."""
     index = _index()
     words = q.split()
     if not 2 <= len(words) <= 6:
@@ -180,29 +182,34 @@ def lemma_proximity(q: str, window: int = Query(0, ge=0, le=50), ordered: bool =
              "edition when their line numbers continue (crosses_passages, match_passages); "
              if cross_passages else "Matches lie inside one stored passage; ")
     return {"query": q, "resolution": resolution, "window": window, "ordered": ordered,
-            "cross_passages": cross_passages,
+            "cross_passages": cross_passages, "combine_variants": combine_variants,
             "scope_note": scope + "the window counts extra words between the terms.",
             "note": NOTE, **result}
 
 
 @router.get("/api/concept/diachrony")
 def concept_diachrony(q: str, include_reference: bool = False, semantic: bool = True,
-                      max_lemmas: int = Query(6, ge=1, le=12), combine_variants: bool = False):
-    """Headwords expressing a concept with frequency by period and author date, and collocates per period."""
+                      max_lemmas: int = Query(6, ge=1, le=12), combine_variants: bool = False,
+                      author: str = "", genre: str = ""):
+    """Headwords expressing a concept with frequency by period and author date, and collocates per period.
+    Release U: `author` / `genre` limit every count, example and the meaning-index neighbourhood to that scope
+    (the words one poet uses for longing)."""
     if not q.strip() or len(q) > 200:
         raise HTTPException(422, "Give a short concept (an English word or phrase, or a Greek headword).")
     index = _index()
     dense_ids, warnings = [], []
     if semantic:
         try:
-            from .server import semantic_service
-            dense_ids = [hit["id"] for hit in semantic_service().search(q, limit=1000, language="grc")]
+            from .server import semantic_service, author_labels
+            # Release U: with an author, the neighbourhood is that author's passages nearest the concept.
+            dense_ids = [hit["id"] for hit in semantic_service().search(
+                q, limit=1000, language="grc", author=list(author_labels(author)) if author else None)]
         except Exception as exc:  # noqa: BLE001 - the dictionary part stands alone
             warnings.append("Meaning index unavailable; semantic candidates omitted: " + type(exc).__name__)
     result = index.diachrony(q, dense_ids=dense_ids, include_reference=include_reference, max_lemmas=max_lemmas,
-                             text_lookup=_text_lookup(), combine_variants=combine_variants)
+                             text_lookup=_text_lookup(), combine_variants=combine_variants, author=author, genre=genre)
     result["warnings"] = warnings
-    result["version"] = "concept-diachrony-v2"
+    result["version"] = "concept-diachrony-v3"
     return result
 
 

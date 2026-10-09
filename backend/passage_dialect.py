@@ -35,6 +35,14 @@ def passage_dialect(passage):
     """'lesbian', 'doric', 'boeotian' or None for a passage dict (author label, id)."""
     if not isinstance(passage, dict):
         return None
+    if "dialect" in passage:
+        # Release U: a draft text (POST /api/analyze-text) names its dialect; "ionic", "attic" or "epic" carry
+        # no dialect rule here, as for an Ionic or Attic poet. Otherwise its author hint decides, as below.
+        hint = _key(passage.get("dialect"))
+        if hint in (LESBIAN, DORIC, BOEOTIAN):
+            return hint
+        if hint:
+            return None
     try:
         from .author_aliases import canonical
         names = [passage.get("author"), canonical(passage.get("author") or "")]

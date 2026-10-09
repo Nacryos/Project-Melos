@@ -11,9 +11,10 @@ dictionary first sense, not a contextual meaning. No text is generated.
 """
 from __future__ import annotations
 
-from copy import deepcopy
+from .fastcopy import deepcopy  # release U: JSON-tree copy, several times faster than copy.deepcopy
 import re
 import unicodedata
+from collections import Counter
 
 from .interlinear import gloss_from_sense, sense_class_compatible, sense_form_compatible, canonical_features
 from .short_gloss import (NON_NUMERAL_POS, being_senses_first, corroborated_choice, dictionary_rank,
@@ -217,6 +218,8 @@ DIALECT_HEADWORD_RULES = (
     ("ρσ", "ρρ", "attic_rr_for_rs", "Attic ρρ where other dialects have ρσ (θάρσος: θάρρος)"),
     ("ω", "ου", "doric_omega_for_ou", "Doric ω where Attic has ου (Μῶσα: Μοῦσα)"),
     ("οι", "ου", "aeolic_oi_for_ou", "Aeolic οι where Attic has ου (Μοῖσα: Μοῦσα)"),
+    # Release U: the long-diphthong ᾱι written in full where Attic-Ionic has ῃ (iota subscript).
+    ("αι", "η", "doric_aeolic_ai_for_eta_subscript", "Doric/Aeolic ᾱι (ᾳ) where Attic-Ionic has ῃ (θναίσκω: θνῄσκω)"),
     ("ευ", "ου", "ionic_eu_for_ou", "Ionic ευ (contracted εο) where Attic has ου (ποιεῦμεν: ποιοῦμεν)"),
 )
 
@@ -704,8 +707,13 @@ def link_derived_forms(interlinear, lookup, attestations=None):
                     shown[key] = target
                     break
             if found.get("match") == "folded_headword":
-                names = {headword_key(e.get("lemma")) for e in found.get("entries") or []}
+                spelled = Counter(headword_key(e.get("lemma")) for e in found.get("entries") or [])
+                names = set(spelled)
                 name = next(iter(names)) if len(names) == 1 else None
+                if name is None and names and len({_fold(n) for n in names}) == 1:
+                    # Release U: one headword printed two ways (θνῄσκω / θνήσκω, iota subscript or not): the
+                    # spelling most dictionary entries print.
+                    name = sorted(spelled, key=lambda n: (-spelled[n], n))[0]
                 if name and clean(name) and _fold(name) == _fold(option):
                     shown[key] = name
                     break
@@ -721,6 +729,15 @@ def link_derived_forms(interlinear, lookup, attestations=None):
                 if better:
                     row.setdefault("lemma_read_as", {"parse_lemma": row[field], "headword": better})
                     row[field] = better
+                    if field == "lemma" and not (row.get("gloss") or {}).get("text"):
+                        # Release U: a parse lemma with no dictionary entry of its own (θναίσκω) takes the
+                        # gloss of the headword it is read as (θνῄσκω "die").
+                        entry, senses, info = resolve(better, row, lookup)
+                        if entry is not None and senses:
+                            chosen = gloss_from_sense(senses[0], senses)
+                            chosen.update(selection_basis="dialect_headword_first_sense_not_contextual",
+                                          lemma_dictionary=info)
+                            row["gloss"] = chosen
             twin = psilosis_twin(row, lookup, attestations)
             if twin:
                 own = headword_key(row["lemma"])

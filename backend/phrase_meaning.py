@@ -4,7 +4,7 @@ Published translations already admitted by the passage lookup may cover a whole
 selection only when the selection is the complete source passage. A dependency
 tree is a prediction, not a set of coherent alternative English interpretations.
 """
-from copy import deepcopy
+from .fastcopy import deepcopy  # release U: JSON-tree copy, several times faster than copy.deepcopy
 import unicodedata
 
 from .translation_languages import is_english_translation

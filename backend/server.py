@@ -30,6 +30,7 @@ from .author_aliases import (canonical as canonical_author, canonical_key, compo
 from .textutils import text_key as passage_text_key
 from .translation_languages import is_english_language
 from .large_json_gzip import LargeJSONGZipMiddleware
+from . import rate_limit as _rate_limit
 
 ROOT = Path(__file__).resolve().parents[1]
 DB = ROOT / 'data/corpus.sqlite'
@@ -138,7 +139,13 @@ async def request_policy(request,call_next):
     from .jev_gateway import public_enabled
     visitor_cookie = None
     machine_cookie = None
-    passage_action = request.url.path in ('/api/analyze-passage', '/api/passage-analysis')
+    if request.method == 'POST' and request.url.path in _rate_limit.LIMITED_PATHS:
+        # Release U: per-client rate limit on the routes that drive the unmetered local parser.
+        wait = _rate_limit.limiter().check(request.headers, request.client.host if request.client else '')
+        if wait:
+            return JSONResponse(status_code=429, headers={'Retry-After': str(wait)},
+                                content={'detail': 'Too many analysis requests from this client; try again shortly.'})
+    passage_action = request.url.path in ('/api/analyze-passage', '/api/passage-analysis', '/api/analyze-text')
     if (request.url.path == '/api/machine-analysis' or passage_action) and request.method == 'POST':
         max_body = 16384 if passage_action else 2048
         try:
@@ -405,7 +412,7 @@ def filters(author='',language='',edition='',include_reference=False, alias='p')
     return (' AND '+ ' AND '.join(clauses) if clauses else ''), values
 
 
-@lru_cache(maxsize=8)
+@lru_cache(maxsize=512)  # release U: 8 thrashed over the claim files, rehashing them on every word lookup
 def file_digest(path,stamp,size):
     with open(path,'rb') as stream:
         return hashlib.file_digest(stream,'sha256').hexdigest()
@@ -480,13 +487,20 @@ def _evidence_index(path,stamp,size):
     return service,service.provenance()
 
 
+@lru_cache(maxsize=2)
+def _claim_audit(path,stamp,size):
+    return json.loads(Path(path).read_text(encoding='utf-8'))
+
+
 def evidence_service():
     if publication_restricted():
         raise RuntimeError(EVIDENCE_HOLD)
     path=ROOT/'data/evidence.sqlite'
     info=path.stat()
     service,provenance=_evidence_index(str(path),info.st_mtime_ns,info.st_size)
-    audit=json.loads((ROOT/'data/reports/p2-claim-acceptance.json').read_text(encoding='utf-8'))
+    audit_path=ROOT/'data/reports/p2-claim-acceptance.json'
+    audit_info=audit_path.stat()
+    audit=_claim_audit(str(audit_path),audit_info.st_mtime_ns,audit_info.st_size)
     for row in provenance['files']:
         approval=audit.get('files',{}).get(row['name'],{})
         source=ROOT/'data/claims'/row['name']
@@ -740,9 +754,32 @@ def passage(id: str):
     return result
 
 
+_OCCURRENCE_MEMO=collections.OrderedDict()
+_OCCURRENCE_LOCK=threading.Lock()
+
+
 def occurrences(keys,author='',limit=30,con=None):
+    """Passages holding any of these normalised spellings (corpus order). Release U: memoised (the corpus is
+    read-only while the server runs; JSON text, decoded fresh per call): the query sorts every matching
+    passage, 0.1-0.3 s for a frequent word, three times per word lookup."""
     if not keys:
         return []
+    key=(tuple(keys),author,limit)
+    with _OCCURRENCE_LOCK:
+        text=_OCCURRENCE_MEMO.get(key)
+        if text is not None:
+            _OCCURRENCE_MEMO.move_to_end(key)
+    if text is not None:
+        return json.loads(text)
+    rows=_occurrences(keys,author,limit,con)
+    with _OCCURRENCE_LOCK:
+        _OCCURRENCE_MEMO[key]=json.dumps(rows,ensure_ascii=False)
+        while len(_OCCURRENCE_MEMO)>1500:
+            _OCCURRENCE_MEMO.popitem(last=False)
+    return rows
+
+
+def _occurrences(keys,author='',limit=30,con=None):
     own = con is None
     con = con or connect()
     marks = ','.join('?' for _ in keys)
@@ -1174,6 +1211,19 @@ def search_response(q:str='',mode:str='words',author:str='',language:str='',edit
     for record in result.get('results') or []:
         with_source_label(record)
         record.update(display_fields(record))
+    if result.get('results') and mode in ('hybrid','themes','words','forms'):
+        # Release U: the line of each result holding the query's headwords, with its citation (a parallel is
+        # a line, not the whole fragment). Display only; the ranking is unchanged.
+        try:
+            from .line_spans import attach_result_lines
+
+            def text_of(identifier):
+                with connect() as con:
+                    row=con.execute('SELECT text FROM passages WHERE id=?',(identifier,)).fetchone()
+                return row[0] if row else None
+            attach_result_lines(result['results'],q,text_of)
+        except (ImportError,FileNotFoundError,OSError,sqlite3.Error,ValueError,KeyError):
+            pass
     # Release T: the single gate for private ranking signals (docs/private-mode.md).
     from .private_gate import apply_public_search
     return apply_public_search(q,result)
@@ -1890,6 +1940,59 @@ from .word_headlines import router as headlines_router
 app.include_router(headlines_router)
 from .commentary_routes import router as commentary_router
 app.include_router(commentary_router)
+
+from .dialectize_routes import router as dialectize_router  # release U: Attic -> Lesbian/Doric/Ionic spellings
+app.include_router(dialectize_router)
+
+
+def _startup_warm():
+    """Release U: load the lookup services and warm the passage-free parts of the most frequent words of the
+    Campbell poems in the background, so the first visitors do not pay the 40 s dictionary load or the first
+    rendering of the big entries (ὁ, καί, δέ). An optimisation only: failures are ignored."""
+    import time as _time
+    started=_time.monotonic()
+    steps={}
+    for name,step in (('lemma_index',lambda: __import__('backend.lemma_index',fromlist=['get_index']).get_index()),
+                      ('dictionaries',lambda: morph_service()._load()),
+                      ('evidence',evidence_service),
+                      ('dialectize',lambda: __import__('backend.dialectize',fromlist=['warm']).warm())):
+        try:
+            step()
+            steps[name]=round(_time.monotonic()-started,1)
+        except Exception:  # noqa: BLE001
+            steps[name]=None
+    limit=int(os.environ.get('MELOS_WARM_WORDS','600') or 0)
+    if limit>0:
+        try:
+            counts=collections.Counter()
+            with connect() as con:
+                for (text,) in con.execute("SELECT text FROM passages WHERE source='campbell_assignment'"):
+                    counts.update(re.findall(r"[Ͱ-Ͽἀ-῿]+[’']?",text))
+            for form,_ in counts.most_common(limit):
+                try:
+                    word(form,'')
+                except Exception:  # noqa: BLE001
+                    pass
+            steps['words']=round(_time.monotonic()-started,1)
+        except Exception:  # noqa: BLE001
+            steps['words']=None
+    # The loaded dictionaries, indexes and memo text are long-lived: moving them out of the cyclic
+    # collector's generations stops full collections from walking a million objects mid-request (an
+    # analysis took 0.9 s, or 2.5-2.8 s whenever a full collection ran).
+    import gc
+    gc.collect()
+    gc.freeze()
+    steps['gc_frozen_objects']=gc.get_freeze_count()
+    _WARM_STATE.update(steps,done=True)
+
+
+_WARM_STATE={'done':False}
+
+
+@app.on_event('startup')
+def _start_warm():
+    if os.environ.get('MELOS_STARTUP_WARM','1')!='0':
+        threading.Thread(target=_startup_warm,name='melos-warm',daemon=True).start()
 
 for directory in ('js','css'):
     app.mount('/'+directory,StaticFiles(directory=ROOT/directory),name=directory)

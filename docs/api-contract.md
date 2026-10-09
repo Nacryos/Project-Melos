@@ -26,8 +26,12 @@ supply it; no engine or stem-library revision is inferred. Cached raw bytes are
 rechecked and parsed again before machine candidates can enter a Jev packet.
 The cache is bounded (default 64 MiB and 10,000 receipts), with a 256 KiB
 response limit, eight-second request timeout, at most two in-flight misses,
-and durable default limits of 200 global/20 per visitor per day and 10
-global/3 per visitor per minute. A signed visitor cookie supports convenience
+and, for the remote Alpheios service only, durable courtesy limits (defaults 200
+global/20 per visitor per day and 10 global/3 per visitor per minute; the live
+deployment sets 1,000/100 and 30/10). The local Morpheus build (`MELOS_MORPHEUS_LOCAL`,
+the live engine) has no per-visitor allowance: it has no external cost (release U).
+Abuse protection is a per-client rate limit on the parsing routes (see Release U).
+A signed visitor cookie supports convenience
 throttling, not authentication; the global limit remains authoritative across
 cookie resets. Failed requests have a five-minute backoff and no automatic
 retry. Invalid forms or receipts return 422; busy requests 409, rate limits
@@ -399,3 +403,134 @@ Owner-only routes; rules, cookies, limits and the public-search gate are in `doc
 - `GET /api/search`: unchanged fields. Results on a page may be re-ordered by private ranking signals. With
   `MELOS_PRIVATE_PUBLIC_EXCERPTS=1` (off by default) a result may carry `reference_excerpt`
   `{visibility: "public-excerpt", text (≤ 30 words), source, page, words}`.
+
+## Release U additions (composer-ready backend)
+
+### POST /api/analyze-text (draft analysis)
+
+JSON `{text, dialect?, author?, fetch_machine?=true, detail?="compact"}`: typed Greek that is not a stored passage
+(at most 2,000 characters and 80 words; body at most 16 kB). The text becomes an ephemeral passage
+(`draft:<sha256 prefix>`, never stored) and goes through the same steps as `/api/analyze-passage` on a stored
+selection: tokens, dictionary and parser readings (local Morpheus answers unseen forms), the dialect gates and
+weights of release R, the contextual syntax model, the interlinear reading with headwords, glosses and
+alternatives, and lemma glosses. `dialect`: `lesbian` (or `aeolic`), `doric` (or `laconian`), `boeotian`, `ionic`,
+`attic`, `epic` (the last three apply no dialect rule); without it, `author` decides as for a stored passage of
+that author (Sappho, Alcaeus: Lesbian; Alcman, Pindar: Doric). 422 with `{code, message}` for an empty or
+non-Greek text, an unknown dialect, extra fields or an unknown `detail`.
+
+Response (`detail: "compact"`): `version, status, detail, draft {id, dialect, author_hint, stored:false, note}`,
+`words: [{text, start, end, lemma, parse, features, gloss, status, alternatives: [{lemma, parse}] (≤ 6),
+dialect_rules}]` (the headword, parse and gloss a reader click shows: js/word-panel.js headlineDetail, the rule
+scripts/eval_lyric_gold.py scores), `interlinear` (the reading's word rows and agreement `groups`: the multi-word
+breakdown; rows keep `morphology_ranking` (≤ 8), `headline_*`, `dialect_rules`, `gloss {text, short_text,
+status, source, entry_id, selection_basis}`), `relationships` (syntax: head and relation per word), `syntax
+{status, state, model, annotation_scheme, tokens, warnings, limitations}`, `lint`, `limits`, `warnings`.
+`detail: "full"` returns the whole `/api/analyze-passage` payload (10–20 MB for a stanza) plus `words` and `draft`.
+
+Differences from a stored passage: no claims linked to a stored locus (treebank or edition annotations of that
+passage) and no neighbouring lines outside the text sent. On 40 random lines of the lyric gold poems the draft
+reading agreed with the stored-passage reading on 87.5 % of words (headword 96.4 %, parse 89.7 %, gloss 95.5 %;
+`scripts/check_draft_parity.py`). Latency: docs/deployment.md, release U.
+
+### POST /api/dialectize (dialect spellings)
+
+`{forms: [str] (≤ 50) | form: str, dialect: "lesbian"|"doric"|"ionic"|"all" (default all; with `author` and no
+dialect, the author's dialect), author?: str, use_parser?: bool = true, parse_attested?: bool = false,
+debug?: bool}`. Generates Lesbian, Doric or Ionic spellings of a standard (Attic) form by general rules (at most
+three per spelling) and returns only spellings that are printed in the corpus under the input's headword or a
+dictionary variant of it, or that local Morpheus reads with that headword. Response: `{dialect, author, ms,
+rules: {id: {id, description, dialects}}, method, results: [{form, headwords, generated, parsed,
+untested_unattested, candidates: [{form, dialect, rules: [{id, description, dialects}], cost, verdict, evidence:
+{kind: attested|parses|attested+parses, attested_tokens (all records), dialect_tokens (tokens in passages of
+authors writing that dialect), dialect_tokens_capped, attested_authors: [{author, tokens}], author_tokens,
+example_citation: {passage_id, author, citation, work, dialect}, indexed_headwords, parses: [{lemma, parse,
+dialect_tag}], attestation_note?}, also_read_as?: [headword], accent_checked?: false}]}]}`. `verdict`:
+`attested_in_dialect`, `attested_elsewhere`, `attested_and_parses` or `parses_only` (generated and unattested, but
+parsed; the parser does not check accents). `also_read_as` marks a spelling that is also another word (παῖς
+"child" beside Lesbian παῖς = πᾶς). The parser is asked about at most 6 unattested spellings per form and dialect
+(2 when the corpus attests one); `use_parser=false` gives attestation only. 422 for an empty, over-long or
+multi-word form, or an unknown dialect. Rules (`backend/dialectize.py`): Lesbian η → ᾱ, a doubled consonant after
+a lengthened vowel (σελάννα), οι/αι for ου/ᾱ before σ, the -ην infinitive, psilosis, the recessive accent, αε for
+contracted η (ἀέλιος), π for τ before a front vowel (πήλοθεν), σδ for ζ, -αισι/-οισι, -ᾶν, -τα, the function-word
+table; Doric η → ᾱ, -εν/-ην infinitives, -ᾶν, -ω genitive, -κα, -μες; Ionic η after ε ι ρ, ου/ει before ν ρ λ, κ
+for π, -ῃσι, psilosis. Ionic candidates are never `attested_in_dialect`: no Ionic poets are listed in
+`backend/passage_dialect.py`.
+
+### Unseen forms and rate limits
+
+`POST /api/machine-analysis` and every analysis route reach the local Morpheus build without a per-visitor
+allowance. A per-client sliding-window limit protects them (`backend/rate_limit.py`): POST to
+`/api/machine-analysis`, `/api/analyze-text`, `/api/dialectize`, `/api/analyze-passage`, `/api/words/headlines`,
+`/api/passage-morphology/warm`: 120 a minute and 20,000 a day per client (`MELOS_RATE_CLIENT_MINUTE`,
+`MELOS_RATE_CLIENT_DAY`), and 1,200 a minute per connecting address (`MELOS_RATE_CONNECTION_MINUTE`). The client
+is the last two `X-Forwarded-For` entries (the visitor as Vercel states it, and the Vercel edge as Tailscale
+Funnel appends it); the connecting address is the last entry. 429 with `Retry-After` when exceeded. Per process,
+in memory; a convenience bound, not authentication.
+
+### POST /api/words/headlines (forms mode)
+
+New optional `dialect` / `author` (as for `/api/analyze-text`). Each token may carry:
+- `form_match {spelling, rule}`: the index lacks the printed spelling; it was read as `spelling` by
+  `enclitic_accent_dropped` (θῦμόν → θῦμον), `breathing_folded` (εὔδω → εὕδω) or `accent_folded`;
+- `rules`: `aeolic_singular` (in a Lesbian/Doric text a first-declension ᾱ ending of an η-stem noun or of a
+  three-ending adjective is singular: σελάννα nom. sg., μόνα fem. sg.; the dual and neuter plural readings
+  follow), `dual` (dropped in a Lesbian/Doric text when another reading exists, otherwise listed last),
+  `pronoun_vocative` (a pronoun has no vocative: αὖτε is the adverb, not αὐτός), `name_vocative` (a capitalised
+  vocative whose headword's dictionaries give only a place or people adjective names the person addressed: Ἄτθι
+  "Atthis (a name; vocative)"; `dictionary_gloss` keeps the dictionary's gloss);
+- `dialect`: the dialect the rules used.
+
+`name_vocative` applies to `/api/analyze-passage` and `/api/analyze-text` rows as well (gloss
+`selection_basis: name_vocative`). Rules: `backend/headline_rules.py`.
+
+### Analysis rules (release U)
+
+- An elided -σ’ keeps its 3rd plural reading when no other word of its clause reads only as a finite verb
+  (φαῖσ’, ἄγοισ’ "they say / bring"); beside a finite verb the participle stands (χαίροισ’ ἔρχεο).
+- Lesbian -αισ-/-οισ- before a vowel is also read as the standard -ᾱσ-/-ουσ- (παῖσαν: πᾶσαν; rule
+  `aeolic_ais_ois_before_vowel`), competing with the printed spelling's readings.
+- A parse lemma with no dictionary entry is read through the Doric/Aeolic ᾱι (ᾳ) for Attic ῃ correspondence and
+  takes that headword's gloss (θναίσκω → θνῄσκω "die"; τεθνάκην, perf. inf.).
+
+### Counting each fragment once
+
+Frequency, distribution, concept diachrony, collocations, n-grams and the `forms_found` facet of
+`/api/lemma/search` count one edition of each fragment or passage. Two searchable passages of the same canonical
+author held by different collections are one text when at least half of the shorter text's content words (four
+letters or more, at least three) occur in the other: the rule search uses to fold editions
+(`backend.retrieval.group_editions`), applied to every pair and joined into groups
+(`scripts/build_edition_groups.py` → `edition_groups.sqlite`, env `MELOS_EDITION_GROUPS`). In each group the
+collection holding most of its words is counted; a passage of another collection is not counted when it matches
+a passage of that collection directly, and in a group of at most 8 passages a passage at least 80 % contained in
+a longer one of its own collection is a copy. Pairs of passages both mapped to TLG works keep the release Q rule.
+`/api/lemma/search` lists the other editions under the counted one (`editions`, `edition_count`;
+`editions_folded`); `forms_found` items carry `passages` (texts with the form). The concordance folds them too.
+
+### Concept search
+
+`GET /api/concept/diachrony` takes `author` and `genre` (every count, example and the meaning-index
+neighbourhood in that scope); `max_lemmas` is the number of headwords returned. A neighbour from the meaning index
+must share a head meaning (a whole word heading one of its senses) with the concept or a chosen headword, not a
+word stem; head-meaning matches are kept even when none of their passages is among the nearest; a headword with
+fewer than five tokens in the scope has its score scaled down. Version `concept-diachrony-v3`.
+
+`GET /api/lemma/proximity` combines each word's variant group by default (`combine_variants=true`: Ἔρος with ἔρος
+and ἔρως); `combine_variants=false` searches the one headword.
+
+### Line-level parallels
+
+- `/api/search` results (every mode) carry `best_line {line, line_basis, start, end, text, citation,
+  matched_headwords}`: the line of the passage holding the most distinct query headwords (Greek words read as
+  their headwords, English words through their head meanings, with their variant groups). Absent when no query
+  headword occurs in the passage. Display only; the ranking is unchanged.
+- Concept diachrony examples carry `line` (the same fields) for the keyword's line.
+- `/api/cite` locus results carry `cited_line` when the stored passage has exactly one line per verse of its
+  locus range (`line_basis: locus`).
+
+`line_basis`: `printed` (the edition's own numbering, counted on from the nearest numbered line), `locus`, or
+`position_in_passage` (the line's place in the stored text when no numbering is printed).
+
+### Variant groups
+
+A capitalisation member's link has `relation: "capitalised spelling"`, `dictionary: "Melos capitalisation rule
+(no dictionary link)"` and `evidence: "same letters, other capitalisation"`; no label is null.

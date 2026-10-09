@@ -287,12 +287,15 @@ def describe(rules):
     return "Normalised from " + " and ".join(dialects) + " via " + "; ".join(_RULE[r][1] for r in rules)
 
 
-def generate_and_test(form, analyze, next_form=None):
+def generate_and_test(form, analyze, next_form=None, deadline=None):
     """Ask `analyze(spelling)` (a machine-morphology result) about generated spellings.
 
     Returns (accepted, tried): accepted = [(spelling, rules, result)] from the first
     cost (fewest rule applications, weak rules counting two) at which anything parses.
+    Release U: `deadline` (time.monotonic() value) stops asking once passed; a word lookup on a
+    damaged piece (γεγρά) asked the parser about hundreds of spellings for 40 s.
     """
+    import time as _time
     candidates = elision_completions(form, next_form)
     if _nfc(form)[-1:] not in ELISION:
         candidates += generate(form)
@@ -304,6 +307,9 @@ def generate_and_test(form, analyze, next_form=None):
     for depth in sorted(by_depth):
         accepted = []
         for spelling, rules in by_depth[depth]:
+            if deadline is not None and _time.monotonic() > deadline:
+                tried.append({"form": spelling, "rules": list(rules), "status": "deadline"})
+                return accepted, tried
             result = analyze(spelling)
             status = result.get("status")
             tried.append({"form": spelling, "rules": list(rules), "status": status})

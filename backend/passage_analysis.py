@@ -7,9 +7,11 @@ checks and evidence receipts remain the same as the existing word reader.
 """
 from __future__ import annotations
 
-from copy import deepcopy
+from .fastcopy import deepcopy  # release U: JSON-tree copy, several times faster than copy.deepcopy
 import hashlib
-from threading import BoundedSemaphore
+import json
+from collections import OrderedDict
+from threading import BoundedSemaphore, Lock
 import unicodedata
 
 from .phrase_meaning import phrase_meaning
@@ -68,6 +70,33 @@ MAX_VARIANT_LOOKUPS = 40
 GENERATED_SECONDS = 8.0
 APOSTROPHES = "'’ʼ᾽"
 EDITORIAL = frozenset("[]⟦⟧⟨⟩<>…†‡̣")
+
+
+WORD_MEMO_SIZE = 3000
+WORD_MEMO_CHARS = 150_000_000  # about 300 MB of str
+LEAN_SENSES = 4
+
+
+def lean_word_result(value):
+    """Release U (draft analysis): a word lookup without the bulk the analysis never reads (observed-form
+    groups, occurrence previews, excluded senses, supporting-source lists); each dictionary entry and source
+    candidate keeps its full text and its first LEAN_SENSES senses. Draft headlines are checked against the
+    full lookups by scripts/check_draft_parity.py."""
+    out = dict(value)
+    for name in ("occurrences", "occurrence_preview_groups", "context", "observed_form_groups"):
+        out.pop(name, None)
+
+    def trim(row):
+        row = dict(row)
+        row.pop("dictionary_senses_excluded", None)
+        row.pop("supporting_sources", None)
+        if isinstance(row.get("dictionary_senses"), list):
+            row["dictionary_senses"] = row["dictionary_senses"][:LEAN_SENSES]
+        return row
+    for name in ("lexicon_entries", "candidates"):
+        if isinstance(out.get(name), list):
+            out[name] = [trim(row) if isinstance(row, dict) else row for row in out[name]]
+    return out
 
 
 class PassageAnalysisError(ValueError):
@@ -457,6 +486,33 @@ class PassageAnalysisService:
         # approved resolver with a trusted cache-only receipt loader.
         self.machine_subentry_lookup = machine_subentry_lookup
         self._slots = BoundedSemaphore(2)
+        # Release U: passage-free word lookups (a draft's words, every headword's dictionaries) memoised across
+        # requests as JSON text; the dictionaries and claims are read-only while the server runs.
+        self._word_memo = OrderedDict()
+        self._word_memo_lock = Lock()
+        self._word_memo_chars = 0
+
+    def _word(self, form, passage_id, lean=False):
+        if passage_id:
+            return self.word_lookup(form, passage_id) or {}
+        key = (form, bool(lean))
+        with self._word_memo_lock:
+            text = self._word_memo.get(key)
+            if text is not None:
+                self._word_memo.move_to_end(key)
+        if text is None:
+            value = self.word_lookup(form, "") or {}
+            if lean:
+                value = lean_word_result(value)
+            text = json.dumps(value, ensure_ascii=False)
+            with self._word_memo_lock:
+                if key not in self._word_memo:
+                    self._word_memo_chars += len(text)
+                self._word_memo[key] = text
+                while self._word_memo and (len(self._word_memo) > WORD_MEMO_SIZE
+                                           or self._word_memo_chars > WORD_MEMO_CHARS):
+                    self._word_memo_chars -= len(self._word_memo.popitem(last=False)[1])
+        return json.loads(text)
 
     def analyze(self, request, *, visitor_id=None, ranker_visitor_id=None):
         # Release R: wait briefly for one of the two slots instead of refusing at once; a reader's
@@ -468,7 +524,25 @@ class PassageAnalysisService:
         finally:
             self._slots.release()
 
-    def _analyze(self, request, *, visitor_id, ranker_visitor_id):
+    def analyze_text(self, request, *, visitor_id=None, ranker_visitor_id=None):
+        """Release U: analyse typed Greek that is not a stored passage (POST /api/analyze-text).
+
+        The text becomes an ephemeral passage (id ``draft:<sha256 prefix>``, never stored) and goes through the
+        same steps as a stored passage: tokens, dictionary and parser readings (local Morpheus is consulted for
+        unseen forms), the dialect rules of the named dialect or author, the syntax model, the interlinear
+        reading with headwords, glosses and alternatives. Each word also gets ``headline`` (the headword, gloss
+        and parse the reader would show)."""
+        from .draft_analysis import draft_passage, attach_headlines
+        passage, internal = draft_passage(request)
+        if not self._slots.acquire(timeout=SLOT_WAIT_SECONDS):
+            raise PassageAnalysisError("busy", "Passage analysis is busy. Try again shortly.", 429)
+        try:
+            result = self._analyze(internal, visitor_id=visitor_id, ranker_visitor_id=ranker_visitor_id, draft=passage)
+        finally:
+            self._slots.release()
+        return attach_headlines(result, passage)
+
+    def _analyze(self, request, *, visitor_id, ranker_visitor_id, draft=None):
         allowed = {"version", "passage_id", "start", "end", "offset_unit", "selected_text", "rerank", "fetch_machine"}
         if not isinstance(request, dict) or set(request) - allowed:
             raise PassageAnalysisError("invalid_request", "Only corpus identity, exact selection, and analysis flags are accepted.")
@@ -483,9 +557,11 @@ class PassageAnalysisService:
         selected = request.get("selected_text")
         if not isinstance(selected, str) or not selected or len(selected) > MAX_CHARACTERS:
             raise PassageAnalysisError("invalid_selection", f"Select 1–{MAX_CHARACTERS} characters from the corpus passage.")
-        passage = self.passage_lookup(passage_id)
+        passage = draft if draft is not None else self.passage_lookup(passage_id)
         if not passage:
             raise PassageAnalysisError("passage_not_found", "Passage not found.", 404)
+        # A draft has no stored record: word lookups use no passage context.
+        lookup_id = "" if draft is not None else passage_id
         text = passage.get("text")
         if not isinstance(text, str) or passage.get("language") not in (None, "grc") or passage.get("kind") not in (None, "text"):
             raise PassageAnalysisError("unsupported_passage", "Analysis requires a Greek source text passage.")
@@ -552,7 +628,7 @@ class PassageAnalysisService:
                 try:
                     # Only dictionary records are copied from this bare-headword
                     # lookup, never another occurrence's morphological claims.
-                    dictionary_cache[key] = self.word_lookup(lemma, '') or {}
+                    dictionary_cache[key] = self._word(lemma, '', lean=bool(draft and draft.get("lean", True)))
                 except Exception:
                     dictionary_cache[key] = {'dictionary_lookup_status': 'unavailable'}
             return dictionary_cache[key]
@@ -578,7 +654,7 @@ class PassageAnalysisService:
                 reading_notes.append("Underdots mark doubtfully read letters; the analysis follows the printed reading.")
             if form not in source_cache:
                 try:
-                    source_cache[form] = self.word_lookup(form, passage_id) or {}
+                    source_cache[form] = self._word(form, lookup_id, lean=bool(draft and draft.get("lean", True)))
                 except Exception:
                     source_cache[form] = {"warnings": ["Source lookup is unavailable for this token."], "status": "unavailable"}
             source = source_cache[form]
@@ -671,7 +747,7 @@ class PassageAnalysisService:
                 if (not machine.get("machine_candidates") and not token.get("lacuna_boundary_uncertain")
                         and machine.get("status") in ("cache_miss", "no_analyses", "request_limit")):
                     # The parser was consulted and has nothing for the printed form.
-                    machine = self._recorded_form_variants(form, token, machine, passage_id, source_cache, variant_budget)
+                    machine = self._recorded_form_variants(form, token, machine, lookup_id, source_cache, variant_budget)
                 machine_cache[machine_key] = machine
             token["machine"] = deepcopy(machine_cache[machine_key])
             if token["machine"].get("normalised_lexicon_entries"):
@@ -749,6 +825,19 @@ class PassageAnalysisService:
             result["limits"]["lemma_dictionary"] = attach_lemma_glosses(
                 result["interlinear"], self.headword_lookup, syntax=result.get("syntax"),
                 form_lemmas=self.form_lemma_lookup, lemma_attestations=self.lemma_attestation_lookup, text=text)
+        try:
+            # Release U: a vocative of a place or people adjective names the person addressed (Ἄτθι: Atthis).
+            from .headline_rules import apply_name_vocatives
+            from .lemma_index import get_index
+            index = get_index()
+
+            def gloss_of(lemma):
+                row = index.con().execute("SELECT gloss FROM lemma WHERE lemma=? ORDER BY tokens DESC LIMIT 1",
+                                          (lemma,)).fetchone()
+                return row[0] if row else None
+            apply_name_vocatives(result["interlinear"], gloss_of)
+        except Exception:  # noqa: BLE001 - an optional display rule; the index may be absent (tests, local runs)
+            pass
         result["sense_ranking"] = {"status": "not_requested"}
         if request.get('rerank') and self.sense_ranker is not None:
             from .sense_ranker import apply_sense_ranking

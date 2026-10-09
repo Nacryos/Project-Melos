@@ -130,8 +130,47 @@ class EvidenceIndex:
             item[0]["source_family"], item[0]["id"],
         ))
 
+    # Release U: the claims are a read-only snapshot, so passage-free answers are memoised per form (JSON
+    # text, decoded fresh per call). A passage-specific question reuses the passage-free answer unless a
+    # claim is linked to that passage for this form (one indexed probe): the rows, their strengths and their
+    # order are then identical, only the echoed passage_id differs.
+    def _memo(self, name, form, passage_id, limit, compute):
+        import json as _json
+        memo = self.__dict__.setdefault("_answer_memo", {})
+        if passage_id:
+            keys = list(dict.fromkeys(query_variants(form)))
+            if keys:
+                marks = ",".join("?" for _ in keys)
+                with closing(self._connect()) as con:
+                    linked = con.execute(f"SELECT 1 FROM claims WHERE normalized_form IN ({marks}) AND passage_id=? LIMIT 1",
+                                         [*keys, passage_id]).fetchone()
+                if linked:
+                    return compute(form, passage_id, limit)
+        key = (name, unicodedata.normalize("NFC", form), limit)
+        text = memo.get(key)
+        if text is None:
+            text = _json.dumps(compute(form, None, limit), ensure_ascii=False)
+            if len(memo) > 4096:
+                memo.clear()
+            memo[key] = text
+        result = _json.loads(text)
+        if "passage_id" in result:
+            result["passage_id"] = passage_id
+        return result
+
     def lookup(self, form: str, passage_id: str | None = None,
                limit: int | None = 20) -> dict[str, Any]:
+        """Find explicitly linked passage claims and source claims on a form (memoised; see _lookup)."""
+        return self._memo("lookup", form, passage_id, limit, lambda f, p, n: self._lookup(f, passage_id=p, limit=n))
+
+    def candidate_analyses(self, form: str, passage_id: str | None = None,
+                           limit: int = 20) -> dict[str, Any]:
+        """Source-stated grammar and form-of links (memoised; see _candidate_analyses)."""
+        return self._memo("candidates", form, passage_id, limit,
+                          lambda f, p, n: self._candidate_analyses(f, passage_id=p, limit=n))
+
+    def _lookup(self, form: str, passage_id: str | None = None,
+                limit: int | None = 20) -> dict[str, Any]:
         """Find explicitly linked passage claims and source claims on a form.
 
         Lookup is accent/case folded for recall. Exact original spelling is
@@ -297,8 +336,8 @@ class EvidenceIndex:
                 context[record_id] = entry
         return context
 
-    def candidate_analyses(self, form: str, passage_id: str | None = None,
-                           limit: int = 20) -> dict[str, Any]:
+    def _candidate_analyses(self, form: str, passage_id: str | None = None,
+                            limit: int = 20) -> dict[str, Any]:
         """Project source-stated grammar and form-of links, never page metadata.
 
         Raw claims remain available through lookup(). Candidates are separate

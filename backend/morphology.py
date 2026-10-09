@@ -391,6 +391,20 @@ class Morphology:
         self._load()
         if not isinstance(lemma, str) or not lemma.strip() or len(lemma) > 200:
             return {"lemma": lemma, "status": "invalid_lemma", "entries": []}
+        # Release U: one word lookup asked for the same headword's entries up to 17 times (headline,
+        # parser candidates, glosses); the rendered result is memoised and copied out.
+        import json as _json
+        cache = self.__dict__.setdefault("_headword_cache", {})
+        key = (lemma, limit)
+        text = cache.get(key)
+        if text is None:
+            text = _json.dumps(self._headword_entries(lemma, limit), ensure_ascii=False)
+            if len(cache) > 4096:
+                cache.clear()
+            cache[key] = text
+        return _json.loads(text)
+
+    def _headword_entries(self, lemma: str, limit: int) -> dict[str, Any]:
         target = unicodedata.normalize("NFC", lemma.strip())
         bucket = self._visible(self._entries.get(normalize(target), ()))
         exact = [row for row in bucket if unicodedata.normalize("NFC", str(row.get("lemma", ""))) == target]

@@ -169,8 +169,9 @@ def main():
                 "scope": "all indexed Greek records" if args.include_reference else "searchable edited Greek text",
                 "min_count": MIN_COUNT, "keep_per_group_and_length": KEEP, "per_headword": PER_LEMMA, "per_headword_min_count": PER_LEMMA_MIN, "groups": len(groups),
                 "duplicate_passages_skipped": not_counted,
-                "deduplication": ("one collection per TLG work (citation index); unnumbered fragment editions are "
-                                  "not deduplicated") if args.citations else None,
+                "deduplication": ("one collection per TLG work (citation index); one edition of each fragment "
+                                  "(release U edition groups, " + ("present" if ix.edition_groups()["manifest"] else "absent")
+                                  + "); word-for-word repeats once") if args.citations else None,
                 "statistic": ("Dunning log-likelihood G2 of the last headword following the (n-1)-headword prefix "
                               "against its frequency in the group; positive associations only"),
                 "seconds": round(time.time() - started)}

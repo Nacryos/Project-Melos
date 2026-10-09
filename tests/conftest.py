@@ -1,9 +1,12 @@
+import os
 import platform
 
 import pytest
 
 # Windows: platform.win32_ver() can deadlock inside WMI under pytest.
 platform._wmi = None
+# Release U: no background warm-up of the lookup services under the test client.
+os.environ.setdefault("MELOS_STARTUP_WARM", "0")
 
 
 @pytest.fixture(autouse=True)

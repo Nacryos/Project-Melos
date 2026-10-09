@@ -85,6 +85,33 @@ def lexical_variant(form):
     return next(iter(found.values())) if len(found) == 1 else None
 
 
+GREEK_VOWELS = set("αεηιουωΑΕΗΙΟΥΩ")
+
+
+def aeolic_diphthong_before_s(form):
+    """Release U (Campbell p. 262 § 3): Lesbian αισ, οισ where the standard spelling has ᾱσ, ουσ before a vowel
+    (παῖσαν: πᾶσαν, ζεύξαισα: ζεύξασα, Μοῖσα: Μοῦσα, ἄγοισι: ἄγουσι). Not at the start of a word (αἶσα)."""
+    nfd = _nfd(form)
+    out = []
+    i = 1
+    while i < len(nfd):
+        if nfd[i].lower() in "αο" and i + 1 < len(nfd) and nfd[i + 1].lower() == "ι":
+            j = i + 2
+            while j < len(nfd) and unicodedata.combining(nfd[j]):
+                j += 1
+            if j + 1 < len(nfd) and nfd[j].lower() in "σς" and nfd[j + 1].lower() in GREEK_VOWELS:
+                marks = nfd[i + 2:j]
+                if nfd[i].lower() == "α":
+                    spelling = nfd[:i + 1] + marks + nfd[j:]
+                else:
+                    spelling = nfd[:i + 1] + ("Υ" if nfd[i + 1].isupper() else "υ") + marks + nfd[j:]
+                out.append(_nfc(spelling))
+            i = j
+        else:
+            i += 1
+    return out
+
+
 def lesbian_fallback_variants(form):
     """Release R: spellings a Lesbian form may stand for even when the parser reads the printed letters:
     psilosis (psilotic_variants) and the recessive (barytone) accent: the acute moved one syllable
@@ -113,6 +140,13 @@ def lesbian_fallback_variants(form):
             seen.add(spelling)
             found.append({"form": spelling, "rule": rule, "tier": "dialect_normalised_query",
                           "note": "Lesbian recessive accent: the edition accents the word earlier than the standard spelling"})
+    for spelling in aeolic_diphthong_before_s(form):
+        if spelling not in seen:
+            # Not a fallback (backend.dialect_rules.FALLBACK_RULES): its readings compete with the printed
+            # spelling's (παῖσαν: πᾶς beside παίω).
+            seen.add(spelling)
+            found.append({"form": spelling, "rule": "aeolic_ais_ois_before_vowel", "tier": "dialect_normalised_query",
+                          "note": "Lesbian αισ/οισ where the standard spelling has ᾱσ/ουσ (παῖσα: πᾶσα, Μοῖσα: Μοῦσα)"})
     return found
 
 

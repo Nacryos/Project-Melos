@@ -51,7 +51,7 @@ def _sense(node):
     return next((ancestor for ancestor in node.iterancestors() if ancestor.tag == 'sense'), None)
 
 
-@lru_cache(maxsize=8)
+@lru_cache(maxsize=512)  # release U: 8 thrashed over the 27 LSJ files (re-hashed per lookup)
 def _verified_digest(path, mtime_ns, size):
     with path.open('rb') as handle:
         return hashlib.file_digest(handle, 'sha256').hexdigest()

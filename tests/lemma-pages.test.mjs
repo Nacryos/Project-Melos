@@ -101,3 +101,19 @@ test('reader search URL keeps Headword mode and its Near distance', () => {
   assert.match(reader, /near: snapshot\.mode === 'lemma' && snapshot\.near \? '1' : null/);
   assert.match(reader, /window: \(raw => \/\^\(\?:\[1-9\]\|1\[0-9\]\|20\)\$\/\.test\(raw\) \? Number\(raw\) : 5\)\(value\('window'\)\)/);
 });
+
+test('release U: a capitalisation link never prints a null dictionary label', () => {
+  const window = load('js/lemma-common.js', 'js/lemma-page.js');
+  window.MelosWordPanel = { plainSource: value => (value === null ? '(null)' : value) };
+  const P = window.MelosLemmaPage;
+  const group = { members: [
+    { lemma: 'ἔρως', links: [] },
+    { lemma: 'Ἔρως', tokens_all_records: 0, links: [
+      { lemma: 'ἔρως', direction: 'capitalisation_of', relation: 'capitalised spelling',
+        dictionary: null, evidence: null }] }] };
+  const lines = P.variantLines('ἔρως', group);
+  assert.equal(lines.length, 1);
+  assert.deepEqual([...lines[0].dictionaries], []);
+  assert.ok(!/null/.test(lines[0].text));
+  assert.match(lines[0].text, /capital/);
+});

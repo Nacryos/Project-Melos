@@ -7,6 +7,17 @@ from pydantic import BaseModel, Field, StrictBool, StrictInt
 from .passage_analysis import MAX_CHARACTERS, PassageAnalysisError, PassageAnalysisService
 
 
+class TextRequest(BaseModel):
+    """Release U: typed Greek that is not a stored passage."""
+    model_config = {"extra": "forbid"}
+    version: StrictInt = 1
+    text: str = Field(min_length=1, max_length=MAX_CHARACTERS)
+    dialect: str | None = Field(default=None, max_length=20)
+    author: str | None = Field(default=None, max_length=120)
+    fetch_machine: StrictBool = True
+    detail: Literal["compact", "full"] = "compact"
+
+
 class PassageRequest(BaseModel):
     model_config = {"extra": "forbid"}
     version: StrictInt = 1
@@ -40,6 +51,15 @@ def create_router(passage_lookup, word_lookup, *, machine_service=None, syntax_p
     @router.post("/api/passage-analysis", include_in_schema=False)
     def analyze_post(payload: PassageRequest, request: Request):
         return run(payload, request)
+
+    @router.post("/api/analyze-text")
+    def analyze_text(payload: TextRequest, request: Request):
+        try:
+            return service.analyze_text(payload.model_dump(exclude_none=True),
+                                        visitor_id=getattr(request.state, "machine_visitor", None),
+                                        ranker_visitor_id=getattr(request.state, "classifier_visitor", None))
+        except PassageAnalysisError as exc:
+            raise HTTPException(exc.status_code, detail={"code": exc.code, "message": str(exc)}) from exc
 
     class WarmRequest(BaseModel):
         model_config = {"extra": "forbid"}

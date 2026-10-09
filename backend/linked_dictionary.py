@@ -136,7 +136,7 @@ def _stamp(path):
                  for p in (Path(path), Path(str(path) + '-wal')))
 
 
-@lru_cache(maxsize=128)
+@lru_cache(maxsize=4096)  # release U: 128 forms were evicted by a 600-word warm-up
 def _lookup(form, evidence_path, source_path, stamps):
     index = EvidenceIndex(evidence_path)
     crossrefs = lookup_crossreference_meanings(form, index, source_path)

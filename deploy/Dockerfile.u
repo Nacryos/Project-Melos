@@ -1,0 +1,9 @@
+# Release U: code-only patch atop the live image (T once T is live).
+# Build with --build-arg BASE_IMAGE=<the live image>; deploy/release_u.sh reads it from the live container.
+# Corpus, indexes (edition groups, n-grams), models, secrets and the private store stay mounts.
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+COPY backend /app/backend
+COPY js /app/js
+COPY css/reader.css /app/css/reader.css
+COPY reader.html /app/reader.html

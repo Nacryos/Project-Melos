@@ -4,7 +4,7 @@ This module neither creates lexical senses nor enumerates joint sentence parses.
 Feature labels follow UD (https://universaldependencies.org/u/feat/index.html);
 Perseus codes use the existing documented describe_postag adapter.
 """
-from copy import deepcopy
+from .fastcopy import deepcopy  # release U: JSON-tree copy, several times faster than copy.deepcopy
 import hashlib
 import json
 import math
@@ -60,8 +60,38 @@ def candidate_identity(row):
         sort_keys=True, separators=(',', ':')).encode()).hexdigest()
 
 
+def _freeze(value):
+    if isinstance(value, dict):
+        return tuple(sorted((str(k), _freeze(v)) for k, v in value.items()))
+    if isinstance(value, (list, tuple)):
+        return tuple(_freeze(v) for v in value)
+    return value
+
+
+_FEATURES_MEMO = {}
+
+
 def canonical_features(row):
-    """Translate supplied labels, never infer missing morphology from spelling."""
+    """Translate supplied labels, never infer missing morphology from spelling.
+
+    Release U: memoised on the fields it reads (features, analysis, source_tags, upos); a stanza's analysis
+    asked for the same candidates' features about 5,000 times."""
+    try:
+        key = (_freeze(row.get('features')), row.get('analysis') if isinstance(row.get('analysis'), str) else None,
+               _freeze(row.get('source_tags')), row.get('upos'))
+        hash(key)
+    except TypeError:
+        return _canonical_features(row)
+    found = _FEATURES_MEMO.get(key)
+    if found is None:
+        found = _canonical_features(row)
+        if len(_FEATURES_MEMO) > 50000:
+            _FEATURES_MEMO.clear()
+        _FEATURES_MEMO[key] = found
+    return dict(found)
+
+
+def _canonical_features(row):
     supplied = {}
     raw = row.get('features') or {}
     if isinstance(raw, dict):

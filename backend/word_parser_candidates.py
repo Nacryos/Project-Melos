@@ -406,6 +406,9 @@ def elision_restorations(printed, form, machine_service):
     return found
 
 
+WORD_GENERATED_SECONDS = 2.0  # release U: bound on generated spellings asked about in one word lookup
+
+
 def parser_candidates(form, machine_service, headword_lookup=None, form_lemmas=None):
     from .dialect_generate import describe, generate_and_test
     from .interlinear import canonical_features, compact_parse
@@ -421,7 +424,9 @@ def parser_candidates(form, machine_service, headword_lookup=None, form_lemmas=N
         except ValueError:
             local = False
         if local:
-            accepted, _ = generate_and_test(form, lambda spelling: machine_service.analyze(spelling, None, fetch=False))
+            import time as _time
+            accepted, _ = generate_and_test(form, lambda spelling: machine_service.analyze(spelling, None, fetch=False),
+                                            deadline=_time.monotonic() + WORD_GENERATED_SECONDS)
             found = accepted
     rows, seen = [], set()
     for spelling, rules, found_result in found:

@@ -40,6 +40,7 @@
   function relationText(variant, base, relation) {
     const rel = String(relation || '').trim();
     if (rel === '=' || !rel) return `${variant} is listed as another form of ${base}`;
+    if (/capitalis/i.test(rel)) return `${variant} is the same word spelt with a capital (${base})`;
     const words = RELATION[rel] || (/form/i.test(rel) ? rel : `${rel.replace(/\.$/, '')} form`);
     return `${variant} is ${/^[aeiouAEIOU]/.test(words) ? 'an' : 'a'} ${words} of ${base}`;
   }
@@ -55,7 +56,8 @@
       const link = links.find(item => same(item.lemma)) || links[0];
       if (!link) continue;
       const [variant, base] = link.direction === 'variant_of' ? [member.lemma, link.lemma] : [link.lemma, member.lemma];
-      const dictionaries = [...new Set(links.filter(item => item.lemma === link.lemma).map(item => window.MelosWordPanel?.plainSource?.(item.dictionary) || item.dictionary).filter(Boolean))];
+      const dictionaries = [...new Set(links.filter(item => item.lemma === link.lemma && item.dictionary && item.direction !== 'capitalisation_of')
+        .map(item => window.MelosWordPanel?.plainSource?.(item.dictionary) || item.dictionary).filter(value => value && !/^\(?null\)?$/i.test(String(value))))];
       out.push({ lemma: member.lemma, gloss: member.gloss || '', tokens: Number(member.tokens_all_records) || 0,
         text: relationText(variant, base, link.relation), dictionaries, evidence: String(link.evidence || '').trim() });
     }

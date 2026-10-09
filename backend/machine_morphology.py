@@ -15,6 +15,8 @@ No retries, redirects, accent folding, feature inference, or dictionary joins.
 from __future__ import annotations
 
 import hashlib
+import threading
+from collections import OrderedDict
 import json
 import os
 from pathlib import Path
@@ -408,6 +410,25 @@ class MachineMorphologyService:
             return self._result("upstream_error", form, "Local Morpheus request failed; no retry or fallback was made.")
 
     def analyze(self, form, visitor_id, fetch=True):
+        """Release U: a settled answer (ok / no_analyses) is memoised per process for the form (receipts are
+        immutable; the memo holds JSON text and returns a fresh copy). Each call otherwise opened the runtime
+        database, ran its schema script and re-read and re-verified the receipt, 190 times for a stanza."""
+        memo_key = (form, self.path if hasattr(self, "path") else None)
+        with _RESULT_LOCK:
+            text = _RESULT_MEMO.get(memo_key)
+            if text is not None:
+                _RESULT_MEMO.move_to_end(memo_key)
+        if text is not None:
+            return json.loads(text)
+        result = self._analyze(form, visitor_id, fetch)
+        if isinstance(result, dict) and result.get("status") in ("ok", "no_analyses"):
+            with _RESULT_LOCK:
+                _RESULT_MEMO[memo_key] = json.dumps(result, ensure_ascii=False)
+                while len(_RESULT_MEMO) > 20000:
+                    _RESULT_MEMO.popitem(last=False)
+        return result
+
+    def _analyze(self, form, visitor_id, fetch=True):
         input_form = form
         try:
             form = validate_form(form)
@@ -506,6 +527,10 @@ class MachineMorphologyService:
                     conn.execute("DELETE FROM inflight WHERE key=?", (key,))
         except (sqlite3.Error, OSError):
             return self._result("upstream_error", form, "Morphology runtime cache unavailable.")
+
+
+_RESULT_MEMO = OrderedDict()
+_RESULT_LOCK = threading.Lock()
 
 
 def get_service():

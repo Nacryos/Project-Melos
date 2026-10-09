@@ -216,6 +216,17 @@ def gate(candidates, token, predicted):
         matched = {word_class(c) for c in kept if fits[id(c)] == "match"}
         apply("dialect_label", lambda c: fits[id(c)] == "other" and word_class(c) not in matched)
     elided = form[-1:] in ELISION
+    if dialect == "lesbian" and not elided:
+        # Release U (Campbell p. 262 § 3): Lesbian αισ, οισ before a vowel is the standard ᾱσ, ουσ (παῖσαν = πᾶσαν,
+        # Μοῖσα = Μοῦσα). When a reading of the word is labelled Aeolic by the parser or comes from that
+        # normalisation, readings the parser gives no dialect for (the Attic neuter participle παῖσαν of παίω)
+        # yield to it.
+        from .aeolic_variants import aeolic_diphthong_before_s
+        if aeolic_diphthong_before_s(form):
+            aeolic = lambda c: fits[id(c)] == "match" or c.get("normalisation_rule") == "aeolic_ais_ois_before_vowel"
+            if any(aeolic(c) for c in kept):
+                apply("aeolic_ais_ois_before_vowel", lambda c: not aeolic(c) and fits[id(c)] is None
+                      and str(c.get("normalisation_rule") or "") not in FALLBACK_RULES)
     if elided:
         # Elision removes a short final vowel; a final ι (dative plural, 3rd plural -σι) or a diphthong
         # is rarely elided in lyric (Smyth § 70): such a restoration yields to a vowel one.
@@ -224,11 +235,16 @@ def gate(candidates, token, predicted):
         if _ends(form.rstrip(ELISION), "σ"):
             # The parser's own readings of an elided -σ’ name the lost ending only through their features:
             # a dative plural or a 3rd plural in -σι, a feminine plural participle in -σαι.
+            # Release U: a 3rd plural in -σι is the clause's verb when no other word of the clause reads only
+            # as a finite verb (φαῖσ’ "they say", ἄγοισ’ "they bring"); beside a finite verb the participle
+            # stands (χαίροισ’ ἔρχεο), as release R ruled.
+            keep_plural = elided_plural_is_verb(token)
+
             def i_or_diphthong(c):
                 f = feats[id(c)]
                 return ((f.get("Case") == "Dat" and f.get("Number") == "Plur")
                         or (f.get("Person") == "3" and f.get("Number") == "Plur" and f.get("Tense") in ("Pres", "Fut")
-                            and f.get("VerbForm") != "Part")
+                            and f.get("VerbForm") != "Part" and not keep_plural)
                         or (f.get("VerbForm") == "Part" and f.get("Number") == "Plur" and f.get("Gender") == "Fem"
                             and f.get("Case") in ("Nom", "Voc")))
             apply("elision_vowel", i_or_diphthong)
@@ -353,11 +369,34 @@ def adjust(candidate):
     if not elided and _ends(form, "ην") and feats.get("VerbForm") == "Inf":
         score += 1.5
     if _ends(form.rstrip(ELISION), "οισα", "αισα", "οισαν", "αισαν", "οισαι", "αισαι") or (elided and _ends(form, "οισ", "αισ")):
-        if feats.get("VerbForm") == "Part" and feats.get("Gender") in (None, "Fem"):
+        if elided and elided_plural_is_verb(token):
+            # Release U: the clause has no other finite verb, so the elided -οισ’ is its 3rd plural verb.
+            if feats.get("Person") == "3" and feats.get("Number") == "Plur" and feats.get("VerbForm") != "Part":
+                score += 1.5
+        elif feats.get("VerbForm") == "Part" and feats.get("Gender") in (None, "Fem"):
             score += 1.5
     if _ends(form, "μμι", "ημι", "ωμι", "ημμεν", "ημμεθα", "ημεν") and feats.get("POS") == "VERB":
         score += 0.5
     return score
+
+
+FINITE_MOODS = ("Ind", "Imp", "Sub", "Opt")
+
+
+def _only_finite(readings):
+    """Every parser reading of a neighbouring word is a finite verb (ἔρχεο), not one reading among nouns."""
+    return bool(readings) and all(r.get("Mood") in FINITE_MOODS and r.get("VerbForm") not in ("Part", "Inf")
+                                  for r in readings)
+
+
+def elided_plural_is_verb(token):
+    """Release U: an elided -σ’ word whose clause (the words to the clause end on each side) has no other word
+    read only as a finite verb. Without neighbour readings (no dialect context) nothing is decided."""
+    words = token.get("context_words") or {}
+    sides = [w for side in ("prev", "next") for w in words.get(side) or []]
+    if not sides or not any("readings" in w for w in sides):
+        return False
+    return not any(_only_finite(w.get("readings") or []) for w in sides)
 
 
 def prohibitive(prev):

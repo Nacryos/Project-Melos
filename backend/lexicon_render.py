@@ -6,6 +6,13 @@ converted from Perseus Beta Code; English and Latin prose is copied verbatim.
 
 from __future__ import annotations
 
+import json
+import os
+import sqlite3
+import threading
+import zlib
+from collections import OrderedDict
+
 from functools import lru_cache
 from html import unescape
 from html.entities import html5 as HTML5_ENTITIES
@@ -147,7 +154,8 @@ def _safe_entities(fragment: bytes) -> tuple[bytes, dict[str, str]]:
     return NAMED_ENTITY.sub(replace, fragment), entities
 
 
-@lru_cache(maxsize=8)
+# Release U: 8 files thrashed (a lookup touches dozens of dictionary files); offsets are small.
+@lru_cache(maxsize=512)
 def _entry_offsets(path: Path, mtime_ns: int | None = None,
                    size: int | None = None) -> dict[str, tuple[int, int]]:
     if not path.is_file():
@@ -363,8 +371,69 @@ def definition_excerpt(record: dict[str, Any]) -> dict[str, Any]:
                 'source_locator': found['source_locator']}}
 
 
+_RENDERED: "OrderedDict[str, str]" = OrderedDict()
+_RENDERED_LOCK = threading.Lock()
+_RENDERED_MAX = 4096
+_STORE = threading.local()
+
+
+def _render_key(record: dict[str, Any]) -> str | None:
+    parts = (record.get("raw_path"), record.get("entry_id"), record.get("raw_sha256"), record.get("id"))
+    if all(part is None for part in parts):
+        return None
+    return json.dumps([str(p) if p is not None else None for p in parts], ensure_ascii=False)
+
+
+def _render_store():
+    """Release U: optional precomputed renderings (scripts/build_render_cache.py), env MELOS_RENDER_CACHE."""
+    path = os.environ.get("MELOS_RENDER_CACHE", "")
+    if not path:
+        return None
+    con = getattr(_STORE, "con", None)
+    if con is None:
+        try:
+            con = sqlite3.connect(f"file:{Path(path).as_posix()}?mode=ro", uri=True, check_same_thread=False)
+            con.execute("SELECT 1 FROM rendered LIMIT 1")
+        except sqlite3.Error:
+            con = False
+        _STORE.con = con
+    return con or None
+
+
 def render_source_record(record: dict[str, Any]) -> dict[str, Any]:
-    """Add a rendered display field and explicit method/warning metadata."""
+    """Add a rendered display field and explicit method/warning metadata.
+
+    Release U: memoised per source record (path, entry id, raw SHA-256, record id); the archived entries never
+    change while the server runs (a changed file has another hash, so a stale rendering cannot match). The
+    memo holds JSON text and every call decodes a fresh copy, so callers may edit theirs. A precomputed store
+    (MELOS_RENDER_CACHE, built by scripts/build_render_cache.py with this same function) answers first
+    lookups; big entries (LSJ ὁ, σύ) took 10-40 ms to render and were rendered again on every word lookup."""
+    key = _render_key(record)
+    if key is None:
+        return _render_source_record(record)
+    with _RENDERED_LOCK:
+        text = _RENDERED.get(key)
+        if text is not None:
+            _RENDERED.move_to_end(key)
+    if text is None:
+        store = _render_store()
+        if store is not None:
+            try:
+                row = store.execute("SELECT value FROM rendered WHERE key=?", (key,)).fetchone()
+            except sqlite3.Error:
+                row = None
+            if row:
+                text = zlib.decompress(row[0]).decode("utf-8")
+        if text is None:
+            text = json.dumps(_render_source_record(record), ensure_ascii=False)
+        with _RENDERED_LOCK:
+            _RENDERED[key] = text
+            while len(_RENDERED) > _RENDERED_MAX:
+                _RENDERED.popitem(last=False)
+    return json.loads(text)
+
+
+def _render_source_record(record: dict[str, Any]) -> dict[str, Any]:
     from .lexicon_senses import dictionary_senses
     try:
         rendered = render_entry_text(record["raw_path"], record["entry_id"], record)

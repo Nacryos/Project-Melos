@@ -41,6 +41,10 @@ SOURCE_BITS = {1: "parser", 2: "recorded_form", 4: "generated_spelling", 8: "pri
 MAX_SCAN_PASSAGES = 40000
 SMALL_GROUP_TOKENS = 50000   # release P: rates over fewer words are flagged small_sample
 UNMAPPED_ORDER = 9999
+COUNTING_NOTE = ("Each text is counted once: where several collections hold the same TLG work, only the collection "
+                 "with the most words of it in the scope; a fragment printed by several editions (same author, at least "
+                 "half of the shorter text's words shared, the rule search uses to fold editions) once, in the edition "
+                 "holding most of it; a passage repeated word for word within one work (a refrain) once.")
 
 
 def rate_fields(count, total):
@@ -82,6 +86,11 @@ SCHEMA = """
 
 def index_path():
     return Path(os.getenv("MELOS_LEMMA_INDEX", str(DEFAULT_PATH)))
+
+
+def edition_groups_path():
+    """Release U: edition groups (scripts/build_edition_groups.py); env MELOS_EDITION_GROUPS."""
+    return Path(os.getenv("MELOS_EDITION_GROUPS", str(ROOT / "data/edition_groups.sqlite")))
 
 
 def load_attributions():
@@ -271,8 +280,11 @@ class LemmaIndex:
                             "links": [dict(l, lemma=(self.lemma_row(l["lemma_id"]) or {}).get("lemma"))
                                       for l in links.get(i, []) if l["lemma_id"] in group]
                             + ([{"lemma_id": case_of[i], "direction": "capitalisation_of",
-                                 "relation": "same letters, other capitalisation", "dictionary": None,
-                                 "evidence": None, "lemma": (self.lemma_row(case_of[i]) or {}).get("lemma")}]
+                                 "relation": "capitalised spelling",
+                                 # Release U: never a null label (the lexicon page printed "(null)").
+                                 "dictionary": "Melos capitalisation rule (no dictionary link)",
+                                 "evidence": "same letters, other capitalisation",
+                                 "lemma": (self.lemma_row(case_of[i]) or {}).get("lemma") or ""}]
                                if i in case_of else [])})
         return {"lemma_ids": [m["lemma_id"] for m in members], "members": members,
                 "note": ("Headwords a dictionary entry names as dialect or poetic forms of one another; they stay "
@@ -367,16 +379,50 @@ class LemmaIndex:
             self._repeated = out
         return out
 
+    def edition_groups(self):
+        """Release U: per passage the edition group id (-1 none) and whether the passage is counted
+        (False for another edition's copy of a fragment the group's primary collection holds). From
+        scripts/build_edition_groups.py; no groups (every passage counted) when the file is absent."""
+        with self._lock:
+            if getattr(self, "_edition_groups", None) is not None:
+                return self._edition_groups
+        n = len(self.pid_id)
+        group = np.full(n, -1, dtype=np.int64)
+        counted = np.ones(n, dtype=bool)
+        primary = {}
+        path = edition_groups_path()
+        manifest = None
+        if path.exists():
+            con = sqlite3.connect(f"file:{path.as_posix()}?mode=ro", uri=True)
+            try:
+                for pid_text, grp, is_counted, source in con.execute(
+                        "SELECT passage_id, grp, counted, primary_source FROM edition_group"):
+                    pid = self.id_pid.get(pid_text)
+                    if pid is None:
+                        continue
+                    group[pid] = grp
+                    counted[pid] = bool(is_counted)
+                    primary[grp] = source
+                row = con.execute("SELECT value FROM meta WHERE key='manifest'").fetchone()
+                manifest = json.loads(row[0]) if row else None
+            finally:
+                con.close()
+        value = {"group": group, "counted": counted, "primary": primary, "manifest": manifest}
+        with self._lock:
+            self._edition_groups = value
+        return value
+
     def count_mask(self, mask):
         """Release Q: the passages counted in frequency tables. One collection of each text (where
         several collections hold the same TLG work, the one with the most cited passages, as n-grams
         and collocations count, chosen by its words inside the scope) and a passage repeated word for word
-        within one work once."""
+        within one work once. Release U: one edition of each fragment (edition groups, the search
+        folding identity), so Sappho 154 printed by five editions counts once."""
         key = ("count_mask", hash(mask.tobytes()))
         with self._lock:
             if key in self._scope_counts:
                 return self._scope_counts[key]
-        out = mask & ~self.repeated()
+        out = mask & ~self.repeated() & self.edition_groups()["counted"]
         info = self.work_info()
         if info is not None:
             # The primary collection is chosen inside the scope (most tokens of the work in scope), so
@@ -625,6 +671,18 @@ class LemmaIndex:
         out.sort(key=lambda r: -r["tokens_all_records"])
         return out[:limit]
 
+    def head_meaning_terms(self, query, lemma_ids=()):
+        """Release U: '=word' head-meaning terms of a concept: its own words and the head meanings of the
+        first chosen headwords (lemma_gloss_term field 3, weight at least 0.2), without stop words."""
+        from .lemma_glosses_index import STOP, _WORD, singular
+        terms = {"=" + singular(w.lower()) for w in _WORD.findall(query or "") if w.lower() not in STOP and len(w) > 1}
+        for lemma_id in list(lemma_ids)[:4]:
+            for term, weight in self.con().execute(
+                    "SELECT term, weight FROM lemma_gloss_term WHERE lemma_id=? AND field=3", (int(lemma_id),)):
+                if weight >= 0.2 and term[1:] not in STOP and len(term) > 3:
+                    terms.add(term)
+        return terms
+
     def head_meaning_lemmas(self, query, limit=6):
         """Release P (concepts): Greek headwords one of whose dictionary senses has a query word as
         its head meaning (lemma_glosses_index.head_meanings: "the moon" -> moon; "Io, identified with
@@ -771,20 +829,57 @@ class LemmaIndex:
             items.sort(key=lambda kv: key(kv[0]))
         else:
             items.sort(key=lambda kv: (-kv[1] / math.sqrt(max(self.ntok[kv[0]], 1)), self.pid_id[kv[0]]))
-        forms = Counter()
+        # Release U: one edition of each text is counted (count_mask: TLG collections, word-for-word
+        # repeats, edition groups); the other editions are listed under it, not as further passages.
+        counted = self.count_mask(mask)
+        items, copies = self.fold_edition_items(items, counted)
+        forms, form_loci = Counter(), defaultdict(int)
         for pid, _ in items[: 400]:
+            if not counted[pid]:
+                continue
             toks = self.tokens(pid)
             if toks is None:
                 continue
             sel = np.isin(toks[0], np.asarray(lemma_ids, dtype=np.uint32))
-            for form_id in toks[1][sel].tolist():
+            fids = toks[1][sel].tolist()
+            for form_id in fids:
                 forms[form_id] += 1
+            for form_id in set(fids):
+                form_loci[form_id] += 1
         form_names = self._form_names(list(forms))
-        return {"total_passages": len(items), "total_tokens": int(sum(hits.values())),
-                "results": [self._with_excerpt(dict(self.record(pid), occurrences=n), pid, lemma_ids, text_lookup, width)
-                            for pid, n in items[offset: offset + limit]],
-                "forms_found": [{"form": form_names.get(fid), "count": n} for fid, n in forms.most_common(40)],
-                "forms_note": "Forms counted in the first 400 listed passages." if len(items) > 400 else None}
+        results = []
+        for pid, n in items[offset: offset + limit]:
+            item = self._with_excerpt(dict(self.record(pid), occurrences=n), pid, lemma_ids, text_lookup, width)
+            editions = [self._edition_record(c) for c in copies.get(pid, [])]
+            item.update(editions=editions, edition_count=1 + len(editions))
+            results.append(item)
+        return {"total_passages": len(items), "total_tokens": int(sum(n for p, n in items if counted[p])),
+                "editions_folded": int(sum(len(v) for v in copies.values())),
+                "results": results,
+                "forms_found": [{"form": form_names.get(fid), "count": n, "passages": form_loci[fid]}
+                                for fid, n in forms.most_common(40)],
+                "forms_note": ("Forms counted once per text: other editions of the same fragment or passage are "
+                               "listed under it (editions) and not counted again"
+                               + ("; counted in the first 400 listed passages." if len(items) > 400 else "."))}
+
+    def fold_edition_items(self, items, counted):
+        """Release U: [(pid, n)] in display order -> (items without other editions' copies,
+        {representative pid: [copy pids]}). A copy is a passage that count_mask does not count and
+        that shares an edition group, TLG work locus or repeat with a listed counted passage."""
+        groups = self.edition_groups()["group"]
+        first = {}
+        for pid, _ in items:
+            g = int(groups[pid])
+            if counted[pid] and g >= 0 and g not in first:
+                first[g] = pid
+        kept, copies = [], defaultdict(list)
+        for pid, n in items:
+            g = int(groups[pid])
+            if not counted[pid] and g >= 0 and g in first:
+                copies[first[g]].append(pid)
+                continue
+            kept.append((pid, n))
+        return kept, copies
 
     def _with_excerpt(self, item, pid, lemma_ids, text_lookup, width=80):
         """Release P: the first occurrence in context and every match offset (code points in the
@@ -865,9 +960,7 @@ class LemmaIndex:
                                     key=lambda r: PERIOD_ORDER.index(r["period"]) if r["period"] in PERIOD_ORDER else 99),
                 "date_note": ("Periods come from the author's sourced biographical date claim (Wikidata), not from "
                               "composition dates; 'undated' collects authors without a claim."),
-                "counting_note": ("Each text is counted once: where several collections hold the same TLG work, "
-                                  "only the collection with the most words of it in the scope; a passage repeated word for "
-                                  "word within one work (a refrain) once.")}
+                "counting_note": COUNTING_NOTE}
 
     def _totals(self, mask):
         key = ("totals", hash(mask.tobytes()))
@@ -905,6 +998,15 @@ class LemmaIndex:
         pids = sorted(hits, key=self.sort_key(order))
         wanted = np.asarray(lemma_ids, dtype=np.uint32)
         folded, copies = {}, defaultdict(list)
+        group_copies = {}
+        if fold_editions:
+            # Release U: another edition of a fragment whose counted edition is listed is folded under it.
+            counted = self.count_mask(mask)
+            kept, group_copies = self.fold_edition_items([(p, hits[p]) for p in pids], counted)
+            for rep, cs in group_copies.items():
+                for c in cs:
+                    folded_collection += hits.pop(c)
+            pids = [p for p, _ in kept]
         if fold_editions:
             loose = [p for p in pids if info is None or info["order"][p] >= UNMAPPED_ORDER - 1]
             by_author = defaultdict(set)
@@ -950,7 +1052,7 @@ class LemmaIndex:
                     continue
                 start, end = int(toks[4][i]), int(toks[4][i]) + int(toks[5][i])
                 left, right, numbers = display_context(text, start, end, width)
-                editions = [self._edition_record(c) for c in dict.fromkeys(copies.get((pid, i), []))]
+                editions = [self._edition_record(c) for c in dict.fromkeys(copies.get((pid, i), []) + group_copies.get(pid, []))]
                 if fold_editions:
                     editions += self.other_collections(pid)
                 lines.append(dict(self.record(pid), left=left, keyword=text[start:end], right=right, offset=start,
@@ -1180,8 +1282,11 @@ class LemmaIndex:
             return None
         start, end = int(toks[4][idx[0]]), int(toks[4][idx[0]]) + int(toks[5][idx[0]])
         left, right, numbers = display_context(text, start, end, width)
-        return dict(self.record(pid), left=left, keyword=text[start:end], right=right, offset=start,
-                    line_numbers=numbers)
+        from .line_spans import line_at
+        record = self.record(pid)
+        # Release U: the whole line holding the keyword, with its line number and citation.
+        return dict(record, left=left, keyword=text[start:end], right=right, offset=start,
+                    line_numbers=numbers, line=line_at(text, start, record.get("citation")))
 
     def _examples(self, lemma_ids, pids, ns, text_lookup, per_group=3):
         """One line from each of the (up to three) authors using the headword most in this group."""
@@ -1203,11 +1308,12 @@ class LemmaIndex:
         return out
 
     def diachrony(self, concept, *, dense_ids=(), include_reference=False, max_lemmas=8, collocates=5,
-                  text_lookup=None, combine_variants=False):
+                  text_lookup=None, combine_variants=False, author="", genre=""):
         """Headwords expressing a concept, each with counts by period and by dated author, typical
         collocates and example passages per period (and for undated authors). Honest output: counts,
-        sources, date uncertainty, interval and small-sample flag on every rate."""
-        mask = self.count_mask(self.scope_mask(include_reference))
+        sources, date uncertainty, interval and small-sample flag on every rate. Release U: `author` /
+        `genre` scope every count and example."""
+        mask = self.count_mask(self.scope_mask(include_reference, author, genre))
         english = not GREEK(concept) and not concept.startswith("lemma:")
         # A single Latin-letter word that spells a Greek headword (eros -> ἔρως) is that headword.
         chosen = self.transliterated_lemmas(concept) if english else []
@@ -1235,9 +1341,10 @@ class LemmaIndex:
                 inside.update(toks[0][toks[0] > 0].tolist())
             counts = self.scope_counts(include_reference, mask)
             N = int(self.ntok[mask].sum()) or 1
-            concept_terms = set(english_terms(concept))
-            for row in chosen:
-                concept_terms.update(english_terms(row.get("gloss") or ""))
+            # Release U: a neighbour must share a head meaning (a whole word that heads one of its dictionary
+            # senses) with the concept or with a chosen headword, not a word stem: "longing" no longer brings
+            # in μακρός "long" or λέων (a lion's skin, "long" in the body of the entry).
+            concept_terms = self.head_meaning_terms(concept, [row["lemma_id"] for row in chosen])
             known = {row["lemma_id"] for row in chosen}
             scored = []
             for lemma_id, c in inside.items():
@@ -1250,7 +1357,8 @@ class LemmaIndex:
             scored.sort(reverse=True)
             for ll, lemma_id, c, expected in scored[:200]:
                 brief = self.lemma_brief(lemma_id)
-                terms = set(t for t, in self.con().execute("SELECT term FROM lemma_gloss_term WHERE lemma_id=?", (lemma_id,)))
+                terms = set(t for t, in self.con().execute(
+                    "SELECT term FROM lemma_gloss_term WHERE lemma_id=? AND field=3", (lemma_id,)))
                 shared = sorted(terms & concept_terms)
                 if not shared:
                     continue
@@ -1294,11 +1402,17 @@ class LemmaIndex:
                            "enrichment": enrichment}
                 # Weight by the meaning index: a dictionary-only reading whose passages are not
                 # among those nearest the concept, and whose gloss matched weakly, is dropped.
+                # Release U: a head-meaning match (the query word heads one of its senses: ἵμερος "longing") is
+                # dictionary evidence of the concept itself and is kept.
                 if inside_n == 0 and occurrence_passages >= 5 and row.get("via") not in (
-                        "headword", "headword_without_accents", "transliterated_headword", "printed_form_reading"):
+                        "headword", "headword_without_accents", "transliterated_headword", "printed_form_reading",
+                        "english_dictionary_head_meaning"):
                     dropped.append({k: row.get(k) for k in ("lemma", "gloss", "via", "gloss_match")})
                     continue
             score = (row.get("gloss_match") or 1.0) * (1 + math.log1p(enrichment or 0))
+            # Release U: a headword with a handful of tokens in the scope (θέλημα, 1) is not the scope's word for
+            # the concept; its score shrinks below five tokens.
+            score *= min(1.0, int(ns.sum()) / 5)
             per_period, per_author = Counter(), Counter()
             for pid, c in zip(pids.tolist(), ns.tolist()):
                 info = self.authors.get(self.author_of[pid]) or {}
@@ -1332,7 +1446,7 @@ class LemmaIndex:
                                    variant_group=group, counted_lemma_ids=ids,
                                    counted_lemmas=[(self.lemma_row(i) or {}).get("lemma") for i in ids]))
         lemmas_out.sort(key=lambda r: -r["concept_score"])
-        lemmas_out = lemmas_out[:max_lemmas + len(semantic_candidates)]
+        lemmas_out = lemmas_out[:max_lemmas]  # release U: max_lemmas is the number returned
         dated = sum(v for k, v in totals["period"].items() if k != "undated")
         return {"concept": concept, "lemmas": lemmas_out, "headwords_without_occurrences": absent,
                 "dropped_without_semantic_support": dropped, "resolution_rule": resolution_rule,

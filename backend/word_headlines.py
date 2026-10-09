@@ -26,6 +26,9 @@ class HeadlineRequest(BaseModel):
     passage_id: str = Field("", max_length=300)
     forms: list[str] = Field(default_factory=list, max_length=MAX_FORMS)
     dictionary: bool = False  # release P: first dictionary's first senses per headline lemma
+    # Release U (forms mode): the dialect of the text the forms come from, or an author whose dialect it is.
+    dialect: str = Field("", max_length=20)
+    author: str = Field("", max_length=120)
 
 
 def _readings(index, form_ids):
@@ -90,7 +93,7 @@ def _forms(index, form_ids):
 from .lemma_calibration import calibration, probability, summary as calibration_summary  # noqa: E402
 
 
-def headlines(passage_id="", forms=()):
+def headlines(passage_id="", forms=(), dialect="", author=""):
     try:
         index = get_index()
     except FileNotFoundError as exc:
@@ -111,19 +114,35 @@ def headlines(passage_id="", forms=()):
                            "raw": int(conf[i]), "src": int(src[i]), "flags": token_flags.get(i, 0)})
     else:
         from .lemma_tokens import clean_form
+        from .lemma_tokens import fold as fold_key
+        from .headline_rules import folded_lookup, pronoun_vocative_only
         cleaned = [clean_form(f) for f in forms]
         con = index.con()
-        found = {}
+        found, matched = {}, {}
         for form in set(cleaned):
             row = con.execute("SELECT id FROM form WHERE form=?", (form,)).fetchone()
             if row:
                 found[form] = row[0]
+            else:
+                # Release U: a spelling the index lacks, read by its letters (enclitic accent, psilosis).
+                hit = folded_lookup(con, form, fold_key)
+                if hit:
+                    found[form] = hit[0]
+                    matched[form] = {"spelling": hit[1], "rule": hit[2]}
         readings = _readings(index, found.values())
         names = _forms(index, found.values())
+        pos_of = _lemmas(index, {r[0] for rows in readings.values() for r in rows})
         for i, (printed, form) in enumerate(zip(forms, cleaned)):
             f = found.get(form)
-            top = (readings.get(f) or [(0, 0, 0, [])])[0]
-            tokens.append({"i": i, "printed": printed, "form_id": f or 0, "lemma_id": top[0],
+            rows = readings.get(f) or [(0, 0, 0, [])]
+            top = rows[0]
+            if len(rows) > 1 and pronoun_vocative_only(top[3], (pos_of.get(top[0]) or {}).get("pos")):
+                # Release U: pronouns are not addressed; another headword of the spelling heads (αὖτε).
+                other = next((r for r in rows[1:] if not pronoun_vocative_only(r[3], (pos_of.get(r[0]) or {}).get("pos"))), None)
+                if other:
+                    top = other
+                    matched.setdefault(form, {})["pronoun_vocative"] = True
+            tokens.append({"i": i, "printed": printed, "cleaned": form, "form_id": f or 0, "lemma_id": top[0],
                            "confidence": round(top[1], 3) if top[0] else 0.0,
                            "raw": max(1, min(255, round(top[1] * 255))) if top[0] else 0, "src": top[2]})
     if not passage_id:
@@ -139,6 +158,11 @@ def headlines(passage_id="", forms=()):
         with connect() as con:
             row = con.execute("SELECT text FROM passages WHERE id=?", (passage_id,)).fetchone()
         text = row[0] if row else ""
+    from .passage_dialect import passage_dialect as _dialect_of
+    if passage_id:
+        text_dialect = _dialect_of({"author": index.author_of[pid] if pid < len(index.author_of) else "", "id": passage_id})
+    else:
+        text_dialect = (_dialect_of({"dialect": dialect}) if dialect else None) or (_dialect_of({"author": author}) if author else None)
     group = None
     if passage_id:
         # Release R: the passage's genre and dialect select the calibration group.
@@ -175,10 +199,17 @@ def headlines(passage_id="", forms=()):
             item.update(start=t["start"], end=t["end"], printed=text[t["start"]:t["end"]] if text else None)
         else:
             item["printed"] = t["printed"]
+            extra = matched.get(t.get("cleaned")) if t.get("cleaned") else None
+            if extra:
+                if extra.get("rule"):
+                    item["form_match"] = {"spelling": extra["spelling"], "rule": extra["rule"]}
+                if extra.get("pronoun_vocative"):
+                    item.setdefault("rules", []).append("pronoun_vocative")
+        _apply_rules(item, head, text_dialect)
         out.append(item)
     stamp = index.manifest.get("built_at", "")
     calibrated = (calibration() or {}).get("built_at")
-    digest = hashlib.sha256(json.dumps([stamp, calibrated, passage_id, list(forms), (text or "")],
+    digest = hashlib.sha256(json.dumps([stamp, calibrated, passage_id, list(forms), (text or ""), text_dialect, "u1"],
                                        ensure_ascii=False).encode()).hexdigest()
     return {"passage_id": passage_id or None, "index_version": index.manifest.get("version"), "index_built_at": stamp,
             "hash": digest, "tokens": out,
@@ -190,6 +221,31 @@ def headlines(passage_id="", forms=()):
                        "probability is that score calibrated against treebank gold lemmas (release P, "
                        "/api/lemma/status calibration), null when no calibration is deployed. /api/word gives the "
                        "full analysis."), "calibration": calibration_summary()}
+
+
+def _apply_rules(item, head, dialect):
+    """Release U (backend.headline_rules): Lesbian/Doric ᾱ singulars, duals last, names in the vocative."""
+    from .headline_rules import aeolic_singular, duals_last, name_vocative
+    if not head:
+        return
+    parses, rule = aeolic_singular(item.get("printed") or item.get("form") or "", head["lemma"], head.get("pos"),
+                                   list(item.get("parses") or []), dialect)
+    rules = item.setdefault("rules", [])
+    if rule:
+        rules.append(rule)
+    parses, rule = duals_last(parses, dialect)
+    if rule:
+        rules.append(rule)
+    item["parses"] = parses
+    named = name_vocative(item.get("printed") or "", head["lemma"], parses, head.get("gloss"))
+    if named:
+        item["dictionary_gloss"] = item.get("gloss")
+        item["gloss"] = named
+        rules.append("name_vocative")
+    if dialect:
+        item["dialect"] = dialect
+    if not rules:
+        item.pop("rules")
 
 
 @lru_cache(maxsize=8192)
@@ -222,7 +278,7 @@ def with_dictionary(payload, senses=3):
 def words_headlines(request: HeadlineRequest):
     if not request.passage_id and not request.forms:
         raise HTTPException(422, "Give passage_id or forms.")
-    payload = headlines(request.passage_id, request.forms)
+    payload = headlines(request.passage_id, request.forms, request.dialect, request.author)
     if request.dictionary:
         payload = with_dictionary(payload)
     return JSONResponse(payload, headers={"ETag": '"' + payload["hash"] + '"',

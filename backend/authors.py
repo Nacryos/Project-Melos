@@ -84,10 +84,15 @@ def lookup_author(author: str, *, path: Path | None = None,
     if not isinstance(author, str) or not author.strip() or "/" in author:
         return None
     key = _key(author)
-    owners = [profile for profile in load_profiles(path=path, claim_path=claim_path,
-                                                   acceptance_path=acceptance_path)
+    # Release U: copy only the matching profile (load_profiles copied every profile, three times a word lookup).
+    path = Path(path) if path is not None else DEFAULT_PROFILES
+    claim_path = Path(claim_path) if claim_path is not None else DEFAULT_CLAIMS
+    acceptance_path = Path(acceptance_path) if acceptance_path is not None else DEFAULT_ACCEPTANCE
+    paths = (path, claim_path, acceptance_path)
+    signatures = tuple(_signature(item) for item in paths)
+    owners = [profile for profile in _load_checked(*(str(item.resolve()) for item in paths), signatures)
               if any(_key(alias["label"]) == key for alias in profile["aliases"])]
-    return owners[0] if len(owners) == 1 else None
+    return deepcopy(owners[0]) if len(owners) == 1 else None
 
 
 def equivalent_labels(author: str, *, path: Path | None = None,
