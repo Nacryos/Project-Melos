@@ -207,7 +207,7 @@ In a passage whose author writes Lesbian, Doric or Boeotian (`backend/passage_di
 several readings goes through the same gates as the live analysis (`backend/dialect_rules.index_factors`, see
 `docs/morphology.md` "Release R"): the parser readings of the spelling and of its neighbours up to a clause end;
 a headword all of whose readings a gate removes keeps 0.15 of its probability, and a Lesbian psilosis twin (οἷ
-for οἶ) can enter only when every reading of the printed spelling is removed. 7,867 tokens were rescored, 498
+for οἶ) can enter only when every reading of the printed spelling is removed. 6,665 tokens were rescored, 412
 changed (token_flag bit 2, calibration class `dialect_rule`). Forms the parser does not read take the parses of
 their psilosis twin (ἀ: the article ἁ), of the Lesbian lexical table (ἤπειτα: ἔπειτα) or of a crasis' second
 word (κωὔτε: οὔτε), labelled `generated:…`.

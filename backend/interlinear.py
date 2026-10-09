@@ -1524,7 +1524,9 @@ def interlinear_reading(result):
             # only "fem." shared) is not a full parse. Show the top-ranked full
             # candidate as an explicitly labelled proposal; alternatives stay listed.
             pos = consensus.get('POS') or canonical_features(predicted).get('POS')
-            if pos in _NOMINAL_POS and not all(key in consensus for key in ('Case', 'Number')):
+            # Release R: a consensus without a part of speech (παῖσαν: only "sg." shared by the adjective
+            # and a participle) is no parse either, whatever the model guessed the class to be.
+            if (pos in _NOMINAL_POS or not consensus.get('POS')) and not all(key in consensus for key in ('Case', 'Number')):
                 top = rank_candidates(candidates, predicted)[0]['candidate']
                 full = canonical_features(top)
                 if all(key in full for key in ('Case', 'Number')):
