@@ -23,6 +23,7 @@ MAX_WORDS = 80
 MAX_MACHINE_FETCHES = 3
 MAX_DICTIONARY_LEMMA_LOOKUPS = 24
 MAX_MACHINE_SUBENTRY_LOOKUPS = 24
+MAX_NEIGHBOUR_LOOKUPS = 160  # release R: parser readings of neighbouring words (dialect rules)
 
 
 def machine_dictionary_lookup(form, *, machine_lookup, subentry_lookup):
@@ -238,6 +239,52 @@ def supplied_letters(text):
     return [run for run in runs if run]
 
 
+_HYPHENS = "-‐‑"
+
+
+def _word_extent(text, index, step):
+    """Index just past the run of word characters from `index` in direction `step` (+1 / -1)."""
+    while 0 <= index < len(text) and (_letter(text[index]) or text[index] in RECONSTRUCTION_MARKS
+                                      or text[index] == UNCERTAIN_MARK):
+        index += step
+    return index
+
+
+def hyphenated_word(text, start, end):
+    """{form, hyphenated_word, hyphen_part} when the printed word at [start, end) is one half of a word
+    divided by a hyphen at a line end ("ἐπί-\\nσχει"); None otherwise. The form is the editor's reading
+    of the whole word (brackets and underdots removed)."""
+    after = end
+    if after < len(text) and text[after] in _HYPHENS:
+        gap = after + 1
+        while gap < len(text) and text[gap] in " \t":
+            gap += 1
+        if gap < len(text) and text[gap] in "\r\n":
+            while gap < len(text) and text[gap].isspace():
+                gap += 1
+            stop = _word_extent(text, gap, 1)
+            if stop > gap and unicodedata.category(text[gap]).startswith("L"):
+                whole = text[start:end] + text[gap:stop]
+                return {"form": printed_reading(whole), "hyphenated_word": printed_reading(whole), "hyphen_part": "first"}
+    before = start - 1
+    while before >= 0 and text[before].isspace():
+        if text[before] in "\r\n":
+            break
+        before -= 1
+    if before >= 0 and text[before] in "\r\n":
+        while before >= 0 and text[before].isspace():
+            before -= 1
+        while before >= 0 and text[before] in " \t":
+            before -= 1
+        if before >= 0 and text[before] in _HYPHENS:
+            head_end = before
+            head_start = _word_extent(text, head_end - 1, -1) + 1
+            if head_start < head_end and unicodedata.category(text[head_start]).startswith("L"):
+                whole = text[head_start:head_end] + text[start:end]
+                return {"form": printed_reading(whole), "hyphenated_word": printed_reading(whole), "hyphen_part": "second"}
+    return None
+
+
 def tokenize_span(text, start, end):
     """Lossless segments, including spaces and every editorial character.
 
@@ -309,6 +356,13 @@ def tokenize_span(text, start, end):
                 token["editorial_reconstruction"] = True
                 token["supplied_letters"] = [printed_reading(run) for run in supplied if printed_reading(run)]
                 token["supplied_whole_word"] = bool(supplied) and printed_reading("".join(supplied)) == token["form"]
+    # Release R: a word divided at a line end with a hyphen (ἐπί-|σχει, γυναί-|κεσσιν) is one
+    # word; each printed half is looked up as the whole word and says so.
+    for token in tokens:
+        if token["kind"] == "word":
+            joined = hyphenated_word(text, token["start"], token["end"])
+            if joined:
+                token.update(joined)
     # An interruption inside printed wording by anything other than brackets
     # (α…β, α†β) is a damaged span; its pieces are preserved, not repaired.
     previous_word, only_editorial = None, False
@@ -499,6 +553,8 @@ class PassageAnalysisService:
                 except Exception:
                     dictionary_cache[key] = {'dictionary_lookup_status': 'unavailable'}
             return dictionary_cache[key]
+        from .passage_dialect import passage_dialect as _passage_dialect
+        passage_dialect_early = _passage_dialect(passage)
         words = [token for token in tokens if token["kind"] == "word"]
         next_word = {id(a): analysis_form(b) for a, b in zip(words, words[1:])}
         for token in tokens:
@@ -569,15 +625,19 @@ class PassageAnalysisService:
                     except Exception:
                         machine["warnings"] = ["Computational morphology is unavailable; source alternatives remain available."]
                 _label_engine(machine)
-                from .aeolic_variants import LEXICAL
-                if (machine.get("status") == "no_analyses" or (form in LEXICAL and machine.get("status") == "ok")) and self.machine_service is not None:
-                    # The exact printed form is unknown to the parser. Query a few
+                from .aeolic_variants import LEXICAL, lexical_variant, lesbian_fallback_variants
+                psilotic = lesbian_fallback_variants(form) if passage_dialect_early == "lesbian" and machine.get("status") == "ok" else []
+                if (machine.get("status") == "no_analyses" or (lexical_variant(form) and machine.get("status") == "ok")
+                        or psilotic) and self.machine_service is not None:
+                    # The exact printed form is unknown to the parser (or, release R, a Lesbian
+                    # spelling also reads as another word: psilosis, the lexical table). Query a few
                     # labelled Aeolic spelling normalisations; each resulting parse
                     # carries its rule and never outranks an exact-form analysis.
                     machine = {**machine, "machine_candidates": list(machine.get("machine_candidates") or []),
                                "normalised_queries": []}
                     from .aeolic_variants import variants
-                    for variant in [*variants(form), *uncertain_edge_variants(token)]:
+                    queries = psilotic if machine.get("status") == "ok" and not lexical_variant(form) else                         [*variants(form), *uncertain_edge_variants(token)]
+                    for variant in queries:
                         try:
                             result = self.machine_service.analyze(variant["form"], visitor_id, fetch=False)
                             if (result.get("status") == "cache_miss" and request.get("fetch_machine")
@@ -629,6 +689,26 @@ class PassageAnalysisService:
                 if not candidate.get("id"):
                     candidate["id"] = candidate_identity(candidate)
                     candidate["generated_candidate_identity"] = True
+        # Release R: the passage's literary dialect and the parser readings of each word's
+        # neighbours (backend.dialect_rules gates and weighs dialect readings with them).
+        from .passage_dialect import passage_dialect
+        dialect = passage_dialect(passage)
+        if dialect:
+            from .dialect_rules import attach_context
+            neighbour_cache = {}
+
+            def neighbour_readings(form):
+                if form not in neighbour_cache:
+                    if self.machine_service is None or len(neighbour_cache) >= MAX_NEIGHBOUR_LOOKUPS:
+                        return {}
+                    try:
+                        neighbour_cache[form] = self.machine_service.analyze(form, visitor_id, fetch=False) or {}
+                    except Exception:
+                        neighbour_cache[form] = {}
+                return neighbour_cache[form]
+            for token in tokens:
+                if token["kind"] == "word" and not token.get("partial_word"):
+                    attach_context(token, text, dialect, neighbour_readings)
         syntax = self._syntax(selected, text, start, end)
         self._last_tier(tokens, syntax, text)
         syntax_text = text[syntax["context_start"]:syntax["context_end"]] if syntax.get("scope") in {"whole_passage", "bounded_context_window"} else selected

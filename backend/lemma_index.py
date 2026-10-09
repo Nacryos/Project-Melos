@@ -76,6 +76,7 @@ SCHEMA = """
       CREATE TABLE token_alt(pid INTEGER, i INTEGER, lemma_id INTEGER, prob REAL, PRIMARY KEY(pid, i)) WITHOUT ROWID;
       CREATE TABLE passage_repeat(pid INTEGER PRIMARY KEY, first_pid INTEGER);
       CREATE TABLE token_flag(pid INTEGER, i INTEGER, flags INTEGER, PRIMARY KEY(pid, i)) WITHOUT ROWID;
+      CREATE TABLE lemma_alias(alias TEXT, lemma_id INTEGER, relation TEXT, entry_id TEXT);
     """
 
 
@@ -462,6 +463,14 @@ class LemmaIndex:
         return folded
 
 
+    def calibration_group(self, pid):
+        """Release R: the calibration group (genre group | dialect) of a passage."""
+        from .lemma_calibration import context_group
+        from .passage_dialect import passage_dialect
+        label = self.author_of[pid]
+        info = self.authors.get(label) or {}
+        return context_group(info.get("genre"), passage_dialect({"author": label, "id": self.pid_id[pid]}))
+
     def tokens(self, pid):
         row = self.con().execute("SELECT lemmas,forms,conf,src,starts,ends FROM tok WHERE pid=?", (int(pid),)).fetchone()
         if not row:
@@ -551,6 +560,13 @@ class LemmaIndex:
             for value in dict.fromkeys([q, _headword_key(q)]):
                 for row in con.execute("SELECT * FROM lemma WHERE lemma=? ORDER BY tokens DESC", (value,)):
                     add(row, "headword")
+            try:
+                # Release R: a headword counted under another (ταχέως under ταχύς, πώνω under πίνω)
+                for row in con.execute("SELECT l.*, a.relation AS relation FROM lemma_alias a JOIN lemma l "
+                                       "ON l.id=a.lemma_id WHERE a.alias IN (?, ?)", (q, _headword_key(q))):
+                    add(row, "alias_" + row["relation"])
+            except sqlite3.OperationalError:
+                pass  # an index older than release R has no lemma_alias table
             if not out:
                 for row in con.execute("SELECT * FROM lemma WHERE key=? ORDER BY tokens DESC LIMIT ?", (fold(q), limit)):
                     add(row, "headword_without_accents")
@@ -941,7 +957,8 @@ class LemmaIndex:
                                   line_numbers=numbers,
                                   token_index=i, confidence=round(int(toks[2][i]) / 255, 3),
                                   probability=calibrated_probability(int(toks[2][i]), int(toks[3][i]),
-                                                                     self.token_flags(pid).get(i, 0)),
+                                                                     self.token_flags(pid).get(i, 0),
+                                                                     self.calibration_group(pid)),
                                   source=describe_source(int(toks[3][i])), editions=editions,
                                   edition_count=1 + len(editions)))
                 seen += 1

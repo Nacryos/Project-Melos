@@ -305,6 +305,32 @@ class Headwords:
         morph._load()
         self.entries = morph._entries
         self.cache = {}
+        self.derived = {}   # release R: derived headword -> backend.derived_forms link
+        self.pointers = {}  # release R: pure-pointer headword -> target headword
+        self.degree_aliases = {}  # release R: recorded degree form -> the parser's positive headword
+
+    def pointer_target(self, head, rows):
+        """The target of a headword all of whose entries are pure pointers with an equivalence relation
+        (no gloss of their own; "= X", "Aeol. for X", "Ep. for X"), when the target is a headword."""
+        if not rows or any(str(r.get("gloss") or "").strip() for r in rows):
+            return None
+        for r in rows:
+            text = str(r.get("entry_text") or "")
+            greek = any("Ͱ" <= ch <= "Ͽ" or "ἀ" <= ch <= "῿" for ch in text[:140])
+            m = (_POINTER if greek else _POINTER_BETA).search(text[:140])
+            if m and not _re.search(r"\b(?:Aeol|Dor|Ep|Ion|Lesb|poet|Boeot|Thess|Lacon|Cypr)\.", text[:m.end()]):
+                m = None   # a plain synonym ("= X") keeps its own headword; dialect/poetic forms are read to X
+            if m:
+                word = m.group(1)
+                if not greek:
+                    # Perseus LSJ and Autenrieth print the Greek in Beta Code inside English text
+                    from betacode import beta_to_uni
+                    word = beta_to_uni(word)
+                target = self.headword_key(unicodedata.normalize("NFC", word).rstrip(",.;:"))
+                match_t, rows_t = self.lookup(target) if target else (None, [])
+                if target and target != head and match_t == "exact" and not all(_prefix_entry(x) for x in rows_t):
+                    return target
+        return None
 
     def lookup(self, headword):
         from backend.morphology import normalize
@@ -332,11 +358,31 @@ class Headwords:
         if not key:
             return lemma, None
         match, rows = self.lookup(key)
+        if match and all(_prefix_entry(r) for r in rows):
+            match = None   # release R: "ὀ-, insep. Prefix" is not the headword of a word
         if match:
             head = unicodedata.normalize("NFC", str(rows[0].get("lemma"))).lstrip("†").rstrip("0123456789")
             if match == "folded" and _initial_upper(key) != _initial_upper(head):
                 head = key  # keep the parser's case for a name; letters agree
-            return self.headword_key(head), "headword" if match == "exact" else "folded_headword"
+            if match == "folded" and _accented(key) and not _accented(head):
+                # Release R: an accented lemma is not the unaccented enclitic of its letters (τίς, the
+                # interrogative, is not τις; ποῦ not που): the parser's lemma is kept.
+                return key, "accented_lemma_not_enclitic"
+            head = self.headword_key(head)
+            # Release R: an adverb, comparative or superlative whose own entry calls it the derived
+            # form of another headword ("ταχέως, Adv. of ταχύς") is counted under that headword.
+            from backend.derived_forms import derived_link
+            link = derived_link(head, rows if match == "exact" else [], lambda base: self.lookup(base)[0] == "exact")
+            if link:
+                self.derived[head] = link
+                return link["base"], "derived_" + link["relation"]
+            # Release R: a headword whose entries are only a pointer to another ("πώνω, Dor. and Aeol.
+            # = πίνω", "ἔμμι, Aeol. for εἰμί") has no meaning of its own: it is that headword.
+            target = self.pointer_target(head, rows) if match == "exact" else None
+            if target:
+                self.pointers[head] = target
+                return target, "dialect_pointer"
+            return head, "headword" if match == "exact" else "folded_headword"
         restored = {o for o in elided_lemma_candidates(lemma) if self.lookup(o)[0] == "exact"}
         if len(restored) == 1:
             return restored.pop(), "elided_lemma_restored"
@@ -360,6 +406,17 @@ class Headwords:
         return key, None
 
 
+def _prefix_entry(entry):
+    """An entry for a prefix ("ὀ-, insep. Prefix", "a)- as a prothetic vowel"), not a word."""
+    text = str(entry.get("entry_text") or "")[:40]
+    return "Prefix" in text or bool(_re.match(r"^\S+?[-‐]\s*[,\s]", text))
+
+
+def _accented(word):
+    nfd = unicodedata.normalize("NFD", str(word or ""))
+    return any(mark in nfd for mark in ("\u0301", "\u0300", "\u0342"))
+
+
 def _pos_of(features):
     return str((features or {}).get("pofs") or "").lower()
 
@@ -378,6 +435,15 @@ _VARIANT_PATTERNS = (
 )
 
 
+# "= X", "Aeol. for X", "Dor. and Aeol. = X", "Ep. for X" near the start of a pointer entry
+_POINTER = _re.compile(r"(?:=|\b(?:Aeol|Dor|Ep|Ion|Lesb|poet|Att|Boeot|Thess|Lacon|Cypr)\.(?:\s*(?:and|&)\s*\w+\.)?"
+                       r"\s*,?\s*(?:=|for))\s*" + _GREEK_WORD)
+
+
+_POINTER_BETA = _re.compile(r"(?:=|\b(?:Aeol|Dor|Ep|Ion|Lesb|poet|Att|Boeot|Thess|Lacon|Cypr)\.(?:\s*(?:and|&)\s*\w+\.)?"
+                            r"\s*,?\s*(?:=|for))\s*([a-z][a-z()/\\=|+']*[a-z/\\=|+])")
+
+
 _GLOSS_STOP = {"the", "a", "an", "of", "to", "and", "or", "in", "on", "for", "with", "by", "as", "at", "from", "be",
                "is", "one", "one's", "any", "some", "which", "that", "this", "also", "form", "used", "esp", "etc"}
 
@@ -386,30 +452,75 @@ def _gloss_words(gloss):
     return {w for w in _re.findall(r"[a-z][a-z'-]+", str(gloss or "").lower()) if len(w) > 2 and w not in _GLOSS_STOP}
 
 
-def senses_agree(gloss_a, gloss_b):
-    """Release Q: a variant link needs the two headwords' meanings to agree (a shared content word of
-    their short glosses), so a homograph's link (ἅλιος (C) "Dor. for ἥλιος") is not given to the
-    headword whose meaning is another homograph's ("fruitless"). A headword without a gloss of its
-    own (πότνα) takes its meaning from the link."""
-    if not gloss_a:
+def _stems(words):
+    return {w[:5] for w in words}
+
+
+def senses_agree(gloss_a, gloss_b, extra_a=(), extra_b=(), pointer_a=()):
+    """A variant link needs the two headwords' meanings to agree. Release Q compared the two short
+    glosses only, which lost genuine links whose short glosses use different words (γαῖα "a land", γῆ
+    "earth"). Release R compares the content words (5-letter stems: "forgetting" ~ "forgetfulness") of
+    every dictionary's gloss of each headword (extra_a, extra_b), plus the words the pointer entry itself
+    prints after the target ("λίς, Ep. for λέων, lion": pointer_a). A headword with no meaning of its own
+    (a pure pointer, πότνα) takes its meaning from the link."""
+    words_a = _gloss_words(gloss_a).union(*(_gloss_words(x) for x in extra_a))
+    if not words_a:
         return True
-    return bool(_gloss_words(gloss_a) & _gloss_words(gloss_b))
+    words_a = words_a.union(*(_gloss_words(x) for x in pointer_a))
+    words_b = _gloss_words(gloss_b).union(*(_gloss_words(x) for x in extra_b))
+    return bool(_stems(words_a) & _stems(words_b))
+
+
+_ARTICLES = {"ὁ", "ἡ", "τό", "οἱ", "αἱ", "τά"}
+
+
+def _header_ending(word):
+    """An article or an inflection ending printed in a dictionary header (ά, όν, ίδος, ατος, ὁ):
+    a word of at most two letters, an article, or a lower-case vowel-initial word without a breathing
+    (a real vowel-initial Greek word always carries one)."""
+    if word in _ARTICLES or len(fold(word)) <= 2:
+        return True
+    nfd = unicodedata.normalize("NFD", word)
+    return word == word.lower() and nfd[:1] in "αεηιουω" and "̓" not in nfd[:3] and "̔" not in nfd[:3]
+
+
+_HOMOGRAPH_LETTER = _re.compile(r"^\s*\S+\s*(?:\[[^\]]*\]\s*)?\(([A-Z])\)")
 
 
 def lemma_variants(lemma_ids, lemma_tokens, heads, glosses=None):
     """Variant links between headwords (release P): a dictionary entry of headword A says it is
     a dialect or poetic form of headword B ("ἔρος ... poet. for ἔρως", "πότνα = πότνια"), and B
     is itself a corpus headword. Both stay separate headwords; the link lets counts be combined
-    and pages cross-reference. Rows (lemma_id, target_id, relation, dictionary, evidence)."""
+    and pages cross-reference. Rows (lemma_id, target_id, relation, dictionary, evidence).
+
+    Release R: the evidence must be the dictionary cross-reference itself and the meanings must agree
+    (senses_agree over every dictionary's glosses). A pointer printed in a secondary homograph's
+    entry ("ἅλιος (C), Dor. for ἥλιος", "πᾶς (C), = πατήρ", "δράω (B), = ὁράω") or naming a secondary
+    homograph of the target ("κοῦρος ... for κόρος (B)") does not link the corpus headwords, whose
+    tokens are mostly the other homograph."""
     rows = set()
+    gloss_cache = {}
+
+    def all_glosses(head):
+        if head not in gloss_cache:
+            match, entries = heads.lookup(head)
+            gloss_cache[head] = [str(e.get("gloss") or "") for e in (entries if match else [])]
+        return gloss_cache[head]
+
     for head, lid in lemma_ids.items():
         if not lemma_tokens.get(lid):
             continue
         match, entries = heads.lookup(head)
         if not match:
             continue
+        # A headword with lettered homograph entries ("οὖλος (A) ... form of ὅλος", "οὖλος (B) woolly"): its
+        # meaning for the link is its own short gloss only, never the union of the homographs' meanings.
+        homographs = any(_HOMOGRAPH_LETTER.match(str(e.get("entry_text") or "")[:220]) for e in entries[:8])
         for entry in entries[:8]:
             texts = [str(entry.get("gloss") or ""), str(entry.get("entry_text") or "")[:220]]
+            letter = _HOMOGRAPH_LETTER.match(texts[1])
+            if letter and letter.group(1) != "A":
+                continue
             for relation, pattern in _VARIANT_PATTERNS:
                 for text in texts:
                     m = pattern.search(text)
@@ -417,16 +528,27 @@ def lemma_variants(lemma_ids, lemma_tokens, heads, glosses=None):
                         continue
                     if relation == "=" and any(fold(w) != fold(head) for w in
                                                _re.findall(_GREEK_WORD, text[:m.start(m.lastindex)])
-                                               if _re.search(r"[Ͱ-Ͽἀ-῿]", w)
-                                               and not (w == w.lower() and len(fold(w)) <= 3)):
+                                               if _re.search(r"[Ͱ-Ͽἀ-῿]", w) and not _header_ending(w)):
                         # "= B" names B as the headword itself only when no other Greek word stands
-                        # before it ("Δίς = Ζεύς" in the entry of Δίιος is about Δίς); inflection
-                        # endings and articles of the header (ά, όν, ὁ) do not count
+                        # before it ("Δίς = Ζεύς" in the entry of Δίιος is about Δίς, "*ῥύω = ἐρύω" in
+                        # the entry of ῥύμη is about ῥύω); inflection endings and articles of the
+                        # header (ά, όν, ίδος, ατος, ὁ) do not count
+                        break
+                    if relation == "=" and _re.search(r"\b(?!also\b)[a-z]{4,}\b", text[:m.start(m.lastindex)]):
+                        # Release R: "φρήν properly = διάφραγμα", "speaking first, and so = πρωταγωνιστής":
+                        # an English definition before "=" makes it an explanation, not a variant
+                        break
+                    after = text[m.end():m.end() + 80]
+                    target_letter = _re.match(r"\s*\(([A-Z])\)", after)
+                    if target_letter and target_letter.group(1) != "A":
                         break
                     target = heads.headword_key(unicodedata.normalize("NFC", m.groups()[-1]))
                     tid = lemma_ids.get(target)
+                    pointer_words = [_re.split(r"[;:]|\b[A-Z][a-z]*\.\s", after, maxsplit=1)[0]]
                     if tid and tid != lid and lemma_tokens.get(tid) and (
-                            glosses is None or senses_agree(glosses.get(lid), glosses.get(tid))):
+                            glosses is None or senses_agree(glosses.get(lid), glosses.get(tid),
+                                                            () if homographs else all_glosses(head), all_glosses(target),
+                                                            () if homographs else pointer_words)):
                         label = "=" if relation == "=" else m.group(1)
                         rows.add((lid, tid, label, str(entry.get("source") or "")[:80],
                                   text[max(0, m.start() - 30): m.end() + 10]))
@@ -514,11 +636,54 @@ def stage_assemble(args):
                 continue
             c = cands.setdefault(head, {"src": 0, "n": 0, "pos": set(), "rules": set()})
             c["src"] |= RECORDED
+        printed_head = heads.headword_key(form)
+        if printed_head in cands and not cands[printed_head]["src"] & MORPH:
+            # Release R: a comparative or superlative recorded as its own lemma (μάλιστα) that the parser
+            # reads as a degree of another headword (μάλα, sup.) is counted under that headword.
+            degree = [h for h, c in cands.items() if c["src"] & MORPH and h != printed_head
+                      and any(p.split()[-1:] in (["sup."], ["comp."]) for p in c.get("parses") or [])]
+            if len(degree) == 1:
+                target = degree[0]
+                cands[target]["src"] |= cands.pop(printed_head)["src"]
+                heads.degree_aliases.setdefault(printed_head, target)
+        if not cands:
+            # Release R: a form the parser does not read whose rough-breathing twin it does (Lesbian
+            # psilosis: ἀ for the article ἁ, ὀ for ὁ, οἰ for οἱ): the twin's parses, labelled.
+            from backend.aeolic_variants import psilotic_variants
+            for item in psilotic_variants(form):
+                status_t, parsed_t = morph.get(item["form"], ("missing", []))
+                for lemma, feats in parsed_t:
+                    head, rule = canon(lemma)
+                    c = cands.setdefault(head, {"src": 0, "n": 0, "pos": set(), "rules": set()})
+                    c["src"] |= GENERATED
+                    c["n"] += 1
+                    c["pos"].add(_pos_of(feats))
+                    c.setdefault("parses", []).append(parse_text(feats) + f" (from {item['form']})")
+                    c["rules"].add("generated:psilosis")
+        if not cands:
+            # Release R: the Lesbian lexical table (ἤπειτα: ἔπειτα) and the second word of a crasis
+            # (κωὔτε: οὔτε, backend.aeolic_variants), when the parser reads that spelling.
+            from backend.aeolic_variants import lexical_variant, crasis_second_words
+            lexical = lexical_variant(form)
+            options = ([(lexical[0], "aeolic_lexical")] if lexical else []) + \
+                [(item["form"], "crasis_second_word") for item in crasis_second_words(form)]
+            for spelling, rule_name in options:
+                status_t, parsed_t = morph.get(spelling, ("missing", []))
+                for lemma, feats in parsed_t:
+                    head, rule = canon(lemma)
+                    c = cands.setdefault(head, {"src": 0, "n": 0, "pos": set(), "rules": set()})
+                    c["src"] |= GENERATED
+                    c["n"] += 1
+                    c["pos"].add(_pos_of(feats))
+                    c.setdefault("parses", []).append(parse_text(feats) + f" (from {spelling})")
+                    c["rules"].add("generated:" + rule_name)
+                if cands:
+                    break
         if not cands and not form.endswith("’"):
             # The printed form is itself a dictionary headword (indeclinables, adverbs: ἴψοι).
             key = heads.headword_key(form)
-            match, _ = heads.lookup(key)
-            if match == "exact":
+            match, rows_h = heads.lookup(key)
+            if match == "exact" and not all(_prefix_entry(r) for r in rows_h):
                 cands[key] = {"src": HEADWORD, "n": 0, "pos": set(), "rules": set()}
         evidence[form] = cands
     log("evidence built", round(time.time() - started), "s;", len(canon_cache), "parser lemmas canonicalised;",
@@ -596,9 +761,43 @@ def stage_assemble(args):
         return form_ids[f]
 
     CONTEXT_AGREES, CONTEXT_CHOSE, DAMAGED, ELIDED = 16, 32, 64, 128
+    DIALECT_RULE_FLAG = 2   # token_flag bit (release R): a dialect rule changed the token's reading
     stats = {"tokens": 0, "with_lemma": 0, "context_agrees": 0, "context_changed": 0,
-             "elision_model": 0, "elision_ties": 0, "elision_changed": 0, "context_disagrees": 0}
-    flag_rows = []   # release Q: token_flag (bit 1: the context model named another reading of the spelling)
+             "elision_model": 0, "elision_ties": 0, "elision_changed": 0, "context_disagrees": 0,
+             "dialect_rule_tokens": 0, "dialect_rule_changed": 0}
+    from backend.passage_dialect import passage_dialect
+    from backend.dialect_rules import index_factors
+    feature_cache = {}
+
+    def readings_of(spelling):
+        """Canonical features of the parser readings of a spelling (cached)."""
+        if spelling not in feature_cache:
+            from backend.interlinear import canonical_features
+            _, parsed_s = morph.get(spelling, ("missing", []))
+            feature_cache[spelling] = [canonical_features({"features": feats}) for _, feats in parsed_s]
+        return feature_cache[spelling]
+
+    def dialect_factors(form, heads_ranked, text, toks, index, dialect):
+        cands = []
+        _, parsed_f = morph.get(form, ("missing", []))
+        for lemma, feats in parsed_f:
+            cands.append({"lemma": canon(lemma)[0], "features": feats})
+        if not cands:
+            for spelling, rules, parsed_g in gen.get(form, []):
+                for lemma, feats in parsed_g:
+                    cands.append({"lemma": canon(lemma)[0], "features": feats, "normalised_query": spelling})
+        known = {c["lemma"] for c in cands}
+        cands += [{"lemma": h, "features": {}} for h in heads_ranked if h not in known]
+        if dialect == "lesbian":
+            # Lesbian psilosis: the rough-breathing twin's parses (οἷ for printed οἶ), as fallback readings
+            from backend.aeolic_variants import psilotic_variants
+            for item in psilotic_variants(form):
+                for lemma, feats in morph.get(item["form"], ("missing", []))[1]:
+                    cands.append({"lemma": canon(lemma)[0], "features": feats, "normalisation_rule": item["rule"],
+                                  "normalised_query": item["form"]})
+        return index_factors(form, cands, heads_ranked, text, toks, index, dialect, readings_of)
+    flag_bits = defaultdict(int)   # release Q: token_flag (bit 1: the context model named another reading;
+    #                                 release R bit 2: a dialect rule changed the reading)
     # Release Q: elided spellings with several readings are ranked per token by the elision model
     # (backend/elision.py): treebank train prior, restored spellings' corpus frequency, context.
     head_class = {h: (c.most_common(1)[0][0] if c else "unknown") for h, c in lemma_pos.items()}
@@ -632,6 +831,7 @@ def stage_assemble(args):
         if not tokens:
             continue
         pid += 1
+        dialect = passage_dialect({"author": row["author"], "id": row["id"]}) if row["kind"] == "text" else None
         label = row["author"] or ""
         if label not in author_cache:
             author_cache[label] = canonical_author(label) if label else ""
@@ -651,6 +851,7 @@ def stage_assemble(args):
             flags = DAMAGED if dmg else 0
             if ranked:
                 choice, prob = ranked[0]
+                dist = list(ranked)
                 if not (row["kind"] == "text" and row["quality"] in SEARCHABLE):
                     # Release O's reading of non-edited records (no contextual model): kept as the
                     # frequency prior of English readings so search ranks as in release O.
@@ -672,6 +873,7 @@ def stage_assemble(args):
                     for h, p in ranked_e:
                         elided_mass[form][h] += p
                     choice, prob = ranked_e[0]
+                    dist = list(ranked_e)
                 elif pred and len(ranked) > 1:
                     plemma, upos = heads.headword_key(pred[2]) if pred[2] else "", pred[3]
                     rescored = []
@@ -700,17 +902,36 @@ def stage_assemble(args):
                         flags |= CONTEXT_AGREES
                         stats["context_agrees"] += 1
                     choice, prob = rescored[0]
+                    dist = list(rescored)
                     other = next((h for h, _ in ranked if plemma and fold(h) == fold(plemma)), None)
                     if other and fold(other) != fold(choice) and not same_lexeme(
                             choice, other, head_class.get(choice), head_class.get(other), heads.morph.form_lemmas):
                         # the contextual model named another reading of this spelling (not the same word
                         # under another lemmatisation convention: μάλιστα / μάλα) and could not impose it
-                        flag_rows.append((pid, i, 1))
+                        flag_bits[(pid, i)] |= 1
                         stats["context_disagrees"] += 1
                 elif pred and pred[2] and fold(heads.headword_key(pred[2])) == fold(choice):
                     flags |= CONTEXT_AGREES
                     stats["context_agrees"] += 1
-                flags |= evidence[form][choice]["src"]
+                if dialect and len(dist) > 1:
+                    # Release R: dialect grammar (backend.dialect_rules gates: parser dialect labels, the
+                    # article needs a noun, -ην infinitives, iota subscript, μή + imperative, elision,
+                    # Lesbian -ας genitives) applied to this token's readings in a Lesbian/Doric passage.
+                    factors = dialect_factors(form, [h for h, _ in dist], row["text"], tokens, i, dialect)
+                    if factors:
+                        top_p = dist[0][1]
+                        known_h = {h for h, _ in dist}
+                        weighted = [(h, p * factors.get(h, 1.0)) for h, p in dist] +                             [(h, top_p * f) for h, f in factors.items() if h not in known_h]
+                        total = sum(p for _, p in weighted) or 1.0
+                        weighted = sorted(((h, p / total) for h, p in weighted), key=lambda kv: (-kv[1], kv[0]))
+                        stats["dialect_rule_tokens"] += 1
+                        if weighted[0][0] != choice:
+                            stats["dialect_rule_changed"] += 1
+                            flag_bits[(pid, i)] |= DIALECT_RULE_FLAG
+                            if flags & (CONTEXT_CHOSE | CONTEXT_AGREES):
+                                flags &= ~(CONTEXT_CHOSE | CONTEXT_AGREES)
+                        choice, prob = weighted[0]
+                flags |= evidence[form].get(choice, {"src": GENERATED})["src"]
                 lemmas[i] = lid(choice)
                 conf[i] = max(1, min(255, round(prob * 255)))
                 here[lemmas[i]] += 1
@@ -745,7 +966,7 @@ def stage_assemble(args):
     ix.executemany("INSERT INTO posting VALUES (?,?,?)", posting_rows)
     ix.executemany("INSERT INTO token_alt VALUES (?,?,?,?)", alt_rows)
     ix.executemany("INSERT INTO passage_repeat VALUES (?,?)", repeat_rows)
-    ix.executemany("INSERT INTO token_flag VALUES (?,?,?)", flag_rows)
+    ix.executemany("INSERT INTO token_flag VALUES (?,?,?)", sorted((p, i, f) for (p, i), f in flag_bits.items()))
     stats["repeated_passages"] = len(repeat_rows)
     first_copy.clear()
     log("tokens", stats)
@@ -755,7 +976,7 @@ def stage_assemble(args):
     lemma_rows, term_rows = [], []
     head_rule = {}
     for head, rule in canon_cache.values():
-        if rule and not head_rule.get(head):
+        if rule and not rule.startswith("derived_") and not head_rule.get(head):
             head_rule[head] = rule
     for form, cands in evidence.items():
         for h, c in cands.items():
@@ -773,7 +994,29 @@ def stage_assemble(args):
     ix.executemany("INSERT INTO lemma_prior VALUES (?,?)", sorted(prior_tokens.items()))
     variant_rows = lemma_variants(lemma_ids, lemma_tokens, heads, {r[0]: r[7] for r in lemma_rows})
     ix.executemany("INSERT INTO lemma_variant VALUES (?,?,?,?,?)", variant_rows)
+    # Release R: headwords counted under another one (derived forms, dialect pointers), so lookups and the
+    # calibration can read a lemma written either way through the link.
+    alias_rows = [(alias, lemma_ids[link["base"]], "derived_" + link["relation"], link.get("entry_id"))
+                  for alias, link in sorted(heads.derived.items()) if link["base"] in lemma_ids]
+    alias_rows += [(alias, lemma_ids[target], "dialect_pointer", None)
+                   for alias, target in sorted(heads.pointers.items()) if target in lemma_ids]
+    alias_rows += [(alias, lemma_ids[target], "parser_degree", None)
+                   for alias, target in sorted(heads.degree_aliases.items())
+                   if target in lemma_ids and alias not in heads.derived and alias not in lemma_ids]
+    ix.executemany("INSERT INTO lemma_alias VALUES (?,?,?,?)", alias_rows)
+    log("lemma aliases", len(alias_rows))
     log("variant links", len(variant_rows))
+    # Release R: a headword whose own entries print no meaning (a pure pointer: "πώνω, Dor. and Aeol.
+    # = πίνω") takes the short gloss of the headword its variant link names, labelled as such.
+    gloss_of = {r[0]: (r[7], r[8]) for r in lemma_rows}
+    borrowed = []
+    for a, b, rel, dic, ev in variant_rows:
+        if not gloss_of.get(a, (None,))[0] and gloss_of.get(b, (None,))[0]:
+            target = next((h for h, i in lemma_ids.items() if i == b), "")
+            borrowed.append((gloss_of[b][0], f"{gloss_of[b][1]} (via {target})", a))
+            gloss_of[a] = (gloss_of[b][0], "borrowed")
+    ix.executemany("UPDATE lemma SET gloss=?, gloss_source=? WHERE id=?", borrowed)
+    log("glosses borrowed through variant links", len(borrowed))
     rules = {h: r for h, (h2, r) in ((k, v) for k, v in canon_cache.items()) if r}
     form_rows, fl_rows = [], []
     for f, i in form_ids.items():
@@ -822,6 +1065,11 @@ def stage_assemble(args):
         "tokens": stats, "coverage_by_group": coverage, "lemmas": len(lemma_ids), "forms": len(form_ids),
         "passages": pid, "context_passages": len(context), "assemble_seconds": round(time.time() - started),
         "recorded_lemmas_dropped": {"lemmas": len(dropped_recorded), "examples": dropped_recorded.most_common(20)},
+        "derived_links": {"headwords": len(heads.derived),
+                          "examples": [[d, l["base"], l["relation"], l["entry_id"]] for d, l in sorted(heads.derived.items())[:40]],
+                          "method": "an adverb, comparative or superlative headword whose own dictionary entry calls it "
+                                    "the derived form of another headword is counted under that headword (release R)"},
+        "dialect_rules": {"tokens": stats.get("dialect_rule_tokens"), "changed": stats.get("dialect_rule_changed")},
         "elision_model": ({k: elision.data.get(k) for k in ("version", "built_at", "split", "params", "train")}
                           if elision is not None else None),
         "source_bits": {"1": "local Morpheus parse of the printed form", "2": "lemma recorded for this spelling in a source annotation (treebank/lexicon form list)",

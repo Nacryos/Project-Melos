@@ -405,3 +405,55 @@ assembly with `--elision-model`; tests `tests/test_release_q_elision.py` use oth
 - The spelling-level ranking (`form_lemma`) of an elided form is the average of its tokens' readings, so the
   headline `alternatives` of the index list τ’ as τε before σύ. The live passage analysis (`/api/analyze-passage`,
   `/api/word`) is unchanged.
+
+## Release R: dialect grammar, derived forms, display headwords (2026-10-09)
+
+General rules only (unit tests `tests/test_release_r_dialect.py` use other words). Measured on the lyric gold set
+(`data/evaluation/lyric-gold-r.json`, `scripts/eval_lyric_gold.py`; see `docs/deployment.md` "Release R").
+
+**Passage dialect** (`backend/passage_dialect.py`): Sappho and Alcaeus Lesbian; Alcman, Pindar, Bacchylides,
+Stesichorus, Ibycus, Theocritus, Bion, Moschus, Epicharmus, Timocreon, Praxilla, Pratinas Doric; Corinna Boeotian.
+Context for ranking and a calibration feature, never proof about a single word.
+
+**Neighbours.** In a dialect passage every word token carries `passage_dialect` and `context_words` (the next
+six and previous three printed words up to a clause end, with the parser's readings of each, at most 160 lookups
+per request), so a rule can look past the selection (a one-word click still sees its sentence).
+
+**Gates and weights** (`backend/dialect_rules.py`, applied in `interlinear._choose` before the contextual model's
+compatibility test, and in `_affinity`): iota subscript = dative singular; an accented proclitic spelling is not
+the proclitic; parser dialect labels separate words of different classes (ἄγην the Aeolic infinitive, not the
+Attic-Ionic noun ἄγη; παῖσαν πᾶς, not παίω); elision of ι or a diphthong yields to α ε ο (χαίροισ’ = χαίροισα);
+-ην is an infinitive where one is offered (Campbell § 3); μή + verb keeps the imperative/subjunctive; the article
+needs an agreeing nominal or, as a pronoun, an agreeing verb, else Lesbian αἰ is the conditional εἰ (§ 10);
+Lesbian -ας of the first declension is the genitive singular (accusative plural -αις, § 7); no dual in lyric
+unless the model reads one; psilosis and barytone readings are fallbacks only. Removed readings are listed on the
+row (`dialect_rules: [{rule, lemma, parse_short}]`), so nothing is hidden silently.
+
+**Lesbian spellings queried even when the parser reads the printed letters** (`aeolic_variants.
+lesbian_fallback_variants`, `lexical_variant`): the psilosis twin (οἷ for printed οἶ), the recessive accent undone
+(ἀνθεῖ for ἄνθει; never on a monosyllable), the lexical table read without regard to accents (αἰ like αἴ).
+A word with two accents (δεῦρύ before an enclitic) is also looked up without the second (`enclitic_accent_dropped`).
+
+**Line-end division.** A word printed across a line end with a hyphen (ἐπί-|σχει) is one word: each printed part is
+looked up as the whole word (`hyphenated_word`, `hyphen_part`), so a click on either part gets the contextual parse.
+
+**Degree.** Morpheus `comp` is read as `Degree` (`comp.`, `sup.`; "adv. sup." for an adverb), so μάλιστα shows
+"adverb, superlative" under μάλα. Treebank postags' degree slot is not read (it is noisy).
+
+**Display headwords** (`lemma_glosses.link_derived_forms`, run after the glosses): the row's `lemma`, `headline_lemma`
+and ranked parses are shown under
+- the base of a derived form when a dictionary entry of the derived headword says so (`derived_from`: "ταχέως, Adv.
+  of ταχύς", "κάλλιστος, Sup. of καλός", "ἀμείνων, irreg. Comp. of ἀγαθός"; adverbs only in -ως; the relation must
+  belong to the headword itself, not to another word listed in the same entry); the derived form's own gloss
+  ("quickly") is kept, the base's used only when it has none;
+- the target of a dialect or poetic pointer entry with no meaning of its own (`variant_of` / `lemma_read_as`:
+  "πώνω, Dor. and Aeol. = πίνω", "ἔμμι, Aeol. for εἰμί", "κε ... Ep., Lesb. = ἄν"); a plain synonym ("= X") keeps its
+  own headword;
+- the headword a parse lemma reads to when it is not one itself: psilosis (ὀ → ὁ), ᾱ for η (δᾶμος → δῆμος), a
+  prefix entry ("ὀ-, insep. Prefix") never counting as a headword;
+- in a Lesbian passage, the rough-breathing twin of a smooth-breathing headword when the twin is already one of the
+  word's ranked readings and has more recorded forms (ἄρμ’: ἅρμα "chariot", not ἄρμα "load"; Campbell § 1).
+
+**Frontend.** The word panel shows the backend's `headline_lemma` with its own best-ranked parse when the row is not
+settled (was: the first ranked parse, whatever its headword), names an indeclinable headword (δύο) even without a
+parse, and fills a settled row's missing parse from its ranked parses.

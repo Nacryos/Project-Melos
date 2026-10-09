@@ -26,12 +26,15 @@ CLASSES = {
                                  "annotation (exact dictionary/treebank form match; release Q)"),
     "no_context_signal": ("no contextual signal: the model did not run, or named a lemma that is not a reading of "
                           "the spelling (typical of dialect forms it cannot lemmatise)"),
+    "dialect_rule": ("a dialect rule (release R, backend.dialect_rules) changed the reading in a Lesbian or Doric "
+                     "passage (index table token_flag bit 2)"),
 }
 _LOCK = threading.Lock()
 _CACHE = {}
 
 
 CONTEXT_DISAGREES = 1   # token_flag bit: the contextual model named another reading of this spelling
+DIALECT_RULE = 2        # token_flag bit (release R): a dialect rule changed the token's reading
 
 
 # Coarse parts of speech that one lexeme spans in dictionary practice (ταχέως under ταχύς).
@@ -61,6 +64,8 @@ def evidence_class(bits, flags=0):
         return "damaged_word"
     if bits & 128:
         return "elision_model"
+    if int(flags or 0) & DIALECT_RULE:
+        return "dialect_rule"
     if bits & 4 and not bits & 1:
         return "generated_spelling"
     if bits & 32:
@@ -84,10 +89,46 @@ def _lookup(table, conf):
     return table[-1][2]
 
 
-def apply_model(model, conf, bits, flags=0):
+def genre_group(genre):
+    """Coarse genre of a passage for calibration (release R): epic, drama, lyric or other."""
+    g = str(genre or "").casefold()
+    if any(w in g for w in ("tragedy", "comedy", "drama", "satyr")):
+        return "drama"
+    if any(w in g for w in ("lyric", "melic", "choral", "elegy", "elegiac", "iamb", "epigram", "hymn", "bucolic")):
+        return "lyric"
+    if any(w in g for w in ("epic", "hexameter", "didactic")):
+        return "epic"
+    return "other"
+
+
+def context_group(genre=None, dialect=None):
+    """The calibration group key "<genre group>|<dialect or none>" (release R)."""
+    return f"{genre_group(genre)}|{dialect or 'none'}"
+
+
+def _interpolate(table, p):
+    """Step function over [[lo, hi, value, weight]] with lo/hi in thousandths of a probability."""
+    if not table:
+        return p
+    x = int(round(p * 1000))
+    for lo, hi, value, _ in table:
+        if x <= hi:
+            return value
+    return table[-1][2]
+
+
+def apply_model(model, conf, bits, flags=0, group=None):
+    """Calibrated probability: the evidence-class map of the raw score, then (release R) the map of the
+    passage's genre/dialect group when one was fitted (`model["groups"][group]`, on the class-calibrated
+    probability); a group with too few gold tokens keeps the class map's value."""
     table = model.get(evidence_class(bits, flags)) or model.get("all")
     value = _lookup(table, int(conf))
-    return None if value is None else round(float(value), 3)
+    if value is None:
+        return None
+    groups = model.get("groups") or {}
+    if group and group in groups:
+        value = _interpolate(groups[group], float(value))
+    return round(float(value), 3)
 
 
 def path():
@@ -111,13 +152,14 @@ def calibration():
         return _CACHE["data"]
 
 
-def probability(conf, bits, flags=0):
+def probability(conf, bits, flags=0, group=None):
     """Calibrated probability that the token's headline headword is right, or None. `flags`: the
-    token's token_flag bits (release Q index; 0 for an older index)."""
+    token's token_flag bits (release Q index; 0 for an older index); `group`: context_group(genre,
+    dialect) of the token's passage (release R; None keeps the evidence-class map only)."""
     data = calibration()
     if not data or not conf:
         return None
-    return apply_model(data["model"], conf, bits, flags)
+    return apply_model(data["model"], conf, bits, flags, group)
 
 
 def summary():
@@ -126,7 +168,8 @@ def summary():
         return {"calibrated": False, "note": "No calibration deployed; confidence is the raw normalised score."}
     return {"calibrated": True, "version": data.get("version"), "built_at": data.get("built_at"),
             "method": data.get("method"), "gold": data.get("gold"), "classes": data.get("classes"),
-            "fit_tokens_by_class": data.get("fit_tokens_by_class")}
+            "fit_tokens_by_class": data.get("fit_tokens_by_class"), "groups": data.get("fit_tokens_by_group")}
 
 
-__all__ = ["same_lexeme", "evidence_class", "apply_model", "probability", "summary", "CLASSES", "CONTEXT_DISAGREES"]
+__all__ = ["same_lexeme", "evidence_class", "apply_model", "probability", "summary", "CLASSES", "CONTEXT_DISAGREES",
+           "DIALECT_RULE", "genre_group", "context_group"]

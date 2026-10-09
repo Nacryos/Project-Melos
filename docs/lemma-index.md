@@ -198,3 +198,52 @@ copies of Homer, Hesiod, Apollonius, Theocritus, Pindar, Callimachus; 25,282 in 
 - Display contexts drop printed line numbers (`line_numbers`).
 - Dates: periods from the floruit, else the middle of the active life (never the birth year); the Homeric Hymns,
   Anacreontea and Semonides dated from Edmonds' *Lyra Graeca* pages in the corpus.
+
+## Release R additions
+
+### Dialect rules per token
+
+In a passage whose author writes Lesbian, Doric or Boeotian (`backend/passage_dialect.py`), every token with
+several readings goes through the same gates as the live analysis (`backend/dialect_rules.index_factors`, see
+`docs/morphology.md` "Release R"): the parser readings of the spelling and of its neighbours up to a clause end;
+a headword all of whose readings a gate removes keeps 0.15 of its probability, and a Lesbian psilosis twin (οἷ
+for οἶ) can enter only when every reading of the printed spelling is removed. 7,867 tokens were rescored, 498
+changed (token_flag bit 2, calibration class `dialect_rule`). Forms the parser does not read take the parses of
+their psilosis twin (ἀ: the article ἁ), of the Lesbian lexical table (ἤπειτα: ἔπειτα) or of a crasis' second
+word (κωὔτε: οὔτε), labelled `generated:…`.
+
+### Headwords read through dictionary links
+
+`Headwords.canonical` (assembly) and the reader (`lemma_glosses.link_derived_forms`) apply the same rules:
+
+| Rule | Example | Index table `lemma_alias` |
+|---|---|---|
+| derived form whose own entry names the base (adverbs in -ως, comparatives, superlatives) | ταχέως → ταχύς, κάλλιστος → καλός, ἀμείνων → ἀγαθός | 35 rows |
+| dialect or poetic pointer with no meaning of its own | πώνω → πίνω, ἔμμι → εἰμί, κε → ἄν, τεός → σός | 387 rows |
+| recorded degree form the parser reads as a degree of another headword | μάλιστα → μάλα | 2 rows |
+| an accented lemma is not the unaccented enclitic of its letters | τίς ≠ τις | — |
+| a prefix entry ("ὀ-, insep. Prefix") is not a headword | — | — |
+
+`/api/lemma/resolve` answers an alias with its headword (`via: alias_derived_adverb`, …). The calibration and the
+lyric gold scoring count a gold lemma written as the alias as agreeing (`held_out_accuracy`;
+`held_out_accuracy_strict` compares spellings).
+
+### Variant links
+
+A link still needs the dictionary cross-reference ("poet. for", "= B" naming the headword itself) and agreeing
+meanings, now compared over every dictionary's glosses of both headwords (5-letter stems) plus the words the
+pointer entry prints after the target; a pure pointer takes its meaning from the link. Excluded: a pointer in a
+secondary homograph's entry ("ἅλιος (C)", "πᾶς (C)", "δράω (B)") or naming one ("for κόρος (B)"), a headword with
+lettered homographs judged by its own short gloss only, and an English definition before "=" ("φρήν properly =
+διάφραγμα"). Pairs: P 3,175, Q 1,731, R 2,103 (629 not in Q, among them γαῖα → γῆ; 257 Q pairs gone, 223 of them
+because the pointer headword is now counted under its target). Hand check of 60 random restored links: 58 correct
+(96.7 %); the two wrong ones point at a homograph of the target (ἴουλος → οὖλος, παρανηνέω → παρανέω).
+ἅλιος/ἥλιος, πᾶς/πατήρ, κοῦρος/κόρος, Δίιος/Ζεύς, δράω/ὁράω stay unlinked. A headword whose entries print no
+meaning borrows its link target's short gloss (1,217 headwords, `gloss_source` "… (via X)").
+
+### Calibration with genre and dialect
+
+`backend/lemma_calibration.apply_model(model, conf, bits, flags, group)`: the evidence-class map, then a map for the
+passage's group `"<epic|drama|lyric|other>|<dialect or none>"` (`context_group`) when the group had at least 150
+fitting tokens (fitted: epic|none 96,301, drama|none 24,401, lyric|lesbian 389). The lyric gold set's development
+half (390 certain tokens) is added to the fitting rows; its held-out half is reported separately (never fitted).

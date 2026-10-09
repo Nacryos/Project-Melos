@@ -21,6 +21,7 @@
     'n.': ['pos', 'noun'], 'adj.': ['pos', 'adjective'], 'art.': ['pos', 'article'], 'pron.': ['pos', 'pronoun'],
     'v.': ['pos', 'verb'], 'adv.': ['pos', 'adverb'], 'prep.': ['pos', 'preposition'], 'conj.': ['pos', 'conjunction'],
     'part.': ['pos', 'particle'], 'interj.': ['pos', 'interjection'],
+    'comp.': ['degree', 'comparative'], 'sup.': ['degree', 'superlative'],
   };
   // "accusative singular feminine"; "third person singular aorist indicative active";
   // "present active participle, dative singular feminine".
@@ -35,8 +36,10 @@
     }
     const verb = [found.person, found.case ? '' : found.number, found.tense,
       found.verbform ? '' : found.mood, found.voice, found.verbform].filter(Boolean).join(' ');
-    const nominal = [found.case, found.case ? found.number : '', found.gender].filter(Boolean).join(' ');
+    const nominal = [found.case, found.case ? found.number : '', found.gender, found.degree].filter(Boolean).join(' ');
     const words = [verb, nominal].filter(Boolean).join(', ');
+    // An adverb's degree alone: "adverb, superlative".
+    if (!words.replace(found.degree || '', '').trim() && found.pos) return [found.pos, found.degree].filter(Boolean).join(', ');
     return words || found.pos || short.trim();
   }
 
@@ -119,13 +122,28 @@
   // the top-ranked reading, with the others listed beside it.
   function headlineDetail(row) {
     const ranking = Array.isArray(row?.morphology_ranking) ? row.morphology_ranking : [];
-    const top = row && !row.lemma ? ranking.find(item => typeof item?.lemma === 'string' && item.lemma.trim()
-      && typeof item.parse_short === 'string' && item.parse_short && unelided(item.lemma) !== unelided(row.text)) : null;
+    // A lemma spelt like the printed word is skipped only for an elided word (σ’ is not a
+    // headword); δύο, πότνια, indeclinables are their own headwords.
+    const elided = /[’'᾽ʼ]$/u.test(String(row?.text || ''));
+    const usable = item => typeof item?.lemma === 'string' && item.lemma.trim() && typeof item.parse_short === 'string'
+      && item.parse_short && !(elided && unelided(item.lemma) === unelided(row.text));
+    // The backend's ranked headline (release O) leads; its own best-ranked parse goes with it.
+    const head = row && !row.lemma && typeof row.headline_lemma === 'string' && row.headline_lemma.trim()
+      ? ranking.find(item => usable(item) && bare(item.lemma) === bare(row.headline_lemma)) : null;
+    let top = row && !row.lemma ? head || ranking.find(usable) : null;
+    // A settled headword without a parse of its own takes its best-ranked parse; a headline headword with
+    // no parsed reading at all (an indeclinable, a crasis) is still named.
+    if (row && row.lemma && !row.parse_short) {
+      const own = ranking.find(item => usable(item) && bare(item.lemma) === bare(row.lemma));
+      if (own) top = own;
+    }
+    if (row && !row.lemma && !top && typeof row.headline_lemma === 'string' && row.headline_lemma.trim()
+      && !(elided && unelided(row.headline_lemma) === unelided(row.text))) top = { lemma: row.headline_lemma, parse_short: '' };
     const chosen = top ? { lemma: top.lemma, parse_short: top.parse_short } : row;
     const alts = alternatives(row, chosen);
     const detail = { source: parseSource(row), alternatives: alts, ranked: true,
       tie: alts.some(alt => alt.lemma && bare(alt.lemma) !== bare(chosen?.lemma)) };
-    if (top) Object.assign(detail, { lemma: top.lemma, parse: row.parse_short || top.parse_short, properName: /^\p{Lu}/u.test(top.lemma.normalize('NFD')) });
+    if (top) Object.assign(detail, { lemma: top.lemma, parse: top.parse_short || row.parse_short, properName: /^\p{Lu}/u.test(top.lemma.normalize('NFD')) });
     return detail;
   }
   // A short gloss for a headword from dictionary entries already loaded: the
@@ -182,7 +200,7 @@
   // Only real sense numbers (A, II, 3, b), never stray markup text.
   function senseLabel(sense) {
     const path = Array.isArray(sense?.sense_path) ? sense.sense_path : [];
-    return path.map(step => step?.n).filter(value => typeof value === 'string' && /^(?:[A-Za-z]|[IVXivx]{1,6}|\d{1,3})$/.test(value.trim())).join('.');
+    return path.map(step => step?.n).filter(value => typeof value === 'string' && /^(?:[A-Za-z]|[IVXivx]{1,6}|[1-9]\d{0,2})$/.test(value.trim())).join('.');
   }
   // A calibrated probability (release P) in words: "about 94% likely".
   function probabilityText(value) {
@@ -203,7 +221,7 @@
       .map(sense => ({ label: senseLabel(sense), text: sense.text.trim() }));
     return (Array.isArray(entry.senses) ? entry.senses : [])
       .filter(sense => typeof sense?.text === 'string' && sense.text.trim())
-      .map(sense => ({ label: typeof sense.label === 'string' && /^(?:[A-Za-z]|[IVXivx]{1,6}|\d{1,3})$/.test(sense.label.trim()) ? sense.label.trim() : '', text: sense.text.trim() }));
+      .map(sense => ({ label: typeof sense.label === 'string' && /^(?:[A-Za-z]|[IVXivx]{1,6}|[1-9]\d{0,2})$/.test(sense.label.trim()) ? sense.label.trim() : '', text: sense.text.trim() }));
   }
   // One block per dictionary for the given headword, from the lexicon entries
   // the API already returned (several payloads may be merged; for one entry id

@@ -255,7 +255,7 @@
         body.append(node('p', 'candidate-reason', window.MelosPhrases.NOTE));
       } catch (error) {
         clear(body);
-        const missing = /^404|returned 404/.test(String(error?.message));
+        const missing = /^404\b|returned 404/.test(String(error?.message));
         body.append(node('p', 'panel-placeholder', missing ? `No phrase list is kept for ${author}: too few edited texts, or texts only in reference records.` : `Could not load the phrases: ${errorText(error)}`));
         if (!missing) delete body.dataset.loaded;
       }
@@ -2496,7 +2496,9 @@
     else if (button && !joined && !fragmentSegment && state.batchReady) state.batchReady.then(() => {
       const late = knownHeadline(button); if (late) showHeadline(late.value, late.final);
     });
-    const contextualHeadline = button && !joined && !fragmentSegment
+    // A word divided across a line end is read in its passage too: the backend (release R) analyses
+    // either printed part as the whole word (hyphenated_word), so the parse is ranked in context.
+    const contextualHeadline = button && !fragmentSegment
       ? passageWordHeadline(button, form).catch(() => null) : Promise.resolve(null);
     contextualHeadline.then(value => showHeadline(value));
     if (button && !joined && state.passageAnalysis?.selectSourceSpan && window.MelosPassageAnalysis?.renderEditorialWordActions) {

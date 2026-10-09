@@ -352,3 +352,24 @@ Citation index: `data/citation_index.sqlite` (env `MELOS_CITATION_INDEX`), built
   they are returned as `line_numbers` (strings, in text order).
 - **Headwords.** A lemma recorded for a spelling in a source annotation is kept only when it is a dictionary
   headword or a lemma the parser gives somewhere (removes "οτηερ", a treebank placeholder).
+
+## Release R additions
+
+`/api/analyze-passage` interlinear word rows (all optional; present when they apply):
+
+| Field | Meaning |
+|---|---|
+| `passage_dialect` | `lesbian`, `doric` or `boeotian` (`backend/passage_dialect.py`). |
+| `dialect_rules` | Readings a dialect or orthography gate removed: `[{rule, lemma, parse_short}]` (`iota_subscript`, `accented_proclitic`, `dialect_label`, `elision_vowel`, `aeolic_infinitive_in_en`, `prohibitive_me`, `article_head`, `lesbian_accusative_plural_in_ais`, `dual`, `psilosis_fallback_only`). |
+| `derived_from` | `{headword, base, relation, printed, entry_id, source}`: the row is shown under the base of a derived form (ταχέως → ταχύς). |
+| `variant_of` | `{headword, relation, entry_id}`: a dialect pointer headword shown as its target (πώνω → πίνω). |
+| `lemma_read_as` | `{parse_lemma, headword[, rule]}`: a parse lemma shown as the headword it reads to (ὀ → ὁ, δᾶμος → δῆμος, Lesbian ἄρμα → ἅρμα). |
+| `form` | For a word divided at a line end, the whole word (also `hyphenated_word`, `hyphen_part: first/second` on the token). |
+
+`morphology_ranking` items may carry `lemma_as_parsed` (the parser's own lemma when the item is shown under a
+linked headword). Parses state `Degree` (`comp.`, `sup.`).
+
+`/api/words/headlines`: `probability` uses the passage's calibration group (genre and dialect);
+`/api/lemma/status` → `calibration.groups` lists the fitted groups. `/api/lemma/resolve` answers an alias headword
+with `via: alias_<relation>`. The index has a table `lemma_alias(alias, lemma_id, relation, entry_id)` and
+token_flag bit 2 (`dialect_rule` calibration class).

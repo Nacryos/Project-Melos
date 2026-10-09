@@ -103,6 +103,7 @@ def align(args):
     ix = LemmaIndex(args.index)
     con = ix.con()
     lemma_of = {r[0]: r[1] for r in con.execute("SELECT id, lemma FROM lemma")}
+    alias = aliases(con, lemma_of)
     form_of = {r[0]: r[1] for r in con.execute("SELECT id, form FROM form")}
     gold = gold_tokens(args.forms)
     log("gold tokens with line citations", sum(len(v) for v in gold.values()), "in", len(gold), "works")
@@ -157,11 +158,22 @@ def align(args):
                         rows.append((block, 0, int(t[3][i]), None, None, g[4], g[3], pid, i))
                         continue
                     pred = lemma_of.get(lid, "")
-                    correct = gold_key(g[4]) == fold(pred)
+                    correct = fold(pred) in {gold_key(g[4]), alias.get(gold_key(g[4]))}
                     rows.append((block, int(t[2][i]), int(t[3][i]), bool(correct), pred, g[4], g[3], pid, i))
             stats["gold_in_matched_passages"] += len(gtoks)
     log("alignment", dict(stats))
     return rows, stats
+
+
+def aliases(con, lemma_of):
+    """Release R: {folded alias headword: folded headword it is counted under} from the index table
+    lemma_alias (derived forms, dialect pointers): a treebank lemma written as the alias (ταχέως, τεός)
+    agrees with the index's headword (ταχύς, σός). Empty for an older index."""
+    try:
+        rows = con.execute("SELECT alias, lemma_id FROM lemma_alias").fetchall()
+    except Exception:  # noqa: BLE001 - release Q index
+        return {}
+    return {fold(a): fold(lemma_of.get(l, "")) for a, l in rows}
 
 
 def isotonic(x, y, w=None):
@@ -265,15 +277,17 @@ def _has_flag_table(index):
     return bool(con.execute("SELECT 1 FROM sqlite_master WHERE name='token_flag'").fetchone())
 
 
-def attach_flags(rows, index, build="", corpus="", lexica=""):
-    """Rows with their token_flag bits appended (only rows whose class could depend on them)."""
+def attach_flags(rows, index, build="", corpus="", lexica="", all_flags=False):
+    """Rows with their token_flag bits appended (only rows whose class could depend on them; release R:
+    every row when the index has the token_flag table, since bit 2 marks a dialect-rule reading)."""
     import sqlite3
     flags = TokenFlags(index, build, lexica)
     con = sqlite3.connect(f"file:{corpus}?mode=ro", uri=True) if corpus else None
     out = []
     for r in rows:
         f = 0
-        if r[3] is not None and evidence_class(r[2]) in ("no_context_signal", "recorded_form_no_context"):
+        if r[3] is not None and (flags.table is not None or
+                                 evidence_class(r[2]) in ("no_context_signal", "recorded_form_no_context")):
             f = flags.get(r[7], r[8], con)
         out.append(tuple(r[:9]) + (f,))
     log("token flags:", flags.source, sum(1 for r in out if r[9]), "rows flagged")
@@ -286,6 +300,7 @@ def lyric_rows(index, gold_path, build="", corpus="", lexica=""):
     gold = json.loads(Path(gold_path).read_text(encoding="utf-8"))["gold"]
     ix = sqlite3.connect(f"file:{index}?mode=ro", uri=True)
     lemma_of = dict(ix.execute("SELECT id, lemma FROM lemma"))
+    alias = aliases(ix, lemma_of)
     pid_of = dict(ix.execute("SELECT id, pid FROM passage WHERE id LIKE 'campbell-glp:%'"))
     rows = []
     for g in gold:
@@ -297,12 +312,48 @@ def lyric_rows(index, gold_path, build="", corpus="", lexica=""):
         lid = int(np.frombuffer(t[0], dtype=np.uint32)[i])
         conf, src = int(np.frombuffer(t[1], dtype=np.uint8)[i]), int(np.frombuffer(t[2], dtype=np.uint8)[i])
         pred = lemma_of.get(lid) if lid else None
-        correct = None if not lid else gold_key(g["gold_lemma"]) == fold(pred)
+        correct = None if not lid else fold(pred) in {gold_key(g["gold_lemma"]), alias.get(gold_key(g["gold_lemma"]))}
         rows.append((g["passage_id"], conf, src, correct, pred, g["gold_lemma"], g["form"], pid, i))
     return attach_flags(rows, index, build, corpus, lexica)
 
 
-def class_table(rows, model):
+def lyric_r_rows(index, gold_path, split, build="", corpus="", lexica=""):
+    """Rows (align layout + group) for the release R lyric gold set (data/evaluation/lyric-gold-r.json):
+    certain tokens of one split ("dev" trains, "held" reports). A token is matched to the index by its
+    start offset; correct = the headline headword is the gold lemma or one of its accepted equivalents."""
+    import sqlite3
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from eval_lyric_gold import accepted, lemma_key
+    gold = json.loads(Path(gold_path).read_text(encoding="utf-8"))["tokens"]
+    ix = sqlite3.connect(f"file:{index}?mode=ro", uri=True)
+    lemma_of = dict(ix.execute("SELECT id, lemma FROM lemma"))
+    alias = aliases(ix, lemma_of)
+    pid_of = dict(ix.execute("SELECT id, pid FROM passage WHERE id LIKE 'campbell-glp:%'"))
+    cache, rows = {}, []
+    for g in gold:
+        if g["split"] != split or g.get("uncertain") or not g.get("lemma"):
+            continue
+        pid = pid_of.get(g["passage_id"])
+        if pid is None:
+            continue
+        if pid not in cache:
+            t = ix.execute("SELECT lemmas, conf, src, starts FROM tok WHERE pid=?", (pid,)).fetchone()
+            cache[pid] = None if not t else (np.frombuffer(t[0], dtype=np.uint32), np.frombuffer(t[1], dtype=np.uint8),
+                                             np.frombuffer(t[2], dtype=np.uint8), np.frombuffer(t[3], dtype=np.uint32).tolist())
+        t = cache[pid]
+        if t is None or g["start"] not in t[3]:
+            continue
+        i = t[3].index(g["start"])
+        lid = int(t[0][i])
+        pred = lemma_of.get(lid) if lid else None
+        keys = accepted(g)
+        keys |= {alias[fold(k)] for k in keys if fold(k) in alias}
+        correct = None if not lid else (lemma_key(pred) in keys or fold(pred) in {fold(k) for k in keys})
+        rows.append((g["passage_id"], int(t[1][i]), int(t[2][i]), correct, pred, g["lemma"], g["printed"], pid, i))
+    return attach_flags(rows, index, build, corpus, lexica, all_flags=True)
+
+
+def class_table(rows, model, groups=None):
     from backend.lemma_calibration import apply_model
     out = {}
     for cls in CLASSES:
@@ -310,8 +361,28 @@ def class_table(rows, model):
         if sel:
             out[cls] = {"tokens": len(sel), "accuracy": round(sum(r[3] for r in sel) / len(sel), 3),
                         "mean_raw_confidence": round(sum(r[1] for r in sel) / len(sel) / 255, 3),
-                        "mean_calibrated": round(sum(apply_model(model, r[1], r[2], _flag(r)) for r in sel) / len(sel), 3)}
+                        "mean_calibrated": round(sum(apply_model(model, r[1], r[2], _flag(r), (groups or {}).get((r[7], r[8])))
+                                                     for r in sel) / len(sel), 3)}
     return out
+
+
+GROUP_MIN = 150
+
+
+def fit_groups(model, rows, group_of):
+    """Release R: per genre/dialect group with at least GROUP_MIN fitting tokens, an isotonic map from the
+    evidence-class probability (thousandths) to the observed agreement. Returns {group: tokens}."""
+    from backend.lemma_calibration import apply_model
+    by_group = defaultdict(list)
+    for r in rows:
+        if r[3] is None:
+            continue
+        g = group_of(r)
+        p = apply_model(model, r[1], r[2], _flag(r))
+        if g and p is not None:
+            by_group[g].append((int(round(p * 1000)), int(r[3])))
+    model["groups"] = {g: isotonic([x for x, _ in v], [y for _, y in v]) for g, v in by_group.items() if len(v) >= GROUP_MIN}
+    return {g: len(v) for g, v in by_group.items()}
 
 
 def fit(rows):
@@ -363,9 +434,25 @@ def evaluate(args):
     # Release Q: the context-disagreement flag splits the former no_context_signal class.
     fit_rows = attach_flags(fit_rows, args.fit_index or args.index, args.build, args.corpus, args.lexica)
     test_rows = attach_flags(test_rows, args.index, args.build, args.corpus, args.lexica)
-    model, fit_counts = fit(fit_rows)
+    # Release R: the lyric gold set's development half joins the fitting rows, and genre/dialect
+    # groups get their own map on top of the evidence-class map.
+    lyric_dev = lyric_r_rows(args.index, args.lyric_gold_r, "dev", args.build, args.corpus, args.lexica)         if getattr(args, "lyric_gold_r", "") else []
+    from backend.lemma_index import LemmaIndex
+    groups_ix = {}
+
+    def group_of_index(index_path):
+        if index_path not in groups_ix:
+            groups_ix[index_path] = LemmaIndex(index_path)
+        ixg = groups_ix[index_path]
+        return lambda r: ixg.calibration_group(r[7])
+    model, fit_counts = fit(fit_rows + lyric_dev)
+    fit_group = group_of_index(args.fit_index or args.index)
+    lyric_group = group_of_index(args.index)
+    group_counts = fit_groups(model, fit_rows + lyric_dev,
+                              lambda r: lyric_group(r) if str(r[0]).startswith("campbell-glp:") else fit_group(r))
     calibration = {"version": "melos-lemma-calibration-v1", "built_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                    "classes": CLASSES, "model": model, "fit_tokens_by_class": fit_counts,
+                   "fit_tokens_by_group": group_counts, "lyric_gold_fit_tokens": len(lyric_dev),
                    "method": ("Isotonic regression (pool-adjacent-violators) of agreement with the treebank gold "
                               "lemma on the raw 0-255 confidence, per evidence class when the class has at least "
                               "300 fitting tokens, else pooled. Fitted on half of the gold blocks. Release Q: "
@@ -378,8 +465,9 @@ def evaluate(args):
                            "aligned to the corpus's Perseus passages",
                    "index": args.index}
     test = [r for r in test_rows if r[3] is not None]
+    test_group = group_of_index(args.index)
     raw_pairs = [(r[1] / 255, int(r[3])) for r in test]
-    cal_pairs = [(apply_model(model, r[1], r[2], _flag(r)), int(r[3])) for r in test]
+    cal_pairs = [(apply_model(model, r[1], r[2], _flag(r), test_group(r)), int(r[3])) for r in test]
     raw_table, raw_ece = reliability(raw_pairs)
     cal_table, cal_ece = reliability(cal_pairs)
     by_class = class_table(test, model)
@@ -390,6 +478,11 @@ def evaluate(args):
     report = {"alignment": dict(stats), "tokens": {"fit": len([r for r in fit_rows if r[3] is not None]),
                                                     "held_out": len(test), "held_out_without_headword": no_head},
               "held_out_accuracy": round(sum(r[3] for r in test) / len(test), 4) if test else None,
+              "held_out_accuracy_strict": (round(sum(gold_key(r[5]) == fold(r[4] or "") for r in test) / len(test), 4)
+                                           if test else None),
+              "accuracy_note": ("held_out_accuracy counts a lemma written as an alias the index reads to its headword "
+                                "(derived forms, dialect pointers; table lemma_alias) as agreeing; "
+                                "held_out_accuracy_strict compares the spellings only"),
               "held_out_elided": {"tokens": len(elided),
                                   "accuracy": round(sum(r[3] for r in elided) / len(elided), 4) if elided else None,
                                   "frequent_disagreements": [{"form": f, "gold": g, "predicted": p, "count": c}
@@ -402,14 +495,43 @@ def evaluate(args):
                         "headwords count as disagreements.",
                         "The contextual model was trained on UD treebanks built from these texts: "
                         "context_agrees / context_chose accuracy is optimistic here."]}
+    by_group = defaultdict(list)
+    for r, pair in zip(test, cal_pairs):
+        by_group[test_group(r)].append(pair)
+    report["calibrated_by_group"] = {g: dict(zip(("bins", "ece"), reliability(v)), tokens=len(v),
+                                             accuracy=round(sum(c for _, c in v) / len(v), 4))
+                                     for g, v in sorted(by_group.items())}
+    if getattr(args, "lyric_gold_r", ""):
+        held = [r for r in lyric_r_rows(args.index, args.lyric_gold_r, "held", args.build, args.corpus, args.lexica)
+                if r[3] is not None]
+        pairs = [(apply_model(model, r[1], r[2], _flag(r), lyric_group(r)), int(r[3])) for r in held]
+        lt, le = reliability(pairs)
+        report["lyric_gold_r"] = {
+            "gold": args.lyric_gold_r, "fit_tokens_dev_half": len(lyric_dev), "held_out_tokens": len(held),
+            "held_out_accuracy": round(sum(r[3] for r in held) / len(held), 4) if held else None,
+            "mean_calibrated": round(sum(p for p, _ in pairs) / len(pairs), 4) if pairs else None,
+            "ece": le, "bins": lt,
+            "by_evidence_class": class_table(held, model, {(r[7], r[8]): lyric_group(r) for r in held}),
+            "errors": [{"passage": r[0], "form": r[6], "gold": r[5], "predicted": r[4]} for r in held if not r[3]]}
+        if getattr(args, "before_index", "") and getattr(args, "before_calibration", ""):
+            # The same held-out lyric tokens under the previous release's index and calibration.
+            before_model = json.loads(Path(args.before_calibration).read_text(encoding="utf-8"))["model"]
+            bheld = [r for r in lyric_r_rows(args.before_index, args.lyric_gold_r, "held") if r[3] is not None]
+            bpairs = [(apply_model(before_model, r[1], r[2], _flag(r)), int(r[3])) for r in bheld]
+            bt, be = reliability(bpairs)
+            report["lyric_gold_r"]["before"] = {
+                "index": args.before_index, "calibration": args.before_calibration, "held_out_tokens": len(bheld),
+                "held_out_accuracy": round(sum(r[3] for r in bheld) / len(bheld), 4) if bheld else None,
+                "mean_calibrated": round(sum(p for p, _ in bpairs) / len(bpairs), 4) if bpairs else None,
+                "ece": be, "bins": bt}
     if args.lyric_gold:
         # Lyric reliability (never used for fitting): LSJ-cited Campbell GLP tokens.
         lyr = [r for r in lyric_rows(args.index, args.lyric_gold, args.build, args.corpus, args.lexica) if r[3] is not None]
         if lyr:
-            lt, le = reliability([(apply_model(model, r[1], r[2], _flag(r)), int(r[3])) for r in lyr])
+            lt, le = reliability([(apply_model(model, r[1], r[2], _flag(r), lyric_group(r)), int(r[3])) for r in lyr])
             report["lyric_gold"] = {
                 "tokens": len(lyr), "accuracy": round(sum(r[3] for r in lyr) / len(lyr), 4),
-                "mean_calibrated": round(sum(apply_model(model, r[1], r[2], _flag(r)) for r in lyr) / len(lyr), 4),
+                "mean_calibrated": round(sum(apply_model(model, r[1], r[2], _flag(r), lyric_group(r)) for r in lyr) / len(lyr), 4),
                 "ece": le, "bins": lt, "by_evidence_class": class_table(lyr, model),
                 "errors": [{"passage": r[0], "form": r[6], "gold": r[5], "predicted": r[4]} for r in lyr if not r[3]],
                 "note": ("Gold = the LSJ headword of an entry citing that Campbell poem and line, where exactly one "
@@ -441,6 +563,9 @@ def main():
     b.add_argument("--corpus", default="", help="corpus.sqlite (with --build)")
     b.add_argument("--lexica", default="", help="lexica directory of the evaluated index (with --build): same-lexeme rule")
     b.add_argument("--lyric-gold", default="", help="data/evaluation/lyric-lemma-gold.json: report lyric reliability")
+    b.add_argument("--lyric-gold-r", default="", help="release R: data/evaluation/lyric-gold-r.json (dev half fits, held half reports)")
+    b.add_argument("--before-index", default="", help="release R: previous index, for the lyric before/after table")
+    b.add_argument("--before-calibration", default="", help="release R: previous calibration json")
     args = p.parse_args()
     {"filter-lexica": filter_lexica, "evaluate": evaluate}[args.cmd](args)
 

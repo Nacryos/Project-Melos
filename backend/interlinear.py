@@ -25,13 +25,18 @@ _VALUES = {
     'Mood': {'Ind': ('indicative', 'ind.'), 'Sub': ('subjunctive', 'subj.'), 'Opt': ('optative', 'opt.'), 'Imp': ('imperative', 'imper.')},
     'Voice': {'Act': ('active', 'act.'), 'Mid': ('middle', 'mid.'), 'Pass': ('passive', 'pass.'), 'Med': ('medio-passive', 'mid./pass.')},
     'VerbForm': {'Inf': ('infinitive', 'inf.'), 'Part': ('participle', 'ptcp.'), 'Fin': ('finite', '')},
+    # Release R: degree of comparison (Morpheus `comp`, treebank postag slot 9, UD Degree).
+    'Degree': {'Cmp': ('comparative', 'comp.'), 'Sup': ('superlative', 'sup.')},
     'POS': {'NOUN': ('noun', 'n.'), 'ADJ': ('adjective', 'adj.'), 'DET': ('article', 'art.'), 'PRON': ('pronoun', 'pron.'), 'VERB': ('verb', 'v.'), 'ADV': ('adverb', 'adv.'), 'ADP': ('preposition', 'prep.'), 'CCONJ': ('conjunction', 'conj.'), 'PART': ('particle', 'part.'),
             # UD classes the contextual model predicts; without them its
             # prediction for πρίν (SCONJ) or ἐστί (AUX) carried no class at all.
             'SCONJ': ('subordinating conjunction', 'conj.'), 'INTJ': ('interjection', 'interj.'),
             'PROPN': ('proper noun', 'n.'), 'AUX': ('auxiliary verb', 'v.')},
 }
-_KEYS = {'case': 'Case', 'gender': 'Gender', 'gend': 'Gender', 'number': 'Number', 'num': 'Number', 'person': 'Person', 'pers': 'Person', 'tense': 'Tense', 'mood': 'Mood', 'voice': 'Voice', 'verbform': 'VerbForm', 'pofs': 'POS', 'pos': 'POS', 'upos': 'POS'}
+_KEYS = {'case': 'Case', 'gender': 'Gender', 'gend': 'Gender', 'number': 'Number', 'num': 'Number', 'person': 'Person', 'pers': 'Person', 'tense': 'Tense', 'mood': 'Mood', 'voice': 'Voice', 'verbform': 'VerbForm', 'pofs': 'POS', 'pos': 'POS', 'upos': 'POS', 'comp': 'Degree'}
+
+
+from .dialect_rules import adjust as dialect_adjust, gate as dialect_gate,     set_context as dialect_set_context, clear_context as dialect_clear_context
 
 
 def _form(token):
@@ -90,6 +95,8 @@ def canonical_features(row):
                'third-person': 'third person'}.get(label, label) for label in labels]
     labels += description.split(' · ') if description else []
     for field, choices in _VALUES.items():
+        if field == 'Degree':
+            continue  # degree is read from the parser's `comp` only; treebank postags carry stray degree slots (καί)
         known = {canonical for canonical, (long, short) in choices.items()
                  if long in labels or field == 'Person' and short in labels}
         supplied.setdefault(field, set()).update(known)
@@ -103,10 +110,13 @@ def canonical_features(row):
 
 def compact_parse(features):
     # Fixed grammatical display order, independent of upstream JSON order.
-    order = ('Case', 'Gender', 'Person', 'Number', 'Tense', 'Mood', 'Voice', 'VerbForm')
+    order = ('Case', 'Gender', 'Person', 'Number', 'Tense', 'Mood', 'Voice', 'VerbForm', 'Degree')
     labels = [_VALUES[field][features[field]][1] for field in order
               if features.get(field) in _VALUES[field] and _VALUES[field][features[field]][1]]
-    return ' '.join(labels) or _VALUES['POS'].get(features.get('POS'), ('', ''))[1]
+    pos = _VALUES['POS'].get(features.get('POS'), ('', ''))[1]
+    if pos and labels and all(field == 'Degree' for field in order if features.get(field) in _VALUES[field]):
+        return f'{pos} ' + ' '.join(labels)  # an adverb's degree: "adv. sup."
+    return ' '.join(labels) or pos
 
 
 def _lemma_letters(value):
@@ -300,7 +310,27 @@ def _affinity(candidate, syntax):
         score -= 0.2
     if _precedent_agrees(candidate):
         score += 0.6
-    return score
+    return score + dialect_adjust(candidate)
+
+
+def _dialect_gated(token, predicted):
+    """A shallow copy of the token whose candidate lists keep only what the dialect gates allow,
+    and the removed readings as [{rule, lemma, parse_short}] (release R)."""
+    source = [row for row in [*(token.get('source_candidates') or []), *(token.get('contextual_candidates') or [])] if _exact(row, token)]
+    machine = [row for row in (token.get('machine') or {}).get('machine_candidates') or [] if _exact(row, token, True)]
+    kept, removed = dialect_gate(source + machine, token, predicted)
+    if not removed:
+        return token, []
+    out = {id(row) for _, row in removed}
+    copy = dict(token)
+    for key in ('source_candidates', 'contextual_candidates'):
+        copy[key] = [row for row in token.get(key) or [] if id(row) not in out]
+    if token.get('machine'):
+        copy['machine'] = {**token['machine'], 'machine_candidates': [
+            row for row in token['machine'].get('machine_candidates') or [] if id(row) not in out]}
+    notes = [{'rule': rule, 'lemma': row.get('lemma'), 'parse_short': compact_parse(canonical_features(row))}
+             for rule, row in removed]
+    return copy, notes
 
 
 def _ranking_key(lemma):
@@ -1368,6 +1398,7 @@ def interlinear_reading(result):
     ranks = {row.get('token_id'): row for row in (result.get('ranking') or {}).get('items') or []}
     projected, linked, pending = [], {}, []
     for token in original:
+        dialect_clear_context()
         row = {key: deepcopy(token.get(key)) for key in ('id', 'text', 'kind', 'start', 'end', 'start_utf16', 'end_utf16')}
         row['token_id'] = token['id']
         for key in ('form', 'editorial_reconstruction', 'supplied_letters', 'supplied_whole_word', 'uncertain_letters'):
@@ -1388,6 +1419,12 @@ def interlinear_reading(result):
         boundary_uncertain = bool(token.get('lacuna_boundary_uncertain'))
         if token.get('damaged_piece'):
             row['damaged_piece'] = True
+        gated_out = []
+        if not partial:
+            # Release R: dialect grammar gates the candidate parses (backend.dialect_rules)
+            # and weighs them in _affinity through the thread-local word context.
+            token, gated_out = _dialect_gated(token, predicted)
+            dialect_set_context(token)
         chosen, basis, count = (None, 'partial_word', 0) if partial else _choose(
             token, predicted, None if boundary_uncertain else ranks.get(token['id']))
         candidates = [] if partial else [
@@ -1563,6 +1600,10 @@ def interlinear_reading(result):
             for meaning in row['candidate_meanings']:
                 meaning.update(status='conditional_alternative', word_attestation=False,
                                occurrence_verified=False, analysis_scope='conditional_on_word_boundary')
+        if gated_out:
+            row['dialect_rules'] = gated_out
+        if token.get('passage_dialect'):
+            row['passage_dialect'] = token['passage_dialect']
         projected.append(row)
         pending.append((row, token, predicted, partial))
         if predicted and not partial and not conflict and not boundary_uncertain:
@@ -1591,6 +1632,7 @@ def interlinear_reading(result):
         # not settle it; in the second pass only the neighbours' chosen parses
         # count (τὼ ξίφεος: the article follows its noun, not the model's "dative").
         augmented = {'agreement_partners': neighbours}
+        dialect_set_context(token)
         chosen, basis, count = _choose(token, augmented, None)
         if not chosen:
             continue
@@ -1611,6 +1653,7 @@ def interlinear_reading(result):
                    parse_source=parse_source(chosen, engines=(token.get('machine') or {}).get('engines')))
         row.pop('supporting_parse_candidate_ids', None)
         record_precedent(_form(token), chosen)
+    dialect_clear_context()
     edges = []
     for row, predicted in linked.values():
         pair = linked.get((predicted.get('sentence_id'), predicted.get('head')))

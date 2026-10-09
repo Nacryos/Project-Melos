@@ -139,6 +139,14 @@ def headlines(passage_id="", forms=()):
         with connect() as con:
             row = con.execute("SELECT text FROM passages WHERE id=?", (passage_id,)).fetchone()
         text = row[0] if row else ""
+    group = None
+    if passage_id:
+        # Release R: the passage's genre and dialect select the calibration group.
+        from .lemma_calibration import context_group
+        from .passage_dialect import passage_dialect
+        label = index.author_of[pid] if pid < len(index.author_of) else ""
+        info = index.authors.get(label) or {}
+        group = context_group(info.get("genre"), passage_dialect({"author": label, "id": passage_id}))
     out = []
     for t in tokens:
         form, status = names.get(t["form_id"], (None, "unknown"))
@@ -149,7 +157,7 @@ def headlines(passage_id="", forms=()):
                 "lemma": head["lemma"] if head else None, "lemma_id": t["lemma_id"] or None,
                 "gloss": head["gloss"] if head else None, "gloss_source": head["gloss_source"] if head else None,
                 "pos": head["pos"] if head else None, "parses": parses, "confidence": t["confidence"],
-                "probability": probability(t["raw"], t["src"], t.get("flags", 0)) if t["lemma_id"] else None,
+                "probability": probability(t["raw"], t["src"], t.get("flags", 0), group) if t["lemma_id"] else None,
                 "basis": describe_source(t["src"]),
                 "alternatives": [{"lemma": lemmas.get(l, {}).get("lemma"), "lemma_id": l,
                                   "gloss": lemmas.get(l, {}).get("gloss"), "form_probability": round(p, 3),

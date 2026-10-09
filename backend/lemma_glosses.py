@@ -607,7 +607,182 @@ def attach_lemma_glosses(interlinear, lookup, limit=MAX_LOOKUPS, *, syntax=None,
             row["gloss"] = normalise_gloss_case(chosen, row.get("lemma"))
             summary["filled"] += 1
     attach_headlines(interlinear, predictions=predictions, attestations=lemma_attestations, text=text, lookup=cached)
+    summary["derived_links"] = link_derived_forms(interlinear, cached, attestations=lemma_attestations)
     return summary
+
+
+def psilosis_twin(row, lookup, attestations):
+    """Release R: in a Lesbian passage a smooth breathing says nothing (psilosis), so a smooth-breathing
+    headword (ἄρμα "load") yields to its rough-breathing twin (ἅρμα "chariot") when the twin is a
+    headword with more recorded forms in the source index (the frequency prior). Returns the twin."""
+    if row.get("passage_dialect") != "lesbian" or not row.get("lemma") or attestations is None:
+        return None
+    from .aeolic_variants import psilotic_variants
+    own = headword_key(row["lemma"])
+    twins = [item["form"] for item in psilotic_variants(own)]
+    if not twins or (lookup(twins[0]) or {}).get("match") != "exact_headword":
+        return None
+    # the twin must already be one of the word's ranked readings (ἄρμ’: ἅρμα is a recorded analysis)
+    if not any(headword_key(item.get("lemma") or "") == twins[0] for item in row.get("morphology_ranking") or []):
+        return None
+    try:
+        if int(attestations(twins[0]) or 0) > max(0, int(attestations(own) or 0)):
+            return twins[0]
+    except Exception:  # noqa: BLE001 - no prior, no change
+        return None
+    return None
+
+
+# A dialect or poetic form's pointer ("Aeol. for X", "Dor. and Aeol. = X", "Ep., Lesb. ... = X"): the reader shows
+# X. A plain synonym pointer ("= X") keeps its own headword.
+_DIALECT_RELATION = re.compile(r"\b(?:Aeol|Dor|Ep|Ion|Lesb|poet|Boeot|Thess|Lacon|Cypr)\.")
+
+
+def _prefix_entry(entry):
+    """An entry for a prefix ("ὀ-, insep. Prefix", "a)- as a prothetic vowel"), not a word."""
+    text = str(entry.get("rendered_entry_text") or entry.get("entry_text") or "")[:40]
+    return "Prefix" in text or bool(re.match(r"^\S+?[-‐]\s*[,\s]", text))
+
+
+_EQUIVALENCE = re.compile(r"(?:\b(?:Aeol|Dor|Ep|Ion|Lesb|poet|Att|Boeot|Thess|Lacon|Cypr)\.|=|\bfor\b)")
+
+
+def link_derived_forms(interlinear, lookup, attestations=None):
+    """Release R: an adverb, comparative or superlative headword that a dictionary entry calls the
+    derived form of another headword ("ταχέως, Adv. of ταχύς", "μάλιστα, Sup. of μάλα") is shown under
+    that base headword (backend.derived_forms). The row keeps the derived headword and the printed
+    relation in ``derived_from``; its gloss (the derived form's own meaning, "quickly") is kept, and
+    taken from the base entry only when the derived form has none. Ranked parses are relabelled the
+    same way, so the headline, the row lemma and the ranking agree. Returns the number of rows linked."""
+    from .derived_forms import derived_link
+    links = {}
+
+    def link(lemma):
+        key = headword_key(lemma or "")
+        if not key:
+            return None
+        if key not in links:
+            found = lookup(key) or {}
+            entries = found.get("entries") or [] if found.get("match") == "exact_headword" else []
+            links[key] = derived_link(key, entries, lambda base: (lookup(base) or {}).get("match") == "exact_headword")
+        return links[key]
+
+    shown = {}
+
+    def headword_of(lemma):
+        """Release R: a parse lemma that is not itself a dictionary headword is shown as the one it
+        reads to by Lesbian psilosis (ὀ: ὁ) or a dialect correspondence (δᾶμος: δῆμος)."""
+        key = headword_key(lemma or "")
+        if not key or key in shown:
+            return shown.get(key)
+        shown[key] = None
+        found = lookup(key) or {}
+        entries = found.get("entries") or []
+        if found.get("match") == "exact_headword" and not all(_prefix_entry(e) for e in entries):
+            # A pure pointer entry ("πώνω, Dor. and Aeol. = πίνω", "κε ... = ἄν"): its target.
+            pointer = None if any(e.get("dictionary_senses") for e in entries) else _cross_reference(entries)
+            if pointer and _DIALECT_RELATION.search(pointer[2]):
+                for target in pointer[1]:
+                    if (lookup(target) or {}).get("match") == "exact_headword":
+                        shown[key] = headword_key(target)
+                        return shown[key]
+            return None
+        from .aeolic_variants import psilotic_variants, alpha_for_eta
+        options = [item["form"] for item in psilotic_variants(key)] + [item["form"] for item in alpha_for_eta(key)]
+        options += [v["key"] for v in dialect_headword_variants(key)] if len(_fold(key)) >= 4 else []
+        def clean(name):
+            # a real headword: letters only, and not the parse lemma itself
+            letters = unicodedata.normalize("NFD", name or "")
+            ok = name and name != key and all(ch.isalpha() or unicodedata.combining(ch) for ch in letters)
+            return name if ok else None
+        for option in options:
+            found = lookup(option) or {}
+            if found.get("match") == "exact_headword":
+                entries = found.get("entries") or []
+                target = clean(headword_key(entries[0].get("lemma")) if entries else option) or clean(option)
+                if target and _fold(target) == _fold(option):
+                    shown[key] = target
+                    break
+            if found.get("match") == "folded_headword":
+                names = {headword_key(e.get("lemma")) for e in found.get("entries") or []}
+                name = next(iter(names)) if len(names) == 1 else None
+                if name and clean(name) and _fold(name) == _fold(option):
+                    shown[key] = name
+                    break
+        return shown[key]
+
+    linked = 0
+    for reading in (interlinear or {}).get("readings") or []:
+        for row in reading.get("tokens") or []:
+            if row.get("kind") != "word":
+                continue
+            for field in ("lemma", "headline_lemma"):
+                better = headword_of(row.get(field))
+                if better:
+                    row.setdefault("lemma_read_as", {"parse_lemma": row[field], "headword": better})
+                    row[field] = better
+            twin = psilosis_twin(row, lookup, attestations)
+            if twin:
+                own = headword_key(row["lemma"])
+                row["lemma_read_as"] = {"parse_lemma": row["lemma"], "headword": twin, "rule": "lesbian_psilosis_twin"}
+                for field in ("lemma", "headline_lemma"):
+                    if row.get(field) and headword_key(row[field]) == own:
+                        row[field] = twin
+                for item in row.get("morphology_ranking") or []:
+                    if item.get("lemma") and headword_key(item["lemma"]) == own:
+                        item["lemma_as_parsed"] = item["lemma"]
+                        item["lemma"] = twin
+                entry, senses, info = resolve(twin, row, lookup)
+                if entry is not None and senses:
+                    chosen = gloss_from_sense(senses[0], senses)
+                    chosen.update(selection_basis="lesbian_psilosis_twin_first_sense_not_contextual", lemma_dictionary=info)
+                    row["gloss"] = chosen
+            for item in row.get("morphology_ranking") or []:
+                better = headword_of(item.get("lemma"))
+                if better:
+                    item["lemma_as_parsed"] = item["lemma"]
+                    item["lemma"] = better
+            # A dialect headword whose own entry is only a pointer ("πώνω, Dor. and Aeol. = πίνω", "ὄρημι,
+            # Aeol. for ὁράω"): the gloss already came from the target (resolve(), one hop); the row now
+            # shows the target headword too, with the printed relation as a note ("see X" is not one).
+            pointer = ((row.get("gloss") or {}).get("lemma_dictionary") or {}).get("cross_reference") or {}
+            target = pointer.get("target_headword")
+            if target and row.get("lemma") and _DIALECT_RELATION.search(pointer.get("printed_relation") or "")                     and headword_key(target) != headword_key(row["lemma"]):
+                own = headword_key(row["lemma"])
+                row["variant_of"] = {"headword": own, "relation": pointer.get("printed_relation"),
+                                     "entry_id": pointer.get("from_entry_id")}
+                for field in ("lemma", "headline_lemma"):
+                    if row.get(field) and headword_key(row[field]) == own:
+                        row[field] = headword_key(target)
+                for item in row.get("morphology_ranking") or []:
+                    if item.get("lemma") and headword_key(item["lemma"]) == own:
+                        item["lemma_as_parsed"] = item["lemma"]
+                        item["lemma"] = headword_key(target)
+            found = None
+            for field in ("lemma", "headline_lemma"):
+                target = link(row.get(field))
+                if target:
+                    found = found or {**target, "headword": headword_key(row[field])}
+                    row[field] = target["base"]
+            for item in row.get("morphology_ranking") or []:
+                target = link(item.get("lemma"))
+                if target:
+                    item["lemma_as_parsed"] = item["lemma"]
+                    item["lemma"] = target["base"]
+            row["headline_alternatives"] = [a for a in row.get("headline_alternatives") or []
+                                            if headword_key(a) != headword_key(row.get("headline_lemma") or "")]
+            if found:
+                row["derived_from"] = found
+                gloss = row.get("gloss") or {}
+                if not gloss.get("text"):
+                    entry, senses, info = resolve(found["base"], row, lookup)
+                    if entry is not None and senses:
+                        chosen = gloss_from_sense(senses[0], senses)
+                        chosen.update(selection_basis="derived_form_base_headword_first_sense_not_contextual",
+                                      lemma_dictionary=info)
+                        row["gloss"] = chosen
+                linked += 1
+    return linked
 
 
 def _starts_with_vowel(text):

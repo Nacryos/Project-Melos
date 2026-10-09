@@ -64,6 +64,76 @@ def _nfd(text):
     return unicodedata.normalize("NFD", text)
 
 
+def _unaccented(text):
+    return unicodedata.normalize("NFC", "".join(c for c in unicodedata.normalize("NFD", text)
+                                                if c not in "́̀͂"))
+
+
+_LEXICAL_UNACCENTED = {}
+for _key, _value in LEXICAL.items():
+    _LEXICAL_UNACCENTED.setdefault(_unaccented(_key), []).append(_value)
+
+
+def lexical_variant(form):
+    """The lexical-table equivalent of a printed form (release R): exact, else the same letters and
+    breathing with another accent (αἰ printed without the accent of the table's αἴ), when that
+    names one equivalent. None otherwise."""
+    form = unicodedata.normalize("NFC", form or "")
+    if form in LEXICAL:
+        return LEXICAL[form]
+    found = {value[0]: value for value in _LEXICAL_UNACCENTED.get(_unaccented(form), [])}
+    return next(iter(found.values())) if len(found) == 1 else None
+
+
+def lesbian_fallback_variants(form):
+    """Release R: spellings a Lesbian form may stand for even when the parser reads the printed letters:
+    psilosis (psilotic_variants) and the recessive (barytone) accent: the acute moved one syllable
+    later (ἄνθει for ἀνθεῖ is first rewritten ἀνθέι, then circumflex for acute) and a circumflex
+    printed for the standard acute. backend.dialect_rules keeps their readings only as a fallback."""
+    found, seen = [], {_nfc(form)}
+    for item in psilotic_variants(form):
+        seen.add(item["form"]); found.append(item)
+    shifted = _accent_shifted_right(form)
+    candidates = []
+    if len(_vowel_groups(_nfd(form))) < 2:
+        shifted = None  # a monosyllable has no recessive accent to undo
+    if shifted:
+        candidates.append((shifted, "recessive_accent"))
+        decomposed = _nfd(shifted)
+        groups = _vowel_groups(decomposed)
+        last = decomposed[groups[-1][0]:groups[-1][1]] if groups else ""
+        letters = [c for c in last if unicodedata.category(c).startswith("L")]
+        if groups and ACUTE in last and (len(letters) == 2 or (letters and letters[0].lower() in "ηω")):
+            # an acute on a final long vowel or diphthong of a contract verb is a circumflex (ἀνθεῖ)
+            candidates.append((_nfc(decomposed.replace(ACUTE, CIRCUMFLEX)), "recessive_accent"))
+    if CIRCUMFLEX in _nfd(form) and len(_vowel_groups(_nfd(form))) >= 2:
+        candidates.append((_nfc(_nfd(form).replace(CIRCUMFLEX, ACUTE, 1)), "circumflex_for_acute"))
+    for spelling, rule in candidates:
+        if spelling not in seen:
+            seen.add(spelling)
+            found.append({"form": spelling, "rule": rule, "tier": "dialect_normalised_query",
+                          "note": "Lesbian recessive accent: the edition accents the word earlier than the standard spelling"})
+    return found
+
+
+def psilotic_variants(form):
+    """Release R: in a Lesbian text a smooth breathing says nothing (psilosis), so a form the parser
+    reads with its smooth breathing is also queried with the rough one (οἶ: the relative οἷ as well
+    as the article; ἄρμ’ as ἅρμ’). The variant carries the psilosis rule and ranks as normalised."""
+    swapped = _initial_breathing_swap(form)
+    if not swapped:
+        # a diphthong carries the breathing on its second letter (οἶ, αἰ, εὐ)
+        decomposed = _nfd(form)
+        if (len(decomposed) > 2 and decomposed[0].lower() in "αεο" and decomposed[1].lower() in "ιυ"
+                and decomposed[2] == SMOOTH):
+            swapped = _nfc(decomposed[:2] + ROUGH + decomposed[3:])
+    if not swapped:
+        return []
+    rule = "psilotic_rho" if _nfd(form)[0].lower() == "ρ" else "psilosis"
+    return [{"form": swapped, "rule": rule, "tier": "dialect_normalised_query",
+             "note": "Lesbian psilosis: the edition prints a smooth breathing where the standard spelling has a rough one"}]
+
+
 def _nfc(text):
     return unicodedata.normalize("NFC", text)
 
@@ -270,6 +340,13 @@ def variants(form):
             seen.add(candidate)
             found.append({"form": candidate, "rule": rule, "note": note, "tier": "dialect_normalised_query"})
 
+    decomposed_form = _nfd(form)
+    if sum(decomposed_form.count(mark) for mark in (ACUTE, GRAVE, CIRCUMFLEX)) >= 2 and ACUTE in decomposed_form:
+        # Release R: a word before an enclitic takes a second accent on its last syllable (δεῦρύ ποτ’,
+        # Smyth § 183); the dictionary spelling has only the first.
+        last = decomposed_form.rindex(ACUTE)
+        add(_nfc(decomposed_form[:last] + decomposed_form[last + 1:]), "enclitic_accent_dropped",
+            "Second accent from a following enclitic removed")
     shifted = _accent_shifted_right(form)
     if shifted:
         add(shifted, "recessive_accent", "Lesbian recessive accent: the edition accents the word one syllable earlier than the standard spelling")
@@ -305,7 +382,7 @@ def variants(form):
         bare_shifted = _accent_shifted_right(bare)
         if bare_shifted:
             add(bare_shifted, "elision_mark_dropped+recessive_accent", "Elision mark dropped and the Lesbian recessive accent undone")
-    lexical = LEXICAL.get(form)
+    lexical = lexical_variant(form)
     if lexical:
         add(lexical[0], "aeolic_lexical", lexical[1])
     if _nfd(form)[0].lower() == "ο" and SMOOTH in _nfd(form)[:3] and len(form) > 3 and _nfd(form)[2].lower() in "ηε":
