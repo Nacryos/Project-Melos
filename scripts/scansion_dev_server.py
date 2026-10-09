@@ -1,6 +1,6 @@
 """Local preview of the scanner pages (worktree only; never deployed).
 
-    python scripts/scansion_dev_server.py            # http://127.0.0.1:8790/scan.html and /rules.html
+    python scripts/scansion_dev_server.py            # http://127.0.0.1:8795/scan.html and /rules.html
 
 Serves backend/scansion/api.py (POST /api/scan, GET /api/scan/rules, rule validation and saving)
 and the two prototype pages from the worktree root. Saving the rules file is enabled here only.
@@ -38,5 +38,5 @@ def page(page: str):
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", "8790"))
+    port = int(os.environ.get("PORT", "8795"))
     uvicorn.run(app, host="127.0.0.1", port=port, log_level="warning")

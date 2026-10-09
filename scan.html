@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Greek Scanner</title>
+<link rel="icon" href="data:,">
 <style>
 :root {
   --bg: #fbfaf7; --fg: #1d1c1a; --muted: #6b6760; --line: #e3dfd6; --panel: #ffffff;
@@ -29,11 +30,13 @@ select { background: var(--panel); color: var(--fg); border: 1px solid var(--lin
 .out { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
 .line { margin: 6px 0 14px; }
 .verse { font: 25px/2.3 var(--font-greek); white-space: pre-wrap; word-break: break-word; }
-.u { position: relative; border-radius: 4px; padding: 1px 1px 2px; cursor: pointer; border-bottom: 3px solid currentColor; }
+.u { position: relative; border-radius: 4px; padding: 1px 1px 2px; margin-right: 1px; cursor: pointer; border-bottom: 3px solid currentColor; }
 .u:hover, .u.sel { outline: 2px solid var(--accent); outline-offset: 1px; }
-.pct { position: absolute; left: 50%; transform: translateX(-50%); top: 1.65em; font: 11px/1 system-ui, sans-serif; color: var(--muted); white-space: nowrap; display: none; }
-.showpct .pct { display: block; }
-.showpct .verse { line-height: 2.8; }
+.pct { display: none; font: 11px/1 system-ui, sans-serif; color: var(--muted); white-space: nowrap; }
+.showpct .u { display: inline-flex; flex-direction: column; align-items: center; vertical-align: top; line-height: 1.5; }
+.showpct .pct { display: block; margin-top: 2px; }
+.showpct .verse { line-height: 1.5; }
+.showpct .gap { display: inline-block; vertical-align: top; line-height: 1.5; white-space: pre; }
 .gap { color: var(--muted); }
 .meta { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; }
 .pattern { font: 15px/1.4 ui-monospace, "Cascadia Mono", monospace; letter-spacing: 2px; color: var(--fg); }
