@@ -50,12 +50,14 @@
     clear(host); host.append(node('p', className, content));
   }
   function errorText(error) { return error instanceof Error ? error.message : String(error); }
-  async function api(path, params = {}) {
+  // `priority` is the fetch priority hint ('high' for the word under the
+  // pointer, 'low' for idle prefetch); `signal` cancels a stale prefetch.
+  async function api(path, params = {}, { signal, priority } = {}) {
     const url = window.melosApiUrl(path);
     for (const [key, value] of Object.entries(params)) {
       if (value !== undefined && value !== null && value !== '') url.searchParams.set(key, String(value));
     }
-    const response = await fetch(url, { headers: { Accept: 'application/json' } });
+    const response = await fetch(url, { headers: { Accept: 'application/json' }, ...(signal ? { signal } : {}), ...(priority ? { priority } : {}) });
     if (!response.ok) {
       let detail = '';
       try { const body = await response.json(); detail = [body?.detail, body?.error].find(value => typeof value === 'string' && value) || ''; } catch { /* HTTP status remains useful. */ }
@@ -63,8 +65,8 @@
     }
     return response.json();
   }
-  async function apiPost(path, body, { signal } = {}) {
-    const response = await fetch(window.melosApiUrl(path), { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal });
+  async function apiPost(path, body, { signal, priority } = {}) {
+    const response = await fetch(window.melosApiUrl(path), { method: 'POST', headers: { Accept: 'application/json', 'Content-Type': 'application/json' }, body: JSON.stringify(body), signal, ...(priority ? { priority } : {}) });
     if (!response.ok) {
       let detail = '', failure = null;
       try { failure = await response.json(); detail = failure.detail || failure.error || failure.status || ''; } catch {}
@@ -76,7 +78,7 @@
   state.passageAnalysis = window.MelosPassageAnalysis?.mount({
     root: ui.text, toolbar: ui.selectionActions, getPassage: () => state.passage,
     selectionHost: ui.passage.querySelector('.passage-heading > div'), onSelectionChange: () => updateSelection(true),
-    post: apiPost, node, safeLink, inspectWord: form => inspectWord(form)
+    post: harvestingPost, node, safeLink, inspectWord: form => inspectWord(form)
   });
   state.wordContextSession = window.MelosWordContext?.createSession({ post: apiPost });
   if (state.passageAnalysis) ui.text.closest('.text-frame').before(ui.selectionActions);
@@ -253,6 +255,11 @@
   }
   function resetPassageContext(loading = false) {
     state.machineAnalysisCancel?.();
+    // Prefetches for the previous passage are stale now (a clicked word's own
+    // lookups are claimed and finish).
+    prefetcher()?.cancel();
+    globalThis.clearTimeout?.(state.hoverTimer);
+    state.batchHeadlines = null;
     state.wordContextSession?.select(null);
     window.MelosNaturePresets?.select(null);
     state.passageAnalysis?.reset();
@@ -428,9 +435,17 @@
       button.dataset.lookupGroup = String(word.group);
       button.dataset.sourceStart = String(word.start);
       button.dataset.sourceEnd = String(word.end);
+      if (!word.joined && !word.fragmentaryJoinRejected) button.dataset.lookupForm = word.form;
       button.setAttribute('aria-label', `Inspect ${word.form}${word.editorial ? `, printed ${word.text}` : ''}${word.fragmentaryJoinRejected
         ? ', printed segment; complete word not established'
         : word.joined ? `, printed segment ${word.text}, divided across source lines` : ''}`);
+      // Predictive loading: the word under the pointer (after a short dwell)
+      // or under the finger (at once) is fetched before the click lands.
+      if (!word.joined && !word.fragmentaryJoinRejected) {
+        button.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') hoverPrefetch(button, word.form, 80); });
+        button.addEventListener('pointerleave', () => globalThis.clearTimeout?.(state.hoverTimer));
+        button.addEventListener('touchstart', () => hoverPrefetch(button, word.form, 0), { passive: true });
+      }
       button.addEventListener('click', event => {
         if (state.passageAnalysis?.ignoreClick?.(event)) return;
         const selection = window.getSelection?.();
@@ -795,6 +810,7 @@
       ui.subtitle.textContent = passage.citation || 'Citation not supplied by source';
       renderPassageText(passage);
       state.passageAnalysis?.bind(passage);
+      schedulePassagePrefetch(passage, sequence);
       renderRelated(passage.related);
       renderMirrors(passage.mirrors);
       renderProvenance(passage);
@@ -2159,10 +2175,18 @@
     const pending = node('p', 'inspector-message melos-loading', 'Looking up recorded analyses…');
     morphologyHost.append(pending);
     const sequence = ++state.wordSequence;
-    let headlineSettled = false, headlineValue = null, wordData = null, wiktionaryData = null;
+    let headlineSettled = false, headlineValue = null, wordData = null, wiktionaryData = null, dictionaryLookupFailed = false;
+    dictionaryHost.append(node('p', 'inspector-message melos-loading word-dictionary-pending', 'Looking up the dictionaries…'));
     // Dictionaries follow the headline's headword when one is known; otherwise
     // the form lookup's own dictionary matches are shown, as before.
     const lemmaEntries = new Map();
+    const loadedEntries = () => [...(wordData?.lexicon_entries || []), ...[...lemmaEntries.values()].flat()];
+    // The other readings of a tie get their short glosses from entries loaded later.
+    const refreshHeadline = () => {
+      if (!renderHeadline || !headlineValue || sequence !== state.wordSequence) return;
+      const enriched = panel?.withAlternativeGlosses?.(headlineValue, loadedEntries()) || headlineValue;
+      if (enriched !== headlineValue) { headlineValue = enriched; renderHeadline(headlineHost, enriched, node); }
+    };
     const drawDictionaries = () => {
       if (sequence !== state.wordSequence) return;
       const lemma = headlineValue?.lemma || '';
@@ -2170,13 +2194,14 @@
       clear(dictionaryHost);
       if (blocks.length) { panel.renderDictionaryBlocks(dictionaryHost, blocks, node, safeLink); return; }
       if (wordData) renderDictionaryPreview(dictionaryHost, wordData, { openEntries: false, wiktionary: wiktionaryData });
+      else if (!dictionaryLookupFailed) dictionaryHost.append(node('p', 'inspector-message melos-loading word-dictionary-pending', 'Looking up the dictionaries…'));
       // Only after the form lookup (which already carried `lemma=`) has none.
       if (lemma && panel?.dictionaryBlocks && wordData && !lemmaEntries.has(lemma)) {
         lemmaEntries.set(lemma, []);
         const loading = node('p', 'inspector-message melos-loading', `Looking up ${lemma} in the dictionaries…`);
         if (!dictionaryHost.children.length) dictionaryHost.append(loading);
-        api('/api/word', { form: lemma, lemma }).then(data => {
-          lemmaEntries.set(lemma, Array.isArray(data?.lexicon_entries) ? data.lexicon_entries : []); drawDictionaries();
+        wordLookup({ form: lemma, lemma }).then(data => {
+          lemmaEntries.set(lemma, Array.isArray(data?.lexicon_entries) ? data.lexicon_entries : []); drawDictionaries(); refreshHeadline();
           if (sequence === state.wordSequence && !dictionaryHost.children.length) message(dictionaryHost, `No dictionary entry for ${lemma} was found.`);
         }).catch(() => {
           loading.remove();
@@ -2197,9 +2222,17 @@
     };
     const showHeadline = (value, final = true) => {
       if (!renderHeadline || !value || sequence !== state.wordSequence || headlineSettled) return;
-      headlineSettled = final; headlineValue = value; renderHeadline(headlineHost, value, node);
-      drawDictionaries(); reconcile();
+      const previous = headlineValue?.lemma || '';
+      headlineSettled = final; headlineValue = panel?.withAlternativeGlosses?.(value, loadedEntries()) || value;
+      renderHeadline(headlineHost, headlineValue, node);
+      // A later headword (the passage reading after the index's) swaps the dictionaries.
+      if (!previous || previous !== headlineValue.lemma || final) drawDictionaries();
+      reconcile();
     };
+    // What is already known is shown at once: a cached passage reading, or the
+    // corpus index's headline until the passage reading arrives.
+    const known = button && !joined && !fragmentSegment ? knownHeadline(button) : null;
+    if (known) showHeadline(known.value, known.final);
     const contextualHeadline = button && !joined && !fragmentSegment
       ? passageWordHeadline(button, form).catch(() => null) : Promise.resolve(null);
     contextualHeadline.then(value => showHeadline(value));
@@ -2227,21 +2260,23 @@
       requestAnimationFrame(() => ui.inspector.closest('.inspector').scrollIntoView({ behavior: 'smooth', block: 'start' }));
     }
     try {
-      // The headline's headword goes to /api/word as `lemma=`, so the
+      // A headword already known goes to /api/word as `lemma=`, so the
       // dictionaries and analyses below follow it (σ’ read as σύ, not σός).
-      // A slow headline does not hold the lookup for more than 2.5 s.
-      const lemma = await headlineLemma(contextualHeadline, 2500);
+      // The lookup never waits for a slow headline; the dictionaries follow
+      // the headword when it arrives.
+      const lemma = headlineValue?.lemma || await headlineLemma(contextualHeadline);
       if (sequence !== state.wordSequence) return;
-      const data = await api('/api/word', { form, passage_id: passageId, ...(lemma ? { lemma } : {}) });
+      const data = await wordLookup({ form, passage_id: passageId, ...(lemma ? { lemma } : {}) });
       if (sequence !== state.wordSequence) return;
       pending.remove();
-      // Fall back to the form lookup when no passage row arrives, or
-      // provisionally while a slow contextual reading is still on its way.
+      // Fall back to the form lookup when no passage row arrives; meanwhile
+      // its headword is shown provisionally, and only when it names one.
       const fallbackHeadline = wordHeadlineFallback(form, data, fragmentSegment);
       contextualHeadline.then(value => { if (!value) showHeadline(fallbackHeadline); });
-      globalThis.setTimeout?.(() => showHeadline(fallbackHeadline, false), 4000);
+      if (fallbackHeadline.lemma && !headlineValue) showHeadline(fallbackHeadline, false);
+      else globalThis.setTimeout?.(() => showHeadline(fallbackHeadline, false), 4000);
       if (data.normalized && data.normalized !== form) morphologyHost.append(node('p', 'word-normalized', `Searched without accents and marks as ${data.normalized}`));
-      wordData = data; drawDictionaries();
+      wordData = data; drawDictionaries(); refreshHeadline();
       const hasLexicalVariant = !fragmentSegment && renderLexicalVariants(morphologyHost, data) === true;
       const hasLinkedMeanings = !fragmentSegment && Boolean(window.MelosDictionaryPreview?.linkedDictionaryGroups?.(form, data.linked_dictionary)?.length);
       const wordStillCurrent=() => sequence===state.wordSequence && !state.passageLoading && (!passageId || state.passage?.id===passageId);
@@ -2361,6 +2396,8 @@
       reconcile();
     } catch (error) {
       contextualHeadline.then(value => { if (!value) showHeadline({ form, note: 'Lookup unavailable' }); });
+      dictionaryLookupFailed = true;
+      for (const line of [...(dictionaryHost.querySelectorAll?.('.word-dictionary-pending') || [])]) line.remove();
       if (sequence === state.wordSequence) {
         message(morphologyHost, `Word lookup unavailable: ${errorText(error)}`, 'warning error-message');
         if (!dictionaryHost.children.length) message(dictionaryHost, 'The dictionary lookup for this form failed. Choose the word again to retry.', 'warning error-message');
@@ -2375,32 +2412,174 @@
     const label = typeof given?.label === 'string' ? given.label.trim() : '';
     return label ? (window.MelosWordPanel?.readableSourceLabel?.(label) || label) : '';
   }
-  // The headline's headword, or '' when none arrives within `wait` ms.
-  function headlineLemma(headline, wait) {
+  // The headline's headword if it is already known (cached or settled within
+  // the current task), else ''. The form lookup never waits for it: a headword
+  // that arrives later swaps the dictionaries in.
+  function headlineLemma(headline) {
     const lemma = Promise.resolve(headline).then(value => typeof value?.lemma === 'string' ? value.lemma.trim() : '', () => '');
     if (!globalThis.setTimeout) return lemma;
-    let timer;
-    return Promise.race([lemma, new Promise(resolve => { timer = globalThis.setTimeout(() => resolve(''), wait); })])
-      .finally(() => globalThis.clearTimeout?.(timer));
+    return Promise.race([lemma, new Promise(resolve => globalThis.setTimeout(() => resolve(''), 0))]);
   }
-  async function passageWordHeadline(button, form) {
+  // Loading layer (js/word-prefetch.js): LRU + sessionStorage, one request per
+  // key, low-priority queue cancelled on passage change. Null when absent; the
+  // reader then calls the API directly.
+  function prefetcher() {
+    if (state.wordPrefetch !== undefined) return state.wordPrefetch;
+    const tools = window.MelosWordPrefetch;
+    let storage = null;
+    try { storage = window.sessionStorage || null; storage?.getItem('melos:probe'); } catch { storage = null; }
+    state.wordPrefetch = tools ? tools.create({ storage }) : null;
+    return state.wordPrefetch;
+  }
+  // Cache keys carry the API's identity, so a new backend release starts clean.
+  function apiVersion() {
+    const status = state.apiStatus;
+    return status ? [status.api_version || status.release || status.version || '', status.passages || ''].join('.') : '';
+  }
+  const headlineKey = (passageId, start) => `head|${apiVersion()}|${passageId}|${start}`;
+  const wordKey = params => `word|${apiVersion()}|${params.passage_id || ''}|${params.form}|${params.lemma || ''}`;
+  // A headline value from one interlinear row, or null.
+  function headlineFromInterlinearRow(row) {
+    const base = window.MelosPassageAnalysis?.headlineFromRow?.(row);
+    return base ? { ...base, ...(window.MelosWordPanel?.headlineDetail?.(row) || {}) } : null;
+  }
+  // Every phrase or passage analysis the reader already receives also fills the
+  // headline cache for the words it read, so a later click on them is instant.
+  function harvestHeadlines(data) {
+    const cache = prefetcher(), passageId = data?.passage?.id;
+    if (!cache || !passageId) return;
+    for (const reading of (data.interlinear?.readings || []).slice(0, 1)) for (const row of reading.tokens || []) {
+      if (row?.kind !== 'word' || !Number.isInteger(row.start_utf16)) continue;
+      const value = headlineFromInterlinearRow(row);
+      if (value) cache.put(headlineKey(passageId, row.start_utf16), value);
+    }
+  }
+  async function harvestingPost(path, body, options) {
+    const data = await apiPost(path, body, options);
+    if (path === '/api/analyze-passage') try { harvestHeadlines(data); } catch { /* harvesting is best effort */ }
+    return data;
+  }
+  // The contextual headline already known for a passage word (no request):
+  // { value, final } — final for the passage reading, provisional for the
+  // batch index headline.
+  function knownHeadline(button) {
+    const start = Number(button?.dataset?.sourceStart), end = Number(button?.dataset?.sourceEnd), passage = state.passage;
+    if (!passage?.id || !Number.isInteger(start)) return null;
+    const cached = prefetcher()?.peek(headlineKey(passage.id, start));
+    if (cached && !cached.none) return { value: cached, final: true };
+    const batch = state.batchHeadlines?.passageId === passage.id ? state.batchHeadlines.values.get(`${start}:${end}`) : null;
+    return batch?.lemma ? { value: batch, final: false } : null;
+  }
+  // Headline for a passage word: the exact-span interlinear row (headword,
+  // short dictionary gloss, contextually ranked parse) from the same endpoint
+  // as the phrase reading. Cached per span; null when no row is returned.
+  async function passageWordHeadline(button, form, priority = 'high', claim = true) {
     const passage = state.passage, start = Number(button?.dataset?.sourceStart), end = Number(button?.dataset?.sourceEnd);
-    const fromRow = window.MelosPassageAnalysis?.headlineFromRow;
-    if (!fromRow || !passage?.id || typeof passage.text !== 'string' || !Number.isInteger(start) || !Number.isInteger(end)
+    if (!window.MelosPassageAnalysis?.headlineFromRow || !passage?.id || typeof passage.text !== 'string' || !Number.isInteger(start) || !Number.isInteger(end)
       || start < 0 || end <= start || end > passage.text.length) return null;
-    const key = `${passage.id}:${start}:${end}`, cache = state.headlineCache ??= new Map();
-    if (cache.has(key)) return cache.get(key);
-    const data = await apiPost('/api/analyze-passage', { version: 1, passage_id: passage.id, start, end, offset_unit: 'utf16',
-      selected_text: passage.text.slice(start, end), fetch_machine: false, rerank: false });
-    if (data?.passage?.id !== passage.id) return null;
-    const rows = (data.interlinear?.readings?.[0]?.tokens || []).filter(row => row.kind === 'word');
-    const row = rows.find(item => item.start_utf16 === start) || (rows.length === 1 ? rows[0] : null);
-    const base = fromRow(row);
-    if (!base) return null;
-    const value = { ...base, ...(window.MelosWordPanel?.headlineDetail?.(row) || {}) };
-    cache.set(key, value);
-    while (cache.size > 64) cache.delete(cache.keys().next().value);
-    return value;
+    const fetchRow = async ({ signal, priority: hint } = {}) => {
+      const data = await apiPost('/api/analyze-passage', { version: 1, passage_id: passage.id, start, end, offset_unit: 'utf16',
+        selected_text: passage.text.slice(start, end), fetch_machine: false, rerank: false }, { signal, priority: hint });
+      if (data?.passage?.id !== passage.id) return { none: true };
+      const rows = (data.interlinear?.readings?.[0]?.tokens || []).filter(row => row.kind === 'word');
+      return headlineFromInterlinearRow(rows.find(item => item.start_utf16 === start) || (rows.length === 1 ? rows[0] : null)) || { none: true };
+    };
+    const cache = prefetcher();
+    const value = cache ? await cache.load(headlineKey(passage.id, start), fetchRow, { priority, claim, group: passage.id }) : await fetchRow();
+    return value && !value.none ? value : null;
+  }
+  // /api/word through the cache. A lookup with `lemma=` falls back to the same
+  // form's cached lookup without it (the dictionaries then follow the headword).
+  function wordLookup(params, priority = 'high', claim = true) {
+    const cache = prefetcher();
+    if (!cache) return api('/api/word', params);
+    const exact = cache.peek(wordKey(params));
+    if (exact) return Promise.resolve(exact);
+    if (params.lemma) {
+      const plain = { ...params, lemma: '' }, loose = cache.peek(wordKey(plain));
+      if (loose) return Promise.resolve(loose);
+      if (cache.pending(wordKey(plain)) && priority === 'high') return cache.load(wordKey(plain), () => api('/api/word', plain), { priority, claim });
+    }
+    return cache.load(wordKey(params), ({ signal, priority: hint } = {}) => api('/api/word', params, { signal, priority: hint }),
+      { priority, claim, group: params.passage_id || '' });
+  }
+  // The word under the pointer or finger: its passage reading and /api/word,
+  // at high priority but unclaimed (a passage change cancels them). A per-
+  // passage budget bounds what a wandering pointer can request.
+  function hoverPrefetch(button, form, delay) {
+    const cache = prefetcher(), policy = state.prefetchPolicy;
+    if (!cache || !policy?.hover || !form) return;
+    globalThis.clearTimeout?.(state.hoverTimer);
+    state.hoverTimer = globalThis.setTimeout?.(() => {
+      const passage = state.passage, start = Number(button.dataset.sourceStart);
+      if (!passage?.id || state.passageLoading || !ui.text.contains(button) || state.activeWord === button) return;
+      const known = knownHeadline(button), lemma = known?.final ? known.value.lemma || '' : '';
+      const params = { form, passage_id: passage.id, ...(lemma ? { lemma } : {}) };
+      const needHead = !known?.final && !cache.pending(headlineKey(passage.id, start));
+      const needWord = !cache.peek(wordKey(params)) && !cache.peek(wordKey({ ...params, lemma: '' })) && !cache.pending(wordKey(params));
+      if ((!needHead && !needWord) || (state.hoverBudget ?? 0) <= 0) return;
+      state.hoverBudget -= 1;
+      if (needHead) passageWordHeadline(button, form, 'high', false).catch(() => {});
+      if (needWord) wordLookup(params, 'high', false).catch(() => {});
+    }, delay);
+  }
+  // POST /api/words/headlines (release O), detected at run time: a missing
+  // route (404 "Not Found" or 405) is remembered for this session and the
+  // reader keeps to the per-word endpoints.
+  async function loadBatchHeadlines(passage) {
+    const cache = prefetcher(), tools = window.MelosWordPrefetch, flag = 'melos:headlines-endpoint';
+    const absent = () => { try { return Number(window.sessionStorage?.getItem(flag)) > Date.now() - 600000; } catch { return false; } };
+    if (!cache || !tools || absent()) return null;
+    const payload = await cache.load(`batch|${apiVersion()}|${passage.id}`, async ({ signal, priority } = {}) => {
+      try { return await apiPost('/api/words/headlines', { passage_id: passage.id }, { signal, priority }); }
+      catch (error) {
+        if (error?.status === 405 || error?.status === 501 || (error?.status === 404 && /^not found$/i.test(String(error.response?.detail || '')))) {
+          try { window.sessionStorage?.setItem(flag, String(Date.now())); } catch { /* memory only */ }
+        }
+        if (error?.status === 404 || error?.status === 405 || error?.status === 501) return { none: true };
+        throw error;
+      }
+    }, { priority: 'low', claim: false, group: passage.id });
+    if (!payload || payload.none) return null;
+    return { passageId: passage.id, values: tools.batchHeadlines(payload, passage.text, window.MelosWordPanel?.plainParse) };
+  }
+  // On opening a passage, in idle time and at low priority: the batch headlines
+  // (one request), then the words most likely to be clicked (content words,
+  // rarer spellings first; frequent particles are left to the click). Bounded
+  // by the connection policy; nothing speculative under Data Saver.
+  function schedulePassagePrefetch(passage, sequence) {
+    const cache = prefetcher(), tools = window.MelosWordPrefetch;
+    if (!cache || !tools || passage?.language !== 'grc' || !passage.id || typeof passage.text !== 'string') return;
+    const policy = state.prefetchPolicy = tools.networkPolicy(navigator.connection);
+    cache.setLimit(policy.maxLow);
+    state.hoverBudget = 24;
+    const current = () => sequence === state.passageSequence && state.passage?.id === passage.id;
+    tools.whenIdle(async () => {
+      if (!current()) return;
+      if (policy.batch) {
+        const batch = await loadBatchHeadlines(passage).catch(() => null);
+        if (!current()) return;
+        state.batchHeadlines = batch;
+      }
+      if (!policy.idle) return;
+      tools.whenIdle(() => {
+        if (!current()) return;
+        const seen = new Map(), words = [];
+        ui.text.querySelectorAll('button.word').forEach((button, index) => {
+          const form = button.dataset.lookupForm;
+          if (!form) return;
+          seen.set(form, (seen.get(form) || 0) + 1);
+          words.push({ button, form, index, key: `${button.dataset.sourceStart}:${button.dataset.sourceEnd}` });
+        });
+        for (const word of words) word.repeated = seen.get(word.form) > 1;
+        const ranked = tools.rankWords(words, { headlines: state.batchHeadlines?.values, limit: policy.idle });
+        for (const word of ranked) {
+          const known = knownHeadline(word.button), lemma = known?.value?.lemma || '';
+          if (!state.batchHeadlines && !known) passageWordHeadline(word.button, word.form, 'low', false).catch(() => {});
+          wordLookup({ form: word.form, passage_id: passage.id, ...(lemma && known.final ? { lemma } : {}) }, 'low', false).catch(() => {});
+        }
+      });
+    });
   }
   // Headline for lookups without a passage reading, from /api/word: a headword
   // only when every exact candidate names the same one; its gloss is the same
@@ -2408,27 +2587,33 @@
   function wordHeadlineFallback(form, data, fragment) {
     const nearby = data?.analysis_match_status === 'spelling_suggestions_only';
     const candidates = fragment || nearby ? [] : [...(data?.contextual_candidates || []), ...(Array.isArray(data?.candidates) ? data.candidates : [])];
-    const lemmas = [...new Set(candidates.map(item => item.lemma).filter(Boolean))];
-    const value = { form, lemma: '', gloss: '', parse: fragment ? 'printed segment · no analysis' : '',
-      note: fragment ? 'Printed segment · no headword' : lemmas.length > 1 ? `${lemmas.length} possible headwords` : '' };
-    if (lemmas.length > 1) {
-      const seen = new Set();
-      value.alternatives = candidates.filter(item => item.lemma && !seen.has(`${item.lemma}\0${item.analysis_text || ''}`) && seen.add(`${item.lemma}\0${item.analysis_text || ''}`))
-        .map(item => ({ lemma: item.lemma, parse: String(item.analysis_text || '').replace(/,(?=\S)/g, ', ') }));
-      value.ranked = false;
-    }
-    if (lemmas.length !== 1) return value;
-    const own = candidates.filter(item => item.lemma === lemmas[0]);
+    // Candidates that carry a parse decide a tie; bare headword matches do not.
+    const analysed = candidates.filter(item => item.lemma && item.analysis_text);
+    const pool = analysed.length ? analysed : candidates.filter(item => item.lemma);
+    const counts = new Map();
+    for (const item of pool) counts.set(item.lemma, (counts.get(item.lemma) || 0) + 1);
+    // Without a passage to rank them, the headword with most analyses comes first.
+    const lemmas = [...counts.keys()].sort((a, b) => counts.get(b) - counts.get(a));
+    const value = { form, lemma: '', gloss: '', parse: fragment ? 'printed segment · no analysis' : '', note: fragment ? 'Printed segment · no headword' : '' };
+    if (!lemmas.length) return value;
+    const top = lemmas[0], own = pool.filter(item => item.lemma === top);
+    const plainParse = text => String(text || '').replace(/,(?=\S)/g, ', ');
     const parses = [...new Set(own.map(item => item.analysis_text).filter(Boolean))];
     const sources = [...new Set(own.map(item => item.source).filter(Boolean))];
     const plainSource = name => window.MelosWordPanel?.plainSource?.(name) || name;
     const given = parseSourceText(data.parse_source);
-    return { ...value, lemma: lemmas[0], gloss: candidateDictionaryExcerpt(own[0], data.lexicon_entries, form).text || '',
+    // A tie keeps a headline (the first) and lists every other headword with its
+    // first parse and the source excerpt the candidate cards show.
+    const others = lemmas.slice(1).map(lemma => {
+      const first = pool.find(item => item.lemma === lemma);
+      return { lemma, parse: plainParse(first.analysis_text), gloss: candidateDictionaryExcerpt(first, data.lexicon_entries, form).text || '' };
+    });
+    return { ...value, lemma: top, gloss: candidateDictionaryExcerpt(own[0], data.lexicon_entries, form).text || '',
       parse: parses.length === 1 ? parses[0] : parses.length ? `${parses.length} possible parses` : '',
       source: given ? `${data.parse_source.kind === 'machine_analysis' ? 'Parse from' : 'Parse recorded in'} ${given}.`
         : sources.length ? `Parse recorded in ${sources.slice(0, 2).map(plainSource).join(' and ')}.` : '',
-      alternatives: parses.length > 1 ? parses.map(parse => ({ parse: String(parse).replace(/,(?=\S)/g, ', ') })) : [], ranked: false,
-      properName: /^\p{Lu}/u.test(lemmas[0].normalize('NFD')) };
+      alternatives: [...(parses.length > 1 ? parses.map(parse => ({ parse: plainParse(parse) })) : []), ...others], ranked: false, tie: others.length > 0,
+      properName: /^\p{Lu}/u.test(top.normalize('NFD')) };
   }
   function updateSelectionTranslationAction() {
     let button = ui.selectionActions.querySelector('.selection-translation');
@@ -2536,7 +2721,7 @@
     }
     message(ui.authors, 'Loading authors…', 'panel-placeholder melos-loading');
     const settled = await Promise.allSettled([api('/api/status'), api('/api/authors'), api('/api/works')]);
-    if (settled[0].status === 'fulfilled') renderStatus(settled[0].value);
+    if (settled[0].status === 'fulfilled') { state.apiStatus ??= settled[0].value; renderStatus(settled[0].value); }
     else ui.status.textContent = `Corpus status unavailable: ${errorText(settled[0].reason)}`;
     if (settled[2].status === 'fulfilled' && Array.isArray(settled[2].value.works)) {
       const works = settled[2].value.works;

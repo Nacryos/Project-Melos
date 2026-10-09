@@ -103,8 +103,41 @@ test('the headline shows the parse in words, its source and the ranked alternati
   assert.equal(parse.textContent, 'accusative singular feminine'); assert.equal(parse.title, 'acc. fem. sg.');
   assert.match(head.textContent, /Parse from Morpheus parser/);
   assert.match(head.textContent, /Other possible parses, most likely first/);
-  assert.deepEqual(head.querySelectorAll('.word-alt-lemma').map(item => item.textContent), ['σέλας'], 'the headword itself is not repeated');
-  assert.match(head.querySelector('.word-more').textContent, /1 more/);
+  // Another headword is a second reading, listed after the top-ranked one.
+  assert.match(head.querySelector('.word-headline-readings').textContent, /Two possible readings, most likely first/);
+  assert.deepEqual(head.querySelectorAll('.word-reading-lemma').map(item => item.textContent), ['σελήνη', 'σέλας']);
+  assert.deepEqual(head.querySelectorAll('.word-alt-lemma').map(item => item.textContent), [], 'the headword itself is not repeated');
+  assert.deepEqual(head.querySelectorAll('.word-alt-parse').map(item => item.textContent), ['genitive plural feminine', 'b', 'c']);
+  const extra = node('div', 'word-headline');
+  panel.decorateHeadline(extra, { lemma: 'λ', parse: '', alternatives: ['a', 'b', 'c', 'd'].map(parse => ({ parse })) }, node);
+  assert.match(extra.querySelector('.word-more').textContent, /1 more/);
+});
+
+test('a tie shows both readings, top-ranked first, with restored form, parse and short gloss', () => {
+  const head = node('div', 'word-headline'); head.append(node('p', 'word-headline-parse', 'acc. 2nd sg.'));
+  panel.decorateHeadline(head, { lemma: 'σύ', form: 'σ’', reading: 'σέ', gloss: 'thou', parse: 'acc. 2nd sg.', ranked: true,
+    alternatives: [{ lemma: 'σός', parse: 'accusative plural neuter', short: 'acc. neut. pl.', gloss: 'thy', form: 'σά' }] }, node);
+  const items = head.querySelectorAll('word-reading');
+  assert.equal(items.length, 2);
+  assert.match(items[0].textContent, /^σύ \(read σέ\) · second person, accusative singular · “thou”$/);
+  assert.match(items[1].textContent, /^σός \(read σά\) · accusative plural neuter · “thy”$/);
+  assert.doesNotMatch(head.textContent, /Headword not identified|no headword/i);
+});
+
+test('a row the server left tied still gets a headline: the top-ranked reading, the other listed', () => {
+  const row = { kind: 'word', text: 'σ’', lemma: '', parse_short: '', morphology_ranking: [
+    { lemma: 'σ’', parse_short: '' }, { lemma: 'σύ', parse_short: 'acc. 2nd sg.' }, { lemma: 'σός', parse_short: 'voc. masc. sg.' }] };
+  const detail = panel.headlineDetail(row);
+  assert.equal(detail.lemma, 'σύ'); assert.equal(detail.parse, 'acc. 2nd sg.'); assert.equal(detail.tie, true);
+  assert.deepEqual(JSON.parse(JSON.stringify(detail.alternatives.map(alt => alt.lemma))), ['σός'], 'the bare elided spelling is not a reading');
+  // When the API lists `alternatives`, they are used, with their glosses and restored forms.
+  const given = panel.headlineDetail({ kind: 'word', text: 'σ’', lemma: 'σύ', parse_short: 'acc. 2nd sg.', morphology_ranking: [],
+    alternatives: [{ lemma: 'σός', parses: ['acc. neut. pl.'], gloss: 'thy', restored: 'σά' }] });
+  assert.deepEqual(JSON.parse(JSON.stringify(given.alternatives)), [{ lemma: 'σός', parse: 'accusative plural neuter', short: 'acc. neut. pl.', gloss: 'thy', form: 'σά' }]);
+  // Missing glosses of the other readings come from dictionary entries already loaded.
+  const filled = panel.withAlternativeGlosses({ lemma: 'σύ', alternatives: [{ lemma: 'σός', parse: 'x' }] },
+    [{ lemma: 'σός', source: 'Perseus Middle Liddell TEI', dictionary_senses: [{ text: 'thy, thine; of thee' }] }]);
+  assert.equal(filled.alternatives[0].gloss, 'thy, thine'); assert.equal(filled.alternatives[0].glossSource, 'Middle Liddell');
 });
 
 test('raw JSON receipts become a readable list without hashes', () => {
@@ -137,7 +170,7 @@ test('reader loads the word-panel module before reader.js, and the build ships i
 });
 
 // inspectWord with the real module: zone order and one coherent statement.
-function harness(response) {
+function harness(response, { post, prefetch = false } = {}) {
   const word = new Element('button', 'word', 'αβ'); word.dataset = { lookupGroup: '0', sourceStart: '0', sourceEnd: '2' };
   const ui = { text: new Element(), inspector: new Element() }; ui.text.append(word);
   ui.inspector.closest = () => ({ scrollIntoView() {} });
@@ -151,18 +184,55 @@ function harness(response) {
   const context = vm.createContext({ ui, state, window, node, clear: host => host.replaceChildren(),
     api: async (path, params) => { lookups.push(params.form); calls.push({ path, ...params }); return params.form === 'αβ' ? response : { lexicon_entries: [
       { id: 'ml', source: 'Perseus Middle Liddell TEI', lemma: 'λέμμα', dictionary_senses: [{ text: 'fixture sense', sense_path: [{ n: 'A' }] }] }] }; },
-    apiPost: async () => ({ passage: { id: 'synthetic:passage' }, interlinear: { readings: [{ tokens: [{ kind: 'word', start_utf16: 0, text: 'αβ', lemma: 'λέμμα', parse_short: 'acc. fem. sg.',
-      source_candidate: { basis: 'machine_analysis' }, selection_basis: 'unique_candidate', morphology_ranking: [] }] }] } }),
+    apiPost: post || (async () => ({ passage: { id: 'synthetic:passage' }, interlinear: { readings: [{ tokens: [{ kind: 'word', start_utf16: 0, text: 'αβ', lemma: 'λέμμα', parse_short: 'acc. fem. sg.',
+      source_candidate: { basis: 'machine_analysis' }, selection_basis: 'unique_candidate', morphology_ranking: [] }] }] } })),
     loadWiktionary: async () => null, renderDictionaryPreview: empty, renderExactCommentaryNotes: empty, renderLexicalVariants: () => false,
     renderLexicalEvidence: empty, renderStructuredEvidence: empty, renderParallelContexts: empty, renderContextualCandidates: empty,
     renderRelatedCommentary: empty, safeLink: empty, addContextAction: empty, renderFormInventories: empty,
     renderOccurrencePreview: host => host, candidateDictionaryExcerpt: () => ({}),
+    setTimeout: (fn, ms) => setTimeout(fn, ms ? 1 : 0), clearTimeout,
     requestAnimationFrame: fn => fn(), message: (host, text) => host.append(new Element('p', '', text)), errorText: error => error.message,
   });
   vm.runInContext(readerSource.slice(readerSource.indexOf('  function appendWarnings('), readerSource.indexOf('  function chronologyClaim(')), context);
   vm.runInContext(readerSource.slice(readerSource.indexOf('  async function renderWordMachineDictionary('), readerSource.indexOf('  function updateSelectionTranslationAction(')), context);
-  return { ui, word, lookups, calls, inspect: context.inspectWord };
+  // With the loading layer: the same file's second block, in the reader's window.
+  if (prefetch) vm.runInContext(panelSource, vm.createContext({ window: Object.assign(window, { sessionStorage: null }), AbortController, DOMException, setTimeout, clearTimeout }));
+  return { ui, word, lookups, calls, state, window, inspect: context.inspectWord };
 }
+
+test('the form lookup never waits for a slow headline; the dictionaries follow it when it lands', async () => {
+  let release;
+  const slow = new Promise(resolve => { release = resolve; });
+  const row = { passage: { id: 'synthetic:passage' }, interlinear: { readings: [{ tokens: [{ kind: 'word', start_utf16: 0, text: 'αβ', lemma: 'λέμμα',
+    parse_short: 'acc. fem. sg.', morphology_ranking: [] }] }] } };
+  const h = harness({ candidates: [{ lemma: 'λέμμα', analysis_text: 'noun' }], contextual_candidates: [], lexicon_entries: [
+    { id: 'other', source: 'Perseus Middle Liddell TEI', lemma: 'ἄλλο', dictionary_senses: [{ text: 'other sense', sense_path: [] }] }] }, { post: () => slow });
+  const started = Date.now();
+  await h.inspect('αβ', h.word);
+  assert.ok(Date.now() - started < 1000, 'no multi-second wait for the headline');
+  const lookup = h.calls.find(call => call.path === '/api/word' && call.form === 'αβ');
+  assert.equal(lookup.lemma, undefined, 'the lookup went out without the headword');
+  // The form lookup's single headword is shown at once, provisionally.
+  assert.equal(h.ui.inspector.querySelector('word-headline-lemma').textContent, 'λέμμα');
+  release(row);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.deepEqual(h.lookups, ['αβ', 'λέμμα'], 'the headword’s entries are fetched when the form lookup lacks them');
+  assert.match(h.ui.inspector.querySelector('.word-dictionaries').textContent, /fixture sense/);
+});
+
+test('with the loading layer, a returning click is served from cache without new requests', async () => {
+  const h = harness({ candidates: [], contextual_candidates: [], lexicon_entries: [
+    { id: 'ml', source: 'Perseus Middle Liddell TEI', lemma: 'λέμμα', dictionary_senses: [{ text: 'cached sense', sense_path: [] }] }] }, { prefetch: true });
+  assert.ok(h.window.MelosWordPrefetch);
+  await h.inspect('αβ', h.word);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  const before = h.calls.length;
+  await h.inspect('αβ', h.word);
+  await new Promise(resolve => setTimeout(resolve, 0));
+  assert.equal(h.calls.length, before, 'no repeated /api/word');
+  assert.equal(h.ui.inspector.querySelector('word-headline-lemma').textContent, 'λέμμα');
+  assert.match(h.ui.inspector.querySelector('.word-dictionaries').textContent, /cached sense/);
+});
 
 test('panel zones run headword, dictionaries, notes, then one collapsed Sources and method', async () => {
   const h = harness({ analysis_match_status: 'spelling_suggestions_only', candidates: [], contextual_candidates: [] });

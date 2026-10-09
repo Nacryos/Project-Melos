@@ -183,7 +183,7 @@ test('no analyses differs from failure and rate limit; unsafe strings stay liter
 test('reader mounts independently before recorded lookup and aborts on passage reset', () => {
   const reader = readFileSync(new URL('../js/reader.js', import.meta.url), 'utf8');
   const inspect = reader.slice(reader.indexOf('  async function inspectWord('));
-  assert.ok(inspect.indexOf('MelosMachineMorphology.mount') < inspect.indexOf("await api('/api/word'"));
+  assert.ok(inspect.indexOf('MelosMachineMorphology.mount') < inspect.indexOf('await wordLookup({ form, passage_id'));
   assert.match(reader, /function resetPassageContext\(loading = false\) \{\s*state.machineAnalysisCancel\?\.\(\)/);
   assert.match(reader, /candidate_basis|onlyNearby/);
 });

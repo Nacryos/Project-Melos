@@ -1,6 +1,7 @@
 // Word panel helpers: the dictionary-style reading order a classicist expects
 // (headword, gloss, form + parse in words, dictionaries, notes, then sources).
 // Pure functions take server fields only; nothing here invents a parse or gloss.
+// The second block (window.MelosWordPrefetch) is the panel's loading layer.
 (() => {
   'use strict';
 
@@ -81,24 +82,78 @@
     return `Parse from ${from}${how ? `; ${how}` : ''}.`;
   }
   // Ranked alternatives below the chosen parse (server order kept). The chosen
-  // parse is not repeated, whatever the capitalisation of its headword.
-  function alternatives(row) {
+  // parse is not repeated, whatever the capitalisation of its headword. When the
+  // API lists `alternatives` (other headwords for the same spelling) they follow
+  // the chosen headword's own other parses; otherwise the ranked parses are the
+  // alternatives. A ranking entry that only repeats the printed spelling as a
+  // headword, with no parse, is not a reading.
+  const unelided = value => bare(String(value || '').replace(/[’'᾽ʼ]/gu, ''));
+  function alternatives(row, chosen = row) {
     const ranking = Array.isArray(row?.morphology_ranking) ? row.morphology_ranking : [];
     // Accents and breathings are ignored here: the ranking can list the chosen
     // analysis again under a mis-breathed headword (ὀ for ὁ).
     const keyOf = (lemma, parse) => `${bare(lemma)}|${parse || ''}`;
-    const seen = new Set([keyOf(row?.lemma, row?.parse_short)]), out = [];
+    const printed = unelided(row?.text);
+    const seen = new Set([keyOf(chosen?.lemma, chosen?.parse_short)]), out = [];
+    const add = (lemma, short, extra = {}) => {
+      const key = keyOf(lemma, short);
+      if (seen.has(key) || (!short && (!lemma || unelided(lemma) === printed))) return;
+      seen.add(key);
+      out.push({ lemma: lemma || '', parse: plainParse(short), short: short || '', ...extra });
+    };
+    const given = Array.isArray(row?.alternatives) ? row.alternatives.filter(alt => typeof alt?.lemma === 'string' && alt.lemma.trim()) : [];
     for (const item of ranking) {
       if (!item || typeof item.parse_short !== 'string') continue;
-      const key = keyOf(item.lemma, item.parse_short);
-      if (seen.has(key)) continue;
-      seen.add(key);
-      out.push({ lemma: item.lemma || '', parse: plainParse(item.parse_short), short: item.parse_short });
+      if (given.length && bare(item.lemma) !== bare(chosen?.lemma)) continue;
+      add(item.lemma, item.parse_short);
+    }
+    for (const alt of given) {
+      const parses = (Array.isArray(alt.parses) ? alt.parses : [alt.parse_short]).filter(item => typeof item === 'string');
+      const gloss = typeof alt.gloss === 'string' ? alt.gloss : typeof alt.gloss?.short_text === 'string' ? alt.gloss.short_text : '';
+      const form = [alt.restored, alt.reading, alt.restored_form].find(item => typeof item === 'string' && item.trim()) || '';
+      add(alt.lemma.trim(), parses[0] || '', { gloss: gloss.trim(), form });
     }
     return out;
   }
+  // A tie the server left open (no `lemma` on the row) still has a headline:
+  // the top-ranked reading, with the others listed beside it.
   function headlineDetail(row) {
-    return { source: parseSource(row), alternatives: alternatives(row), ranked: true };
+    const ranking = Array.isArray(row?.morphology_ranking) ? row.morphology_ranking : [];
+    const top = row && !row.lemma ? ranking.find(item => typeof item?.lemma === 'string' && item.lemma.trim()
+      && typeof item.parse_short === 'string' && item.parse_short && unelided(item.lemma) !== unelided(row.text)) : null;
+    const chosen = top ? { lemma: top.lemma, parse_short: top.parse_short } : row;
+    const alts = alternatives(row, chosen);
+    const detail = { source: parseSource(row), alternatives: alts, ranked: true,
+      tie: alts.some(alt => alt.lemma && bare(alt.lemma) !== bare(chosen?.lemma)) };
+    if (top) Object.assign(detail, { lemma: top.lemma, parse: row.parse_short || top.parse_short, properName: /^\p{Lu}/u.test(top.lemma.normalize('NFD')) });
+    return detail;
+  }
+  // A short gloss for a headword from dictionary entries already loaded: the
+  // entry's own gloss or its first sense, up to the first clause.
+  function entryGloss(lemma, entries) {
+    const want = identity(lemma);
+    for (const entry of Array.isArray(entries) ? entries : []) {
+      if (!entry || !want || identity(entry.lemma) !== want) continue;
+      const sense = (Array.isArray(entry.dictionary_senses) ? entry.dictionary_senses : []).find(item => typeof item?.text === 'string' && item.text.trim());
+      const text = (typeof entry.gloss === 'string' && entry.gloss.trim()) || sense?.text.trim() || '';
+      if (!text) continue;
+      const cut = text.split(/[;:]/)[0].trim().replace(/[.,]$/, '');
+      return { text: cut.length > 60 ? `${cut.slice(0, 60).replace(/\s+\S*$/, '')} …` : cut, source: plainSource(entry.source) };
+    }
+    return null;
+  }
+  // The other readings' missing short glosses, from entries already loaded.
+  function withAlternativeGlosses(value, entries) {
+    if (!value || !Array.isArray(value.alternatives)) return value;
+    let changed = false;
+    const alts = value.alternatives.map(alt => {
+      if (alt.gloss || !alt.lemma || bare(alt.lemma) === bare(value.lemma)) return alt;
+      const found = entryGloss(alt.lemma, entries);
+      if (!found) return alt;
+      changed = true;
+      return { ...alt, gloss: found.text, glossSource: found.source };
+    });
+    return changed ? { ...value, alternatives: alts } : value;
   }
 
   // Dictionary names in reader-facing form and the order a classicist reads them.
@@ -194,7 +249,9 @@
   }
 
   // Adds the parse in words, its source and the ranked alternatives under the
-  // headline the passage-analysis module already drew.
+  // headline the passage-analysis module already drew. When another headword is
+  // possible (σ’: σύ or σός) the readings come first, the top-ranked one first,
+  // each with its restored form, parse and short gloss.
   function decorateHeadline(head, value, node) {
     if (!head || !value || value.pending) return head;
     const parse = head.querySelector?.('.word-headline-parse');
@@ -203,21 +260,47 @@
     if (parse && words && words !== short) { parse.textContent = words; parse.title = short; }
     if (value.source) head.append(node('p', 'word-headline-source', value.source));
     const alts = Array.isArray(value.alternatives) ? value.alternatives : [];
-    if (alts.length) {
+    const others = [], lemmas = new Set([bare(value.lemma)]);
+    const rest = alts.filter(alt => {
+      if (!value.lemma || !alt.lemma || lemmas.has(bare(alt.lemma))) return true;
+      lemmas.add(bare(alt.lemma)); others.push(alt); return false;
+    });
+    if (others.length) {
+      const box = node('div', 'word-headline-readings'), count = others.length + 1, number = count === 2 ? 'Two' : String(count);
+      box.append(node('p', 'word-headline-alt-title', value.ranked === false
+        ? `${number} possible readings (no context to rank them)` : `${number} possible readings, most likely first`));
+      const list = node('ol', 'word-headline-reading-list');
+      const reading = (alt, top) => {
+        const item = node('li', top ? 'word-reading word-reading-top' : 'word-reading');
+        const lemma = node('span', 'word-reading-lemma', alt.lemma); lemma.setAttribute('lang', 'grc'); item.append(lemma);
+        const restored = top ? value.reading : alt.form;
+        if (restored && restored !== value.form) { const form = node('span', 'word-reading-form', ` (read ${restored})`); form.setAttribute('lang', 'grc'); item.append(form); }
+        const parsed = top ? words || short : alt.parse || plainParse(alt.short);
+        if (parsed) item.append(node('span', 'word-reading-parse', ` · ${parsed}`));
+        const gloss = top ? value.gloss : alt.gloss;
+        if (gloss) { const text = node('span', 'word-reading-gloss', ` · “${gloss}”`); text.setAttribute('lang', 'en'); if (alt.glossSource) text.title = `Short gloss from ${alt.glossSource}`; item.append(text); }
+        list.append(item);
+      };
+      reading({ lemma: value.lemma }, true);
+      for (const alt of others) reading(alt, false);
+      box.append(list);
+      head.append(box);
+    }
+    if (rest.length) {
       const box = node('div', 'word-headline-alternatives');
       box.append(node('p', 'word-headline-alt-title', value.ranked === false ? 'Possible parses (no context to rank them)' : 'Other possible parses, most likely first'));
-      const list = node('ol', 'word-headline-alt-list'), rest = node('ol', 'word-headline-alt-list');
-      alts.forEach((alt, i) => {
+      const list = node('ol', 'word-headline-alt-list'), more = node('ol', 'word-headline-alt-list');
+      rest.forEach((alt, i) => {
         const item = node('li', '');
         if (alt.lemma && bare(alt.lemma) !== bare(value.lemma)) { const lemma = node('span', 'word-alt-lemma', alt.lemma); lemma.setAttribute('lang', 'grc'); item.append(lemma, ' '); }
         item.append(node('span', 'word-alt-parse', alt.parse || alt.short || ''));
-        (i < 3 ? list : rest).append(item);
+        (i < 3 ? list : more).append(item);
       });
       box.append(list);
-      if (rest.children.length) {
-        const more = node('details', 'word-more');
-        more.append(node('summary', '', `${rest.children.length} more`), rest);
-        box.append(more);
+      if (more.children.length) {
+        const details = node('details', 'word-more');
+        details.append(node('summary', '', `${more.children.length} more`), more);
+        box.append(details);
       }
       head.append(box);
     }
@@ -309,6 +392,239 @@
     const start = () => { watchReceipts(document.body, make); const text = document.getElementById('passage-text'); if (text) retargetTaps(text); };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
   }
-  window.MelosWordPanel = Object.freeze({ plainParse, parseSource, readableSourceLabel, alternatives, headlineDetail, dictionaryName, plainSource,
+  window.MelosWordPanel = Object.freeze({ plainParse, parseSource, readableSourceLabel, alternatives, headlineDetail, entryGloss, withAlternativeGlosses, dictionaryName, plainSource,
     dictionaryBlocks, renderDictionaryBlocks, decorateHeadline, nearestWord, retargetTaps, plainKey, readableValue, humanizeReceipt, watchReceipts });
+})();
+
+// Word-panel loading: an in-memory LRU backed by sessionStorage, one request
+// per key at a time, a small low-priority queue that a passage change cancels,
+// and the rules for what to fetch ahead of a click. Nothing here builds a
+// parse or a gloss; it only stores and orders what the API returned.
+(() => {
+  'use strict';
+
+  // Bump when the cached shapes change; old session entries are then ignored.
+  const VERSION = 'wp1';
+
+  function createLru(max) {
+    const map = new Map();
+    return {
+      get(key) { if (!map.has(key)) return undefined; const value = map.get(key); map.delete(key); map.set(key, value); return value; },
+      set(key, value) { map.delete(key); map.set(key, value); while (map.size > max) map.delete(map.keys().next().value); },
+      has: key => map.has(key),
+      delete: key => map.delete(key),
+      get size() { return map.size; },
+    };
+  }
+
+  // sessionStorage with a character budget and oldest-first eviction. Every
+  // access is guarded: private windows, previews and full quotas just miss.
+  function createStore(storage, prefix, { budget = 1500000, maxItem = 400000 } = {}) {
+    const orderKey = `${prefix}#order`;
+    let order = [];
+    try { order = JSON.parse(storage?.getItem(orderKey) || '[]'); if (!Array.isArray(order)) order = []; } catch { order = []; }
+    const size = () => order.reduce((sum, item) => sum + (item[1] || 0), 0);
+    const saveOrder = () => { try { storage.setItem(orderKey, JSON.stringify(order)); } catch { /* order is advisory */ } };
+    const evict = () => {
+      const oldest = order.shift();
+      if (!oldest) return false;
+      try { storage.removeItem(prefix + oldest[0]); } catch { /* ignore */ }
+      return true;
+    };
+    return {
+      get(key) {
+        if (!storage) return undefined;
+        try { const raw = storage.getItem(prefix + key); return raw == null ? undefined : JSON.parse(raw); } catch { return undefined; }
+      },
+      set(key, value) {
+        if (!storage) return false;
+        let raw;
+        try { raw = JSON.stringify(value); } catch { return false; }
+        if (typeof raw !== 'string' || raw.length > maxItem) return false;
+        order = order.filter(item => item[0] !== key);
+        while (order.length && size() + raw.length > budget) evict();
+        for (let attempt = 0; attempt < 6; attempt++) {
+          try { storage.setItem(prefix + key, raw); order.push([key, raw.length]); saveOrder(); return true; }
+          catch { if (!evict()) return false; }
+        }
+        return false;
+      },
+    };
+  }
+
+  // What the connection allows ahead of a click. Data saver: nothing
+  // speculative. 2G: only the word under the finger or pointer. 3G or a slow
+  // downlink: a few idle words, one request at a time.
+  function networkPolicy(connection) {
+    const c = connection || {};
+    if (c.saveData) return { batch: false, hover: false, idle: 0, maxLow: 0, reason: 'save-data' };
+    const type = String(c.effectiveType || '');
+    if (type === 'slow-2g' || type === '2g') return { batch: true, hover: true, idle: 0, maxLow: 1, reason: type };
+    if (type === '3g' || (typeof c.downlink === 'number' && c.downlink > 0 && c.downlink < 1.5)) return { batch: true, hover: true, idle: 3, maxLow: 1, reason: '3g' };
+    return { batch: true, hover: true, idle: 6, maxLow: 2, reason: 'default' };
+  }
+
+  const fold = value => String(value || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()
+    .replace(/[’'᾽ʼ᾿]/gu, '').replaceAll('ς', 'σ').replace(/[^\p{L}]/gu, '');
+  // Articles, particles, conjunctions, prepositions and personal pronouns:
+  // these come from the server's cache quickly and are rarely what a reader
+  // needs explained, so idle prefetch leaves them to the click.
+  const FREQUENT = new Set(`ο η το τον την τα του τησ τω τη οι αι τοι ται των τοισ ταισ τουσ τασ τοισι ταισι τασ
+    δε δ τε τ γαρ μεν και κε κεν αν γε γ ου ουκ ουχ μη μηδε ουδε αλλα αλλ ωσ η ηδε εν ενι εσ εισ εκ εξ απο απ
+    επι επ περι προσ ποτι παρα παρ κατα κατ μετα μετ υπο υπ συν ξυν ω αι ει οτι οττι οτε δη αρα ρα νυν νυ τοι
+    μοι μοι σοι με σε μ σ μιν νιν εγω εγων συ αμμι αμμε υμμι υμμε κ οσ οσσ ουτοσ τισ τι τιν οππωσ ωσπερ ειτ
+    ηκ ουτε μητε τε ου κουκ κου κηκ καμμ κ αυ αυτε δηυτε αυτ αυτοσ`.split(/\s+/).filter(Boolean));
+  const CONTENT_POS = /noun|verb|adj|name|propn|participle/i;
+  const FUNCTION_POS = /article|particle|conj|prep|pron|interj|adverb/i;
+
+  // Words most likely to be clicked, best first: content words, longer
+  // (rarer) spellings first; one entry per spelling.
+  function rankWords(words, { headlines = null, limit = 6 } = {}) {
+    const seen = new Set(), out = [];
+    for (const word of words) {
+      const folded = fold(word.form);
+      if (!folded || folded.length < 3 || FREQUENT.has(folded) || seen.has(folded)) continue;
+      const pos = headlines?.get?.(word.key)?.pos || '';
+      if (FUNCTION_POS.test(pos)) continue;
+      seen.add(folded);
+      out.push({ ...word, score: folded.length + (CONTENT_POS.test(pos) ? 3 : 0) + (word.repeated ? -2 : 0) });
+    }
+    return out.sort((a, b) => b.score - a.score || a.index - b.index).slice(0, Math.max(0, limit));
+  }
+
+  // UTF-16 offsets of every code point boundary, so codepoint token offsets
+  // from the server match the reader's button offsets.
+  function utf16Offsets(text) {
+    const at = [0];
+    let offset = 0;
+    for (const char of String(text || '')) { offset += char.length; at.push(offset); }
+    return at;
+  }
+  const capitalised = value => typeof value === 'string' && /^\p{Lu}/u.test(value.normalize('NFD'));
+  const firstText = value => typeof value === 'string' ? value.trim()
+    : typeof value?.short_text === 'string' ? value.short_text.trim() : typeof value?.text === 'string' ? value.text.trim() : '';
+
+  // POST /api/words/headlines (release O) as provisional headline values keyed
+  // `start:end` in UTF-16 units. The contextual reading of the clicked word
+  // replaces a provisional value when it arrives.
+  function batchHeadlines(payload, text, plain = value => value) {
+    const tokens = Array.isArray(payload?.tokens) ? payload.tokens : Array.isArray(payload?.headlines) ? payload.headlines : [];
+    const offsets = typeof text === 'string' ? utf16Offsets(text) : null;
+    const out = new Map();
+    for (const token of tokens) {
+      const start = Number(token?.start_utf16 ?? token?.start), end = Number(token?.end_utf16 ?? token?.end);
+      if (!Number.isInteger(start) || !Number.isInteger(end) || end <= start) continue;
+      const utf16 = token.start_utf16 != null || !offsets ? [start, end] : [offsets[start], offsets[end]];
+      if (utf16.some(value => !Number.isInteger(value))) continue;
+      const lemma = typeof token.lemma === 'string' ? token.lemma.trim() : '';
+      const parses = (Array.isArray(token.parses) ? token.parses : [token.parse_short]).filter(item => typeof item === 'string' && item.trim());
+      const printed = typeof token.printed === 'string' ? token.printed : offsets && typeof text === 'string' ? text.slice(utf16[0], utf16[1]) : '';
+      const restored = [token.restored, token.reading, token.restored_form].find(item => typeof item === 'string' && item.trim()) || '';
+      const alternatives = [
+        ...parses.slice(1).map(parse => ({ lemma, parse: plain(parse), short: parse })),
+        ...(Array.isArray(token.alternatives) ? token.alternatives : []).filter(alt => alt && typeof alt.lemma === 'string' && alt.lemma.trim())
+          .map(alt => {
+            const altParses = (Array.isArray(alt.parses) ? alt.parses : [alt.parse_short]).filter(item => typeof item === 'string' && item.trim());
+            return { lemma: alt.lemma.trim(), parse: altParses[0] ? plain(altParses[0]) : '', short: altParses[0] || '', gloss: firstText(alt.gloss),
+              form: [alt.restored, alt.reading, alt.restored_form, alt.form_restored].find(item => typeof item === 'string' && item.trim()) || '' };
+          }),
+      ];
+      const value = { lemma, gloss: firstText(token.gloss), form: printed || restored || '', reading: restored && restored !== printed ? restored : '',
+        parse: parses[0] || '', pos: typeof token.pos === 'string' ? token.pos : '', alternatives, ranked: true, tie: token.tie === true,
+        properName: capitalised(lemma), provisional: true, source: lemma ? 'Headword from the corpus index; checking it against this passage.' : '' };
+      out.set(`${utf16[0]}:${utf16[1]}`, value);
+    }
+    return out;
+  }
+
+  function abortError() {
+    try { return new DOMException('Prefetch cancelled', 'AbortError'); } catch { const error = new Error('Prefetch cancelled'); error.name = 'AbortError'; return error; }
+  }
+
+  // One loader per key: a cache hit resolves at once, a second caller joins the
+  // request already running, and a high-priority caller starts a queued
+  // low-priority request immediately. Low-priority work runs at most
+  // `maxLow` at a time; cancel(group) drops it unless a click has claimed it.
+  function create({ storage = null, version = '', maxEntries = 160, budget, maxItem, maxLow = 2 } = {}) {
+    const memory = createLru(maxEntries);
+    const store = createStore(storage, `melos:${VERSION}:${version}:`, { budget, maxItem });
+    const inflight = new Map(), queue = [];
+    const stats = { requests: 0, hits: 0, joined: 0, cancelled: 0, byKind: {} };
+    let running = 0, limit = maxLow;
+    const kindOf = key => String(key).split('|')[0];
+
+    function peek(key) {
+      if (memory.has(key)) { stats.hits++; return memory.get(key); }
+      const stored = store.get(key);
+      if (stored !== undefined) { memory.set(key, stored); stats.hits++; return stored; }
+      return undefined;
+    }
+    function put(key, value, persist = true) {
+      if (value === undefined) return;
+      memory.set(key, value);
+      if (persist) store.set(key, value);
+    }
+    function finish(task) {
+      if (inflight.get(task.key) === task) inflight.delete(task.key);
+      if (task.low) { task.low = false; running--; pump(); }
+    }
+    function start(task) {
+      task.started = true;
+      if (task.priority !== 'high') { task.low = true; running++; }
+      stats.requests++; stats.byKind[kindOf(task.key)] = (stats.byKind[kindOf(task.key)] || 0) + 1;
+      Promise.resolve()
+        .then(() => task.loader({ signal: task.controller.signal, priority: task.priority }))
+        .then(value => { if (value !== undefined && value !== null) put(task.key, value, task.persist); finish(task); task.resolve(value); },
+          error => { finish(task); task.reject(error); });
+    }
+    function pump() {
+      while (running < limit && queue.length) {
+        const task = queue.shift();
+        if (!task.controller.signal.aborted) start(task);
+      }
+    }
+    // `claim`: a click owns the request, so cancel() leaves it running; a
+    // hover prefetch asks for high priority without claiming it.
+    function load(key, loader, { priority = 'high', group = '', persist = true, claim = priority === 'high' } = {}) {
+      const hit = peek(key);
+      if (hit !== undefined) return Promise.resolve(hit);
+      const active = inflight.get(key);
+      if (active) {
+        stats.joined++;
+        if (claim) active.claimed = true;
+        if (priority === 'high' && !active.started) { queue.splice(queue.indexOf(active), 1); active.priority = 'high'; start(active); }
+        return active.promise;
+      }
+      if (priority !== 'high' && limit <= 0) return Promise.resolve(undefined);
+      const task = { key, loader, priority, group, persist, claimed: claim, started: false, low: false, controller: new AbortController() };
+      task.promise = new Promise((resolve, reject) => { task.resolve = resolve; task.reject = reject; });
+      inflight.set(key, task);
+      if (priority === 'high') start(task); else { queue.push(task); pump(); }
+      return task.promise;
+    }
+    function cancel(group) {
+      for (const task of [...inflight.values()]) {
+        if (task.claimed || (group && task.group !== group)) continue;
+        stats.cancelled++;
+        task.controller.abort();
+        inflight.delete(task.key);
+        if (!task.started) { queue.splice(queue.indexOf(task), 1); task.reject(abortError()); }
+      }
+    }
+    return {
+      load, peek, put, cancel, stats,
+      pending: key => inflight.has(key),
+      setLimit(value) { limit = Math.max(0, value | 0); pump(); },
+      get queued() { return queue.length; },
+      get running() { return running; },
+    };
+  }
+
+  // Low-priority scheduling that never competes with rendering.
+  function whenIdle(fn, timeout = 2000) {
+    if (typeof requestIdleCallback === 'function') return requestIdleCallback(fn, { timeout });
+    return setTimeout(fn, 200);
+  }
+
+  window.MelosWordPrefetch = Object.freeze({ VERSION, createLru, createStore, networkPolicy, rankWords, fold, utf16Offsets, batchHeadlines, create, whenIdle });
 })();

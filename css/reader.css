@@ -250,6 +250,10 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .word-headline-alternatives{margin:10px 0 0;padding:8px 0 0;border-top:1px dotted var(--line)}
 .word-headline-alt-title{margin:0 0 3px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .word-headline-alt-list{margin:0;padding-left:20px;font-size:13px;line-height:1.45;color:var(--ink)}.word-alt-lemma{font-family:var(--greek);font-size:15px}
+.word-headline-readings{margin:10px 0 0;padding:8px 0 0;border-top:1px dotted var(--line)}
+.word-headline-reading-list{margin:0;padding-left:20px;font-size:14px;line-height:1.5;color:var(--ink)}
+.word-reading-lemma{font-family:var(--greek);font-size:16px}.word-reading-top .word-reading-lemma{font-weight:600}
+.word-reading-form{font-family:var(--greek);color:var(--muted)}.word-reading-parse,.word-reading-gloss{color:var(--muted)}
 .word-zone{margin:18px 0 0;padding-top:12px;border-top:1px solid var(--line)}
 .word-zone-title{margin:0 0 8px;font-size:12px;letter-spacing:.1em;text-transform:uppercase}
 .word-dictionary{margin:0 0 8px;border:1px solid var(--line);background:#fff}
