@@ -31,7 +31,7 @@ def _env(name, default):
 
 class RateLimiter:
     def __init__(self, *, client_minute=None, client_day=None, connection_minute=None, clock=time.monotonic):
-        self.client_minute = client_minute or _env("MELOS_RATE_CLIENT_MINUTE", 120)
+        self.client_minute = client_minute or _env("MELOS_RATE_CLIENT_MINUTE", 300)
         self.client_day = client_day or _env("MELOS_RATE_CLIENT_DAY", 20000)
         self.connection_minute = connection_minute or _env("MELOS_RATE_CONNECTION_MINUTE", 1200)
         self.clock = clock
@@ -55,7 +55,12 @@ class RateLimiter:
         return 0
 
     def check(self, headers, client_host):
-        """0 when allowed (and counted), else the seconds to wait."""
+        """0 when allowed (and counted), else the seconds to wait. A request without X-Forwarded-For is
+        not limited: it comes from the host itself (check scripts; inside the container it arrives from the
+        Docker gateway), since public traffic reaches the API only through Tailscale Funnel, whose reverse
+        proxy always appends the header."""
+        if not (headers.get("x-forwarded-for") or "").strip():
+            return 0
         client, conn = self.keys(headers, client_host)
         now = self.clock()
         with self._lock:

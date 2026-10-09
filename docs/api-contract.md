@@ -461,11 +461,13 @@ for π, -ῃσι, psilosis. Ionic candidates are never `attested_in_dialect`: no
 `POST /api/machine-analysis` and every analysis route reach the local Morpheus build without a per-visitor
 allowance. A per-client sliding-window limit protects them (`backend/rate_limit.py`): POST to
 `/api/machine-analysis`, `/api/analyze-text`, `/api/dialectize`, `/api/analyze-passage`, `/api/words/headlines`,
-`/api/passage-morphology/warm`: 120 a minute and 20,000 a day per client (`MELOS_RATE_CLIENT_MINUTE`,
+`/api/passage-morphology/warm`: 300 a minute and 20,000 a day per client (`MELOS_RATE_CLIENT_MINUTE`,
 `MELOS_RATE_CLIENT_DAY`), and 1,200 a minute per connecting address (`MELOS_RATE_CONNECTION_MINUTE`). The client
 is the last two `X-Forwarded-For` entries (the visitor as Vercel states it, and the Vercel edge as Tailscale
-Funnel appends it); the connecting address is the last entry. 429 with `Retry-After` when exceeded. Per process,
-in memory; a convenience bound, not authentication.
+Funnel appends it); the connecting address is the last entry. A request without X-Forwarded-For comes from the host
+itself (check scripts) and is not limited. 429 with `Retry-After` when exceeded. Per process, in memory; a
+convenience bound, not authentication. If an edge proxy rewrites rather than appends X-Forwarded-For,
+visitors behind one Vercel edge share a key; the per-client limit is set high (300 a minute) for that reason.
 
 ### POST /api/words/headlines (forms mode)
 

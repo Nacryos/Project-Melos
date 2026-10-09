@@ -219,3 +219,10 @@ def test_printed_line_number_with_full_stop():
     text = "7. ὤς ποτ’ ἀελίω\n8. δύντος ἀ βροδοδάκτυλος σελάννα"
     line = line_at(text, text.index("δύντος"), "Fragment 96")
     assert line["line"] == 8 and line["line_basis"] == "printed" and line["text"] == "δύντος ἀ βροδοδάκτυλος σελάννα"
+
+
+def test_rate_limiter_leaves_host_tooling_alone():
+    limiter = RateLimiter(client_minute=1, client_day=1, connection_minute=1, clock=lambda: 0.0)
+    assert [limiter.check({}, "172.17.0.1") for _ in range(5)] == [0] * 5  # no X-Forwarded-For: the host itself
+    assert limiter.check({"x-forwarded-for": "1.1.1.1, 2.2.2.2"}, "127.0.0.1") == 0
+    assert limiter.check({"x-forwarded-for": "1.1.1.1, 2.2.2.2"}, "127.0.0.1") > 0  # via Funnel: limited
