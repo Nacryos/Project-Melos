@@ -12,6 +12,8 @@
   <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/loading.css">
   <link rel="stylesheet" href="css/lemma-page.css?v=release-p-20261009">
+  <link rel="stylesheet" href="css/site-menu.css?v=site-menu-20261009">
+  <script src="js/site-menu.js?v=site-menu-20261009" defer></script>
   <script src="js/config.js" defer></script>
   <script src="js/api.js" defer></script>
   <script src="js/lemma-common.js?v=release-p-20261009" defer></script>
@@ -22,7 +24,7 @@
   <a class="skip-link" href="#main">Skip to the concept</a>
   <header class="site-bar">
     <a class="site-mark" href="/" aria-label="Melos, home"><span lang="grc">Μέλος</span><small>A Greek Lyric Lexicon</small></a>
-    <nav aria-label="Main navigation"><a href="/">Reader</a><a href="lemma.html">Lexicon</a><a href="concept.html" aria-current="page">Concepts</a></nav>
+    <button class="site-menu-button" id="site-menu-button" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </header>
   <main id="main" class="page">
     <form id="lookup" class="lookup" role="search">

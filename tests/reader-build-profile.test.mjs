@@ -19,7 +19,7 @@ test('reader-only release excludes discovery without changing the full local bui
   });
   await mkdir(path.join(fixture, 'scripts'));
   await cp(path.join(root, 'scripts/build_frontend.mjs'), path.join(fixture, 'scripts/build_frontend.mjs'));
-  for (const entry of ['reader.html', 'index.html', 'lemma.html', 'concept.html', 'lexicon.html', 'authors.html', 'themes.html', 'js', 'css', 'assets/branding', 'assets/authors', 'assets/nature-presets', 'assets/paintings']) {
+  for (const entry of ['reader.html', 'index.html', 'lemma.html', 'concept.html', 'about.html', 'lexicon.html', 'authors.html', 'themes.html', 'js', 'css', 'assets/branding', 'assets/authors', 'assets/nature-presets', 'assets/paintings']) {
     await cp(path.join(root, entry), path.join(fixture, entry), { recursive: true });
   }
   const originalReader = await readFile(path.join(fixture, 'reader.html'), 'utf8');

@@ -176,7 +176,8 @@ phoneDither.addEventListener('change', () => apply({}));
 function toggleTune(open = $('#tune').hidden) {
   $('#tune').hidden = !open;
   $('#tune-toggle').setAttribute('aria-expanded', String(open));
-  if (!open) $('#tune-toggle').focus({ preventScroll: true });
+  // The dither controls open from the site menu; return focus to its button when they close.
+  if (!open) ($('#site-menu-button') || $('#tune-toggle')).focus({ preventScroll: true });
 }
 $('#tune-toggle').addEventListener('click', () => toggleTune());
 $('#tune-close').addEventListener('click', () => toggleTune(false));

@@ -70,7 +70,8 @@ test('pages use safe DOM building, plain words and a pinned cache-bust tag', () 
   }
   for (const page of ['lemma.html', 'concept.html']) {
     const html = read(page);
-    assert.match(html, /<nav aria-label="Main navigation">.*href="lemma\.html".*>Lexicon<.*href="concept\.html".*>Concepts</s, page);
+    assert.match(html, /id="site-menu-button"[^>]*aria-controls="site-menu"/, page);
+    assert.match(html, /js\/site-menu\.js\?v=site-menu-\d{8}/, page);
     assert.match(html, /lemma-common\.js\?v=(?:lemma|release-[a-z])-\d{8}/, page);
     assert.doesNotMatch(html, /<script[^>]+src="https?:/, `${page} loads no third-party script`);
   }
@@ -81,7 +82,7 @@ test('reader offers Headword search with Near, folds editions and links the pane
   const html = read('reader.html');
   assert.match(html, /name="search-mode" value="lemma"><span>Headword<\/span>/);
   assert.match(html, /id="lemma-near"/); assert.match(html, /id="lemma-window"[^>]*min="1" max="20"/);
-  assert.match(html, /class="nav-tool" href="lemma\.html">Lexicon<\/a><a class="nav-tool" href="concept\.html">Concepts<\/a>/);
+  assert.match(read('js/site-menu.js'), /\['Lexicon', '\/lexicon'[\s\S]*\['Concepts', '\/concepts'/);
   const reader = read('js/reader.js');
   assert.match(reader, /api\('\/api\/lemma\/concordance'/); assert.match(reader, /api\('\/api\/lemma\/proximity'/);
   assert.match(reader, /ordered: snapshot\.near \? 'false' : 'true'/);

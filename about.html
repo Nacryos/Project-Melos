@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>About · Melos</title>
+  <meta name="description" content="What Melos does: a reader for Greek poetry with click-to-parse words, dictionaries, a lexicon, concepts through time, search, citations, its sources and licences, and how the parser's accuracy is measured.">
+  <link rel="icon" type="image/svg+xml" href="assets/branding/melos-favicon-white.svg?v=white-1">
+  <meta name="theme-color" content="#14223a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/lemma-page.css?v=release-p-20261009">
+  <link rel="stylesheet" href="css/site-menu.css?v=site-menu-20261009">
+  <script src="js/site-menu.js?v=site-menu-20261009" defer></script>
+  <style>
+    .about { max-width: 46rem; }
+    .about h1 { font: 400 2.4rem/1.15 var(--greek); margin: 8px 0 12px; }
+    .about h2 { font: 400 1.45rem/1.25 var(--greek); margin: 34px 0 8px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .about p, .about li { color: var(--ink-2); }
+    .about ul { padding-left: 1.2rem; }
+    .about li { margin: 4px 0; }
+    .about .lede { font-size: 1.12rem; color: var(--ink); }
+    .about .gaps { font-size: .95rem; }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the text</a>
+  <header class="site-bar">
+    <a class="site-mark" href="/" aria-label="Melos, home"><span lang="grc">Μέλος</span><small>A Greek Lyric Lexicon</small></a>
+    <button class="site-menu-button" id="site-menu-button" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </header>
+  <main id="main" class="page about">
+    <h1>About Melos</h1>
+    <p class="lede">Melos is a reader for ancient Greek poetry, with the lyric poets at its centre. Every Greek word in the collection has been read by machine to its dictionary headword, and each reading carries a confidence, so you can see how sure the reading is.</p>
+
+    <h2>Reading</h2>
+    <ul>
+      <li>Open a poem and click any Greek word. A panel shows its headword, a short meaning and the parse in plain words, then the dictionaries and the sources.</li>
+      <li>The headword line says how likely the reading is, for example “about 96% likely”. When it is less certain, the panel says that another headword is possible.</li>
+      <li>Select a phrase to trace it: <em>Same wording</em>, <em>Related word forms</em> or <em>Similar theme</em>.</li>
+      <li>Move through a text with Previous passage and Next passage. Verse keeps its lines.</li>
+    </ul>
+
+    <h2>Dictionaries</h2>
+    <p>Word panels and the lexicon show the dictionary entries side by side: LSJ (with the Logeion edition by H. Dik), the Middle Liddell, Autenrieth, Cunliffe and Dodson. Wiktionary appears in a separate panel because it is machine-extracted, and a form listed there is not evidence that an ancient author used it.</p>
+
+    <h2>Lexicon</h2>
+    <p>The <a href="lemma.html">Lexicon</a> gives one headword its own page:</p>
+    <ul>
+      <li><strong>Frequency</strong>: uses per 10,000 words, with a 95% range, by author, by genre and by period. Genres are an editorial grouping of authors, not a property of each poem.</li>
+      <li><strong>Concordance</strong>: every passage that uses the word, with the words around it, filterable by author and period.</li>
+      <li><strong>Collocations</strong>: the words it keeps company with (shown when they occur together at least three times), and phrases that recur.</li>
+      <li>The forms the word takes in the collection.</li>
+    </ul>
+
+    <h2>Concepts through time</h2>
+    <p><a href="concept.html">Concepts</a> starts from a meaning, such as moon, love or sea. It shows which Greek words express it, how often poets of each period use each word, the words around them and example passages. Dates are the authors’ lifetimes, not the dates the poems were composed. Authors with no sourced date are shown as undated and never placed in a period. A refrain repeated in one poem is counted once, and each text is read in one edition.</p>
+
+    <h2>Search</h2>
+    <ul>
+      <li>Search in Greek or English, or type a passage reference. <em>All evidence</em> combines exact words, related word forms and similar meanings, and each result says why it matched. Its place in the list is not a measure of certainty.</li>
+      <li><em>Headword</em> finds every form of a word (ἔρωτος, ἔρωτι… for ἔρως). Several words find them side by side; tick Near to allow other words in between.</li>
+      <li>English searches read through dictionary meanings and may use translations or commentary as a bridge. “moon” finds σελήνη and μήνη.</li>
+    </ul>
+
+    <h2>Citations</h2>
+    <ul>
+      <li>Type a reference such as <em>Il. 1.1</em>, <em>Hes. Th. 116</em>, <em>Pind. O. 1.1</em> or <em>Sappho fr. 31</em> to go straight to the passage. If an abbreviation fits several works, Melos says so instead of guessing.</li>
+      <li>Sappho and Alcaeus fragments can be cited by Voigt, Lobel-Page or Campbell number: “Sappho fr. 31 V”, “Alc. 346 L-P” and “Sappho Campbell 16” open the same poems. Campbell uses the Lobel-Page numbers. Where no source states a Voigt number, Melos uses the general rule that Voigt follows Lobel-Page and labels it as a convention.</li>
+    </ul>
+
+    <h2>Sources and licences</h2>
+    <ul>
+      <li>The texts come from editions including D. A. Campbell’s <em>Greek Lyric Poetry</em> (1967), the Perseus Digital Library and First1KGreek, J. M. Edmonds’ <em>Lyra Graeca</em> and <em>Elegy and Iambus</em>, Digital Sappho, and the Centre for the Greek Language anthology.</li>
+      <li>Author dates come from Wikidata; for a few works it does not date, from Edmonds’ <em>Lyra Graeca</em>.</li>
+      <li>Rights belong to each source and are shown with each record; where a licence is not known it is shown as unknown. Publishing a record with its source label is not a claim that every source allows redistribution.</li>
+      <li>Machine-corrected scans of public-domain editions are searchable and labelled as such. Raw scans and records that still need review are kept out of ordinary search.</li>
+      <li>The paintings behind the reader are public domain; each is credited at the foot of the reader page.</li>
+    </ul>
+
+    <h2>The parser and how accuracy is measured</h2>
+    <ul>
+      <li>Each word is parsed by a local copy of Morpheus, the Perseus morphological parser (CC BY-SA 3.0 US). Forms it does not know are tried again with dialect spellings and restored elisions. The possible headwords are then ranked by the evidence and how common each is in the collection, and a contextual language model rescores them for edited Greek text.</li>
+      <li>Accuracy is measured against hand-made treebank annotations (the Perseus Greek Dependency Treebank: Homer, Hesiod, Sophocles, Aeschylus). Half of the treebank is held out, and the index is rebuilt without those works’ annotations, so the test does not see the answers.</li>
+      <li>On the held-out half (131,011 words), the headword agreed with the treebank 96.7% of the time, and 98.0% for elided words (13,095), as measured for release Q on 9 October 2026.</li>
+      <li>The confidence shown for each word is calibrated: it says how often a reading that sure was right in the check. On 427 words from Campbell’s lyric poems cited in LSJ, kept apart for reporting only, the headword was right 96.5% of the time.</li>
+    </ul>
+    <p class="gaps">Known limits: the contextual model was trained on some of the same texts as the treebank check, so a few confidence groups are optimistic there. Alcaeus has no lyric check set. Fragmentary lyric poets are covered less well than Sappho, epic and the hymns.</p>
+  </main>
+  <footer class="site-foot"><span lang="grc">Μέλος</span> <span>Counts come from machine reading of every word; each reading carries a confidence. <a href="/">Open the reader →</a></span></footer>
+</body>
+</html>

@@ -18,12 +18,13 @@
   <link rel="stylesheet" href="css/touch-selection.css?v=word-panel-20261008">
   <link rel="stylesheet" href="css/theme.css?v=white-blue-1">
   <link rel="stylesheet" href="css/discovery-nav.css">
+  <link rel="stylesheet" href="css/site-menu.css?v=site-menu-20261009">
 </head>
 <body>
   <a class="skip-link" href="#passage">Skip to passage</a>
   <header class="bar">
     <a class="mark" href="./" aria-label="Melos, home"><span class="mark-gr" lang="grc">Μέλος</span><span class="mark-en">A Greek Lyric Lexicon</span></a>
-    <nav aria-label="Main navigation"><a href="#reader">Reader</a><a href="#collection">Poets &amp; works</a><a class="nav-tool" href="lemma.html">Lexicon</a><a class="nav-tool" href="concept.html">Concepts</a><a href="legacy">Design studio</a></nav>
+    <button class="site-menu-button" id="site-menu-button" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </header>
   <section class="hero reader-hero" id="top" aria-label="Explore the lyric corpus">
     <div class="stage"><canvas id="dither" aria-hidden="true"></canvas><img id="fallback" alt="" hidden></div>
@@ -101,7 +102,8 @@
   <script src="js/citation-lookup.js?v=release-p-20261009" defer></script>
   <script src="js/phrases.js?v=release-p-20261009" defer></script>
   <script src="js/reader.js?v=release-p-20261009" defer></script>
+  <script src="js/site-menu.js?v=site-menu-20261009" defer></script>
   <script src="js/reader-fullscreen.js?v=reader-touch-20261006" defer></script>
-  <script type="module" src="js/reader-hero.js?v=release-p-20261009"></script>
+  <script type="module" src="js/reader-hero.js?v=site-menu-20261009"></script>
 </body>
 </html>

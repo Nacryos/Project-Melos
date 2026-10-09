@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/loading.css">
   <link rel="stylesheet" href="css/theme.css?v=white-blue-1">
+  <link rel="stylesheet" href="css/site-menu.css?v=site-menu-20261009">
   <style>
     .studio-search-notes { margin: .8rem 0 0; color: #56616b; font-size: var(--step--1); }
     .studio-source-label { margin: 1rem 0 .5rem; color: #56616b; font-size: var(--step--1); text-transform: capitalize; }
@@ -27,16 +28,16 @@
 </head>
 <body>
   <header class="bar">
-    <a class="mark" href="#top" aria-label="Melos, home">
+    <a class="mark" href="./" aria-label="Melos, home">
       <span class="mark-gr" lang="grc">Μέλος</span>
       <span class="mark-en">A Greek Lyric Lexicon</span>
     </a>
-    <nav>
-      <a href="#lexicon">Corpus</a>
-      <a href="#poets">Poets</a>
-      <a href="./">Reader</a>
-      <a href="#about">About</a>
+    <nav aria-label="On this page" data-site-menu-local hidden>
+      <a href="#lexicon">Corpus search</a>
+      <a href="#poets">Poets in the corpus</a>
+      <a href="#about">Credits</a>
     </nav>
+    <button class="site-menu-button" id="site-menu-button" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </header>
 
   <section class="hero" id="top">
@@ -147,6 +148,7 @@
   <script src="js/config.js?v=p2-20260930"></script>
   <script src="js/api.js?v=p2-20260930"></script>
   <script src="js/verse-fit.js?v=p2-20260930"></script>
-  <script type="module" src="js/app.js?v=p2-20260930"></script>
+  <script src="js/site-menu.js?v=site-menu-20261009" defer></script>
+  <script type="module" src="js/app.js?v=site-menu-20261009"></script>
 </body>
 </html>

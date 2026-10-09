@@ -1,0 +1,68 @@
+/* Site menu: hamburger button in every page header and the panel it opens (js/site-menu.js). */
+.site-menu-button {
+  pointer-events: auto; flex: none; align-self: center;
+  display: inline-grid; place-items: center; width: 44px; height: 44px; padding: 0;
+  color: #fff; background: rgb(14 24 41 / .48); border: 1px solid rgb(255 255 255 / .35); border-radius: 0;
+  backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
+  cursor: pointer; transition: background-color .15s, border-color .15s;
+}
+.site-menu-button svg, .site-menu-close svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+.site-menu-button:hover, .site-menu-button[aria-expanded="true"] { background: rgb(14 24 41 / .82); border-color: #fff; }
+.site-menu-button:focus-visible, .site-menu :focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+/* The visual controls live in the menu now, not as floating buttons over the page. */
+.tune-toggle, .plate .thumbs { display: none !important; }
+/* In-page links a page hands to the menu (js/site-menu.js) never show in the header itself. */
+[data-site-menu-local] { display: none !important; }
+
+.site-menu { position: fixed; inset: 0; z-index: 1000; font: 400 1rem/1.4 "Gentium Book Plus", Georgia, serif; }
+.site-menu[hidden] { display: none; }
+.site-menu-scrim { position: absolute; inset: 0; background: rgb(10 18 32 / .5); animation: site-menu-fade .18s ease-out; }
+.site-menu-panel {
+  position: absolute; top: 0; right: 0; bottom: 0; width: min(380px, 100%);
+  overflow-y: auto; overscroll-behavior: contain;
+  padding: 14px 24px calc(28px + env(safe-area-inset-bottom));
+  background: #14223a; color: #f4f6f5; box-shadow: -18px 0 48px rgb(0 0 0 / .3);
+  animation: site-menu-in .2s ease-out;
+}
+@media (max-width: 480px) { .site-menu-panel { width: 100%; padding-left: 16px; padding-right: 16px; } }
+@keyframes site-menu-in { from { transform: translateX(24px); opacity: 0; } }
+@keyframes site-menu-fade { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .site-menu-scrim, .site-menu-panel { animation: none; } }
+.site-menu-head { display: flex; align-items: center; justify-content: space-between; min-height: 52px; border-bottom: 1px solid rgb(255 255 255 / .16); }
+.site-menu-brand { font: 400 1.7rem/1 "GFS Didot", "Gentium Book Plus", serif; }
+.site-menu-close { display: grid; place-items: center; width: 44px; height: 44px; padding: 0; color: #fff; background: none; border: 1px solid rgb(255 255 255 / .35); border-radius: 0; cursor: pointer; }
+.site-menu-close:hover { background: rgb(255 255 255 / .1); border-color: #fff; }
+.site-menu-section h3 { margin: 22px 0 6px; font: 700 .72rem/1.2 "Gentium Book Plus", Georgia, serif; letter-spacing: .14em; text-transform: uppercase; color: rgb(244 246 245 / .66); }
+.site-menu-list { list-style: none; margin: 0; padding: 0; }
+.site-menu .site-menu-item {
+  display: flex; flex-direction: column; gap: 1px; width: calc(100% + 24px); margin: 0 -12px; padding: 8px 12px 8px 10px;
+  color: #fff; font: inherit; text-align: left; text-decoration: none;
+  background: none; border: 0; border-left: 2px solid transparent; border-radius: 0; cursor: pointer;
+}
+.site-menu .site-menu-item span { font-size: 1.08rem; }
+.site-menu .site-menu-item small { font-size: .82rem; color: rgb(244 246 245 / .7); }
+.site-menu .site-menu-item:hover { background: rgb(255 255 255 / .08); border-left-color: #fff; }
+.site-menu .site-menu-item:hover span { text-decoration: underline; text-underline-offset: .2em; }
+.site-menu .site-menu-item:focus-visible { outline-offset: -2px; }
+.site-menu .site-menu-item[aria-current="page"] { border-left-color: #fff; background: rgb(255 255 255 / .05); }
+.site-menu .site-menu-item[aria-current="page"] span::after { content: " · this page"; font-size: .8rem; color: rgb(244 246 245 / .7); }
+.site-menu .site-menu-item.is-soon { cursor: default; opacity: .55; }
+.site-menu .site-menu-item.is-soon:hover { background: none; border-left-color: transparent; }
+.site-menu .site-menu-item.is-soon:hover span { text-decoration: none; }
+.site-menu-note { margin: 8px 0 6px; font-size: .9rem; color: rgb(244 246 245 / .8); }
+.site-menu-note a { color: #fff; }
+.site-menu-paintings { display: flex; flex-wrap: wrap; gap: 8px; }
+.site-menu-paintings button {
+  width: 52px; height: 52px; padding: 0; cursor: pointer; border-radius: 0;
+  background: center / cover no-repeat #263d50; border: 1px solid rgb(255 255 255 / .3); opacity: .72; image-rendering: pixelated;
+}
+.site-menu-paintings button:hover { opacity: 1; border-color: #fff; }
+.site-menu-paintings button[aria-pressed="true"] { opacity: 1; border-color: #fff; box-shadow: 0 0 0 2px #fff; }
+.site-menu-foot { margin-top: 26px; padding-top: 18px; border-top: 1px solid rgb(255 255 255 / .16); }
+.site-menu .site-menu-login {
+  display: block; padding: 11px 14px; text-align: center; text-decoration: none; font-size: 1.05rem;
+  color: #14223a; background: #fff; border: 1px solid #fff; transition: background-color .15s, color .15s;
+}
+.site-menu .site-menu-login:hover { color: #fff; background: transparent; }
+.site-menu-status { margin: 10px 0 0; font-size: .9rem; color: rgb(244 246 245 / .85); }
+.site-menu-status:empty { display: none; }
