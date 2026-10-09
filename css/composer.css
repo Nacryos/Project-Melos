@@ -130,3 +130,10 @@ html, body { overflow-x: hidden; }
   .mode-toggle { flex: 1 1 100%; min-height: 52px; font-size: 1.15rem; }
   .canvas textarea, .canvas .backdrop { padding: 12px 12px 16px; }
 }
+
+/* Dark: the site bar keeps the site's navy; filled buttons take dark text on the lighter sea. */
+.site-bar { background: #14223a; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .primary, :root:not([data-theme="light"]) .mode-toggle[aria-pressed="true"] { color: #0f1b2e; }
+}
+:root[data-theme="dark"] .primary, :root[data-theme="dark"] .mode-toggle[aria-pressed="true"] { color: #0f1b2e; }

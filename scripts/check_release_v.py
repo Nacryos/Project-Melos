@@ -68,6 +68,33 @@ def main():
     timings["scan_stanza_ms"] = {"median": statistics.median(times), "max": max(times), "server_ms_last": r.get("ms")}
     check("scan: 4-line stanza with metre, median round trip under 150 ms", statistics.median(times) < 150, timings["scan_stanza_ms"])
 
+    # Reader overlay and metre-locked resolution (reader only).
+    code, sp, ms_cold = call(B, "/api/scan/passage?id=campbell-glp:sappho:1")
+    _, _, ms_warm = call(B, "/api/scan/passage?id=campbell-glp:sappho:1")
+    meta = [m for m in (u.get("metre") for u in sp.get("units", [])) if m] if code == 200 else []
+    adjusted = [m for m in meta if m["adjusted"]]
+    rule_ok = all(0.3 <= m["p_before"] <= 0.7 and m["requires"] in ("long", "short")
+                  and abs(m["p_after"] - (min(1, m["p_before"] + .5) if m["requires"] == "long" else max(0, m["p_before"] - .5))) < 1e-3
+                  for m in adjusted)
+    conflicts_ok = all(not m["adjusted"] and m["p_after"] == m["p_before"] for m in meta if m["conflict"])
+    anceps_ok = all(not m["adjusted"] for m in meta if m["requires"] == "anceps")
+    check("reader scan: Sappho 1 has its recorded metre, locked lines, and the band rule holds",
+          code == 200 and (sp.get("metre") or {}).get("metre") == "sapphic" and sum(l["locked"] for l in sp["lines"]) >= 20
+          and adjusted and rule_ok and conflicts_ok and anceps_ok,
+          {"code": code, "locked": sum(l["locked"] for l in sp.get("lines", [])), "adjusted": len(adjusted),
+           "conflicts": sum(m["conflict"] for m in meta), "example": adjusted[0]["reason"] if adjusted else None,
+           "ms_cold": ms_cold, "ms_cached": ms_warm})
+    check("reader scan: cached repeat under 100 ms", ms_warm < 100, {"ms": ms_warm})
+    code, f96, _ = call(B, "/api/scan/passage?id=digital-sappho:fr96:1")
+    check("reader scan: fr. 96 (no recorded metre) is never adjusted; bracketed words are marked editorial",
+          code == 200 and f96["metre"] is None and not any("metre" in u for u in f96["units"])
+          and any(u["editorial"] for u in f96["units"]), {"code": code})
+    code, _, _ = call(B, "/api/scan/passage?id=no-such-passage")
+    check("reader scan: unknown passage is 404", code == 404, {"code": code})
+    code, plain, _ = call(B, "/api/scan", {"text": sp.get("text", "")[:400], "metre": "sapphic", "dialect": "aeolic"})
+    check("composer path: /api/scan never applies the metre lock", code == 200 and not any("metre" in u for u in plain["units"]),
+          {"code": code})
+
     code, status, _ = call(B, "/api/compose/status")
     check("compose: status names the proposer and says whether a text model is configured",
           code == 200 and status.get("proposers") == ["corpus"] and "configured" in status.get("llm", {}),

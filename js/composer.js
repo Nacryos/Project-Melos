@@ -103,7 +103,7 @@
         if (u.rs < pos || u.re > line.length) continue;
         if (u.rs > pos) html += esc(line.slice(pos, u.rs));
         const p = u.p_long, c = rgb(p);
-        html += `<span class="u${first ? '' : ' b'}${u.violation ? ' violation' : ''}${state.selected === `${li}:${u.rs}` ? ' sel' : ''}" data-line="${li}" data-rs="${u.rs}" data-ns="${u.ns}" data-i="${u.i}" style="color:rgb(${c});background:rgba(${c},.09)">${esc(line.slice(u.rs, u.re))}<span class="pct">${Math.round(p * 100)}%</span></span>`;
+        html += `<span class="u${first ? '' : ' b'}${u.violation ? ' violation' : ''}${state.selected === `${li}:${u.rs}` ? ' sel' : ''}" data-line="${li}" data-rs="${u.rs}" data-ns="${u.ns}" data-i="${u.i}" style="color:rgb(${c});background:rgba(${c},.06)">${esc(line.slice(u.rs, u.re))}<span class="pct">${Math.round(p * 100)}%</span></span>`;
         pos = u.re; first = false;
       }
       html += esc(line.slice(pos));

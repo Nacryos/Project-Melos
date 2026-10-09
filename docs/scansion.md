@@ -366,3 +366,71 @@ The first call of a process loads the rules file and opens the lexicon (~70 ms +
 6. Attribution on the page: Hypotactic (Chamberlain) is used only for evaluation; Monro (DCC,
    CC BY-SA), Wiktionary (CC BY-SA), Morpheus (CC BY-SA 3.0 US) and LSJ (CC BY-SA 4.0) data are used at
    run time and need credit lines.
+
+**Shipped in release V (2026-10-09):** items 1, 2 (the lexicon is a read-only mount, `MELOS_SCANSION_LEXICON`;
+SQLite `immutable=1`, so its pages live in the OS page cache; the in-process lookup cache is bounded at 50,000
+forms), 4 (`/api/scan` and `/api/scan/rules/validate` are in the per-client limit of `backend/rate_limit.py`),
+5 (the composer canvas and the reader overlay below) and 6 (credit line on the composer page). §8's open
+questions keep their defaults (0.5 parameters, no genre input, no correption split, FIN-ANC as now).
+
+## 10. Release V: palette, reader overlay, metre-locked resolution
+
+### 10.1 Palette (shared tokens)
+
+`css/scansion.css` defines `--scan-short`, `--scan-mid`, `--scan-long` (RGB triples) for the reader and the composer.
+The spectrum runs from the site's saffron (deepened to `#a66000` for 4.9:1 text contrast on white) through slate
+(`#6c727a`, the uncertain middle) to the site's sea blue (`#2b5a87`); colours between are interpolated, so the
+probability stays continuous. Dark stops (composer only; the reader has no dark theme): `#f0b048`, `#9ea6b0`,
+`#7ab0eb`. Colour-vision check (Machado et al. 2009, severity 1, CIELAB ΔE76 between stops):
+
+| Theme | Vision | short–long | short–mid | mid–long |
+|---|---|---|---|---|
+| light | normal / protanopia / deuteranopia / tritanopia | 89 / 78 / 89 / 72 | 65 / 56 / 61 / 51 | 29 / 27 / 32 / 25 |
+| dark | normal / protanopia / deuteranopia / tritanopia | 97 / 94 / 98 / 73 | 68 / 67 / 68 / 45 | 29 / 28 / 31 / 28 |
+
+The dev page's red→purple→blue had mid–long ΔE 11 under protanopia. Metre violations in the composer are a
+wavy underline in the error colour (shape, not hue, carries it).
+
+### 10.2 Reader overlay (`js/reader-scansion.js`, `GET /api/scan/passage?id=`)
+
+- Two toggles above a Greek poem: **Scansion** (marks above syllables) and **Syllable breaks** (bold `|` between
+  syllables). Each is remembered per viewer (`localStorage`, wrapped in try/catch). Off by default.
+- The poem is scanned on demand when a toggle is first turned on: the server scans the stored text itself (the
+  printed lines joined by newlines, the same offsets the reader's word buttons carry), with the author's dialect
+  (Lesbian → aeolic, Doric), and caches 512 passages. The reader checks the returned text equals what it prints.
+- **Marks:** `–` long (p ≥ 0.5), `⏑` short, `×` anceps (only where a recorded metre puts an anceps or the line end).
+  Uncertain syllables (30–70 %) are drawn lighter. The mark is anchored over the syllable's vowel; for a
+  diphthong over its second vowel (the nucleus's last letter, skipping combining marks). It sits above the line
+  box's top, clear of breathings, accents and circumflexes (checked on ἆ ᾄ ῗ Ἄ Ὦ ᾯ ΐ at 34 px).
+- **Bars** sit between the letters at the scanner's unit boundaries (vowel + following consonants, the owner's
+  units), inside words only. Marks and bars are CSS generated content inside the word's `<button>`: a click
+  anywhere on the word, bars included, still inspects the whole word, and selection/copy never include them.
+  Turning both toggles off restores the reader's original DOM.
+- **Gaps:** a word containing an editorial sign (`[ ] ⟨ ⟩ { } < > † …`, a dotted letter U+0323, or a dotted lacuna)
+  gets no marks, so nothing is invented across a lacuna; its bars still show where letters survive.
+- Clicking a word shows its syllables with % long and the deciding reason under the poem (beside the usual word
+  panel), including any metre adjustment.
+
+### 10.3 Metre-locked resolution (reader only)
+
+Only for stored poems whose metre is **recorded** (`backend/scansion/recorded_metres.py`; the corpus has no metre
+field): Sappho frr. 1–42 (Book 1 of the Alexandrian edition, Sapphic stanzas; L–P/Voigt numbering), Homer's Iliad
+and Odyssey and Hesiod's Theogony and Works and Days (hexameter). Nothing is guessed from a scan.
+
+Per line, the scanner fits each of the metre's line templates and keeps the best one that parses; lines with
+editorial signs, and lines that parse in no template, are left alone. Then, for each syllable at a position whose
+quantity the parse fixes (long or short; `x`, `X` and the line end `F` are anceps and never adjusted):
+
+- p_long in [0.30, 0.70] → moved 0.50 toward the required quantity, clamped to 0..1 (70 % where short is required →
+  20 %; 40 % where long is required → 90 %);
+- p_long outside the band and against the metre (e.g. 95 % where short is required) → **not** moved; flagged as a
+  conflict (textual or responsion problem), shown with a wavy underline under its mark.
+
+The click reason says it: "metre: Sapphic hendecasyllable, position 2 requires short; 50% → 0% (scanner 50%)".
+Sappho 1 (Campbell): 28 lines locked, 13 syllables adjusted, 1 conflict; Sappho 31: 15 of 17 lines locked (2 with
+gaps), 16 adjusted, 4 conflicts; fr. 96 (not Book 1): nothing adjusted.
+
+**The composer never applies it.** `/api/scan` has no passage input and no lock; `backend/compose_routes.py`,
+`backend/scansion/api.py` and `js/composer.js` never import or call the lock (`tests/test_scansion_lock.py`
+asserts both the unchanged probabilities and the absence of any call). The composer's scans exist to catch the
+writer's errors.

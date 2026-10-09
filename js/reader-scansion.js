@@ -25,11 +25,11 @@
   note.className = 'scansion-note';
   note.setAttribute('role', 'status');
   tools.append(marksButton, barsButton, note);
-  text.before(tools);
+  frame.before(tools);
   const detail = document.createElement('div');
   detail.className = 'scansion-detail';
   detail.hidden = true;
-  text.after(detail);
+  frame.after(detail);
 
   function button(label, title) {
     const b = document.createElement('button');

@@ -3,6 +3,7 @@
 # and POST /api/compose/suggest (next-line suggestions: corpus proposer, scanner/parser/dialect lint, repair rounds).
 # Code-only image atop the LIVE image (U); canary/promote copy the live container's mounts, environment and
 # command (deploy/clone_run.py), adding:
+# The dev and canary containers read release T's synthetic private store, never the owner's.
 #   $V/data/scansion/quantities.sqlite -> /lemma/quantities.sqlite (scripts/scansion_build_lexicon.py; read with
 #   SQLite immutable=1, so pages are shared from the OS page cache rather than held in the process)
 #
@@ -22,12 +23,20 @@ KEPT=melos-api-before-v
 CANARY=melos-api-canary-v
 DEV=${MELOS_V_DEV:-melos-api-dev-v}
 DEV_PORT=${MELOS_V_DEV_PORT:-8799}
+T_CANARY_STORE=/home/alvin/melos-t/canary-private/store
 step=${1:-}
 
 v_args() {
   test -f "$DATA/scansion/quantities.sqlite"
   echo --mount "$DATA/scansion/quantities.sqlite:/lemma/quantities.sqlite:ro" \
        --env MELOS_SCANSION_LEXICON=/lemma/quantities.sqlite
+}
+
+canary_store() {
+  # Dev and canary containers read release T's synthetic private store, never the owner's.
+  if docker inspect "$LIVE" --format '{{range .HostConfig.Binds}}{{println .}}{{end}}' | grep -q ':/private:'; then
+    echo --mount "$T_CANARY_STORE:/private:ro"
+  fi
 }
 
 case "$step" in
@@ -43,13 +52,13 @@ case "$step" in
     # shellcheck disable=SC2046
     python3 "$SRC/deploy/clone_run.py" --from "$LIVE" --name "$DEV" --port "$DEV_PORT" \
       --image "$(docker inspect "$LIVE" --format '{{.Config.Image}}')" \
-      --mount "$SRC/backend:/app/backend:ro" $(v_args)
+      --mount "$SRC/backend:/app/backend:ro" $(v_args) $(canary_store)
     sleep 20; curl -fsS "http://127.0.0.1:$DEV_PORT/api/status" | head -c 120; echo
     ;;
   canary)
     docker container inspect "$CANARY" >/dev/null 2>&1 && { echo "$CANARY exists; remove it first" >&2; exit 1; }
     # shellcheck disable=SC2046
-    python3 "$SRC/deploy/clone_run.py" --from "$LIVE" --name "$CANARY" --port 8792 --image "$IMAGE" $(v_args)
+    python3 "$SRC/deploy/clone_run.py" --from "$LIVE" --name "$CANARY" --port 8792 --image "$IMAGE" $(v_args) $(canary_store)
     sleep 20; curl -fsS http://127.0.0.1:8792/api/status | head -c 200; echo
     ;;
   stop-canary)

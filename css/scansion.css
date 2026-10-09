@@ -1,7 +1,8 @@
 /* Scansion palette and marks, shared by the reader (js/reader-scansion.js) and the composer (js/composer.js).
    A continuous spectrum by longness: short = the site's saffron (deepened for text contrast), uncertain = slate,
    long = the site's sea blue. Checked under Machado-2009 protanopia, deuteranopia and tritanopia simulation:
-   every pair of stops stays ≥ 25 ΔE apart in both themes (docs/scansion.md §10). */
+   every pair of stops stays ≥ 25 ΔE apart in both themes (docs/scansion.md §10). The dark stops apply only
+   on pages that have a dark theme (the composer marks <html class="scan-dark-ok">); the reader is light only. */
 :root {
   --scan-short: 166, 96, 0;        /* #a66000, 4.9:1 on white */
   --scan-mid: 108, 114, 122;       /* #6c727a, 4.8:1 on white */
@@ -9,7 +10,7 @@
   --scan-bar: var(--ink, #14223a);
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) { --scan-short: 240, 176, 72; --scan-mid: 158, 166, 176; --scan-long: 122, 176, 235; }
+  :root.scan-dark-ok:not([data-theme="light"]) { --scan-short: 240, 176, 72; --scan-mid: 158, 166, 176; --scan-long: 122, 176, 235; }
 }
 :root[data-theme="dark"] { --scan-short: 240, 176, 72; --scan-mid: 158, 166, 176; --scan-long: 122, 176, 235; }
 
@@ -31,13 +32,13 @@
 .sy-n { position: relative; }
 .scan-marks .sy-n::before {
   content: attr(data-m); position: absolute; left: 50%; bottom: 100%; transform: translate(-50%, -.08em);
-  font: 700 .56em/1 "Gentium Book Plus", Georgia, serif; color: rgb(var(--sc, var(--scan-mid)));
+  font: 700 .7em/1 "Gentium Book Plus", Georgia, serif; color: rgb(var(--sc, var(--scan-mid)));
   pointer-events: none; user-select: none; -webkit-user-select: none; white-space: nowrap;
 }
 .scan-marks .sy-n.unsure::before { opacity: .55; font-weight: 400; }
 .scan-marks .sy-n.conflict::before { text-decoration: underline wavy rgb(var(--scan-short)); }
 .scan-bars .sy.b::before {
-  content: "|"; font-weight: 700; margin: 0 .05em; color: var(--scan-bar);
+  content: "|"; font: 800 .82em/1 system-ui, -apple-system, "Segoe UI", sans-serif; margin: 0 .07em; color: var(--scan-bar);
   pointer-events: none; user-select: none; -webkit-user-select: none;
 }
 .scansion-detail { margin: 10px 0 0; padding: 8px 12px; border-left: 3px solid rgb(var(--scan-long)); font: 14px/1.45 "Gentium Book Plus", Georgia, serif; color: var(--ink, #14223a); background: rgb(43 90 135 / .06); }
