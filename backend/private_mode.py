@@ -4,7 +4,7 @@
 (it reads uncompressed bodies). Server-side enforcement, in order:
 
 1. ``/api/private/*`` answers 404 to any request without a verified owner session, before
-   routing (unknown sub-paths included);
+   routing (unknown sub-paths included); 503 "not configured" when the box has no owner secrets;
 2. every owner route also checks the session itself (``_owner_or_404``);
 3. for signed-out requests the guard scans every ``/api`` response body for the private marker
    that tags all owner payloads; a match is replaced by 404 (or the stream is cut) and logged.
@@ -19,7 +19,7 @@ from fastapi.responses import FileResponse, Response
 from starlette.requests import Request as StarletteRequest
 
 from . import private_store
-from .private_auth import not_found, owner_from_request, router as auth_router
+from .private_auth import load_config, not_configured, not_found, owner_from_request, router as auth_router
 
 log = logging.getLogger("melos.private")
 MARKER_BYTES = private_store.MARKER.encode()
@@ -40,6 +40,8 @@ class PrivateGuard:
         if owner is not None:
             return await self.app(scope, receive, send)
         if scope["path"].startswith("/api/private/") or scope["path"] == "/api/private":
+            if load_config() is None:
+                return await not_configured(request)(scope, receive, send)
             return await not_found()(scope, receive, send)
 
         held_start = None

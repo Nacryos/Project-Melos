@@ -3,8 +3,8 @@
 Rules: docs/private-mode.md. The owner's credentials never live in the repository:
 the box holds an argon2id hash and a session key in a mode-600 secrets file
 (``MELOS_OWNER_AUTH_FILE``, default ``/run/secrets/owner_auth.env``), written by
-``scripts/owner_auth_setup.py``. Without that file private mode is off and every
-owner route answers 404.
+``scripts/owner_auth_setup.py``. Without that file private mode is off: every owner
+and private route answers 503 "not configured" (no private material exists to protect).
 
 Sessions are server-side (one uvicorn worker): the cookie carries a random id and
 its HMAC, so a restart signs the owner out and a cookie never outlives logout.
@@ -253,6 +253,15 @@ def not_found() -> JSONResponse:
     return JSONResponse(status_code=404, content={"detail": "Not Found"})
 
 
+def not_configured(request: Request) -> JSONResponse:
+    """Private mode off (no owner secrets file): say so plainly. ``https`` reports whether this
+    request reached the API as HTTPS (X-Forwarded-Proto on the public deployment), so the proxy
+    chain can be checked before a password exists."""
+    return JSONResponse(status_code=503, headers={"Cache-Control": "no-store"}, content={
+        "configured": False, "signed_in": False, "https": is_https(request),
+        "detail": "Owner sign-in is not configured on this server."})
+
+
 def _cookie(response: Response, name: str, value: str, max_age: int, httponly: bool = True) -> None:
     response.set_cookie(name, value, max_age=max_age, path="/", secure=True, httponly=httponly, samesite="strict")
 
@@ -279,7 +288,9 @@ router = APIRouter()
 @router.get("/api/owner/session", include_in_schema=False)
 def owner_session(request: Request):
     config = load_config()
-    if config is None or not is_https(request):
+    if config is None:
+        return not_configured(request)
+    if not is_https(request):
         return not_found()
     owner = owner_from_request(request)
     if owner is None:
@@ -295,7 +306,9 @@ def owner_session(request: Request):
 def login_token(request: Request):
     """A one-use pre-login token bound to an HttpOnly cookie (login CSRF protection)."""
     config = load_config()
-    if config is None or not is_https(request):
+    if config is None:
+        return not_configured(request)
+    if not is_https(request):
         return not_found()
     nonce = secrets.token_urlsafe(24)
     expires = int(_now()) + LOGIN_TOKEN_TTL
@@ -335,7 +348,9 @@ def _login_token_ok(config: OwnerConfig, request: Request) -> str | None:
 @router.post("/api/owner/login", include_in_schema=False)
 async def login(request: Request):
     config = load_config()
-    if config is None or not is_https(request):
+    if config is None:
+        return not_configured(request)
+    if not is_https(request):
         return not_found()
     if not origin_ok(request):
         return JSONResponse(status_code=403, content={"detail": "Sign-in must come from the site itself."})
@@ -376,7 +391,9 @@ async def login(request: Request):
 @router.post("/api/owner/logout", include_in_schema=False)
 def logout(request: Request):
     config = load_config()
-    if config is None or not is_https(request):
+    if config is None:
+        return not_configured(request)
+    if not is_https(request):
         return not_found()
     owner = owner_from_request(request)
     if owner is None:

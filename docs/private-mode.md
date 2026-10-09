@@ -60,7 +60,17 @@ want public) goes to S's commentary inbox instead.
   **argon2id** hash (time 3, 64 MiB, parallelism 2) and a random 256-bit session key in
   `/home/alvin/services/melos/secrets/owner_auth.env` (mode 600), written by
   `scripts/owner_auth_setup.py`, which reads the password from standard input. Without that file
-  private mode is off and every owner route is 404.
+  private mode is off: every `/api/owner/*` and `/api/private/*` route answers **503**
+  `{"configured": false, "signed_in": false, "https": <bool>, "detail": "Owner sign-in is not configured on this server."}`
+  (`https` says whether the request reached the API as HTTPS, so the Funnel/Vercel chain can be
+  checked before a password exists); public routes are unchanged. The API mounts the secrets
+  *directory* read-only (`/run/secrets/melos-owner`), so the file takes effect without a restart.
+  The owner sets the password with one interactive command (the T image has argon2; the host
+  Python does not):
+
+  ```
+  ssh -t alvin@100.64.176.44 'docker run --rm -it --network none --user 1000:1000 -v /home/alvin/services/melos/secrets:/out -v /home/alvin/melos-t/src:/src:ro -w /src melos-api:20261009t python scripts/owner_auth_setup.py --out /out/owner_auth.env --username Alvin'
+  ```
 - **Session:** cookie `__Host-melos_owner` = random id + HMAC; `HttpOnly`, `Secure`,
   `SameSite=Strict`, `Path=/`, 12 hours. Sessions are held server-side (one worker), so sign-out
   ends them and a restart signs the owner out. A second, non-secret cookie `melos_owner_ui=1`

@@ -3,7 +3,9 @@
 # for public search through one gate. Rules: docs/private-mode.md.
 # Code-only image atop the LIVE image (S once S is live): build reads the live container's image, and
 # canary/promote copy the live container's mounts, environment and command (deploy/clone_run.py), adding:
-#   /home/alvin/services/melos/secrets/owner_auth.env -> /run/secrets/owner_auth.env (ro, mode 600)
+#   /home/alvin/services/melos/secrets (dir)          -> /run/secrets/melos-owner (ro); the API reads
+#     owner_auth.env there (mode 600). Missing file = sign-in inert (503 "not configured"); the owner
+#     creates it later with scripts/owner_auth_setup.py and it takes effect without a restart.
 #   $PRIVATE_STORE (the private store directory)        -> /private (ro)
 #
 #   sh /home/alvin/melos-t/src/deploy/release_t.sh build        # melos-api:<date>t atop the live image
@@ -20,18 +22,23 @@ IMAGE=${MELOS_T_IMAGE:-melos-api:20261009t}
 LIVE=melos-api
 KEPT=melos-api-before-t
 CANARY=melos-api-canary-t
-SECRET=/home/alvin/services/melos/secrets/owner_auth.env
+SECRET_DIR=/home/alvin/services/melos/secrets
+SECRET=$SECRET_DIR/owner_auth.env
 REAL_STORE=/home/alvin/melos-private/store
 CANARY_STORE=${MELOS_T_CANARY_STORE:-$T/canary-private/store}
 step=${1:-}
 
 t_args() {
   store=$1
-  test -f "$SECRET" || { echo "missing $SECRET (scripts/owner_auth_setup.py)" >&2; exit 1; }
-  [ "$(stat -c %a "$SECRET")" = 600 ] || { echo "$SECRET must be mode 600" >&2; exit 1; }
+  if test -f "$SECRET"; then
+    [ "$(stat -c %a "$SECRET")" = 600 ] || { echo "$SECRET must be mode 600" >&2; exit 1; }
+  else
+    echo "note: no $SECRET; owner sign-in ships inert (503 not configured)" >&2
+  fi
+  [ "$(stat -c %a "$SECRET_DIR")" = 700 ] || { echo "$SECRET_DIR must be mode 700" >&2; exit 1; }
   mkdir -p "$store"
-  echo --mount "$SECRET:/run/secrets/owner_auth.env:ro" --mount "$store:/private:ro" \
-       --env MELOS_OWNER_AUTH_FILE=/run/secrets/owner_auth.env --env MELOS_PRIVATE_STORE=/private/private.sqlite \
+  echo --mount "$SECRET_DIR:/run/secrets/melos-owner:ro" --mount "$store:/private:ro" \
+       --env MELOS_OWNER_AUTH_FILE=/run/secrets/melos-owner/owner_auth.env --env MELOS_PRIVATE_STORE=/private/private.sqlite \
        --env MELOS_OWNER_ORIGINS=https://greeklyric.com
 }
 

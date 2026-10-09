@@ -274,9 +274,19 @@ def test_private_mode_off_without_secrets(env, monkeypatch, tmp_path):
     monkeypatch.setenv("MELOS_OWNER_AUTH_FILE", str(tmp_path / "missing.env"))
     private_auth.reset_state()
     c = client()
-    for path in ("/api/owner/session", "/api/owner/login-token", "/api/private/status"):
-        assert c.get(path).status_code == 404
-    assert c.post("/api/owner/login", json={}, headers={"Origin": ORIGIN}).status_code == 404
+    for path in ("/api/owner/session", "/api/owner/login-token", "/api/private/status", "/api/private/unknown"):
+        response = c.get(path)
+        assert response.status_code == 503 and response.json()["configured"] is False
+        assert "not configured" in response.json()["detail"] and not response.cookies
+    for path in ("/api/owner/login", "/api/owner/logout"):
+        assert c.post(path, json={}, headers={"Origin": ORIGIN}).status_code == 503
+    # HTTPS detection behind the proxy is visible before a password exists.
+    monkeypatch.setenv("MELOS_PUBLIC_DEPLOYMENT", "1")
+    assert c.get("/api/owner/session", headers={"X-Forwarded-Proto": "https"}).json()["https"] is True
+    assert c.get("/api/owner/session", headers={"X-Forwarded-Proto": "http"}).json()["https"] is False
+    assert c.get("/api/owner/session").json()["https"] is False
+    # Public routes are unaffected.
+    assert c.get("/api/status").status_code == 200
 
 
 # --------------------------------------------------------------------------- no private text leaks

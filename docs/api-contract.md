@@ -392,7 +392,7 @@ token_flag bit 2 (`dialect_rule` calibration class).
 Owner-only routes; rules, cookies, limits and the public-search gate are in `docs/private-mode.md`.
 
 - `GET /api/owner/session`, `GET /api/owner/login-token`, `POST /api/owner/login`, `POST /api/owner/logout`
-  (404 everywhere when the box has no owner secrets file).
+  (503 `{"configured": false, ...}` on these and every `/api/private/*` path when the box has no owner secrets file).
 - `GET /api/private/{status,documents,passage,lemma,search,page,ui.js}`: owner session only; **404** for any
   `/api/private/*` path without one. Every payload carries `"visibility": "private-owner-only"` and each item
   `label` ("Private — owner only"), `source` ("<citation>, p. <page>"), `page`, `pdf_page`, `kind`, `text`.
