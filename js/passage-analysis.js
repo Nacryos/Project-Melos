@@ -444,8 +444,10 @@
     for (const item of items) {
       const card = node('article', 'published-translation');
       card.append(node('p', 'translation-credit', `English · Translator: ${item.translator}`),
-        node('p', 'translation-edition', `${item.edition} · ${item.citation}`),
-        node('p', 'translation-text', item.text));
+        node('p', 'translation-edition', `${item.edition} · ${item.citation}`));
+      if (item.coverage === 'partial') card.append(node('p', 'translation-scope translation-partial',
+        typeof item.coverage_label === 'string' && item.coverage_label.trim() ? item.coverage_label : 'Partial rendering of this poem.'));
+      card.append(node('p', 'translation-text', item.text));
       const link = safeLink(item.source_url, 'Published translation source'); if (link) card.append(link);
       const sourceDetails = node('details', 'entry-details');
       sourceDetails.append(node('summary', '', 'Source notes and edition details'));

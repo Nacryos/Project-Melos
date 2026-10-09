@@ -74,3 +74,16 @@ test('poem-load related panel exposes comparison even without ordinary related r
   assert.equal(ui.related.hidden, false); assert.match(ui.related.textContent, /English translation · another edition/);
   assert.equal(ui.related.children[0].tag, 'details');
 });
+test('a partial rendering shows its coverage label above the text; a full one shows none', () => {
+  const data = fixture(), item = data.translation_comparisons.translation_comparisons[0], host = node('div');
+  item.coverage = 'partial'; item.coverage_label = 'Partial: the opening words are left out.';
+  assert.equal(render(host, data, node, safeLink), true);
+  const flatten = element => [element, ...element.children.flatMap(flatten)];
+  const nodes = flatten(host.children[0]);
+  const label = nodes.findIndex(element => element.cls.includes('translation-partial'));
+  const text = nodes.findIndex(element => element.cls === 'translation-text');
+  assert.ok(label >= 0 && label < text); assert.equal(nodes[label].text, item.coverage_label);
+  const full = fixture(), fullHost = node('div');
+  assert.equal(render(fullHost, full, node, safeLink), true);
+  assert.ok(!flatten(fullHost.children[0]).some(element => element.cls.includes('translation-partial')));
+});

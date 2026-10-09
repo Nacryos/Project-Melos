@@ -1,7 +1,7 @@
 {
- "comparison_count": 209,
+ "comparison_count": 226,
  "exact_edition_alignment": false,
- "record_count": 209,
+ "record_count": 226,
  "records": [
   {
    "campbell_identity": {
@@ -2949,6 +2949,289 @@
    "campbell_identity": {
     "author": "Archilochus",
     "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "103",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "6d5ab79cc0a57eaf891c2d4b51d41fc6e33e2a45f0b18d26d4371639c6eb88a9",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:archilochus:103",
+   "translation_comparisons": [
+    {
+     "citation": "Mueller, footnote 3 to p. 186 (\"fragment 122\", Bergk)",
+     "comparison_id": "glp-translation:archilochus:103:muller1858:1",
+     "edition": "A History of the Literature of Ancient Greece, vol. I (K. O. Mueller; English translation by G. C. Lewis, continued by J. W. Donaldson) (1858), London: Longmans [preface 1858; first English ed. 1840]",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Prose rendering quoted inside a footnote."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1858)",
+     "license_basis": "Published 1858 (before 1931): public domain in the US. IA possible-copyright-status: NOT_IN_COPYRIGHT.",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "The footnote quotes the Greek before the English: \"πόλλ᾽ οἶδ᾽ ἀλώπηξ, ἀλλ᾽ ἐχῖνος ἓν μέγα\" = Campbell 103.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/historyofliterat01mluoft%2Fhistoryofliterat01mluoft_jp2.zip%2Fhistoryofliterat01mluoft_jp2%2Fhistoryofliterat01mluoft_0242.jp2/full/1200,/0/default.jpg",
+        "printed_page": "186",
+        "scan_leaf": 242,
+        "sha256": "3a7d1352f80b5305df65eab9d8dcfd66d7bde54d764ea681500293363904cda3"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 0,
+      "source_id": "muller1858",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/historyofliterat01mluoft",
+     "text": "the fox uses many arts, but the hedgehog has one great one",
+     "text_normalisation": [
+      "surrounding quotation marks of the source prose removed: \"'the fox uses many arts, but the hedgehog has one great one,'\" -> 'the fox uses many arts, but the hedgehog has one great one'"
+     ],
+     "translator": "Sir George Cornewall Lewis (translator of K. O. Mueller)",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Archilochus",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "104",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "f3cc9074f844dac3a779a06c2fb337c260f507c42123a64a8b1d121376a57bd3",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:archilochus:104",
+   "translation_comparisons": [
+    {
+     "citation": "Brooks XX (Bergk 84)",
+     "comparison_id": "glp-translation:archilochus:104:brooks1896:1",
+     "edition": "Greek Lyric Poets (1896), London: David Nutt",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Prose."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1896)",
+     "license_basis": "Published 1896 (before 1931): public domain in the US.",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Greek on the same page: \"Δύστηνος ἔγκειμαι πόθῳ / ἄψυχος, χαλεπῇσι θεῶν ὀδύνῃσιν ἕκητι / πεπαρμένος δι᾽ ὀστέων\" = Campbell 104.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0025.jp2/full/1200,/0/default.jpg",
+        "printed_page": "11",
+        "scan_leaf": 25,
+        "sha256": "5e745dbd0daceff0f7566a2087498c4d6fec397cae618cb828428acf6634920e"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 0,
+      "source_id": "brooks1896",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/greeklyricpoets00broo",
+     "text": "Hapless I am wrapped in desire, life-bereft, pierced through the marrow with cruel pangs by the will of the gods.",
+     "translator": "Francis Brooks",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Archilochus",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "112",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "ba9455604d3dff7746784d1fd0d0c47fa587a8675b7ddf71524b2096a506497e",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:archilochus:112",
+   "translation_comparisons": [
+    {
+     "citation": "Brooks XXIX (Bergk 103)",
+     "comparison_id": "glp-translation:archilochus:112:brooks1896:1",
+     "edition": "Greek Lyric Poets (1896), London: David Nutt",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Prose. Brooks prints ἀταλὰς where Campbell has ἁπαλὰς."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1896)",
+     "license_basis": "Published 1896 (before 1931): public domain in the US.",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Greek on the same page: \"Τοῖος γὰρ φιλότητος ἔρως ὑπὸ καρδίην ἐλυσθείς / πολλὴν κατ᾽ ἀχλὺν ὀμμάτων ἔχευεν, / κλέψας ἐκ στηθέων ἀταλὰς φρένας\" = Campbell 112.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0028.jp2/full/1200,/0/default.jpg",
+        "printed_page": "14",
+        "scan_leaf": 28,
+        "sha256": "116b1cd7f340612ce0dc1796f7c7e777016fc980221707399eb95bdc1cf4a97d"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 0,
+      "source_id": "brooks1896",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/greeklyricpoets00broo",
+     "text": "Such passion of love, winding beneath my heart, shed thick mist over my eyes, stealing the tender soul from my breast.",
+     "translator": "Francis Brooks",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Archilochus",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "118",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "2914988fa8001efaf1a83de58c9b32a2d1830e339fcfa74adc431bac5278d1fb",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:archilochus:118",
+   "translation_comparisons": [
+    {
+     "citation": "Brooks XXI (Bergk 85)",
+     "comparison_id": "glp-translation:archilochus:118:brooks1896:1",
+     "edition": "Greek Lyric Poets (1896), London: David Nutt",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Prose."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1896)",
+     "license_basis": "Published 1896 (before 1931): public domain in the US.",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Greek on the same page: \"Ἀλλά μ᾽ ὁ λυσιμελής, ὦ ᾽ταῖρε, δάμναται πόθος\" = Campbell 118.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0026.jp2/full/1200,/0/default.jpg",
+        "printed_page": "12",
+        "scan_leaf": 26,
+        "sha256": "2a4d4bb544dac2998b2242ef78fbeb66c3530fdb815d5a7debd87458f0b65626"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 1,
+      "source_id": "brooks1896",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/greeklyricpoets00broo",
+     "text": "But desire, that makes loose the limbs, overcomes me, O friend.",
+     "translator": "Francis Brooks",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Archilochus",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
     "edition_fragment": "18",
     "kind": "text",
     "language": "grc",
@@ -4003,6 +4286,76 @@
    "campbell_identity": {
     "author": "Archilochus",
     "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "71",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "4ccce2a9ebf1246414c1a74838119f660386f36821495ea6f0fe57fe4c304873",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:archilochus:71",
+   "translation_comparisons": [
+    {
+     "citation": "Brooks XIII (Bergk 71)",
+     "comparison_id": "glp-translation:archilochus:71:brooks1896:1",
+     "edition": "Greek Lyric Poets (1896), London: David Nutt",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Prose."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1896)",
+     "license_basis": "Published 1896 (before 1931): public domain in the US.",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Greek printed above the English on the same page: \"Εἰ γὰρ ὡς ἐμοὶ γένοιτο χεῖρα Νεοβούλης θιγεῖν\" = Campbell 71 (εἰ γὰρ ὣς ἐμοὶ γένοιτο χεῖρα Νευβούλης θιγεῖν).",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0023.jp2/full/1200,/0/default.jpg",
+        "printed_page": "9",
+        "scan_leaf": 23,
+        "sha256": "adc8bf249e4c7e6978273815f2c581ae34181297d4583e2d5db6a4477f4e33f9"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 0,
+      "source_id": "brooks1896",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/greeklyricpoets00broo",
+     "text": "O that it might be mine to touch the hand of Neobule.",
+     "translator": "Francis Brooks",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Archilochus",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
     "edition_fragment": "74",
     "kind": "text",
     "language": "grc",
@@ -4119,6 +4472,304 @@
      "source_url": "https://archive.org/details/deipnosophistsor03atheuoft",
      "text": "I, all excited in my mind with wine,\nAm skilful in the dithyrambic, knowing\nThe noble melodies of the sovereign Bacchus.",
      "translator": "C. D. Yonge",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Archilochus",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "79a",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "de7964d8ee02cbef7474d7ef1dd464cf9ea6280e3da1a850c6de065831165792",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:archilochus:79a",
+   "translation_comparisons": [
+    {
+     "citation": "E. D. Perry, lecture \"Lyric Poetry\", p. 70",
+     "comparison_id": "glp-translation:archilochus:79a:columbia1912:1",
+     "coverage": "partial",
+     "coverage_kind": "opening_missing",
+     "coverage_label": "Partial: Perry leaves out the opening words of the poem; his rendering begins at “At Salmydessus”.",
+     "edition": "Greek Literature: A Series of Lectures Delivered at Columbia University (lecture \"Lyric Poetry\") (1912), New York: The Columbia University Press",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Prose. Perry omits the opening words (\"omitting the first few words of the fragment\") and renders from \"At Salmydessus\" to \"he that aforetime was my friend\", i.e. Campbell lines 3-16. No Greek is printed."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1912)",
+     "license_basis": "Published 1912 (before 1931): public domain in the US. Cornell scan note: \"There are no known copyright restrictions in the United States on the use of the text.\"",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Content match with Campbell 79a: Σαλμυδησσῷ (Salmydessus), Θρήικες ἀκρόκομοι (wild-haired Thracians), δούλιον ἄρτον ἔδων (bread of slavery), γυμνόν / ῥίγει πεπηγότ᾽ (naked and stiff with the cold), φυκία (seaweed), κροτέοι ὀδόντας ὡς κύων (teeth chatter … dog-like), λὰξ δ᾽ ἐπ᾽ ὁρκίοις ἔβη (trampled under foot his oaths), ἑταῖρος ἐὼν τὸ πρίν (aforetime was my friend); the page names the 1898 Strassburg papyrus.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/cu31924022691251%2Fcu31924022691251_jp2.zip%2Fcu31924022691251_jp2%2Fcu31924022691251_0081.jp2/full/1200,/0/default.jpg",
+        "printed_page": "70",
+        "scan_leaf": 81,
+        "sha256": "7e4fe03f444707ec90e4cf1377a0c03159cff8cea705cc885e3bf2a44d5b3b57"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 0,
+      "source_id": "columbia1912",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/cu31924022691251",
+     "text": "At Salmydessus may the wild-haired Thracians give to him a joyous welcome — how his cup of woe shall be full as he eats the bread of slavery! — to him naked and stiff with the cold; and may abundant seaweed, cast out of the surge, hold him fast; may his teeth chatter as he lies dog-like on his face in helplessness, on the shore's edge, close to the waves. Such a sight may I see, for that he has wronged me and trampled under foot his oaths — he that aforetime was my friend!",
+     "text_normalisation": [
+      "old-print spaces before ; : ? ! and inside quotation marks removed"
+     ],
+     "translator": "Edward Delavan Perry",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Archilochus",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "88",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "928b3a6db4c2c1509f349c28ad6261b48a5aad1354902637362e7fca7e523a8f",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:archilochus:88",
+   "translation_comparisons": [
+    {
+     "citation": "Brooks XXVI (Bergk 94)",
+     "comparison_id": "glp-translation:archilochus:88:brooks1896:1",
+     "edition": "Greek Lyric Poets (1896), London: David Nutt",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Prose; runs over from p. 13 to p. 14."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1896)",
+     "license_basis": "Published 1896 (before 1931): public domain in the US.",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Greek on p. 13: \"Πάτερ Λυκάμβα, ποῖον ἐφράσω τόδε; / τίς σὰς παρήειρε φρένας; / ἧς τὸ πρὶν ἠρήρησθα· νῦν δὲ δὴ πολύς / ἀστοῖσι φαίνεαι γέλως\" = Campbell 88.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0027.jp2/full/1200,/0/default.jpg",
+        "printed_page": "13",
+        "scan_leaf": 27,
+        "sha256": "a7e5a7860d4e4c230f2498bbd431fa4ff011bdc6ebb1f7e56e0f8c5f3183db3b"
+       }
+      },
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0028.jp2/full/1200,/0/default.jpg",
+        "printed_page": "14",
+        "scan_leaf": 28,
+        "sha256": "116b1cd7f340612ce0dc1796f7c7e777016fc980221707399eb95bdc1cf4a97d"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 0,
+      "source_id": "brooks1896",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/greeklyricpoets00broo",
+     "text": "Father Lycambes, what thing is this thou hast devised? Who has made thy mind distraught? Once thou wast steadfast therein, but now thou art a great laughing-stock in the eyes of the people.",
+     "text_normalisation": [
+      "old-print spaces before ; : ? ! and inside quotation marks removed"
+     ],
+     "translator": "Francis Brooks",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Archilochus",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "89",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "6681cf7839637493be456bb189c46de3d4f0697e1fd54181c4f176a9f0d2db6f",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:archilochus:89",
+   "translation_comparisons": [
+    {
+     "citation": "Brooks XXII (Bergk 86)",
+     "comparison_id": "glp-translation:archilochus:89:brooks1896:1",
+     "edition": "Greek Lyric Poets (1896), London: David Nutt",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Prose; Brooks’ headnote ties this and the next two fragments to the fable of the eagle and the fox."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1896)",
+     "license_basis": "Published 1896 (before 1931): public domain in the US.",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Greek on the same page: \"Αἶνός τις ἀνθρώπων ὅδε, / ὡς ἆρ᾽ ἀλώπηξ καἰετὸς ξυνωνίην / ἔμιξαν\" = Campbell 89.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0026.jp2/full/1200,/0/default.jpg",
+        "printed_page": "12",
+        "scan_leaf": 26,
+        "sha256": "2a4d4bb544dac2998b2242ef78fbeb66c3530fdb815d5a7debd87458f0b65626"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 0,
+      "source_id": "brooks1896",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/greeklyricpoets00broo",
+     "text": "This tale there is among men, that a fox and eagle made once upon a time a league together.",
+     "translator": "Francis Brooks",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Archilochus",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "92a",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "2e0ebd66cf19f61de8d68951edb0849117c1b3df1a7d52332598d1dc03d9ad4f",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:archilochus:92a",
+   "translation_comparisons": [
+    {
+     "citation": "Brooks XXIII (Bergk 87)",
+     "comparison_id": "glp-translation:archilochus:92a:brooks1896:1",
+     "edition": "Greek Lyric Poets (1896), London: David Nutt",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Prose. Brooks prints κάθημαι (\"I sit\") where Campbell has κάθηται."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1896)",
+     "license_basis": "Published 1896 (before 1931): public domain in the US.",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Greek on the same page: \"Ὁρᾷς ἵν᾽ ἔστ᾽ ἐκεῖνος ὑψηλὸς πάγος, / τρηχύς τε καὶ παλίγκοτος, / ἐν τῷ κάθημαι σὴν ἐλαφρίζων μάχην\" = Campbell 92a.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0026.jp2/full/1200,/0/default.jpg",
+        "printed_page": "12",
+        "scan_leaf": 26,
+        "sha256": "2a4d4bb544dac2998b2242ef78fbeb66c3530fdb815d5a7debd87458f0b65626"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 1,
+      "source_id": "brooks1896",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/greeklyricpoets00broo",
+     "text": "Thou seest where is yonder lofty crag, rough and frowning, on which I sit making light of thy warfare.",
+     "translator": "Francis Brooks",
      "word_attestation": false
     }
    ]
@@ -5851,6 +6502,421 @@
    "campbell_identity": {
     "author": "Hipponax",
     "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "24a",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "4e116157cd47d094abf5a710b212067d33c4f0ddcf7151d2e55419bc5cbb3a53",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:hipponax:24a",
+   "translation_comparisons": [
+    {
+     "citation": "Knox frs. 56-57 (joint rendering) + 59",
+     "comparison_id": "glp-translation:hipponax:24a:knox1929:1",
+     "coverage": "partial",
+     "coverage_kind": "shared_rendering",
+     "coverage_label": "Partial: Knox renders his fragments 56 and 57 together, so Campbell 24a and 24b share one rendering; 24a’s request for clothes and gold is Knox fragment 59.",
+     "edition": "The Characters of Theophrastus (ed. J. M. Edmonds) with Herodes, Cercidas and the Greek Choliambic Poets (except Callimachus and Babrius) (1929), London: W. Heinemann; Loeb Classical Library 225",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Campbell 24a joins the Hermes invocation (Knox fr. 57) to the request for clothes and gold (Knox fr. 59). Knox prints no separate English for fr. 57: his single rendering \"56 and 57\" conflates it with fr. 56 (= Campbell 24b). Both Knox renderings are given, separated by a blank line."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1929)",
+     "license_basis": "Published 1929; US copyright term (95 years) ended 2024-12-31, public domain in the US since 2025-01-01. IA possible-copyright-status: \"Permission Granted to Digitize Item\".",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Knox Greek fr. 57 (p. 40, leaf 212) \"…φίλ᾽ Ἑρμῆ, Μαιαδεῦ Κυλλήν<ι>ε … κάρτα γὰρ κακῶς ῥιγῶ\" and fr. 59 (p. 42, leaf 214) \"δὸς χλαῖναν Ἱππώνακτι καὶ κυπασσίσκον / καὶ σαμβαλίσκα κἀσκερίσκα καὶ χρυσοῦ / στατῆρας ἑξήκοντα τοὐτέρου τοίχου\" = Campbell 24a lines 1-2 and 4-6.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [
+      {
+       "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0212.jp2/full/1200,/0/default.jpg",
+       "printed_page": "40",
+       "scan_leaf": 212,
+       "sha256": "ad81d46331b734340e08e130ef41094506c4e67f03cd1e2365e4f1a7ef2b7995"
+      },
+      {
+       "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0214.jp2/full/1200,/0/default.jpg",
+       "printed_page": "42",
+       "scan_leaf": 214,
+       "sha256": "5c8611ae20148abed51e589eaa17429f35325095fb990e514ee55881dcc65ccb"
+      }
+     ],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0213.jp2/full/1200,/0/default.jpg",
+        "printed_page": "41",
+        "scan_leaf": 213,
+        "sha256": "65a14c792436503182c28b99c1ad14f399dcb7f46bf571504303afa6b701a224"
+       }
+      },
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0215.jp2/full/1200,/0/default.jpg",
+        "printed_page": "43",
+        "scan_leaf": 215,
+        "sha256": "e25fb235ce3c6be3311388f7bbc61d4acfa6c8232aa5f657c035e3a269e221a4"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 4,
+      "source_id": "knox1929",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/charactersofthe00theouoft",
+     "text": "I’ll say dear son of Maia, Cyllene’s\nLord, give Hipponax a great coat: chilly\nI am—I beg you I am right chilly\nAnd my teeth chatter.\n\nGive to Hipponax a great-coat, shirtlet,\nSandals and carpet-slippers; and sixty\nStaters of gold by th’ inner wall hidden.",
+     "text_normalisation": [
+      "old-print spaces before ; : ? ! and inside quotation marks removed"
+     ],
+     "translator": "A. D. Knox",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Hipponax",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "24b",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "2515ee3e2c0520052e13c1a56c047a82fa9fddf08c0182dc9fdabf3fe4fb00bf",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:hipponax:24b",
+   "translation_comparisons": [
+    {
+     "citation": "Knox frs. 56-57 (joint rendering)",
+     "comparison_id": "glp-translation:hipponax:24b:knox1929:1",
+     "coverage": "partial",
+     "coverage_kind": "shared_rendering",
+     "coverage_label": "Partial: Knox renders his fragments 56 and 57 together, so Campbell 24a and 24b share one rendering, which also covers the Hermes invocation of 24a.",
+     "edition": "The Characters of Theophrastus (ed. J. M. Edmonds) with Herodes, Cercidas and the Greek Choliambic Poets (except Callimachus and Babrius) (1929), London: W. Heinemann; Loeb Classical Library 225",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Knox renders fr. 56 (= Campbell 24b) jointly with fr. 57 (the Hermes invocation, part of Campbell 24a) in one four-line version headed \"56 and 57\"."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1929)",
+     "license_basis": "Published 1929; US copyright term (95 years) ended 2024-12-31, public domain in the US since 2025-01-01. IA possible-copyright-status: \"Permission Granted to Digitize Item\".",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Knox Greek fr. 56 (p. 40, leaf 212) \"δὸς χλαῖναν Ἱππώνακτι· κάρτα γὰρ ῥιγῶ / καὶ βαμβαλύζω\" = Campbell 24b.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [
+      {
+       "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0212.jp2/full/1200,/0/default.jpg",
+       "printed_page": "40",
+       "scan_leaf": 212,
+       "sha256": "ad81d46331b734340e08e130ef41094506c4e67f03cd1e2365e4f1a7ef2b7995"
+      }
+     ],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0213.jp2/full/1200,/0/default.jpg",
+        "printed_page": "41",
+        "scan_leaf": 213,
+        "sha256": "65a14c792436503182c28b99c1ad14f399dcb7f46bf571504303afa6b701a224"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 3,
+      "source_id": "knox1929",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/charactersofthe00theouoft",
+     "text": "I’ll say dear son of Maia, Cyllene’s\nLord, give Hipponax a great coat: chilly\nI am—I beg you I am right chilly\nAnd my teeth chatter.",
+     "translator": "A. D. Knox",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Hipponax",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "25",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "09ca885b7a4f3d735546822c62a3c31936121617526a59e76f591dfa691fadb6",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:hipponax:25",
+   "translation_comparisons": [
+    {
+     "citation": "Knox fr. 60",
+     "comparison_id": "glp-translation:hipponax:25:knox1929:1",
+     "edition": "The Characters of Theophrastus (ed. J. M. Edmonds) with Herodes, Cercidas and the Greek Choliambic Poets (except Callimachus and Babrius) (1929), London: W. Heinemann; Loeb Classical Library 225",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Knox fr. 60."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1929)",
+     "license_basis": "Published 1929; US copyright term (95 years) ended 2024-12-31, public domain in the US since 2025-01-01. IA possible-copyright-status: \"Permission Granted to Digitize Item\".",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Knox Greek fr. 60 (p. 42, leaf 214) \"ἐμοὶ γὰρ οὐκ ἔδωκας οὔτε χλαῖναν / δασεῖαν … χίμετλα …\" = Campbell 25.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [
+      {
+       "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0214.jp2/full/1200,/0/default.jpg",
+       "printed_page": "42",
+       "scan_leaf": 214,
+       "sha256": "5c8611ae20148abed51e589eaa17429f35325095fb990e514ee55881dcc65ccb"
+      }
+     ],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0215.jp2/full/1200,/0/default.jpg",
+        "printed_page": "43",
+        "scan_leaf": 215,
+        "sha256": "e25fb235ce3c6be3311388f7bbc61d4acfa6c8232aa5f657c035e3a269e221a4"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 1,
+      "source_id": "knox1929",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/charactersofthe00theouoft",
+     "text": "To me thou gavest never (yet) great-coat\nShaggy, a cure for ague in winter,\nNor hid’st in carpet-slippers right shaggy\nMy feet, to hinder my chillblains growing.",
+     "translator": "A. D. Knox",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Hipponax",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "29",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "fba5dd6a8ff3de01bb3835fff10bcd107b71102494f0e8962bc0af35318e256d",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:hipponax:29",
+   "translation_comparisons": [
+    {
+     "citation": "Knox fr. 61",
+     "comparison_id": "glp-translation:hipponax:29:knox1929:1",
+     "edition": "The Characters of Theophrastus (ed. J. M. Edmonds) with Herodes, Cercidas and the Greek Choliambic Poets (except Callimachus and Babrius) (1929), London: W. Heinemann; Loeb Classical Library 225",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Knox fr. 61; Knox brackets the last line as Tzetzes’ (or a grammarian’s) words."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1929)",
+     "license_basis": "Published 1929; US copyright term (95 years) ended 2024-12-31, public domain in the US since 2025-01-01. IA possible-copyright-status: \"Permission Granted to Digitize Item\".",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Knox Greek fr. 61 (p. 42, leaf 214) \"ἐμοὶ δὲ Πλοῦτος, ἔστι γὰρ λίην τυφλός, / ἐς τὠκί᾽ ἐλθὼν οὐδάμ᾽ εἶπεν· Ἱππῶναξ, / δίδωμί σοι μνέας ἀργυρίου τριήκοντα\" + \"καὶ πόλλ᾽ ἔτ᾽ ἄλλα· δείλαιος γὰρ τὰς φρένας\" = Campbell 29.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [
+      {
+       "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0214.jp2/full/1200,/0/default.jpg",
+       "printed_page": "42",
+       "scan_leaf": 214,
+       "sha256": "5c8611ae20148abed51e589eaa17429f35325095fb990e514ee55881dcc65ccb"
+      }
+     ],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0215.jp2/full/1200,/0/default.jpg",
+        "printed_page": "43",
+        "scan_leaf": 215,
+        "sha256": "e25fb235ce3c6be3311388f7bbc61d4acfa6c8232aa5f657c035e3a269e221a4"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 2,
+      "source_id": "knox1929",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/charactersofthe00theouoft",
+     "text": "But never came there Plutus, the blind one,\nUnto my house, nor spake thus: ‘Hipponax\nMinas of silver give I thee thirty.’\n[Etcetera: for his intelligence is paltry].",
+     "text_normalisation": [
+      "old-print spaces before ; : ? ! and inside quotation marks removed"
+     ],
+     "translator": "A. D. Knox",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Hipponax",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "70",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "ac4c9a5a88c08e1fbae9f0d402fe6965b062f6634042531fe4e17b0947f1e211",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:hipponax:70",
+   "translation_comparisons": [
+    {
+     "citation": "Knox fr. 78",
+     "comparison_id": "glp-translation:hipponax:70:knox1929:1",
+     "edition": "The Characters of Theophrastus (ed. J. M. Edmonds) with Herodes, Cercidas and the Greek Choliambic Poets (except Callimachus and Babrius) (1929), London: W. Heinemann; Loeb Classical Library 225",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Knox fr. 78 (tetrameters)."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1929)",
+     "license_basis": "Published 1929; US copyright term (95 years) ended 2024-12-31, public domain in the US since 2025-01-01. IA possible-copyright-status: \"Permission Granted to Digitize Item\".",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Knox Greek fr. 78 (p. 54, leaf 226) \"λάβετέ μευ ταἰμάτια, κόψω Βουπάλου τὸν ὀφθαλμόν· / ἀμφιδέξιος γάρ εἰμι, κοὐχ ἁμαρτάνω κόπτων\" = Campbell 70.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [
+      {
+       "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0226.jp2/full/1200,/0/default.jpg",
+       "printed_page": "54",
+       "scan_leaf": 226,
+       "sha256": "1f7d43c99c22f7d4f0986570cb5d69e53e00d3ddea6d341a46108e7dd5eda007"
+      }
+     ],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0227.jp2/full/1200,/0/default.jpg",
+        "printed_page": "55",
+        "scan_leaf": 227,
+        "sha256": "7b14e0f7a14ccfe41645d7208af727aff992b6d1f564129ee6b0aa2cb10431c9"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 2,
+      "source_id": "knox1929",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/charactersofthe00theouoft",
+     "text": "Here take my clothes, so in the eye I’ll Bupalus pummel;\nFor I am ambidexterous and pummelling miss not.",
+     "text_normalisation": [
+      "old-print spaces before ; : ? ! and inside quotation marks removed"
+     ],
+     "translator": "A. D. Knox",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Hipponax",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
     "edition_fragment": "77",
     "kind": "text",
     "language": "grc",
@@ -5905,6 +6971,87 @@
      "source_url": "https://archive.org/details/deipnosophistsor03atheuoft",
      "text": "Muse, sing me now the praises of Eurymedon,\nThat great Charybdis of the sea, who holds\nA sword within his stomach, never weary\nWith eating. Tell me how the votes may pass\nCondemning him to death, by public judgment,\nOn the loud-sounding shore of the barren sea.",
      "translator": "C. D. Yonge",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Hipponax",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "[81]",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "f4478ea05903dbae185dd65315773e0f11c676ce9662b007319522caf97b51aa",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:hipponax:81",
+   "translation_comparisons": [
+    {
+     "citation": "Knox, Introduction p. 5-6 (Stobaeus lxxii. 5; Bergk 72)",
+     "comparison_id": "glp-translation:hipponax:81:knox1929:1",
+     "edition": "The Characters of Theophrastus (ed. J. M. Edmonds) with Herodes, Cercidas and the Greek Choliambic Poets (except Callimachus and Babrius) (1929), London: W. Heinemann; Loeb Classical Library 225",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Knox treats these Stobaeus verses as falsely ascribed to Hipponax (Campbell also brackets the number) and gives \"the sense\" in English verse in his Introduction; he prints two rows of dots between the 4th and 5th verse."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1929)",
+     "license_basis": "Published 1929; US copyright term (95 years) ended 2024-12-31, public domain in the US since 2025-01-01. IA possible-copyright-status: \"Permission Granted to Digitize Item\".",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Knox quotes the Greek on p. 5 (leaf 177): \"Γάμος κράτιστός ἐστιν ἀνδρὶ σώφρονι / τρόπον γυναικὸς χρηστὸν ἔνδον λαμβάνειν· / αὕτη γὰρ ἡ προὶξ οἰκίαν σώζει μόνη. / ὅστις δὲ †τρυφῶς† … / συνεργὸν οὗτος ἀντὶ δεσποίνης ἔχει, / εὔνουν, βεβαίαν εἰς ἅπαντα τὸν βίον\" = Campbell [81].",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [
+      {
+       "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0177.jp2/full/1200,/0/default.jpg",
+       "printed_page": "5",
+       "scan_leaf": 177,
+       "sha256": "8fc4c5eb258abd59552bcf8962c76e033b5cdbd12f119da54f8273d284f461ec"
+      }
+     ],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0178.jp2/full/1200,/0/default.jpg",
+        "printed_page": "6",
+        "scan_leaf": 178,
+        "sha256": "3ff991a11135b4ca5ea38da9bbe1d3f30e59fe2182d08a8ccd4fedc4b42d19f3"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 2,
+      "source_id": "knox1929",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/charactersofthe00theouoft",
+     "text": "Best marriage is it for a prudent man\nTo take as dower a noble character:\nThis bridal gift alone can save the house.\nBut whoso takes to wife a spendthrift girl\n. . . . . . .\n. . . . . . .\nHe finds a helpmeet, not a mistress stern:\nA kind and true companion to the end.",
+     "text_normalisation": [
+      "surrounding quotation marks of the source prose removed: 'to the end.”' -> 'to the end.'",
+      "old-print spaces before ; : ? ! and inside quotation marks removed"
+     ],
+     "translator": "A. D. Knox",
      "word_attestation": false
     }
    ]
@@ -6677,6 +7824,149 @@
      "source_url": "https://archive.org/details/geographyofstrab0005hora_l1u3",
      "text": "And thus saith Phocylides, ‘the Lerians are bad, not one, but every one, all except Procles; and Procles is a Lerian.’",
      "translator": "Horace Leonard Jones",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Phocylides",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "3",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "79d29f2dd4e8896919479708a2520921fbd77e5e8f21955de56b189a17e48f00",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:phocylides:3",
+   "translation_comparisons": [
+    {
+     "citation": "Jevons p. 153, \"(4)\"",
+     "comparison_id": "glp-translation:phocylides:3:jevons1886:1",
+     "coverage": "partial",
+     "coverage_kind": "paraphrase",
+     "coverage_label": "Partial: an indirect English paraphrase in a literary history (Jevons 1886), not a verse-by-verse translation.",
+     "edition": "A History of Greek Literature from the Earliest Period to the Death of Demosthenes (1886), New York: Scribner [London: Griffin]",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Indirect-speech paraphrase in a literary history, not a line-by-line translation; Jevons cites it as \"(4)\" (Bergk). See the German verse translation (Thudichum) for a full rendering."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1886)",
+     "license_basis": "Published 1886 (before 1931): public domain in the US. IA possible-copyright-status: NOT_IN_COPYRIGHT.",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "No Greek printed; Jevons cites Bergk fr. 4, which is Campbell 3 (τί πλέον, γένος εὐγενὲς εἶναι, οἷς οὔτ᾽ ἐν μύθοις ἕπεται χάρις οὔτ᾽ ἐνὶ βουλῇ); content match: birth / speak pleasantly / sensibly.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/historyofgreekli00jevouoft%2Fhistoryofgreekli00jevouoft_jp2.zip%2Fhistoryofgreekli00jevouoft_jp2%2Fhistoryofgreekli00jevouoft_0175.jp2/full/1200,/0/default.jpg",
+        "printed_page": "153",
+        "scan_leaf": 175,
+        "sha256": "fc0d9f6ce366a8e03a95e9de2847dfd584c61aa15cf342558f5389e45118beb2"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 0,
+      "source_id": "jevons1886",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/historyofgreekli00jevouoft",
+     "text": "Birth is no good if a man can speak neither pleasantly nor sensibly",
+     "translator": "F. B. Jevons",
+     "word_attestation": false
+    }
+   ]
+  },
+  {
+   "campbell_identity": {
+    "author": "Phocylides",
+    "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+    "edition_fragment": "4",
+    "kind": "text",
+    "language": "grc",
+    "quality": "machine_corrected_ocr",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "source": "campbell_assignment",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "source_url": "https://openlibrary.org/works/OL105540W",
+    "text_sha256": "e27e020b5ed2c4d0d3c03ba2be908c82e5da30f22bdf012a3a47554640c87055",
+    "work": "Fragments"
+   },
+   "campbell_record_id": "campbell-glp:phocylides:4",
+   "translation_comparisons": [
+    {
+     "citation": "Marchant, Greek Reader I p. 3 (introduction \"Maxims and Anecdotes\")",
+     "comparison_id": "glp-translation:phocylides:4:marchant1905:1",
+     "edition": "Greek Reader, selected and adapted with English notes from Prof. von Wilamowitz-Moellendorff's Griechisches Lesebuch, vol. I (1905), Oxford: Clarendon Press",
+     "edition_difference_metadata": {
+      "difference_status": "not_computed_different_edition",
+      "exact_token_differences": null,
+      "extraction_metadata_note": "Prose, in parentheses after the Greek."
+     },
+     "evidence_type": "different_edition_translation_comparison",
+     "exact_edition_alignment": false,
+     "language": "eng",
+     "license": "Public domain in the United States (published 1905)",
+     "license_basis": "Published 1905 (before 1931): public domain in the US.",
+     "license_unrestricted": false,
+     "license_url": null,
+     "line_attestation": false,
+     "match_evidence": "Greek printed immediately above: \"Καὶ τόδε Φωκυλίδεω· πόλις ἐν σκοπέλῳ κατὰ κόσμον / οἰκεῦσα σμικρὴ κρέσσων Νίνου ἀφραινούσης\" = Campbell 4.",
+     "model_eligible": false,
+     "paired_greek": null,
+     "paired_greek_images": [],
+     "paired_greek_transcription_status": "withheld_use_source_scan",
+     "quality": "source_scan_OCR_corrected_against_image",
+     "reuse_status": "public_domain_us_edition",
+     "scope": "whole_poem_other_edition",
+     "selection_aligned": false,
+     "source_note_markers": [],
+     "source_notes": [],
+     "source_provenance": [
+      {
+       "language": "eng",
+       "source_image": {
+        "iiif_url": "https://iiif.archive.org/image/iiif/3/cu31924021601640%2Fcu31924021601640_jp2.zip%2Fcu31924021601640_jp2%2Fcu31924021601640_0012.jp2/full/1200,/0/default.jpg",
+        "printed_page": "3",
+        "scan_leaf": 12,
+        "sha256": "2477487863c9c692d08a7ac64538e3f8511832e8e896b3305628e6c2ae4ea138"
+       }
+      }
+     ],
+     "source_record": {
+      "dataset": "data/open/pd-translations",
+      "host": "Internet Archive",
+      "ocr_corrections_applied": 0,
+      "source_id": "marchant1905",
+      "verified_on": "2026-10-09"
+     },
+     "source_url": "https://archive.org/details/cu31924021601640",
+     "text": "Thus too spake Phocylides: ‘A small city upon a rock wherein discretion abideth is greater than Nineveh in her folly’",
+     "translator": "E. C. Marchant (adapting U. von Wilamowitz-Moellendorff)",
      "word_attestation": false
     }
    ]

@@ -113,3 +113,36 @@ def test_five_corrections_are_applied_bound_and_reapproved():
     assert tc.GREEK_PACKAGE_SHA256 == approval['package']['sha256']
     for row in rows:
         assert tc.for_passage(deepcopy(row))['status'] == 'available'
+
+
+def test_open_survey_translations_fill_seventeen_gaps_english_only_with_partial_labels():
+    from scripts import build_campbell_glp_translations as builder
+    payload = json.loads(tc.GLP_DATA_PATH.read_text(encoding='utf-8'))
+    by_id = {r['campbell_record_id']: r['translation_comparisons'] for r in payload['records']}
+    assert payload['record_count'] == 226 == payload['comparison_count']
+    opened = {i: items for i, items in by_id.items() if any('source_record' in item for item in items)}
+    assert set(opened) == builder.OPEN_ACCEPTED and len(opened) == 17
+    for poem_id, items in opened.items():
+        (item,) = items
+        assert item['language'] == 'eng' and item['model_eligible'] is False and item['selection_aligned'] is False
+        assert item['license_basis'] and item['source_url'].startswith('https://archive.org/details/')
+        assert item['source_provenance'] and all(p['source_image']['sha256'] and p['source_image']['iiif_url'] for p in item['source_provenance'])
+        assert ' ;' not in item['text'] and '‘ ' not in item['text']
+        assert (item.get('coverage') == 'partial') == (poem_id in builder.OPEN_PARTIAL)
+    for poem_id in ('campbell-glp:phocylides:3', 'campbell-glp:archilochus:79a',
+                    'campbell-glp:hipponax:24a', 'campbell-glp:hipponax:24b'):
+        assert by_id[poem_id][0]['coverage_label'].startswith('Partial:')
+    assert by_id['campbell-glp:archilochus:79a'][0]['text'].startswith('At Salmydessus')
+    # German-only renderings stay out until the owner decides; they remain listed gaps.
+    gaps = {g['id']: g for g in json.loads((ROOT / 'data/campbell_glp/translation_gaps.json').read_text(encoding='utf-8'))}
+    assert 'campbell-glp:mimnermus:13' not in by_id and 'campbell-glp:phocylides:8' not in by_id
+    assert gaps['campbell-glp:mimnermus:13']['open_survey_2026_10_09']['status'] == 'found_other_language'
+    assert len(gaps) == 6
+
+
+def test_open_record_projection_reaches_the_reader_bound_to_the_poem():
+    records = {r['id']: r for r in _records()}
+    result = tc.for_passage(deepcopy(records['campbell-glp:hipponax:24b']))
+    assert result['status'] == 'available' and result['comparison_count'] == 1
+    item = result['translation_comparisons'][0]
+    assert item['translator'] == 'A. D. Knox' and item['coverage_kind'] == 'shared_rendering'

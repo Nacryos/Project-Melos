@@ -94,7 +94,7 @@ sidecar returns an explicit unavailable result without source content.
 # comparison-only contract; a poem without a verified public-domain translation
 # has no record and gets no panel (None), never an authored substitute.
 GLP_DATA_PATH = Path(__file__).with_name('translation_comparisons_glp_data.json')
-GLP_DATA_SHA256 = '22c492acc2b54dad801f0f700b01a3ff803a0db289445b267c4f21bbd645f544'
+GLP_DATA_SHA256 = '825f5db83809ebf9a172e092e8f5e4b122f817c7809ce3d1a36b72a70ed122cf'
 GLP_MAX_BYTES = 3_000_000
 GLP_IDENTITY = ('source', 'kind', 'language', 'quality', 'author', 'work', 'edition', 'source_url', 'raw_sha256')
 _GLP_CACHE: dict = {}

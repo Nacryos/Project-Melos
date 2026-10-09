@@ -1,94 +1,50 @@
 [
  {
   "id": "campbell-glp:alcaeus:45",
-  "reason": "Edmonds, Lyra Graeca I (1922), has only fr. 93 (p. 380-381, scan leaves 402-403). This is a scholiast's testimonium (on Theocritus 7. 112) followed by Edmonds' own exempli-gratia reconstruction, 'e.g. . . . O Hebrus, fairest of all rivers'. It is not a transmitted text of the poem. The papyrus text Campbell prints (Hebrus, Aenus, the girls bathing) is not in Edmonds. Edmonds' vol. I OCR was searched for Hebrus, Thrace, Aenus and thighs; no other version was found. No pre-1930 English translation of the poem was located."
+  "reason": "Edmonds, Lyra Graeca I (1922), has only fr. 93 (p. 380-381, scan leaves 402-403). This is a scholiast's testimonium (on Theocritus 7. 112) followed by Edmonds' own exempli-gratia reconstruction, 'e.g. . . . O Hebrus, fairest of all rivers'. It is not a transmitted text of the poem. The papyrus text Campbell prints (Hebrus, Aenus, the girls bathing) is not in Edmonds. Edmonds' vol. I OCR was searched for Hebrus, Thrace, Aenus and thighs; no other version was found. No pre-1930 English translation of the poem was located.",
+  "open_survey_2026_10_09": {
+   "status": "none_found",
+   "note": "No public-domain translation found."
+  }
  },
  {
   "id": "campbell-glp:alcman:3",
-  "reason": "Alcman 3 (Ὀλ]υμπιάδες περί με φρένας ..., Astymeloisa) is P.Oxy. 2387, first published 1957; none of its lines is quoted by an ancient author, so it is absent from Edmonds, Lyra Graeca I (1922) (searched the OCR for Astymeloisa, limb-loosening, melting, and the Greek forms) and from every other pre-1930 translation. No public-domain English translation exists."
- },
- {
-  "id": "campbell-glp:archilochus:103",
-  "reason": "Fox/hedgehog proverb (Zenobius); no English rendering of the verse found in the sources searched. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:archilochus:104",
-  "reason": "Stobaeus fragment; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:archilochus:112",
-  "reason": "Stobaeus fragment; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:archilochus:118",
-  "reason": "Hephaestion fragment; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  "reason": "Alcman 3 (Ὀλ]υμπιάδες περί με φρένας ..., Astymeloisa) is P.Oxy. 2387, first published 1957; none of its lines is quoted by an ancient author, so it is absent from Edmonds, Lyra Graeca I (1922) (searched the OCR for Astymeloisa, limb-loosening, melting, and the Greek forms) and from every other pre-1930 translation. No public-domain English translation exists.",
+  "open_survey_2026_10_09": {
+   "status": "none_found",
+   "note": "No public-domain translation found."
+  }
  },
  {
   "id": "campbell-glp:archilochus:55",
-  "reason": "Source is Pausanias 10.31.12, who reports Archilochus' Tantalus' stone story without quoting the line in any English version found (Shilleto 1886 paraphrases only). No verse translation in the anthologies. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:archilochus:71",
-  "reason": "Merivale (1833) quotes this line only in Greek in his introduction, untranslated; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:archilochus:79a",
-  "reason": "Strasbourg papyrus epode (published 1899); no pre-1930 English translation found in the sources searched. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:archilochus:88",
-  "reason": "Fable epode (Lycambes); quoted by Hephaestion/others; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:archilochus:89",
-  "reason": "Fox-and-eagle fable opening; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:archilochus:92a",
-  "reason": "Fable fragment (Atticus); no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:hipponax:24a",
-  "reason": "Tzetzes et al.; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:hipponax:24b",
-  "reason": "Tzetzes et al.; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:hipponax:25",
-  "reason": "Tzetzes; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:hipponax:29",
-  "reason": "Tzetzes; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:hipponax:70",
-  "reason": "Tzetzes; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:hipponax:81",
-  "reason": "Stobaeus (marriage choliambics); no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  "reason": "Source is Pausanias 10.31.12, who reports Archilochus' Tantalus' stone story without quoting the line in any English version found (Shilleto 1886 paraphrases only). No verse translation in the anthologies. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). ",
+  "open_survey_2026_10_09": {
+   "status": "becomes_pd_2027",
+   "note": "Edmonds, Elegy and Iambus (1931) becomes US public domain on 2027-01-01."
+  }
  },
  {
   "id": "campbell-glp:mimnermus:13",
-  "reason": "Stobaeus fragment (Smyrna battle); Symonds mentions it (as Bergk fr. 9/14) without translating it; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
- },
- {
-  "id": "campbell-glp:phocylides:3",
-  "reason": "Quoted only by Stobaeus. Searched Internet Archive for pre-1930 English versions of Phocylides (title/creator searches; only a Spanish 1802 'Sentencias de Teognis, de Phocylides ...' found), Banks' Bohn Theognis volume (1856; no Phocylides), Paton's Greek Anthology (not in the Anthology). Edmonds' Elegy and Iambus (1931) is excluded. No pre-1930 English translation found."
- },
- {
-  "id": "campbell-glp:phocylides:4",
-  "reason": "Quoted by Dio Chrysostom, Or. 36.13 (Borystheniticus). Searched Internet Archive for pre-1930 English Dio Chrysostom (only Greek editions, e.g. von Arnim 1893; Cohoon/Crosby Loeb vol. III is 1940) and for Phocylides translations; Edmonds 1931 excluded. No pre-1930 English translation found."
+  "reason": "Stobaeus fragment (Smyrna battle); Symonds mentions it (as Bergk fr. 9/14) without translating it; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). ",
+  "open_survey_2026_10_09": {
+   "status": "found_other_language",
+   "note": "Only a non-English public-domain rendering was found (hartung1859); not added pending an owner decision."
+  }
  },
  {
   "id": "campbell-glp:phocylides:8",
-  "reason": "Quoted only by Stobaeus (gnomic couplet on night counsel). Same searches as Phocylides 3; no pre-1930 English translation found."
+  "reason": "Quoted only by Stobaeus (gnomic couplet on night counsel). Same searches as Phocylides 3; no pre-1930 English translation found.",
+  "open_survey_2026_10_09": {
+   "status": "found_other_language",
+   "note": "Only a non-English public-domain rendering was found (thudichum1859); not added pending an owner decision."
+  }
  },
  {
   "id": "campbell-glp:semonides:2",
-  "reason": "Stobaeus fragment; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). "
+  "reason": "Stobaeus fragment; no English rendering found. Searched (OCR full text, then page images where relevant): Elton, Specimens of the Classic Poets I (1814); Bland & Merivale, Collections from the Greek Anthology (1813 and 1833 eds.); Dole (ed.), The Greek Poets (1904); Symonds, Studies of the Greek Poets (1920 repr. of 3rd ed.); Yonge's Athenaeus I-III (1854); Banks's Bohn Theocritus/Tyrtaeus (1853) and Hesiod/Theognis (1856); Jones's Loeb Strabo IV and VI (1927, 1929); Wilson's Clement of Alexandria II (1869); Dods's Theophilus (ANCL III, 1867); Shilleto's Pausanias (1886). ",
+  "open_survey_2026_10_09": {
+   "status": "becomes_pd_2027",
+   "note": "Edmonds, Elegy and Iambus (1931) becomes US public domain on 2027-01-01."
+  }
  }
 ]
