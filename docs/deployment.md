@@ -1,6 +1,50 @@
 # Deployment handoff
 
-## Current: release S — stacked semantic search, Ancient Greek sentence vectors, commentary notes, 120-query evaluation (2026-10-09)
+## Current: release T — owner private mode, shipped inert (2026-10-09)
+
+Public backend: image `melos-api:20261009t`
+(`sha256:2451784605084807806096fdd0977357ff6eb87bc354d1999146a333498e90f4`), built with `deploy/Dockerfile.t` atop
+the S image `melos-api:20261009s` from the T source tarball (`git archive` of `734f075`, branch `private-mode`
+rebased on `semantic-search-s`; sha256 `c40d4fd1315ea71537fdd0db12ba6b206ce41089d2a76134a26fd0e93b41fd6c`, unpacked
+in `/home/alvin/melos-t/src`; the pre-rebase tree is `src-d41f2fe`). Promoted 17:14 UTC (10:14 PDT). Recipe:
+`deploy/release_t.sh build|canary|stop-canary|promote|rollback`; checks: release S's `deploy/canary_checks_s.sh`
+with `MELOS_S_SRC=/home/alvin/melos-t/src`. S is kept stopped as `melos-api-before-t`, the T canary as
+`melos-api-canary-t` (stopped). **Rollback:** `sh /home/alvin/melos-t/src/deploy/release_t.sh rollback` (stops T,
+renames it `melos-api-failed-t`, restarts S with its own mounts). No frontend change (T's owner page, footer "·"
+links and `owner-loader.js` are in the branch but not deployed; the live frontend is still `project-melos-14vcxsj88`).
+
+**Owner sign-in is inert:** the box has no `secrets/owner_auth.env`, so every `/api/owner/*` and `/api/private/*`
+route answers 503 `{"configured": false, "signed_in": false, "https": …, "detail": "Owner sign-in is not configured
+on this server."}` and sets no cookie; public routes are unchanged. The container mounts the secrets directory
+read-only at `/run/secrets/melos-owner`, so the file takes effect without a restart once the owner runs (password
+typed at the prompt, never on the command line):
+
+```
+ssh -t alvin@100.64.176.44 'docker run --rm -it --network none --user 1000:1000 -v /home/alvin/services/melos/secrets:/out -v /home/alvin/melos-t/src:/src:ro -w /src melos-api:20261009t python scripts/owner_auth_setup.py --out /out/owner_auth.env --username Alvin'
+```
+
+Then the frontend (owner page; `OWNER_LOGIN_LIVE` in `js/site-menu.js`) can go out. The private store
+`/home/alvin/melos-private/store` (mode 700) is empty; the drop-folder ingest was not run (no inbox, nothing to
+ingest).
+
+Checks:
+- HTTPS behind the proxies: `/api/owner/session` reports `"https": true` through https://greeklyric.com (Vercel) and
+  the Funnel (`basecamp.taila44c41.ts.net:8443`), `false` for plain HTTP or no `X-Forwarded-Proto`.
+- `deploy/owner_login_check.py` against a throwaway container (T image, a random throwaway password and its own
+  secrets directory, removed afterwards): 29/29 pass (signed-out 404s, plain-HTTP refusal, CSRF, origin,
+  content type, wrong password 401, sign-in, cookie `HttpOnly`/`Secure`/`SameSite=Strict`/`Path=/`/12 h, fixation,
+  re-sign-in, sign-out, cookie replay, lockout 429). Removing and restoring the file switched 503 ↔ 200 live.
+- Canary (8792, inert) and production after promotion, release S's checks: smoke pass; Campbell 237/237 identical,
+  50 lines analysed, 0 failures; spans 227, 816 rows, 0 failures; citations 35/35; endpoints 20/20 200; search
+  nDCG@10 42 queries 0.854 / 0.675 / 0.794 and 120 queries 0.608 / 0.527 / 0.581 (development / held out / all),
+  identical to S.
+- `/api/word` (S's `scripts/word_latency.py`, 42 forms), median / p90: live S on the box 0.147 / 0.73 s, T canary
+  0.125 / 0.70 s; through greeklyric.com S (S's record) 0.79 / 2.33 s, T 0.59 / 1.87 s. Memory 4.6 GiB of 8 GiB.
+- Tests: `tests/test_private_mode.py` 20 pass; `tests/reader-build-profile.test.mjs` 6 pass.
+
+Outputs: `/home/alvin/melos-t/canary-checks`, `/home/alvin/melos-t/prod-checks`, `/home/alvin/melos-t/live-s`.
+
+## Historical: release S — stacked semantic search, Ancient Greek sentence vectors, commentary notes, 120-query evaluation (2026-10-09)
 
 Public backend: image `melos-api:20261009s`
 (`sha256:b77b0c2925137094d520ecee3ad5a892fed7af84cdcca7bf22afb9ee1f516d73`), built on Basecamp with
