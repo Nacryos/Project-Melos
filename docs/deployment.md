@@ -1,6 +1,118 @@
 # Deployment handoff
 
-## Current: release O — corpus headword index, lemma features, search quality, parser fixes (2026-10-09)
+## Current: release P — citations, sourced dates and genres, n-grams, calibrated confidence, lemma UI gaps (2026-10-09)
+
+Public backend: image `melos-api:20261009p`
+(`sha256:cdd0a3dce06c6c39d1be386a776308e8fe4f998237985af5f304253377932f9d`), built on Basecamp with
+`deploy/Dockerfile.patch` atop the O image from the P source tarball (`git archive` of `bbbe6a7`, sha256
+`0fa8d8ebcb83e11b21275118b74dd7724103e61f5d65bdbe21fe6818ec8cd190`, unpacked in `/home/alvin/melos-p/src`).
+Recipe: `deploy/release_p.sh build|dev|canary|stop-canary|promote|rollback`; checks `deploy/canary_checks_p.sh`.
+O is kept stopped as `melos-api-before-p`, the P canary as `melos-api-canary-p` (stopped). **Rollback:**
+`sh /home/alvin/melos-p/src/deploy/release_p.sh rollback` (stops P, renames it `melos-api-failed-p`, restarts O
+with its own mounts; the Morpheus sidecar is untouched). No frontend change in this release.
+
+Data (read-only mounts): O's `corpus.sqlite` and `embeddings/` (unchanged, from `/home/alvin/melos-o/data`), and
+under `/home/alvin/melos-p/data`: `lemma_index.sqlite` (280 MB, rebuilt), `citation_index.sqlite` (46 MB),
+`ngrams.sqlite` (4.8 MB), `lemma_calibration.json`, `tlg_catalogue.json` (summary), and `metadata/`
+(`chronology.json`, `attributions.json`, `genre_sources.json`, mounted at `/p-metadata`; `chronology.json` also
+over `/app/data/metadata/chronology.json`).
+
+**What P adds** (details: `docs/api-contract.md` "Citations (release P)" and "Headword index additions
+(release P)", `docs/lemma-index.md` "Release P additions"):
+
+- **Citations.** `scripts/build_citation_index.py`: 158,163 stored passages with a printed locus in 394 work groups.
+  TLG author/work numbers for 180 work groups (35 authors), each with its source: the record's own CTS URN 111,
+  the PerseusDL / First1KGreek CTS catalogue (`__cts__.xml`, tree shas in the index manifest) 45, the same verse
+  lines as URN-carrying records 23, the OGC README 1; 94.3 % of edited tokens lie in a mapped work. Nothing from
+  the TLG website. `/api/cite` resolves line/book citations (LSJ/OCD abbreviations, `Eur. Med. 1`-style title
+  prefixes), CTS URNs and fragments; the home search box answers a citation with the cited passages
+  (`mode: citation`). Fragment-number equivalences only where one record prints both numbers: 70 rows (Archilochus
+  Diehl↔West 38, Stesichorus Finglass↔SLG/PMGF, SLG↔Page, Ibycus Page↔SLG and Campbell↔Page). Voigt / Lobel-Page →
+  Campbell: one record carries it (Digital Sappho "178 Campbell (= Voigt, and Lobel & Page 168A)"); the Campbell GLP
+  (1967) records carry only their own numbers, so no GLP↔Voigt/L-P concordance is given.
+  **Citation test (30 citations, `scripts/eval_citations.py`): 30/30** resolve to a passage containing the
+  expected words (Iliad, Odyssey, Theogony, Works and Days, Pindar O./P./N., Argonautica, Idylls, Dionysiaca,
+  Posthomerica, Phaenomena, Musaeus, Alexandra, Halieutica, Bacchylides, AP 7.1, Medea, Antigone, four CTS URNs,
+  Sappho 1/16/31, Alcaeus 346, Anacreon 348, Sappho 168A L-P via the equivalence).
+- **Dates.** `scripts/collect_chronology.py`: Wikidata CE century and decade precision now read (release O read
+  only BCE ones: Nonnus "5th century", Quintus, Musaeus were undated); claim order birth → floruit → work period →
+  death → inception; 36 Greek Anthology poets named by the epigram records (`metadata.attributed_author`) mapped
+  to Wikidata items where the label is unambiguous; anonymous collections (Homeric Hymns, Orphica, Anacreontea)
+  looked up on their own items (no referenced date claim: still undated). A passage takes its author's date, else
+  its attributed poet's. **Dated share of searchable edited Greek tokens: 74.0 % (O) → 90.9 % (P)** (1,259,366 of
+  1,386,111; 43,234 tokens through attributed Anthology poets). All Greek records: 36.4 % (scholia and anonymous
+  OCR are undated). Still undated: Greek Anthology epigrams by anonymous or ambiguous poets (87k tokens), the
+  Homeric Hymns (28k), Orphica, Anacreontea, Semonides, Diodorus Periegetes.
+- **Genres.** A source edition's own label first (CGL anthology sections ΜΕΛΙΚΟΙ ΠΟΙΗΤΕΣ / ΕΛΕΓΕΙΟΓΡΑΦΟΙ ΚΑΙ
+  ΙΑΜΒΟΓΡΑΦΟΙ and subsections, Greek Wikisource titles: 17 authors), then Wikidata P136, else the editorial table
+  (`genre_source`). Alcman, Stesichorus, Ibycus and Simonides move from the editorial "choral lyric" to the source's
+  "melic lyric"; Solon is "elegy and iambus"; Pindar and Bacchylides stay editorial "choral lyric".
+- **N-grams** (`/api/lemma/ngrams`): 2–4 headwords, 73 groups (authors, genres, periods, corpus), one collection per
+  TLG work, refrains once, Dunning G². Examples: Homer ἀλλά ὅτε δή (77), ὡς ἄρα φωνέω (58), θυμός ἐν στῆθος (47);
+  Sappho γῆ μέλας (10), πρόσθεν ἄμβροτος (6); Pindar Ζεύς πατήρ (10), ἑπτάπυλος Θῆβαι (4); Nonnus ἔνθα καί ἔνθα (56);
+  melic lyric ἠχώ θεσπέσιος, δινήεις Ἀχέρων; tragedy φεῦ φεῦ (50).
+- **Proximity across passages** (`cross_passages=true`): continues into the next stored passages of the same
+  collection when the line numbers continue (σελήνη + ἀστήρ within 8 words: 2 extra matches across line records in
+  Nonnus and Theocritus).
+- **Contextual model on every Greek record**: OdyCy on the 176,037 records release O skipped (scholia, commentary,
+  OCR pages): 5 shards × 3 CPUs, 60 min, texts in length order. Context agreements 1.02 M → 2.84 M tokens,
+  changes 57,881 → 159,784 (all in non-edited records; edited text unchanged). English search readings keep
+  release O's frequency prior (`lemma_prior`), so search ranks exactly as in O.
+- **Calibrated confidence** (`scripts/calibrate_lemma_confidence.py`, report `/home/alvin/melos-p/eval/calibration-report.json`):
+  gold = PerseusDL treebank tokens of Homer, Hesiod, Sophocles, Aeschylus aligned to the Perseus passages (251,966
+  aligned); evaluation index assembled with those works' treebank tokens removed from the form lists; isotonic
+  fit per evidence class on half the 25-line blocks, reported on the other half (131,011 tokens). Held-out
+  agreement with the gold lemma 95.7 %. Expected calibration error 0.021 (raw score) → 0.001 (calibrated).
+
+  | Calibrated probability | Tokens | Mean predicted | Observed |
+  |---|---|---|---|
+  | < 0.50 | 2,823 | 0.27 | 0.28 |
+  | 0.50–0.60 | 1,468 | 0.60 | 0.62 |
+  | 0.60–0.70 | 1,646 | 0.64 | 0.65 |
+  | 0.70–0.80 | 365 | 0.73 | 0.72 |
+  | 0.80–0.90 | 1,444 | 0.88 | 0.85 |
+  | 0.90–0.95 | 21,563 | 0.94 | 0.94 |
+  | 0.95–0.98 | 15,913 | 0.97 | 0.97 |
+  | ≥ 0.98 | 85,789 | 0.997 | 0.997 |
+
+  Raw score bins, for comparison: 0.70–0.80 predicted 0.75, observed 0.90; ≥ 0.98 predicted 0.999, observed 0.984.
+  By evidence: context agrees 99.1 % (102,289 tokens), context chose 92.3 % (6,745), no context signal 80.9 %
+  (21,970). Commonest disagreements: elided particles (τ’ read as σύ for τε, ἀλλ’ as ἄλλος for ἀλλά), εἶδον
+  vs ὁράω, ἦ vs εἰμί, and convention differences (ἠέλιος/ἥλιος, μίγνυμι/μείγνυμι). Caveats: OdyCy was trained on
+  treebanks of these texts, so the context classes are optimistic; the gold is edited epic and drama, not OCR or
+  scholia.
+- **Lemma UI gaps** (`docs/audits/lemma-ui-2026-10-09.md`): headline dictionaries in the batch payload
+  (`dictionary=true`: Anacreon 348 13.7 → 22.9 KB, 0.06–0.16 s; a cold 90-word poem 0.7 s, then cached);
+  `/api/word … &compact=true` (φαίνω 439 KB → 7 KB); excerpts and match offsets in `/api/lemma/search`; edition
+  folding in concordance and proximity; `period=` / `undated=true` on the concordance; examples per period and
+  undated collocates in diachrony; 95 % intervals and `small_sample` on every rate; head-meaning concept lists
+  ("moon" no longer brings Ἰώ or Οὐρανία; "love" is ἔρως, ἀγαπάω, φιλέω before φίλος; "sea" brings θάλασσα, not
+  ναύτης) weighted by the meaning index, whole matched words; 3,839 dictionary variant links (ἔρος poet. for ἔρως,
+  πότνα shorter form of πότνια) with `combine_variants`; work order in chronological lists; collocations count a
+  refrain once and one collection of each text (σελήνη's Hellenistic collocates no longer led by πότνα, ὅθεν);
+  main entry before a homograph or cross-reference for short glosses (ὁδός "a way", was "a threshold").
+
+Canary (8792) before promotion: smoke pass; `verify_campbell_glp.py --analyze sample`: 237/237 identical, 214
+translations, 50 lines analysed, 0 failures; `check_span_parses.py --random 30`: 227 spans, 816 word rows, **0
+failures**. Search evaluation (42 queries): **identical to O on every query** (nDCG@10 development 0.707, held out
+0.577, all 0.664). Sampler vs O: seed 101 (421 rows) and held-out seed 20261008 (487 rows) identical on every
+metric, no row gains or loses. Citation test 30/30. Memory: canary 4.3 GiB of 8 GiB (O 3.5 GiB at the same time).
+Backend tests: 1,985 pass; 5 fail as on O's HEAD (`test_commentary_relevance_packet`, `test_linked_sense_integration` and `test_run_commentary_relevance` snapshots, `test_sense_ranker…keep_other_unambiguous…`,
+and `test_release_o_parser_rules::test_printed_headword_is_not_overridden…`, which fails on `54c9580` too).
+
+Verified on https://greeklyric.com after promotion (`deploy/canary_checks_p.sh`, output in
+`/home/alvin/melos-p/prod-checks`): smoke pass; 237/237 identical, 0 failures; span check 227 spans, 816 rows,
+0 failures; search evaluation 0.707 / 0.577 / 0.664 (as O); citations 30/30; every new endpoint 200 through the
+public route (80–160 ms; diachrony 0.9–1.0 s; `/api/cite` for a fragment 0.9 s). Memory: P 3.2 GiB of 8 GiB,
+sidecar 28 MiB.
+
+Known gaps: the frontend does not yet read `dictionaries`, `compact`, `probability`, `variant_group`, n-grams or
+`/api/cite` (the search box already shows citation results as ordinary results); Greek Anthology epigrams by
+ambiguous or anonymous poets and the anonymous collections remain undated; frequency tables still count both
+collections of a text (concordance, collocations and n-grams count one); the calibration is fitted on edited
+epic and drama and applied unchanged to OCR pages and scholia.
+
+## Historical: release O — corpus headword index, lemma features, search quality, parser fixes (2026-10-09)
 
 Public backend: image `melos-api:20261009o`
 (`sha256:77f70495fa90eaa99d5033085e6f3c0474e9850c2f56bf22a3ea2f7c6fc4d127`), built on Basecamp with
