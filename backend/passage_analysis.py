@@ -24,6 +24,7 @@ MAX_MACHINE_FETCHES = 3
 MAX_DICTIONARY_LEMMA_LOOKUPS = 24
 MAX_MACHINE_SUBENTRY_LOOKUPS = 24
 MAX_NEIGHBOUR_LOOKUPS = 160  # release R: parser readings of neighbouring words (dialect rules)
+SLOT_WAIT_SECONDS = 12  # release R: how long a request waits for an analysis slot before answering busy
 
 
 def machine_dictionary_lookup(form, *, machine_lookup, subentry_lookup):
@@ -458,7 +459,9 @@ class PassageAnalysisService:
         self._slots = BoundedSemaphore(2)
 
     def analyze(self, request, *, visitor_id=None, ranker_visitor_id=None):
-        if not self._slots.acquire(blocking=False):
+        # Release R: wait briefly for one of the two slots instead of refusing at once; a reader's
+        # phrase request no longer fails because hover and idle prefetches of single words hold them.
+        if not self._slots.acquire(timeout=SLOT_WAIT_SECONDS):
             raise PassageAnalysisError("busy", "Passage analysis is busy. Try again shortly.", 429)
         try:
             return self._analyze(request, visitor_id=visitor_id, ranker_visitor_id=ranker_visitor_id)

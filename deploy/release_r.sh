@@ -16,6 +16,7 @@
 #   sh /home/alvin/melos-r/src/deploy/release_r.sh canary     # melos-api-canary-r on 127.0.0.1:8792
 #   sh /home/alvin/melos-r/src/deploy/release_r.sh stop-canary
 #   sh /home/alvin/melos-r/src/deploy/release_r.sh promote    # stop+keep Q as melos-api-before-r, start R on 8791
+#   sh /home/alvin/melos-r/src/deploy/release_r.sh replace    # corrected R image (MELOS_R_IMAGE) replaces the live R
 #   sh /home/alvin/melos-r/src/deploy/release_r.sh rollback   # stop R, restart the kept Q
 set -eu
 R=${MELOS_R_DIR:-/home/alvin/melos-r}
@@ -102,11 +103,20 @@ case "$step" in
     run_container "$LIVE" 8791 >/dev/null
     sleep 12; curl -fsS http://127.0.0.1:8791/api/status | head -c 300; echo
     ;;
+  replace)
+    # A corrected R image replaces the live R container; the kept Q (melos-api-before-r) stays the
+    # rollback target. The replaced container is kept stopped as melos-api-r-superseded.
+    docker container inspect "$LIVE" >/dev/null
+    docker rm melos-api-r-superseded >/dev/null 2>&1 || true
+    docker stop "$LIVE" >/dev/null && docker rename "$LIVE" melos-api-r-superseded
+    run_container "$LIVE" 8791 >/dev/null
+    sleep 12; curl -fsS http://127.0.0.1:8791/api/status | head -c 300; echo
+    ;;
   rollback)
     docker stop "$LIVE" >/dev/null && docker rename "$LIVE" "melos-api-failed-r"
     docker rename "$KEPT" "$LIVE" && docker start "$LIVE"
     sleep 12; curl -fsS http://127.0.0.1:8791/api/status | head -c 300; echo
     ;;
   *)
-    echo "usage: release_r.sh build|dev|canary|stop-canary|promote|rollback" >&2; exit 1;;
+    echo "usage: release_r.sh build|dev|canary|stop-canary|promote|replace|rollback" >&2; exit 1;;
 esac
