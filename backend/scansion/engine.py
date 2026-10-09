@@ -45,7 +45,9 @@ FEATURES: dict[str, str] = {
     "ultima_short_by_nature": "the word's ultima is a bare ε or ο",
     "ultima_ai_oi": "the word ends in -αι or -οι (count short for the accent)",
     "enclitic_compound": "the word ends in an enclitic written with it (οὔτι, ὥστε, ὅδε): its accent is the first word's (Smyth §186)",
-    "lex": 'lexical evidence for this α ι υ: "L", "S", "conflict", "ending", "unmarked", "none" (no lexicon)',
+    "dialect": 'dialect the caller states for the text: "none" (default), "aeolic", "doric", "ionic", "attic"',
+    "lex": 'lexical evidence for this α ι υ: "L", "S", "conflict", "ending", "unmarked", "unknown_word" (lexicon on, word not in it), "none" (no lexicon)',
+    "alpha_for_eta": "lexical hook: this α stands where the attested Attic-Ionic form of the word has η (Doric/Aeolic ᾱ, Smyth §30)",
     "lex_sources": 'which sources marked it: "both" (dictionary and Morpheus), "dict", "morph", ""',
     "p_vowel": "probability the nucleus is long (set by the vowel tree)",
 }
@@ -204,6 +206,9 @@ def load(path: Path | str | None = None, text: str | None = None,
     for k, v in params.items():
         if not isinstance(v, (int, float)) or not 0 <= v <= 1:
             errors.append(f"params.{k}: must be a number from 0 to 1 (got {v!r})")
+    for k in params:
+        if k in FEATURES:
+            errors.append(f"params.{k}: this name is a feature; give the parameter another name")
     params.update(param_overrides or {})
     known_vowel = set(FEATURES) - {"p_vowel"} | set(params)
     known_unit = set(FEATURES) | set(params)

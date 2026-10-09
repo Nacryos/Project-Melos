@@ -32,6 +32,7 @@ params:
   lex_long: 0.9            # lexical sources mark α ι υ long
   lex_short: 0.05          # lexical sources mark α ι υ short
   lex_unmarked: 0.1        # lexicon knows the word but gives this α ι υ no mark
+  dialect_alpha_long: 0.95 # α where the attested Attic-Ionic form of the same word has η (Doric/Aeolic ᾱ)
   digamma_lengthening: 0.3 # short syllable before a word that once began with ϝ
   epic_lengthening: 0.1    # short final vowel before initial λ μ ν σ δ (Monro §371)
   epic_lengthening_rho: 0.4 # ... before initial ρ ("appears always to have this power", Monro §371)
@@ -113,6 +114,11 @@ vowel:
             p: lex_short
             reason: the lexical sources mark it short
             cite: Morpheus; Wiktionary; LSJ
+          - id: DIA-ETA
+            when: alpha_for_eta and dialect in ("aeolic", "doric")
+            p: dialect_alpha_long
+            reason: Doric/Aeolic α where the Attic-Ionic form has η (σελάννα = σελήνη), so ᾱ
+            cite: Smyth §30; Buck, Greek Dialects §8 (via backend/dialect_generate.py)
           - id: LEX-CONFLICT
             when: lex == "conflict"
             p: dichronon_default
@@ -140,11 +146,6 @@ vowel:
         cite: Smyth §147
 
 unit:
-  - id: FIN-ANC
-    when: line_final
-    p: 0.5
-    reason: last unit of the line, its length is indifferent (brevis in longo)
-    cite: Monro §366
   - id: POS
     when: (consonants >= 2 or double) and not mcl
     reason: long by position
@@ -260,7 +261,7 @@ flags:
     when: next_digamma and word_final
     reason: the next word once began with ϝ (Homer)
     cite: Monro §§390-395
-  - id: FIN
+  - id: FIN-ANC
     when: line_final
-    reason: line end (brevis in longo)
+    reason: last unit of the line; in verse its length is indifferent (brevis in longo), so a metre does not test it
     cite: Monro §366

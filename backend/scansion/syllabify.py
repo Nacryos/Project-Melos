@@ -66,7 +66,7 @@ class Syllable:
 
 def words_of(text: str, start: int = 0, end: int | None = None) -> list[Word]:
     out: list[Word] = []
-    for m in _WORD.finditer(text, start, len(text) if end is None else end):
+    for m in _pieces(text, start, len(text) if end is None else end):
         raw = m.group(0)
         letters = []
         for i, ch in enumerate(raw):
@@ -87,6 +87,16 @@ def words_of(text: str, start: int = 0, end: int | None = None) -> list[Word]:
     return out
 
 
+_PIECE = re.compile(r"[’'ʼ᾽᾿]?[^’'ʼ᾽᾿]+[’'ʼ᾽᾿]?|[’'ʼ᾽᾿]+")
+
+
+def _pieces(text: str, start: int, end: int):
+    """Word tokens; an elision mark followed directly by a letter ends a word (δ᾽ἄλοχος = δ᾽ + ἄλοχος)."""
+    for m in _WORD.finditer(text, start, end):
+        for p in _PIECE.finditer(text, m.start(), m.end()):
+            yield p
+
+
 def _is_combining(ch: str) -> bool:
     import unicodedata
     return unicodedata.combining(ch) > 0
@@ -100,6 +110,13 @@ def nuclei_of(word: Word) -> list[Nucleus]:
     while i < len(L):
         if L[i].base not in VOWELS:
             i += 1
+            continue
+        if (i + 1 < len(L) and L[i + 1].base in VOWELS and i > 0
+                and any(m in L[i + 1].marks for m in (SMOOTH, ROUGH))):
+            # CRA-1: a breathing (coronis) on a vowel right after another vowel inside a written word
+            # marks crasis written without a space (ὠράνωἴθερος): the two vowels make one long syllable
+            out.append(Nucleus(word.index, [i, i + 1], "long", ["CRA-1"]))
+            i += 2
             continue
         if i + 1 < len(L) and L[i + 1].base in VOWELS:
             joined, rule = _diphthong(L[i], L[i + 1])

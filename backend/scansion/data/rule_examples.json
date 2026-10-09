@@ -1,0 +1,1448 @@
+{
+ "sample": "Iliad 1.1-300 (Hypotactic) and the handcheck texts",
+ "counts": {
+  "ACC-PAROX-LONG": 13,
+  "ACC-PAROX-SHORT": 34,
+  "ACC-PAROX-SHORT-AIOI": 13,
+  "ACC-PROPAROX": 137,
+  "ACC-PROPERISP": 71,
+  "CONS-VOW": 584,
+  "COR-EXT": 164,
+  "COR-INT": 182,
+  "CRA-1": 11,
+  "DICH": 1747,
+  "DIG-HIA": 17,
+  "DIG-LEN": 16,
+  "DIG-WORD": 63,
+  "ELI-1": 164,
+  "EPL-INIT": 229,
+  "EPL-RHO": 1,
+  "FIN-ANC": 376,
+  "HIA-SHORT": 25,
+  "HIATUS": 206,
+  "LEX": 1479,
+  "LEX-CONFLICT": 148,
+  "LEX-ENDING": 20,
+  "LEX-L": 136,
+  "LEX-OTHER": 125,
+  "LEX-S": 777,
+  "LEX-UNMARKED": 273,
+  "MCL": 154,
+  "MCL-INIT": 31,
+  "MCL-LONGV": 36,
+  "MCL-WORD": 87,
+  "NAT-CIRC": 184,
+  "NAT-DIPH": 1004,
+  "NAT-EO": 2021,
+  "NAT-ETA": 631,
+  "NAT-ISUB": 78,
+  "NATURE": 3329,
+  "OPEN": 4159,
+  "POS": 975,
+  "POS-ACROSS": 373,
+  "POS-DOUBLE": 75,
+  "POS-INIT": 20,
+  "POS-WORD": 507,
+  "SYN-CAND": 172
+ },
+ "examples": {
+  "ACC-PAROX-LONG": [
+   {
+    "source": "Iliad 1.85 (Hypotactic)",
+    "line": "’ θαρσήσας μάλα εἰπὲ θεοπρόπιον ὅ τι οἶσθα·",
+    "start": 8,
+    "end": 12,
+    "unit": "ας μ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 6",
+    "line": "τὰς ἔμας αὔδας ἀίοισα πήλοι",
+    "start": 12,
+    "end": 14,
+    "unit": "ας",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 10",
+    "line": "ὤκεες στροῦθοι περὶ γᾶς μελαίνας",
+    "start": 30,
+    "end": 32,
+    "unit": "ας",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 27",
+    "line": "θῦμος ἰμέρρει, τέλεσον, σὺ δ᾽ αὔτα",
+    "start": 33,
+    "end": 34,
+    "unit": "α",
+    "p_long": 1.0
+   }
+  ],
+  "ACC-PAROX-SHORT": [
+   {
+    "source": "Iliad 1.22 (Hypotactic)",
+    "line": "ἔνθ’ ἄλλοι μὲν πάντες ἐπευφήμησαν Ἀχαιοὶ",
+    "start": 16,
+    "end": 19,
+    "unit": "άντ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 5,
+    "end": 6,
+    "unit": "ί",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 7",
+    "line": "ἔκλυες, πάτρος δὲ δόμον λίποισα",
+    "start": 9,
+    "end": 12,
+    "unit": "άτρ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-31 line 1",
+    "line": "φαίνεταί μοι κῆνος ἴσος θέοισιν",
+    "start": 19,
+    "end": 21,
+    "unit": "ἴσ",
+    "p_long": 0.0
+   }
+  ],
+  "ACC-PAROX-SHORT-AIOI": [
+   {
+    "source": "Iliad 1.17 (Hypotactic)",
+    "line": "Ἀτρεΐδαι τε καὶ ἄλλοι ἐϋκνήμιδες Ἀχαιοί,",
+    "start": 4,
+    "end": 6,
+    "unit": "ΐδ",
+    "p_long": 0.05
+   },
+   {
+    "source": "sappho-1 line 9",
+    "line": "ἄρμ᾽ ὐπασδεύξαισα· κάλοι δέ σ᾽ ἆγον",
+    "start": 20,
+    "end": 22,
+    "unit": "άλ",
+    "p_long": 0.05
+   },
+   {
+    "source": "sophocles-ot-1-15 line 1",
+    "line": "ὦ τέκνα, Κάδμου τοῦ πάλαι νέα τροφή,",
+    "start": 21,
+    "end": 23,
+    "unit": "άλ",
+    "p_long": 0.05
+   },
+   {
+    "source": "sophocles-ot-1-15 line 15",
+    "line": "ὁρᾷς μὲν ἡμᾶς ἡλίκοι προσήμεθα",
+    "start": 16,
+    "end": 18,
+    "unit": "ίκ",
+    "p_long": 0.05
+   }
+  ],
+  "ACC-PROPAROX": [
+   {
+    "source": "Iliad 1.3 (Hypotactic)",
+    "line": "πολλὰς δ’ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν",
+    "start": 28,
+    "end": 32,
+    "unit": "ι πρ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 28,
+    "end": 29,
+    "unit": "α",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 11,
+    "end": 14,
+    "unit": "ι μ",
+    "p_long": 0.1
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 24,
+    "end": 27,
+    "unit": "ι δ",
+    "p_long": 0.1
+   }
+  ],
+  "ACC-PROPERISP": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 3,
+    "end": 5,
+    "unit": "ιν",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 13",
+    "line": "αἶψα δ᾽ ἐξίκοντο, σὺ δ᾽ ὦ μάκαιρα",
+    "start": 3,
+    "end": 7,
+    "unit": "α δ᾽",
+    "p_long": 0.1
+   },
+   {
+    "source": "sappho-1 line 22",
+    "line": "αἰ δὲ δῶρα μὴ δέκετ᾽, ἀλλὰ δώσει,",
+    "start": 9,
+    "end": 12,
+    "unit": "α μ",
+    "p_long": 0.1
+   },
+   {
+    "source": "sappho-31 line 3",
+    "line": "ἰσδάνει καὶ πλάσιον ἆδυ φωνεί-",
+    "start": 22,
+    "end": 25,
+    "unit": "υ φ",
+    "p_long": 0.0
+   }
+  ],
+  "CONS-VOW": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 3,
+    "end": 5,
+    "unit": "ιν",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 9,
+    "end": 12,
+    "unit": "ον᾽",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 17,
+    "end": 20,
+    "unit": "άτ᾽",
+    "p_long": 0.05
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 14,
+    "end": 17,
+    "unit": "ηδ᾽",
+    "p_long": 1.0
+   }
+  ],
+  "COR-EXT": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 24,
+    "end": 25,
+    "unit": "ω",
+    "p_long": 0.5
+   },
+   {
+    "source": "sophocles-ot-1-15 line 13",
+    "line": "εἴην τοιάνδε μὴ οὐ κατοικτίρων ἕδραν.",
+    "start": 14,
+    "end": 15,
+    "unit": "ὴ",
+    "p_long": 0.5
+   },
+   {
+    "source": "prose-plutarch-vita-homeri line 1",
+    "line": "1. Περιττὸν μὲν ἂν ἴσως δόξειέ τισι πολυπραγμονεῖν περὶ Ὁμήρου, ποίων τε ἦν γονέων καὶ πόθεν· ἐπεὶ μηδʼ αὐτὸς ἠξίωσεν εἰπεῖν περὶ αὑτοῦ, ἀλλʼ οὕτως ἐγκρατῶς ἔσχεν ὡς μηδὲ τὴν ἀρχὴν τοῦ ὀνόματος ἐπιμνησθῆναι. ἐπεὶ δὲ ὡς πρὸς εἰσαγωγὴν τῶν ἀρχομένων παιδεύεσθαι χρήσιμος ἡ πολυπειρία, πειρασόμεθα εἰπεῖν ὅσα ἱστόρηται τοῖς παλαιοῖς περὶ αὐτοῦ.",
+    "start": 54,
+    "end": 55,
+    "unit": "ὶ",
+    "p_long": 0.025
+   },
+   {
+    "source": "prose-plutarch-vita-homeri line 1",
+    "line": "1. Περιττὸν μὲν ἂν ἴσως δόξειέ τισι πολυπραγμονεῖν περὶ Ὁμήρου, ποίων τε ἦν γονέων καὶ πόθεν· ἐπεὶ μηδʼ αὐτὸς ἠξίωσεν εἰπεῖν περὶ αὑτοῦ, ἀλλʼ οὕτως ἐγκρατῶς ἔσχεν ὡς μηδὲ τὴν ἀρχὴν τοῦ ὀνόματος ἐπιμνησθῆναι. ἐπεὶ δὲ ὡς πρὸς εἰσαγωγὴν τῶν ἀρχομένων παιδεύεσθαι χρήσιμος ἡ πολυπειρία, πειρασόμεθα εἰπεῖν ὅσα ἱστόρηται τοῖς παλαιοῖς περὶ αὐτοῦ.",
+    "start": 128,
+    "end": 129,
+    "unit": "ὶ",
+    "p_long": 0.025
+   }
+  ],
+  "COR-INT": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 19,
+    "end": 20,
+    "unit": "η",
+    "p_long": 0.95
+   },
+   {
+    "source": "sappho-1 line 20",
+    "line": "Ψάπφ᾽ ἀδικήει;",
+    "start": 10,
+    "end": 11,
+    "unit": "ή",
+    "p_long": 0.95
+   },
+   {
+    "source": "sappho-31 line 4",
+    "line": "σας ὐπακούει",
+    "start": 8,
+    "end": 10,
+    "unit": "ού",
+    "p_long": 0.95
+   },
+   {
+    "source": "sappho-31 line 12",
+    "line": "βεισι δ᾽ ἄκουαι,",
+    "start": 11,
+    "end": 13,
+    "unit": "ου",
+    "p_long": 0.95
+   }
+  ],
+  "CRA-1": [
+   {
+    "source": "Iliad 1.96 (Hypotactic)",
+    "line": "τοὔνεκ’ ἄρ’ ἄλγε’ ἔδωκεν ἑκηβόλος ἠδ’ ἔτι δώσει·",
+    "start": 0,
+    "end": 4,
+    "unit": "τοὔν",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 5",
+    "line": "ἀλλὰ τυίδ᾽ ἔλθ᾽, αἴ ποτα κἀτέρωτα",
+    "start": 26,
+    "end": 28,
+    "unit": "ἀτ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 11",
+    "line": "πύκνα δίννεντες πτέρ᾽ ἀπ᾽ ὠράνωἴθε-",
+    "start": 30,
+    "end": 33,
+    "unit": "ωἴθ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 15",
+    "line": "ἤρε᾽ ὄττι δηὖτε πέπονθα κὤττι",
+    "start": 11,
+    "end": 14,
+    "unit": "ηὖτ",
+    "p_long": 1.0
+   }
+  ],
+  "DICH": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 3,
+    "end": 5,
+    "unit": "ιν",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 4,
+    "end": 6,
+    "unit": "ιλ",
+    "p_long": 0.05
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 13,
+    "end": 15,
+    "unit": "ἀθ",
+    "p_long": 0.9
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 15,
+    "end": 17,
+    "unit": "αν",
+    "p_long": 0.05
+   }
+  ],
+  "DIG-HIA": [
+   {
+    "source": "Iliad 1.30 (Hypotactic)",
+    "line": "ἡμετέρῳ ἐνὶ οἴκῳ ἐν Ἄργεϊ τηλόθι πάτρης",
+    "start": 10,
+    "end": 11,
+    "unit": "ὶ",
+    "p_long": 0.043
+   }
+  ],
+  "DIG-LEN": [
+   {
+    "source": "Iliad 1.62 (Hypotactic)",
+    "line": "ἀλλ’ ἄγε δή τινα μάντιν ἐρείομεν ἢ ἱερῆα",
+    "start": 21,
+    "end": 23,
+    "unit": "ιν",
+    "p_long": 0.335
+   },
+   {
+    "source": "sappho-31 line 1",
+    "line": "φαίνεταί μοι κῆνος ἴσος θέοισιν",
+    "start": 16,
+    "end": 18,
+    "unit": "ος",
+    "p_long": 0.3
+   },
+   {
+    "source": "sappho-31 line 8",
+    "line": "σ᾽ οὐδ᾽ ἒν ἔτ᾽ εἴκει,",
+    "start": 8,
+    "end": 10,
+    "unit": "ἒν",
+    "p_long": 0.3
+   },
+   {
+    "source": "sappho-31 line 8",
+    "line": "σ᾽ οὐδ᾽ ἒν ἔτ᾽ εἴκει,",
+    "start": 11,
+    "end": 14,
+    "unit": "ἔτ᾽",
+    "p_long": 0.3
+   }
+  ],
+  "DIG-WORD": [
+   {
+    "source": "Iliad 1.6 (Hypotactic)",
+    "line": "ἐξ οὗ δὴ τὰ πρῶτα διαστήτην ἐρίσαντε",
+    "start": 0,
+    "end": 2,
+    "unit": "ἐξ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-31 line 1",
+    "line": "φαίνεταί μοι κῆνος ἴσος θέοισιν",
+    "start": 16,
+    "end": 18,
+    "unit": "ος",
+    "p_long": 0.3
+   },
+   {
+    "source": "sappho-31 line 8",
+    "line": "σ᾽ οὐδ᾽ ἒν ἔτ᾽ εἴκει,",
+    "start": 8,
+    "end": 10,
+    "unit": "ἒν",
+    "p_long": 0.3
+   },
+   {
+    "source": "sappho-31 line 8",
+    "line": "σ᾽ οὐδ᾽ ἒν ἔτ᾽ εἴκει,",
+    "start": 11,
+    "end": 14,
+    "unit": "ἔτ᾽",
+    "p_long": 0.3
+   }
+  ],
+  "ELI-1": [
+   {
+    "source": "Iliad 1.2 (Hypotactic)",
+    "line": "οὐλομένην, ἣ μυρί’ Ἀχαιοῖς ἄλγε’ ἔθηκε,",
+    "start": 16,
+    "end": 17,
+    "unit": "ί",
+    "p_long": 0.025
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 9,
+    "end": 12,
+    "unit": "ον᾽",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 17,
+    "end": 20,
+    "unit": "άτ᾽",
+    "p_long": 0.05
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 14,
+    "end": 17,
+    "unit": "ηδ᾽",
+    "p_long": 1.0
+   }
+  ],
+  "EPL-INIT": [
+   {
+    "source": "Iliad 1.5 (Hypotactic)",
+    "line": "οἰωνοῖσί τε πᾶσι, Διὸς δ’ ἐτελείετο βουλή,",
+    "start": 15,
+    "end": 19,
+    "unit": "ι, Δ",
+    "p_long": 0.1
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 17,
+    "end": 21,
+    "unit": "ε, λ",
+    "p_long": 0.1
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 11,
+    "end": 14,
+    "unit": "ι μ",
+    "p_long": 0.1
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 24,
+    "end": 27,
+    "unit": "ι δ",
+    "p_long": 0.1
+   }
+  ],
+  "EPL-RHO": [
+   {
+    "source": "Iliad 1.56 (Hypotactic)",
+    "line": "κήδετο γὰρ Δαναῶν, ὅτι ῥα θνήσκοντας ὁρᾶτο.",
+    "start": 21,
+    "end": 24,
+    "unit": "ι ῥ",
+    "p_long": 0.43
+   }
+  ],
+  "FIN-ANC": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 31,
+    "end": 33,
+    "unit": "ος",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 28,
+    "end": 29,
+    "unit": "α",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 30,
+    "end": 31,
+    "unit": "ε",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 30,
+    "end": 31,
+    "unit": "α",
+    "p_long": 0.9
+   }
+  ],
+  "HIA-SHORT": [
+   {
+    "source": "Iliad 1.2 (Hypotactic)",
+    "line": "οὐλομένην, ἣ μυρί’ Ἀχαιοῖς ἄλγε’ ἔθηκε,",
+    "start": 30,
+    "end": 31,
+    "unit": "ε",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 15",
+    "line": "ἤρε᾽ ὄττι δηὖτε πέπονθα κὤττι",
+    "start": 2,
+    "end": 3,
+    "unit": "ε",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-31 line 7",
+    "line": "ὠς γὰρ ἔς σ᾽ ἴδω βρόχε᾽, ὤς με φώναι-",
+    "start": 21,
+    "end": 22,
+    "unit": "ε",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-31 line 9",
+    "line": "ἀλλ᾽ ἄκαν μὲν γλῶσσα †ἔαγε†, λέπτον",
+    "start": 19,
+    "end": 20,
+    "unit": "α",
+    "p_long": 0.0
+   }
+  ],
+  "HIATUS": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 24,
+    "end": 25,
+    "unit": "ω",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 15",
+    "line": "ἤρε᾽ ὄττι δηὖτε πέπονθα κὤττι",
+    "start": 2,
+    "end": 3,
+    "unit": "ε",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-31 line 7",
+    "line": "ὠς γὰρ ἔς σ᾽ ἴδω βρόχε᾽, ὤς με φώναι-",
+    "start": 21,
+    "end": 22,
+    "unit": "ε",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-31 line 9",
+    "line": "ἀλλ᾽ ἄκαν μὲν γλῶσσα †ἔαγε†, λέπτον",
+    "start": 19,
+    "end": 20,
+    "unit": "α",
+    "p_long": 0.0
+   }
+  ],
+  "LEX": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 6,
+    "end": 7,
+    "unit": "ἄ",
+    "p_long": 0.05
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 4,
+    "end": 6,
+    "unit": "ιλ",
+    "p_long": 0.05
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 13,
+    "end": 15,
+    "unit": "ἀθ",
+    "p_long": 0.9
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 15,
+    "end": 17,
+    "unit": "αν",
+    "p_long": 0.05
+   }
+  ],
+  "LEX-CONFLICT": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 14,
+    "end": 17,
+    "unit": "ὰ Π",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 5",
+    "line": "ἀλλὰ τυίδ᾽ ἔλθ᾽, αἴ ποτα κἀτέρωτα",
+    "start": 3,
+    "end": 6,
+    "unit": "ὰ τ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 7",
+    "line": "ἔκλυες, πάτρος δὲ δόμον λίποισα",
+    "start": 3,
+    "end": 4,
+    "unit": "υ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 11",
+    "line": "πύκνα δίννεντες πτέρ᾽ ἀπ᾽ ὠράνωἴθε-",
+    "start": 4,
+    "end": 7,
+    "unit": "α δ",
+    "p_long": 0.55
+   }
+  ],
+  "LEX-ENDING": [
+   {
+    "source": "Iliad 1.85 (Hypotactic)",
+    "line": "’ θαρσήσας μάλα εἰπὲ θεοπρόπιον ὅ τι οἶσθα·",
+    "start": 28,
+    "end": 29,
+    "unit": "ι",
+    "p_long": 0.05
+   },
+   {
+    "source": "sophocles-ot-1-15 line 11",
+    "line": "δείσαντες ἢ στέρξαντες; ὡς θέλοντος ἂν",
+    "start": 17,
+    "end": 20,
+    "unit": "αντ",
+    "p_long": 1.0
+   }
+  ],
+  "LEX-L": [
+   {
+    "source": "Iliad 1.3 (Hypotactic)",
+    "line": "πολλὰς δ’ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν",
+    "start": 4,
+    "end": 9,
+    "unit": "ὰς δ’",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 13,
+    "end": 15,
+    "unit": "ἀθ",
+    "p_long": 0.9
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 26,
+    "end": 28,
+    "unit": "ιτ",
+    "p_long": 0.9
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 30,
+    "end": 31,
+    "unit": "α",
+    "p_long": 0.9
+   }
+  ],
+  "LEX-OTHER": [
+   {
+    "source": "Iliad 1.8 (Hypotactic)",
+    "line": "τίς τ’ ἄρ σφωε θεῶν ἔριδι ξυνέηκε μάχεσθαι;",
+    "start": 35,
+    "end": 37,
+    "unit": "άχ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 9",
+    "line": "ἄρμ᾽ ὐπασδεύξαισα· κάλοι δέ σ᾽ ἆγον",
+    "start": 5,
+    "end": 7,
+    "unit": "ὐπ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 9",
+    "line": "ἄρμ᾽ ὐπασδεύξαισα· κάλοι δέ σ᾽ ἆγον",
+    "start": 7,
+    "end": 10,
+    "unit": "ασδ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 11",
+    "line": "πύκνα δίννεντες πτέρ᾽ ἀπ᾽ ὠράνωἴθε-",
+    "start": 28,
+    "end": 30,
+    "unit": "άν",
+    "p_long": 0.5
+   }
+  ],
+  "LEX-S": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 6,
+    "end": 7,
+    "unit": "ἄ",
+    "p_long": 0.05
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 4,
+    "end": 6,
+    "unit": "ιλ",
+    "p_long": 0.05
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 15,
+    "end": 17,
+    "unit": "αν",
+    "p_long": 0.05
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 17,
+    "end": 20,
+    "unit": "άτ᾽",
+    "p_long": 0.05
+   }
+  ],
+  "LEX-UNMARKED": [
+   {
+    "source": "Iliad 1.2 (Hypotactic)",
+    "line": "οὐλομένην, ἣ μυρί’ Ἀχαιοῖς ἄλγε’ ἔθηκε,",
+    "start": 19,
+    "end": 21,
+    "unit": "Ἀχ",
+    "p_long": 0.1
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 21,
+    "end": 24,
+    "unit": "Ἀφρ",
+    "p_long": 0.55
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 21,
+    "end": 24,
+    "unit": "ίσσ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 6,
+    "end": 8,
+    "unit": "ἄσ",
+    "p_long": 0.1
+   }
+  ],
+  "MCL": [
+   {
+    "source": "Iliad 1.3 (Hypotactic)",
+    "line": "πολλὰς δ’ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν",
+    "start": 28,
+    "end": 32,
+    "unit": "ι πρ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 6,
+    "end": 9,
+    "unit": "όθρ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 21,
+    "end": 24,
+    "unit": "Ἀφρ",
+    "p_long": 0.55
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 12,
+    "end": 15,
+    "unit": "όπλ",
+    "p_long": 0.5
+   }
+  ],
+  "MCL-INIT": [
+   {
+    "source": "Iliad 1.3 (Hypotactic)",
+    "line": "πολλὰς δ’ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν",
+    "start": 28,
+    "end": 32,
+    "unit": "ι πρ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-31 line 10",
+    "line": "δ᾽ αὔτικα χρῶι πῦρ ὐπαδεδρόμηκεν,",
+    "start": 8,
+    "end": 12,
+    "unit": "α χρ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sophocles-ot-1-15 line 1",
+    "line": "ὦ τέκνα, Κάδμου τοῦ πάλαι νέα τροφή,",
+    "start": 28,
+    "end": 32,
+    "unit": "α τρ",
+    "p_long": 0.75
+   },
+   {
+    "source": "sophocles-ot-1-15 line 8",
+    "line": "ὁ πᾶσι κλεινὸς Οἰδίπους καλούμενος.",
+    "start": 5,
+    "end": 9,
+    "unit": "ι κλ",
+    "p_long": 0.5
+   }
+  ],
+  "MCL-LONGV": [
+   {
+    "source": "Iliad 1.19 (Hypotactic)",
+    "line": "ἐκπέρσαι Πριάμοιο πόλιν, εὖ δ’ οἴκαδ’ ἱκέσθαι·",
+    "start": 6,
+    "end": 11,
+    "unit": "αι Πρ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 14",
+    "line": "μειδιαίσαισ᾽ ἀθανάτωι προσώπωι",
+    "start": 19,
+    "end": 24,
+    "unit": "ωι πρ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-31 line 3",
+    "line": "ἰσδάνει καὶ πλάσιον ἆδυ φωνεί-",
+    "start": 9,
+    "end": 14,
+    "unit": "αὶ πλ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-31 line 7",
+    "line": "ὠς γὰρ ἔς σ᾽ ἴδω βρόχε᾽, ὤς με φώναι-",
+    "start": 15,
+    "end": 19,
+    "unit": "ω βρ",
+    "p_long": 1.0
+   }
+  ],
+  "MCL-WORD": [
+   {
+    "source": "Iliad 1.7 (Hypotactic)",
+    "line": "Ἀτρεΐδης τε ἄναξ ἀνδρῶν καὶ δῖος Ἀχιλλεύς.",
+    "start": 0,
+    "end": 3,
+    "unit": "Ἀτρ",
+    "p_long": 0.55
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 6,
+    "end": 9,
+    "unit": "όθρ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 21,
+    "end": 24,
+    "unit": "Ἀφρ",
+    "p_long": 0.55
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 12,
+    "end": 15,
+    "unit": "όπλ",
+    "p_long": 0.5
+   }
+  ],
+  "NAT-CIRC": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 0,
+    "end": 3,
+    "unit": "μῆν",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 4",
+    "line": "πότνια, θῦμον,",
+    "start": 9,
+    "end": 11,
+    "unit": "ῦμ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 8",
+    "line": "χρύσιον ἦλθες",
+    "start": 8,
+    "end": 11,
+    "unit": "ἦλθ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 9",
+    "line": "ἄρμ᾽ ὐπασδεύξαισα· κάλοι δέ σ᾽ ἆγον",
+    "start": 31,
+    "end": 33,
+    "unit": "ἆγ",
+    "p_long": 1.0
+   }
+  ],
+  "NAT-DIPH": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 7,
+    "end": 10,
+    "unit": "ειδ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 0,
+    "end": 4,
+    "unit": "ποικ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 0,
+    "end": 5,
+    "unit": "παῖ Δ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 26,
+    "end": 30,
+    "unit": "αί σ",
+    "p_long": 1.0
+   }
+  ],
+  "NAT-EO": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 10,
+    "end": 13,
+    "unit": "ε θ",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 6,
+    "end": 9,
+    "unit": "όθρ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 9,
+    "end": 12,
+    "unit": "ον᾽",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 24,
+    "end": 26,
+    "unit": "όδ",
+    "p_long": 0.0
+   }
+  ],
+  "NAT-ETA": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 17,
+    "end": 19,
+    "unit": "ηλ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 0,
+    "end": 5,
+    "unit": "μή μ᾽",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 14,
+    "end": 17,
+    "unit": "ηδ᾽",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 5",
+    "line": "ἀλλὰ τυίδ᾽ ἔλθ᾽, αἴ ποτα κἀτέρωτα",
+    "start": 30,
+    "end": 32,
+    "unit": "ωτ",
+    "p_long": 1.0
+   }
+  ],
+  "NAT-ISUB": [
+   {
+    "source": "Iliad 1.15 (Hypotactic)",
+    "line": "χρυσέῳ ἀνὰ σκήπτρῳ, καὶ λίσσετο πάντας Ἀχαιούς,",
+    "start": 5,
+    "end": 6,
+    "unit": "ῳ",
+    "p_long": 0.5
+   },
+   {
+    "source": "sappho-1 line 14",
+    "line": "μειδιαίσαισ᾽ ἀθανάτωι προσώπωι",
+    "start": 19,
+    "end": 24,
+    "unit": "ωι πρ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 14",
+    "line": "μειδιαίσαισ᾽ ἀθανάτωι προσώπωι",
+    "start": 28,
+    "end": 30,
+    "unit": "ωι",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 18",
+    "line": "μαινόλαι θύμωι· τίνα δηὖτε πείθω",
+    "start": 12,
+    "end": 17,
+    "unit": "ωι· τ",
+    "p_long": 1.0
+   }
+  ],
+  "NATURE": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 0,
+    "end": 3,
+    "unit": "μῆν",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 0,
+    "end": 4,
+    "unit": "ποικ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 4,
+    "end": 6,
+    "unit": "ιλ",
+    "p_long": 0.05
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 13,
+    "end": 15,
+    "unit": "ἀθ",
+    "p_long": 0.9
+   }
+  ],
+  "OPEN": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 0,
+    "end": 3,
+    "unit": "μῆν",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 0,
+    "end": 4,
+    "unit": "ποικ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 4,
+    "end": 6,
+    "unit": "ιλ",
+    "p_long": 0.05
+   },
+   {
+    "source": "sappho-1 line 1",
+    "line": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+    "start": 9,
+    "end": 12,
+    "unit": "ον᾽",
+    "p_long": 0.0
+   }
+  ],
+  "POS": [
+   {
+    "source": "Iliad 1.2 (Hypotactic)",
+    "line": "οὐλομένην, ἣ μυρί’ Ἀχαιοῖς ἄλγε’ ἔθηκε,",
+    "start": 27,
+    "end": 30,
+    "unit": "ἄλγ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 6,
+    "end": 10,
+    "unit": "ος δ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 21,
+    "end": 24,
+    "unit": "ίσσ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 27,
+    "end": 30,
+    "unit": "άμν",
+    "p_long": 1.0
+   }
+  ],
+  "POS-ACROSS": [
+   {
+    "source": "Iliad 1.3 (Hypotactic)",
+    "line": "πολλὰς δ’ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν",
+    "start": 4,
+    "end": 9,
+    "unit": "ὰς δ’",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 6,
+    "end": 10,
+    "unit": "ος δ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 7",
+    "line": "ἔκλυες, πάτρος δὲ δόμον λίποισα",
+    "start": 4,
+    "end": 9,
+    "unit": "ες, π",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 7",
+    "line": "ἔκλυες, πάτρος δὲ δόμον λίποισα",
+    "start": 12,
+    "end": 16,
+    "unit": "ος δ",
+    "p_long": 1.0
+   }
+  ],
+  "POS-DOUBLE": [
+   {
+    "source": "Iliad 1.3 (Hypotactic)",
+    "line": "πολλὰς δ’ ἰφθίμους ψυχὰς Ἄϊδι προΐαψεν",
+    "start": 15,
+    "end": 20,
+    "unit": "ους ψ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 9",
+    "line": "ἄρμ᾽ ὐπασδεύξαισα· κάλοι δέ σ᾽ ἆγον",
+    "start": 10,
+    "end": 13,
+    "unit": "εύξ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 13",
+    "line": "αἶψα δ᾽ ἐξίκοντο, σὺ δ᾽ ὦ μάκαιρα",
+    "start": 0,
+    "end": 3,
+    "unit": "αἶψ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 13",
+    "line": "αἶψα δ᾽ ἐξίκοντο, σὺ δ᾽ ὦ μάκαιρα",
+    "start": 8,
+    "end": 10,
+    "unit": "ἐξ",
+    "p_long": 1.0
+   }
+  ],
+  "POS-INIT": [
+   {
+    "source": "Iliad 1.10 (Hypotactic)",
+    "line": "νοῦσον ἀνὰ στρατὸν ὄρσε κακήν, ὀλέκοντο δὲ λαοί,",
+    "start": 9,
+    "end": 14,
+    "unit": "ὰ στρ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sophocles-ot-1-15 line 5",
+    "line": "ὁμοῦ δὲ παιάνων τε καὶ στεναγμάτων·",
+    "start": 20,
+    "end": 25,
+    "unit": "αὶ στ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sophocles-ot-1-15 line 11",
+    "line": "δείσαντες ἢ στέρξαντες; ὡς θέλοντος ἂν",
+    "start": 10,
+    "end": 14,
+    "unit": "ἢ στ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sophocles-ot-1-15 line 17",
+    "line": "πτέσθαι σθένοντες, οἱ δὲ σὺν γήρᾳ βαρεῖς,",
+    "start": 5,
+    "end": 10,
+    "unit": "αι σθ",
+    "p_long": 1.0
+   }
+  ],
+  "POS-WORD": [
+   {
+    "source": "Iliad 1.2 (Hypotactic)",
+    "line": "οὐλομένην, ἣ μυρί’ Ἀχαιοῖς ἄλγε’ ἔθηκε,",
+    "start": 27,
+    "end": 30,
+    "unit": "ἄλγ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 2",
+    "line": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+    "start": 21,
+    "end": 24,
+    "unit": "ίσσ",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 3",
+    "line": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+    "start": 27,
+    "end": 30,
+    "unit": "άμν",
+    "p_long": 1.0
+   },
+   {
+    "source": "sappho-1 line 5",
+    "line": "ἀλλὰ τυίδ᾽ ἔλθ᾽, αἴ ποτα κἀτέρωτα",
+    "start": 0,
+    "end": 3,
+    "unit": "ἀλλ",
+    "p_long": 1.0
+   }
+  ],
+  "SYN-CAND": [
+   {
+    "source": "Iliad 1.1 (Hypotactic)",
+    "line": "μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος",
+    "start": 13,
+    "end": 14,
+    "unit": "ε",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 10",
+    "line": "ὤκεες στροῦθοι περὶ γᾶς μελαίνας",
+    "start": 2,
+    "end": 3,
+    "unit": "ε",
+    "p_long": 0.0
+   },
+   {
+    "source": "sappho-1 line 20",
+    "line": "Ψάπφ᾽ ἀδικήει;",
+    "start": 10,
+    "end": 11,
+    "unit": "ή",
+    "p_long": 0.95
+   },
+   {
+    "source": "sappho-1 line 21",
+    "line": "καὶ γὰρ αἰ φεύγει, ταχέως διώξει,",
+    "start": 22,
+    "end": 23,
+    "unit": "έ",
+    "p_long": 0.0
+   }
+  ]
+ }
+}

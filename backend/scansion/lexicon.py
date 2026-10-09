@@ -37,8 +37,10 @@ def default_path() -> Path:
 
 
 class QuantityLexicon:
-    def __init__(self, path: Path | str | None = None):
+    def __init__(self, path: Path | str | None = None, sources: tuple[str, ...] | None = None):
+        """`sources` limits the evidence to some sources (e.g. ("wiktionary",)); None = all."""
         self.path = Path(path or default_path())
+        self.sources = tuple(sources) if sources else None
         self._local = threading.local()
         self.available = self.path.exists()
 
@@ -52,7 +54,8 @@ class QuantityLexicon:
     def rows(self, k: str, column: str = "key") -> list[tuple[str, str, str]]:
         if not self.available:
             return []
-        return self._db().execute(f"SELECT source, marks, lemmas FROM q WHERE {column}=?", (k,)).fetchall()
+        rows = self._db().execute(f"SELECT source, marks, lemmas FROM q WHERE {column}=?", (k,)).fetchall()
+        return [r for r in rows if r[0] in self.sources] if self.sources else rows
 
     def lookup(self, form: str) -> Evidence:
         return _lookup_cached(self, key(form))

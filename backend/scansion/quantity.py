@@ -67,13 +67,14 @@ class Scanner:
     """scan(text) -> list of units.  `lexicon=None` runs the core grammar only."""
 
     def __init__(self, lexicon: QuantityLexicon | None = None, grammar: engine.Grammar | None = None,
-                 rules_path: str | Path | None = None, params: dict | None = None):
+                 rules_path: str | Path | None = None, params: dict | None = None, dialect: str = "none"):
         if grammar is None:
             grammar, errors = engine.load(rules_path, param_overrides=params)
             if errors:
                 raise engine.RuleError("; ".join(errors))
         self.grammar = grammar
         self.lexicon = lexicon
+        self.dialect = dialect          # "none" | "aeolic" | "doric" | "ionic" | "attic" (caller's statement)
 
     def scan(self, text: str) -> list[SyllableResult]:
         out: list[SyllableResult] = []
@@ -182,7 +183,7 @@ class _Line:
             "adscript": "SYL-4" in n.rules,
             "iota_sub": IOTA_SUB in marks,
             "circumflex": CIRCUMFLEX in marks,
-            "crasis": n.letters[0] > 0 and SMOOTH in marks and _crasis(w, n),
+            "crasis": "CRA-1" in n.rules or (n.letters[0] > 0 and SMOOTH in marks and _crasis(w, n)),
             "consonants": consonant_units(u.coda),
             "double": any(c in DOUBLE_CONSONANTS for c in cons),
             "mcl": mcl,
@@ -207,12 +208,29 @@ class _Line:
             "ultima_short_by_nature": _ultima_short(w, nuc[last]),
             "ultima_ai_oi": _ultima_ai_oi(w, nuc[last]),
             "enclitic_compound": _enclitic_compound(w, nuc),
+            "dialect": self.sc.dialect,
             "lex": "none",
             "lex_sources": "",
         }
+        f["alpha_for_eta"] = False
         if self.sc.lexicon is not None and n.kind == "dichronon" and not f["circumflex"] and not f["iota_sub"]:
             f["lex"], f["lex_sources"] = self.lex(u.word, n.letters[0])
+            if f["vowel"] == "α":
+                f["alpha_for_eta"] = n.letters[0] in self.eta_alphas(u.word)
         return f
+
+    def eta_alphas(self, wi: int) -> frozenset[int]:
+        """Letter indices of α that stand where the attested Attic-Ionic spelling has η (lexical hook).
+
+        Candidates come from the project's dialect correspondence rules (backend/dialect_generate.py:
+        ᾱ for η, Aeolic gemination, psilosis, recessive accent, ...); a candidate counts when the
+        quantity lexicon knows that exact spelling and, if the printed form is itself known, the two
+        share a lemma (so an Ionic α never borrows length from an unrelated η-word)."""
+        if not hasattr(self, "_eta"):
+            self._eta = {}
+        if wi not in self._eta:
+            self._eta[wi] = _eta_alphas(self.sc.lexicon, self.words[wi].text)
+        return self._eta[wi]
 
     def evidence(self, wi: int) -> Evidence:
         if wi not in self._ev:
@@ -237,7 +255,7 @@ class _Line:
     def lex(self, wi: int, li: int) -> tuple[str, str]:
         ev = self.evidence(wi)
         if not ev.found or li >= len(ev.per_letter) or ev.via == "accentless":
-            return "none", ""
+            return "unknown_word", ""
         codes = ev.per_letter[li]
         explicit = {src: {c for c in cs if c in "LS"} for src, cs in codes.items()}
         explicit = {src: cs for src, cs in explicit.items() if cs}
@@ -269,7 +287,7 @@ class _Line:
 
 # Enclitics that join a preceding word into one written word (Smyth §181, §186: such compounds keep
 # the accent of the first word, as if the enclitic were separate: οὔτις, ὥστε, ὅδε).
-ENCLITIC_ENDINGS = ("τε", "τις", "τι", "τινα", "τινος", "τινι", "περ", "γε", "δε")
+ENCLITIC_ENDINGS = ("τε", "τισ", "τι", "τινα", "τινοσ", "τινι", "περ", "γε", "δε")  # σ: letters are folded (FOLD)
 
 
 def _enclitic_compound(w: Word, nuc: list[Nucleus]) -> bool:
@@ -285,6 +303,49 @@ def _enclitic_compound(w: Word, nuc: list[Nucleus]) -> bool:
             if not any(a in tail_marks for a in ACCENTS) and any(a in head_marks for a in ACCENTS):
                 return True
     return False
+
+
+@lru_cache(maxsize=50_000)
+def _eta_alphas_cached(lexicon: QuantityLexicon, form: str) -> frozenset[int]:
+    import difflib
+    from .. import dialect_generate
+    from .greek import base_letters
+    if "α" not in base_letters(form):
+        return frozenset()
+    own = lexicon.lookup(form)
+    own_lemmas = lemma_keys(own.lemmas) if own.found and own.via == "exact" else set()
+    src = base_letters(form)
+    hits: set[int] = set()
+    for spelling, rules in dialect_generate.generate(form):
+        if "alpha_for_eta" not in rules:
+            continue
+        ev = lexicon.lookup(spelling)
+        if not ev.found or ev.via != "exact":
+            continue
+        if own_lemmas and not (own_lemmas & lemma_keys(ev.lemmas)):
+            continue
+        dst = base_letters(spelling)
+        sm = difflib.SequenceMatcher(None, src, dst, autojunk=False)
+        for tag, i1, i2, j1, j2 in sm.get_opcodes():
+            if tag != "replace":
+                continue
+            m = min(i2 - i1, j2 - j1)
+            pairs = [(i1 + k, j1 + k) for k in range(m)] + [(i2 - 1 - k, j2 - 1 - k) for k in range(m)]
+            for i, j in pairs:
+                if src[i] == "α" and dst[j] == "η":
+                    # an α before an Aeolic double consonant answers Attic η by compensatory
+                    # lengthening (σελάννα / σελήνη): the Aeolic α itself is short
+                    if "geminate" in rules and i + 2 < len(src) and src[i + 1] == src[i + 2]:
+                        continue
+                    hits.add(i)
+    return frozenset(hits)
+
+
+def _eta_alphas(lexicon: QuantityLexicon, form: str) -> frozenset[int]:
+    from .greek import ELISION_MARKS
+    if form[-1:] in ELISION_MARKS:
+        return frozenset()
+    return _eta_alphas_cached(lexicon, form)
 
 
 def _crasis(w: Word, n: Nucleus) -> bool:

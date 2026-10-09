@@ -246,9 +246,9 @@
     "share": 0.2204
    },
    "COR-INT": {
-    "n": 4440,
-    "long": 4426,
-    "share": 0.9968
+    "n": 4449,
+    "long": 4428,
+    "share": 0.9953
    },
    "DIG-HIA": {
     "n": 357,
@@ -301,13 +301,13 @@
     "share": 0.9814
    },
    "NATURE": {
-    "n": 60525,
-    "long": 20889,
+    "n": 60516,
+    "long": 20887,
     "share": 0.3451
    },
    "OPEN": {
-    "n": 77452,
-    "long": 25031,
+    "n": 77443,
+    "long": 25029,
     "share": 0.3232
    },
    "POS": {
@@ -367,20 +367,20 @@
     "long": 13,
     "share": 1.0
    },
+   "DIA-ETA": {
+    "n": 37,
+    "long": 2,
+    "share": 0.0541
+   },
    "DICH": {
-    "n": 24090,
-    "long": 3247,
+    "n": 24081,
+    "long": 3245,
     "share": 0.1348
    },
-   "DICH-UNK": {
-    "n": 1208,
-    "long": 228,
-    "share": 0.1887
-   },
    "LEX": {
-    "n": 19897,
-    "long": 2890,
-    "share": 0.1452
+    "n": 21096,
+    "long": 3116,
+    "share": 0.1477
    },
    "LEX-CONFLICT": {
     "n": 1831,
@@ -397,15 +397,20 @@
     "long": 2310,
     "share": 0.9149
    },
+   "LEX-OTHER": {
+    "n": 1208,
+    "long": 228,
+    "share": 0.1887
+   },
    "LEX-S": {
     "n": 11633,
     "long": 117,
     "share": 0.0101
    },
    "LEX-UNMARKED": {
-    "n": 3718,
-    "long": 168,
-    "share": 0.0452
+    "n": 3672,
+    "long": 164,
+    "share": 0.0447
    },
    "NAT-CIRC": {
     "n": 1861,
@@ -441,15 +446,15 @@
    }
   },
   "params": {
+   "alpha_for_eta": {
+    "n": 37,
+    "long": 2,
+    "share": 0.0541
+   },
    "correption": {
     "n": 2890,
     "long": 666,
     "share": 0.2304
-   },
-   "dichronon_default": {
-    "n": 1208,
-    "long": 228,
-    "share": 0.1887
    },
    "digamma_keep": {
     "n": 184,
@@ -472,9 +477,9 @@
     "share": 0.3913
    },
    "internal_keep": {
-    "n": 4440,
-    "long": 4426,
-    "share": 0.9968
+    "n": 4449,
+    "long": 4428,
+    "share": 0.9953
    },
    "lex_long": {
     "n": 2525,
@@ -487,9 +492,9 @@
     "share": 0.0101
    },
    "lex_unmarked": {
-    "n": 3718,
-    "long": 168,
-    "share": 0.0452
+    "n": 3672,
+    "long": 164,
+    "share": 0.0447
    },
    "mcl_boundary": {
     "n": 623,

@@ -46,7 +46,7 @@ def align(line, results):
         g = gold_idx[k]
         mnext = k + 1 < len(results) and gold_idx[k + 1] == g
         mprev = k > 0 and gold_idx[k - 1] == g
-        out.append((r, line.lengths[g] if g is not None else None, mnext, mprev, r.rule == "FIN-ANC"))
+        out.append((r, line.lengths[g] if g is not None else None, mnext, mprev, any(f["id"] == "FIN-ANC" for f in r.flags)))
     return out
 
 
@@ -93,7 +93,7 @@ def measure(scanner, lines) -> dict:
         if r.rule in ("NATURE", "CONS-VOW"):
             vr = r.vowel["rule"]
             key = {"DICH-UNK": "dichronon_default", "LEX-L": "lex_long", "LEX-S": "lex_short",
-                   "LEX-UNMARKED": "lex_unmarked"}.get(vr)
+                   "LEX-UNMARKED": "lex_unmarked", "DIA-ETA": "alpha_for_eta"}.get(vr)
             if key:
                 param[key][0] += 1; param[key][1] += y
         if r.rule == "DIG-LEN" and pv <= 0.01:

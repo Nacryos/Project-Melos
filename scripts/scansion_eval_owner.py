@@ -90,7 +90,7 @@ def score(scanner, lines):
             tot["count_mismatch"] += 1
             continue
         for u, g in zip(units, q):
-            if g == "x" or u.rule == "FIN-ANC":
+            if g == "x" or any(f["id"] == "FIN-ANC" for f in u.flags):
                 continue
             y = int(g == "-")
             tot["n"] += 1
