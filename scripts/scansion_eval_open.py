@@ -155,6 +155,50 @@ class Score:
                 "ms_per_line_median": round(self.ms[len(self.ms) // 2], 3) if self.ms else None}
 
 
+TEMPLATE_FOR = {"hexameter": "hexameter", "pentameter": "pentameter", "ia6": "iambic_trimeter",
+                "tr7": "trochaic_tetrameter"}
+
+
+def eval_metre(scanner, split_chunks):
+    """Layer 2: for lines whose Hypotactic metre has a template, does the fit choose the gold weights?"""
+    from backend.scansion import metre
+    want = {i for ch in split_chunks for i in ch["ids"]}
+    stats = defaultdict(lambda: defaultdict(int))
+    for r in hypotactic_lines():
+        name = TEMPLATE_FOR.get(r["metre"])
+        if r["id"] not in want or not name:
+            continue
+        st = stats[name]
+        units = scanner.scan(r["text"])
+        al = align(r["text"], r["words"], units)
+        if al is None:
+            continue
+        st["lines"] += 1
+        fit = metre.fit_line(units, name)
+        st["fits"] += int(fit.ok)
+        if fit.log_likelihood != float("-inf"):
+            right = all((fit.posterior[k] >= 0.5) == (gold == "L") for k, (u, gold, _) in enumerate(al) if gold)
+            st["weights_all_right"] += int(right)
+            for k, (u, gold, _) in enumerate(al):
+                if gold:
+                    st["units"] += 1
+                    st["units_right"] += int((fit.posterior[k] >= 0.5) == (gold == "L"))
+                    st["units_ambiguous_before"] += int(u.label == "A")
+                    st["units_ambiguous_after"] += int(0.1 < fit.posterior[k] < 0.9)
+        top = metre.auto([units], top=1)
+        st["auto_top1_right"] += int(bool(top) and top[0]["metre"] == name)
+    out = {}
+    for name, st in stats.items():
+        n = max(st["lines"], 1)
+        out[name] = {"lines": st["lines"], "fit_share": round(st["fits"] / n, 4),
+                     "lines_all_weights_right": round(st["weights_all_right"] / n, 4),
+                     "unit_accuracy_after_fit": round(st["units_right"] / max(st["units"], 1), 4),
+                     "ambiguous_share_before_fit": round(st["units_ambiguous_before"] / max(st["units"], 1), 4),
+                     "ambiguous_share_after_fit": round(st["units_ambiguous_after"] / max(st["units"], 1), 4),
+                     "auto_detect_top1": round(st["auto_top1_right"] / n, 4)}
+    return out
+
+
 def eval_hypotactic(scanner, split_chunks, dialect_by_file=None):
     want = {}
     for ch in split_chunks:
@@ -243,10 +287,11 @@ def main():
     args = ap.parse_args()
     man = manifest()
     modes = {"none": None, "wiktionary": QuantityLexicon(sources=("wiktionary",)), "full": QuantityLexicon()}
-    report = {"split": args.split, "hypotactic": {}, "norma": {}}
+    report = {"split": args.split, "hypotactic": {}, "norma": {}, "metre_layer": {}}
     for name, lex in modes.items():
         sc = Scanner(lexicon=lex)
         report["hypotactic"][name] = eval_hypotactic(sc, man[args.split])
+        report["metre_layer"][name] = eval_metre(sc, man[args.split])
         if args.split == "heldout":
             report["norma"][name] = eval_norma(sc)
     text = json.dumps(report, ensure_ascii=False, indent=1)

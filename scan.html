@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Greek Scanner</title>
+<style>
+:root {
+  --bg: #fbfaf7; --fg: #1d1c1a; --muted: #6b6760; --line: #e3dfd6; --panel: #ffffff;
+  --short: 214, 64, 52; --mid: 140, 82, 190; --long: 38, 98, 214;
+  --accent: #2a5bd7;
+  --font-greek: "Gentium Plus", "GFS Didot", "Noto Serif", "Palatino Linotype", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #16161a; --fg: #ecebe6; --muted: #a29f97; --line: #2c2c33; --panel: #1e1e24; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { padding: 14px 20px; border-bottom: 1px solid var(--line); display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+header h1 { font-size: 17px; margin: 0; }
+header a { color: var(--accent); text-decoration: none; font-size: 13px; }
+main { max-width: 1100px; margin: 0 auto; padding: 16px 20px 80px; }
+textarea { width: 100%; min-height: 120px; font: 20px/1.6 var(--font-greek); padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--fg); resize: vertical; }
+.controls { display: flex; flex-wrap: wrap; gap: 14px; align-items: center; margin: 10px 0 18px; font-size: 13px; color: var(--muted); }
+.controls label { display: inline-flex; gap: 6px; align-items: center; }
+select { background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 6px; padding: 3px 6px; }
+.legend { display: inline-flex; align-items: center; gap: 6px; }
+.legend .bar { width: 120px; height: 10px; border-radius: 5px; background: linear-gradient(90deg, rgb(var(--short)), rgb(var(--mid)), rgb(var(--long))); }
+.out { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; }
+.line { margin: 6px 0 14px; }
+.verse { font: 25px/2.3 var(--font-greek); white-space: pre-wrap; word-break: break-word; }
+.u { position: relative; border-radius: 4px; padding: 1px 1px 2px; cursor: pointer; border-bottom: 3px solid currentColor; }
+.u:hover, .u.sel { outline: 2px solid var(--accent); outline-offset: 1px; }
+.pct { position: absolute; left: 50%; transform: translateX(-50%); top: 1.65em; font: 11px/1 system-ui, sans-serif; color: var(--muted); white-space: nowrap; display: none; }
+.showpct .pct { display: block; }
+.showpct .verse { line-height: 2.8; }
+.gap { color: var(--muted); }
+.meta { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; }
+.pattern { font: 15px/1.4 ui-monospace, "Cascadia Mono", monospace; letter-spacing: 2px; color: var(--fg); }
+.bad { color: rgb(var(--short)); }
+.ok { color: #2e8b57; }
+#pop { position: fixed; z-index: 10; max-width: 380px; background: var(--panel); color: var(--fg); border: 1px solid var(--line); border-radius: 10px; box-shadow: 0 8px 28px rgba(0,0,0,.18); padding: 12px 14px; font-size: 13px; display: none; }
+#pop h3 { margin: 0 0 6px; font: 600 18px/1.3 var(--font-greek); }
+#pop .p { font-size: 22px; font-weight: 600; }
+#pop .rid { font: 11px ui-monospace, monospace; color: var(--muted); }
+#pop ul { margin: 6px 0 0; padding-left: 16px; }
+#pop li { margin: 3px 0; }
+#pop .cite { color: var(--muted); font-size: 12px; }
+.status { font-size: 12px; color: var(--muted); margin-top: 8px; }
+.err { color: rgb(var(--short)); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Scanner — metre-free syllable quantities</h1>
+  <a href="/rules.html">Rules (meta-grammar) →</a>
+</header>
+<main>
+  <textarea id="text" spellcheck="false" placeholder="Type or paste Greek…">φαίνεται πόντῳ πέρι νῦν σελάννα,
+καὶ πόθος θῦμόν με δόνει μάλ’ αὖτε·
+μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος</textarea>
+  <div class="controls">
+    <label><input type="checkbox" id="pct"> show %</label>
+    <label><input type="checkbox" id="lex" checked> lexical vowel lengths</label>
+    <label>dialect <select id="dialect"><option value="none">none</option><option value="aeolic">Aeolic</option><option value="doric">Doric</option><option value="ionic">Ionic</option><option value="attic">Attic</option></select></label>
+    <label>metre <select id="metre"><option value="">none (metre-free)</option><option value="auto">auto-detect</option></select></label>
+    <label><input type="checkbox" id="post"> colour by metre fit</label>
+    <span class="legend">short <span class="bar"></span> long</span>
+  </div>
+  <div class="out" id="out"></div>
+  <div class="status" id="status"></div>
+</main>
+<div id="pop" role="dialog"></div>
+<script>
+const $ = (id) => document.getElementById(id);
+const METRES = ["hexameter","pentameter","elegiac","iambic_trimeter","trochaic_tetrameter","sapphic","sapphic_hendecasyllable","adonean","alcaic","glyconic","pherecratean","hipponactean","telesillean","reizianum","aristophanean","lesser_asclepiad","greater_asclepiad"];
+for (const m of METRES) { const o = document.createElement("option"); o.value = m; o.textContent = m.replace(/_/g, " "); $("metre").appendChild(o); }
+try { const s = JSON.parse(localStorage.getItem("scan-prefs") || "{}"); for (const k of ["pct","lex","post"]) if (k in s) $(k).checked = s[k]; for (const k of ["dialect","metre"]) if (s[k]) $(k).value = s[k]; if (s.text) $("text").value = s.text; } catch (e) {}
+
+function rgbFor(p) {
+  const css = getComputedStyle(document.documentElement);
+  const c = (n) => css.getPropertyValue(n).split(",").map(Number);
+  const [a, b, t] = p < 0.5 ? [c("--short"), c("--mid"), p / 0.5] : [c("--mid"), c("--long"), (p - 0.5) / 0.5];
+  return a.map((x, i) => Math.round(x + (b[i] - x) * t));
+}
+const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
+let last = null, timer = null, seq = 0;
+
+async function scan() {
+  const my = ++seq;
+  const text = $("text").value;
+  try { localStorage.setItem("scan-prefs", JSON.stringify({pct: $("pct").checked, lex: $("lex").checked, post: $("post").checked, dialect: $("dialect").value, metre: $("metre").value, text})); } catch (e) {}
+  if (!text.trim()) { $("out").innerHTML = ""; return; }
+  const body = {text, lexicon: $("lex").checked, dialect: $("dialect").value, metre: $("metre").value || null};
+  const t0 = performance.now();
+  let res;
+  try {
+    const r = await fetch("/api/scan", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify(body)});
+    res = await r.json();
+    if (!r.ok) throw new Error(JSON.stringify(res.detail || res));
+  } catch (e) { $("status").innerHTML = `<span class="err">${esc(e.message)}</span>`; return; }
+  if (my !== seq) return;
+  last = {res, text};
+  render();
+  $("status").textContent = `${res.units.length} units · server ${res.ms} ms · round trip ${Math.round(performance.now() - t0)} ms · lexicon ${res.lexicon ? "on" : "off"}`;
+}
+
+function render() {
+  if (!last) return;
+  const {res, text} = last;
+  const usePost = $("post").checked && res.fit;
+  const post = {};
+  if (usePost) res.fit.forEach((f, li) => { const line = res.lines[li]; if (!line || !f.posterior_p_long) return; line.units.forEach((ui, k) => { post[ui] = f.posterior_p_long[k]; }); });
+  const lines = text.split("\n");
+  let offset = 0, html = "";
+  const byLine = {};
+  for (const u of res.units) (byLine[u.line] = byLine[u.line] || []).push(u);
+  lines.forEach((lt, li) => {
+    const start = offset, end = offset + lt.length; offset = end + 1;
+    const units = (byLine[li] || []);
+    let pos = start, h = "";
+    for (const u of units) {
+      if (u.start > pos) h += `<span class="gap">${esc(text.slice(pos, u.start))}</span>`;
+      const p = usePost && post[u.i] !== undefined ? post[u.i] : u.p_long;
+      const [r, g, b] = rgbFor(p);
+      const pct = Math.round(p * 100);
+      h += `<span class="u" data-i="${u.i}" style="color: rgb(${r},${g},${b}); background: rgba(${r},${g},${b},.10)" title="${pct}% long">${esc(text.slice(u.start, u.end))}<span class="pct">${pct}%</span></span>`;
+      pos = Math.max(pos, u.end);
+    }
+    if (pos < end) h += `<span class="gap">${esc(text.slice(pos, end))}</span>`;
+    const lineInfo = res.lines.find((l) => l.line === li);
+    let meta = "";
+    if (lineInfo) {
+      meta += `<span class="pattern">${esc(lineInfo.pattern)}</span>`;
+      if (res.fit) {
+        const k = res.lines.indexOf(lineInfo), f = res.fit[k];
+        if (f) meta += f.ok ? `<span class="ok">fits ${esc(f.metre.replace(/_/g," "))}: <span class="pattern">${esc(f.pattern)}</span></span>`
+          : `<span class="bad">${esc(f.metre.replace(/_/g," "))}: ${esc(f.message)}${f.violations && f.violations.length ? " — " + f.violations.map((v) => esc(v.text) + " needs " + v.needs).join("; ") : ""}</span>`;
+      }
+    }
+    html += `<div class="line"><div class="verse">${h || "&nbsp;"}</div><div class="meta">${meta}</div></div>`;
+  });
+  if (res.auto) html += `<div class="meta">auto-detect: ${res.auto.map((a) => `${esc(a.metre.replace(/_/g, " "))} (${a.lines_fitting}/${a.lines} fit)`).join(" · ")}</div>`;
+  $("out").innerHTML = html;
+  $("out").classList.toggle("showpct", $("pct").checked);
+}
+
+function showPop(el) {
+  const u = last.res.units.find((x) => x.i === Number(el.dataset.i));
+  if (!u) return;
+  document.querySelectorAll(".u.sel").forEach((x) => x.classList.remove("sel"));
+  el.classList.add("sel");
+  const reasons = u.reasons.map((r) => `<li><b>${esc(r.text)}</b>${r.detail ? " (" + esc(r.detail) + ")" : ""} <span class="rid">${esc(r.id)}</span><br><span class="cite">${esc(r.cite)}</span></li>`).join("");
+  const flags = u.flags.map((f) => `<li>${esc(f.text)}${f.p !== undefined ? ` (${Math.round(f.p * 100)}%)` : ""} <span class="rid">${esc(f.id)}</span></li>`).join("");
+  $("pop").innerHTML = `<h3>${esc(u.text)}</h3>
+    <div><span class="p">${Math.round(u.p_long * 100)}%</span> long · vowel ${Math.round(u.vowel.p_long * 100)}% long</div>
+    <ul>${reasons}</ul>${flags ? `<div style="margin-top:6px">Possible:</div><ul>${flags}</ul>` : ""}
+    <div class="rid" style="margin-top:6px">path: ${esc(u.vowel.path.join(" › "))} | ${esc(u.path.join(" › "))}</div>`;
+  const r = el.getBoundingClientRect(), pop = $("pop");
+  pop.style.display = "block";
+  const w = pop.offsetWidth, hgt = pop.offsetHeight;
+  let x = Math.min(window.innerWidth - w - 10, Math.max(10, r.left));
+  let y = r.bottom + 8; if (y + hgt > window.innerHeight - 10) y = Math.max(10, r.top - hgt - 8);
+  pop.style.left = x + "px"; pop.style.top = y + "px";
+}
+document.addEventListener("click", (e) => {
+  const el = e.target.closest(".u");
+  if (el) { showPop(el); e.stopPropagation(); return; }
+  if (!e.target.closest("#pop")) { $("pop").style.display = "none"; document.querySelectorAll(".u.sel").forEach((x) => x.classList.remove("sel")); }
+});
+document.addEventListener("keydown", (e) => { if (e.key === "Escape") $("pop").style.display = "none"; });
+$("text").addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(scan, 150); });
+for (const id of ["lex", "dialect", "metre"]) $(id).addEventListener("change", scan);
+for (const id of ["pct", "post"]) $(id).addEventListener("change", render);
+scan();
+</script>
+</body>
+</html>

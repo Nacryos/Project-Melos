@@ -93,8 +93,8 @@ def _clamp(p: float) -> float:
 
 def _merge_p(s: SyllableResult) -> float | None:
     for f in s.flags:
-        if f["id"] == "SYN-CAND" and f.get("p_merge") is not None:
-            return f["p_merge"]
+        if f["id"] == "SYN-CAND" and f.get("p") is not None:
+            return f["p"]
     return None
 
 
