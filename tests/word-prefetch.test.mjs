@@ -73,8 +73,10 @@ test('low-priority prefetch runs at most maxLow at a time; a click promotes a qu
   await tick();
   assert.deepEqual(started, ['a:low', 'b:low', 'd:high'], 'the clicked word does not wait behind prefetch');
   gates.a.resolve(1); await tick(); await tick();
-  assert.deepEqual(started, ['a:low', 'b:low', 'd:high', 'c:low']);
+  assert.deepEqual(started, ['a:low', 'b:low', 'd:high'], 'queued prefetch waits while the clicked word loads');
   gates.d.resolve('dict'); assert.equal(await clicked, 'dict');
+  await tick(); await tick();
+  assert.deepEqual(started, ['a:low', 'b:low', 'd:high', 'c:low']);
 });
 
 test('a passage change cancels unclaimed prefetch; a clicked word keeps its request', async () => {

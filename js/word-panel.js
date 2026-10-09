@@ -460,8 +460,8 @@
     if (c.saveData) return { batch: false, hover: false, idle: 0, maxLow: 0, reason: 'save-data' };
     const type = String(c.effectiveType || '');
     if (type === 'slow-2g' || type === '2g') return { batch: true, hover: true, idle: 0, maxLow: 1, reason: type };
-    if (type === '3g' || (typeof c.downlink === 'number' && c.downlink > 0 && c.downlink < 1.5)) return { batch: true, hover: true, idle: 3, maxLow: 1, reason: '3g' };
-    return { batch: true, hover: true, idle: 6, maxLow: 2, reason: 'default' };
+    if (type === '3g' || (typeof c.downlink === 'number' && c.downlink > 0 && c.downlink < 1.5)) return { batch: true, hover: true, idle: 3, maxLow: 1, delay: 2500, reason: '3g' };
+    return { batch: true, hover: true, idle: 6, maxLow: 2, delay: 0, reason: 'default' };
   }
 
   const fold = value => String(value || '').normalize('NFD').replace(/\p{M}/gu, '').toLowerCase()
@@ -550,7 +550,7 @@
     const store = createStore(storage, `melos:${VERSION}:${version}:`, { budget, maxItem });
     const inflight = new Map(), queue = [];
     const stats = { requests: 0, hits: 0, joined: 0, cancelled: 0, byKind: {} };
-    let running = 0, limit = maxLow;
+    let running = 0, urgent = 0, limit = maxLow;
     const kindOf = key => String(key).split('|')[0];
 
     function peek(key) {
@@ -566,19 +566,23 @@
     }
     function finish(task) {
       if (inflight.get(task.key) === task) inflight.delete(task.key);
-      if (task.low) { task.low = false; running--; pump(); }
+      if (task.low) { task.low = false; running--; }
+      if (task.urgent) { task.urgent = false; urgent--; }
+      pump();
     }
     function start(task) {
       task.started = true;
-      if (task.priority !== 'high') { task.low = true; running++; }
+      if (task.priority !== 'high') { task.low = true; running++; } else { task.urgent = true; urgent++; }
       stats.requests++; stats.byKind[kindOf(task.key)] = (stats.byKind[kindOf(task.key)] || 0) + 1;
       Promise.resolve()
         .then(() => task.loader({ signal: task.controller.signal, priority: task.priority }))
         .then(value => { if (value !== undefined && value !== null) put(task.key, value, task.persist); finish(task); task.resolve(value); },
           error => { finish(task); task.reject(error); });
     }
+    // Queued prefetch waits while a clicked or hovered word is loading, so on a
+    // slow link it never shares the bandwidth with what the reader asked for.
     function pump() {
-      while (running < limit && queue.length) {
+      while (running < limit && urgent === 0 && queue.length) {
         const task = queue.shift();
         if (!task.controller.signal.aborted) start(task);
       }

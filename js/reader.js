@@ -2562,7 +2562,9 @@
         state.batchHeadlines = batch;
       }
       if (!policy.idle) return;
-      tools.whenIdle(() => {
+      // On a slow link the first tap after opening must not share bandwidth.
+      const later = fn => policy.delay ? globalThis.setTimeout(() => tools.whenIdle(fn), policy.delay) : tools.whenIdle(fn);
+      later(() => {
         if (!current()) return;
         const seen = new Map(), words = [];
         ui.text.querySelectorAll('button.word').forEach((button, index) => {
