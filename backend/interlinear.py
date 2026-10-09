@@ -974,7 +974,9 @@ def _printed_headword_reading(token, candidates, syntax):
         # gender and all), not just its word class: that is strong evidence.
         return None
     consistent = [row for row in others if canonical_features(row) and _lemma_letters(row.get('lemma')) in targets]
-    return rank_candidates(consistent, syntax)[0]['candidate'] if consistent else heads[0]
+    # Without a parse of the headword's own reading the override would leave the word unparsed
+    # (ἄχω): the ordinary ranking stands.
+    return rank_candidates(consistent, syntax)[0]['candidate'] if consistent else None
 
 
 def _choose(token, syntax, rank):

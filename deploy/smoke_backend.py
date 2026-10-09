@@ -45,6 +45,7 @@ expected_notices = {
     'Semantic total counts only the first 1,000 ranked candidates; more indexed hits may exist.',
     'Scores are a one-list reciprocal-rank transform of the bounded dense order, not cosine similarities, probabilities, or confidence.',
     'Dense candidates are ranked and grouped by explicit Greek parent IDs; linked commentary/translation remains separately attributed evidence, not a word-level alignment or verified sense equivalence.',
+    'Other editions of the same passage (same author, most words shared) are listed under the first-ranked copy in editions.',
 }
 assert set(themes.get('warnings', [])) <= expected_notices, themes.get('warnings')
 assert expected_notices - {'Semantic total counts only the first 1,000 ranked candidates; more indexed hits may exist.'} <= set(themes['warnings'])
