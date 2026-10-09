@@ -1,0 +1,1963 @@
+{
+ "note": "Release S search lab (scripts/search_lab_s.py, in process on the laptop copy of the O corpus and R headword index; 120 queries of data/evaluation/search-eval-s.json). Live figures are in docs/deployment.md.",
+ "retrievers_alone": {
+  "bm25_bridge": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.1595,
+    "recall50": 0.0919
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.1394,
+    "recall50": 0.1042
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.1528,
+    "recall50": 0.096
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.2017,
+    "recall50": 0.1082
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.195,
+    "recall50": 0.1157
+   }
+  },
+  "dense_bge-m3_comm": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.1845,
+    "recall50": 0.0533
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.1183,
+    "recall50": 0.0366
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.1625,
+    "recall50": 0.0478
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.1903,
+    "recall50": 0.0433
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.2031,
+    "recall50": 0.0443
+   }
+  },
+  "dense_bge-m3_eng": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.1635,
+    "recall50": 0.0989
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.1519,
+    "recall50": 0.1003
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.1596,
+    "recall50": 0.0994
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.2221,
+    "recall50": 0.124
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.2087,
+    "recall50": 0.15
+   }
+  },
+  "dense_bge-m3_grc": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.3181,
+    "recall50": 0.2411
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.317,
+    "recall50": 0.2604
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.3177,
+    "recall50": 0.2475
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.3906,
+    "recall50": 0.31
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.3831,
+    "recall50": 0.3529
+   }
+  },
+  "dense_qwen3_comm": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.1401,
+    "recall50": 0.0451
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.0871,
+    "recall50": 0.0404
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.1224,
+    "recall50": 0.0435
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.1521,
+    "recall50": 0.0414
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.1308,
+    "recall50": 0.0429
+   }
+  },
+  "dense_qwen3_eng": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.1554,
+    "recall50": 0.0937
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.1069,
+    "recall50": 0.0792
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.1393,
+    "recall50": 0.0889
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.2133,
+    "recall50": 0.1274
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.1849,
+    "recall50": 0.1329
+   }
+  },
+  "dense_qwen3_grc": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.2606,
+    "recall50": 0.2164
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.2866,
+    "recall50": 0.1946
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.2693,
+    "recall50": 0.2091
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.2883,
+    "recall50": 0.2181
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.3516,
+    "recall50": 0.23
+   }
+  },
+  "dense_shlm_comm": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.1691,
+    "recall50": 0.0526
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.1213,
+    "recall50": 0.0461
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.1531,
+    "recall50": 0.0504
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.1931,
+    "recall50": 0.0448
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.2064,
+    "recall50": 0.0457
+   }
+  },
+  "dense_shlm_eng": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.121,
+    "recall50": 0.0897
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.0749,
+    "recall50": 0.0744
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.1056,
+    "recall50": 0.0846
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.1344,
+    "recall50": 0.1038
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.1117,
+    "recall50": 0.1114
+   }
+  },
+  "dense_shlm_grc": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.4756,
+    "recall50": 0.4043
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.4072,
+    "recall50": 0.3439
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.4528,
+    "recall50": 0.3842
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.6045,
+    "recall50": 0.5248
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.6103,
+    "recall50": 0.5029
+   }
+  },
+  "dense_sphilberta_comm": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.0751,
+    "recall50": 0.0356
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.0322,
+    "recall50": 0.0306
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.0608,
+    "recall50": 0.0339
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.0652,
+    "recall50": 0.0257
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.0459,
+    "recall50": 0.0257
+   }
+  },
+  "dense_sphilberta_eng": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.05,
+    "recall50": 0.0384
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.0337,
+    "recall50": 0.0393
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.0445,
+    "recall50": 0.0387
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.0687,
+    "recall50": 0.0538
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.0658,
+    "recall50": 0.0586
+   }
+  },
+  "dense_sphilberta_grc": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.1303,
+    "recall50": 0.0871
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.1092,
+    "recall50": 0.095
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.1233,
+    "recall50": 0.0897
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.1731,
+    "recall50": 0.1295
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.205,
+    "recall50": 0.1743
+   }
+  },
+  "forms": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.3388,
+    "recall50": 0.2363
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.3348,
+    "recall50": 0.2316
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.3375,
+    "recall50": 0.2347
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.4372,
+    "recall50": 0.2767
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.4207,
+    "recall50": 0.3129
+   }
+  },
+  "headword": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.3708,
+    "recall50": 0.3704
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.3976,
+    "recall50": 0.3774
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.3797,
+    "recall50": 0.3727
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.6056,
+    "recall50": 0.6015
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.5752,
+    "recall50": 0.6314
+   }
+  },
+  "keyword": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.1865,
+    "recall50": 0.1666
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.1797,
+    "recall50": 0.1321
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.1842,
+    "recall50": 0.1551
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.2064,
+    "recall50": 0.159
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.2372,
+    "recall50": 0.1671
+   }
+  },
+  "lemma": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.3456,
+    "recall50": 0.3649
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.355,
+    "recall50": 0.3054
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.3487,
+    "recall50": 0.345
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.5084,
+    "recall50": 0.4977
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.4027,
+    "recall50": 0.3471
+   }
+  },
+  "lexical": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.3598,
+    "recall50": 0.2514
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.3462,
+    "recall50": 0.2414
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.3553,
+    "recall50": 0.2481
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.4372,
+    "recall50": 0.2772
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.4207,
+    "recall50": 0.3129
+   }
+  },
+  "notes": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.1526,
+    "recall50": 0.0665
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.1384,
+    "recall50": 0.0628
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.1478,
+    "recall50": 0.0652
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.194,
+    "recall50": 0.0812
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.1892,
+    "recall50": 0.0786
+   }
+  },
+  "semantic": {
+   "development": {
+    "n": 80,
+    "ndcg10": 0.3124,
+    "recall50": 0.234
+   },
+   "held_out": {
+    "n": 40,
+    "ndcg10": 0.281,
+    "recall50": 0.2139
+   },
+   "all": {
+    "n": 120,
+    "ndcg10": 0.3019,
+    "recall50": 0.2273
+   },
+   "o42_all": {
+    "n": 42,
+    "ndcg10": 0.357,
+    "recall50": 0.2638
+   },
+   "o42_held_out": {
+    "n": 14,
+    "ndcg10": 0.3503,
+    "recall50": 0.2643
+   }
+  }
+ },
+ "release_R_fusion": {
+  "development": {
+   "n": 80,
+   "ndcg10": 0.5024,
+   "recall50": 0.3875
+  },
+  "held_out": {
+   "n": 40,
+   "ndcg10": 0.4761,
+   "recall50": 0.3392
+  },
+  "all": {
+   "n": 120,
+   "ndcg10": 0.4937,
+   "recall50": 0.3714
+  },
+  "o42_development": {
+   "n": 28,
+   "ndcg10": 0.7037,
+   "recall50": 0.5137
+  },
+  "o42_held_out": {
+   "n": 14,
+   "ndcg10": 0.5776,
+   "recall50": 0.4129
+  },
+  "o42_all": {
+   "n": 42,
+   "ndcg10": 0.6617,
+   "recall50": 0.4801
+  },
+  "type:allusion": {
+   "n": 12,
+   "ndcg10": 0.131,
+   "recall50": 0.11
+  },
+  "type:cross_lingual": {
+   "n": 8,
+   "ndcg10": 0.2742,
+   "recall50": 0.1747
+  },
+  "type:english_concept": {
+   "n": 36,
+   "ndcg10": 0.5592,
+   "recall50": 0.3944
+  },
+  "type:epithet": {
+   "n": 17,
+   "ndcg10": 0.6315,
+   "recall50": 0.4025
+  },
+  "type:greek_lemma": {
+   "n": 17,
+   "ndcg10": 0.9883,
+   "recall50": 0.9388
+  },
+  "type:greek_phrase": {
+   "n": 12,
+   "ndcg10": 0.5408,
+   "recall50": 0.3096
+  },
+  "type:imagery": {
+   "n": 10,
+   "ndcg10": 0.1089,
+   "recall50": 0.0774
+  },
+  "type:motif": {
+   "n": 8,
+   "ndcg10": 0.0287,
+   "recall50": 0.045
+  }
+ },
+ "stack": {
+  "development": {
+   "n": 80,
+   "ndcg10": 0.6096,
+   "recall50": 0.4984
+  },
+  "held_out": {
+   "n": 40,
+   "ndcg10": 0.5274,
+   "recall50": 0.4345
+  },
+  "all": {
+   "n": 120,
+   "ndcg10": 0.5822,
+   "recall50": 0.4771
+  },
+  "o42_development": {
+   "n": 28,
+   "ndcg10": 0.8544,
+   "recall50": 0.6929
+  },
+  "o42_held_out": {
+   "n": 14,
+   "ndcg10": 0.6802,
+   "recall50": 0.5914
+  },
+  "o42_all": {
+   "n": 42,
+   "ndcg10": 0.7963,
+   "recall50": 0.6591
+  },
+  "type:allusion": {
+   "n": 12,
+   "ndcg10": 0.1772,
+   "recall50": 0.2378
+  },
+  "type:cross_lingual": {
+   "n": 8,
+   "ndcg10": 0.22,
+   "recall50": 0.1612
+  },
+  "type:english_concept": {
+   "n": 36,
+   "ndcg10": 0.7895,
+   "recall50": 0.7111
+  },
+  "type:epithet": {
+   "n": 17,
+   "ndcg10": 0.6195,
+   "recall50": 0.3525
+  },
+  "type:greek_lemma": {
+   "n": 17,
+   "ndcg10": 0.9961,
+   "recall50": 0.9035
+  },
+  "type:greek_phrase": {
+   "n": 12,
+   "ndcg10": 0.5942,
+   "recall50": 0.3554
+  },
+  "type:imagery": {
+   "n": 10,
+   "ndcg10": 0.2189,
+   "recall50": 0.1491
+  },
+  "type:motif": {
+   "n": 8,
+   "ndcg10": 0.0965,
+   "recall50": 0.05
+  }
+ },
+ "stack_queries": [
+  {
+   "q": "moon",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.98,
+   "first": 1
+  },
+  {
+   "q": "stars",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.9,
+   "first": 1
+  },
+  {
+   "q": "wine",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 0.4807,
+   "recall50": 0.46,
+   "first": 2
+  },
+  {
+   "q": "honey",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.88,
+   "first": 1
+  },
+  {
+   "q": "rose",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.9306,
+   "recall50": 0.78,
+   "first": 1
+  },
+  {
+   "q": "sleep",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 0.7799,
+   "recall50": 0.64,
+   "first": 2
+  },
+  {
+   "q": "death",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.89,
+   "recall50": 0.92,
+   "first": 1
+  },
+  {
+   "q": "old age",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.74,
+   "first": 1
+  },
+  {
+   "q": "nightingale",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 0.8415,
+   "recall50": 0.52,
+   "first": 1
+  },
+  {
+   "q": "swallow",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.8553,
+   "recall50": 0.46,
+   "first": 1
+  },
+  {
+   "q": "horse",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.2399,
+   "recall50": 0.4,
+   "first": 3
+  },
+  {
+   "q": "gold",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 0.8611,
+   "recall50": 0.92,
+   "first": 1
+  },
+  {
+   "q": "lyre",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.7799,
+   "recall50": 0.7,
+   "first": 2
+  },
+  {
+   "q": "tears",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.94,
+   "first": 1
+  },
+  {
+   "q": "springtime",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 0.3726,
+   "recall50": 0.76,
+   "first": 5
+  },
+  {
+   "q": "snow",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.84,
+   "first": 1
+  },
+  {
+   "q": "eagle",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.9,
+   "first": 1
+  },
+  {
+   "q": "wedding",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 0.9337,
+   "recall50": 0.76,
+   "first": 1
+  },
+  {
+   "q": "dawn",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.552,
+   "recall50": 0.42,
+   "first": 2
+  },
+  {
+   "q": "dream",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.9149,
+   "recall50": 0.94,
+   "first": 1
+  },
+  {
+   "q": "sword",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 0.4016,
+   "recall50": 0.58,
+   "first": 3
+  },
+  {
+   "q": "fate",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.7001,
+   "recall50": 0.54,
+   "first": 1
+  },
+  {
+   "q": "desire",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.4983,
+   "recall50": 0.5,
+   "first": 2
+  },
+  {
+   "q": "shield",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 0.4205,
+   "recall50": 0.72,
+   "first": 2
+  },
+  {
+   "q": "ἔρως",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.98,
+   "first": 1
+  },
+  {
+   "q": "σελήνη",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 1.0,
+   "first": 1
+  },
+  {
+   "q": "θάνατος",
+   "type": "greek_lemma",
+   "split": "held_out",
+   "ndcg10": 1.0,
+   "recall50": 0.84,
+   "first": 1
+  },
+  {
+   "q": "Μοῦσα",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.92,
+   "first": 1
+  },
+  {
+   "q": "ἀηδών",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.7,
+   "first": 1
+  },
+  {
+   "q": "οἶνος",
+   "type": "greek_lemma",
+   "split": "held_out",
+   "ndcg10": 1.0,
+   "recall50": 0.96,
+   "first": 1
+  },
+  {
+   "q": "χρυσός",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.84,
+   "first": 1
+  },
+  {
+   "q": "rose-fingered",
+   "type": "epithet",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.56,
+   "first": 1
+  },
+  {
+   "q": "bittersweet",
+   "type": "epithet",
+   "split": "held_out",
+   "ndcg10": 0.0,
+   "recall50": 0.0,
+   "first": null
+  },
+  {
+   "q": "golden-throned",
+   "type": "epithet",
+   "split": "development",
+   "ndcg10": 0.9266,
+   "recall50": 0.5,
+   "first": 1
+  },
+  {
+   "q": "violet-crowned",
+   "type": "epithet",
+   "split": "development",
+   "ndcg10": 0.7564,
+   "recall50": 0.3023,
+   "first": 1
+  },
+  {
+   "q": "ox-eyed",
+   "type": "epithet",
+   "split": "held_out",
+   "ndcg10": 1.0,
+   "recall50": 0.54,
+   "first": 1
+  },
+  {
+   "q": "wine-dark sea",
+   "type": "epithet",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.58,
+   "first": 1
+  },
+  {
+   "q": "grey-eyed Athena",
+   "type": "epithet",
+   "split": "development",
+   "ndcg10": 0.5396,
+   "recall50": 0.32,
+   "first": 1
+  },
+  {
+   "q": "ῥοδοδάκτυλος Ἠώς",
+   "type": "greek_phrase",
+   "split": "held_out",
+   "ndcg10": 0.8669,
+   "recall50": 0.18,
+   "first": 1
+  },
+  {
+   "q": "πόδας ὠκὺς Ἀχιλλεύς",
+   "type": "greek_phrase",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.66,
+   "first": 1
+  },
+  {
+   "q": "ποικιλόθρον’ ἀθανάτ’ Ἀφρόδιτα",
+   "type": "greek_phrase",
+   "split": "development",
+   "ndcg10": 0.3392,
+   "recall50": 0.2,
+   "first": 1
+  },
+  {
+   "q": "γλυκύπικρον ἀμάχανον ὄρπετον",
+   "type": "greek_phrase",
+   "split": "held_out",
+   "ndcg10": 0.5638,
+   "recall50": 0.4,
+   "first": 1
+  },
+  {
+   "q": "sea",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.7511,
+   "recall50": 0.6,
+   "first": 1
+  },
+  {
+   "q": "θάλασσα",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.92,
+   "first": 1
+  },
+  {
+   "q": "γαῖα μέλαινα",
+   "type": "greek_phrase",
+   "split": "held_out",
+   "ndcg10": 1.0,
+   "recall50": 0.4545,
+   "first": 1
+  },
+  {
+   "q": "limb-loosening",
+   "type": "epithet",
+   "split": "development",
+   "ndcg10": 0.11,
+   "recall50": 0.0323,
+   "first": 3
+  },
+  {
+   "q": "the moon among the stars",
+   "type": "imagery",
+   "split": "development",
+   "ndcg10": 0.3836,
+   "recall50": 0.25,
+   "first": 1
+  },
+  {
+   "q": "youth fades quickly",
+   "type": "motif",
+   "split": "held_out",
+   "ndcg10": 0.0,
+   "recall50": 0.0,
+   "first": null
+  },
+  {
+   "q": "black earth",
+   "type": "cross_lingual",
+   "split": "development",
+   "ndcg10": 0.2048,
+   "recall50": 0.2424,
+   "first": 3
+  },
+  {
+   "q": "as are the generations of leaves, so are those of men",
+   "type": "allusion",
+   "split": "development",
+   "ndcg10": 0.3392,
+   "recall50": 0.2,
+   "first": 1
+  },
+  {
+   "q": "night",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 0.9337,
+   "recall50": 0.78,
+   "first": 1
+  },
+  {
+   "q": "ἥλιος",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 0.9337,
+   "recall50": 0.64,
+   "first": 1
+  },
+  {
+   "q": "ἔρος δηὖτέ μ’ ὀ λυσιμέλης δόνει",
+   "type": "greek_phrase",
+   "split": "development",
+   "ndcg10": 0.3392,
+   "recall50": 0.2,
+   "first": 1
+  },
+  {
+   "q": "white-armed",
+   "type": "epithet",
+   "split": "held_out",
+   "ndcg10": 0.9364,
+   "recall50": 0.6,
+   "first": 1
+  },
+  {
+   "q": "an apple reddening on the highest branch",
+   "type": "imagery",
+   "split": "development",
+   "ndcg10": 0.0851,
+   "recall50": 0.037,
+   "first": 5
+  },
+  {
+   "q": "old age and grey hair",
+   "type": "motif",
+   "split": "development",
+   "ndcg10": 0.1389,
+   "recall50": 0.06,
+   "first": 2
+  },
+  {
+   "q": "father of gods and men",
+   "type": "cross_lingual",
+   "split": "held_out",
+   "ndcg10": 0.359,
+   "recall50": 0.0625,
+   "first": 1
+  },
+  {
+   "q": "some say an army of horsemen is the most beautiful thing on the black earth",
+   "type": "allusion",
+   "split": "development",
+   "ndcg10": 0.0,
+   "recall50": 0.2,
+   "first": 31
+  },
+  {
+   "q": "wind",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.7472,
+   "recall50": 0.66,
+   "first": 1
+  },
+  {
+   "q": "νύξ",
+   "type": "greek_lemma",
+   "split": "held_out",
+   "ndcg10": 1.0,
+   "recall50": 1.0,
+   "first": 1
+  },
+  {
+   "q": "φαίνεταί μοι κῆνος ἴσος θέοισιν",
+   "type": "greek_phrase",
+   "split": "development",
+   "ndcg10": 0.3392,
+   "recall50": 0.2,
+   "first": 1
+  },
+  {
+   "q": "cloud-gathering Zeus",
+   "type": "epithet",
+   "split": "development",
+   "ndcg10": 0.5036,
+   "recall50": 0.24,
+   "first": 1
+  },
+  {
+   "q": "wind falling on the oaks of a mountain",
+   "type": "imagery",
+   "split": "held_out",
+   "ndcg10": 0.3843,
+   "recall50": 0.1875,
+   "first": 1
+  },
+  {
+   "q": "wine to forget sorrow",
+   "type": "motif",
+   "split": "development",
+   "ndcg10": 0.359,
+   "recall50": 0.06,
+   "first": 1
+  },
+  {
+   "q": "glukupikron",
+   "type": "cross_lingual",
+   "split": "development",
+   "ndcg10": 0.0,
+   "recall50": 0.4,
+   "first": 11
+  },
+  {
+   "q": "I cannot understand the strife of the winds",
+   "type": "allusion",
+   "split": "held_out",
+   "ndcg10": 0.0,
+   "recall50": 0.0,
+   "first": null
+  },
+  {
+   "q": "ship",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.2809,
+   "recall50": 0.46,
+   "first": 2
+  },
+  {
+   "q": "ὕπνος",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.94,
+   "first": 1
+  },
+  {
+   "q": "ἄστερες μὲν ἀμφὶ κάλαν σελάνναν",
+   "type": "greek_phrase",
+   "split": "held_out",
+   "ndcg10": 0.3392,
+   "recall50": 0.2,
+   "first": 1
+  },
+  {
+   "q": "far-shooting Apollo",
+   "type": "epithet",
+   "split": "development",
+   "ndcg10": 0.5469,
+   "recall50": 0.4,
+   "first": 2
+  },
+  {
+   "q": "snow on the mountains",
+   "type": "imagery",
+   "split": "development",
+   "ndcg10": 0.0734,
+   "recall50": 0.1667,
+   "first": 7
+  },
+  {
+   "q": "throwing away the shield in battle",
+   "type": "motif",
+   "split": "held_out",
+   "ndcg10": 0.0,
+   "recall50": 0.06,
+   "first": 14
+  },
+  {
+   "q": "rhododaktylos Eos",
+   "type": "cross_lingual",
+   "split": "development",
+   "ndcg10": 0.0,
+   "recall50": 0.0,
+   "first": null
+  },
+  {
+   "q": "creatures of a day: man is the dream of a shadow",
+   "type": "allusion",
+   "split": "development",
+   "ndcg10": 0.6131,
+   "recall50": 0.5,
+   "first": 1
+  },
+  {
+   "q": "laughter",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 1.0,
+   "recall50": 0.78,
+   "first": 1
+  },
+  {
+   "q": "Ἀφροδίτη",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.94,
+   "first": 1
+  },
+  {
+   "q": "δέδυκε μὲν ἀ σελάννα",
+   "type": "greek_phrase",
+   "split": "development",
+   "ndcg10": 0.3904,
+   "recall50": 0.25,
+   "first": 1
+  },
+  {
+   "q": "honey-voiced",
+   "type": "epithet",
+   "split": "held_out",
+   "ndcg10": 0.6047,
+   "recall50": 0.2051,
+   "first": 1
+  },
+  {
+   "q": "a cicada singing in the summer heat",
+   "type": "imagery",
+   "split": "development",
+   "ndcg10": 0.0,
+   "recall50": 0.0,
+   "first": null
+  },
+  {
+   "q": "love as fire",
+   "type": "motif",
+   "split": "development",
+   "ndcg10": 0.2745,
+   "recall50": 0.14,
+   "first": 2
+  },
+  {
+   "q": "poikilothron athanat Aphrodita",
+   "type": "cross_lingual",
+   "split": "held_out",
+   "ndcg10": 0.0,
+   "recall50": 0.0,
+   "first": null
+  },
+  {
+   "q": "neither honey nor the bee for me",
+   "type": "allusion",
+   "split": "development",
+   "ndcg10": 0.4693,
+   "recall50": 0.3333,
+   "first": 1
+  },
+  {
+   "q": "girl",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.9216,
+   "recall50": 0.56,
+   "first": 1
+  },
+  {
+   "q": "πόθος",
+   "type": "greek_lemma",
+   "split": "held_out",
+   "ndcg10": 1.0,
+   "recall50": 0.94,
+   "first": 1
+  },
+  {
+   "q": "χλωροτέρα δὲ ποίας",
+   "type": "greek_phrase",
+   "split": "development",
+   "ndcg10": 0.3392,
+   "recall50": 0.2,
+   "first": 1
+  },
+  {
+   "q": "fair-tressed",
+   "type": "epithet",
+   "split": "development",
+   "ndcg10": 0.224,
+   "recall50": 0.08,
+   "first": 2
+  },
+  {
+   "q": "a ship tossed by waves in a storm",
+   "type": "imagery",
+   "split": "held_out",
+   "ndcg10": 0.1488,
+   "recall50": 0.12,
+   "first": 5
+  },
+  {
+   "q": "Eros strikes like a blacksmith",
+   "type": "motif",
+   "split": "development",
+   "ndcg10": 0.0,
+   "recall50": 0.0,
+   "first": null
+  },
+  {
+   "q": "son of Kronos",
+   "type": "cross_lingual",
+   "split": "development",
+   "ndcg10": 0.5389,
+   "recall50": 0.28,
+   "first": 1
+  },
+  {
+   "q": "Thracian filly, why do you look at me askance",
+   "type": "allusion",
+   "split": "held_out",
+   "ndcg10": 0.0,
+   "recall50": 0.5,
+   "first": 12
+  },
+  {
+   "q": "bee",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.96,
+   "first": 1
+  },
+  {
+   "q": "ἄνεμος",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.84,
+   "first": 1
+  },
+  {
+   "q": "ἄριστον μὲν ὕδωρ",
+   "type": "greek_phrase",
+   "split": "held_out",
+   "ndcg10": 0.6131,
+   "recall50": 0.5,
+   "first": 1
+  },
+  {
+   "q": "golden Aphrodite",
+   "type": "epithet",
+   "split": "development",
+   "ndcg10": 0.5876,
+   "recall50": 0.34,
+   "first": 1
+  },
+  {
+   "q": "tears running down the cheeks",
+   "type": "imagery",
+   "split": "development",
+   "ndcg10": 0.0636,
+   "recall50": 0.1,
+   "first": 10
+  },
+  {
+   "q": "prayer to Aphrodite to come",
+   "type": "motif",
+   "split": "held_out",
+   "ndcg10": 0.0,
+   "recall50": 0.06,
+   "first": 22
+  },
+  {
+   "q": "eros lusimeles",
+   "type": "cross_lingual",
+   "split": "development",
+   "ndcg10": 0.2895,
+   "recall50": 0.0645,
+   "first": 1
+  },
+  {
+   "q": "Helen left the best of husbands and sailed to Troy",
+   "type": "allusion",
+   "split": "development",
+   "ndcg10": 0.0,
+   "recall50": 0.2,
+   "first": 14
+  },
+  {
+   "q": "tomb",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 0.9052,
+   "recall50": 0.74,
+   "first": 1
+  },
+  {
+   "q": "ῥόδον",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.96,
+   "first": 1
+  },
+  {
+   "q": "Ζεῦ πάτερ",
+   "type": "greek_phrase",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.82,
+   "first": 1
+  },
+  {
+   "q": "earth-shaker",
+   "type": "epithet",
+   "split": "held_out",
+   "ndcg10": 0.7952,
+   "recall50": 0.68,
+   "first": 1
+  },
+  {
+   "q": "lightning hurled by Zeus",
+   "type": "imagery",
+   "split": "development",
+   "ndcg10": 0.577,
+   "recall50": 0.3,
+   "first": 1
+  },
+  {
+   "q": "lament for a dead child",
+   "type": "motif",
+   "split": "development",
+   "ndcg10": 0.0,
+   "recall50": 0.02,
+   "first": 22
+  },
+  {
+   "q": "a sea-purple bird of spring",
+   "type": "allusion",
+   "split": "held_out",
+   "ndcg10": 0.0,
+   "recall50": 0.0,
+   "first": null
+  },
+  {
+   "q": "river",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.863,
+   "recall50": 0.82,
+   "first": 1
+  },
+  {
+   "q": "μέλισσα",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.94,
+   "first": 1
+  },
+  {
+   "q": "silver-bowed",
+   "type": "epithet",
+   "split": "held_out",
+   "ndcg10": 0.0,
+   "recall50": 0.0238,
+   "first": 11
+  },
+  {
+   "q": "garlands of flowers",
+   "type": "imagery",
+   "split": "development",
+   "ndcg10": 0.2201,
+   "recall50": 0.08,
+   "first": 1
+  },
+  {
+   "q": "κῦμα",
+   "type": "greek_lemma",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 1.0,
+   "first": 1
+  },
+  {
+   "q": "the mountain peaks and ravines are asleep",
+   "type": "allusion",
+   "split": "held_out",
+   "ndcg10": 0.0,
+   "recall50": 0.1429,
+   "first": 15
+  },
+  {
+   "q": "laughter-loving Aphrodite",
+   "type": "epithet",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.5882,
+   "first": 1
+  },
+  {
+   "q": "the nightingale's song in spring",
+   "type": "imagery",
+   "split": "development",
+   "ndcg10": 0.2529,
+   "recall50": 0.25,
+   "first": 1
+  },
+  {
+   "q": "I long and I yearn",
+   "type": "allusion",
+   "split": "held_out",
+   "ndcg10": 0.4693,
+   "recall50": 0.3333,
+   "first": 1
+  },
+  {
+   "q": "child of Zeus",
+   "type": "cross_lingual",
+   "split": "development",
+   "ndcg10": 0.3679,
+   "recall50": 0.24,
+   "first": 1
+  },
+  {
+   "q": "Some Saian exults in my shield",
+   "type": "allusion",
+   "split": "development",
+   "ndcg10": 0.0,
+   "recall50": 0.3333,
+   "first": 21
+  },
+  {
+   "q": "the wrath of Achilles",
+   "type": "allusion",
+   "split": "held_out",
+   "ndcg10": 0.235,
+   "recall50": 0.1111,
+   "first": 1
+  },
+  {
+   "q": "flowers",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 0.7156,
+   "recall50": 0.46,
+   "first": 1
+  },
+  {
+   "q": "mother",
+   "type": "english_concept",
+   "split": "development",
+   "ndcg10": 1.0,
+   "recall50": 0.96,
+   "first": 1
+  },
+  {
+   "q": "blood",
+   "type": "english_concept",
+   "split": "held_out",
+   "ndcg10": 0.8512,
+   "recall50": 0.62,
+   "first": 1
+  }
+ ],
+ "weights": {
+  "greek": {
+   "dense_bge-m3_comm": 0.0,
+   "dense_bge-m3_eng": 1.5,
+   "dense_bge-m3_grc": 0.5,
+   "dense_shlm_comm": 0.0,
+   "dense_shlm_eng": 1.0,
+   "dense_shlm_grc": 0.0,
+   "forms": 1.0,
+   "headword": 0.0,
+   "keyword": 0.5,
+   "lemma": 2.0,
+   "lexical": 1.0,
+   "notes": 0.0,
+   "semantic": 1.0
+  },
+  "greek_dev_objective": {
+   "ndcg10": 0.834045,
+   "ndcg10_recall50_mean": 0.770773,
+   "queries": 20
+  },
+  "english": {
+   "bm25_bridge": 1.0,
+   "dense_bge-m3_comm": 0.0,
+   "dense_bge-m3_eng": 1.5,
+   "dense_bge-m3_grc": 0.5,
+   "dense_shlm_comm": 0.25,
+   "dense_shlm_eng": 0.0,
+   "dense_shlm_grc": 3.0,
+   "forms": 0.5,
+   "headword": 0.5,
+   "keyword": 0.0,
+   "lemma": 3.0,
+   "lexical": 1.0,
+   "notes": 1.0,
+   "semantic": 1.0
+  },
+  "english_dev_objective": {
+   "ndcg10": 0.534765,
+   "ndcg10_recall50_mean": 0.481716,
+   "queries": 60
+  },
+  "fitted_on": {
+   "queries": "C:\\Users\\alvin\\melos-s\\data\\evaluation\\search-eval-s.json",
+   "split": "development",
+   "grid": [
+    0.0,
+    0.25,
+    0.5,
+    1.0,
+    1.5,
+    2.0,
+    3.0,
+    4.0,
+    6.0
+   ],
+   "method": "coordinate ascent on development nDCG@10 (ties: mean of nDCG@10 and recall@50)",
+   "at": "2026-10-09T12:18:43Z"
+  }
+ },
+ "rerankers": {
+  "cross-encoder_mmarco-mMiniLMv2-L12-H384-v1": {
+   "best_beta_on_development": 0.0,
+   "by_beta": {
+    "0.0": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.6096,
+      "recall50": 0.4984
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.5274,
+      "recall50": 0.4345
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5822,
+      "recall50": 0.4771
+     }
+    },
+    "0.1": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.6014,
+      "recall50": 0.4984
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.5382,
+      "recall50": 0.4345
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5803,
+      "recall50": 0.4771
+     }
+    },
+    "0.2": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.6046,
+      "recall50": 0.4984
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.535,
+      "recall50": 0.4345
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5814,
+      "recall50": 0.4771
+     }
+    },
+    "0.3": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.6017,
+      "recall50": 0.4984
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.5357,
+      "recall50": 0.435
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5797,
+      "recall50": 0.4773
+     }
+    },
+    "0.5": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.5883,
+      "recall50": 0.4984
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.5385,
+      "recall50": 0.435
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5717,
+      "recall50": 0.4773
+     }
+    },
+    "0.7": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.5551,
+      "recall50": 0.4984
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.5022,
+      "recall50": 0.4355
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5375,
+      "recall50": 0.4774
+     }
+    },
+    "1.0": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.506,
+      "recall50": 0.4984
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.4609,
+      "recall50": 0.4355
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.491,
+      "recall50": 0.4774
+     }
+    }
+   },
+   "mean_seconds_per_query_gpu": 0.242
+  },
+  "BAAI_bge-reranker-v2-m3": {
+   "best_beta_on_development": 0.0,
+   "by_beta": {
+    "0.0": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.6096,
+      "recall50": 0.4984
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.5274,
+      "recall50": 0.4345
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5822,
+      "recall50": 0.4771
+     }
+    },
+    "0.1": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.6018,
+      "recall50": 0.4984
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.5225,
+      "recall50": 0.4345
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5754,
+      "recall50": 0.4771
+     }
+    },
+    "0.2": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.6015,
+      "recall50": 0.4981
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.5132,
+      "recall50": 0.4345
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5721,
+      "recall50": 0.4769
+     }
+    },
+    "0.3": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.5903,
+      "recall50": 0.4981
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.5028,
+      "recall50": 0.4345
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5612,
+      "recall50": 0.4769
+     }
+    },
+    "0.5": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.571,
+      "recall50": 0.4981
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.4755,
+      "recall50": 0.4345
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5391,
+      "recall50": 0.4769
+     }
+    },
+    "0.7": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.5476,
+      "recall50": 0.4981
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.4594,
+      "recall50": 0.4345
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.5182,
+      "recall50": 0.4769
+     }
+    },
+    "1.0": {
+     "development": {
+      "n": 80,
+      "ndcg10": 0.4825,
+      "recall50": 0.4981
+     },
+     "held_out": {
+      "n": 40,
+      "ndcg10": 0.4225,
+      "recall50": 0.4345
+     },
+     "all": {
+      "n": 120,
+      "ndcg10": 0.4625,
+      "recall50": 0.4769
+     }
+    }
+   },
+   "mean_seconds_per_query_gpu": 2.351
+  }
+ }
+}

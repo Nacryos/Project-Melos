@@ -1,0 +1,6094 @@
+{
+ "version": "search-eval-s-v1",
+ "created": "2026-10-09",
+ "purpose": "Release S search evaluation: release O's 42 queries (first, unchanged) and 78 more: English concepts, Greek headwords and phrases, epithets, imagery, motifs, cross-lingual and transliterated queries, and allusions to well-known lines. Written before any release S retriever was run; every third query is held out and was not used to choose weights.",
+ "judgement_rule": "A passage is relevant when it is Greek edited text (kind text, quality source_text or machine_corrected_ocr) whose normalised text (backend.textutils.normalize: lower case, no accents, final sigma as σ) matches the query's pattern: the concept, headword or epithet is actually present in the Greek. Relevance is judged on the passage (a fragment and its other editions are one item: only the first-ranked copy counts). Patterns are written from the Greek vocabulary of the concept, independently of the lemma index. Imagery and motif queries list several patterns in all_of; a passage is relevant only when every one matches.",
+ "metric": "nDCG@10 with binary gains; ideal DCG assumes min(10, number of relevant items) relevant results. Also P@10 and the rank of the first relevant result. recall@50: distinct relevant passages in the first 50 / min(50, relevant passages).",
+ "draft_sha256": "0a5a4427b6c885cbca18dd137f5b822b961e2b7808ac1aa4fecb1a9771168c84",
+ "queries": [
+  {
+   "q": "moon",
+   "type": "english_concept",
+   "pattern": "\\bσελ[ηα]νν?[αηε]|\\bμην[ηα]\\b|\\bσεληναι",
+   "origin": "release O",
+   "headwords": [
+    "σελήνη",
+    "μήνη"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 311,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 34",
+     "id": "campbell-glp:sappho:34",
+     "match": "ερεσ μεν αμφι καλαν σελανναν\nαψ απυκρυπτοισι φα"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 96",
+     "id": "campbell-glp:sappho:96",
+     "match": "τοσ α βροδοδακτυλοσ σελαννα\nπαντα περρεχοισ' ασ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fr. Adesp. 976 (P.M.G.)",
+     "id": "campbell-glp:sappho:fr-adesp-976-pmg",
+     "match": "δεδυκε μεν α σελαννα\nκαι πληιαδεσ, μεσαι"
+    },
+    {
+     "author": "Simonides",
+     "citation": "Fragment 581",
+     "id": "campbell-glp:simonides:581",
+     "match": "τε φλογι χρυσεασ τε σελανασ\nκαι θαλασσαιαισι δ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "σελήνη",
+     "head_meaning": "the moon",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 643
+    },
+    {
+     "headword": "μήνη",
+     "head_meaning": "the moon",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 104
+    }
+   ]
+  },
+  {
+   "q": "stars",
+   "type": "english_concept",
+   "pattern": "\\bαστ[ηε]ρ|\\bαστρ[οαω]",
+   "origin": "release O",
+   "headwords": [
+    "ἀστήρ",
+    "ἄστρον"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 924,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 347",
+     "id": "campbell-glp:alcaeus:347",
+     "match": "υμονασ οινω, το γαρ αστρον περιτελλεται,\nα δ'"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:alcman:1",
+     "match": "μβροσιαν ατε σηριον\nαστρον ανηρομεναι μαχοντα"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 3",
+     "id": "campbell-glp:alcman:3",
+     "match": "ω] τισ αιγλα[ε]ντοσ αστηρ\nωρανω διαιπετησ\nη χ"
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 388",
+     "id": "campbell-glp:anacreon:388",
+     "match": "ωμενα,\nκαι ξυλινουσ αστραγαλουσ εν ωσι και ψι"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἀστήρ",
+     "head_meaning": "a star",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 591
+    },
+    {
+     "headword": "ἄστρον",
+     "head_meaning": "the stars",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 474
+    }
+   ]
+  },
+  {
+   "q": "wine",
+   "type": "english_concept",
+   "pattern": "\\bοιν[οωευ]",
+   "origin": "release O",
+   "headwords": [
+    "οἶνος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 946,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 333",
+     "id": "campbell-glp:alcaeus:333",
+     "match": "οινοσ γαρ ανθρωπω διοπτρ"
+    },
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 335",
+     "id": "campbell-glp:alcaeus:335",
+     "match": "φαρμακων δ' αριστον\nοινον ενεικαμενοισ μεθυσ"
+    },
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 338",
+     "id": "campbell-glp:alcaeus:338",
+     "match": "πυρ, εν δε κερναισ οινον αφειδεωσ\nμελιχρον,"
+    },
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 346",
+     "id": "campbell-glp:alcaeus:346",
+     "match": "σ †αιτα† ποικιλαισ·\nοινον γαρ σεμελασ και δι"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "οἶνος",
+     "head_meaning": "wine",
+     "dictionary": "LSJ (Logeion)",
+     "corpus_tokens": 1273
+    }
+   ]
+  },
+  {
+   "q": "honey",
+   "type": "english_concept",
+   "pattern": "\\bμελι\\b|\\bμελιτ[οι]",
+   "origin": "release O",
+   "headwords": [
+    "μέλι"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 112,
+   "corpus_loci": [
+    {
+     "author": "Xenophanes",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:xenophanes:1",
+     "match": "ε τραπεζα\nτυρου και μελιτοσ πιονοσ αχθομενη·\nβ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "146",
+     "id": "dcc-sappho:frag-118-168:146",
+     "match": "μητε μοι μελι μητε μελισσα"
+    },
+    {
+     "author": "Sappho",
+     "citation": "146",
+     "id": "digital-sappho:fr118-168:29",
+     "match": "μητε μοι μελι μητε μελισσα"
+    },
+    {
+     "author": "pindarus",
+     "citation": "5.54",
+     "id": "ogc:pindarus.isthmia.jsonl:262",
+     "match": "μελιτι και τοιαιδε τιμαι κ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "μέλι",
+     "head_meaning": "honey",
+     "dictionary": "LSJ (Logeion)",
+     "corpus_tokens": 337
+    }
+   ]
+  },
+  {
+   "q": "rose",
+   "type": "english_concept",
+   "pattern": "\\bβ?ροδ[οαεω]",
+   "origin": "release O",
+   "headwords": [
+    "ῥόδον"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 407,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "ωκε δολιοσ αφροδιτα ροδοισ ερεμνον.\nαπιστον"
+    },
+    {
+     "author": "Ibycus",
+     "citation": "Fragment 288",
+     "id": "campbell-glp:ibycus:288",
+     "match": "ανοβλεφαροσ πει-\nθω ροδεοισιν εν ανθεσι θρεψ"
+    },
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 10",
+     "id": "campbell-glp:mimnermus:10",
+     "match": "ν τε και αυτω, επει ροδοδακτυλοσ ηωσ\nωκεανον"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 2",
+     "id": "campbell-glp:sappho:2",
+     "match": "δι' υσδων\nμαλινων, βροδοισι δε παισ ο χωροσ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ῥόδον",
+     "head_meaning": "the rose",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 360
+    }
+   ]
+  },
+  {
+   "q": "sleep",
+   "type": "english_concept",
+   "pattern": "\\bυπν[οωευ]",
+   "origin": "release O",
+   "headwords": [
+    "ὕπνος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 642,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 3",
+     "id": "campbell-glp:alcman:3",
+     "match": "ιοισαν μελοσ\n] . οι\nυπνον α]πο γλεφαρων σκεδ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Fragment 4",
+     "id": "campbell-glp:bacchylides:fr-4",
+     "match": "δε συλαται μελιφρων\nυπνοσ απο βλεφαρων\nαωοσ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 30",
+     "id": "dcc-sappho:frag-30",
+     "match": "α λιγυφω[νοσ ορνισ\nυπνον [ι]δωμεν. ⊗"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 63",
+     "id": "dcc-sappho:frag-63",
+     "match": "[,\nφ[ο]ιταισ οτα τ' υπνοσ[\nγλυκυσ θ[ε]οσ, η"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ὕπνος",
+     "head_meaning": "sleep",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1104
+    }
+   ]
+  },
+  {
+   "q": "death",
+   "type": "english_concept",
+   "pattern": "\\bθανατ",
+   "origin": "release O",
+   "headwords": [
+    "θάνατος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 665,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 38A",
+     "id": "campbell-glp:alcaeus:38a",
+     "match": "πλειστα νοησαμενοσ [θανατω κρετην·\nαλλα και π"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "ι δυσμενεων φοι-\nτα θανατον τε φερει\nτοισιν α"
+    },
+    {
+     "author": "Callinus",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:callinus:1",
+     "match": "αλοχου\nδυσμενεσιν· θανατοσ δε τοτ' εσσεται,"
+    },
+    {
+     "author": "Corinna",
+     "citation": "Fragment 654.i.12-34",
+     "id": "campbell-glp:corinna:654-i-12-34",
+     "match": "ρεια\nμεγ]αλαν τ' [α]θανατων εσ-\nσ] ελε τιμαν."
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "θάνατος",
+     "head_meaning": "death",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1749
+    }
+   ]
+  },
+  {
+   "q": "old age",
+   "type": "english_concept",
+   "pattern": "\\bγηρα|\\bγηρ[αω]σ",
+   "origin": "release O",
+   "headwords": [
+    "γῆρας"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 474,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 130 (assignment: Fragment 130b)",
+     "id": "campbell-glp:alcaeus:130b",
+     "match": "ατεροσ πατηρ\nκαγγ[ε]γηρασ' εχοντεσ πεδα τωνδ"
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 395",
+     "id": "campbell-glp:anacreon:395",
+     "match": "δ' ουκετ' ηβη\nπαρα, γηραλεοι δ' οδοντεσ,\nγλυ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "σ, πολιον π[αρ]εντα\nγηρασ, θαλ[εια]ν αυτισ α"
+    },
+    {
+     "author": "Ibycus",
+     "citation": "Fragment 287",
+     "id": "campbell-glp:ibycus:287",
+     "match": "ποσ αεθλοφοροσ ποτι γηρα\nαεκων συν οχεσφι θο"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "γῆρας",
+     "head_meaning": "old age",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 851
+    }
+   ]
+  },
+  {
+   "q": "nightingale",
+   "type": "english_concept",
+   "pattern": "\\bαηδο[νι]|\\bαηδω",
+   "origin": "release O",
+   "headwords": [
+    "ἀηδών"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 71,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "υμνησει χαριν\nκηιασ αηδονοσ."
+    },
+    {
+     "author": "Sappho",
+     "citation": "136",
+     "id": "dcc-sappho:frag-118-168:136",
+     "match": "αγγελοσ ιμεροφωνοσ αηδων"
+    },
+    {
+     "author": "Sappho",
+     "citation": "136",
+     "id": "digital-sappho:fr118-168:19",
+     "match": "αγγελοσ ιμεροφωνοσ αηδων"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "3.98",
+     "id": "ogc:bacchylides.tlg0199-tlg001.jsonl:216",
+     "match": "κηιασ αηδονοσ."
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἀηδών",
+     "head_meaning": "the songstress",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 172
+    }
+   ]
+  },
+  {
+   "q": "swallow",
+   "type": "english_concept",
+   "pattern": "\\bχελιδ",
+   "origin": "release O",
+   "headwords": [
+    "χελιδών"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 69,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "135",
+     "id": "dcc-sappho:frag-118-168:135",
+     "match": "ανδιονισ, ω ειρανα, χελιδων . . . ;"
+    },
+    {
+     "author": "Sappho",
+     "citation": "135",
+     "id": "digital-sappho:fr118-168:18",
+     "match": "ανδιονισ, ω ειρανα, χελιδων . . . ;"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Lines Preceding “The Tithonus poem” in the Cologne Papyrus",
+     "id": "digital-sappho:fr58-59:section:080131622ea51da1",
+     "match": "γασ εοισαν\nκαλεισι χελιδω] λιγυραν, [α]ι κεν"
+    },
+    {
+     "author": "anacreontea",
+     "citation": "25",
+     "id": "ogc:anacreontea.anacreontea.jsonl:21",
+     "match": "συ μεν φιλη χελιδων ετησιη μολουσα απ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "χελιδών",
+     "head_meaning": "the swallow",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 196
+    }
+   ]
+  },
+  {
+   "q": "horse",
+   "type": "english_concept",
+   "pattern": "\\bιππ(οσ|ου|ω|ον|οι|ων|οισ|οισι|οισιν|ουσ|ε)\\b",
+   "origin": "release O",
+   "headwords": [
+    "ἵππος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 1395,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 34a",
+     "id": "campbell-glp:alcaeus:34a",
+     "match": "εσθ' ω[κυπο]δων επ' ιππων,\nρηα δ' ανθρωποι[σ]"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:alcman:1",
+     "match": "εν βοτοισ στασειεν ιππον\nπαγον αεθλοφορον κα"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "μπιοδρομουσ ιερωνοσ ιππουσ.\nσευον]το γαρ συν υ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "νιν υπο προτε[ρω]ν\nιππων εν αγωνι κατεχρανεν"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἵππος",
+     "head_meaning": "a horse",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 3463
+    }
+   ]
+  },
+  {
+   "q": "gold",
+   "type": "english_concept",
+   "pattern": "\\bχρυσ",
+   "origin": "release O",
+   "headwords": [
+    "χρυσός"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 1604,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 350",
+     "id": "campbell-glp:alcaeus:350",
+     "match": "ναν\nλαβαν τω ξιφεοσ χρυσοδεταν εχων\n\nαεθλον"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:alcman:1",
+     "match": "αγησιχορασ επανθει\nχρυσοσ [ω]σ ακηρατοσ·\nτο"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 3",
+     "id": "campbell-glp:alcman:3",
+     "match": "ρ\nωρανω διαιπετησ\nη χρυσιον ερνοσ η απαλο[ν"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 56",
+     "id": "campbell-glp:alcman:56",
+     "match": "δη πολυφανοσ εορτα,\nχρυσιον αγγοσ εχοισα, με"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "χρυσός",
+     "head_meaning": "gold",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1083
+    }
+   ]
+  },
+  {
+   "q": "lyre",
+   "type": "english_concept",
+   "pattern": "\\bλυρ[αηε]|\\bφορμιγ|\\bβαρβιτ|\\bχελυ[νσ]",
+   "origin": "release O",
+   "headwords": [
+    "λύρα",
+    "φόρμιγξ",
+    "βάρβιτος",
+    "χέλυς"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 260,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Fragment 20B",
+     "id": "campbell-glp:bacchylides:fr-20b",
+     "match": "ω βαρβιτε, μηκετι πασσαλον φ"
+    },
+    {
+     "author": "Theognis",
+     "citation": "Lines 531–4",
+     "id": "campbell-glp:theognis:531-4",
+     "match": "δ' ευφθογγον χερσι λυρην οχεων."
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 58-59",
+     "id": "dcc-sappho:frag-58-59",
+     "match": "ν φιλαοιδον λιγυραν χελυνναν·\nεμοι δ' απαλον"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragments 58-59",
+     "id": "digital-sappho:fr58-59:1",
+     "match": "ν φιλαοιδον λιγυραν χελυνναν·\nεμοι δ' απαλον"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "λύρα",
+     "head_meaning": "lyric poetry and music",
+     "dictionary": "LSJ (Logeion)",
+     "corpus_tokens": 299
+    },
+    {
+     "headword": "φόρμιγξ",
+     "head_meaning": "the phorminx",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 230
+    },
+    {
+     "headword": "βάρβιτος",
+     "head_meaning": "a musical instrument of …",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 39
+    },
+    {
+     "headword": "χέλυς",
+     "head_meaning": "a tortoise",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 69
+    }
+   ]
+  },
+  {
+   "q": "tears",
+   "type": "english_concept",
+   "pattern": "\\bδακρυ",
+   "origin": "release O",
+   "headwords": [
+    "δάκρυ"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 765,
+   "corpus_loci": [
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 96D.",
+     "id": "campbell-glp:anacreon:96d",
+     "match": "νεικεα και πολεμον δακρυοεντα λεγει,\nαλλ' οσ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "ε προσεφα μελεαγροσ\nδακρυοεισ· ‘χαλεπον\nθεων"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "5.94",
+     "id": "ogc:bacchylides.tlg0199-tlg001.jsonl:330",
+     "match": "δακρυοεισ· χαλεπον"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "5.153",
+     "id": "ogc:bacchylides.tlg0199-tlg001.jsonl:389",
+     "match": "ι· πυματον δε πνεων δακρυσα τλ[αμων"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "δάκρυ",
+     "head_meaning": "a tear",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2
+    }
+   ]
+  },
+  {
+   "q": "springtime",
+   "type": "english_concept",
+   "pattern": "\\bεαρ|\\bειαρ|\\bηροσ\\b|\\bεαροσ",
+   "origin": "release O",
+   "headwords": [
+    "ἔαρ"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 215,
+   "corpus_loci": [
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 2",
+     "id": "campbell-glp:mimnermus:2",
+     "match": "υει πολυανθεμοσ ωρη\nεαροσ, οτ' αιψ' αυγησ α"
+    },
+    {
+     "author": "Simonides",
+     "citation": "Fragment 581",
+     "id": "campbell-glp:simonides:581",
+     "match": "ποταμοισ ανθεσι τ' ειαρινοισ\nαελιου τε φλογ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "136",
+     "id": "dcc-sappho:frag-118-168:136",
+     "match": "ηροσ αγγελοσ ιμεροφωνοσ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "136",
+     "id": "digital-sappho:fr118-168:19",
+     "match": "ηροσ αγγελοσ ιμεροφωνοσ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἔαρ",
+     "head_meaning": "spring",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 392
+    }
+   ]
+  },
+  {
+   "q": "snow",
+   "type": "english_concept",
+   "pattern": "\\bχιον|\\bνιφ",
+   "origin": "release O",
+   "headwords": [
+    "χιών",
+    "νιφάς"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 279,
+   "corpus_loci": [
+    {
+     "author": "Simonides",
+     "citation": "Fragment 135D.",
+     "id": "campbell-glp:simonides:135d",
+     "match": "ημπλακεσ, ουδ' ικευ χιον εσ αμφιρυτην."
+    },
+    {
+     "author": "Solon",
+     "citation": "Fragment 10",
+     "id": "campbell-glp:solon:10",
+     "match": "εκ νεφελησ πελεται χιονοσ μενοσ ηδε χαλαζησ"
+    },
+    {
+     "author": "pindarus",
+     "citation": "4.17",
+     "id": "ogc:pindarus.isthmia.jsonl:151",
+     "match": "τραχεια νιφασ πολεμοιο τεσσαρων"
+    },
+    {
+     "author": "pindarus",
+     "citation": "7.5",
+     "id": "ogc:pindarus.isthmia.jsonl:351",
+     "match": "η χρυσω μεσονυκτιον νιφοντα δεξαμενα τον φε"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "χιών",
+     "head_meaning": "snow",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 155
+    },
+    {
+     "headword": "νιφάς",
+     "head_meaning": "a snowflake",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 84
+    }
+   ]
+  },
+  {
+   "q": "eagle",
+   "type": "english_concept",
+   "pattern": "\\bαιετ|\\bαετ[οω]",
+   "origin": "release O",
+   "headwords": [
+    "αἰετός"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 144,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "ερυγεσσι ταχει-\nαισ αιετοσ ευρυανακτοσ αγγελ"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "5.19",
+     "id": "ogc:bacchylides.tlg0199-tlg001.jsonl:255",
+     "match": "αισ αιετοσ ευρυανακτοσ αγγελ"
+    },
+    {
+     "author": "pindarus",
+     "citation": "4.47",
+     "id": "ogc:pindarus.isthmia.jsonl:183",
+     "match": "ω, μητιν δ' αλωπηξ, αιετου α τ' αναπιτναμενα"
+    },
+    {
+     "author": "pindarus",
+     "citation": "6.50",
+     "id": "ogc:pindarus.isthmia.jsonl:321",
+     "match": "αρχον οιωνων μεγαν αιετον· αδεια δ' ενδον ν"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "αἰετός",
+     "head_meaning": null,
+     "dictionary": null,
+     "note": "not a headword of the corpus index; the pattern carries the spelling"
+    }
+   ]
+  },
+  {
+   "q": "wedding",
+   "type": "english_concept",
+   "pattern": "\\bγαμ[οεω]|\\bυμεναι|\\bυμην",
+   "origin": "release O",
+   "headwords": [
+    "γάμος",
+    "ὑμέναιος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 962,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 42",
+     "id": "campbell-glp:alcaeus:42",
+     "match": "[σ αγανοσ\nπαντασ εσ γαμον μακ[αρασ καλεσσαισ"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 74",
+     "id": "campbell-glp:archilochus:74",
+     "match": "ησ\n]ητου παισ\n]τυθη γαμω.[\n] . . . ννε . .\n]"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "κον,\nτον ποτε οι εν γαμω\nδωκε δολιοσ αφροδιτ"
+    },
+    {
+     "author": "Corinna",
+     "citation": "Fragment 654.iii.12-51",
+     "id": "campbell-glp:corinna:654-iii-12-51",
+     "match": "ευσ,\nτρισ δε ποντ[ω γαμε] μεδων\nπ[οτιδαων, τ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "γάμος",
+     "head_meaning": "a wedding",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1328
+    },
+    {
+     "headword": "ὑμέναιος",
+     "head_meaning": "hymenaeus",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 394
+    }
+   ]
+  },
+  {
+   "q": "dawn",
+   "type": "english_concept",
+   "pattern": "\\bηω[σι]?\\b|\\bηοι?\\b|\\bηουσ|\\bαυω[σι]?\\b|\\bαω[σι]?\\b",
+   "origin": "release O",
+   "headwords": [
+    "ἠώς"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 499,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "ικασαντα χρυσοπαχυσ αωσ,\nπυθωνι τ' εν αγαθε"
+    },
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 10",
+     "id": "campbell-glp:mimnermus:10",
+     "match": ", επει ροδοδακτυλοσ ηωσ\nωκεανον προλιπουσ'"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 104a",
+     "id": "campbell-glp:sappho:104a",
+     "match": "α φαινολισ εσκεδασ' αυωσ,\n†φερεισ οιν, φερει"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 44",
+     "id": "campbell-glp:sappho:44",
+     "match": "κιασ τ' α[π' αι]ν⟨ν⟩αω\nαβραν ανδρομαχαν εν"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἠώς",
+     "head_meaning": "the morning red",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 810
+    }
+   ]
+  },
+  {
+   "q": "dream",
+   "type": "english_concept",
+   "pattern": "\\bονειρ|\\bοναρ\\b",
+   "origin": "release O",
+   "headwords": [
+    "ὄνειρος",
+    "ὄναρ"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 280,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:alcman:1",
+     "match": "δα\nτων υποπετριδιων ονειρων.\nη ουχ ορησ; ο με"
+    },
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 5",
+     "id": "campbell-glp:mimnermus:5",
+     "match": "νιον γιγνεται ωσπερ οναρ\nηβη τιμηεσσα· το δ'"
+    },
+    {
+     "author": "Sappho",
+     "citation": "134",
+     "id": "dcc-sappho:frag-118-168:134",
+     "match": "ζα ⟨τ'⟩ ελεξαμαν οναρ, κυπρογενηα"
+    },
+    {
+     "author": "Sappho",
+     "citation": "134",
+     "id": "digital-sappho:fr118-168:17",
+     "match": "ζα ⟨τ'⟩ ελεξαμαν οναρ, κυπρογενηα"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ὄνειρος",
+     "head_meaning": "a dream",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 452
+    },
+    {
+     "headword": "ὄναρ",
+     "head_meaning": "a dream",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 176
+    }
+   ]
+  },
+  {
+   "q": "sword",
+   "type": "english_concept",
+   "pattern": "\\bξιφ|\\bφασγαν",
+   "origin": "release O",
+   "headwords": [
+    "ξίφος",
+    "φάσγανον"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 485,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 350",
+     "id": "campbell-glp:alcaeus:350",
+     "match": "λεφαντιναν\nλαβαν τω ξιφεοσ χρυσοδεταν εχων"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 3",
+     "id": "campbell-glp:archilochus:3",
+     "match": "ησ συναγη\nεν πεδιω· ξιφεων δε πολυστονον εσ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 18",
+     "id": "campbell-glp:bacchylides:18",
+     "match": "φαιδιμοισι δ' ωμοισ\nξιφοσ εχειν ⟨"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Fragment 4",
+     "id": "campbell-glp:bacchylides:fr-4",
+     "match": "αι\nεγχεα τε λογχωτα ξιφεα\nτ' αμφακεα δαμνατ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ξίφος",
+     "head_meaning": "a sword",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 712
+    },
+    {
+     "headword": "φάσγανον",
+     "head_meaning": "a sword",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 208
+    }
+   ]
+  },
+  {
+   "q": "fate",
+   "type": "english_concept",
+   "pattern": "\\bμοιρ|\\bποτμ",
+   "origin": "release O",
+   "headwords": [
+    "μοῖρα",
+    "πότμος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 962,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 130 (assignment: Fragment 130b)",
+     "id": "campbell-glp:alcaeus:130b",
+     "match": "ισ ο ταλαισ εγω\nζωω μοιραν εχων αγροικωτικαν"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "ν.\nο τι μεν εκ θεων μοιρα παγκρατησ\nαμμι κατ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": ".\nολβιοσ ωτινι θεοσ\nμοιραν τε καλων επορεν\nσ"
+    },
+    {
+     "author": "Callinus",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:callinus:1",
+     "match": "εται, οπποτε κεν δη\nμοιραι επικλωσωσ'· αλλα"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "μοῖρα",
+     "head_meaning": "a part",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1680
+    },
+    {
+     "headword": "πότμος",
+     "head_meaning": "that which befals one",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 371
+    }
+   ]
+  },
+  {
+   "q": "desire",
+   "type": "english_concept",
+   "pattern": "\\bποθ(οσ|ου|ω|ον|οι|ων|εω|ει|ησ|εουσ)|\\bιμερ|\\bερ[ωο](σ|τ|ν)|\\bεπιθυμ",
+   "origin": "release O",
+   "headwords": [
+    "πόθος",
+    "ἵμερος",
+    "ἔρως",
+    "ἐπιθυμία"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 2092,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 130 (assignment: Fragment 130b)",
+     "id": "campbell-glp:alcaeus:130b",
+     "match": "ν εχων αγροικωτικαν\nιμερρων αγορασ ακουσαι\nκ"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 27",
+     "id": "campbell-glp:alcman:27",
+     "match": "ατων ϝεπεων, επι δ' ιμερον\nυμνω και χαριεντα"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 58",
+     "id": "campbell-glp:alcman:58",
+     "match": "ουκ εστι, μαργοσ δ' ερωσ οια ⟨παισ⟩\nπαισδει,"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 59a",
+     "id": "campbell-glp:alcman:59a",
+     "match": "ερωσ με δηυτε κυπριδοσ ϝ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "πόθος",
+     "head_meaning": "a longing",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 737
+    },
+    {
+     "headword": "ἵμερος",
+     "head_meaning": "a longing or",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 211
+    },
+    {
+     "headword": "ἔρως",
+     "head_meaning": "love",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2265
+    },
+    {
+     "headword": "ἐπιθυμία",
+     "head_meaning": "desire",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 171
+    }
+   ]
+  },
+  {
+   "q": "shield",
+   "type": "english_concept",
+   "pattern": "\\bασπι[δσ]|\\bσακ(οσ|εοσ|ει|εα)\\b",
+   "origin": "release O",
+   "headwords": [
+    "ἀσπίς",
+    "σάκος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 657,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 357",
+     "id": "campbell-glp:alcaeus:357",
+     "match": "λινω κοιλαι τε κατ ασπιδεσ βεβλημεναι·\nπαρ δ"
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 388",
+     "id": "campbell-glp:anacreon:388",
+     "match": "πλυτον ειλυμα κακησ ασπιδοσ, αρτοπωλισιν\nκαθε"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 6",
+     "id": "campbell-glp:archilochus:6",
+     "match": "ασπιδι μεν σαιων τισ αγαλ"
+    },
+    {
+     "author": "Callinus",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:callinus:1",
+     "match": "ανασχομενοσ και υπ' ασπιδοσ αλκιμον ητορ\nελσα"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἀσπίς",
+     "head_meaning": "a round shield",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1016
+    },
+    {
+     "headword": "σάκος",
+     "head_meaning": "a shield",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 446
+    }
+   ]
+  },
+  {
+   "q": "ἔρως",
+   "type": "greek_lemma",
+   "pattern": "\\bερ[ωο](σ|τοσ|τι|τα|τεσ|των|ν|ι|ω)\\b",
+   "origin": "release O",
+   "headwords": [
+    "ἔρως"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 1141,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 58",
+     "id": "campbell-glp:alcman:58",
+     "match": "ουκ εστι, μαργοσ δ' ερωσ οια ⟨παισ⟩\nπαισδει,"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 59a",
+     "id": "campbell-glp:alcman:59a",
+     "match": "ερωσ με δηυτε κυπριδοσ ϝ"
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 357",
+     "id": "campbell-glp:anacreon:357",
+     "match": "ωναξ, ω δαμαλησ ερωσ\nκαι νυμφαι κυανωπιδ"
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 358",
+     "id": "campbell-glp:anacreon:358",
+     "match": "η\nβαλλων χρυσοκομησ ερωσ\nνηνι ποικιλοσαμβαλω"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἔρως",
+     "head_meaning": "love",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2265
+    }
+   ]
+  },
+  {
+   "q": "σελήνη",
+   "type": "greek_lemma",
+   "pattern": "\\bσελ[ηα]νν?[αηε]|\\bσεληναι",
+   "origin": "release O",
+   "headwords": [
+    "σελήνη"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 261,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 34",
+     "id": "campbell-glp:sappho:34",
+     "match": "ερεσ μεν αμφι καλαν σελανναν\nαψ απυκρυπτοισι φα"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 96",
+     "id": "campbell-glp:sappho:96",
+     "match": "τοσ α βροδοδακτυλοσ σελαννα\nπαντα περρεχοισ' ασ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fr. Adesp. 976 (P.M.G.)",
+     "id": "campbell-glp:sappho:fr-adesp-976-pmg",
+     "match": "δεδυκε μεν α σελαννα\nκαι πληιαδεσ, μεσαι"
+    },
+    {
+     "author": "Simonides",
+     "citation": "Fragment 581",
+     "id": "campbell-glp:simonides:581",
+     "match": "τε φλογι χρυσεασ τε σελανασ\nκαι θαλασσαιαισι δ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "σελήνη",
+     "head_meaning": "the moon",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 643
+    }
+   ]
+  },
+  {
+   "q": "θάνατος",
+   "type": "greek_lemma",
+   "pattern": "\\bθανατ",
+   "origin": "release O",
+   "headwords": [
+    "θάνατος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 665,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 38A",
+     "id": "campbell-glp:alcaeus:38a",
+     "match": "πλειστα νοησαμενοσ [θανατω κρετην·\nαλλα και π"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "ι δυσμενεων φοι-\nτα θανατον τε φερει\nτοισιν α"
+    },
+    {
+     "author": "Callinus",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:callinus:1",
+     "match": "αλοχου\nδυσμενεσιν· θανατοσ δε τοτ' εσσεται,"
+    },
+    {
+     "author": "Corinna",
+     "citation": "Fragment 654.i.12-34",
+     "id": "campbell-glp:corinna:654-i-12-34",
+     "match": "ρεια\nμεγ]αλαν τ' [α]θανατων εσ-\nσ] ελε τιμαν."
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "θάνατος",
+     "head_meaning": "death",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1749
+    }
+   ]
+  },
+  {
+   "q": "Μοῦσα",
+   "type": "greek_lemma",
+   "pattern": "\\bμ[οω]ι?υ?σ(α|αι|αν|ησ|ασ|αισ|αων|ων|εων)\\b",
+   "origin": "release O",
+   "headwords": [
+    "Μοῦσα"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 587,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 14a",
+     "id": "campbell-glp:alcman:14a",
+     "match": "μωσ' αγε μωσα λιγηα πολυμμελεσ\nαι"
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 96D.",
+     "id": "campbell-glp:anacreon:96d",
+     "match": "α λεγει,\nαλλ' οστισ μουσεων τε και αγλαα δωρ' α"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:archilochus:1",
+     "match": "υαλιοιο ανακτοσ\nκαι μουσεων ερατον δωρον επιστα"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "ν τε μερο[σ εχοντ]α μουσαν·\n. . . .]μαλεα ποτ["
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "Μοῦσα",
+     "head_meaning": "the Muse",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1292
+    }
+   ]
+  },
+  {
+   "q": "ἀηδών",
+   "type": "greek_lemma",
+   "pattern": "\\bαηδο[νι]|\\bαηδω",
+   "origin": "release O",
+   "headwords": [
+    "ἀηδών"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 71,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "υμνησει χαριν\nκηιασ αηδονοσ."
+    },
+    {
+     "author": "Sappho",
+     "citation": "136",
+     "id": "dcc-sappho:frag-118-168:136",
+     "match": "αγγελοσ ιμεροφωνοσ αηδων"
+    },
+    {
+     "author": "Sappho",
+     "citation": "136",
+     "id": "digital-sappho:fr118-168:19",
+     "match": "αγγελοσ ιμεροφωνοσ αηδων"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "3.98",
+     "id": "ogc:bacchylides.tlg0199-tlg001.jsonl:216",
+     "match": "κηιασ αηδονοσ."
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἀηδών",
+     "head_meaning": "the songstress",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 172
+    }
+   ]
+  },
+  {
+   "q": "οἶνος",
+   "type": "greek_lemma",
+   "pattern": "\\bοιν(οσ|ου|ω|ον|οι|ων|οισ)\\b",
+   "origin": "release O",
+   "headwords": [
+    "οἶνος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 503,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 333",
+     "id": "campbell-glp:alcaeus:333",
+     "match": "οινοσ γαρ ανθρωπω διοπτρο"
+    },
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 335",
+     "id": "campbell-glp:alcaeus:335",
+     "match": "φαρμακων δ' αριστον\nοινον ενεικαμενοισ μεθυσθ"
+    },
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 338",
+     "id": "campbell-glp:alcaeus:338",
+     "match": "πυρ, εν δε κερναισ οινον αφειδεωσ\nμελιχρον,"
+    },
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 346",
+     "id": "campbell-glp:alcaeus:346",
+     "match": "σ †αιτα† ποικιλαισ·\nοινον γαρ σεμελασ και διο"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "οἶνος",
+     "head_meaning": "wine",
+     "dictionary": "LSJ (Logeion)",
+     "corpus_tokens": 1273
+    }
+   ]
+  },
+  {
+   "q": "χρυσός",
+   "type": "greek_lemma",
+   "pattern": "\\bχρυσ(οσ|ου|ω|ον|οι|οσ|ε|ου|ω|ον|ων|α|η|ησ|εοσ|εον|εη|εω)\\b",
+   "origin": "release O",
+   "headwords": [
+    "χρυσός"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 602,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:alcman:1",
+     "match": "αγησιχορασ επανθει\nχρυσοσ [ω]σ ακηρατοσ·\nτο τ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "ιω τεκεν\nποσειδανι, χρυσεον\nτε οι δοσαν ιοπλοκο"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "' υπο μαρμαρυγαισ ο χρυσοσ,\nυψιδαιδαλτων τριπο"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Fragment 20B",
+     "id": "campbell-glp:bacchylides:fr-20b",
+     "match": "ορμαινω τι πεμπ[ειν\nχρυσεον μουσαν αλεξανδρω πτ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "χρυσός",
+     "head_meaning": "gold",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1083
+    }
+   ]
+  },
+  {
+   "q": "rose-fingered",
+   "type": "epithet",
+   "pattern": "β?ροδοδακτυλ",
+   "origin": "release O",
+   "headwords": [
+    "ῥοδοδάκτυλος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 73,
+   "corpus_loci": [
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 10",
+     "id": "campbell-glp:mimnermus:10",
+     "match": "ν τε και αυτω, επει ροδοδακτυλοσ ηωσ\nωκεανον προλι"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 96",
+     "id": "campbell-glp:sappho:96",
+     "match": "ποτ' αελιω\nδυντοσ α βροδοδακτυλοσ σελαννα\nπαντα περ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 96",
+     "id": "dcc-sappho:frag-96",
+     "match": "ποτ' αελιω\nδυντοσ α βροδοδακτυλοσ σελαννα\nπαντα περ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 96",
+     "id": "digital-sappho:fr96:1",
+     "match": "' αελιω\n8. δυντοσ α βροδοδακτυλοσ σελαννα\nπαντα περ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ῥοδοδάκτυλος",
+     "head_meaning": "rosy-fingered",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 101
+    }
+   ]
+  },
+  {
+   "q": "bittersweet",
+   "type": "epithet",
+   "pattern": "γλυκυπικρ",
+   "origin": "release O",
+   "headwords": [
+    "γλυκύπικρος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 10,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 130",
+     "id": "campbell-glp:sappho:130",
+     "match": "ο λυσιμελησ δονει,\nγλυκυπικρον αμαχανον ορπετον."
+    },
+    {
+     "author": "Sappho",
+     "citation": "130",
+     "id": "dcc-sappho:frag-118-168:130",
+     "match": "ο λυσιμελησ δονει,\nγλυκυπικρον αμαχανον ορπετον"
+    },
+    {
+     "author": "Sappho",
+     "citation": "130",
+     "id": "digital-sappho:fr118-168:13",
+     "match": "ο λυσιμελησ δονει,\nγλυκυπικρον αμαχανον ορπετον"
+    },
+    {
+     "author": "sappho",
+     "citation": "130",
+     "id": "ogc:sappho.fragmenta.jsonl:29",
+     "match": "ο λυσιμελησ δονει, γλυκυπικρον αμαχανον ορπετον"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "γλυκύπικρος",
+     "head_meaning": "sweetly bitter",
+     "dictionary": "LSJ (Logeion)",
+     "corpus_tokens": 16
+    }
+   ]
+  },
+  {
+   "q": "golden-throned",
+   "type": "epithet",
+   "pattern": "χρυσοθρον",
+   "origin": "release O",
+   "headwords": [
+    "χρυσόθρονος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 51,
+   "corpus_loci": [
+    {
+     "author": "bacchylides",
+     "citation": "14b.1",
+     "id": "ogc:bacchylides.tlg0199-tlg001.jsonl:977",
+     "match": "εστια χρυσοθρον', ευ-"
+    },
+    {
+     "author": "pindarus",
+     "citation": "1.37",
+     "id": "ogc:pindarus.nemea.jsonl:37",
+     "match": "ωσ ου λαθων χρυσοθρονον"
+    },
+    {
+     "author": "pindarus",
+     "citation": "4.260",
+     "id": "ogc:pindarus.pythia.jsonl:571",
+     "match": "μαισ οφελλειν, αστυ χρυσοθρονου"
+    },
+    {
+     "author": "Pindar",
+     "citation": "4.260–4.279",
+     "id": "perseus:tlg0033.tlg002.perseus-grc2:4.260–4.279:1",
+     "match": "μαισ οφελλειν, αστυ χρυσοθρονου\nδιανεμειν θειον κ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "χρυσόθρονος",
+     "head_meaning": "gold-enthroned",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 61
+    }
+   ]
+  },
+  {
+   "q": "violet-crowned",
+   "type": "epithet",
+   "pattern": "ιοστεφαν|ιοπλοκ",
+   "origin": "release O",
+   "headwords": [
+    "ἰοστέφανος",
+    "ἰόπλοκος"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 43,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "χρυσεον\nτε οι δοσαν ιοπλοκοι κα-\nλυμμα † νηρηι"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "ασ κρεουσαν\nδαματρα ιοστεφανον τε κουραν\nυμνει,"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "στραταγε,\nγνωση μεν ιοστεφανων\nμοισαν γλυκυδωρον"
+    },
+    {
+     "author": "Theognis",
+     "citation": "Lines 237–54",
+     "id": "campbell-glp:theognis:237-54",
+     "match": "αγλαα μουσαων δωρα ιοστεφανων.\nπασι δ', οσοισι"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἰοστέφανος",
+     "head_meaning": "violet-crowned",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 42
+    },
+    {
+     "headword": "ἰόπλοκος",
+     "head_meaning": null,
+     "dictionary": null,
+     "corpus_tokens": 8
+    }
+   ]
+  },
+  {
+   "q": "ox-eyed",
+   "type": "epithet",
+   "pattern": "βοωπι",
+   "origin": "release O",
+   "headwords": [
+    "βοῶπις"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 58,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "αλοχον φιλαν\nσεμναν βοωπιν ερατοι-\nσιν αμφιτρ"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "11.99",
+     "id": "ogc:bacchylides.tlg0199-tlg001.jsonl:734",
+     "match": "κικλ[ησκε θυγατρα] βοωπιν,"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "17.110",
+     "id": "ogc:bacchylides.tlg0199-tlg002.jsonl:186",
+     "match": "ιδε βοωπιν ερατοι-"
+    },
+    {
+     "author": "pindarus",
+     "citation": "3.91",
+     "id": "ogc:pindarus.pythia.jsonl:287",
+     "match": "ποθ' αρμονιαν γαμεν βοωπιν,"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "βοῶπις",
+     "head_meaning": "ox-eyed",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 74
+    }
+   ]
+  },
+  {
+   "q": "wine-dark sea",
+   "type": "epithet",
+   "pattern": "οινοπ[αι]|οινοψ",
+   "origin": "release O",
+   "headwords": [
+    "οἶνοψ"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 96,
+   "corpus_loci": [
+    {
+     "author": "pindarus",
+     "citation": "8.21",
+     "id": "ogc:pindarus.isthmia.jsonl:418",
+     "match": "σε δ' εσ νασον οινοπιαν ενεγκων"
+    },
+    {
+     "author": "agathias-scholasticus",
+     "citation": "84",
+     "id": "ogc:agathias-scholasticus.epigrammata.jsonl:84",
+     "match": "γερων ευωδει βακχω οινοπιων, εμπησ δ' ουκ απε"
+    },
+    {
+     "author": "aratus-astronomy",
+     "citation": "640",
+     "id": "ogc:aratus-astronomy.phaenomena.jsonl:641",
+     "match": "νυμενοσ κεινω χαριν οινοπιωνι."
+    },
+    {
+     "author": "hesiodus",
+     "citation": "622",
+     "id": "ogc:hesiodus.opera-et-dies.jsonl:619",
+     "match": "κετι νηασ εχειν ενι οινοπι ποντω,"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "οἶνοψ",
+     "head_meaning": "wine-coloured",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 119
+    }
+   ]
+  },
+  {
+   "q": "grey-eyed Athena",
+   "type": "epithet",
+   "pattern": "γλαυκωπι",
+   "origin": "release O",
+   "headwords": [
+    "γλαυκῶπις"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 234,
+   "corpus_loci": [
+    {
+     "author": "pindarus",
+     "citation": "7.96",
+     "id": "ogc:pindarus.nemea.jsonl:496",
+     "match": "κοραν τε γλαυκωπιδα· δυνασαι δε βροτο"
+    },
+    {
+     "author": "pindarus",
+     "citation": "10.7",
+     "id": "ogc:pindarus.nemea.jsonl:618",
+     "match": "αμβροτον ξανθα ποτε γλαυκωπισ εθηκε θεον·"
+    },
+    {
+     "author": "pindarus",
+     "citation": "7.51",
+     "id": "ogc:pindarus.olympia.jsonl:469",
+     "match": "πασαν επιχθονιων γλαυκωπισ αριστοπονοισ χερσι"
+    },
+    {
+     "author": "Pindar",
+     "citation": "7.40–7.59",
+     "id": "perseus:tlg0033.tlg001.perseus-grc2:7.40–7.59:1",
+     "match": "αν\nπασαν επιχθονιων γλαυκωπισ αριστοπονοισ χερσι"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "γλαυκῶπις",
+     "head_meaning": "with gleaming eyes",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 316
+    }
+   ]
+  },
+  {
+   "q": "ῥοδοδάκτυλος Ἠώς",
+   "type": "greek_phrase",
+   "pattern": "ροδοδακτυλ",
+   "origin": "release O",
+   "headwords": [
+    "ῥοδοδάκτυλος",
+    "ἠώς"
+   ],
+   "loci": [
+    "Hom. Od. 2.1"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 73,
+   "corpus_loci": [
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 10",
+     "id": "campbell-glp:mimnermus:10",
+     "match": "ν τε και αυτω, επει ροδοδακτυλοσ ηωσ\nωκεανον προλι"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 96",
+     "id": "campbell-glp:sappho:96",
+     "match": "οτ' αελιω\nδυντοσ α βροδοδακτυλοσ σελαννα\nπαντα περ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 96",
+     "id": "dcc-sappho:frag-96",
+     "match": "οτ' αελιω\nδυντοσ α βροδοδακτυλοσ σελαννα\nπαντα περ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 96",
+     "id": "digital-sappho:fr96:1",
+     "match": "αελιω\n8. δυντοσ α βροδοδακτυλοσ σελαννα\nπαντα περ"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": [
+    {
+     "headword": "ῥοδοδάκτυλος",
+     "head_meaning": "rosy-fingered",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 101
+    },
+    {
+     "headword": "ἠώς",
+     "head_meaning": "the morning red",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 810
+    }
+   ]
+  },
+  {
+   "q": "πόδας ὠκὺς Ἀχιλλεύς",
+   "type": "greek_phrase",
+   "pattern": "ποδασ ωκυσ|ποδαρκ",
+   "origin": "release O",
+   "headwords": [
+    "ποδάρκης"
+   ],
+   "loci": [
+    "Hom. Il. 1.58"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 118,
+   "corpus_loci": [
+    {
+     "author": "bacchylides",
+     "citation": "19.30",
+     "id": "ogc:bacchylides.tlg0199-tlg002.jsonl:298",
+     "match": "ποδαρκε' αγγελο[ν διοσ"
+    },
+    {
+     "author": "pindarus",
+     "citation": "13.38",
+     "id": "ogc:pindarus.olympia.jsonl:896",
+     "match": "αθαναισι τρια εργα ποδαρκησ"
+    },
+    {
+     "author": "pindarus",
+     "citation": "5.33",
+     "id": "ogc:pindarus.pythia.jsonl:643",
+     "match": "ποδαρκεων δωδεκαδρομον τεμ"
+    },
+    {
+     "author": "Pindar",
+     "citation": "13.20–13.39",
+     "id": "perseus:tlg0033.tlg001.perseus-grc2:13.20–13.39:1",
+     "match": "αθαναισι τρια εργα ποδαρκησ\nαμερα θηκε καλλισ"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": [
+    {
+     "headword": "ποδάρκης",
+     "head_meaning": "sufficient with the feet",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 0
+    }
+   ]
+  },
+  {
+   "q": "ποικιλόθρον’ ἀθανάτ’ Ἀφρόδιτα",
+   "type": "greek_phrase",
+   "pattern": "ποικιλοθρον",
+   "origin": "release O",
+   "headwords": [
+    "ποικιλόθρονος"
+   ],
+   "loci": [
+    "Sappho 1 L-P"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "development",
+   "relevant_in_corpus": 5,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:sappho:1",
+     "match": "ποικιλοθρον' αθανατ' αφροδιτα,"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 1",
+     "id": "dcc-sappho:frag-1",
+     "match": "ποικιλοθρον' αθανατ' αφροδιτα,"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 1",
+     "id": "digital-sappho:fr1:1",
+     "match": "ποικιλοθρον' αθανατ' αφροδιτα,"
+    },
+    {
+     "author": "sappho",
+     "citation": "1",
+     "id": "ogc:sappho.fragmenta.jsonl:2",
+     "match": "ποικιλοθρον' αθανατ' αφροδιτα,"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": [
+    {
+     "headword": "ποικιλόθρονος",
+     "head_meaning": "on rich-worked throne",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 7
+    }
+   ]
+  },
+  {
+   "q": "γλυκύπικρον ἀμάχανον ὄρπετον",
+   "type": "greek_phrase",
+   "pattern": "γλυκυπικρ|αμαχανον ορπετον",
+   "origin": "release O",
+   "headwords": [
+    "γλυκύπικρος"
+   ],
+   "loci": [
+    "Sappho 130 L-P"
+   ],
+   "reasoning": "Release O judgement: the pattern is the concept's Greek vocabulary.",
+   "split": "held_out",
+   "relevant_in_corpus": 10,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 130",
+     "id": "campbell-glp:sappho:130",
+     "match": "ο λυσιμελησ δονει,\nγλυκυπικρον αμαχανον ορπετον."
+    },
+    {
+     "author": "Sappho",
+     "citation": "130",
+     "id": "dcc-sappho:frag-118-168:130",
+     "match": "ο λυσιμελησ δονει,\nγλυκυπικρον αμαχανον ορπετον"
+    },
+    {
+     "author": "Sappho",
+     "citation": "130",
+     "id": "digital-sappho:fr118-168:13",
+     "match": "ο λυσιμελησ δονει,\nγλυκυπικρον αμαχανον ορπετον"
+    },
+    {
+     "author": "sappho",
+     "citation": "130",
+     "id": "ogc:sappho.fragmenta.jsonl:29",
+     "match": "ο λυσιμελησ δονει, γλυκυπικρον αμαχανον ορπετον"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": [
+    {
+     "headword": "γλυκύπικρος",
+     "head_meaning": "sweetly bitter",
+     "dictionary": "LSJ (Logeion)",
+     "corpus_tokens": 16
+    }
+   ]
+  },
+  {
+   "q": "sea",
+   "type": "english_concept",
+   "pattern": "\\bθαλασσ|\\bθαλαττ|\\bποντ(οσ|ου|ω|ον|οιο)\\b|\\bπελαγ",
+   "headwords": [
+    "θάλασσα",
+    "πόντος",
+    "πέλαγος"
+   ],
+   "reasoning": "θάλασσα, πόντος and πέλαγος are the Greek words for the sea.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 2085,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 34a",
+     "id": "campbell-glp:alcaeus:34a",
+     "match": "ευρηαν χ[θονα] και θαλασσαν\nπαισαν ερχεσθ' ω["
+    },
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 45",
+     "id": "campbell-glp:alcaeus:45",
+     "match": "[ησθ' εσ] πορφυριαν θαλασσαν\nθρακ[ιασ ερ]ευγομ"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 53",
+     "id": "campbell-glp:archilochus:53",
+     "match": "και συκα κεινα και θαλασσιον βιον."
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 56",
+     "id": "campbell-glp:archilochus:56",
+     "match": "κυμασιν ταρασσεται\nποντοσ, αμφι δ' ακρα γυρεω"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "θάλασσα",
+     "head_meaning": "the sea",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2311
+    },
+    {
+     "headword": "πόντος",
+     "head_meaning": "the sea",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1663
+    },
+    {
+     "headword": "πέλαγος",
+     "head_meaning": "the sea",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 656
+    }
+   ]
+  },
+  {
+   "q": "θάλασσα",
+   "type": "greek_lemma",
+   "pattern": "\\bθαλασσ|\\bθαλαττ",
+   "headwords": [
+    "θάλασσα"
+   ],
+   "reasoning": "Any inflected form of θάλασσα (Attic θάλαττα).",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 967,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 34a",
+     "id": "campbell-glp:alcaeus:34a",
+     "match": "ευρηαν χ[θονα] και θαλασσαν\nπαισαν ερχεσθ' ω["
+    },
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 45",
+     "id": "campbell-glp:alcaeus:45",
+     "match": "[ησθ' εσ] πορφυριαν θαλασσαν\nθρακ[ιασ ερ]ευγομ"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 53",
+     "id": "campbell-glp:archilochus:53",
+     "match": "και συκα κεινα και θαλασσιον βιον."
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 7",
+     "id": "campbell-glp:archilochus:7",
+     "match": "κυμα πολυφλοισβοιο θαλασσησ\nεκλυσεν· οιδαλεου"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "θάλασσα",
+     "head_meaning": "the sea",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2311
+    }
+   ]
+  },
+  {
+   "q": "γαῖα μέλαινα",
+   "type": "greek_phrase",
+   "pattern": "\\bγαι(α|αν|ησ|η|αι)\\s+μελαιν|\\bμελαιν(α|αν|ησ|η|αι)\\s+γαι|\\bγ[αη]ν?\\s+μελαιν|\\bμελαιν(α|αν|ησ|η)\\s+γ[αη]ν?\\b",
+   "headwords": [
+    "γαῖα",
+    "μέλας"
+   ],
+   "reasoning": "The formula 'black earth': γαῖα / γῆ / Doric γᾶ next to a form of μέλας.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 33,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 89",
+     "id": "campbell-glp:alcman:89",
+     "match": "' ερπετ' οσα τρεφει μελαινα γαια\nθηρεσ τ' ορεσκωοι"
+    },
+    {
+     "author": "Solon",
+     "citation": "Fragment 24",
+     "id": "campbell-glp:solon:24",
+     "match": "ων ολυμπιων\nαριστα, γη μελαινα, τησ εγω ποτε\nορου"
+    },
+    {
+     "author": "Theognis",
+     "citation": "Lines 1069–70b",
+     "id": "campbell-glp:theognis:1069-70b",
+     "match": "νδρεσ, εγω δε θανων γαια μελαιν' εσομαι."
+    },
+    {
+     "author": "anacreontea",
+     "citation": "21",
+     "id": "ogc:anacreontea.anacreontea.jsonl:17",
+     "match": "η γη μελαινα πινει, πινει δε δε"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "γαῖα",
+     "head_meaning": "a land",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2752
+    },
+    {
+     "headword": "μέλας",
+     "head_meaning": "black",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1437
+    }
+   ]
+  },
+  {
+   "q": "limb-loosening",
+   "type": "epithet",
+   "pattern": "λυσιμελ",
+   "headwords": [
+    "λυσιμελής"
+   ],
+   "reasoning": "λυσιμελής 'limb-loosening', epithet of Eros, sleep and death.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 31,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 3",
+     "id": "campbell-glp:alcman:3",
+     "match": "απ]αλοι ποδεσ\nλυσιμελει τε ποσω, τακερωτε"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 118",
+     "id": "campbell-glp:archilochus:118",
+     "match": "αλλα μ' ο λυσιμελησ, ω 'ταιρε, δαμνατ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 130",
+     "id": "campbell-glp:sappho:130",
+     "match": "εροσ δηυτε μ' ο λυσιμελησ δονει,\nγλυκυπικρο"
+    },
+    {
+     "author": "Sappho",
+     "citation": "130",
+     "id": "dcc-sappho:frag-118-168:130",
+     "match": "εροσ δηυτε μ' ο λυσιμελησ δονει,\nγλυκυπικρο"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "λυσιμελής",
+     "head_meaning": "limb-relaxing",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 52
+    }
+   ]
+  },
+  {
+   "q": "the moon among the stars",
+   "type": "imagery",
+   "all_of": [
+    "\\bσελ[ηα]νν?[αηε]|\\bμην[ηα]\\b|\\bσεληναι",
+    "\\bαστ[ηε]ρ|\\bαστρ[οαω]"
+   ],
+   "headwords": [
+    "σελήνη",
+    "ἀστήρ",
+    "ἄστρον"
+   ],
+   "reasoning": "The image needs both the moon (σελήνη, Aeolic σελάννα, μήνη) and the stars (ἀστήρ, ἄστρον) in the passage.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 28,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 34",
+     "id": "campbell-glp:sappho:34",
+     "match": "ερεσ μεν αμφι καλαν σελανναν\nαψ απυκρυπτοισι φα … αστερεσ μεν αμφι καλαν σε"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 96",
+     "id": "campbell-glp:sappho:96",
+     "match": "τοσ α βροδοδακτυλοσ σελαννα\nπαντα περρεχοισ' ασ … να\nπαντα περρεχοισ' αστρα· φαοσ δ' επι-\nσχει"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 34",
+     "id": "dcc-sappho:frag-34",
+     "match": "ερεσ μεν αμφι καλαν σελανναν\nαψ απυκρυπτοισι φα … αστερεσ μεν αμφι καλαν σε"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 96",
+     "id": "dcc-sappho:frag-96",
+     "match": "τοσ α βροδοδακτυλοσ σελαννα\nπαντα περρεχοισ' ασ … να\nπαντα περρεχοισ' αστρα· φαοσ δ' επι-\nσχει"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "σελήνη",
+     "head_meaning": "the moon",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 643
+    },
+    {
+     "headword": "ἀστήρ",
+     "head_meaning": "a star",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 591
+    },
+    {
+     "headword": "ἄστρον",
+     "head_meaning": "the stars",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 474
+    }
+   ]
+  },
+  {
+   "q": "youth fades quickly",
+   "type": "motif",
+   "all_of": [
+    "\\bηβη|\\bηβα(σ|ν)?\\b|\\bηβησ",
+    "\\bολιγ|\\bμινυνθ|\\bωκυ|\\bταχ|\\bφθιν|\\bοιχ|\\bολλυ|\\bφευγ"
+   ],
+   "headwords": [
+    "ἥβη",
+    "μίνυνθα",
+    "ὀλίγος",
+    "ὠκύς",
+    "φθίνω"
+   ],
+   "reasoning": "Youth (ἥβη) together with a word of brevity or passing (μίνυνθα, ὀλίγος, ὠκύς, ταχύς, φθίνω, οἴχομαι, φεύγω).",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 50,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "υσα τλα[μων,\nαγλααν ηβαν προλειπων.'\nφασιν α … νων\nυψου πτερυγεσσι ταχει-\nαισ αιετοσ ευρυα"
+    },
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 2",
+     "id": "campbell-glp:mimnermus:2",
+     "match": "επι χρονον ανθεσιν ηβησ\nτερπομεθα, προσ θε … δ' ετερη θανατοιο· μινυνθα δε γιγνεται ηβησ\nκ"
+    },
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 5",
+     "id": "campbell-glp:mimnermus:5",
+     "match": "γιγνεται ωσπερ οναρ\nηβη τιμηεσσα· το δ' αργ … αλλ' ολιγοχρονιον γιγνεται ωσ"
+    },
+    {
+     "author": "Semonides",
+     "citation": "Fragment 29",
+     "id": "campbell-glp:semonides:29",
+     "match": "νθοσ εχη πολυηρατον ηβησ,\nκουφον εχων θυμον … σθ' ηβησ και βιοτου ολιγοσ\nθνητοισ. αλλα συ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἥβη",
+     "head_meaning": "manhood",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 555
+    },
+    {
+     "headword": "μίνυνθα",
+     "head_meaning": "a little",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 58
+    },
+    {
+     "headword": "ὀλίγος",
+     "head_meaning": "few",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1279
+    },
+    {
+     "headword": "ὠκύς",
+     "head_meaning": "quick",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 614
+    },
+    {
+     "headword": "φθίνω",
+     "head_meaning": null,
+     "dictionary": null,
+     "note": "not a headword of the corpus index; the pattern carries the spelling"
+    }
+   ]
+  },
+  {
+   "q": "black earth",
+   "type": "cross_lingual",
+   "pattern": "\\bγαι(α|αν|ησ|η|αι)\\s+μελαιν|\\bμελαιν(α|αν|ησ|η|αι)\\s+γαι|\\bγ[αη]ν?\\s+μελαιν|\\bμελαιν(α|αν|ησ|η)\\s+γ[αη]ν?\\b",
+   "headwords": [
+    "γαῖα",
+    "μέλας"
+   ],
+   "reasoning": "English rendering of the Greek formula γαῖα μέλαινα.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 33,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 89",
+     "id": "campbell-glp:alcman:89",
+     "match": "' ερπετ' οσα τρεφει μελαινα γαια\nθηρεσ τ' ορεσκωοι"
+    },
+    {
+     "author": "Solon",
+     "citation": "Fragment 24",
+     "id": "campbell-glp:solon:24",
+     "match": "ων ολυμπιων\nαριστα, γη μελαινα, τησ εγω ποτε\nορου"
+    },
+    {
+     "author": "Theognis",
+     "citation": "Lines 1069–70b",
+     "id": "campbell-glp:theognis:1069-70b",
+     "match": "νδρεσ, εγω δε θανων γαια μελαιν' εσομαι."
+    },
+    {
+     "author": "anacreontea",
+     "citation": "21",
+     "id": "ogc:anacreontea.anacreontea.jsonl:17",
+     "match": "η γη μελαινα πινει, πινει δε δε"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "γαῖα",
+     "head_meaning": "a land",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2752
+    },
+    {
+     "headword": "μέλας",
+     "head_meaning": "black",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1437
+    }
+   ]
+  },
+  {
+   "q": "as are the generations of leaves, so are those of men",
+   "type": "allusion",
+   "pattern": "φυλλων\\s+γενε",
+   "loci": [
+    "Hom. Il. 6.146",
+    "Mimnermus 2 W",
+    "Simonides 19 W"
+   ],
+   "reasoning": "Glaucus' simile οἵη περ φύλλων γενεὴ τοίη δὲ καὶ ἀνδρῶν (Il. 6.146), quoted by Simonides and echoed by Mimnermus; relevant passages print φύλλων γενεή.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 5,
+   "corpus_loci": [
+    {
+     "author": "Semonides",
+     "citation": "Fragment 29",
+     "id": "campbell-glp:semonides:29",
+     "match": "ιπεν ανηρ·\n‘οιη περ φυλλων γενεη, τοιη δε και ανδρω"
+    },
+    {
+     "author": "homerus-epic",
+     "citation": "6.146",
+     "id": "ogc:homerus-epic.ilias.jsonl:3548",
+     "match": "οιη περ φυλλων γενεη τοιη δε και ανδρων"
+    },
+    {
+     "author": "ΣΙΜΩΝΙΔΗΣ Ο ΚΕΙΟΣ",
+     "citation": "απ. 8 West",
+     "id": "p2_cgl_anthology:457",
+     "match": "ιπεν ανηρ·\n«οιη περ φυλλων γενεη, τοιη δε και ανδρω"
+    },
+    {
+     "author": "Homer",
+     "citation": "6.141–6.160",
+     "id": "perseus:tlg0012.tlg001.perseus-grc2:6.141–6.160:1",
+     "match": "ερεεινεισ;\nοιη περ φυλλων γενεη τοιη δε και ανδρων"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "night",
+   "type": "english_concept",
+   "pattern": "\\bνυκτ|\\bνυξ\\b",
+   "headwords": [
+    "νύξ"
+   ],
+   "reasoning": "νύξ, νυκτός 'night'.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 981,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 34a",
+     "id": "campbell-glp:alcaeus:34a",
+     "match": "]ντεσ\nαργαλεα δ' εν νυκτι φ[αοσ φε]ροντεσ\nνα"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:alcman:1",
+     "match": "ρια φαροσ φεροισαισ\nνυκτα δι' αμβροσιαν ατε"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 74",
+     "id": "campbell-glp:archilochus:74",
+     "match": "εκ μεσημβριησ εθηκε νυκτ' αποκρυψασ φαοσ\nηλι"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fr. Adesp. 976 (P.M.G.)",
+     "id": "campbell-glp:sappho:fr-adesp-976-pmg",
+     "match": "πληιαδεσ, μεσαι δε\nνυκτεσ, παρα δ' ερχετ' ω"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "νύξ",
+     "head_meaning": "the night",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2069
+    }
+   ]
+  },
+  {
+   "q": "ἥλιος",
+   "type": "greek_lemma",
+   "pattern": "\\bηελι|\\bηλι(οσ|ου|ω|ον|ε)\\b|\\bαελι",
+   "headwords": [
+    "ἥλιος",
+    "ἠέλιος"
+   ],
+   "reasoning": "ἥλιος with epic ἠέλιος and Aeolic ἀέλιος.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 907,
+   "corpus_loci": [
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 74",
+     "id": "campbell-glp:archilochus:74",
+     "match": "υκτ' αποκρυψασ φαοσ\nηλιου λαμποντοσ, υγρον δ'"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "φυναι φεριστον\nμηδ' αελιου προσιδειν\nφεγγοσ·"
+    },
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:mimnermus:1",
+     "match": "σ προσορων τερπεται ηελιου,\nαλλ' εχθροσ μεν"
+    },
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 10",
+     "id": "campbell-glp:mimnermus:10",
+     "match": "ηελιοσ μεν γαρ πονον ελλ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἥλιος",
+     "head_meaning": "the sun",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2668
+    },
+    {
+     "headword": "ἠέλιος",
+     "head_meaning": null,
+     "dictionary": null,
+     "note": "not a headword of the corpus index; the pattern carries the spelling"
+    }
+   ]
+  },
+  {
+   "q": "ἔρος δηὖτέ μ’ ὀ λυσιμέλης δόνει",
+   "type": "greek_phrase",
+   "pattern": "ερ[ωο]σ\\s+δηυτ|λυσιμελησ\\s+δονει",
+   "loci": [
+    "Sappho 130 L-P"
+   ],
+   "reasoning": "Sappho's line (130 L-P); relevant passages print Ἔρος/Ἔρως δηὖτε or λυσιμέλης δόνει.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 5,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 130",
+     "id": "campbell-glp:sappho:130",
+     "match": "εροσ δηυτε μ' ο λυσιμελησ δον"
+    },
+    {
+     "author": "Sappho",
+     "citation": "130",
+     "id": "dcc-sappho:frag-118-168:130",
+     "match": "εροσ δηυτε μ' ο λυσιμελησ δον"
+    },
+    {
+     "author": "Sappho",
+     "citation": "130",
+     "id": "digital-sappho:fr118-168:13",
+     "match": "εροσ δηυτε μ' ο λυσιμελησ δον"
+    },
+    {
+     "author": "sappho",
+     "citation": "130",
+     "id": "ogc:sappho.fragmenta.jsonl:29",
+     "match": "εροσ δηυτε μ' ο λυσιμελησ δον"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "white-armed",
+   "type": "epithet",
+   "pattern": "λευκωλεν",
+   "headwords": [
+    "λευκώλενος"
+   ],
+   "reasoning": "λευκώλενος 'white-armed', epithet of Hera and other women.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 106,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "με νυμ[φ]α\nφοινισσα λευκωλενοσ σοι τεκεν,\nνυν πρ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "νασ χολον αρτεμιδοσ λευκωλενου\nλισσομενοσ πολεων"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "5.99",
+     "id": "ogc:bacchylides.tlg0199-tlg001.jsonl:335",
+     "match": "νασ χολον αρτεμιδοσ λευκωλενου"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "5.176",
+     "id": "ogc:bacchylides.tlg0199-tlg001.jsonl:412",
+     "match": "λευκωλενε καλλιοπα,"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "λευκώλενος",
+     "head_meaning": "white-armed",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 141
+    }
+   ]
+  },
+  {
+   "q": "an apple reddening on the highest branch",
+   "type": "imagery",
+   "all_of": [
+    "\\bμαλ(ον|α|ων|οισ|ω|ου)\\b|γλυκυμαλ|\\bμηλ(ον|α|ων|οισ|ω|ου)\\b",
+    "ερευθ|υσδ|οσδ|ακροτατ"
+   ],
+   "headwords": [
+    "μῆλον",
+    "γλυκύμαλον",
+    "ἐρεύθω"
+   ],
+   "reasoning": "An apple (μῆλον, Aeolic μᾶλον, γλυκύμαλον) together with reddening (ἐρεύθω) or the branch-top (ὔσδος, ἀκρότατος), as in Sappho 105a.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 27,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 105a",
+     "id": "campbell-glp:sappho:105a",
+     "match": "οιον το γλυκυμαλον ερευθεται ακρω επ … οιον το γλυκυμαλον ερευθεται ακρω επ' υσδω,"
+    },
+    {
+     "author": "Sappho",
+     "citation": "105a",
+     "id": "digital-sappho:fr104-117:3",
+     "match": "οιον το γλυκυμαλον ερευθεται ακρω επ … οιον το γλυκυμαλον ερευθεται ακρω επ' υσδω,"
+    },
+    {
+     "author": "sappho",
+     "citation": "105a",
+     "id": "ogc:sappho.fragmenta.jsonl:166",
+     "match": "οιον το γλυκυμαλον ερευθεται ακρω επ … οιον το γλυκυμαλον ερευθεται ακρω επ' υσδω,"
+    },
+    {
+     "author": "aratus-astronomy",
+     "citation": "797",
+     "id": "ogc:aratus-astronomy.phaenomena.jsonl:798",
+     "match": "παντη ερευθομενοσ, μαλα κεν τοτε χειμεροσ ε … παντη ερευθομενοσ, μαλα κεν τοτ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "μῆλον",
+     "head_meaning": "apple",
+     "dictionary": "LSJ (Logeion)",
+     "corpus_tokens": 930
+    },
+    {
+     "headword": "γλυκύμαλον",
+     "head_meaning": "sweet-apple",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 10
+    },
+    {
+     "headword": "ἐρεύθω",
+     "head_meaning": "to make red",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 63
+    }
+   ]
+  },
+  {
+   "q": "old age and grey hair",
+   "type": "motif",
+   "all_of": [
+    "\\bγηρ",
+    "\\bπολι(οσ|οι|αι|ον|ου|ην|η|ασ|ων|α|ουσ)\\b|\\bλευκ|\\bτριχ|\\bθριξ|\\bκροταφ"
+   ],
+   "headwords": [
+    "γῆρας",
+    "πολιός",
+    "θρίξ"
+   ],
+   "reasoning": "Old age (γῆρας, γηράσκω) together with grey or white hair or temples (πολιός, λευκός, θρίξ, κρόταφος), as in Anacreon 395 and Sappho 58.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 51,
+   "corpus_loci": [
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 395",
+     "id": "campbell-glp:anacreon:395",
+     "match": "δ' ουκετ' ηβη\nπαρα, γηραλεοι δ' οδοντεσ,\nγλ … πολιοι μεν ημιν ηδη\nκροταφ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "σ, πολιον π[αρ]εντα\nγηρασ, θαλ[εια]ν αυτισ … ανδρι δ' ου θεμισ, πολιον π[αρ]εντα\nγηρασ, θα"
+    },
+    {
+     "author": "Theognis",
+     "citation": "Lines 173–82",
+     "id": "campbell-glp:theognis:173-82",
+     "match": "αμνησι μαλιστα,\nκαι γηρωσ πολιου, κυρνε, κα … μαλιστα,\nκαι γηρωσ πολιου, κυρνε, και ηπιαλου"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 58-59",
+     "id": "dcc-sappho:frag-58-59",
+     "match": "] ποτ' [ε]οντα χροα γηρασ ηδη\nεπελλαβε, λευ … γηρασ ηδη\nεπελλαβε, λευκαι δ' εγ]ενοντο τριχ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "γῆρας",
+     "head_meaning": "old age",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 851
+    },
+    {
+     "headword": "πολιός",
+     "head_meaning": "gray",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 487
+    },
+    {
+     "headword": "θρίξ",
+     "head_meaning": "the hair of the …",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 497
+    }
+   ]
+  },
+  {
+   "q": "father of gods and men",
+   "type": "cross_lingual",
+   "pattern": "πατ[ηε]ρ\\s+ανδρων\\s+τε\\s+θεων|ανδρων\\s+τε\\s+θεων\\s+τε",
+   "headwords": [
+    "πατήρ"
+   ],
+   "reasoning": "English rendering of the Homeric formula πατὴρ ἀνδρῶν τε θεῶν τε.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 48,
+   "corpus_loci": [
+    {
+     "author": "hesiodus",
+     "citation": "59",
+     "id": "ogc:hesiodus.opera-et-dies.jsonl:59",
+     "match": "ατ'· εκ δ' εγελασσε πατηρ ανδρων τε θεων τε."
+    },
+    {
+     "author": "hesiodus",
+     "citation": "103",
+     "id": "ogc:hesiodus.scutum.jsonl:103",
+     "match": "ηθει', η μαλα δη τι πατηρ ανδρων τε θεων τε"
+    },
+    {
+     "author": "hesiodus",
+     "citation": "27",
+     "id": "ogc:hesiodus.scutum.jsonl:27",
+     "match": "ων λαοισι. πατηρ δ' ανδρων τε θεων τε"
+    },
+    {
+     "author": "hesiodus",
+     "citation": "220",
+     "id": "ogc:hesiodus.theogonia.jsonl:217",
+     "match": "αιτ' ανδρων τε θεων τε παραιβασιασ εφεπουσ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "πατήρ",
+     "head_meaning": "a father",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 5810
+    }
+   ]
+  },
+  {
+   "q": "some say an army of horsemen is the most beautiful thing on the black earth",
+   "type": "allusion",
+   "pattern": "ιππηων\\s+στροτον|ιππηων\\s+στρατον|οι\\s+μεν\\s+ιππηων",
+   "loci": [
+    "Sappho 16 L-P"
+   ],
+   "reasoning": "Opening of Sappho 16 (ὀ]ἰ μὲν ἰππήων στρότον); relevant passages print ἰππήων στρότον.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 5,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 16",
+     "id": "campbell-glp:sappho:16",
+     "match": "ο]ι μεν ιππηων στροτον οι δε πεσδων\nοι δε"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 16",
+     "id": "dcc-sappho:frag-16",
+     "match": "ο]ι μεν ιππηων στροτον οι δε πεσδων\nοι δε"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 16",
+     "id": "digital-sappho:fr16:1",
+     "match": "ο]ι μεν ιππηων στροτον οι δε πεσδων\nοι δε"
+    },
+    {
+     "author": "sappho",
+     "citation": "16",
+     "id": "ogc:sappho.fragmenta.jsonl:70",
+     "match": "ο]ι μεν ιππηων στροτον οι δε πεσδων οι δε"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "wind",
+   "type": "english_concept",
+   "pattern": "\\bανεμ|\\bβορε|\\bζεφυρ|\\bνοτ(οσ|ου|ω|ον)\\b",
+   "headwords": [
+    "ἄνεμος",
+    "Βορέας",
+    "Ζέφυρος",
+    "Νότος"
+   ],
+   "reasoning": "ἄνεμος 'wind' and the named winds Boreas, Zephyrus, Notus.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 1202,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 326",
+     "id": "campbell-glp:alcaeus:326",
+     "match": "ασυννετημμι των ανεμων στασιν·\nτο μεν γα"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "μπον δορυ· σοει\nνιν βορεασ εξοπιν πνεουσ' αη"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "χαει\nλεπτοτριχα συν ζεφυρου πνοι-\nαισιν εθειρ"
+    },
+    {
+     "author": "Ibycus",
+     "citation": "Fragment 286",
+     "id": "campbell-glp:ibycus:286",
+     "match": "πασ φλεγων\nθρηικιοσ βορεασ αισ-\nσων παρα κυπ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἄνεμος",
+     "head_meaning": "wind",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1399
+    },
+    {
+     "headword": "Βορέας",
+     "head_meaning": "the North wind",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 521
+    },
+    {
+     "headword": "Ζέφυρος",
+     "head_meaning": "Zephyrus",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 374
+    },
+    {
+     "headword": "Νότος",
+     "head_meaning": "the south or south-west …",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 0
+    }
+   ]
+  },
+  {
+   "q": "νύξ",
+   "type": "greek_lemma",
+   "pattern": "\\bνυκτ|\\bνυξ\\b",
+   "headwords": [
+    "νύξ"
+   ],
+   "reasoning": "Any inflected form of νύξ.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 981,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 34a",
+     "id": "campbell-glp:alcaeus:34a",
+     "match": "]ντεσ\nαργαλεα δ' εν νυκτι φ[αοσ φε]ροντεσ\nνα"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:alcman:1",
+     "match": "ρια φαροσ φεροισαισ\nνυκτα δι' αμβροσιαν ατε"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 74",
+     "id": "campbell-glp:archilochus:74",
+     "match": "εκ μεσημβριησ εθηκε νυκτ' αποκρυψασ φαοσ\nηλι"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fr. Adesp. 976 (P.M.G.)",
+     "id": "campbell-glp:sappho:fr-adesp-976-pmg",
+     "match": "πληιαδεσ, μεσαι δε\nνυκτεσ, παρα δ' ερχετ' ω"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "νύξ",
+     "head_meaning": "the night",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2069
+    }
+   ]
+  },
+  {
+   "q": "φαίνεταί μοι κῆνος ἴσος θέοισιν",
+   "type": "greek_phrase",
+   "pattern": "φαινεται\\s+μοι\\s+κηνοσ|ισοσ\\s+θεοισιν",
+   "loci": [
+    "Sappho 31 L-P"
+   ],
+   "reasoning": "Opening of Sappho 31; relevant passages print its words.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 5,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 31",
+     "id": "campbell-glp:sappho:31",
+     "match": "φαινεται μοι κηνοσ ισοσ θεοισιν\nεμμεν'"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 31",
+     "id": "dcc-sappho:frag-31",
+     "match": "φαινεται μοι κηνοσ ισοσ θεοισιν\nεμμεν"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 31",
+     "id": "digital-sappho:fr31:1",
+     "match": "φαινεται μοι κηνοσ ισοσ θεοισιν\nεμμεν"
+    },
+    {
+     "author": "sappho",
+     "citation": "31",
+     "id": "ogc:sappho.fragmenta.jsonl:85",
+     "match": "φαινεται μοι κηνοσ ισοσ θεοισιν εμμεν"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "cloud-gathering Zeus",
+   "type": "epithet",
+   "pattern": "νεφεληγερετ",
+   "headwords": [
+    "νεφεληγερέτα"
+   ],
+   "reasoning": "νεφεληγερέτα 'cloud-gatherer', epithet of Zeus.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 88,
+   "corpus_loci": [
+    {
+     "author": "hesiodus",
+     "citation": "53",
+     "id": "ogc:hesiodus.opera-et-dies.jsonl:53",
+     "match": "χολωσαμενοσ προσεφη νεφεληγερετα ζευσ·"
+    },
+    {
+     "author": "hesiodus",
+     "citation": "558",
+     "id": "ogc:hesiodus.theogonia.jsonl:552",
+     "match": "εγ' οχθησασ προσεφη νεφεληγερετα ζευσ·"
+    },
+    {
+     "author": "hesiodus",
+     "citation": "730",
+     "id": "ogc:hesiodus.theogonia.jsonl:721",
+     "match": "υφαται βουλησι διοσ νεφεληγερεταο"
+    },
+    {
+     "author": "hesiodus",
+     "citation": "944",
+     "id": "ogc:hesiodus.theogonia.jsonl:953",
+     "match": "σ' εν φιλοτητι διοσ νεφεληγερεταο."
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "νεφεληγερέτα",
+     "head_meaning": "cloud-gatherer",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 114
+    }
+   ]
+  },
+  {
+   "q": "wind falling on the oaks of a mountain",
+   "type": "imagery",
+   "all_of": [
+    "\\bανεμ",
+    "\\bδρυ(σ|ι|ν|σιν|ων|εσ|ασ|οσ|ι)\\b|\\bδρυσι"
+   ],
+   "headwords": [
+    "ἄνεμος",
+    "δρῦς"
+   ],
+   "reasoning": "Wind (ἄνεμος) and oaks (δρῦς) in one passage, as in Sappho 47.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 16,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 47",
+     "id": "campbell-glp:sappho:47",
+     "match": "ναξε μοι\nφρενασ, ωσ ανεμοσ κατ οροσ δρυσιν ε … ωσ ανεμοσ κατ οροσ δρυσιν εμπετων."
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 47",
+     "id": "dcc-sappho:frag-47",
+     "match": "ναξε μοι\nφρενασ, ωσ ανεμοσ κατ οροσ δρυσιν ε … ωσ ανεμοσ κατ οροσ δρυσιν εμπετων."
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 47",
+     "id": "digital-sappho:fr47:1",
+     "match": "ναξε μοι\nφρενασ, ωσ ανεμοσ κατ οροσ δρυσιν ε … ωσ ανεμοσ κατ οροσ δρυσιν εμπετων."
+    },
+    {
+     "author": "sappho",
+     "citation": "47",
+     "id": "ogc:sappho.fragmenta.jsonl:101",
+     "match": "ναξε μοι φρενασ, ωσ ανεμοσ κατ οροσ δρυσιν ε … ωσ ανεμοσ κατ οροσ δρυσιν εμπετων."
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἄνεμος",
+     "head_meaning": "wind",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1399
+    },
+    {
+     "headword": "δρῦς",
+     "head_meaning": "a tree",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 473
+    }
+   ]
+  },
+  {
+   "q": "wine to forget sorrow",
+   "type": "motif",
+   "all_of": [
+    "\\bοιν",
+    "\\bλαθ|\\bληθ|\\bκαδ|\\bκηδ|\\bανι[αη]|\\bμεριμν|\\bπενθ|\\bλυπ"
+   ],
+   "headwords": [
+    "οἶνος",
+    "λαθικηδής",
+    "μέριμνα",
+    "ἀνία"
+   ],
+   "reasoning": "Wine (οἶνος) together with forgetting or care, grief, sorrow (λαθικηδής, λήθη, κῆδος, ἀνία, μέριμνα, πένθος, λύπη), as in Alcaeus 346.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 72,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 346",
+     "id": "campbell-glp:alcaeus:346",
+     "match": "σ †αιτα† ποικιλαισ·\nοινον γαρ σεμελασ και δ … εν; δακτυλοσ αμερα.\nκαδ δαερρε κυλιχναισ με"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 5A",
+     "id": "campbell-glp:archilochus:5a",
+     "match": "λκε καδων,\nαγρει δ' οινον ερυθρον απο τρυγο … οιλων πωματ' αφελκε καδων,\nαγρει δ' οινον ε"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "αι γαρ αν πλαξιπποσ οινευσ\nπαυσεν καλυκοστε … ο]ν\nατρεμ' αμπαυσασ μεριμναν\nδευρ' αθρησον νοω"
+    },
+    {
+     "author": "anacreontea",
+     "citation": "36",
+     "id": "ogc:anacreontea.anacreontea.jsonl:29",
+     "match": "ιλαροι πιωμεν οινον, αναμελψωμεν δε β … η, δι' ον αμπαυεται λυπα, δι' ον ευναζεται"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "οἶνος",
+     "head_meaning": "wine",
+     "dictionary": "LSJ (Logeion)",
+     "corpus_tokens": 1273
+    },
+    {
+     "headword": "λαθικηδής",
+     "head_meaning": "banishing care",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 27
+    },
+    {
+     "headword": "μέριμνα",
+     "head_meaning": "care",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 194
+    },
+    {
+     "headword": "ἀνία",
+     "head_meaning": "grief",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 225
+    }
+   ]
+  },
+  {
+   "q": "glukupikron",
+   "type": "cross_lingual",
+   "pattern": "γλυκυπικρ",
+   "headwords": [
+    "γλυκύπικρος"
+   ],
+   "reasoning": "Latin-script spelling of γλυκύπικρος 'bittersweet'.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 10,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 130",
+     "id": "campbell-glp:sappho:130",
+     "match": "ο λυσιμελησ δονει,\nγλυκυπικρον αμαχανον ορπετον."
+    },
+    {
+     "author": "Sappho",
+     "citation": "130",
+     "id": "dcc-sappho:frag-118-168:130",
+     "match": "ο λυσιμελησ δονει,\nγλυκυπικρον αμαχανον ορπετον"
+    },
+    {
+     "author": "Sappho",
+     "citation": "130",
+     "id": "digital-sappho:fr118-168:13",
+     "match": "ο λυσιμελησ δονει,\nγλυκυπικρον αμαχανον ορπετον"
+    },
+    {
+     "author": "sappho",
+     "citation": "130",
+     "id": "ogc:sappho.fragmenta.jsonl:29",
+     "match": "ο λυσιμελησ δονει, γλυκυπικρον αμαχανον ορπετον"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "γλυκύπικρος",
+     "head_meaning": "sweetly bitter",
+     "dictionary": "LSJ (Logeion)",
+     "corpus_tokens": 16
+    }
+   ]
+  },
+  {
+   "q": "I cannot understand the strife of the winds",
+   "type": "allusion",
+   "pattern": "ανεμων\\s+στασιν|ασυννετημμι",
+   "loci": [
+    "Alcaeus 326 L-P"
+   ],
+   "reasoning": "Alcaeus 326 (ἀσυννέτημμι τὼν ἀνέμων στάσιν), the 'ship of state' poem.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 2,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 326",
+     "id": "campbell-glp:alcaeus:326",
+     "match": "ασυννετημμι των ανεμων στασιν·"
+    },
+    {
+     "author": "ΑΛΚΑΙΟΣ",
+     "citation": "απ. 326 Lobel-Page",
+     "id": "p2_cgl_anthology:247",
+     "match": "ασυννετημμι των ανεμων στασιν·"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "ship",
+   "type": "english_concept",
+   "pattern": "\\bναυσ\\b|\\bνα[υϝ]\\b|\\bναα\\b|\\bνη(οσ|ι|α|ασ|ων|εσσι|εσσιν|υσι|υσιν|εσ)\\b|\\bναυ(σι|σιν|ων)\\b",
+   "headwords": [
+    "ναῦς"
+   ],
+   "reasoning": "ναῦς 'ship' with its epic and Aeolic forms (νηός, νᾶα, νάεσσι).",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 2239,
+   "corpus_loci": [
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 5A",
+     "id": "campbell-glp:archilochus:5a",
+     "match": "νι θοησ δια σελματα νηοσ\nφοιτα και κοιλων πω"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "κυανοπρωρα μεν ναυσ μενεκτυ[πον\nθησεα δ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 44",
+     "id": "campbell-glp:sappho:44",
+     "match": "βραν ανδρομαχαν ενι ναυσιν επ' αλμυρον\nποντον·"
+    },
+    {
+     "author": "Simonides",
+     "citation": "Fragment 97D.",
+     "id": "campbell-glp:simonides:97d",
+     "match": "τασ\nεν πελαγοσ, μια ναυσ, εισ ταφοσ εκτερισε"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ναῦς",
+     "head_meaning": "a ship",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 5804
+    }
+   ]
+  },
+  {
+   "q": "ὕπνος",
+   "type": "greek_lemma",
+   "pattern": "\\bυπν(οσ|ου|ω|ον|οι|ε|οιο)\\b",
+   "headwords": [
+    "ὕπνος"
+   ],
+   "reasoning": "Any inflected form of ὕπνος.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 576,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 3",
+     "id": "campbell-glp:alcman:3",
+     "match": "ιοισαν μελοσ\n] . οι\nυπνον α]πο γλεφαρων σκεδ["
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Fragment 4",
+     "id": "campbell-glp:bacchylides:fr-4",
+     "match": "δε συλαται μελιφρων\nυπνοσ απο βλεφαρων\nαωοσ ο"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 30",
+     "id": "dcc-sappho:frag-30",
+     "match": "α λιγυφω[νοσ ορνισ\nυπνον [ι]δωμεν. ⊗"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 63",
+     "id": "dcc-sappho:frag-63",
+     "match": "[,\nφ[ο]ιταισ οτα τ' υπνοσ[\nγλυκυσ θ[ε]οσ, η δ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ὕπνος",
+     "head_meaning": "sleep",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1104
+    }
+   ]
+  },
+  {
+   "q": "ἄστερες μὲν ἀμφὶ κάλαν σελάνναν",
+   "type": "greek_phrase",
+   "pattern": "αστερεσ\\s+μεν\\s+αμφι\\s+καλαν|αμφι\\s+καλαν\\s+σελανναν",
+   "loci": [
+    "Sappho 34 L-P"
+   ],
+   "reasoning": "Sappho 34.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 5,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 34",
+     "id": "campbell-glp:sappho:34",
+     "match": "αστερεσ μεν αμφι καλαν σελανναν\nαψ απυκρυπ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 34",
+     "id": "dcc-sappho:frag-34",
+     "match": "αστερεσ μεν αμφι καλαν σελανναν\nαψ απυκρυπ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 34",
+     "id": "digital-sappho:fr34:1",
+     "match": "αστερεσ μεν αμφι καλαν σελανναν\nαψ απυκρυπ"
+    },
+    {
+     "author": "sappho",
+     "citation": "34",
+     "id": "ogc:sappho.fragmenta.jsonl:88",
+     "match": "αστερεσ μεν αμφι καλαν σελανναν αψ απυκρυπ"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "far-shooting Apollo",
+   "type": "epithet",
+   "pattern": "εκηβολ|εκατηβολ|εκατηβελετ|εκαβολ",
+   "headwords": [
+    "ἑκηβόλος",
+    "ἑκατηβόλος",
+    "ἑκατηβελέτης"
+   ],
+   "reasoning": "ἑκηβόλος, ἑκατηβόλος, ἑκατηβελέτης 'far-shooting', epithets of Apollo.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 135,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 44",
+     "id": "campbell-glp:sappho:44",
+     "match": "ν\nπαον' ονκαλεοντεσ εκαβολον ευλυραν,\nυμνην δ'"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 44",
+     "id": "dcc-sappho:frag-44:Frag. 44",
+     "match": "ν\nπαον' ονκαλεοντεσ εκαβολον ευλυραν,\nυμνην δ'"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 44",
+     "id": "digital-sappho:fr44:1",
+     "match": "ν\nπαον' ονκαλεοντεσ εκαβολον ευλυραν,\nυμνην δ'"
+    },
+    {
+     "author": "sappho",
+     "citation": "44",
+     "id": "ogc:sappho.fragmenta.jsonl:98",
+     "match": "ν παον' ονκαλεοντεσ εκαβολον ευλυραν, υμνην δ'"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἑκηβόλος",
+     "head_meaning": "far-darting",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 110
+    },
+    {
+     "headword": "ἑκατηβόλος",
+     "head_meaning": "far-shooting",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 44
+    },
+    {
+     "headword": "ἑκατηβελέτης",
+     "head_meaning": "six",
+     "dictionary": "LSJ",
+     "corpus_tokens": 8
+    }
+   ]
+  },
+  {
+   "q": "snow on the mountains",
+   "type": "imagery",
+   "all_of": [
+    "\\bχιον|\\bνιφ",
+    "\\bορε|\\bουρε|\\bοροσ\\b|\\bορων|\\bορει"
+   ],
+   "headwords": [
+    "χιών",
+    "νιφάς",
+    "ὄρος"
+   ],
+   "reasoning": "Snow (χιών, νιφάς, νίφω) and mountains (ὄρος, epic οὔρεα) in one passage.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 30,
+   "corpus_loci": [
+    {
+     "author": "homerus-epic",
+     "citation": "13.754",
+     "id": "ogc:homerus-epic.ilias.jsonl:8334",
+     "match": "ρα, και ορμηθη ορει νιφοεντι εοικωσ … η ρα, και ορμηθη ορει νιφοεντι εοικωσ"
+    },
+    {
+     "author": "homerus-epic",
+     "citation": "14.227",
+     "id": "ogc:homerus-epic.ilias.jsonl:8644",
+     "match": "ποπολων θρηκων ορεα νιφοεντα … φ' ιπποπολων θρηκων ορεα νιφοεντα"
+    },
+    {
+     "author": "homerus-epic",
+     "citation": "19.338",
+     "id": "ogc:homerus-epic.odyssea.jsonl:9593",
+     "match": "πρωτον κρητησ ορεα νιφοεντα … , οτε πρωτον κρητησ ορεα νιφοεντα"
+    },
+    {
+     "author": "nonnus",
+     "citation": "6.267",
+     "id": "ogc:nonnus.dionysiaca.jsonl:3047",
+     "match": "θιοισιν ορεσσιχυτου νιφετοιο … αι ξυνοισ ροθιοισιν ορεσσιχυτου νιφετοιο"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "χιών",
+     "head_meaning": "snow",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 155
+    },
+    {
+     "headword": "νιφάς",
+     "head_meaning": "a snowflake",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 84
+    },
+    {
+     "headword": "ὄρος",
+     "head_meaning": "a mountain",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2358
+    }
+   ]
+  },
+  {
+   "q": "throwing away the shield in battle",
+   "type": "motif",
+   "all_of": [
+    "\\bασπι[δσ]",
+    "\\bλιπ|\\bλειπ|\\bκαλλιπ|\\bκαλλειπ|\\bαπωλ|\\bριψ|\\bριπτ|\\bβαλ"
+   ],
+   "headwords": [
+    "ἀσπίς",
+    "λείπω",
+    "ῥίπτω"
+   ],
+   "reasoning": "A shield (ἀσπίς) together with leaving, losing or throwing (λείπω, καταλείπω, ἀπόλλυμι, ῥίπτω, βάλλω), as in Archilochus 5 and Anacreon 381.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 72,
+   "corpus_loci": [
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 6",
+     "id": "campbell-glp:archilochus:6",
+     "match": "ασπιδι μεν σαιων τισ αγαλ … αμνω\nεντοσ αμωμητον καλλιπον ουκ εθελων,\nαυτον"
+    },
+    {
+     "author": "Tyrtaeus",
+     "citation": "Fragment 8",
+     "id": "campbell-glp:tyrtaeus:8",
+     "match": "θυσ δ' εσ προμαχουσ ασπιδ' ανηρ εχετω\nεχθρην … πτωσσοντεσ μεγαλοισ βαλλετε χερμαδιοισ\nδουρ"
+    },
+    {
+     "author": "anacreontea",
+     "citation": "8",
+     "id": "ogc:anacreontea.anacreontea.jsonl:8",
+     "match": "νετο πριν αιασ μετ' ασπιδοσ κραδαινων την εκτ … . ποθεν ουν γενοιτο βαλβισ ελικωνιδοσ μεριμ"
+    },
+    {
+     "author": "Pindar",
+     "citation": "8.40–8.59",
+     "id": "perseus:tlg0033.tlg002.perseus-grc2:8.40–8.59:1",
+     "match": "ν αιθασ αλκμαν' επ' ασπιδοσ\nνωμωντα πρωτον εν … αλκμανα στεφανοισι βαλλω, ραινω δε και υμν"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἀσπίς",
+     "head_meaning": "a round shield",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1016
+    },
+    {
+     "headword": "λείπω",
+     "head_meaning": "to leave",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2748
+    },
+    {
+     "headword": "ῥίπτω",
+     "head_meaning": "to throw",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 522
+    }
+   ]
+  },
+  {
+   "q": "rhododaktylos Eos",
+   "type": "cross_lingual",
+   "pattern": "ροδοδακτυλ",
+   "headwords": [
+    "ῥοδοδάκτυλος"
+   ],
+   "reasoning": "Latin-script spelling of ῥοδοδάκτυλος Ἠώς.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 73,
+   "corpus_loci": [
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 10",
+     "id": "campbell-glp:mimnermus:10",
+     "match": "ν τε και αυτω, επει ροδοδακτυλοσ ηωσ\nωκεανον προλι"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 96",
+     "id": "campbell-glp:sappho:96",
+     "match": "οτ' αελιω\nδυντοσ α βροδοδακτυλοσ σελαννα\nπαντα περ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 96",
+     "id": "dcc-sappho:frag-96",
+     "match": "οτ' αελιω\nδυντοσ α βροδοδακτυλοσ σελαννα\nπαντα περ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 96",
+     "id": "digital-sappho:fr96:1",
+     "match": "αελιω\n8. δυντοσ α βροδοδακτυλοσ σελαννα\nπαντα περ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ῥοδοδάκτυλος",
+     "head_meaning": "rosy-fingered",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 101
+    }
+   ]
+  },
+  {
+   "q": "creatures of a day: man is the dream of a shadow",
+   "type": "allusion",
+   "pattern": "σκιασ\\s+οναρ|επαμεροι",
+   "loci": [
+    "Pind. P. 8.95-96"
+   ],
+   "reasoning": "Pindar, Pythian 8.95-96 (ἐπάμεροι· τί δέ τις; ... σκιᾶς ὄναρ ἄνθρωπος).",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 2,
+   "corpus_loci": [
+    {
+     "author": "pindarus",
+     "citation": "8.95",
+     "id": "ogc:pindarus.pythia.jsonl:902",
+     "match": "επαμεροι· τι δε τισ; τι δ' ο"
+    },
+    {
+     "author": "Pindar",
+     "citation": "8.80–8.99",
+     "id": "perseus:tlg0033.tlg002.perseus-grc2:8.80–8.99:1",
+     "match": "γνωμα σεσεισμενον.\nεπαμεροι· τι δε τισ; τι δ' ο"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "laughter",
+   "type": "english_concept",
+   "pattern": "\\bγελ[αωο]",
+   "headwords": [
+    "γελάω",
+    "γέλως"
+   ],
+   "reasoning": "γελάω 'laugh', γέλως 'laughter'.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 366,
+   "corpus_loci": [
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 88",
+     "id": "campbell-glp:archilochus:88",
+     "match": "λυσ\nαστοισι φαινεαι γελωσ."
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": ",\nσταθι τ' εν χωρα, γελανωσασ τε θυμον\nμη τα"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 31",
+     "id": "campbell-glp:sappho:31",
+     "match": "ι-\nσασ υπακουει\nκαι γελαισασ ιμεροεν, το μ'"
+    },
+    {
+     "author": "Semonides",
+     "citation": "Fragment 7",
+     "id": "campbell-glp:semonides:7",
+     "match": "ρεσιν νοει·\nτην μεν γελα τε και γεγηθεν ημερ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "γελάω",
+     "head_meaning": "to laugh",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 619
+    },
+    {
+     "headword": "γέλως",
+     "head_meaning": "laughter",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 338
+    }
+   ]
+  },
+  {
+   "q": "Ἀφροδίτη",
+   "type": "greek_lemma",
+   "pattern": "\\bαφροδιτ",
+   "headwords": [
+    "Ἀφροδίτη"
+   ],
+   "reasoning": "Any form of Ἀφροδίτη (Aeolic Ἀφρόδιτα).",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 429,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:alcman:1",
+     "match": "ε πη]ρητω γαμην ταν αφροδιταν\nκυπριαν ϝ]αν[α]σσ"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 58",
+     "id": "campbell-glp:alcman:58",
+     "match": "αφροδιτα μεν ουκ εστι, μαργ"
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 357",
+     "id": "campbell-glp:anacreon:357",
+     "match": "ανωπιδεσ\nπορφυρη τ' αφροδιτη\nσυμπαιζουσιν, επισ"
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 96D.",
+     "id": "campbell-glp:anacreon:96d",
+     "match": "ν τε και αγλαα δωρ' αφροδιτησ\nσυμμισγων ερατησ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "Ἀφροδίτη",
+     "head_meaning": "Aphrodite",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1244
+    }
+   ]
+  },
+  {
+   "q": "δέδυκε μὲν ἀ σελάννα",
+   "type": "greek_phrase",
+   "pattern": "δεδυκε\\s+μεν",
+   "loci": [
+    "Sappho 168B Voigt"
+   ],
+   "reasoning": "The 'midnight poem' (δέδυκε μὲν ἀ σελάννα καὶ Πληίαδες).",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 4,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fr. Adesp. 976 (P.M.G.)",
+     "id": "campbell-glp:sappho:fr-adesp-976-pmg",
+     "match": "δεδυκε μεν α σελαννα\nκαι πληια"
+    },
+    {
+     "author": "Sappho",
+     "citation": "168B",
+     "id": "dcc-sappho:frag-118-168:168B",
+     "match": "δεδυκε μεν α σελαννα\nκαι πληια"
+    },
+    {
+     "author": "Sappho",
+     "citation": "168B",
+     "id": "digital-sappho:fr118-168:52",
+     "match": "δεδυκε μεν α σελαννα\nκαι πληια"
+    },
+    {
+     "author": "sappho",
+     "citation": "168B",
+     "id": "ogc:sappho.fragmenta.jsonl:68",
+     "match": "δεδυκε μεν α σελαννα και πληια"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "honey-voiced",
+   "type": "epithet",
+   "pattern": "μελιγαρυ|μελιφθογγ|μελιφων|μελιγλωσσ|μελιγηρυ",
+   "headwords": [
+    "μελίγηρυς",
+    "μελίφθογγος",
+    "μελίγλωσσος"
+   ],
+   "reasoning": "μελίγηρυς / Doric μελιγάρυς, μελίφθογγος, μελίγλωσσος 'honey-voiced, honey-tongued'.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 39,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 26",
+     "id": "campbell-glp:alcman:26",
+     "match": "μ' ετι, παρσενικαι μελιγαρυεσ ιαροφωνοι,\nγυια φ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "αλαθ[εια] καλων\nκαι μελιγλωσσου τισ υμνησει χαριν"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Fragment 4",
+     "id": "campbell-glp:bacchylides:fr-4",
+     "match": "αλανορα πλουτον\nκαι μελιγλωσσων αοιδαν ανθεα\nδαιδ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "185",
+     "id": "dcc-sappho:frag-169-192:185",
+     "match": "μελιφωνοι\nμελλιχοφωνοι"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "μελίγηρυς",
+     "head_meaning": "sweet-voiced",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 42
+    },
+    {
+     "headword": "μελίφθογγος",
+     "head_meaning": "honey-voiced",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 9
+    },
+    {
+     "headword": "μελίγλωσσος",
+     "head_meaning": "honey-tongued",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 8
+    }
+   ]
+  },
+  {
+   "q": "a cicada singing in the summer heat",
+   "type": "imagery",
+   "all_of": [
+    "\\bτεττι[γξ]",
+    "\\bθερ(οσ|ουσ|ει|ευσ)\\b|\\bκαυμ|\\bσειρι|\\bαελι|\\bηελι|\\bπνιγ"
+   ],
+   "headwords": [
+    "τέττιξ",
+    "θέρος",
+    "καῦμα",
+    "Σείριος"
+   ],
+   "reasoning": "A cicada (τέττιξ) with summer or heat (θέρος, καῦμα, Σείριος, the sun, πνῖγος), as in Alcaeus 347 and Hesiod Op. 582-584.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 9,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 347",
+     "id": "campbell-glp:alcaeus:347",
+     "match": "δ' εκ πεταλων· αδεα τεττιξ, πτερυγων δ' υπα\nκα … αντα δε διψαισ' υπα καυματοσ,\nαχει δ' εκ πετ"
+    },
+    {
+     "author": "Alcaeus of Mytilene",
+     "citation": "Wikisource main fragment 39; Edmonds 161",
+     "id": "p2_alcaeus:elws:20686:122262:Bergk-order:39",
+     "match": "δ' εκ πεταλων αδεα τεττιξ ...\nανθει δε σκολυμ … αντα δε διψαισ' υπα καυματοσ,\nαχει δ' εκ πετ"
+    },
+    {
+     "author": "ΑΛΚΑΙΟΣ",
+     "citation": "απ. 347 Lobel-Page",
+     "id": "p2_cgl_anthology:261",
+     "match": "δ' εκ πεταλων αδεα τεττιξ, ‹πτερυγων δ' υπα\nκ … αντα δε διψαισ' υπα καυματοσ,\nαχει δ' εκ πετ"
+    },
+    {
+     "author": "Hesiod",
+     "citation": "578–597",
+     "id": "perseus:tlg0020.tlg002.perseus-grc2:578–597:1",
+     "match": "τ' ανθει και ηχετα τεττιξ\nδενδρεω εφεζομενοσ … κεφαλην και γουνατα σειριοσ αζει,\nαυαλεοσ δε"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "τέττιξ",
+     "head_meaning": "grasshopper",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 153
+    },
+    {
+     "headword": "θέρος",
+     "head_meaning": "summer",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 355
+    },
+    {
+     "headword": "καῦμα",
+     "head_meaning": "burning heat",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 94
+    },
+    {
+     "headword": "Σείριος",
+     "head_meaning": "the scorcher",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 0
+    }
+   ]
+  },
+  {
+   "q": "love as fire",
+   "type": "motif",
+   "all_of": [
+    "\\bερ[ωο](σ|τ|ν)|\\bποθ|\\bιμερ|\\bκυπρ|\\bαφροδιτ",
+    "\\bπυρ\\b|\\bπυρι|\\bπυροσ|\\bφλεγ|\\bφλογ|\\bκαι(ει|ομ|ετ)|\\bοπτ|\\bπυρσ"
+   ],
+   "headwords": [
+    "ἔρως",
+    "πόθος",
+    "πῦρ",
+    "φλέγω",
+    "καίω"
+   ],
+   "reasoning": "Love or desire (ἔρως, πόθος, ἵμερος, Cypris, Aphrodite) together with fire or burning (πῦρ, φλέγω, φλόξ, καίω, ὀπτάω), as in Sappho 31 and 38.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 218,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "νισεν τε μινωι κεαρ\nιμεραμπυκοσ θεασ\nκυπριδο … π' απ' ουρανου θοαν\nπυριεθειραν αστραπαν\nσαμ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 18",
+     "id": "campbell-glp:bacchylides:18",
+     "match": "ιται.\nτινα δ' εμμεν ποθεν ανδρα τουτον\nλεγε … αι-\nναν κρατοσ περι πυρσοχαιτου·\nχιτωνα πορφ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "ν εσ υπερβορεο[υσ γ]εροντα\nσυν τανισφυροισ κ … ν·\nαλλ' επει δεινου πυροσ\nλαμπρον διαι[σσεν μ"
+    },
+    {
+     "author": "Ibycus",
+     "citation": "Fragment 286",
+     "id": "campbell-glp:ibycus:286",
+     "match": "θαλεθοισιν, εμοι δ' εροσ\nουδεμιαν κατακοιτοσ … λ' αθ' υπο στεροπασ φλεγων\nθρηικιοσ βορεασ α"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἔρως",
+     "head_meaning": "love",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2265
+    },
+    {
+     "headword": "πόθος",
+     "head_meaning": "a longing",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 737
+    },
+    {
+     "headword": "πῦρ",
+     "head_meaning": "fire",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2680
+    },
+    {
+     "headword": "φλέγω",
+     "head_meaning": "to burn",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 262
+    },
+    {
+     "headword": "καίω",
+     "head_meaning": "to light",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 762
+    }
+   ]
+  },
+  {
+   "q": "poikilothron athanat Aphrodita",
+   "type": "cross_lingual",
+   "pattern": "ποικιλοθρον",
+   "headwords": [
+    "ποικιλόθρονος"
+   ],
+   "reasoning": "Latin-script spelling of the first words of Sappho 1.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 5,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:sappho:1",
+     "match": "ποικιλοθρον' αθανατ' αφροδιτα,"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 1",
+     "id": "dcc-sappho:frag-1",
+     "match": "ποικιλοθρον' αθανατ' αφροδιτα,"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 1",
+     "id": "digital-sappho:fr1:1",
+     "match": "ποικιλοθρον' αθανατ' αφροδιτα,"
+    },
+    {
+     "author": "sappho",
+     "citation": "1",
+     "id": "ogc:sappho.fragmenta.jsonl:2",
+     "match": "ποικιλοθρον' αθανατ' αφροδιτα,"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ποικιλόθρονος",
+     "head_meaning": "on rich-worked throne",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 7
+    }
+   ]
+  },
+  {
+   "q": "neither honey nor the bee for me",
+   "type": "allusion",
+   "pattern": "μητε\\s+μοι\\s+μελι",
+   "loci": [
+    "Sappho 146 L-P"
+   ],
+   "reasoning": "Sappho 146 (μήτε μοι μέλι μήτε μέλισσα).",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 3,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "146",
+     "id": "dcc-sappho:frag-118-168:146",
+     "match": "μητε μοι μελι μητε μελισσα"
+    },
+    {
+     "author": "Sappho",
+     "citation": "146",
+     "id": "digital-sappho:fr118-168:29",
+     "match": "μητε μοι μελι μητε μελισσα"
+    },
+    {
+     "author": "sappho",
+     "citation": "146",
+     "id": "ogc:sappho.fragmenta.jsonl:45",
+     "match": "μητε μοι μελι μητε μελισσα"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "girl",
+   "type": "english_concept",
+   "pattern": "\\bπαρθεν|\\bκορ(α|η|αι|ασ|ην|αν|ησ|αισ|ων)\\b|\\bκουρ(α|η|ην|ασ|αι|ησ)\\b",
+   "headwords": [
+    "παρθένος",
+    "κόρη",
+    "κούρη"
+   ],
+   "reasoning": "παρθένος 'maiden', κόρη / Ionic κούρη 'girl'.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 2014,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 42",
+     "id": "campbell-glp:alcaeus:42",
+     "match": "]ηοσ ελων [μελαθρων\nπαρθενον αβραν\nεσ δομον χε"
+    },
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 45",
+     "id": "campbell-glp:alcaeus:45",
+     "match": ".]ι·\nκαι σε πολλαι παρθενικαι 'πεπ[οισιν\n. ."
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 360",
+     "id": "campbell-glp:anacreon:360",
+     "match": "ω παι παρθενιον βλεπων\nδιζημαι σ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "·\nχειρα δ' ου[κετι] παρθενικασ\nατερθ' ερατυεν,"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "παρθένος",
+     "head_meaning": "a maid",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1333
+    },
+    {
+     "headword": "κόρη",
+     "head_meaning": "a maiden",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2269
+    },
+    {
+     "headword": "κούρη",
+     "head_meaning": null,
+     "dictionary": null,
+     "note": "not a headword of the corpus index; the pattern carries the spelling"
+    }
+   ]
+  },
+  {
+   "q": "πόθος",
+   "type": "greek_lemma",
+   "pattern": "\\bποθ(οσ|ου|ω|ον|οι|ων|οισ|οιο)\\b",
+   "headwords": [
+    "πόθος"
+   ],
+   "reasoning": "Any inflected form of the noun πόθος.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 373,
+   "corpus_loci": [
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 104",
+     "id": "campbell-glp:archilochus:104",
+     "match": "δυστηνοσ εγκειμαι ποθω\nαψυχοσ, χαλεπησι θε"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 118",
+     "id": "campbell-glp:archilochus:118",
+     "match": "ω 'ταιρε, δαμναται ποθοσ."
+    },
+    {
+     "author": "Callinus",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:callinus:1",
+     "match": "η·\nλαω γαρ συμπαντι ποθοσ κρατεροφρονοσ ανδρο"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 102",
+     "id": "campbell-glp:sappho:102",
+     "match": "ι κρεκην τον ιστον,\nποθω δαμεισα παιδοσ βραδ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "πόθος",
+     "head_meaning": "a longing",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 737
+    }
+   ]
+  },
+  {
+   "q": "χλωροτέρα δὲ ποίας",
+   "type": "greek_phrase",
+   "pattern": "χλωροτερα\\s+δε\\s+ποιασ",
+   "loci": [
+    "Sappho 31.14 L-P"
+   ],
+   "reasoning": "Sappho 31.14.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 5,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 31",
+     "id": "campbell-glp:sappho:31",
+     "match": "οσ δε\nπαισαν αγρει, χλωροτερα δε ποιασ\nεμμι, τεθνακην δ' ο"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 31",
+     "id": "dcc-sappho:frag-31",
+     "match": "οσ δε\nπαισαν αγρει, χλωροτερα δε ποιασ\nεμμι, τεθνακην δ' ο"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 31",
+     "id": "digital-sappho:fr31:1",
+     "match": "οσ δε\nπαισαν αγρει, χλωροτερα δε ποιασ\nεμμι, τεθνακην δ' ο"
+    },
+    {
+     "author": "sappho",
+     "citation": "31",
+     "id": "ogc:sappho.fragmenta.jsonl:85",
+     "match": "οσ δε παισαν αγρει, χλωροτερα δε ποιασ εμμι, τεθνακην δ' ο"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "fair-tressed",
+   "type": "epithet",
+   "pattern": "ευπλοκαμ|καλλιπλοκαμ|ηυκομ|ευκομ|καλλικομ",
+   "headwords": [
+    "εὐπλόκαμος",
+    "καλλιπλόκαμος",
+    "ἠΰκομος",
+    "καλλίκομος"
+   ],
+   "reasoning": "εὐπλόκαμος, καλλιπλόκαμος, ἠΰκομος, καλλίκομος 'with lovely hair'.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 226,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "λοχω] τε κεδ[να\nσυν ευπλοκαμοι[σ τ'] επεβαιν' αλ"
+    },
+    {
+     "author": "Ibycus",
+     "citation": "Fragment 288",
+     "id": "campbell-glp:ibycus:288",
+     "match": "ριτων θαλοσ, ⟨ωραν⟩\nκαλλικομων μελεδημα, σε μεν"
+    },
+    {
+     "author": "Sappho",
+     "citation": "128",
+     "id": "dcc-sappho:frag-118-168:128",
+     "match": "ε νυν αβραι χαριτεσ καλλικομοι τε μοισαι"
+    },
+    {
+     "author": "Sappho",
+     "citation": "128",
+     "id": "digital-sappho:fr118-168:11",
+     "match": "ε νυν αβραι χαριτεσ καλλικομοι τε μοισαι"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "εὐπλόκαμος",
+     "head_meaning": "with goodly locks",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 119
+    },
+    {
+     "headword": "καλλιπλόκαμος",
+     "head_meaning": "with beautiful locks",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 23
+    },
+    {
+     "headword": "ἠΰκομος",
+     "head_meaning": null,
+     "dictionary": null,
+     "note": "not a headword of the corpus index; the pattern carries the spelling"
+    },
+    {
+     "headword": "καλλίκομος",
+     "head_meaning": "beautiful-haired",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 49
+    }
+   ]
+  },
+  {
+   "q": "a ship tossed by waves in a storm",
+   "type": "imagery",
+   "all_of": [
+    "\\bναυσ\\b|\\bνα[υϝ]\\b|\\bναα\\b|\\bνη(οσ|ι|α|ασ|ων|εσσι|εσσιν|υσι|υσιν|εσ)\\b|\\bναυ(σι|σιν|ων)\\b",
+    "\\bκυμ(α|ατ)|\\bχειμ"
+   ],
+   "headwords": [
+    "ναῦς",
+    "κῦμα",
+    "χειμών"
+   ],
+   "reasoning": "A ship (ναῦς) with waves or storm (κῦμα, χειμών) in one passage, as in Alcaeus 208 and 6.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 97,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "13.139–13.158",
+     "id": "perseus:tlg0199.tlg001.perseus-grc2:13.139–13.158:1",
+     "match": "επι θινα θαλασσασ·\nναυσι δ' ευπυμνοισ παραι … ιβαν εσιδοντεσ υπαι\nχειμωνοσ αιγλαν·\nπασσυδι"
+    },
+    {
+     "author": "apollonius-rhodius-epic",
+     "citation": "2.1184",
+     "id": "ogc:apollonius-rhodius-epic.argonautica.jsonl:2545",
+     "match": "αρεστι δε τησδ' επι νηοσ … χειματοσ ουλομενοιο. παρ"
+    },
+    {
+     "author": "apollonius-rhodius-epic",
+     "citation": "4.910",
+     "id": "ogc:apollonius-rhodius-epic.argonautica.jsonl:4960",
+     "match": "νηα δ' ομου ζεφυροσ τε … σ τε και ηχηεν φερε κυμα"
+    },
+    {
+     "author": "aratus-astronomy",
+     "citation": "744",
+     "id": "ogc:aratus-astronomy.phaenomena.jsonl:745",
+     "match": "και μεν τισ και νηι πολυκλυστου χειμωνο … και νηι πολυκλυστου χειμωνοσ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ναῦς",
+     "head_meaning": "a ship",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 5804
+    },
+    {
+     "headword": "κῦμα",
+     "head_meaning": "anything swollen",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1383
+    },
+    {
+     "headword": "χειμών",
+     "head_meaning": "winter",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 471
+    }
+   ]
+  },
+  {
+   "q": "Eros strikes like a blacksmith",
+   "type": "motif",
+   "all_of": [
+    "\\bερ[ωο]",
+    "\\bχαλκευ|\\bπελεκ|\\bκοπτ|\\bεκοψ"
+   ],
+   "headwords": [
+    "ἔρως",
+    "χαλκεύς",
+    "πέλεκυς"
+   ],
+   "reasoning": "Eros together with a smith, an axe or striking (χαλκεύς, πέλεκυς, κόπτω), as in Anacreon 413.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 10,
+   "corpus_loci": [
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 413",
+     "id": "campbell-glp:anacreon:413",
+     "match": "μεγαλω δηυτε μ' ερωσ εκοψεν ωστε χαλκευ … εγαλω δηυτε μ' ερωσ εκοψεν ωστε χαλκευσ\nπελε"
+    },
+    {
+     "author": "ΑΝΑΚΡΕΩΝ",
+     "citation": "απ. 413 Page",
+     "id": "p2_cgl_anthology:402",
+     "match": "μεγαλωι δηυτε μ' ερωσ εκοψεν ωστε χαλκευ … γαλωι δηυτε μ' ερωσ εκοψεν ωστε χαλκευσ\nπελε"
+    },
+    {
+     "author": "Apollonius Rhodius",
+     "citation": "3.261–3.280",
+     "id": "perseus:tlg0001.tlg001.perseus-grc2:3.261–3.280:1",
+     "match": "ν βασιληι.\nτοφρα δ' ερωσ πολιοιο δι' ηεροσ … ξυλα καγκανα χαλκω\nκοπτον· τοι δε λοετρα πυ"
+    },
+    {
+     "author": "Theocritus",
+     "citation": "2.122–2.141",
+     "id": "perseus:tlg0005.tlg001.perseus-grc2:2.122–2.141:1",
+     "match": "ταν.\nφραζεο μευ τον ερωθ' οθεν ικετο, ποτνα … το μοχλω,\nπαντωσ κα πελεκεισ και λαμπαδεσ ηνθ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἔρως",
+     "head_meaning": "love",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2265
+    },
+    {
+     "headword": "χαλκεύς",
+     "head_meaning": "a worker in copper",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 54
+    },
+    {
+     "headword": "πέλεκυς",
+     "head_meaning": "an axe",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 203
+    }
+   ]
+  },
+  {
+   "q": "son of Kronos",
+   "type": "cross_lingual",
+   "pattern": "\\bκρονιδ|\\bκρονιων|\\bκρονου\\s+παι|\\bπαι\\s+κρονου",
+   "headwords": [
+    "Κρονίδης",
+    "Κρονίων"
+   ],
+   "reasoning": "English rendering of Κρονίδης / Κρονίων, Zeus.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 685,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 308b",
+     "id": "campbell-glp:alcaeus:308b",
+     "match": "αυγαισ\nμαια γεννατο κρονιδα μιγεισα\nπαμβασιληι"
+    },
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 38A",
+     "id": "campbell-glp:alcaeus:38a",
+     "match": "μ[\nαυτω μοχθον εχην κρονιδαισ βα[σιλευσ κατω\nμ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "-\nρυβρομον πελαγοσ· κρονιδασ\nδε τοι πατηρ αναξ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 18",
+     "id": "campbell-glp:bacchylides:18",
+     "match": "φερτατοσ\nθνατων ην, κρονιδα λυταιου\nσεισιχθονο"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "Κρονίδης",
+     "head_meaning": "son of Cronus",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 529
+    },
+    {
+     "headword": "Κρονίων",
+     "head_meaning": "son of Cronus",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 420
+    }
+   ]
+  },
+  {
+   "q": "Thracian filly, why do you look at me askance",
+   "type": "allusion",
+   "pattern": "πωλε\\s+θρη\\w*κ",
+   "loci": [
+    "Anacreon 417 PMG"
+   ],
+   "reasoning": "Anacreon 417 (πῶλε Θρῃκίη).",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 2,
+   "corpus_loci": [
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 417",
+     "id": "campbell-glp:anacreon:417",
+     "match": "πωλε θρηκιη, τι δη με λοξον ο"
+    },
+    {
+     "author": "ΑΝΑΚΡΕΩΝ",
+     "citation": "απ. 417 Page",
+     "id": "p2_cgl_anthology:404",
+     "match": "πωλε θρηικιη, τι δη με\nλοξον ο"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "bee",
+   "type": "english_concept",
+   "pattern": "\\bμελισσ|\\bμελιττ",
+   "headwords": [
+    "μέλισσα"
+   ],
+   "reasoning": "μέλισσα 'bee'.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 183,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 89",
+     "id": "campbell-glp:alcman:89",
+     "match": "ορεσκωοι και γενοσ μελισσαν\nκαι κνωδαλ' εν βε"
+    },
+    {
+     "author": "Semonides",
+     "citation": "Fragment 7",
+     "id": "campbell-glp:semonides:7",
+     "match": "εν κακον.\nτην δ' εκ μελισσησ· την τισ ευτυχει"
+    },
+    {
+     "author": "Sappho",
+     "citation": "146",
+     "id": "dcc-sappho:frag-118-168:146",
+     "match": "μητε μοι μελι μητε μελισσα"
+    },
+    {
+     "author": "Sappho",
+     "citation": "146",
+     "id": "digital-sappho:fr118-168:29",
+     "match": "μητε μοι μελι μητε μελισσα"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "μέλισσα",
+     "head_meaning": "a bee",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 388
+    }
+   ]
+  },
+  {
+   "q": "ἄνεμος",
+   "type": "greek_lemma",
+   "pattern": "\\bανεμ",
+   "headwords": [
+    "ἄνεμος"
+   ],
+   "reasoning": "Any inflected form of ἄνεμος.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 729,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 326",
+     "id": "campbell-glp:alcaeus:326",
+     "match": "ασυννετημμι των ανεμων στασιν·\nτο μεν γα"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "θροισ,\nοια τε φυλλ' ανεμοσ\nιδασ ανα μηλοβοτο"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 47",
+     "id": "campbell-glp:sappho:47",
+     "match": "ναξε μοι\nφρενασ, ωσ ανεμοσ κατ οροσ δρυσιν ε"
+    },
+    {
+     "author": "Simonides",
+     "citation": "Fragment 543",
+     "id": "campbell-glp:simonides:543",
+     "match": "λαρνακι\nεν δαιδαλεα\nανεμοσ τε μιν πνεων\nκινη"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἄνεμος",
+     "head_meaning": "wind",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1399
+    }
+   ]
+  },
+  {
+   "q": "ἄριστον μὲν ὕδωρ",
+   "type": "greek_phrase",
+   "pattern": "αριστον\\s+μεν\\s+υδωρ",
+   "loci": [
+    "Pind. O. 1.1"
+   ],
+   "reasoning": "Opening of Pindar, Olympian 1.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 2,
+   "corpus_loci": [
+    {
+     "author": "pindarus",
+     "citation": "1.1",
+     "id": "ogc:pindarus.olympia.jsonl:1",
+     "match": "αριστον μεν υδωρ, ο δε χρυσοσ αιθομε"
+    },
+    {
+     "author": "Pindar",
+     "citation": "1.1–1.19",
+     "id": "perseus:tlg0033.tlg001.perseus-grc2:1.1–1.19:1",
+     "match": "αριστον μεν υδωρ, ο δε χρυσοσ αιθομε"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "golden Aphrodite",
+   "type": "epithet",
+   "pattern": "χρυσ\\w*\\s+(τ'\\s+)?αφροδιτ|αφροδιτ\\w*\\s+χρυσ",
+   "headwords": [
+    "χρύσεος",
+    "Ἀφροδίτη"
+   ],
+   "reasoning": "χρυσέη Ἀφροδίτη 'golden Aphrodite' (adjacent words).",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 57,
+   "corpus_loci": [
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:mimnermus:1",
+     "match": "τι δε τερπνον ατερ χρυσησ αφροδιτησ;\nτεθναιην, οτε μο"
+    },
+    {
+     "author": "theognis-elegy",
+     "citation": "bergk_plg2_0238.17",
+     "id": "ogc:theognis-elegy.elegiae.jsonl:359",
+     "match": "σ' ιμεροεντα γαμον, χρυσησ αφροδιτησ"
+    },
+    {
+     "author": "Μίμνερμος",
+     "citation": "Τις δε βίος",
+     "id": "lyric_web:elws:16169:94036:1",
+     "match": "τι δε τερπνον ατερ χρυσησ αφροδιτησ;\nτεθναιην, οτε μο"
+    },
+    {
+     "author": "hesiodus",
+     "citation": "521",
+     "id": "ogc:hesiodus.opera-et-dies.jsonl:518",
+     "match": "υ πω εργα ιδυια πολυχρυσου αφροδιτησ·"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "χρύσεος",
+     "head_meaning": "golden",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1637
+    },
+    {
+     "headword": "Ἀφροδίτη",
+     "head_meaning": "Aphrodite",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1244
+    }
+   ]
+  },
+  {
+   "q": "tears running down the cheeks",
+   "type": "imagery",
+   "all_of": [
+    "\\bδακρυ",
+    "\\bπαρει|\\bπαρηι|\\bπαρη(ιδ|ισ)"
+   ],
+   "headwords": [
+    "δάκρυ",
+    "παρειά",
+    "παρηΐς"
+   ],
+   "reasoning": "Tears (δάκρυ) and cheeks (παρειά, παρηΐς) in one passage.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 51,
+   "corpus_loci": [
+    {
+     "author": "agathias-scholasticus",
+     "citation": "18",
+     "id": "ogc:agathias-scholasticus.epigrammata.jsonl:18",
+     "match": "ιην αθρησω θαμινοισ δακρυσι τεγγομενην. κυπρι … τεην δ', αμεγαρτε, παρειην αθρησω θαμινοισ δ"
+    },
+    {
+     "author": "apollonius-rhodius-epic",
+     "citation": "3.1064",
+     "id": "ogc:apollonius-rhodius-epic.argonautica.jsonl:3709",
+     "match": "ον λιαροισι παρηιδα δακρυσι δευεν … θεσπεσιον λιαροισι παρηιδα δακρυσι δευεν"
+    },
+    {
+     "author": "apollonius-rhodius-epic",
+     "citation": "4.1064",
+     "id": "ogc:apollonius-rhodius-epic.argonautica.jsonl:5114",
+     "match": "ιοσ· σταλαει δ' υπο δακρυ παρειασ … ταλαει δ' υπο δακρυ παρειασ"
+    },
+    {
+     "author": "homerus-epic",
+     "citation": "24.794",
+     "id": "ogc:homerus-epic.ilias.jsonl:15673",
+     "match": "αλερον δε κατειβετο δακρυ παρειων. … δε κατειβετο δακρυ παρειων."
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "δάκρυ",
+     "head_meaning": "a tear",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2
+    },
+    {
+     "headword": "παρειά",
+     "head_meaning": "the cheek",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 233
+    },
+    {
+     "headword": "παρηΐς",
+     "head_meaning": null,
+     "dictionary": null,
+     "corpus_tokens": 67
+    }
+   ]
+  },
+  {
+   "q": "prayer to Aphrodite to come",
+   "type": "motif",
+   "all_of": [
+    "\\bαφροδιτ|\\bκυπρι|\\bκυπρογεν",
+    "\\bελθ|\\bμολε|\\bμολοισ|\\bδευρο|\\bλισσ|\\bλιτ(ομ|αι)"
+   ],
+   "headwords": [
+    "Ἀφροδίτη",
+    "Κύπρις",
+    "ἔρχομαι",
+    "δεῦρο",
+    "λίσσομαι"
+   ],
+   "reasoning": "Aphrodite or Cypris with a call to come or a plea (ἔλθε, μόλε, δεῦρο, λίσσομαι), as in Sappho 1 and 2.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 54,
+   "corpus_loci": [
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 357",
+     "id": "campbell-glp:anacreon:357",
+     "match": "ανωπιδεσ\nπορφυρη τ' αφροδιτη\nσυμπαιζουσιν, επισ … ι σε, συ δ' ευμενησ\nελθ' ημιν, κεχαρισμενησ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "αρ\nιμεραμπυκοσ θεασ\nκυπριδοσ [α]γνα δωρα·\nχει … αν εκπλησομεν, οταν\nελθη· [σ]υ δε βαρειαν κ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "ν,\nνηιν ετι χρυσεασ\nκυπριδοσ θελξιμβροτου.'\nλ … ρτεμιδοσ λευκωλενου\nλισσομενοσ πολεων\nτ' αιγ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:sappho:1",
+     "match": "οικιλοθρον' αθανατ' αφροδιτα,\nπαι διοσ δολοπλοκ … παι διοσ δολοπλοκε, λισσομαι σε,\nμη μ' ασαισ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "Ἀφροδίτη",
+     "head_meaning": "Aphrodite",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1244
+    },
+    {
+     "headword": "Κύπρις",
+     "head_meaning": "Cypris",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 890
+    },
+    {
+     "headword": "ἔρχομαι",
+     "head_meaning": "to come or go",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 6272
+    },
+    {
+     "headword": "δεῦρο",
+     "head_meaning": "hither",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 766
+    },
+    {
+     "headword": "λίσσομαι",
+     "head_meaning": "to beg",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 471
+    }
+   ]
+  },
+  {
+   "q": "eros lusimeles",
+   "type": "cross_lingual",
+   "pattern": "λυσιμελ",
+   "headwords": [
+    "λυσιμελής"
+   ],
+   "reasoning": "Latin-script spelling of Ἔρος λυσιμέλης.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 31,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 3",
+     "id": "campbell-glp:alcman:3",
+     "match": "απ]αλοι ποδεσ\nλυσιμελει τε ποσω, τακερωτε"
+    },
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 118",
+     "id": "campbell-glp:archilochus:118",
+     "match": "αλλα μ' ο λυσιμελησ, ω 'ταιρε, δαμνατ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 130",
+     "id": "campbell-glp:sappho:130",
+     "match": "εροσ δηυτε μ' ο λυσιμελησ δονει,\nγλυκυπικρο"
+    },
+    {
+     "author": "Sappho",
+     "citation": "130",
+     "id": "dcc-sappho:frag-118-168:130",
+     "match": "εροσ δηυτε μ' ο λυσιμελησ δονει,\nγλυκυπικρο"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "λυσιμελής",
+     "head_meaning": "limb-relaxing",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 52
+    }
+   ]
+  },
+  {
+   "q": "Helen left the best of husbands and sailed to Troy",
+   "type": "allusion",
+   "pattern": "ελενα\\s+\\[?το\\]?ν\\s+ανδρα|ανδρα\\s+τον\\s+\\[?πανα?ρ?",
+   "loci": [
+    "Sappho 16.6-9 L-P"
+   ],
+   "reasoning": "Sappho 16.7-8 (Ἐλένα τὸν ἄνδρα / τὸν πανάριστον).",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 5,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Fragment 16",
+     "id": "campbell-glp:sappho:16",
+     "match": "α\nκαλλοσ [ανθ]ρωπων ελενα [το]ν ανδρα\nτον [παναρ]ιστον\nκα"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Frag. 16",
+     "id": "dcc-sappho:frag-16",
+     "match": "α\nκαλλοσ [ανθ]ρωπων ελενα [το]ν ανδρα\nτον [παναρ]ιστον\nκα"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 16",
+     "id": "digital-sappho:fr16:1",
+     "match": "α\nκαλλοσ [ανθ]ρωπων ελενα [το]ν ανδρα\nτον [παναρ]ιστον\nκα"
+    },
+    {
+     "author": "sappho",
+     "citation": "16",
+     "id": "ogc:sappho.fragmenta.jsonl:70",
+     "match": "α καλλοσ [ανθ]ρωπων ελενα [το]ν ανδρα τον [παναρ]ιστον κα"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "tomb",
+   "type": "english_concept",
+   "pattern": "\\bτυμβ|\\bταφ(οσ|ου|ω|ον|οι|ων)\\b|\\bμνημ(α|ατ)",
+   "headwords": [
+    "τύμβος",
+    "τάφος",
+    "μνῆμα"
+   ],
+   "reasoning": "τύμβος, τάφος 'tomb', μνῆμα 'memorial, tomb'.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 789,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "εν αρεταιχμοσ ηρωσ·\nταφον δε ναυβαται\nφωτοσ υ"
+    },
+    {
+     "author": "Simonides",
+     "citation": "Fragment 142D.",
+     "id": "campbell-glp:simonides:142d",
+     "match": "ευκ' οστεα τωδ' ενι τυμβω\nισκω ετι τρομεειν"
+    },
+    {
+     "author": "Simonides",
+     "citation": "Fragment 531",
+     "id": "campbell-glp:simonides:531",
+     "match": "ποτμοσ,\nβωμοσ δ' ο ταφοσ, προ γοων δε μναστι"
+    },
+    {
+     "author": "Simonides",
+     "citation": "Fragment 83D.",
+     "id": "campbell-glp:simonides:83d",
+     "match": "μνημα τοδε κλεινοιο μεγισ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "τύμβος",
+     "head_meaning": "a sepulchral mound",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 936
+    },
+    {
+     "headword": "τάφος",
+     "head_meaning": "a burial",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1115
+    },
+    {
+     "headword": "μνῆμα",
+     "head_meaning": "a memorial",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 282
+    }
+   ]
+  },
+  {
+   "q": "ῥόδον",
+   "type": "greek_lemma",
+   "pattern": "\\bβ?ροδ(ον|α|ων|οισ|οισι|ου|ω)\\b|\\bβ?ροδε",
+   "headwords": [
+    "ῥόδον",
+    "ῥόδεος"
+   ],
+   "reasoning": "ῥόδον (Aeolic βρόδον) and the adjective ῥόδεος.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 215,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "ωκε δολιοσ αφροδιτα ροδοισ ερεμνον.\nαπιστον ο"
+    },
+    {
+     "author": "Ibycus",
+     "citation": "Fragment 288",
+     "id": "campbell-glp:ibycus:288",
+     "match": "ανοβλεφαροσ πει-\nθω ροδεοισιν εν ανθεσι θρεψ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 2",
+     "id": "campbell-glp:sappho:2",
+     "match": "δι' υσδων\nμαλινων, βροδοισι δε παισ ο χωροσ\nεσκ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 55",
+     "id": "campbell-glp:sappho:55",
+     "match": "ρον· ου γαρ πεδεχησ βροδων\nτων εκ πιεριασ, αλλ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ῥόδον",
+     "head_meaning": "the rose",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 360
+    },
+    {
+     "headword": "ῥόδεος",
+     "head_meaning": "of roses",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 57
+    }
+   ]
+  },
+  {
+   "q": "Ζεῦ πάτερ",
+   "type": "greek_phrase",
+   "pattern": "\\bζευ\\s+πατερ\\b",
+   "headwords": [
+    "Ζεύς",
+    "πατήρ"
+   ],
+   "reasoning": "The invocation Ζεῦ πάτερ.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 112,
+   "corpus_loci": [
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 94",
+     "id": "campbell-glp:archilochus:94",
+     "match": "‘ω ζευ πατερ ζευ, σον μεν ουρανο"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "ν τε· ‘μεγαλοσθενεσ\nζευ πατερ, ακουσον· ειπερ με"
+    },
+    {
+     "author": "Simonides",
+     "citation": "Fragment 543",
+     "id": "campbell-glp:simonides:543",
+     "match": "υλια δε τισ φανειη,\nζευ πατερ, εκ σεο·\nοττι δε θα"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "17.53",
+     "id": "ogc:bacchylides.tlg0199-tlg002.jsonl:129",
+     "match": "ζευ πατερ, ακουσον· ειπερ μ[ε"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "Ζεύς",
+     "head_meaning": "Zeus",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 10011
+    },
+    {
+     "headword": "πατήρ",
+     "head_meaning": "a father",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 5810
+    }
+   ]
+  },
+  {
+   "q": "earth-shaker",
+   "type": "epithet",
+   "pattern": "ενοσιχθ|εννοσιγαι|ενοσιγαι|σεισιχθ",
+   "headwords": [
+    "ἐνοσίχθων",
+    "ἐννοσίγαιος",
+    "σεισίχθων"
+   ],
+   "reasoning": "ἐνοσίχθων, ἐννοσίγαιος, σεισίχθων 'earth-shaker', Poseidon.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 234,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "δε και σε τροιζηνια σεισιχθονι\nφυτευσεν αιθρα π"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 18",
+     "id": "campbell-glp:bacchylides:18",
+     "match": "ην, κρονιδα λυταιου\nσεισιχθονοσ τεκοσ·\nσυν τ' α"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "17.58",
+     "id": "ogc:bacchylides.tlg0199-tlg002.jsonl:134",
+     "match": "δε και σε τροιζηνια σεισιχθονι"
+    },
+    {
+     "author": "bacchylides",
+     "citation": "18.22",
+     "id": "ogc:bacchylides.tlg0199-tlg002.jsonl:230",
+     "match": "σεισιχθονοσ τεκοσ·"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "Ἐνοσίχθων",
+     "head_meaning": "Earth-shaker",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 147
+    },
+    {
+     "headword": "ἐννοσίγαιος",
+     "head_meaning": "the Earth-shaker",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 0
+    },
+    {
+     "headword": "σεισίχθων",
+     "head_meaning": "earth-shaker",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 14
+    }
+   ]
+  },
+  {
+   "q": "lightning hurled by Zeus",
+   "type": "imagery",
+   "all_of": [
+    "\\bκεραυν|\\bαστεροπ|\\bστεροπ",
+    "\\bζευ|\\bζην|\\bδι(οσ|ι|α)\\b|\\bκρονιδ|\\bκρονιων"
+   ],
+   "headwords": [
+    "κεραυνός",
+    "ἀστεροπή",
+    "Ζεύς"
+   ],
+   "reasoning": "Thunderbolt or lightning (κεραυνός, ἀστεροπή, στεροπή) with Zeus.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 178,
+   "corpus_loci": [
+    {
+     "author": "bacchylides",
+     "citation": "8.26",
+     "id": "ogc:bacchylides.tlg0199-tlg001.jsonl:473",
+     "match": "ω ζευ κεραυνεγχεσ, κα[ι επ' αργυ … ω ζευ κεραυνεγχεσ, κα[ι ε"
+    },
+    {
+     "author": "pindarus",
+     "citation": "9.19",
+     "id": "ogc:pindarus.nemea.jsonl:575",
+     "match": "οδον· ουδε κρονιων αστεροπαν ελελιξαισ οικοθεν … ορνιχων οδον· ουδε κρονιων αστεροπαν ελελιξαισ"
+    },
+    {
+     "author": "pindarus",
+     "citation": "10.8",
+     "id": "ogc:pindarus.nemea.jsonl:619",
+     "match": "εν θηβαισ υπεδεκτο κεραυνωθεισα διοσ βελεσιν … εδεκτο κεραυνωθεισα διοσ βελεσιν"
+    },
+    {
+     "author": "pindarus",
+     "citation": "10.71",
+     "id": "ogc:pindarus.nemea.jsonl:682",
+     "match": "ορον πλαξε ψολοεντα κεραυνον· … ζευσ δ' επ' ιδα πυρφορο"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "κεραυνός",
+     "head_meaning": "a thunderbolt",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 437
+    },
+    {
+     "headword": "ἀστεροπή",
+     "head_meaning": "lightning",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 91
+    },
+    {
+     "headword": "Ζεύς",
+     "head_meaning": "Zeus",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 10011
+    }
+   ]
+  },
+  {
+   "q": "lament for a dead child",
+   "type": "motif",
+   "all_of": [
+    "\\bθαν|\\bολωλ|\\bαπωλ|\\bφθιμεν|\\bτεθν|\\bφθιτ",
+    "\\bπαι[σδ]|\\bτεκν|\\bκουρ|\\bκορ(α|η)",
+    "\\bθρην|\\bοδυρ|\\bκλαι|\\bκλαυ|\\bγο(οσ|ον|ου|οι|ων|οισ)\\b|\\bδακρυ|\\bστεν"
+   ],
+   "headwords": [
+    "θάνατος",
+    "παῖς",
+    "τέκνον",
+    "θρῆνος",
+    "ὀδύρομαι",
+    "κλαίω",
+    "γόος"
+   ],
+   "reasoning": "Death, a child (παῖς, τέκνον, κούρη) and lament (θρῆνος, ὀδύρομαι, κλαίω, γόος, δάκρυ, στένω) in one passage.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 111,
+   "corpus_loci": [
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "οιστον\nψυχαισιν επι φθιμενων·\nου τοι δεοσ.' ωσ … νομενευσ αγερω-\nχοι παιδεσ· ευ ερδων δε μη κ … ε προσεφα μελεαγροσ\nδακρυοεισ· ‘χαλεπον\nθεων"
+    },
+    {
+     "author": "Callinus",
+     "citation": "Fragment 1",
+     "id": "campbell-glp:callinus:1",
+     "match": "αλοχου\nδυσμενεσιν· θανατοσ δε τοτ' εσσεται … χεσθαι\nγησ περι και παιδων κουριδιησ τ' αλοχ … ινοσ,\nτον δ' ολιγοσ στεναχει και μεγασ, ην τ"
+    },
+    {
+     "author": "Alcaeus of Mytilene",
+     "citation": "Wikisource additional fragment 14; Edmonds 14",
+     "id": "p2_alcaeus:elws:20686:122262:Edmonds-additional:14",
+     "match": "ρηα δ' ανθρω[ποισ] θανατω ρυεσθε δακρυοεντ … ]οπο[ν] λιποντε[σ]\n[παιδεσ ιφθ]ιμοι διοσ ηδε … ποισ] θανατω ρυεσθε δακρυοεντοσ\nδακρυοεντοσ\nε"
+    },
+    {
+     "author": "Pindar",
+     "citation": "10.60–10.79",
+     "id": "perseus:tlg0033.tlg003.perseus-grc2:10.60–10.79:1",
+     "match": "ριδασ,\nκαι νιν ουπω τεθναοτ', ασθματι δε φρι … τικα γαρ\nηλθε ληδασ παισ διωκων· τοι δ' εναν … εν.\nθερμα δη τεγγων δακρυα στοναχαισ\nορθιον φ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "θάνατος",
+     "head_meaning": "death",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1749
+    },
+    {
+     "headword": "παῖς",
+     "head_meaning": "a child",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 7909
+    },
+    {
+     "headword": "τέκνον",
+     "head_meaning": "that which is borne …",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1688
+    },
+    {
+     "headword": "θρῆνος",
+     "head_meaning": "a funeral-song",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 211
+    },
+    {
+     "headword": "ὀδύρομαι",
+     "head_meaning": "to lament",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 304
+    },
+    {
+     "headword": "κλαίω",
+     "head_meaning": "to weep",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 728
+    },
+    {
+     "headword": "γόος",
+     "head_meaning": "weeping",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 382
+    }
+   ]
+  },
+  {
+   "q": "a sea-purple bird of spring",
+   "type": "allusion",
+   "pattern": "αλιπορφυρ",
+   "loci": [
+    "Alcman 26 PMG"
+   ],
+   "reasoning": "Alcman 26 (ἁλιπόρφυρος ἱαρὸς ὄρνις), the kingfisher.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 14,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 26",
+     "id": "campbell-glp:alcman:26",
+     "match": "ι\nνηδεεσ ητορ εχων, αλιπορφυροσ ιαροσ ορνισ."
+    },
+    {
+     "author": "anacreontea",
+     "citation": "35",
+     "id": "ogc:anacreontea.anacreontea.jsonl:28",
+     "match": "α νυκτοσ εγχαθευδων αλιπορφυροισ ταπτησιν, γεγανω"
+    },
+    {
+     "author": "Αλκμάν",
+     "citation": "Ου μ' έτι, παρθενικαί μελιγάρυες",
+     "id": "lyric_web:elws:17308:149925:1",
+     "match": "ι\nνηδεεσ ητορ εχων, αλιπορφυροσ ιαροσ ορνισ."
+    },
+    {
+     "author": "homerus-epic",
+     "citation": "6.53",
+     "id": "ogc:homerus-epic.odyssea.jsonl:2768",
+     "match": "ηλακατα στρωφωσ' αλιπορφυρα· τω δε θυραζε"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "river",
+   "type": "english_concept",
+   "pattern": "\\bποταμ",
+   "headwords": [
+    "ποταμός"
+   ],
+   "reasoning": "ποταμός 'river'.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 825,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 45",
+     "id": "campbell-glp:alcaeus:45",
+     "match": "εβρε, κ[αλ]λιστοσ ποταμων παρ α[ινον\nεξι[ησ"
+    },
+    {
+     "author": "Ibycus",
+     "citation": "Fragment 286",
+     "id": "campbell-glp:ibycus:286",
+     "match": "σ αρδομεναι ροαν\nεκ ποταμων, ινα παρθενων\nκαπ"
+    },
+    {
+     "author": "Simonides",
+     "citation": "Fragment 581",
+     "id": "campbell-glp:simonides:581",
+     "match": "κλεοβουλον,\nαεναοισ ποταμοισ ανθεσι τ' ειαριν"
+    },
+    {
+     "author": "Simonides",
+     "citation": "Fragment 83D.",
+     "id": "campbell-glp:simonides:83d",
+     "match": "οτε μηδοι\nσπερχειον ποταμον κτειναν αμειψαμεν"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ποταμός",
+     "head_meaning": "a river",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2297
+    }
+   ]
+  },
+  {
+   "q": "μέλισσα",
+   "type": "greek_lemma",
+   "pattern": "\\bμελισσ|\\bμελιττ",
+   "headwords": [
+    "μέλισσα"
+   ],
+   "reasoning": "Any form of μέλισσα (Attic μέλιττα).",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 183,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 89",
+     "id": "campbell-glp:alcman:89",
+     "match": "ορεσκωοι και γενοσ μελισσαν\nκαι κνωδαλ' εν βε"
+    },
+    {
+     "author": "Semonides",
+     "citation": "Fragment 7",
+     "id": "campbell-glp:semonides:7",
+     "match": "εν κακον.\nτην δ' εκ μελισσησ· την τισ ευτυχει"
+    },
+    {
+     "author": "Sappho",
+     "citation": "146",
+     "id": "dcc-sappho:frag-118-168:146",
+     "match": "μητε μοι μελι μητε μελισσα"
+    },
+    {
+     "author": "Sappho",
+     "citation": "146",
+     "id": "digital-sappho:fr118-168:29",
+     "match": "μητε μοι μελι μητε μελισσα"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "μέλισσα",
+     "head_meaning": "a bee",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 388
+    }
+   ]
+  },
+  {
+   "q": "silver-bowed",
+   "type": "epithet",
+   "pattern": "αργυροτοξ",
+   "headwords": [
+    "ἀργυρότοξος"
+   ],
+   "reasoning": "ἀργυρότοξος 'of the silver bow', Apollo.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 42,
+   "corpus_loci": [
+    {
+     "author": "homerus-epic",
+     "citation": "21.229",
+     "id": "ogc:homerus-epic.ilias.jsonl:13085",
+     "match": "ω ποποι αργυροτοξε διοσ τεκοσ ου συ γ"
+    },
+    {
+     "author": "homerus-epic",
+     "citation": "2.766",
+     "id": "ogc:homerus-epic.ilias.jsonl:1377",
+     "match": "τασ εν πηρειη θρεψ' αργυροτοξοσ απολλων"
+    },
+    {
+     "author": "homerus-epic",
+     "citation": "24.56",
+     "id": "ogc:homerus-epic.ilias.jsonl:14935",
+     "match": "και τουτο τεον εποσ αργυροτοξε"
+    },
+    {
+     "author": "homerus-epic",
+     "citation": "24.758",
+     "id": "ogc:homerus-epic.ilias.jsonl:15637",
+     "match": "αι, τω ικελοσ ον τ' αργυροτοξοσ απολλων"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἀργυρότοξος",
+     "head_meaning": "with silver bow",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 64
+    }
+   ]
+  },
+  {
+   "q": "garlands of flowers",
+   "type": "imagery",
+   "all_of": [
+    "\\bστεφαν|\\bυποθυμιδ|\\bπλεκτ",
+    "\\bανθ(οσ|εοσ|ει|εα|εων|εσι|εσιν|εμ)|\\bβ?ροδ|\\bσελιν|\\bανηθ|\\bιων\\b"
+   ],
+   "headwords": [
+    "στέφανος",
+    "ὑποθυμίς",
+    "ἄνθος",
+    "ῥόδον",
+    "σέλινον",
+    "ἄνηθον"
+   ],
+   "reasoning": "A garland (στέφανος, ὑποθυμίς, πλεκτός) with flowers or plants (ἄνθος, ῥόδον, σέλινον, ἄνηθον, ἴον), as in Sappho 81 and 94.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 66,
+   "corpus_loci": [
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 396",
+     "id": "campbell-glp:anacreon:396",
+     "match": "'⟩ ανθεμοεντασ ημιν\nστεφανουσ· ενεικον, ωσ δη … νον ω παι φερε ⟨δ'⟩ ανθεμοεντασ ημιν\nστεφανου"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "θηκαν\nολβιον τ[εκοσ στεφανω]ν κυρησαι·\nθροησε … οτ[ε . . . . . .] . ιων\n. . . .]νοσ εφαμερο"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 94",
+     "id": "campbell-glp:sappho:94",
+     "match": "χομεν.\nπο[λλοισ γαρ στεφαν]οισ ιων\nκαι βρ[οδων … λοισ γαρ στεφαν]οισ ιων\nκαι βρ[οδων κρο]κιω"
+    },
+    {
+     "author": "Stesichorus",
+     "citation": "Fragment 187",
+     "id": "campbell-glp:stesichorus:187",
+     "match": "φυλλα\nκαι ροδινουσ στεφανουσ ιων τε κορωνιδασ … ε μυρσινα φυλλα\nκαι ροδινουσ στεφανουσ ιων"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "στέφανος",
+     "head_meaning": "that which surrounds",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1011
+    },
+    {
+     "headword": "ὑποθυμίς",
+     "head_meaning": "a garland",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 16
+    },
+    {
+     "headword": "ἄνθος",
+     "head_meaning": "a blossom",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 933
+    },
+    {
+     "headword": "ῥόδον",
+     "head_meaning": "the rose",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 360
+    },
+    {
+     "headword": "σέλινον",
+     "head_meaning": "parsley",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 131
+    },
+    {
+     "headword": "ἄνηθον",
+     "head_meaning": "anise",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 21
+    }
+   ]
+  },
+  {
+   "q": "κῦμα",
+   "type": "greek_lemma",
+   "pattern": "\\bκυμ(α|ατ)",
+   "headwords": [
+    "κῦμα"
+   ],
+   "reasoning": "Any form of κῦμα 'wave'.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 679,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 326",
+     "id": "campbell-glp:alcaeus:326",
+     "match": "ν·\nτο μεν γαρ ενθεν κυμα κυλινδεται,\nτο δ' ε"
+    },
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 6",
+     "id": "campbell-glp:alcaeus:6",
+     "match": "τοδ' αυτε κυμα τω προτερω †νεμω\nστ"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 26",
+     "id": "campbell-glp:alcman:26",
+     "match": "λοσ ειην,\nοσ τ' επι κυματοσ ανθοσ αμ' αλκυον"
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 376",
+     "id": "campbell-glp:anacreon:376",
+     "match": "οσ\nπετρησ εσ πολιον κυμα κολυμβω μεθυων ερωτ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "κῦμα",
+     "head_meaning": "anything swollen",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1383
+    }
+   ]
+  },
+  {
+   "q": "the mountain peaks and ravines are asleep",
+   "type": "allusion",
+   "pattern": "ευδουσι\\s+δ\\W?\\s*ορεων|ορεων\\s+κορυφαι",
+   "loci": [
+    "Alcman 89 PMG"
+   ],
+   "reasoning": "Alcman 89 (εὕδουσι δ’ ὀρέων κορυφαί τε καὶ φάραγγες).",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 7,
+   "corpus_loci": [
+    {
+     "author": "Alcman",
+     "citation": "Fragment 89",
+     "id": "campbell-glp:alcman:89",
+     "match": "ευδουσι δ' ορεων κορυφαι τε και φαρα"
+    },
+    {
+     "author": "Sappho",
+     "citation": "FRAGMENT 44Α — (a) Column i",
+     "id": "digital-sappho:fr44:section:1c5658026225ae91",
+     "match": "μαι\nαδμησ οιοπο]λων ορεων κορυφαισ' επι\nθηρευοισ'· αγ"
+    },
+    {
+     "author": "sappho",
+     "citation": "44",
+     "id": "ogc:sappho.fragmenta.jsonl:98",
+     "match": "μαι αδμησ οιοπο]λων ορεων κορυφαισ' επι θηρευοισ'· αγ"
+    },
+    {
+     "author": "Αλκμάν",
+     "citation": "Εύδουσιν δ' ορέων",
+     "id": "lyric_web:elws:17911:125703:1",
+     "match": "ευδουσιν δ' ορεων κορυφαι τε και φαραγγεσ,\nπρ"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "laughter-loving Aphrodite",
+   "type": "epithet",
+   "pattern": "φιλομμειδ|φιλομειδ",
+   "headwords": [
+    "φιλομμειδής"
+   ],
+   "reasoning": "φιλομμειδής 'laughter-loving', epithet of Aphrodite.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 34,
+   "corpus_loci": [
+    {
+     "author": "hesiodus",
+     "citation": "256",
+     "id": "ogc:hesiodus.theogonia.jsonl:253",
+     "match": "γλαυκονομη τε φιλομμειδησ και ποντοπορεια"
+    },
+    {
+     "author": "hesiodus",
+     "citation": "989",
+     "id": "ogc:hesiodus.theogonia.jsonl:998",
+     "match": "ιδ' αταλα φρονεοντα φιλομμειδησ αφροδιτη"
+    },
+    {
+     "author": "homerus-epic",
+     "citation": "20.40",
+     "id": "ogc:homerus-epic.ilias.jsonl:12393",
+     "match": "λητω τε ξανθοσ τε φιλομειδησ τ' αφροδιτη."
+    },
+    {
+     "author": "homerus-epic",
+     "citation": "3.424",
+     "id": "ogc:homerus-epic.ilias.jsonl:1912",
+     "match": "' αρα διφρον ελουσα φιλομειδησ αφροδιτη"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "φιλομμειδής",
+     "head_meaning": "laughter-loving",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 66
+    }
+   ]
+  },
+  {
+   "q": "the nightingale's song in spring",
+   "type": "imagery",
+   "all_of": [
+    "\\bαηδο[νι]|\\bαηδω",
+    "\\bεαρ|\\bειαρ|\\bηροσ\\b|\\bεαροσ|\\bεαρι"
+   ],
+   "headwords": [
+    "ἀηδών",
+    "ἔαρ"
+   ],
+   "reasoning": "The nightingale (ἀηδών) and spring (ἔαρ, εἶαρ) in one passage, as in Sappho 136.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 8,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "136",
+     "id": "dcc-sappho:frag-118-168:136",
+     "match": "αγγελοσ ιμεροφωνοσ αηδων … ηροσ αγγελοσ ιμεροφωνοσ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "136",
+     "id": "digital-sappho:fr118-168:19",
+     "match": "αγγελοσ ιμεροφωνοσ αηδων … ηροσ αγγελοσ ιμεροφωνοσ"
+    },
+    {
+     "author": "sappho",
+     "citation": "136",
+     "id": "ogc:sappho.fragmenta.jsonl:35",
+     "match": "αγγελοσ ιμεροφωνοσ αηδων … ηροσ αγγελοσ ιμεροφωνοσ"
+    },
+    {
+     "author": "nonnus",
+     "citation": "48.588",
+     "id": "ogc:nonnus.dionysiaca.jsonl:20941",
+     "match": "ειαρινων ελιγαινον αηδονεσ υψοθι φυλλων. … ειαρινων ελιγαινον αηδον"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἀηδών",
+     "head_meaning": "the songstress",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 172
+    },
+    {
+     "headword": "ἔαρ",
+     "head_meaning": "spring",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 392
+    }
+   ]
+  },
+  {
+   "q": "I long and I yearn",
+   "type": "allusion",
+   "pattern": "ποθηω\\s+και\\s+μαομαι",
+   "loci": [
+    "Sappho 36 L-P"
+   ],
+   "reasoning": "Sappho 36 (καὶ ποθήω καὶ μάομαι).",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 3,
+   "corpus_loci": [
+    {
+     "author": "Sappho",
+     "citation": "Frag. 36",
+     "id": "dcc-sappho:frag-36",
+     "match": "και ποθηω και μαομαι"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 36",
+     "id": "digital-sappho:fr36:1",
+     "match": "και ποθηω και μαομαι"
+    },
+    {
+     "author": "sappho",
+     "citation": "36",
+     "id": "ogc:sappho.fragmenta.jsonl:90",
+     "match": "και ποθηω και μαομαι"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "child of Zeus",
+   "type": "cross_lingual",
+   "pattern": "\\b(δι|ζην)οσ\\s+(θυγατ|τεκοσ|παι|κουρ|κορ|υι|γονοσ)|\\b(θυγατ|τεκοσ|παι|κουρ|κορ|υι)\\w*\\s+(δι|ζην)οσ\\b",
+   "headwords": [
+    "Ζεύς",
+    "θυγάτηρ",
+    "παῖς",
+    "κούρη"
+   ],
+   "reasoning": "English rendering of Διὸς θύγατερ / παῖ Διός / Διὸς κούρη (adjacent words).",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 399,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 346",
+     "id": "campbell-glp:alcaeus:346",
+     "match": "νον γαρ σεμελασ και διοσ υιοσ λαθικαδεον\nανθρωπ"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 27",
+     "id": "campbell-glp:alcman:27",
+     "match": "μωσ' αγε καλλιοπα θυγατερ διοσ\nαρχ' ερατων ϝεπεων,"
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 348",
+     "id": "campbell-glp:anacreon:348",
+     "match": "σ' ελαφηβολε\nξανθη παι διοσ αγριων\nδεσποιν' αρτ"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 17",
+     "id": "campbell-glp:bacchylides:17",
+     "match": "ν αλγοσ,\nειρεν τε· ‘διοσ υιε φερτατου,\nοσιον ου"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "Ζεύς",
+     "head_meaning": "Zeus",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 10011
+    },
+    {
+     "headword": "θυγάτηρ",
+     "head_meaning": "a daughter",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 2082
+    },
+    {
+     "headword": "παῖς",
+     "head_meaning": "a child",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 7909
+    },
+    {
+     "headword": "κούρη",
+     "head_meaning": null,
+     "dictionary": null,
+     "note": "not a headword of the corpus index; the pattern carries the spelling"
+    }
+   ]
+  },
+  {
+   "q": "Some Saian exults in my shield",
+   "type": "allusion",
+   "pattern": "ασπιδι\\s+μεν\\s+σαι",
+   "loci": [
+    "Archilochus 5 W"
+   ],
+   "reasoning": "Archilochus 5 W (ἀσπίδι μὲν Σαΐων τις ἀγάλλεται).",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 3,
+   "corpus_loci": [
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 6",
+     "id": "campbell-glp:archilochus:6",
+     "match": "ασπιδι μεν σαιων τισ αγαλλεται, ην"
+    },
+    {
+     "author": "Αρχίλοχος",
+     "citation": "6 D.  5 W. (Snell) Plut. Lacon. inst. 34 (p. 239b) - Sext. Emp. Pyrrhon. hypot. 3, 216",
+     "id": "lyric_web:elws:7634:165088:3",
+     "match": "ασπιδι μεν σαιων τισ αγαλλεται, ην"
+    },
+    {
+     "author": "ΑΡΧΙΛΟΧΟΣ",
+     "citation": "απ. 5 West",
+     "id": "p2_cgl_anthology:9",
+     "match": "ασπιδι μεν σαιων τισ αγαλλεται, ην"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "the wrath of Achilles",
+   "type": "allusion",
+   "pattern": "μηνιν\\s+αειδε",
+   "loci": [
+    "Hom. Il. 1.1"
+   ],
+   "reasoning": "Il. 1.1 (μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος).",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 9,
+   "corpus_loci": [
+    {
+     "author": "agathias-scholasticus",
+     "citation": "108",
+     "id": "ogc:agathias-scholasticus.epigrammata.jsonl:108",
+     "match": "αμματικα. ωσ δε το „μηνιν αειδε” και „αλγεα μυρι' ε"
+    },
+    {
+     "author": "homerus-epic",
+     "citation": "1.1",
+     "id": "ogc:homerus-epic.ilias.jsonl:1",
+     "match": "μηνιν αειδε θεα πηληιαδεω αχιλη"
+    },
+    {
+     "author": "Homer",
+     "citation": "1.1–1.20",
+     "id": "perseus:tlg0012.tlg001.perseus-grc2:1.1–1.20:1",
+     "match": "μηνιν αειδε θεα πηληιαδεω αχιλη"
+    },
+    {
+     "author": "Greek Anthology",
+     "citation": "9.572.1–9.572.8",
+     "id": "perseus:tlg7000.tlg001.perseus-grc8:9.572.1–9.572.8:1",
+     "match": "ωσ λογοσ, ησιοδοσ.\nμηνιν αειδε, θεα, και “ανδρα μο"
+    }
+   ],
+   "locus_author_found": true,
+   "headword_evidence": []
+  },
+  {
+   "q": "flowers",
+   "type": "english_concept",
+   "pattern": "\\bανθ(οσ|εοσ|ευσ|ει|εα|εων|εσι|εσιν|εμ|η\\b|εμα|εμων)",
+   "headwords": [
+    "ἄνθος",
+    "ἄνθεμον"
+   ],
+   "reasoning": "ἄνθος, ἄνθεμον 'flower'.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 515,
+   "corpus_loci": [
+    {
+     "author": "Alcaeus",
+     "citation": "Fragment 347",
+     "id": "campbell-glp:alcaeus:347",
+     "match": "υδειη†\n⟨          ⟩\nανθει δε σκολυμοσ· νυν δε"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 26",
+     "id": "campbell-glp:alcman:26",
+     "match": ",\nοσ τ' επι κυματοσ ανθοσ αμ' αλκυονεσσι ποτη"
+    },
+    {
+     "author": "Alcman",
+     "citation": "Fragment 58",
+     "id": "campbell-glp:alcman:58",
+     "match": "⟩\nπαισδει,\nακρ' επ' ανθη καβαινων, α μη μοι"
+    },
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 396",
+     "id": "campbell-glp:anacreon:396",
+     "match": "νον ω παι φερε ⟨δ'⟩ ανθεμοεντασ ημιν\nστεφανου"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "ἄνθος",
+     "head_meaning": "a blossom",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 933
+    },
+    {
+     "headword": "ἄνθεμον",
+     "head_meaning": "plant",
+     "dictionary": "LSJ (Logeion)",
+     "corpus_tokens": 44
+    }
+   ]
+  },
+  {
+   "q": "mother",
+   "type": "english_concept",
+   "pattern": "\\bματ(ηρ|ερ|ρ)|\\bμητ(ηρ|ερ|ρ)",
+   "headwords": [
+    "μήτηρ"
+   ],
+   "reasoning": "μήτηρ (Doric/Aeolic μάτηρ) 'mother'.",
+   "origin": "release S",
+   "split": "development",
+   "relevant_in_corpus": 1706,
+   "corpus_loci": [
+    {
+     "author": "Anacreon",
+     "citation": "Fragment 408",
+     "id": "campbell-glp:anacreon:408",
+     "match": "σησ\nαπολειφθεισ απο μητροσ επτοηθη."
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": "θενοι, φιλασ τ' ανα ματρι χειρασ\nεβαλλον· ο"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 5",
+     "id": "campbell-glp:bacchylides:5",
+     "match": "ν τ' αφαρητα, θοουσ ματρωασ· ου γαρ\nκαρτεροθ"
+    },
+    {
+     "author": "Sappho",
+     "citation": "Fragment 102",
+     "id": "campbell-glp:sappho:102",
+     "match": "γλυκηα ματερ, ουτοι δυναμαι κρεκ"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "μήτηρ",
+     "head_meaning": "a mother",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 3670
+    }
+   ]
+  },
+  {
+   "q": "blood",
+   "type": "english_concept",
+   "pattern": "\\bαιμ(α|ατ)",
+   "headwords": [
+    "αἷμα"
+   ],
+   "reasoning": "αἷμα 'blood'.",
+   "origin": "release S",
+   "split": "held_out",
+   "relevant_in_corpus": 953,
+   "corpus_loci": [
+    {
+     "author": "Archilochus",
+     "citation": "Fragment 7",
+     "id": "campbell-glp:archilochus:7",
+     "match": "εσ ημεασ\nετραπεθ', αιματοεν δ' ελκοσ αναστε"
+    },
+    {
+     "author": "Bacchylides",
+     "citation": "Ode 3",
+     "id": "campbell-glp:bacchylides:3",
+     "match": ".\n] αστυ,\nερευθεται αιματι χρυσο]δινασ\nπακτω"
+    },
+    {
+     "author": "Mimnermus",
+     "citation": "Fragment 13",
+     "id": "campbell-glp:mimnermus:13",
+     "match": "α προμαχουσ\nσευαιθ' αιματοεντοσ εν υσμινη πο"
+    },
+    {
+     "author": "Theognis",
+     "citation": "Lines 341–50",
+     "id": "campbell-glp:theognis:341-50",
+     "match": "ενοσ.\nτων ειη μελαν αιμα πιειν· επι τ' εσθλο"
+    }
+   ],
+   "headword_evidence": [
+    {
+     "headword": "αἷμα",
+     "head_meaning": "blood",
+     "dictionary": "Middle Liddell",
+     "corpus_tokens": 1425
+    }
+   ]
+  }
+ ]
+}

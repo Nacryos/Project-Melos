@@ -1,14 +1,18 @@
-"""Search-quality evaluation (release O): nDCG@10, P@10 and first relevant rank per query.
+"""Search-quality evaluation (releases O and S): nDCG@10, P@10, recall@50 and first relevant rank.
 
   python scripts/search_eval.py count --corpus data/corpus.sqlite      # relevant-item counts (ideal DCG)
   python scripts/search_eval.py run --base https://greeklyric.com --out before.json
+  python scripts/search_eval.py run --base ... --queries data/evaluation/search-eval-s.json          --counts data/evaluation/search-eval-s-counts.json --out s.json      # release S set (120 queries)
   python scripts/search_eval.py compare before.json after.json
 
-Queries and the judgement rule: data/evaluation/search-eval-o.json. Every third query
+Queries and the judgement rule: data/evaluation/search-eval-o.json (42 queries) and
+data/evaluation/search-eval-s.json (the same 42 first, then 78 more). Every third query
 (index 2, 5, 8, ...) is held out: it was not looked at while choosing ranking parameters.
 A result is relevant when it is Greek edited text whose normalised text matches the query's
-pattern. A later result that is another copy/edition of an already counted relevant passage
-(same author; at least half of the shorter text's words shared) gains nothing.
+pattern (or, for imagery and motif queries, every pattern in ``all_of``). A later result that
+is another copy/edition of an already counted relevant passage (same author; at least half of
+the shorter text's words shared) gains nothing. recall@50 = distinct relevant passages in the
+first 50 results / min(50, relevant passages in the corpus).
 """
 from __future__ import annotations
 
@@ -31,11 +35,25 @@ QUERIES = ROOT / "data/evaluation/search-eval-o.json"
 SEARCHABLE = ("source_text", "machine_corrected_ocr")
 
 
-def load():
-    data = json.loads(QUERIES.read_text(encoding="utf-8"))
+class AllOf:
+    """Every pattern must match (imagery and motif queries)."""
+
+    def __init__(self, patterns):
+        self.patterns = [re.compile(p) for p in patterns]
+
+    def search(self, text):
+        return all(p.search(text) for p in self.patterns)
+
+
+def compile_query(q):
+    return AllOf(q["all_of"]) if q.get("all_of") else re.compile(q["pattern"])
+
+
+def load(path=None):
+    data = json.loads(Path(path or QUERIES).read_text(encoding="utf-8"))
     for i, q in enumerate(data["queries"]):
         q["split"] = "held_out" if i % 3 == 2 else "development"
-        q["regex"] = re.compile(q["pattern"])
+        q["regex"] = compile_query(q)
     return data
 
 
@@ -49,7 +67,7 @@ def relevant(record, regex):
 
 
 def count(args):
-    data = load()
+    data = load(args.queries)
     con = sqlite3.connect(f"file:{args.corpus}?mode=ro", uri=True)
     texts = [normalize(t) for (t,) in con.execute(
         "SELECT text FROM passages WHERE language='grc' AND kind='text' AND quality IN ('source_text','machine_corrected_ocr')")]
@@ -73,9 +91,9 @@ def fetch(base, q, limit, mode):
             time.sleep(2)
 
 
-def score(results, regex, n_relevant, k=10):
+def score(results, regex, n_relevant, k=10, k_recall=50):
     gains, seen = [], []
-    for record in results[:k]:
+    for record in results[:max(k, k_recall)]:
         g = 0
         if relevant(record, regex):
             w = words(record.get("text"))
@@ -85,21 +103,23 @@ def score(results, regex, n_relevant, k=10):
                 g = 1
                 seen.append((author, w))
         gains.append(g)
-    dcg = sum(g / math.log2(i + 2) for i, g in enumerate(gains))
+    top = gains[:k]
+    dcg = sum(g / math.log2(i + 2) for i, g in enumerate(top))
     ideal = sum(1 / math.log2(i + 2) for i in range(min(k, n_relevant)))
     first = next((i + 1 for i, g in enumerate(gains) if g), None)
-    return {"ndcg10": round(dcg / ideal, 4) if ideal else 0.0, "p10": sum(gains) / k, "first_relevant": first,
-            "gains": gains}
+    recall = sum(gains[:k_recall]) / min(k_recall, n_relevant) if n_relevant else 0.0
+    return {"ndcg10": round(dcg / ideal, 4) if ideal else 0.0, "p10": sum(top) / k, "recall50": round(min(1.0, recall), 4),
+            "first_relevant": first, "gains": top}
 
 
 def run(args):
-    data = load()
+    data = load(args.queries)
     counts = json.loads(Path(args.counts).read_text(encoding="utf-8"))
     rows = []
     for q in data["queries"]:
         if args.split and q["split"] != args.split:
             continue
-        payload, seconds = fetch(args.base, q["q"], 10, args.mode)
+        payload, seconds = fetch(args.base, q["q"], args.limit, args.mode)
         results = payload.get("results") or []
         s = score(results, q["regex"], counts.get(q["q"], 10))
         rows.append({"q": q["q"], "type": q["type"], "split": q["split"], "seconds": round(seconds, 2), **s,
@@ -118,6 +138,7 @@ def summarise(rows):
         if sel:
             out[split] = {"queries": len(sel), "ndcg10": round(sum(r["ndcg10"] for r in sel) / len(sel), 4),
                           "p10": round(sum(r["p10"] for r in sel) / len(sel), 4),
+                          "recall50": round(sum(r.get("recall50", 0) for r in sel) / len(sel), 4),
                           "mean_seconds": round(sum(r["seconds"] for r in sel) / len(sel), 2)}
     for kind in sorted({r["type"] for r in rows}):
         sel = [r for r in rows if r["type"] == kind]
@@ -139,7 +160,9 @@ def main():
     p = argparse.ArgumentParser()
     sub = p.add_subparsers(dest="cmd", required=True)
     c = sub.add_parser("count"); c.add_argument("--corpus", required=True); c.add_argument("--out", default=str(ROOT / "data/evaluation/search-eval-o-counts.json"))
+    c.add_argument("--queries", default=str(QUERIES))
     r = sub.add_parser("run"); r.add_argument("--base", required=True); r.add_argument("--out", required=True)
+    r.add_argument("--queries", default=str(QUERIES)); r.add_argument("--limit", type=int, default=50)
     r.add_argument("--mode", default="hybrid"); r.add_argument("--split", default=""); r.add_argument("--counts", default=str(ROOT / "data/evaluation/search-eval-o-counts.json"))
     m = sub.add_parser("compare"); m.add_argument("before"); m.add_argument("after")
     args = p.parse_args()

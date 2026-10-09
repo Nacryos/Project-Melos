@@ -373,3 +373,16 @@ linked headword). Parses state `Degree` (`comp.`, `sup.`).
 `/api/lemma/status` → `calibration.groups` lists the fitted groups. `/api/lemma/resolve` answers an alias headword
 with `via: alias_<relation>`. The index has a table `lemma_alias(alias, lemma_id, relation, entry_id)` and
 token_flag bit 2 (`dialect_rule` calibration class).
+
+## Release S additions
+
+- `/api/search?mode=hybrid`: fused lists and weights per query class come from `backend/search_stack_weights.json`
+  (see `docs/retrieval.md`, "Release S"). Results carry the new list names in `retrieval_ranks` and
+  `matched_evidence` (`keyword`, `headword`, `dense_bge-m3_grc|eng|comm`, `dense_shlm_grc|eng|comm`, `notes`); the
+  response adds `stack.seconds` (time per list) and `stack.keyword_variants` / `stack.headwords` when used.
+  `MELOS_SEARCH_STACK=0` restores release R's fusion.
+- `GET /api/commentary/status`: commentary sources (title, author, year, licence, repository, note and passage
+  counts) and the display rule.
+- `GET /api/commentary/notes?passage_id=…&limit=20`: notes linked to a passage: `source`, `author`, `year`,
+  `locator`, `page`, `url`, `licence`, `citation`, `display` (`full` for public domain, else `quotation`) and
+  `text` (at most 30 words unless public domain).

@@ -1616,15 +1616,13 @@ def lemma_signal(q,*,greek,english):
     return hits,used
 
 
-def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
-                  match='fuzzy',limit=30,order='relevance',offset=0,commentary_assisted=True):
-    """Rank fusion, not arithmetic on unrelated cosine and lexical scores.
+def hybrid_candidates(q,*,author='',language='',include_reference=False,match='fuzzy',commentary_assisted=True,
+                      pool=400,stack=None):
+    """Every ranked candidate list hybrid search fuses, with the weights it fuses them with.
 
-    Fetch translation/commentary evidence before applying output-language and
-    edition filters, so their explicit Greek parents can be returned.
-    """
-    from .retrieval import fuse
-    pool=400
+    ``stack`` (release S, ``backend.search_stack``): None uses the fitted stack when its weights file is
+    present; False keeps release O-R's lists and weights; a list of signal names collects those stack
+    lists as well, with release R's weights (the evaluation lab)."""
     # An explicitly selected translation language is a source lookup. Preserve
     # it in the candidate pool, whose default otherwise excludes non-English
     # translations; Greek output can still use English parent-linked evidence.
@@ -1634,7 +1632,7 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
                 order='relevance',offset=0)
     lexical=search(q=q,mode='words',**common)
     # Long descriptions are not sequences of Greek morphological queries.
-    greek=any(c.isalpha() and ('\u0370'<=c<='\u03ff' or '\u1f00'<=c<='\u1fff') for c in q)
+    greek=any(c.isalpha() and ('Ͱ'<=c<='Ͽ' or 'ἀ'<=c<='῿') for c in q)
     forms=search(q=q,mode='forms',_legacy_multiword_forms=True,**common) if greek or len(tokenize(q))<=2 else {'results':[],'warnings':[]}
     # Word and form matches come back in catalogue order (author, work); fusion needs a
     # relevance order, so both lists are ranked by query-word frequency with length normalisation.
@@ -1650,9 +1648,8 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
         warnings.append('Dense retrieval unavailable; hybrid results currently use lexical/form signals only: '+safe_error(exc))
     extra={}
     weights=None
+    stack_info=None
     with connect() as con:
-        def fetch_record(identifier):
-            return unpack(con.execute('SELECT data FROM passages WHERE id=?',(identifier,)).fetchone())
         # A Latin-script query that the exact wording path already matched is a
         # transliteration of Greek, not an English description.
         # Latin letters that match Greek wording are a transliteration; an English word that only
@@ -1678,16 +1675,67 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
                 warnings.append('Headword signal: passages containing any inflected form of the query’s headwords '
                                 +('(read from the Greek words)' if greek else '(Greek headwords whose dictionary glosses use the English words)')
                                 +' are fused as a ranked list, weighted above the other signals.')
-        fused=fuse(q,lexical['results'],forms['results'],dense,fetch_record,
+        from . import search_stack
+        if stack is not False and (stack or search_stack.enabled()) and commentary_assisted:
+            # Release S: further lists and fitted weights for every list, per query class
+            # (Greek letters or not). English-only bridges stay out of Greek-letter queries.
+            try:
+                lists,stack_info=search_stack.stack_lists(q,con=con,greek=greek,english=not greek,
+                                                          signals=stack if isinstance(stack,(list,tuple)) else None,
+                                                          limit=pool if isinstance(stack,(list,tuple)) else search_stack.STACK_POOL)
+                extra.update(lists)
+                if not isinstance(stack,(list,tuple)):
+                    weights=search_stack.weights_for(greek)
+                    warnings.append('Stacked retrieval (release S): keyword, headword, Greek-text, translation and '
+                                    'commentary vector lists are fused with weights fitted on the development queries of '
+                                    'the search evaluation set.')
+            except (ImportError,OSError,RuntimeError,ValueError,KeyError,sqlite3.Error) as exc:
+                stack_info=None
+                warnings.append('Stacked retrieval unavailable; release R fusion used: '+safe_error(exc))
+    return {'lexical':lexical,'forms':forms,'dense':dense,'extra':extra,'weights':weights,'greek':greek,
+            'warnings':warnings,'query_lemmas':query_lemmas,'stack_info':stack_info}
+
+
+def fuse_candidates(q,c,*,author='',language='',edition='',include_reference=False,order='relevance',
+                    commentary_assisted=True,weights=None,pool=400,extra=None):
+    """Fuse ``hybrid_candidates`` output (optionally other weights or lists) and fold editions."""
+    from .retrieval import fuse, group_editions
+    with connect() as con:
+        def fetch_record(identifier):
+            return unpack(con.execute('SELECT data FROM passages WHERE id=?',(identifier,)).fetchone())
+        fused=fuse(q,c['lexical']['results'],c['forms']['results'],c['dense'],fetch_record,
                    author=author,language=language,edition=edition,
                    include_reference=include_reference,limit=2*pool+1000,offset=0,
                    commentary_assisted=commentary_assisted,author_labels=author_labels(author) if author else (),
-                   author_key=canonical_key,author_keys=component_keys,weights=weights,extra=extra)
+                   author_key=canonical_key,author_keys=component_keys,
+                   weights=c['weights'] if weights is None else weights,extra=c['extra'] if extra is None else extra)
     ranked=order_results(fused['results'],order)
-    from .retrieval import group_editions
     ranked,folded=group_editions(ranked,author_key=canonical_key)
+    return fused,ranked,folded
+
+
+def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
+                  match='fuzzy',limit=30,order='relevance',offset=0,commentary_assisted=True,stack=None):
+    """Rank fusion, not arithmetic on unrelated cosine and lexical scores.
+
+    Fetch translation/commentary evidence before applying output-language and
+    edition filters, so their explicit Greek parents can be returned.
+    """
+    pool=400
+    c=hybrid_candidates(q,author=author,language=language,include_reference=include_reference,match=match,
+                        commentary_assisted=commentary_assisted,pool=pool,stack=stack)
+    lexical,forms,extra,query_lemmas=c['lexical'],c['forms'],c['extra'],c['query_lemmas']
+    warnings=c['warnings']
+    fused,ranked,folded=fuse_candidates(q,c,author=author,language=language,edition=edition,
+                                        include_reference=include_reference,order=order,
+                                        commentary_assisted=commentary_assisted,pool=pool)
     if folded:
         warnings.append('Other editions of the same passage (same author, most words shared) are listed under the first-ranked copy in editions.')
+    if order=='relevance' and c['stack_info'] is not None and not isinstance(stack,(list,tuple)):
+        from .search_rerank import rerank
+        ranked,note=rerank(q,ranked,greek=c['greek'])
+        if note:
+            warnings.append(note)
     if lexical.get('transliteration_phrase') and order=='relevance':
         # A proved complete source phrase outranks an unrelated dense-only hit.
         # Preserve RRF ordering inside each tier; scores remain RRF, not a
@@ -1697,7 +1745,7 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
             and evidence.get('match_reason')=='Source-confirmed transliteration phrase'
             for evidence in item.get('matched_evidence',[])))
     warnings+=fused['warnings']
-    warnings.append('Counts cover a bounded pool of up to 400 word, 400 form and 1,000 dense candidates'+(', 400 English-bridge candidates' if extra else '')+', not every possible match.')
+    warnings.append('Counts cover a bounded pool of up to 400 word, 400 form and 1,000 dense candidates'+(', 400 candidates per further list' if extra else '')+', not every possible match.')
     if order=='chronological':
         warnings.append('Author biography dates order these candidates; they are not secure passage composition dates.')
     excluded={} if include_reference else excluded_exact_matches(q,author,language,edition)
@@ -1710,6 +1758,8 @@ def hybrid_search(q,*,author='',language='',edition='',include_reference=False,
                             if order=='relevance' else 'Requested chronology retained; no phrase-priority override.'))
     if query_lemmas:
         provenance['query_lemmas']=query_lemmas
+    if c['stack_info']:
+        provenance['stack']={k:v for k,v in c['stack_info'].items() if v}
     return {**fused,'results':ranked[offset:offset+limit],'total':len(ranked),'mode':'hybrid',
             'commentary_assisted':commentary_assisted,'warnings':list(dict.fromkeys(warnings)),**excluded,**provenance}
 
@@ -1833,6 +1883,8 @@ from .citation_routes import router as citation_router
 app.include_router(citation_router)
 from .word_headlines import router as headlines_router
 app.include_router(headlines_router)
+from .commentary_routes import router as commentary_router
+app.include_router(commentary_router)
 
 for directory in ('js','css'):
     app.mount('/'+directory,StaticFiles(directory=ROOT/directory),name=directory)

@@ -129,3 +129,43 @@ experiments, not production signals. Weights are in
 The remaining limit is coverage: with one translation per passage there is
 nothing to bridge on, which is why translation sources (Edmonds, Paton, the
 CGL anthology) count as retrieval improvements.
+
+## Release S: stacked retrieval (2026-10-09)
+
+`backend/search_stack.py` adds ranked lists to hybrid fusion, and every list's weight is read from
+`backend/search_stack_weights.json`, fitted on the development queries of
+`data/evaluation/search-eval-s.json` by `scripts/search_lab_s.py fit` (coordinate ascent on nDCG@10 over the
+grid 0–6, separately for queries with Greek letters and for the rest). Held-out queries were never read by the
+fit. Fusion is still weighted reciprocal-rank fusion (`backend.retrieval.fuse`); translation, commentary and note
+hits reach a Greek passage only through an explicit link. Lab figures: `docs/audits/search-lab-s.json`.
+
+| List | What it ranks |
+|---|---|
+| `keyword` | BM25 (FTS5) over normalised Greek text for the query's Greek words, plus at most 8 spelling variants per word found in the corpus vocabulary (Aeolic/Doric/epic vowel and consonant correspondences, single/double consonants, movable nu, then one-letter edits for words of six letters or more). Variants add candidates at weight 0.6 and fill at most 40 % of the list. |
+| `headword` | The query's headwords (Greek words read as headwords; English through dictionary head meanings), each widened to its dictionary variant group and capitalisation variants (weight 0.8 for a variant). |
+| `dense_<model>_<kind>` | Cosine between the query and the passage vectors of one record kind: `grc` Greek text, `eng` English translation, `comm` commentary (scholia and English notes). |
+| `notes` | BM25 over the commentary notes index (`backend/commentary_context.py`), projected to the passages each note is linked to. |
+
+**Encoders compared** (all 116,428 indexed records embedded with each; word windows of 160, word-weighted mean;
+nDCG@10 on all 120 queries with the Greek-text list alone): Krahn et al.'s Ancient Greek–English model
+`kevinkrahn/shlm-grc-en` (MIT) **0.453**; BGE-M3 (MIT, the release O vectors) 0.318; Qwen3-Embedding-0.6B
+(Apache-2.0) 0.269; SPhilBERTa (Apache-2.0) 0.123. Deployed: shlm-grc-en (768 dimensions, float16, 179 MB of
+vectors, 90 M parameters) and BGE-M3. Qwen3 also needs a newer `transformers` than the image has; SPhilBERTa
+was weakest on every split.
+
+**Rerankers compared** on the first 50 stacked results, blended with the fused rank (weight fitted on the
+development queries): mMiniLMv2-L12 mMARCO (Apache-2.0) and BGE-reranker-v2-m3 (Apache-2.0) both lowered
+development nDCG@10 at every weight (0.610 → 0.601 / 0.602 at 0.1), so the fitted weight is 0 and no reranker
+runs; BGE-reranker also costs 2.4 s a query on the laptop GPU. Qwen3-Reranker-0.6B could not be loaded with
+the image's libraries. `backend/search_rerank.py` stays available behind a `rerank` entry in the weights file.
+
+**Commentary notes** (`scripts/build_commentary_context.py` → `data/commentary_context.sqlite`, status at
+`/api/commentary/status`, notes per passage at `/api/commentary/notes?passage_id=`): public-domain commentaries
+from Perseus (Gildersleeve, Pindar 1885; Allen & Sikes, Homeric Hymns 1904; Cholmeley, Theocritus 1901; Perseus
+encoding CC BY-SA 3.0 US) and the Internet Archive (Smyth, Greek Melic Poets 1900; Jebb, Bacchylides 1905;
+Wharton, Sappho 1887, whose OCR has no Greek and so no links). A note is linked to a passage of its poets when the
+passage contains at least two of the Greek word pairs the note quotes (or one pair and a rare word). Owner PDFs
+go in `data/commentary_inbox/` (`name.pdf`, optional `name.json` with title, author, year, licence, url,
+poets); one note per page with its page number. Display rule: a public-domain note may be shown in full; any
+other note feeds only search signals and links, and the API returns at most a 30-word quotation with the full
+citation and link (`commentary_context.display_note`).

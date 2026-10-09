@@ -1,0 +1,60 @@
+{
+ "greek": {
+  "dense_bge-m3_comm": 0.0,
+  "dense_bge-m3_eng": 1.5,
+  "dense_bge-m3_grc": 0.5,
+  "dense_shlm_comm": 0.0,
+  "dense_shlm_eng": 1.0,
+  "dense_shlm_grc": 0.0,
+  "forms": 1.0,
+  "headword": 0.0,
+  "keyword": 0.5,
+  "lemma": 2.0,
+  "lexical": 1.0,
+  "notes": 0.0,
+  "semantic": 1.0
+ },
+ "greek_dev_objective": {
+  "ndcg10": 0.834045,
+  "ndcg10_recall50_mean": 0.770773,
+  "queries": 20
+ },
+ "english": {
+  "bm25_bridge": 1.0,
+  "dense_bge-m3_comm": 0.0,
+  "dense_bge-m3_eng": 1.5,
+  "dense_bge-m3_grc": 0.5,
+  "dense_shlm_comm": 0.25,
+  "dense_shlm_eng": 0.0,
+  "dense_shlm_grc": 3.0,
+  "forms": 0.5,
+  "headword": 0.5,
+  "keyword": 0.0,
+  "lemma": 3.0,
+  "lexical": 1.0,
+  "notes": 1.0,
+  "semantic": 1.0
+ },
+ "english_dev_objective": {
+  "ndcg10": 0.534765,
+  "ndcg10_recall50_mean": 0.481716,
+  "queries": 60
+ },
+ "fitted_on": {
+  "queries": "C:\\Users\\alvin\\melos-s\\data\\evaluation\\search-eval-s.json",
+  "split": "development",
+  "grid": [
+   0.0,
+   0.25,
+   0.5,
+   1.0,
+   1.5,
+   2.0,
+   3.0,
+   4.0,
+   6.0
+  ],
+  "method": "coordinate ascent on development nDCG@10 (ties: mean of nDCG@10 and recall@50)",
+  "at": "2026-10-09T12:18:43Z"
+ }
+}

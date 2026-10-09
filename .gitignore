@@ -33,3 +33,8 @@ screenshots/
 runtime/
 secrets/
 output/imagegen/nature-gallery/
+
+# Owner-provided commentary PDFs (in copyright unless stated): used for derived signals only, never committed
+data/commentary_inbox/*.pdf
+data/commentary_inbox/*.json
+data/embeddings-s/

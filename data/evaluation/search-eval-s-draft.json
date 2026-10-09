@@ -1,0 +1,843 @@
+{
+ "note": "Draft of the 78 queries added in release S (written 2026-10-09 before any release S retriever was run). scripts/build_search_eval_s.py adds the dictionary evidence and corpus loci and writes search-eval-s.json.",
+ "queries": [
+  {
+   "q": "sea",
+   "type": "english_concept",
+   "pattern": "\\bθαλασσ|\\bθαλαττ|\\bποντ(οσ|ου|ω|ον|οιο)\\b|\\bπελαγ",
+   "headwords": [
+    "θάλασσα",
+    "πόντος",
+    "πέλαγος"
+   ],
+   "reasoning": "θάλασσα, πόντος and πέλαγος are the Greek words for the sea."
+  },
+  {
+   "q": "θάλασσα",
+   "type": "greek_lemma",
+   "pattern": "\\bθαλασσ|\\bθαλαττ",
+   "headwords": [
+    "θάλασσα"
+   ],
+   "reasoning": "Any inflected form of θάλασσα (Attic θάλαττα)."
+  },
+  {
+   "q": "γαῖα μέλαινα",
+   "type": "greek_phrase",
+   "pattern": "\\bγαι(α|αν|ησ|η|αι)\\s+μελαιν|\\bμελαιν(α|αν|ησ|η|αι)\\s+γαι|\\bγ[αη]ν?\\s+μελαιν|\\bμελαιν(α|αν|ησ|η)\\s+γ[αη]ν?\\b",
+   "headwords": [
+    "γαῖα",
+    "μέλας"
+   ],
+   "reasoning": "The formula 'black earth': γαῖα / γῆ / Doric γᾶ next to a form of μέλας."
+  },
+  {
+   "q": "limb-loosening",
+   "type": "epithet",
+   "pattern": "λυσιμελ",
+   "headwords": [
+    "λυσιμελής"
+   ],
+   "reasoning": "λυσιμελής 'limb-loosening', epithet of Eros, sleep and death."
+  },
+  {
+   "q": "the moon among the stars",
+   "type": "imagery",
+   "all_of": [
+    "\\bσελ[ηα]νν?[αηε]|\\bμην[ηα]\\b|\\bσεληναι",
+    "\\bαστ[ηε]ρ|\\bαστρ[οαω]"
+   ],
+   "headwords": [
+    "σελήνη",
+    "ἀστήρ",
+    "ἄστρον"
+   ],
+   "reasoning": "The image needs both the moon (σελήνη, Aeolic σελάννα, μήνη) and the stars (ἀστήρ, ἄστρον) in the passage."
+  },
+  {
+   "q": "youth fades quickly",
+   "type": "motif",
+   "all_of": [
+    "\\bηβη|\\bηβα(σ|ν)?\\b|\\bηβησ",
+    "\\bολιγ|\\bμινυνθ|\\bωκυ|\\bταχ|\\bφθιν|\\bοιχ|\\bολλυ|\\bφευγ"
+   ],
+   "headwords": [
+    "ἥβη",
+    "μίνυνθα",
+    "ὀλίγος",
+    "ὠκύς",
+    "φθίνω"
+   ],
+   "reasoning": "Youth (ἥβη) together with a word of brevity or passing (μίνυνθα, ὀλίγος, ὠκύς, ταχύς, φθίνω, οἴχομαι, φεύγω)."
+  },
+  {
+   "q": "black earth",
+   "type": "cross_lingual",
+   "pattern": "\\bγαι(α|αν|ησ|η|αι)\\s+μελαιν|\\bμελαιν(α|αν|ησ|η|αι)\\s+γαι|\\bγ[αη]ν?\\s+μελαιν|\\bμελαιν(α|αν|ησ|η)\\s+γ[αη]ν?\\b",
+   "headwords": [
+    "γαῖα",
+    "μέλας"
+   ],
+   "reasoning": "English rendering of the Greek formula γαῖα μέλαινα."
+  },
+  {
+   "q": "as are the generations of leaves, so are those of men",
+   "type": "allusion",
+   "pattern": "φυλλων\\s+γενε",
+   "loci": [
+    "Hom. Il. 6.146",
+    "Mimnermus 2 W",
+    "Simonides 19 W"
+   ],
+   "reasoning": "Glaucus' simile οἵη περ φύλλων γενεὴ τοίη δὲ καὶ ἀνδρῶν (Il. 6.146), quoted by Simonides and echoed by Mimnermus; relevant passages print φύλλων γενεή."
+  },
+  {
+   "q": "night",
+   "type": "english_concept",
+   "pattern": "\\bνυκτ|\\bνυξ\\b",
+   "headwords": [
+    "νύξ"
+   ],
+   "reasoning": "νύξ, νυκτός 'night'."
+  },
+  {
+   "q": "ἥλιος",
+   "type": "greek_lemma",
+   "pattern": "\\bηελι|\\bηλι(οσ|ου|ω|ον|ε)\\b|\\bαελι",
+   "headwords": [
+    "ἥλιος",
+    "ἠέλιος"
+   ],
+   "reasoning": "ἥλιος with epic ἠέλιος and Aeolic ἀέλιος."
+  },
+  {
+   "q": "ἔρος δηὖτέ μ’ ὀ λυσιμέλης δόνει",
+   "type": "greek_phrase",
+   "pattern": "ερ[ωο]σ\\s+δηυτ|λυσιμελησ\\s+δονει",
+   "loci": [
+    "Sappho 130 L-P"
+   ],
+   "reasoning": "Sappho's line (130 L-P); relevant passages print Ἔρος/Ἔρως δηὖτε or λυσιμέλης δόνει."
+  },
+  {
+   "q": "white-armed",
+   "type": "epithet",
+   "pattern": "λευκωλεν",
+   "headwords": [
+    "λευκώλενος"
+   ],
+   "reasoning": "λευκώλενος 'white-armed', epithet of Hera and other women."
+  },
+  {
+   "q": "an apple reddening on the highest branch",
+   "type": "imagery",
+   "all_of": [
+    "\\bμαλ(ον|α|ων|οισ|ω|ου)\\b|γλυκυμαλ|\\bμηλ(ον|α|ων|οισ|ω|ου)\\b",
+    "ερευθ|υσδ|οσδ|ακροτατ"
+   ],
+   "headwords": [
+    "μῆλον",
+    "γλυκύμαλον",
+    "ἐρεύθω"
+   ],
+   "reasoning": "An apple (μῆλον, Aeolic μᾶλον, γλυκύμαλον) together with reddening (ἐρεύθω) or the branch-top (ὔσδος, ἀκρότατος), as in Sappho 105a."
+  },
+  {
+   "q": "old age and grey hair",
+   "type": "motif",
+   "all_of": [
+    "\\bγηρ",
+    "\\bπολι(οσ|οι|αι|ον|ου|ην|η|ασ|ων|α|ουσ)\\b|\\bλευκ|\\bτριχ|\\bθριξ|\\bκροταφ"
+   ],
+   "headwords": [
+    "γῆρας",
+    "πολιός",
+    "θρίξ"
+   ],
+   "reasoning": "Old age (γῆρας, γηράσκω) together with grey or white hair or temples (πολιός, λευκός, θρίξ, κρόταφος), as in Anacreon 395 and Sappho 58."
+  },
+  {
+   "q": "father of gods and men",
+   "type": "cross_lingual",
+   "pattern": "πατ[ηε]ρ\\s+ανδρων\\s+τε\\s+θεων|ανδρων\\s+τε\\s+θεων\\s+τε",
+   "headwords": [
+    "πατήρ"
+   ],
+   "reasoning": "English rendering of the Homeric formula πατὴρ ἀνδρῶν τε θεῶν τε."
+  },
+  {
+   "q": "some say an army of horsemen is the most beautiful thing on the black earth",
+   "type": "allusion",
+   "pattern": "ιππηων\\s+στροτον|ιππηων\\s+στρατον|οι\\s+μεν\\s+ιππηων",
+   "loci": [
+    "Sappho 16 L-P"
+   ],
+   "reasoning": "Opening of Sappho 16 (ὀ]ἰ μὲν ἰππήων στρότον); relevant passages print ἰππήων στρότον."
+  },
+  {
+   "q": "wind",
+   "type": "english_concept",
+   "pattern": "\\bανεμ|\\bβορε|\\bζεφυρ|\\bνοτ(οσ|ου|ω|ον)\\b",
+   "headwords": [
+    "ἄνεμος",
+    "Βορέας",
+    "Ζέφυρος",
+    "Νότος"
+   ],
+   "reasoning": "ἄνεμος 'wind' and the named winds Boreas, Zephyrus, Notus."
+  },
+  {
+   "q": "νύξ",
+   "type": "greek_lemma",
+   "pattern": "\\bνυκτ|\\bνυξ\\b",
+   "headwords": [
+    "νύξ"
+   ],
+   "reasoning": "Any inflected form of νύξ."
+  },
+  {
+   "q": "φαίνεταί μοι κῆνος ἴσος θέοισιν",
+   "type": "greek_phrase",
+   "pattern": "φαινεται\\s+μοι\\s+κηνοσ|ισοσ\\s+θεοισιν",
+   "loci": [
+    "Sappho 31 L-P"
+   ],
+   "reasoning": "Opening of Sappho 31; relevant passages print its words."
+  },
+  {
+   "q": "cloud-gathering Zeus",
+   "type": "epithet",
+   "pattern": "νεφεληγερετ",
+   "headwords": [
+    "νεφεληγερέτα"
+   ],
+   "reasoning": "νεφεληγερέτα 'cloud-gatherer', epithet of Zeus."
+  },
+  {
+   "q": "wind falling on the oaks of a mountain",
+   "type": "imagery",
+   "all_of": [
+    "\\bανεμ",
+    "\\bδρυ(σ|ι|ν|σιν|ων|εσ|ασ|οσ|ι)\\b|\\bδρυσι"
+   ],
+   "headwords": [
+    "ἄνεμος",
+    "δρῦς"
+   ],
+   "reasoning": "Wind (ἄνεμος) and oaks (δρῦς) in one passage, as in Sappho 47."
+  },
+  {
+   "q": "wine to forget sorrow",
+   "type": "motif",
+   "all_of": [
+    "\\bοιν",
+    "\\bλαθ|\\bληθ|\\bκαδ|\\bκηδ|\\bανι[αη]|\\bμεριμν|\\bπενθ|\\bλυπ"
+   ],
+   "headwords": [
+    "οἶνος",
+    "λαθικηδής",
+    "μέριμνα",
+    "ἀνία"
+   ],
+   "reasoning": "Wine (οἶνος) together with forgetting or care, grief, sorrow (λαθικηδής, λήθη, κῆδος, ἀνία, μέριμνα, πένθος, λύπη), as in Alcaeus 346."
+  },
+  {
+   "q": "glukupikron",
+   "type": "cross_lingual",
+   "pattern": "γλυκυπικρ",
+   "headwords": [
+    "γλυκύπικρος"
+   ],
+   "reasoning": "Latin-script spelling of γλυκύπικρος 'bittersweet'."
+  },
+  {
+   "q": "I cannot understand the strife of the winds",
+   "type": "allusion",
+   "pattern": "ανεμων\\s+στασιν|ασυννετημμι",
+   "loci": [
+    "Alcaeus 326 L-P"
+   ],
+   "reasoning": "Alcaeus 326 (ἀσυννέτημμι τὼν ἀνέμων στάσιν), the 'ship of state' poem."
+  },
+  {
+   "q": "ship",
+   "type": "english_concept",
+   "pattern": "\\bναυσ\\b|\\bνα[υϝ]\\b|\\bναα\\b|\\bνη(οσ|ι|α|ασ|ων|εσσι|εσσιν|υσι|υσιν|εσ)\\b|\\bναυ(σι|σιν|ων)\\b",
+   "headwords": [
+    "ναῦς"
+   ],
+   "reasoning": "ναῦς 'ship' with its epic and Aeolic forms (νηός, νᾶα, νάεσσι)."
+  },
+  {
+   "q": "ὕπνος",
+   "type": "greek_lemma",
+   "pattern": "\\bυπν(οσ|ου|ω|ον|οι|ε|οιο)\\b",
+   "headwords": [
+    "ὕπνος"
+   ],
+   "reasoning": "Any inflected form of ὕπνος."
+  },
+  {
+   "q": "ἄστερες μὲν ἀμφὶ κάλαν σελάνναν",
+   "type": "greek_phrase",
+   "pattern": "αστερεσ\\s+μεν\\s+αμφι\\s+καλαν|αμφι\\s+καλαν\\s+σελανναν",
+   "loci": [
+    "Sappho 34 L-P"
+   ],
+   "reasoning": "Sappho 34."
+  },
+  {
+   "q": "far-shooting Apollo",
+   "type": "epithet",
+   "pattern": "εκηβολ|εκατηβολ|εκατηβελετ|εκαβολ",
+   "headwords": [
+    "ἑκηβόλος",
+    "ἑκατηβόλος",
+    "ἑκατηβελέτης"
+   ],
+   "reasoning": "ἑκηβόλος, ἑκατηβόλος, ἑκατηβελέτης 'far-shooting', epithets of Apollo."
+  },
+  {
+   "q": "snow on the mountains",
+   "type": "imagery",
+   "all_of": [
+    "\\bχιον|\\bνιφ",
+    "\\bορε|\\bουρε|\\bοροσ\\b|\\bορων|\\bορει"
+   ],
+   "headwords": [
+    "χιών",
+    "νιφάς",
+    "ὄρος"
+   ],
+   "reasoning": "Snow (χιών, νιφάς, νίφω) and mountains (ὄρος, epic οὔρεα) in one passage."
+  },
+  {
+   "q": "throwing away the shield in battle",
+   "type": "motif",
+   "all_of": [
+    "\\bασπι[δσ]",
+    "\\bλιπ|\\bλειπ|\\bκαλλιπ|\\bκαλλειπ|\\bαπωλ|\\bριψ|\\bριπτ|\\bβαλ"
+   ],
+   "headwords": [
+    "ἀσπίς",
+    "λείπω",
+    "ῥίπτω"
+   ],
+   "reasoning": "A shield (ἀσπίς) together with leaving, losing or throwing (λείπω, καταλείπω, ἀπόλλυμι, ῥίπτω, βάλλω), as in Archilochus 5 and Anacreon 381."
+  },
+  {
+   "q": "rhododaktylos Eos",
+   "type": "cross_lingual",
+   "pattern": "ροδοδακτυλ",
+   "headwords": [
+    "ῥοδοδάκτυλος"
+   ],
+   "reasoning": "Latin-script spelling of ῥοδοδάκτυλος Ἠώς."
+  },
+  {
+   "q": "creatures of a day: man is the dream of a shadow",
+   "type": "allusion",
+   "pattern": "σκιασ\\s+οναρ|επαμεροι",
+   "loci": [
+    "Pind. P. 8.95-96"
+   ],
+   "reasoning": "Pindar, Pythian 8.95-96 (ἐπάμεροι· τί δέ τις; ... σκιᾶς ὄναρ ἄνθρωπος)."
+  },
+  {
+   "q": "laughter",
+   "type": "english_concept",
+   "pattern": "\\bγελ[αωο]",
+   "headwords": [
+    "γελάω",
+    "γέλως"
+   ],
+   "reasoning": "γελάω 'laugh', γέλως 'laughter'."
+  },
+  {
+   "q": "Ἀφροδίτη",
+   "type": "greek_lemma",
+   "pattern": "\\bαφροδιτ",
+   "headwords": [
+    "Ἀφροδίτη"
+   ],
+   "reasoning": "Any form of Ἀφροδίτη (Aeolic Ἀφρόδιτα)."
+  },
+  {
+   "q": "δέδυκε μὲν ἀ σελάννα",
+   "type": "greek_phrase",
+   "pattern": "δεδυκε\\s+μεν",
+   "loci": [
+    "Sappho 168B Voigt"
+   ],
+   "reasoning": "The 'midnight poem' (δέδυκε μὲν ἀ σελάννα καὶ Πληίαδες)."
+  },
+  {
+   "q": "honey-voiced",
+   "type": "epithet",
+   "pattern": "μελιγαρυ|μελιφθογγ|μελιφων|μελιγλωσσ|μελιγηρυ",
+   "headwords": [
+    "μελίγηρυς",
+    "μελίφθογγος",
+    "μελίγλωσσος"
+   ],
+   "reasoning": "μελίγηρυς / Doric μελιγάρυς, μελίφθογγος, μελίγλωσσος 'honey-voiced, honey-tongued'."
+  },
+  {
+   "q": "a cicada singing in the summer heat",
+   "type": "imagery",
+   "all_of": [
+    "\\bτεττι[γξ]",
+    "\\bθερ(οσ|ουσ|ει|ευσ)\\b|\\bκαυμ|\\bσειρι|\\bαελι|\\bηελι|\\bπνιγ"
+   ],
+   "headwords": [
+    "τέττιξ",
+    "θέρος",
+    "καῦμα",
+    "Σείριος"
+   ],
+   "reasoning": "A cicada (τέττιξ) with summer or heat (θέρος, καῦμα, Σείριος, the sun, πνῖγος), as in Alcaeus 347 and Hesiod Op. 582-584."
+  },
+  {
+   "q": "love as fire",
+   "type": "motif",
+   "all_of": [
+    "\\bερ[ωο](σ|τ|ν)|\\bποθ|\\bιμερ|\\bκυπρ|\\bαφροδιτ",
+    "\\bπυρ\\b|\\bπυρι|\\bπυροσ|\\bφλεγ|\\bφλογ|\\bκαι(ει|ομ|ετ)|\\bοπτ|\\bπυρσ"
+   ],
+   "headwords": [
+    "ἔρως",
+    "πόθος",
+    "πῦρ",
+    "φλέγω",
+    "καίω"
+   ],
+   "reasoning": "Love or desire (ἔρως, πόθος, ἵμερος, Cypris, Aphrodite) together with fire or burning (πῦρ, φλέγω, φλόξ, καίω, ὀπτάω), as in Sappho 31 and 38."
+  },
+  {
+   "q": "poikilothron athanat Aphrodita",
+   "type": "cross_lingual",
+   "pattern": "ποικιλοθρον",
+   "headwords": [
+    "ποικιλόθρονος"
+   ],
+   "reasoning": "Latin-script spelling of the first words of Sappho 1."
+  },
+  {
+   "q": "neither honey nor the bee for me",
+   "type": "allusion",
+   "pattern": "μητε\\s+μοι\\s+μελι",
+   "loci": [
+    "Sappho 146 L-P"
+   ],
+   "reasoning": "Sappho 146 (μήτε μοι μέλι μήτε μέλισσα)."
+  },
+  {
+   "q": "girl",
+   "type": "english_concept",
+   "pattern": "\\bπαρθεν|\\bκορ(α|η|αι|ασ|ην|αν|ησ|αισ|ων)\\b|\\bκουρ(α|η|ην|ασ|αι|ησ)\\b",
+   "headwords": [
+    "παρθένος",
+    "κόρη",
+    "κούρη"
+   ],
+   "reasoning": "παρθένος 'maiden', κόρη / Ionic κούρη 'girl'."
+  },
+  {
+   "q": "πόθος",
+   "type": "greek_lemma",
+   "pattern": "\\bποθ(οσ|ου|ω|ον|οι|ων|οισ|οιο)\\b",
+   "headwords": [
+    "πόθος"
+   ],
+   "reasoning": "Any inflected form of the noun πόθος."
+  },
+  {
+   "q": "χλωροτέρα δὲ ποίας",
+   "type": "greek_phrase",
+   "pattern": "χλωροτερα\\s+δε\\s+ποιασ",
+   "loci": [
+    "Sappho 31.14 L-P"
+   ],
+   "reasoning": "Sappho 31.14."
+  },
+  {
+   "q": "fair-tressed",
+   "type": "epithet",
+   "pattern": "ευπλοκαμ|καλλιπλοκαμ|ηυκομ|ευκομ|καλλικομ",
+   "headwords": [
+    "εὐπλόκαμος",
+    "καλλιπλόκαμος",
+    "ἠΰκομος",
+    "καλλίκομος"
+   ],
+   "reasoning": "εὐπλόκαμος, καλλιπλόκαμος, ἠΰκομος, καλλίκομος 'with lovely hair'."
+  },
+  {
+   "q": "a ship tossed by waves in a storm",
+   "type": "imagery",
+   "all_of": [
+    "\\bναυσ\\b|\\bνα[υϝ]\\b|\\bναα\\b|\\bνη(οσ|ι|α|ασ|ων|εσσι|εσσιν|υσι|υσιν|εσ)\\b|\\bναυ(σι|σιν|ων)\\b",
+    "\\bκυμ(α|ατ)|\\bχειμ"
+   ],
+   "headwords": [
+    "ναῦς",
+    "κῦμα",
+    "χειμών"
+   ],
+   "reasoning": "A ship (ναῦς) with waves or storm (κῦμα, χειμών) in one passage, as in Alcaeus 208 and 6."
+  },
+  {
+   "q": "Eros strikes like a blacksmith",
+   "type": "motif",
+   "all_of": [
+    "\\bερ[ωο]",
+    "\\bχαλκευ|\\bπελεκ|\\bκοπτ|\\bεκοψ"
+   ],
+   "headwords": [
+    "ἔρως",
+    "χαλκεύς",
+    "πέλεκυς"
+   ],
+   "reasoning": "Eros together with a smith, an axe or striking (χαλκεύς, πέλεκυς, κόπτω), as in Anacreon 413."
+  },
+  {
+   "q": "son of Kronos",
+   "type": "cross_lingual",
+   "pattern": "\\bκρονιδ|\\bκρονιων|\\bκρονου\\s+παι|\\bπαι\\s+κρονου",
+   "headwords": [
+    "Κρονίδης",
+    "Κρονίων"
+   ],
+   "reasoning": "English rendering of Κρονίδης / Κρονίων, Zeus."
+  },
+  {
+   "q": "Thracian filly, why do you look at me askance",
+   "type": "allusion",
+   "pattern": "πωλε\\s+θρη\\w*κ",
+   "loci": [
+    "Anacreon 417 PMG"
+   ],
+   "reasoning": "Anacreon 417 (πῶλε Θρῃκίη)."
+  },
+  {
+   "q": "bee",
+   "type": "english_concept",
+   "pattern": "\\bμελισσ|\\bμελιττ",
+   "headwords": [
+    "μέλισσα"
+   ],
+   "reasoning": "μέλισσα 'bee'."
+  },
+  {
+   "q": "ἄνεμος",
+   "type": "greek_lemma",
+   "pattern": "\\bανεμ",
+   "headwords": [
+    "ἄνεμος"
+   ],
+   "reasoning": "Any inflected form of ἄνεμος."
+  },
+  {
+   "q": "ἄριστον μὲν ὕδωρ",
+   "type": "greek_phrase",
+   "pattern": "αριστον\\s+μεν\\s+υδωρ",
+   "loci": [
+    "Pind. O. 1.1"
+   ],
+   "reasoning": "Opening of Pindar, Olympian 1."
+  },
+  {
+   "q": "golden Aphrodite",
+   "type": "epithet",
+   "pattern": "χρυσ\\w*\\s+(τ'\\s+)?αφροδιτ|αφροδιτ\\w*\\s+χρυσ",
+   "headwords": [
+    "χρύσεος",
+    "Ἀφροδίτη"
+   ],
+   "reasoning": "χρυσέη Ἀφροδίτη 'golden Aphrodite' (adjacent words)."
+  },
+  {
+   "q": "tears running down the cheeks",
+   "type": "imagery",
+   "all_of": [
+    "\\bδακρυ",
+    "\\bπαρει|\\bπαρηι|\\bπαρη(ιδ|ισ)"
+   ],
+   "headwords": [
+    "δάκρυ",
+    "παρειά",
+    "παρηΐς"
+   ],
+   "reasoning": "Tears (δάκρυ) and cheeks (παρειά, παρηΐς) in one passage."
+  },
+  {
+   "q": "prayer to Aphrodite to come",
+   "type": "motif",
+   "all_of": [
+    "\\bαφροδιτ|\\bκυπρι|\\bκυπρογεν",
+    "\\bελθ|\\bμολε|\\bμολοισ|\\bδευρο|\\bλισσ|\\bλιτ(ομ|αι)"
+   ],
+   "headwords": [
+    "Ἀφροδίτη",
+    "Κύπρις",
+    "ἔρχομαι",
+    "δεῦρο",
+    "λίσσομαι"
+   ],
+   "reasoning": "Aphrodite or Cypris with a call to come or a plea (ἔλθε, μόλε, δεῦρο, λίσσομαι), as in Sappho 1 and 2."
+  },
+  {
+   "q": "eros lusimeles",
+   "type": "cross_lingual",
+   "pattern": "λυσιμελ",
+   "headwords": [
+    "λυσιμελής"
+   ],
+   "reasoning": "Latin-script spelling of Ἔρος λυσιμέλης."
+  },
+  {
+   "q": "Helen left the best of husbands and sailed to Troy",
+   "type": "allusion",
+   "pattern": "ελενα\\s+\\[?το\\]?ν\\s+ανδρα|ανδρα\\s+τον\\s+\\[?πανα?ρ?",
+   "loci": [
+    "Sappho 16.6-9 L-P"
+   ],
+   "reasoning": "Sappho 16.7-8 (Ἐλένα τὸν ἄνδρα / τὸν πανάριστον)."
+  },
+  {
+   "q": "tomb",
+   "type": "english_concept",
+   "pattern": "\\bτυμβ|\\bταφ(οσ|ου|ω|ον|οι|ων)\\b|\\bμνημ(α|ατ)",
+   "headwords": [
+    "τύμβος",
+    "τάφος",
+    "μνῆμα"
+   ],
+   "reasoning": "τύμβος, τάφος 'tomb', μνῆμα 'memorial, tomb'."
+  },
+  {
+   "q": "ῥόδον",
+   "type": "greek_lemma",
+   "pattern": "\\bβ?ροδ(ον|α|ων|οισ|οισι|ου|ω)\\b|\\bβ?ροδε",
+   "headwords": [
+    "ῥόδον",
+    "ῥόδεος"
+   ],
+   "reasoning": "ῥόδον (Aeolic βρόδον) and the adjective ῥόδεος."
+  },
+  {
+   "q": "Ζεῦ πάτερ",
+   "type": "greek_phrase",
+   "pattern": "\\bζευ\\s+πατερ\\b",
+   "headwords": [
+    "Ζεύς",
+    "πατήρ"
+   ],
+   "reasoning": "The invocation Ζεῦ πάτερ."
+  },
+  {
+   "q": "earth-shaker",
+   "type": "epithet",
+   "pattern": "ενοσιχθ|εννοσιγαι|ενοσιγαι|σεισιχθ",
+   "headwords": [
+    "ἐνοσίχθων",
+    "ἐννοσίγαιος",
+    "σεισίχθων"
+   ],
+   "reasoning": "ἐνοσίχθων, ἐννοσίγαιος, σεισίχθων 'earth-shaker', Poseidon."
+  },
+  {
+   "q": "lightning hurled by Zeus",
+   "type": "imagery",
+   "all_of": [
+    "\\bκεραυν|\\bαστεροπ|\\bστεροπ",
+    "\\bζευ|\\bζην|\\bδι(οσ|ι|α)\\b|\\bκρονιδ|\\bκρονιων"
+   ],
+   "headwords": [
+    "κεραυνός",
+    "ἀστεροπή",
+    "Ζεύς"
+   ],
+   "reasoning": "Thunderbolt or lightning (κεραυνός, ἀστεροπή, στεροπή) with Zeus."
+  },
+  {
+   "q": "lament for a dead child",
+   "type": "motif",
+   "all_of": [
+    "\\bθαν|\\bολωλ|\\bαπωλ|\\bφθιμεν|\\bτεθν|\\bφθιτ",
+    "\\bπαι[σδ]|\\bτεκν|\\bκουρ|\\bκορ(α|η)",
+    "\\bθρην|\\bοδυρ|\\bκλαι|\\bκλαυ|\\bγο(οσ|ον|ου|οι|ων|οισ)\\b|\\bδακρυ|\\bστεν"
+   ],
+   "headwords": [
+    "θάνατος",
+    "παῖς",
+    "τέκνον",
+    "θρῆνος",
+    "ὀδύρομαι",
+    "κλαίω",
+    "γόος"
+   ],
+   "reasoning": "Death, a child (παῖς, τέκνον, κούρη) and lament (θρῆνος, ὀδύρομαι, κλαίω, γόος, δάκρυ, στένω) in one passage."
+  },
+  {
+   "q": "a sea-purple bird of spring",
+   "type": "allusion",
+   "pattern": "αλιπορφυρ",
+   "loci": [
+    "Alcman 26 PMG"
+   ],
+   "reasoning": "Alcman 26 (ἁλιπόρφυρος ἱαρὸς ὄρνις), the kingfisher."
+  },
+  {
+   "q": "river",
+   "type": "english_concept",
+   "pattern": "\\bποταμ",
+   "headwords": [
+    "ποταμός"
+   ],
+   "reasoning": "ποταμός 'river'."
+  },
+  {
+   "q": "μέλισσα",
+   "type": "greek_lemma",
+   "pattern": "\\bμελισσ|\\bμελιττ",
+   "headwords": [
+    "μέλισσα"
+   ],
+   "reasoning": "Any form of μέλισσα (Attic μέλιττα)."
+  },
+  {
+   "q": "silver-bowed",
+   "type": "epithet",
+   "pattern": "αργυροτοξ",
+   "headwords": [
+    "ἀργυρότοξος"
+   ],
+   "reasoning": "ἀργυρότοξος 'of the silver bow', Apollo."
+  },
+  {
+   "q": "garlands of flowers",
+   "type": "imagery",
+   "all_of": [
+    "\\bστεφαν|\\bυποθυμιδ|\\bπλεκτ",
+    "\\bανθ(οσ|εοσ|ει|εα|εων|εσι|εσιν|εμ)|\\bβ?ροδ|\\bσελιν|\\bανηθ|\\bιων\\b"
+   ],
+   "headwords": [
+    "στέφανος",
+    "ὑποθυμίς",
+    "ἄνθος",
+    "ῥόδον",
+    "σέλινον",
+    "ἄνηθον"
+   ],
+   "reasoning": "A garland (στέφανος, ὑποθυμίς, πλεκτός) with flowers or plants (ἄνθος, ῥόδον, σέλινον, ἄνηθον, ἴον), as in Sappho 81 and 94."
+  },
+  {
+   "q": "κῦμα",
+   "type": "greek_lemma",
+   "pattern": "\\bκυμ(α|ατ)",
+   "headwords": [
+    "κῦμα"
+   ],
+   "reasoning": "Any form of κῦμα 'wave'."
+  },
+  {
+   "q": "the mountain peaks and ravines are asleep",
+   "type": "allusion",
+   "pattern": "ευδουσι\\s+δ\\W?\\s*ορεων|ορεων\\s+κορυφαι",
+   "loci": [
+    "Alcman 89 PMG"
+   ],
+   "reasoning": "Alcman 89 (εὕδουσι δ’ ὀρέων κορυφαί τε καὶ φάραγγες)."
+  },
+  {
+   "q": "laughter-loving Aphrodite",
+   "type": "epithet",
+   "pattern": "φιλομμειδ|φιλομειδ",
+   "headwords": [
+    "φιλομμειδής"
+   ],
+   "reasoning": "φιλομμειδής 'laughter-loving', epithet of Aphrodite."
+  },
+  {
+   "q": "the nightingale's song in spring",
+   "type": "imagery",
+   "all_of": [
+    "\\bαηδο[νι]|\\bαηδω",
+    "\\bεαρ|\\bειαρ|\\bηροσ\\b|\\bεαροσ|\\bεαρι"
+   ],
+   "headwords": [
+    "ἀηδών",
+    "ἔαρ"
+   ],
+   "reasoning": "The nightingale (ἀηδών) and spring (ἔαρ, εἶαρ) in one passage, as in Sappho 136."
+  },
+  {
+   "q": "I long and I yearn",
+   "type": "allusion",
+   "pattern": "ποθηω\\s+και\\s+μαομαι",
+   "loci": [
+    "Sappho 36 L-P"
+   ],
+   "reasoning": "Sappho 36 (καὶ ποθήω καὶ μάομαι)."
+  },
+  {
+   "q": "child of Zeus",
+   "type": "cross_lingual",
+   "pattern": "\\b(δι|ζην)οσ\\s+(θυγατ|τεκοσ|παι|κουρ|κορ|υι|γονοσ)|\\b(θυγατ|τεκοσ|παι|κουρ|κορ|υι)\\w*\\s+(δι|ζην)οσ\\b",
+   "headwords": [
+    "Ζεύς",
+    "θυγάτηρ",
+    "παῖς",
+    "κούρη"
+   ],
+   "reasoning": "English rendering of Διὸς θύγατερ / παῖ Διός / Διὸς κούρη (adjacent words)."
+  },
+  {
+   "q": "Some Saian exults in my shield",
+   "type": "allusion",
+   "pattern": "ασπιδι\\s+μεν\\s+σαι",
+   "loci": [
+    "Archilochus 5 W"
+   ],
+   "reasoning": "Archilochus 5 W (ἀσπίδι μὲν Σαΐων τις ἀγάλλεται)."
+  },
+  {
+   "q": "the wrath of Achilles",
+   "type": "allusion",
+   "pattern": "μηνιν\\s+αειδε",
+   "loci": [
+    "Hom. Il. 1.1"
+   ],
+   "reasoning": "Il. 1.1 (μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος)."
+  },
+  {
+   "q": "flowers",
+   "type": "english_concept",
+   "pattern": "\\bανθ(οσ|εοσ|ευσ|ει|εα|εων|εσι|εσιν|εμ|η\\b|εμα|εμων)",
+   "headwords": [
+    "ἄνθος",
+    "ἄνθεμον"
+   ],
+   "reasoning": "ἄνθος, ἄνθεμον 'flower'."
+  },
+  {
+   "q": "mother",
+   "type": "english_concept",
+   "pattern": "\\bματ(ηρ|ερ|ρ)|\\bμητ(ηρ|ερ|ρ)",
+   "headwords": [
+    "μήτηρ"
+   ],
+   "reasoning": "μήτηρ (Doric/Aeolic μάτηρ) 'mother'."
+  },
+  {
+   "q": "blood",
+   "type": "english_concept",
+   "pattern": "\\bαιμ(α|ατ)",
+   "headwords": [
+    "αἷμα"
+   ],
+   "reasoning": "αἷμα 'blood'."
+  }
+ ]
+}
