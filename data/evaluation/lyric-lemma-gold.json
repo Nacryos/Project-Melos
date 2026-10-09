@@ -1,0 +1,5993 @@
+{
+ "version": "melos-lyric-lemma-gold-v1",
+ "method": "There is no treebank of the lyric poets, so the gold lemma of a lyric word is taken from a dictionary that cites that very place: an LSJ entry (PerseusDL LSJ TEI, data/lexica/entries.jsonl) whose text cites \"Sapph. 1.20\", \"Alc. 34.7\", \"Archil. 5\" ... names its own headword for a word at that place. A Campbell GLP poem (campbell-glp:<poet>:<number>; Campbell prints the standard edition numbers, for Sappho and Alcaeus Lobel-Page's) gives a gold token when exactly one token on the cited line (or, for a citation without a line, in the whole poem) has the entry's headword among its index readings; that check also guards against a numbering mismatch between LSJ and Campbell. Every row keeps its provenance (entry id, the citation as printed, passage, line, printed word) so the set can be checked by hand. Caveat: the gold headword is always one of the token's index readings, so the set measures ranking and calibration, not coverage.",
+ "stats": {
+  "citations": 6842,
+  "citations_of_campbell_poems": 999,
+  "no_unique_token": 555,
+  "duplicate": 9,
+  "several_tokens": 8
+ },
+ "tokens": 427,
+ "poems": 29,
+ "gold": [
+  {
+   "passage_id": "campbell-glp:alcman:1",
+   "token": 309,
+   "line": 86,
+   "printed": "παρσένος",
+   "form": "παρσένος",
+   "gold_lemma": "παρσένος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n79834",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dparse%2Fnos",
+    "citation": "Alcm. 1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:alcman:1",
+   "token": 377,
+   "line": 101,
+   "printed": "κομίσκᾳ",
+   "form": "κομίσκᾳ",
+   "gold_lemma": "κομίσκη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n58792",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkomi%2Fskh",
+    "citation": "Alcm. 1.101"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:alcman:26",
+   "token": 3,
+   "line": 1,
+   "printed": "παρσενικαὶ",
+   "form": "παρσενικαὶ",
+   "gold_lemma": "παρθενική",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n79585",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dparqenikh%2F",
+    "citation": "Alcm. 26"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:alcman:26",
+   "token": 4,
+   "line": 1,
+   "printed": "μελιγάρυες",
+   "form": "μελιγάρυες",
+   "gold_lemma": "μελίγηρυς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n65994",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmeli%2Fghrus",
+    "citation": "Alcm. 26.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:alcman:26",
+   "token": 5,
+   "line": 1,
+   "printed": "ἱαρόφωνοι",
+   "form": "ἱαρόφωνοι",
+   "gold_lemma": "ἱερόφωνος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:10:n50132",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Di%28ero%2Ffwnos",
+    "citation": "Alcm. 26.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:alcman:26",
+   "token": 12,
+   "line": 2,
+   "printed": "κηρύλος",
+   "form": "κηρύλος",
+   "gold_lemma": "κηρύλος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n57260",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkhru%2Flos",
+    "citation": "Alcm. 26.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:alcman:26",
+   "token": 20,
+   "line": 3,
+   "printed": "ἀλκυόνεσσι",
+   "form": "ἀλκυόνεσσι",
+   "gold_lemma": "ἀλκυών",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n4356",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29lkuw%2Fn",
+    "citation": "Alcm. 26"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:alcman:26",
+   "token": 21,
+   "line": 3,
+   "printed": "ποτήται",
+   "form": "ποτήται",
+   "gold_lemma": "ποτάομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n85962",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpota%2Fomai",
+    "citation": "Alcm. 26.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:alcman:26",
+   "token": 25,
+   "line": 4,
+   "printed": "ἁλιπόρφυρος",
+   "form": "ἁλιπόρφυρος",
+   "gold_lemma": "ἁλιπόρφυρος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n4256",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%28lipo%2Frfuros",
+    "citation": "Alcm. 26.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:alcman:26",
+   "token": 27,
+   "line": 4,
+   "printed": "ὄρνις",
+   "form": "ὄρνις",
+   "gold_lemma": "ὄρνις",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n75263",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%29%2Frnis",
+    "citation": "Alcm. 26.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:1",
+   "token": 5,
+   "line": 1,
+   "printed": "Ἐνυαλίοιο",
+   "form": "Ἐνυαλίοιο",
+   "gold_lemma": "Ἐνυάλιος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n36376",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3D%2A%29enua%2Flios",
+    "citation": "Archil. 1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:1",
+   "token": 11,
+   "line": 2,
+   "printed": "ἐπιστάμενος",
+   "form": "ἐπιστάμενος",
+   "gold_lemma": "ἐπίσταμαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n40972",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29pi%2Fstamai",
+    "citation": "Archil. 1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:2",
+   "token": 4,
+   "line": 1,
+   "printed": "μᾶζα",
+   "form": "μᾶζα",
+   "gold_lemma": "μᾶζα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n64483",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dma%3Dza",
+    "citation": "Archil. 2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:2",
+   "token": 5,
+   "line": 1,
+   "printed": "μεμαγμένη",
+   "form": "μεμαγμένη",
+   "gold_lemma": "μάσσω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n65125",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dma%2Fssw",
+    "citation": "Archil. 2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:2",
+   "token": 15,
+   "line": 2,
+   "printed": "κεκλιμένος",
+   "form": "κεκλιμένος",
+   "gold_lemma": "κλίνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n57964",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkli%2Fnw",
+    "citation": "Archil. 2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:3",
+   "token": 5,
+   "line": 1,
+   "printed": "τανύσσεται",
+   "form": "τανύσσεται",
+   "gold_lemma": "τανύω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n102369",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtanu%2Fw",
+    "citation": "Archil. 3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:3",
+   "token": 8,
+   "line": 2,
+   "printed": "σφενδόναι",
+   "form": "σφενδόναι",
+   "gold_lemma": "σφενδόνη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n101641",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dsfendo%2Fnh",
+    "citation": "Archil. 3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:3",
+   "token": 12,
+   "line": 2,
+   "printed": "μῶλον",
+   "form": "μῶλον",
+   "gold_lemma": "μῶλος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n69565",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmw%3Dlos",
+    "citation": "Archil. 3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:3",
+   "token": 19,
+   "line": 3,
+   "printed": "πολύστονον",
+   "form": "πολύστονον",
+   "gold_lemma": "πολύστονος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n85373",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpolu%2Fstonos",
+    "citation": "Archil. 3.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:3",
+   "token": 25,
+   "line": 4,
+   "printed": "δαίμονές",
+   "form": "δαίμονές",
+   "gold_lemma": "δαίμων",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n23242",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddai%2Fmwn",
+    "citation": "Archil. 3.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:6",
+   "token": 4,
+   "line": 1,
+   "printed": "ἀγάλλεται",
+   "form": "ἀγάλλεται",
+   "gold_lemma": "ἀγάλλω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n292",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29ga%2Fllw",
+    "citation": "Archil. 6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:6",
+   "token": 7,
+   "line": 1,
+   "printed": "θάμνῳ",
+   "form": "θάμνῳ",
+   "gold_lemma": "θάμνος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:9:n47856",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dqa%2Fmnos",
+    "citation": "Archil. 6.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:6",
+   "token": 8,
+   "line": 2,
+   "printed": "ἔντος",
+   "form": "ἔντος",
+   "gold_lemma": "ἔντεα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n36179",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29%2Fntea",
+    "citation": "Archil. 6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:6",
+   "token": 9,
+   "line": 2,
+   "printed": "ἀμώμητον",
+   "form": "ἀμώμητον",
+   "gold_lemma": "ἀμώμητος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n6196",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29mw%2Fmhtos",
+    "citation": "Archil. 6.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:6",
+   "token": 21,
+   "line": 4,
+   "printed": "ἐρρέτω",
+   "form": "ἐρρέτω",
+   "gold_lemma": "ἔρρω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n42710",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29%2Frrw1",
+    "citation": "Archil. 6.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:6",
+   "token": 22,
+   "line": 4,
+   "printed": "ἐξαῦτις",
+   "form": "ἐξαῦτις",
+   "gold_lemma": "ἐξαῦτις",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n37005",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29cau%3Dtis",
+    "citation": "Archil. 6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:6",
+   "token": 23,
+   "line": 4,
+   "printed": "κτήσομαι",
+   "form": "κτήσομαι",
+   "gold_lemma": "κτάομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n60308",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkta%2Fomai",
+    "citation": "Archil. 6.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:71",
+   "token": 7,
+   "line": 1,
+   "printed": "θιγεῖν",
+   "form": "θιγεῖν",
+   "gold_lemma": "θιγγάνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:9:n48867",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dqigga%2Fnw",
+    "citation": "Archil. 71"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:74",
+   "token": 0,
+   "line": 1,
+   "printed": "χρημάτων",
+   "form": "χρημάτων",
+   "gold_lemma": "χρῆμα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:25:n114624",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dxrh%3Dma",
+    "citation": "Archil. 74"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:74",
+   "token": 1,
+   "line": 1,
+   "printed": "ἄελπτον",
+   "form": "ἄελπτον",
+   "gold_lemma": "ἄελπτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n1688",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Felptos",
+    "citation": "Archil. 74"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:74",
+   "token": 5,
+   "line": 1,
+   "printed": "ἀπώμοτον",
+   "form": "ἀπώμοτον",
+   "gold_lemma": "ἀπώμοτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n14617",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29pw%2Fmotos",
+    "citation": "Archil. 74"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:74",
+   "token": 13,
+   "line": 3,
+   "printed": "μεσημβρίης",
+   "form": "μεσημβρίης",
+   "gold_lemma": "μεσημβρία",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n66392",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmeshmbri%2Fa",
+    "citation": "Archil. 74"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:74",
+   "token": 16,
+   "line": 3,
+   "printed": "ἀποκρύψας",
+   "form": "ἀποκρύψας",
+   "gold_lemma": "ἀποκρύπτω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n12965",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29pokru%2Fptw",
+    "citation": "Archil. 74.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:74",
+   "token": 32,
+   "line": 5,
+   "printed": "κἀπίελπτα",
+   "form": "κἀπίελπτα",
+   "gold_lemma": "ἐπίελπτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n39345",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29pi%2Felptos",
+    "citation": "Archil. 74.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:74",
+   "token": 37,
+   "line": 6,
+   "printed": "ὑμέων",
+   "form": "ὑμέων",
+   "gold_lemma": "σύ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n97456",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dsu%2F",
+    "citation": "Archil. 74.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:74",
+   "token": 42,
+   "line": 7,
+   "printed": "δελφῖσι",
+   "form": "δελφῖσι",
+   "gold_lemma": "δελφίς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n24002",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddelfi%2Fs",
+    "citation": "Archil. 74.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:74",
+   "token": 44,
+   "line": 7,
+   "printed": "ἀνταμείψωνται",
+   "form": "ἀνταμείψωνται",
+   "gold_lemma": "ἀνταμείβομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n9416",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29ntamei%2Fbomai",
+    "citation": "Archil. 74.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:74",
+   "token": 46,
+   "line": 8,
+   "printed": "ἐνάλιον",
+   "form": "ἐνάλιον",
+   "gold_lemma": "ἐνάλιος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n34798",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29na%2Flios",
+    "citation": "Archil. 74.8"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:74",
+   "token": 50,
+   "line": 8,
+   "printed": "ἠχέεντα",
+   "form": "ἠχέεντα",
+   "gold_lemma": "ἠχέεις",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:8:n47670",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dh%29xe%2Feis",
+    "citation": "Archil. 74.8"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:77",
+   "token": 1,
+   "line": 1,
+   "printed": "Διωνύσοι’",
+   "form": "Διωνύσοι’",
+   "gold_lemma": "Διόνυσος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n27219",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3D%2Adio%2Fnusos",
+    "citation": "Archil. 77"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:77",
+   "token": 7,
+   "line": 2,
+   "printed": "διθύραμβον",
+   "form": "διθύραμβον",
+   "gold_lemma": "διθύραμβος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n26815",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddiqu%2Frambos",
+    "citation": "Archil. 77"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:archilochus:77",
+   "token": 9,
+   "line": 2,
+   "printed": "συγκεραυνωθεὶς",
+   "form": "συγκεραυνωθεὶς",
+   "gold_lemma": "συγκεραυνόω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n97783",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dsugkerauno%2Fw",
+    "citation": "Archil. 77"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 0,
+   "line": 1,
+   "printed": "ἀριστοκάρπου",
+   "form": "ἀριστοκάρπου",
+   "gold_lemma": "ἀριστόκαρπος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n15111",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29risto%2Fkarpos",
+    "citation": "B. 3.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 2,
+   "line": 1,
+   "printed": "κρέουσαν",
+   "form": "κρέουσαν",
+   "gold_lemma": "κρείων",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n59796",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkrei%2Fwn1",
+    "citation": "B. 3.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 8,
+   "line": 3,
+   "printed": "γλυκύδωρε",
+   "form": "γλυκύδωρε",
+   "gold_lemma": "γλυκύδωρος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:3:n22363",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dgluku%2Fdwros",
+    "citation": "B. 3.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 19,
+   "line": 5,
+   "printed": "ὑπερόχῳ",
+   "form": "ὑπερόχῳ",
+   "gold_lemma": "ὑπέροχος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:23:n107775",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Du%28pe%2Froxos",
+    "citation": "B. 3.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 35,
+   "line": 9,
+   "printed": "θρόησε",
+   "form": "θρόησε",
+   "gold_lemma": "θροέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:9:n49189",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dqroe%2Fw",
+    "citation": "B. 3.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 45,
+   "line": 12,
+   "printed": "πλείσταρχον",
+   "form": "πλείσταρχον",
+   "gold_lemma": "πλείσταρχος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n83651",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dplei%2Fstarxos",
+    "citation": "B. 3.12"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 49,
+   "line": 13,
+   "printed": "πυργωθέντα",
+   "form": "πυργωθέντα",
+   "gold_lemma": "πυργόω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n91612",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpurgo%2Fw",
+    "citation": "B. 3.13"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 56,
+   "line": 15,
+   "printed": "βρύει",
+   "form": "βρύει",
+   "gold_lemma": "βρύω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:2:n21147",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dbru%2Fw",
+    "citation": "B. 3.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 59,
+   "line": 15,
+   "printed": "βουθύτοις",
+   "form": "βουθύτοις",
+   "gold_lemma": "βούθυτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:2:n20528",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dbou%2Fqutos",
+    "citation": "B. 3.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 63,
+   "line": 16,
+   "printed": "ἀγυιαί",
+   "form": "ἀγυιαί",
+   "gold_lemma": "ἄγυια",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n967",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Fguia",
+    "citation": "B. 3.16"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 66,
+   "line": 17,
+   "printed": "ὑπὸ",
+   "form": "ὑπὸ",
+   "gold_lemma": "ὑπό",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:23:n108092",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Du%28po%2F",
+    "citation": "B. 3.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 67,
+   "line": 17,
+   "printed": "μαρμαρυγαῖς",
+   "form": "μαρμαρυγαῖς",
+   "gold_lemma": "μαρμαρυγή",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n65062",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmarmarugh%2F",
+    "citation": "B. 3.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 70,
+   "line": 18,
+   "printed": "ὑψιδαιδάλτων",
+   "form": "ὑψιδαιδάλτων",
+   "gold_lemma": "ὑψιδαίδαλτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:23:n109948",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Du%28yidai%2Fdaltos",
+    "citation": "B. 3.18"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 75,
+   "line": 19,
+   "printed": "τόθι",
+   "form": "τόθι",
+   "gold_lemma": "τόθι^",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n104154",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dto%2Fqi%5E",
+    "citation": "B. 3.19"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 77,
+   "line": 19,
+   "printed": "ἄλσος",
+   "form": "ἄλσος",
+   "gold_lemma": "ἄλσος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n4683",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Flsos",
+    "citation": "B. 3.19"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 83,
+   "line": 21,
+   "printed": "διέπουσι",
+   "form": "διέπουσι",
+   "gold_lemma": "διέπω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n26637",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddie%2Fpw",
+    "citation": "B. 3.21"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 84,
+   "line": 21,
+   "printed": "θεὸν",
+   "form": "θεὸν",
+   "gold_lemma": "θεός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:9:n48291",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dqeo%2Fs",
+    "citation": "B. 3.21"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 94,
+   "line": 23,
+   "printed": "δαμασίππου",
+   "form": "δαμασίππου",
+   "gold_lemma": "δαμάσιππος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n23370",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddama%2Fsippos",
+    "citation": "B. 3.23"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 97,
+   "line": 25,
+   "printed": "εὖτε",
+   "form": "εὖτε",
+   "gold_lemma": "εὖτε",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n45273",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Deu%29%3Dte",
+    "citation": "B. 3.25"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 170,
+   "line": 45,
+   "printed": "ἀεικελίως",
+   "form": "ἀεικελίως",
+   "gold_lemma": "ἀεικέλιος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n1602",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29eike%2Flios",
+    "citation": "B. 3.45"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 173,
+   "line": 46,
+   "printed": "ἐϋκτίτων",
+   "form": "ἐϋκτίτων",
+   "gold_lemma": "ἐΰκτιτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n44340",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29u%2F%2Bktitos",
+    "citation": "B. 3.46"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 181,
+   "line": 47,
+   "printed": "γλύκιστον",
+   "form": "γλύκιστον",
+   "gold_lemma": "γλυκύς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:3:n22389",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dgluku%2Fs",
+    "citation": "B. 3.47"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 188,
+   "line": 49,
+   "printed": "ξύλινον",
+   "form": "ξύλινον",
+   "gold_lemma": "ξύλινος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:15:n71706",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dcu%2Flinos",
+    "citation": "B. 3.49"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 189,
+   "line": 49,
+   "printed": "δόμον",
+   "form": "δόμον",
+   "gold_lemma": "δόμος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n27980",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddo%2Fmos",
+    "citation": "B. 3.49"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 201,
+   "line": 51,
+   "printed": "προφανὴς",
+   "form": "προφανὴς",
+   "gold_lemma": "προφανής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n90656",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dprofanh%2Fs",
+    "citation": "B. 3.51"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 235,
+   "line": 60,
+   "printed": "τανισφύροις",
+   "form": "τανισφύροις",
+   "gold_lemma": "τανίσφυρος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n102311",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtani%2Fsfuros",
+    "citation": "B. 3.60"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 271,
+   "line": 68,
+   "printed": "πιαίνεται",
+   "form": "πιαίνεται",
+   "gold_lemma": "πιαίνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n83033",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpiai%2Fnw",
+    "citation": "B. 3.68"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 318,
+   "line": 80,
+   "printed": "μοῦνον",
+   "form": "μοῦνον",
+   "gold_lemma": "μόνος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n68641",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmo%2Fnos",
+    "citation": "B. 3.80"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 325,
+   "line": 82,
+   "printed": "βαθύπλουτον",
+   "form": "βαθύπλουτον",
+   "gold_lemma": "βαθύπλουτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:2:n19067",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dbaqu%2Fploutos",
+    "citation": "B. 3.82"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 334,
+   "line": 84,
+   "printed": "ὑπέρτατον",
+   "form": "ὑπέρτατον",
+   "gold_lemma": "ὑπέρτατος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:23:n107880",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Du%28pe%2Frtatos",
+    "citation": "B. 3.84"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 336,
+   "line": 85,
+   "printed": "συνετὰ",
+   "form": "συνετὰ",
+   "gold_lemma": "συνετός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n100436",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dsuneto%2Fs",
+    "citation": "B. 3.85"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 337,
+   "line": 85,
+   "printed": "γαρύω",
+   "form": "γαρύω",
+   "gold_lemma": "γηρύω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:3:n22164",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dghru%2Fw",
+    "citation": "B. 3.85"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 341,
+   "line": 86,
+   "printed": "ἀμίαντος",
+   "form": "ἀμίαντος",
+   "gold_lemma": "ἀμίαντος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n5262",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29mi%2Fantos",
+    "citation": "B. 3.86"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 366,
+   "line": 90,
+   "printed": "μινύθει",
+   "form": "μινύθει",
+   "gold_lemma": "μινύθω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n67894",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dminu%2Fqw",
+    "citation": "B. 3.90"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 378,
+   "line": 92,
+   "printed": "ὄλβου",
+   "form": "ὄλβου",
+   "gold_lemma": "ὄλβος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n72920",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%29%2Flbos",
+    "citation": "B. 3.92"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:3",
+   "token": 401,
+   "line": 98,
+   "printed": "ἀηδόνος",
+   "form": "ἀηδόνος",
+   "gold_lemma": "ἀηδών",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n1863",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29hdw%2Fn",
+    "citation": "B. 3.98"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 0,
+   "line": 1,
+   "printed": "εὔμοιρε",
+   "form": "εὔμοιρε",
+   "gold_lemma": "εὔμοιρος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n44505",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Deu%29%2Fmoiros",
+    "citation": "B. 5.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 2,
+   "line": 2,
+   "printed": "ἱπποδινήτων",
+   "form": "ἱπποδινήτων",
+   "gold_lemma": "ἱπποδίνητος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:10:n50748",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Di%28ppodi%2Fnhtos",
+    "citation": "B. 5.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 6,
+   "line": 3,
+   "printed": "ἰοστεφάνων",
+   "form": "ἰοστεφάνων",
+   "gold_lemma": "ἰοστέφανος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:10:n50611",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Di%29oste%2Ffanos",
+    "citation": "B. 5.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 8,
+   "line": 4,
+   "printed": "γλυκύδωρον",
+   "form": "γλυκύδωρον",
+   "gold_lemma": "γλυκύδωρος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:3:n22363",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dgluku%2Fdwros",
+    "citation": "B. 5.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 12,
+   "line": 4,
+   "printed": "νῦν",
+   "form": "νῦν",
+   "gold_lemma": "νῦν",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:14:n71308",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dnu%3Dn1",
+    "citation": "B. 5.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 13,
+   "line": 5,
+   "printed": "αἴ",
+   "form": "αἴ",
+   "gold_lemma": "εἰ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n30817",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dei%291",
+    "citation": "B. 5.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 29,
+   "line": 9,
+   "printed": "βαθυζώνοις",
+   "form": "βαθυζώνοις",
+   "gold_lemma": "βαθύζωνος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:2:n19030",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dbaqu%2Fzwnos",
+    "citation": "B. 5.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 30,
+   "line": 9,
+   "printed": "ὑφάνας",
+   "form": "ὑφάνας",
+   "gold_lemma": "ὑφαίνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:23:n109779",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Du%28fai%2Fnw",
+    "citation": "B. 5.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 42,
+   "line": 13,
+   "printed": "χρυσάμπυκος",
+   "form": "χρυσάμπυκος",
+   "gold_lemma": "χρυσάμπυξ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:25:n114769",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dxrusa%2Fmpuc",
+    "citation": "B. 5.13"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 49,
+   "line": 15,
+   "printed": "γᾶρυν",
+   "form": "γᾶρυν",
+   "gold_lemma": "γῆρυς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:3:n22163",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dgh%3Drus",
+    "citation": "B. 5.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 51,
+   "line": 15,
+   "printed": "στηθέων",
+   "form": "στηθέων",
+   "gold_lemma": "στῆθος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n96698",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dsth%3Dqos",
+    "citation": "B. 5.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 58,
+   "line": 17,
+   "printed": "ξουθαῖσι",
+   "form": "ξουθαῖσι",
+   "gold_lemma": "ξουθός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:15:n71680",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dcouqo%2Fs",
+    "citation": "B. 5.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 59,
+   "line": 17,
+   "printed": "τάμνων",
+   "form": "τάμνων",
+   "gold_lemma": "τέμνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n103052",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dte%2Fmnw1",
+    "citation": "B. 5.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 60,
+   "line": 18,
+   "printed": "ὑψοῦ",
+   "form": "ὑψοῦ",
+   "gold_lemma": "ὑψοῦ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:23:n110016",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Du%28you%3D",
+    "citation": "B. 5.18"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 68,
+   "line": 20,
+   "printed": "ἐρισφαράγου",
+   "form": "ἐρισφαράγου",
+   "gold_lemma": "ἐρισφάραγος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n42541",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29risfa%2Fragos",
+    "citation": "B. 5.20"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 71,
+   "line": 21,
+   "printed": "πίσυνος",
+   "form": "πίσυνος",
+   "gold_lemma": "πίσυνος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n83338",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpi%2Fsunos",
+    "citation": "B. 5.21"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 75,
+   "line": 22,
+   "printed": "ὄρνι",
+   "form": "ὄρνι",
+   "gold_lemma": "ὄρνις",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n75263",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%29%2Frnis",
+    "citation": "B. 5.22"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 77,
+   "line": 23,
+   "printed": "λιγύφθογγοι",
+   "form": "λιγύφθογγοι",
+   "gold_lemma": "λιγύφθογγος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n63109",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dligu%2Ffqoggos",
+    "citation": "B. 5.23"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 81,
+   "line": 24,
+   "printed": "κορυφαὶ",
+   "form": "κορυφαὶ",
+   "gold_lemma": "κορυφή",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n59238",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkorufh%2F",
+    "citation": "B. 5.24"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 87,
+   "line": 25,
+   "printed": "ἀκαμάτας",
+   "form": "ἀκαμάτας",
+   "gold_lemma": "ἀκάματος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n2886",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29ka%2Fmatos",
+    "citation": "B. 5.25"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 88,
+   "line": 26,
+   "printed": "δυσπαίπαλα",
+   "form": "δυσπαίπαλα",
+   "gold_lemma": "δυσπαίπαλος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n29340",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dduspai%2Fpalos",
+    "citation": "B. 5.26"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 95,
+   "line": 27,
+   "printed": "χάει",
+   "form": "χάει",
+   "gold_lemma": "χάος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:25:n113325",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dxa%2Fos1",
+    "citation": "B. 5.27"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 96,
+   "line": 28,
+   "printed": "λεπτότριχα",
+   "form": "λεπτότριχα",
+   "gold_lemma": "λέπτοθριξ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n62493",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dle%2Fptoqric",
+    "citation": "B. 5.28"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 104,
+   "line": 30,
+   "printed": "μετ’",
+   "form": "μετ’",
+   "gold_lemma": "μετά",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n66572",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmeta%2F",
+    "citation": "B. 5.30"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 111,
+   "line": 31,
+   "printed": "μυρία",
+   "form": "μυρία",
+   "gold_lemma": "μυρίος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n69292",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmuri%2Fos",
+    "citation": "B. 5.31"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 113,
+   "line": 31,
+   "printed": "κέλευθος",
+   "form": "κέλευθος",
+   "gold_lemma": "κέλευθος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n56480",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dke%2Fleuqos",
+    "citation": "B. 5.31"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 116,
+   "line": 33,
+   "printed": "ὑμνεῖν",
+   "form": "ὑμνεῖν",
+   "gold_lemma": "ὑμνέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:23:n106707",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Du%28mne%2Fw",
+    "citation": "B. 5.33"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 117,
+   "line": 33,
+   "printed": "κυανοπλοκάμου",
+   "form": "κυανοπλοκάμου",
+   "gold_lemma": "κυανοπλόκαμος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n60450",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkuanoplo%2Fkamos",
+    "citation": "B. 5.33"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 121,
+   "line": 34,
+   "printed": "χαλκεοστέρνου",
+   "form": "χαλκεοστέρνου",
+   "gold_lemma": "χαλκεόστερνος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:25:n113061",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dxalkeo%2Fsternos",
+    "citation": "B. 5.34"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 134,
+   "line": 37,
+   "printed": "ξανθότριχα",
+   "form": "ξανθότριχα",
+   "gold_lemma": "ξάνθοθριξ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:15:n71443",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dca%2Fnqoqric",
+    "citation": "B. 5.37"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 144,
+   "line": 40,
+   "printed": "χρυσόπαχυς",
+   "form": "χρυσόπαχυς",
+   "gold_lemma": "χρυσόπηχυς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:25:n114937",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dxruso%2Fphxus",
+    "citation": "B. 5.40"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 148,
+   "line": 41,
+   "printed": "ἐν",
+   "form": "ἐν",
+   "gold_lemma": "ἐν",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n34700",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29n",
+    "citation": "B. 5.41"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 153,
+   "line": 42,
+   "printed": "πιφαύσκω",
+   "form": "πιφαύσκω",
+   "gold_lemma": "πιφαύσκω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n83383",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpifau%2Fskw",
+    "citation": "B. 5.42"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 161,
+   "line": 44,
+   "printed": "κατέχρανεν",
+   "form": "κατέχρανεν",
+   "gold_lemma": "καταχραίνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n55621",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkataxrai%2Fnw",
+    "citation": "B. 5.44"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 164,
+   "line": 45,
+   "printed": "τέλος",
+   "form": "τέλος",
+   "gold_lemma": "τέλος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n103012",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dte%2Flos",
+    "citation": "B. 5.45"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 166,
+   "line": 46,
+   "printed": "ῥιπᾷ",
+   "form": "ῥιπᾷ",
+   "gold_lemma": "ῥιπή",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:20:n92514",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dr%28iph%2F",
+    "citation": "B. 5.46"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 168,
+   "line": 46,
+   "printed": "ἴσος",
+   "form": "ἴσος",
+   "gold_lemma": "ἴσος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:10:n51148",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Di%29%2Fsos",
+    "citation": "B. 5.46"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 170,
+   "line": 47,
+   "printed": "ὃν",
+   "form": "ὃν",
+   "gold_lemma": "ὅς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n75513",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%28%2Fs2",
+    "citation": "B. 5.47"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 178,
+   "line": 49,
+   "printed": "τιτύσκων",
+   "form": "τιτύσκων",
+   "gold_lemma": "τιτύσκομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n104107",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtitu%2Fskomai",
+    "citation": "B. 5.49"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 188,
+   "line": 52,
+   "printed": "ἐπιζήλῳ",
+   "form": "ἐπιζήλῳ",
+   "gold_lemma": "ἐπίζηλος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n39369",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29pi%2Fzhlos",
+    "citation": "B. 5.52"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 204,
+   "line": 56,
+   "printed": "ἐρειψιπύλαν",
+   "form": "ἐρειψιπύλαν",
+   "gold_lemma": "ἐρειψιπύλας",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n42294",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29reiyipu%2Flas",
+    "citation": "B. 5.56"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 224,
+   "line": 62,
+   "printed": "ἀπλάτοι’",
+   "form": "ἀπλάτοι’",
+   "gold_lemma": "ἄπλατος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n12169",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Fplatos",
+    "citation": "B. 5.62"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 230,
+   "line": 64,
+   "printed": "ἐδάη",
+   "form": "ἐδάη",
+   "gold_lemma": "δάω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n23595",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dda%2Fw",
+    "citation": "B. 5.64"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 236,
+   "line": 65,
+   "printed": "φύλλ’",
+   "form": "φύλλ’",
+   "gold_lemma": "φύλλον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n112599",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfu%2Fllon",
+    "citation": "B. 5.65"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 240,
+   "line": 66,
+   "printed": "μηλοβότους",
+   "form": "μηλοβότους",
+   "gold_lemma": "μηλόβοτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n67405",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmhlo%2Fbotos",
+    "citation": "B. 5.66"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 249,
+   "line": 69,
+   "printed": "θρασυμέμνονος",
+   "form": "θρασυμέμνονος",
+   "gold_lemma": "θρασυμέμνων",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:9:n49036",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dqrasume%2Fmnwn",
+    "citation": "B. 5.69"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 263,
+   "line": 73,
+   "printed": "ἐπέβασε",
+   "form": "ἐπέβασε",
+   "gold_lemma": "ἐπιβαίνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n38876",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29pibai%2Fnw",
+    "citation": "B. 5.73"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 264,
+   "line": 73,
+   "printed": "λιγυκλαγγῆ",
+   "form": "λιγυκλαγγῆ",
+   "gold_lemma": "λιγυκλαγγής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n63091",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dliguklaggh%2Fs",
+    "citation": "B. 5.73"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 266,
+   "line": 74,
+   "printed": "χαλκεόκρανον",
+   "form": "χαλκεόκρανον",
+   "gold_lemma": "χαλκεόκρανος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:25:n113053",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dxalkeo%2Fkranos",
+    "citation": "B. 5.74"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 275,
+   "line": 76,
+   "printed": "πῶμα",
+   "form": "πῶμα",
+   "gold_lemma": "πῶμα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n91976",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpw%3Dma1",
+    "citation": "B. 5.76"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 280,
+   "line": 77,
+   "printed": "προφάνη",
+   "form": "προφάνη",
+   "gold_lemma": "προφαίνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n90654",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dprofai%2Fnw",
+    "citation": "B. 5.77"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 294,
+   "line": 80,
+   "printed": "γελανώσας",
+   "form": "γελανώσας",
+   "gold_lemma": "γελανόω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:3:n21771",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dgelano%2Fw",
+    "citation": "B. 5.80"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 298,
+   "line": 81,
+   "printed": "ταΰσιον",
+   "form": "ταΰσιον",
+   "gold_lemma": "τηΰσιος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n103887",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dthu%2F%2Bsios",
+    "citation": "B. 5.81"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 306,
+   "line": 83,
+   "printed": "φθιμένων",
+   "form": "φθιμένων",
+   "gold_lemma": "φθίω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n110727",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfqi%2Fw",
+    "citation": "B. 5.83"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 312,
+   "line": 84,
+   "printed": "θάμβησεν",
+   "form": "θάμβησεν",
+   "gold_lemma": "θαμβέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:9:n47836",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dqambe%2Fw",
+    "citation": "B. 5.84"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 323,
+   "line": 87,
+   "printed": "ἔρνος",
+   "form": "ἔρνος",
+   "gold_lemma": "ἔρνος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n42640",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29%2Frnos",
+    "citation": "B. 5.87"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 333,
+   "line": 89,
+   "printed": "καλλίζωνος",
+   "form": "καλλίζωνος",
+   "gold_lemma": "καλλίζωνος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n52654",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkalli%2Fzwnos",
+    "citation": "B. 5.89"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 343,
+   "line": 92,
+   "printed": "Παλλάδι",
+   "form": "Παλλάδι",
+   "gold_lemma": "Παλλάς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n77017",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3D%2Apalla%2Fs",
+    "citation": "B. 5.92"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 363,
+   "line": 98,
+   "printed": "καλυκοστεφάνου",
+   "form": "καλυκοστεφάνου",
+   "gold_lemma": "καλυκοστέφανος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n52878",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkalukoste%2Ffanos",
+    "citation": "B. 5.98"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 369,
+   "line": 100,
+   "printed": "πολέων",
+   "form": "πολέων",
+   "gold_lemma": "πολύς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n85306",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpolu%2Fs",
+    "citation": "B. 5.100"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 376,
+   "line": 102,
+   "printed": "φοινικονώτων",
+   "form": "φοινικονώτων",
+   "gold_lemma": "φοινικόνωτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n111978",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfoiniko%2Fnwtos",
+    "citation": "B. 5.102"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 380,
+   "line": 104,
+   "printed": "ἔσχεν",
+   "form": "ἔσχεν",
+   "gold_lemma": "ἔχω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n45996",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29%2Fxw1",
+    "citation": "B. 5.104"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 387,
+   "line": 105,
+   "printed": "ἀναιδομάχαν",
+   "form": "ἀναιδομάχαν",
+   "gold_lemma": "ἀναιδομάχας",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n6589",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29naidoma%2Fxas",
+    "citation": "B. 5.105"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 395,
+   "line": 108,
+   "printed": "ὄρχους",
+   "form": "ὄρχους",
+   "gold_lemma": "ὄρχος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n75503",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%29%2Frxos",
+    "citation": "B. 5.108"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 396,
+   "line": 108,
+   "printed": "ἐπέκειρεν",
+   "form": "ἐπέκειρεν",
+   "gold_lemma": "ἐπικείρω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n39662",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29pikei%2Frw",
+    "citation": "B. 5.108"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 416,
+   "line": 113,
+   "printed": "συνεχέως",
+   "form": "συνεχέως",
+   "gold_lemma": "συνεχής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n100495",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dsunexh%2Fs",
+    "citation": "B. 5.113"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 417,
+   "line": 113,
+   "printed": "ἐπεὶ",
+   "form": "ἐπεὶ",
+   "gold_lemma": "ἐπεὶ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n38473",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29pei%5C2",
+    "citation": "B. 5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 428,
+   "line": 116,
+   "printed": "ἐριβρύχας",
+   "form": "ἐριβρύχας",
+   "gold_lemma": "ἐριβρύχης",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n42408",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29ribru%2Fxhs",
+    "citation": "B. 5.116"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 429,
+   "line": 116,
+   "printed": "ἐπαΐσσων",
+   "form": "ἐπαΐσσων",
+   "gold_lemma": "ἐπαΐσσω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n37895",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29pai%2F%2Bssw",
+    "citation": "B. 5.116"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 436,
+   "line": 118,
+   "printed": "κεδνῶν",
+   "form": "κεδνῶν",
+   "gold_lemma": "κεδνός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n56367",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkedno%2Fs",
+    "citation": "B. 5.118"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 453,
+   "line": 122,
+   "printed": "δαΐφρων",
+   "form": "δαΐφρων",
+   "gold_lemma": "δαΐφρων",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n23271",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddai%2F%2Bfrwn",
+    "citation": "B. 5.122"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 461,
+   "line": 124,
+   "printed": "αἴθωνος",
+   "form": "αἴθωνος",
+   "gold_lemma": "αἴθων",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n2362",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dai%29%2Fqwn",
+    "citation": "B. 5.124"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 463,
+   "line": 125,
+   "printed": "μαρνάμεθ’",
+   "form": "μαρνάμεθ’",
+   "gold_lemma": "μάρναμαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n65072",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dma%2Frnamai",
+    "citation": "B. 5.125"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 464,
+   "line": 125,
+   "printed": "ἐνδυκέως",
+   "form": "ἐνδυκέως",
+   "gold_lemma": "ἐνδυκέως",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n35303",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29nduke%2Fws",
+    "citation": "B. 5.125"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 499,
+   "line": 134,
+   "printed": "φέρει",
+   "form": "φέρει",
+   "gold_lemma": "φέρω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n110598",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfe%2Frw",
+    "citation": "B. 5.134"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 511,
+   "line": 138,
+   "printed": "κακόποτμος",
+   "form": "κακόποτμος",
+   "gold_lemma": "κακόποτμος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n52309",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkako%2Fpotmos",
+    "citation": "B. 5.138"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 515,
+   "line": 139,
+   "printed": "ἀτάρβακτος",
+   "form": "ἀτάρβακτος",
+   "gold_lemma": "ἀτάρβακτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n16965",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29ta%2Frbaktos",
+    "citation": "B. 5.139"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 519,
+   "line": 140,
+   "printed": "δαιδαλέας",
+   "form": "δαιδαλέας",
+   "gold_lemma": "δαιδάλεος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n23200",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddaida%2Fleos",
+    "citation": "B. 5.140"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 521,
+   "line": 141,
+   "printed": "λάρνακος",
+   "form": "λάρνακος",
+   "gold_lemma": "λάρναξ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n61978",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dla%2Frnac",
+    "citation": "B. 5.141"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 522,
+   "line": 141,
+   "printed": "ὠκύμορον",
+   "form": "ὠκύμορον",
+   "gold_lemma": "ὠκύμορος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:27:n116118",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dw%29ku%2Fmoros",
+    "citation": "B. 5.141"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 523,
+   "line": 142,
+   "printed": "φίτρον",
+   "form": "φίτρον",
+   "gold_lemma": "φιτρός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n111675",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfitro%2Fs",
+    "citation": "B. 5.142"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 528,
+   "line": 143,
+   "printed": "ἐπέκλωσεν",
+   "form": "ἐπέκλωσεν",
+   "gold_lemma": "ἐπικλώθω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n39776",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29piklw%2Fqw",
+    "citation": "B. 5.143"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 531,
+   "line": 144,
+   "printed": "ὅρον",
+   "form": "ὅρον",
+   "gold_lemma": "ὅρος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n75308",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%28%2Fros",
+    "citation": "B. 5.144"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 543,
+   "line": 147,
+   "printed": "δέμας",
+   "form": "δέμας",
+   "gold_lemma": "δέμας",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n24007",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dde%2Fmas",
+    "citation": "B. 5.147"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 545,
+   "line": 148,
+   "printed": "προπάροιθε",
+   "form": "προπάροιθε",
+   "gold_lemma": "προπάροιθε",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n88252",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpropa%2Froiqe",
+    "citation": "B. 5.148"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 550,
+   "line": 149,
+   "printed": "εὐκτιμέναν",
+   "form": "εὐκτιμέναν",
+   "gold_lemma": "ἐϋκτίμενος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n44338",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29u%2Bkti%2Fmenos",
+    "citation": "B. 5.149"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 562,
+   "line": 152,
+   "printed": "ὀλιγοσθενέων",
+   "form": "ὀλιγοσθενέων",
+   "gold_lemma": "ὀλιγοσθενέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n73066",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%29ligosqene%2Fw",
+    "citation": "B. 5.152"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 569,
+   "line": 154,
+   "printed": "ἀγλαὰν",
+   "form": "ἀγλαὰν",
+   "gold_lemma": "ἀγλαός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n657",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29glao%2Fs",
+    "citation": "B. 5.154"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 573,
+   "line": 155,
+   "printed": "ἀδεισιβόαν",
+   "form": "ἀδεισιβόαν",
+   "gold_lemma": "ἀδεισιβόας",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n1182",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29deisibo%2Fas",
+    "citation": "B. 5.155"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 579,
+   "line": 157,
+   "printed": "τέγξαι",
+   "form": "τέγξαι",
+   "gold_lemma": "τέγγω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n102759",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dte%2Fggw",
+    "citation": "B. 5.157"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 581,
+   "line": 157,
+   "printed": "ταλαπενθέος",
+   "form": "ταλαπενθέος",
+   "gold_lemma": "ταλαπενθής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n102237",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtalapenqh%2Fs",
+    "citation": "B. 5.157"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 582,
+   "line": 158,
+   "printed": "πότμον",
+   "form": "πότμον",
+   "gold_lemma": "πότμος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n86067",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpo%2Ftmos",
+    "citation": "B. 5.158"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 597,
+   "line": 162,
+   "printed": "φέγγος",
+   "form": "φέγγος",
+   "gold_lemma": "φέγγος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n110477",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfe%2Fggos",
+    "citation": "B. 5.162"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 613,
+   "line": 165,
+   "printed": "ἦρά",
+   "form": "ἦρά",
+   "gold_lemma": "ἠρα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:8:n47506",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dh%29ra1",
+    "citation": "B. 5.165"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 623,
+   "line": 168,
+   "printed": "φυὰν",
+   "form": "φυὰν",
+   "gold_lemma": "φυή",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n112496",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfuh%2F1",
+    "citation": "B. 5.168"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 629,
+   "line": 169,
+   "printed": "θείμαν",
+   "form": "θείμαν",
+   "gold_lemma": "τίθημι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n103922",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dti%2Fqhmi",
+    "citation": "B. 5.169"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 639,
+   "line": 172,
+   "printed": "χλωραύχενα",
+   "form": "χλωραύχενα",
+   "gold_lemma": "χλωραύχην",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:25:n114212",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dxlwrau%2Fxhn",
+    "citation": "B. 5.172"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 643,
+   "line": 174,
+   "printed": "νῆϊν",
+   "form": "νῆϊν",
+   "gold_lemma": "νῆϊς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:14:n70638",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dnh%3Di%2Bs1",
+    "citation": "B. 5.174"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 651,
+   "line": 177,
+   "printed": "εὐποίητον",
+   "form": "εὐποίητον",
+   "gold_lemma": "εὐποίητος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n44814",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Deu%29poi%2Fhtos",
+    "citation": "B. 5.177"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 659,
+   "line": 179,
+   "printed": "ἀρχαγὸν",
+   "form": "ἀρχαγὸν",
+   "gold_lemma": "ἀρχηγός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n15900",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29rxhgo%2Fs",
+    "citation": "B. 5.179"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 663,
+   "line": 180,
+   "printed": "ἀκαμαντορόαν",
+   "form": "ἀκαμαντορόαν",
+   "gold_lemma": "ἀκαμαντορόας",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n2883",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29kamantoro%2Fas",
+    "citation": "B. 5.180"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 667,
+   "line": 181,
+   "printed": "βίαν",
+   "form": "βίαν",
+   "gold_lemma": "βία",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:2:n19870",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dbi%2Fa",
+    "citation": "B. 5.181"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 679,
+   "line": 184,
+   "printed": "εὐπύργους",
+   "form": "εὐπύργους",
+   "gold_lemma": "εὔπυργος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n44906",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Deu%29%2Fpurgos",
+    "citation": "B. 5.184"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 685,
+   "line": 186,
+   "printed": "πέταλον",
+   "form": "πέταλον",
+   "gold_lemma": "πέταλον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n82719",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpe%2Ftalon",
+    "citation": "B. 5.186"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 706,
+   "line": 192,
+   "printed": "πρόπολος",
+   "form": "πρόπολος",
+   "gold_lemma": "πρόπολος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n88356",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpro%2Fpolos",
+    "citation": "B. 5.192"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 715,
+   "line": 194,
+   "printed": "φήμαν",
+   "form": "φήμαν",
+   "gold_lemma": "φήμη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n110638",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfh%2Fmh",
+    "citation": "B. 5.194"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 718,
+   "line": 195,
+   "printed": "εὐμαρέως",
+   "form": "εὐμαρέως",
+   "gold_lemma": "εὐμαρής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n44429",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Deu%29marh%2Fs",
+    "citation": "B. 5.195"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 719,
+   "line": 196,
+   "printed": "εὐκλέα",
+   "form": "εὐκλέα",
+   "gold_lemma": "εὐκλεής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n44248",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Deu%29kleh%2Fs",
+    "citation": "B. 5.196"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:bacchylides:5",
+   "token": 727,
+   "line": 198,
+   "printed": "πυθμένες",
+   "form": "πυθμένες",
+   "gold_lemma": "πυθμήν",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n91377",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpuqmh%2Fn",
+    "citation": "B. 5.198"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:callinus:1",
+   "token": 35,
+   "line": 6,
+   "printed": "ἀγλαὸν",
+   "form": "ἀγλαὸν",
+   "gold_lemma": "ἀγλαός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n657",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29glao%2Fs",
+    "citation": "Callin. 1.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:callinus:1",
+   "token": 54,
+   "line": 9,
+   "printed": "ἐπικλώσωσ’",
+   "form": "ἐπικλώσωσ’",
+   "gold_lemma": "ἐπικλώθω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n39776",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29piklw%2Fqw",
+    "citation": "Callin. 1.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:callinus:1",
+   "token": 64,
+   "line": 10,
+   "printed": "ἄλκιμον",
+   "form": "ἄλκιμον",
+   "gold_lemma": "ἄλκιμος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n4345",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Flkimos",
+    "citation": "Callin. 1.10"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:callinus:1",
+   "token": 66,
+   "line": 11,
+   "printed": "ἔλσας",
+   "form": "ἔλσας",
+   "gold_lemma": "εἴλω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n31113",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dei%29%2Flw",
+    "citation": "Callin. 1.11"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:callinus:1",
+   "token": 69,
+   "line": 11,
+   "printed": "μειγνυμένου",
+   "form": "μειγνυμένου",
+   "gold_lemma": "μείγνυμι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n65689",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmei%2Fgnumi",
+    "citation": "Callin. 1.11"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:callinus:1",
+   "token": 107,
+   "line": 16,
+   "printed": "ποθεινός",
+   "form": "ποθεινός",
+   "gold_lemma": "ποθεινός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n84201",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpoqeino%2Fs",
+    "citation": "Callin. 1.16"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:callinus:1",
+   "token": 110,
+   "line": 17,
+   "printed": "ὀλίγος",
+   "form": "ὀλίγος",
+   "gold_lemma": "ὀλίγος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n73064",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%29li%2Fgos",
+    "citation": "Callin. 1.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:callinus:1",
+   "token": 111,
+   "line": 17,
+   "printed": "στενάχει",
+   "form": "στενάχει",
+   "gold_lemma": "στενάχω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n96477",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dstena%2Fxw",
+    "citation": "Callin. 1.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:callinus:1",
+   "token": 113,
+   "line": 17,
+   "printed": "μέγας",
+   "form": "μέγας",
+   "gold_lemma": "μέγας",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n65552",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dme%2Fgas",
+    "citation": "Callin. 1.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:callinus:1",
+   "token": 116,
+   "line": 17,
+   "printed": "πάθῃ",
+   "form": "πάθῃ",
+   "gold_lemma": "πάσχω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n79983",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpa%2Fsxw",
+    "citation": "Callin. 1.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:callinus:3",
+   "token": 6,
+   "line": 1,
+   "printed": "ὀβριμοεργῶν",
+   "form": "ὀβριμοεργῶν",
+   "gold_lemma": "ὀβριμοεργός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n71926",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%29brimoergo%2Fs",
+    "citation": "Callin. 3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:1",
+   "token": 26,
+   "line": 4,
+   "printed": "ἁρπαλέα",
+   "form": "ἁρπαλέα",
+   "gold_lemma": "ἁρπαλέος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n15410",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%28rpale%2Fos",
+    "citation": "Mimn. 1.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:1",
+   "token": 32,
+   "line": 5,
+   "printed": "ὀδυνηρὸν",
+   "form": "ὀδυνηρὸν",
+   "gold_lemma": "ὀδυνηρός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n72108",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%29dunhro%2Fs",
+    "citation": "Mimn. 1.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:1",
+   "token": 42,
+   "line": 6,
+   "printed": "τιθεῖ",
+   "form": "τιθεῖ",
+   "gold_lemma": "τίθημι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n103922",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dti%2Fqhmi",
+    "citation": "Mimn. 1.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:1",
+   "token": 46,
+   "line": 7,
+   "printed": "ἀμφὶ",
+   "form": "ἀμφὶ",
+   "gold_lemma": "ἀμφί",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n5704",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29mfi%2F",
+    "citation": "Mimn. 1.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:1",
+   "token": 48,
+   "line": 7,
+   "printed": "τείρουσι",
+   "form": "τείρουσι",
+   "gold_lemma": "τείρω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n102797",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtei%2Frw",
+    "citation": "Mimn. 1.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:1",
+   "token": 52,
+   "line": 8,
+   "printed": "προσορῶν",
+   "form": "προσορῶν",
+   "gold_lemma": "προσοράω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n89840",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dprosora%2Fw",
+    "citation": "Mimn. 1.8"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:1",
+   "token": 59,
+   "line": 9,
+   "printed": "ἀτίμαστος",
+   "form": "ἀτίμαστος",
+   "gold_lemma": "ἀτιμαστός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n17081",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29timasto%2Fs",
+    "citation": "Mimn. 1.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:2",
+   "token": 4,
+   "line": 1,
+   "printed": "φύλλα",
+   "form": "φύλλα",
+   "gold_lemma": "φύλλον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n112599",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfu%2Fllon",
+    "citation": "Mimn. 2.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:2",
+   "token": 16,
+   "line": 3,
+   "printed": "πήχυιον",
+   "form": "πήχυιον",
+   "gold_lemma": "πήχυιος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n83028",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dph%2Fxuios",
+    "citation": "Mimn. 2.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:2",
+   "token": 36,
+   "line": 6,
+   "printed": "τέλος",
+   "form": "τέλος",
+   "gold_lemma": "τέλος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n103012",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dte%2Flos",
+    "citation": "Mimn. 2.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:2",
+   "token": 37,
+   "line": 6,
+   "printed": "γήραος",
+   "form": "γήραος",
+   "gold_lemma": "γῆρας",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:3:n22141",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dgh%3Dras2",
+    "citation": "Mimn. 2.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:2",
+   "token": 43,
+   "line": 7,
+   "printed": "μίνυνθα",
+   "form": "μίνυνθα",
+   "gold_lemma": "μίνυνθα^",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n67896",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmi%2Fnunqa%5E",
+    "citation": "Mimn. 2.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:2",
+   "token": 58,
+   "line": 9,
+   "printed": "τέλος",
+   "form": "τέλος",
+   "gold_lemma": "τέλος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n103012",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dte%2Flos",
+    "citation": "Mimn. 2.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:2",
+   "token": 63,
+   "line": 10,
+   "printed": "τεθνάναι",
+   "form": "τεθνάναι",
+   "gold_lemma": "θνῄσκω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:9:n48905",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dqnh%2F%7Cskw",
+    "citation": "Mimn. 2.10"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:2",
+   "token": 64,
+   "line": 10,
+   "printed": "βέλτιον",
+   "form": "βέλτιον",
+   "gold_lemma": "βελτίων",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:2:n19789",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dbelti%2Fwn",
+    "citation": "Mimn. 2.10"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:2",
+   "token": 75,
+   "line": 12,
+   "printed": "τρυχοῦται",
+   "form": "τρυχοῦται",
+   "gold_lemma": "τρυχόω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n105768",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtruxo%2Fw",
+    "citation": "Mimn. 2.12"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:2",
+   "token": 108,
+   "line": 16,
+   "printed": "διδοῖ",
+   "form": "διδοῖ",
+   "gold_lemma": "δίδωμι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n26447",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddi%2Fdwmi",
+    "citation": "Mimn. 2.16"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:5",
+   "token": 16,
+   "line": 3,
+   "printed": "ὑπερκρέμαται",
+   "form": "ὑπερκρέμαται",
+   "gold_lemma": "ὑπερκρεμάννυμι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:23:n107655",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Du%28perkrema%2Fnnumi",
+    "citation": "Mimn. 5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:mimnermus:5",
+   "token": 31,
+   "line": 5,
+   "printed": "ἀμφιχυθέν",
+   "form": "ἀμφιχυθέν",
+   "gold_lemma": "ἀμφιχέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n6138",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29mfixe%2Fw",
+    "citation": "Mimn. 5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 0,
+   "line": 1,
+   "printed": "ποικιλόθρον’",
+   "form": "ποικιλόθρον’",
+   "gold_lemma": "ποικιλόθρονος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n84283",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpoikilo%2Fqronos",
+    "citation": "Sapph. 1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 5,
+   "line": 2,
+   "printed": "δολόπλοκε",
+   "form": "δολόπλοκε",
+   "gold_lemma": "δολοπλόκος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n27939",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddoloplo%2Fkos",
+    "citation": "Sapph. 1.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 7,
+   "line": 2,
+   "printed": "σε",
+   "form": "σε",
+   "gold_lemma": "σύ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n97456",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dsu%2F",
+    "citation": "Sapph. 1.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 10,
+   "line": 3,
+   "printed": "ἄσαισι",
+   "form": "ἄσαισι",
+   "gold_lemma": "ἄση",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n16153",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Fsh",
+    "citation": "Sapph. 1.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 12,
+   "line": 3,
+   "printed": "ὀνίαισι",
+   "form": "ὀνίαισι",
+   "gold_lemma": "ἀνία",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n8980",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29ni%2Fa",
+    "citation": "Sapph. 1.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 13,
+   "line": 3,
+   "printed": "δάμνα",
+   "form": "δάμνα",
+   "gold_lemma": "δαμνάω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n23394",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddamna%2Fw",
+    "citation": "Sapph. 1.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 15,
+   "line": 4,
+   "printed": "θῦμον",
+   "form": "θῦμον",
+   "gold_lemma": "θυμός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:9:n49415",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dqumo%2Fs",
+    "citation": "Sapph. 1.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 17,
+   "line": 5,
+   "printed": "τυίδ’",
+   "form": "τυίδ’",
+   "gold_lemma": "τυῖδε",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n105833",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtui%3Dde",
+    "citation": "Sapph. 1.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 20,
+   "line": 5,
+   "printed": "ποτα",
+   "form": "ποτα",
+   "gold_lemma": "πότε",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n85971",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpo%2Fte",
+    "citation": "Sapph. 1.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 21,
+   "line": 5,
+   "printed": "κἀτέρωτα",
+   "form": "κἀτέρωτα",
+   "gold_lemma": "ἐτέρωτα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n43255",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29te%2Frwta",
+    "citation": "Sapph. 1.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 25,
+   "line": 6,
+   "printed": "ἀίοισα",
+   "form": "ἀίοισα",
+   "gold_lemma": "ἀΐω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n2812",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29i%2F%2Bw1",
+    "citation": "Sapph. 1.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 26,
+   "line": 6,
+   "printed": "πήλοι",
+   "form": "πήλοι",
+   "gold_lemma": "τηλοῦ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n103839",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dthlou%3D",
+    "citation": "Sapph. 1.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 30,
+   "line": 7,
+   "printed": "δόμον",
+   "form": "δόμον",
+   "gold_lemma": "δόμος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n27980",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddo%2Fmos",
+    "citation": "Sapph. 1.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 32,
+   "line": 8,
+   "printed": "χρύσιον",
+   "form": "χρύσιον",
+   "gold_lemma": "χρύσεος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:25:n114816",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dxru%2Fseos",
+    "citation": "Sapph. 1.8"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 35,
+   "line": 9,
+   "printed": "ὐπασδεύξαισα",
+   "form": "ὐπασδεύξαισα",
+   "gold_lemma": "ὑποζεύγνυμι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:23:n108381",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Du%28pozeu%2Fgnumi",
+    "citation": "Sapph. 1.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 41,
+   "line": 10,
+   "printed": "στροῦθοι",
+   "form": "στροῦθοι",
+   "gold_lemma": "στρουθός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n97285",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dstrouqo%2Fs",
+    "citation": "Sapph. 1.10"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 42,
+   "line": 10,
+   "printed": "περὶ",
+   "form": "περὶ",
+   "gold_lemma": "περί",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n81017",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dperi%2F",
+    "citation": "Sapph. 1.10"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 45,
+   "line": 11,
+   "printed": "πύκνα",
+   "form": "πύκνα",
+   "gold_lemma": "πυκνός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n91439",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpukno%2Fs1",
+    "citation": "Sapph. 1.11"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 46,
+   "line": 11,
+   "printed": "δίννεντες",
+   "form": "δίννεντες",
+   "gold_lemma": "δινεύω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n27091",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddineu%2Fw",
+    "citation": "Sapph. 1.11"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 52,
+   "line": 12,
+   "printed": "μέσσω",
+   "form": "μέσσω",
+   "gold_lemma": "μέσος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n66494",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dme%2Fsos",
+    "citation": "Sapph. 1.12"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 53,
+   "line": 13,
+   "printed": "αἶψα",
+   "form": "αἶψα",
+   "gold_lemma": "αἶψα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n2809",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dai%29%3Dya",
+    "citation": "Sapph. 1.13"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 55,
+   "line": 13,
+   "printed": "ἐξίκοντο",
+   "form": "ἐξίκοντο",
+   "gold_lemma": "ἐξικνέομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n37378",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29cikne%2Fomai",
+    "citation": "Sapph. 1.13"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 59,
+   "line": 13,
+   "printed": "μάκαιρα",
+   "form": "μάκαιρα",
+   "gold_lemma": "μάκαρ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n64581",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dma%2Fkar",
+    "citation": "Sapph. 1.13"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 61,
+   "line": 14,
+   "printed": "ἀθανάτῳ",
+   "form": "ἀθανάτῳ",
+   "gold_lemma": "ἀθάνατος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n1899",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29qa%2Fnatos",
+    "citation": "Sapph. 1.14"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 63,
+   "line": 15,
+   "printed": "ἤρε’",
+   "form": "ἤρε’",
+   "gold_lemma": "ἔρομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n42648",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29%2Fromai",
+    "citation": "Sapph. 1.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 75,
+   "line": 18,
+   "printed": "μαινόλᾳ",
+   "form": "μαινόλᾳ",
+   "gold_lemma": "μαινόλης",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n64560",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmaino%2Flhs",
+    "citation": "Sapph. 1.18"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 85,
+   "line": 19,
+   "printed": "φιλότατα",
+   "form": "φιλότατα",
+   "gold_lemma": "φιλότης",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n111537",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfilo%2Fths",
+    "citation": "Sapph. 1.19"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 89,
+   "line": 20,
+   "printed": "Ψάπφ’",
+   "form": "Ψάπφ’",
+   "gold_lemma": "Σαπφώ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n93280",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3D%2Asapfw%2F",
+    "citation": "Sapph. 1.20"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 90,
+   "line": 20,
+   "printed": "ἀδικήει",
+   "form": "ἀδικήει",
+   "gold_lemma": "ἀδικέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n1377",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29dike%2Fw",
+    "citation": "Sapph. 1.20"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 96,
+   "line": 21,
+   "printed": "διώξει",
+   "form": "διώξει",
+   "gold_lemma": "διώκω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n27764",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddiw%2Fkw",
+    "citation": "Sapph. 1.21"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 101,
+   "line": 22,
+   "printed": "δέκετ’",
+   "form": "δέκετ’",
+   "gold_lemma": "δέχομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n24289",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dde%2Fxomai",
+    "citation": "Sapph. 1.22"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 126,
+   "line": 27,
+   "printed": "ἰμέρρει",
+   "form": "ἰμέρρει",
+   "gold_lemma": "ἱμείρω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:10:n50468",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Di%28mei%2Frw",
+    "citation": "Sapph. 1.27"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 131,
+   "line": 28,
+   "printed": "σύμμαχος",
+   "form": "σύμμαχος",
+   "gold_lemma": "σύμμαχος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n98358",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dsu%2Fmmaxos",
+    "citation": "Sapph. 1.28"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:1",
+   "token": 132,
+   "line": 28,
+   "printed": "ἔσσο",
+   "form": "ἔσσο",
+   "gold_lemma": "εἰμί",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n31130",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dei%29mi%2F1",
+    "citation": "Sapph. 1.28"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:sappho:5",
+   "token": 0,
+   "line": 1,
+   "printed": "Κύπρι",
+   "form": "Κύπρι",
+   "gold_lemma": "Κύπρις",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n61013",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3D%2Aku%2Fpris",
+    "citation": "Sapph. 5.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 2,
+   "line": 1,
+   "printed": "τέλος",
+   "form": "τέλος",
+   "gold_lemma": "τέλος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n103012",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dte%2Flos",
+    "citation": "Semon. 1.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 11,
+   "line": 2,
+   "printed": "τίθησ’",
+   "form": "τίθησ’",
+   "gold_lemma": "τίθημι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n103922",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dti%2Fqhmi",
+    "citation": "Semon. 1.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 20,
+   "line": 3,
+   "printed": "ἐφήμεροι",
+   "form": "ἐφήμεροι",
+   "gold_lemma": "ἐφήμερος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n45742",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29fh%2Fmeros",
+    "citation": "Semon. 1.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 29,
+   "line": 5,
+   "printed": "ἐκτελευτήσει",
+   "form": "ἐκτελευτήσει",
+   "gold_lemma": "ἐκτελευτάω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n32975",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29kteleuta%2Fw",
+    "citation": "Semon. 1.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 37,
+   "line": 7,
+   "printed": "ὁρμαίνοντας",
+   "form": "ὁρμαίνοντας",
+   "gold_lemma": "ὁρμαίνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n75149",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%28rmai%2Fnw",
+    "citation": "Semon. 1.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 47,
+   "line": 9,
+   "printed": "νέωτα",
+   "form": "νέωτα",
+   "gold_lemma": "νέωτα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:14:n70601",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dne%2Fwta",
+    "citation": "Semon. 1.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 64,
+   "line": 11,
+   "printed": "ἄζηλον",
+   "form": "ἄζηλον",
+   "gold_lemma": "ἄζηλος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n1816",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Fzhlos",
+    "citation": "Semon. 1.11"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 88,
+   "line": 15,
+   "printed": "λαίλαπι",
+   "form": "λαίλαπι",
+   "gold_lemma": "λαῖλαψ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n61644",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dlai%3Dlay",
+    "citation": "Semon. 1.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 89,
+   "line": 15,
+   "printed": "κλονεύμενοι",
+   "form": "κλονεύμενοι",
+   "gold_lemma": "κλονέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n57985",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dklone%2Fw",
+    "citation": "Semon. 1.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 99,
+   "line": 17,
+   "printed": "δυνήσωνται",
+   "form": "δυνήσωνται",
+   "gold_lemma": "δύναμαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n28566",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddu%2Fnamai",
+    "citation": "Semon. 1.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 103,
+   "line": 18,
+   "printed": "ἀγχόνην",
+   "form": "ἀγχόνην",
+   "gold_lemma": "ἀγχόνη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n1065",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29gxo%2Fnh",
+    "citation": "Semon. 1.18"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 107,
+   "line": 19,
+   "printed": "καὐτάγρετοι",
+   "form": "καὐτάγρετοι",
+   "gold_lemma": "αὐτάγρετος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n17545",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dau%29ta%2Fgretos",
+    "citation": "Semon. 1.19"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 113,
+   "line": 20,
+   "printed": "ἄπ’",
+   "form": "ἄπ’",
+   "gold_lemma": "ἀπό",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n12243",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29po%2F",
+    "citation": "Semon. 1.20"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:1",
+   "token": 119,
+   "line": 21,
+   "printed": "κἀνεπίφραστοι",
+   "form": "κἀνεπίφραστοι",
+   "gold_lemma": "ἀνεπίφραστος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n8464",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29nepi%2Ffrastos",
+    "citation": "Semon. 1.21"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:2",
+   "token": 5,
+   "line": 1,
+   "printed": "ἐνθυμοίμεθα",
+   "form": "ἐνθυμοίμεθα",
+   "gold_lemma": "ἐνθυμέομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n35642",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29nqume%2Fomai",
+    "citation": "Semon. 2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:29",
+   "token": 59,
+   "line": 9,
+   "printed": "καμάτου",
+   "form": "καμάτου",
+   "gold_lemma": "κάματος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n52939",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dka%2Fmatos",
+    "citation": "Semon. 29"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:6",
+   "token": 4,
+   "line": 1,
+   "printed": "ληίζεται",
+   "form": "ληίζεται",
+   "gold_lemma": "ληΐζομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n62858",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dlhi%2F%2Bzomai",
+    "citation": "Semon. 6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:6",
+   "token": 8,
+   "line": 2,
+   "printed": "ῥίγιον",
+   "form": "ῥίγιον",
+   "gold_lemma": "ῥίγιον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:20:n92395",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dr%28i%2Fgion",
+    "citation": "Semon. 6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 0,
+   "line": 1,
+   "printed": "χωρὶς",
+   "form": "χωρὶς",
+   "gold_lemma": "χωρίς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:25:n115213",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dxwri%2Fs",
+    "citation": "Semon. 7.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 11,
+   "line": 2,
+   "printed": "τανύτριχος",
+   "form": "τανύτριχος",
+   "gold_lemma": "τάνυθριξ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n102332",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dta%2Fnuqric",
+    "citation": "Semon. 7.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 12,
+   "line": 3,
+   "printed": "τῇ",
+   "form": "τῇ",
+   "gold_lemma": "ὁ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n71882",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%281",
+    "citation": "Semon. 7.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 17,
+   "line": 3,
+   "printed": "πεφυρμένα",
+   "form": "πεφυρμένα",
+   "gold_lemma": "φύρω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n112661",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfu%2Frw",
+    "citation": "Semon. 7.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 21,
+   "line": 4,
+   "printed": "κυλίνδεται",
+   "form": "κυλίνδεται",
+   "gold_lemma": "κυλίνδω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n60703",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkuli%2Fndw",
+    "citation": "Semon. 7.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 25,
+   "line": 5,
+   "printed": "ἄλουτος",
+   "form": "ἄλουτος",
+   "gold_lemma": "ἄλουτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n4663",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Floutos",
+    "citation": "Semon. 7.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 26,
+   "line": 5,
+   "printed": "ἀπλύτοις",
+   "form": "ἀπλύτοις",
+   "gold_lemma": "ἄπλυτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n12225",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Fplutos",
+    "citation": "Semon. 7.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 30,
+   "line": 6,
+   "printed": "κοπρίῃσιν",
+   "form": "κοπρίῃσιν",
+   "gold_lemma": "κοπρία",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n58988",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkopri%2Fa",
+    "citation": "Semon. 7.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 32,
+   "line": 6,
+   "printed": "πιαίνεται",
+   "form": "πιαίνεται",
+   "gold_lemma": "πιαίνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n83033",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpiai%2Fnw",
+    "citation": "Semon. 7.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 36,
+   "line": 7,
+   "printed": "ἀλιτρῆς",
+   "form": "ἀλιτρῆς",
+   "gold_lemma": "ἀλιτρός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n4312",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29litro%2Fs",
+    "citation": "Semon. 7.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 39,
+   "line": 7,
+   "printed": "ἀλώπεκος",
+   "form": "ἀλώπεκος",
+   "gold_lemma": "ἀλώπηξ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n4832",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29lw%2Fphc",
+    "citation": "Semon. 7.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 46,
+   "line": 9,
+   "printed": "λέληθεν",
+   "form": "λέληθεν",
+   "gold_lemma": "λανθάνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n61885",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dlanqa%2Fnw",
+    "citation": "Semon. 7.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 61,
+   "line": 11,
+   "printed": "ὀργὴν",
+   "form": "ὀργὴν",
+   "gold_lemma": "ὀργή",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n74767",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%29rgh%2F",
+    "citation": "Semon. 7.11"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 71,
+   "line": 12,
+   "printed": "αὐτομήτορα",
+   "form": "αὐτομήτορα",
+   "gold_lemma": "αὐτομήτωρ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n17820",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dau%29tomh%2Ftwr",
+    "citation": "Semon. 7.12"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 78,
+   "line": 13,
+   "printed": "θέλει",
+   "form": "θέλει",
+   "gold_lemma": "ἐθέλω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n30790",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29qe%2Flw",
+    "citation": "Semon. 7.13"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 84,
+   "line": 15,
+   "printed": "λέληκεν",
+   "form": "λέληκεν",
+   "gold_lemma": "λάσκω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n62023",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dla%2Fskw",
+    "citation": "Semon. 7.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 100,
+   "line": 17,
+   "printed": "ἐξαράξειεν",
+   "form": "ἐξαράξειεν",
+   "gold_lemma": "ἐξαράσσω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n36901",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29cara%2Fssw",
+    "citation": "Semon. 7.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 105,
+   "line": 18,
+   "printed": "μειλίχως",
+   "form": "μειλίχως",
+   "gold_lemma": "μείλιχος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n65727",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmei%2Flixos",
+    "citation": "Semon. 7.18"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 106,
+   "line": 18,
+   "printed": "μυθεύμενος",
+   "form": "μυθεύμενος",
+   "gold_lemma": "μυθέομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n69013",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmuqe%2Fomai",
+    "citation": "Semon. 7.18"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 112,
+   "line": 19,
+   "printed": "τύχῃ",
+   "form": "τύχῃ",
+   "gold_lemma": "τυγχάνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n105829",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtugxa%2Fnw",
+    "citation": "Semon. 7.19"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 114,
+   "line": 20,
+   "printed": "ἐμπέδως",
+   "form": "ἐμπέδως",
+   "gold_lemma": "ἔμπεδος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n34259",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29%2Fmpedos1",
+    "citation": "Semon. 7.20"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 116,
+   "line": 20,
+   "printed": "αὐονὴν",
+   "form": "αὐονὴν",
+   "gold_lemma": "αὐονή",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n17511",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dau%29onh%2F2",
+    "citation": "Semon. 7.20"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 121,
+   "line": 21,
+   "printed": "γηίνην",
+   "form": "γηίνην",
+   "gold_lemma": "γήινος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:3:n22115",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dgh%2Finos",
+    "citation": "Semon. 7.21"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 125,
+   "line": 22,
+   "printed": "πηρόν",
+   "form": "πηρόν",
+   "gold_lemma": "πηρός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n83010",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dphro%2Fs1",
+    "citation": "Semon. 7.22"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 139,
+   "line": 24,
+   "printed": "ἐπίσταται",
+   "form": "ἐπίσταται",
+   "gold_lemma": "ἐπίσταμαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n40972",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29pi%2Fstamai",
+    "citation": "Semon. 7.24"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 146,
+   "line": 26,
+   "printed": "ῥιγῶσα",
+   "form": "ῥιγῶσα",
+   "gold_lemma": "ῥιγόω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:20:n92403",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dr%28igo%2Fw",
+    "citation": "Semon. 7.26"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 148,
+   "line": 26,
+   "printed": "ἆσσον",
+   "form": "ἆσσον",
+   "gold_lemma": "ἆσσον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n16429",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%3Dsson",
+    "citation": "Semon. 7.26"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 149,
+   "line": 26,
+   "printed": "ἕλκεται",
+   "form": "ἕλκεται",
+   "gold_lemma": "ἕλκω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n33770",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%28%2Flkw",
+    "citation": "Semon. 7.26"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 167,
+   "line": 29,
+   "printed": "ἐπαινέσει",
+   "form": "ἐπαινέσει",
+   "gold_lemma": "ἐπαινέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n37885",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29paine%2Fw",
+    "citation": "Semon. 7.29"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 177,
+   "line": 30,
+   "printed": "λωίων",
+   "form": "λωίων",
+   "gold_lemma": "λωΐων",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n64335",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dlwi%2F%2Bwn",
+    "citation": "Semon. 7.30"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 196,
+   "line": 33,
+   "printed": "μαίνεται",
+   "form": "μαίνεται",
+   "gold_lemma": "μαίνομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n64562",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmai%2Fnomai",
+    "citation": "Semon. 7.33"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 198,
+   "line": 34,
+   "printed": "ἄπλητον",
+   "form": "ἄπλητον",
+   "gold_lemma": "ἄπλητος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n12195",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Fplhtos",
+    "citation": "Semon. 7.34"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 216,
+   "line": 37,
+   "printed": "ἀτρεμής",
+   "form": "ἀτρεμής",
+   "gold_lemma": "ἀτρεμής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n17191",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29tremh%2Fs",
+    "citation": "Semon. 7.37"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 233,
+   "line": 41,
+   "printed": "ἔοικε",
+   "form": "ἔοικε",
+   "gold_lemma": "ἔοικα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n37776",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29%2Foika",
+    "citation": "Semon. 7.41"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 247,
+   "line": 43,
+   "printed": "παλιντριβέος",
+   "form": "παλιντριβέος",
+   "gold_lemma": "παλιντριβής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n76968",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpalintribh%2Fs",
+    "citation": "Semon. 7.43"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 257,
+   "line": 45,
+   "printed": "ἔστερξεν",
+   "form": "ἔστερξεν",
+   "gold_lemma": "στέργω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n96541",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dste%2Frgw",
+    "citation": "Semon. 7.45"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 261,
+   "line": 46,
+   "printed": "ἀρεστά",
+   "form": "ἀρεστά",
+   "gold_lemma": "ἀρεστός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n14960",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29resto%2Fs",
+    "citation": "Semon. 7.46"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 268,
+   "line": 47,
+   "printed": "προνύξ",
+   "form": "προνύξ",
+   "gold_lemma": "προνύξ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n88109",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpronu%2Fc",
+    "citation": "Semon. 7.47"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 269,
+   "line": 47,
+   "printed": "προῆμαρ",
+   "form": "προῆμαρ",
+   "gold_lemma": "προῆμαρ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n87489",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dproh%3Dmar",
+    "citation": "Semon. 7.47"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 279,
+   "line": 48,
+   "printed": "ἀφροδίσιον",
+   "form": "ἀφροδίσιον",
+   "gold_lemma": "Ἀφροδίσιος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n18515",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3D%2A%29afrodi%2Fsios",
+    "citation": "Semon. 7.48"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 281,
+   "line": 49,
+   "printed": "ἑταῖρον",
+   "form": "ἑταῖρον",
+   "gold_lemma": "ἑταῖρος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n43089",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%28tai%3Dros",
+    "citation": "Semon. 7.49"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 302,
+   "line": 52,
+   "printed": "ἐράσμιον",
+   "form": "ἐράσμιον",
+   "gold_lemma": "ἐράσμιος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n42130",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29ra%2Fsmios",
+    "citation": "Semon. 7.52"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 321,
+   "line": 56,
+   "printed": "ἄθυστα",
+   "form": "ἄθυστα",
+   "gold_lemma": "ἄθυστος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n2087",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Fqustos",
+    "citation": "Semon. 7.56"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 323,
+   "line": 56,
+   "printed": "ἱρὰ",
+   "form": "ἱρὰ",
+   "gold_lemma": "ἱερός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:10:n50093",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Di%28ero%2Fs",
+    "citation": "Semon. 7.56"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 330,
+   "line": 57,
+   "printed": "χαιτέεσσ’",
+   "form": "χαιτέεσσ’",
+   "gold_lemma": "χαιτέεις",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:25:n112935",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dxaite%2Feis",
+    "citation": "Semon. 7.57"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 343,
+   "line": 59,
+   "printed": "κόσκινον",
+   "form": "κόσκινον",
+   "gold_lemma": "κόσκινον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n59282",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dko%2Fskinon",
+    "citation": "Semon. 7.59"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 353,
+   "line": 61,
+   "printed": "ἀσβόλην",
+   "form": "ἀσβόλην",
+   "gold_lemma": "ἀσβόλη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n16122",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29sbo%2Flh",
+    "citation": "Semon. 7.61"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 361,
+   "line": 63,
+   "printed": "λοῦται",
+   "form": "λοῦται",
+   "gold_lemma": "λούω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n63937",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dlou%2Fw",
+    "citation": "Semon. 7.63"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 366,
+   "line": 63,
+   "printed": "ῥύπον",
+   "form": "ῥύπον",
+   "gold_lemma": "ῥύπος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:20:n92830",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dr%28u%2Fpos",
+    "citation": "Semon. 7.63"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 376,
+   "line": 65,
+   "printed": "ἐκτενισμένην",
+   "form": "ἐκτενισμένην",
+   "gold_lemma": "κτενίζω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n60318",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkteni%2Fzw",
+    "citation": "Semon. 7.65"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 378,
+   "line": 66,
+   "printed": "βαθεῖαν",
+   "form": "βαθεῖαν",
+   "gold_lemma": "βαθύς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:2:n19082",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dbaqu%2Fs",
+    "citation": "Semon. 7.66"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 379,
+   "line": 66,
+   "printed": "ἀνθέμοισιν",
+   "form": "ἀνθέμοισιν",
+   "gold_lemma": "ἄνθεμον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n8714",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Fnqemon",
+    "citation": "Semon. 7.66"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 380,
+   "line": 66,
+   "printed": "ἐσκιασμένην",
+   "form": "ἐσκιασμένην",
+   "gold_lemma": "σκιάζω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n94828",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dskia%2Fzw",
+    "citation": "Semon. 7.66"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 384,
+   "line": 67,
+   "printed": "θέημα",
+   "form": "θέημα",
+   "gold_lemma": "θέαμα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:9:n47960",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dqe%2Fama",
+    "citation": "Semon. 7.67"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 397,
+   "line": 69,
+   "printed": "τύραννος",
+   "form": "τύραννος",
+   "gold_lemma": "τύραννος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n105974",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtu%2Frannos",
+    "citation": "Semon. 7.69"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 399,
+   "line": 69,
+   "printed": "σκηπτοῦχος",
+   "form": "σκηπτοῦχος",
+   "gold_lemma": "σκηπτοῦχος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n94804",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dskhptou%3Dxos",
+    "citation": "Semon. 7.69"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 424,
+   "line": 74,
+   "printed": "ἄστεος",
+   "form": "ἄστεος",
+   "gold_lemma": "ἄστυ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n16686",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Fstu",
+    "citation": "Semon. 7.74"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 433,
+   "line": 76,
+   "printed": "ἄπυγος",
+   "form": "ἄπυγος",
+   "gold_lemma": "ἄπυγος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n14574",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Fpugos",
+    "citation": "Semon. 7.76"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 434,
+   "line": 76,
+   "printed": "αὐτόκωλος",
+   "form": "αὐτόκωλος",
+   "gold_lemma": "αὐτόκωλος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n17786",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dau%29to%2Fkwlos",
+    "citation": "Semon. 7.76"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 435,
+   "line": 76,
+   "printed": "ἆ",
+   "form": "ἆ",
+   "gold_lemma": "ἆ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n3",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%3D3",
+    "citation": "Semon. 7.76"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 441,
+   "line": 77,
+   "printed": "ἀγκαλίζεται",
+   "form": "ἀγκαλίζεται",
+   "gold_lemma": "ἀγκαλίζομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n542",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29gkali%2Fzomai",
+    "citation": "Semon. 7.77"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 442,
+   "line": 78,
+   "printed": "δήνεα",
+   "form": "δήνεα",
+   "gold_lemma": "δήνεα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n24484",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddh%2Fnea",
+    "citation": "Semon. 7.78"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 458,
+   "line": 80,
+   "printed": "ἔρξειεν",
+   "form": "ἔρξειεν",
+   "gold_lemma": "ἔρδω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n42230",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29%2Frdw",
+    "citation": "Semon. 7.80"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 461,
+   "line": 80,
+   "printed": "ὁρᾷ",
+   "form": "ὁρᾷ",
+   "gold_lemma": "ὁράω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n74735",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%28ra%2Fw",
+    "citation": "Semon. 7.80"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 484,
+   "line": 84,
+   "printed": "μῶμος",
+   "form": "μῶμος",
+   "gold_lemma": "μῶμος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n69593",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmw%3Dmos",
+    "citation": "Semon. 7.84"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 486,
+   "line": 84,
+   "printed": "προσιζάνει",
+   "form": "προσιζάνει",
+   "gold_lemma": "προσιζάνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n89437",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dprosiza%2Fnw",
+    "citation": "Semon. 7.84"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 491,
+   "line": 85,
+   "printed": "κἀπαέξεται",
+   "form": "κἀπαέξεται",
+   "gold_lemma": "ἐπαέξω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n37864",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29pae%2Fcw",
+    "citation": "Semon. 7.85"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 511,
+   "line": 89,
+   "printed": "ἀμφιδέδρομεν",
+   "form": "ἀμφιδέδρομεν",
+   "gold_lemma": "ἀμφιτρέχω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n6113",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29mfitre%2Fxw",
+    "citation": "Semon. 7.89"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 521,
+   "line": 91,
+   "printed": "λόγους",
+   "form": "λόγους",
+   "gold_lemma": "λόγος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n63772",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dlo%2Fgos",
+    "citation": "Semon. 7.91"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 530,
+   "line": 93,
+   "printed": "πολυφραδεστάτας",
+   "form": "πολυφραδεστάτας",
+   "gold_lemma": "πολυφραδής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n85515",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpolufradh%2Fs",
+    "citation": "Semon. 7.93"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 579,
+   "line": 102,
+   "printed": "συνοικητῆρα",
+   "form": "συνοικητῆρα",
+   "gold_lemma": "συνοικητήρ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n100781",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dsunoikhth%2Fr",
+    "citation": "Semon. 7.102"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 586,
+   "line": 103,
+   "printed": "θυμηδεῖν",
+   "form": "θυμηδεῖν",
+   "gold_lemma": "θυμηδέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:9:n49371",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dqumhde%2Fw",
+    "citation": "Semon. 7.103"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 620,
+   "line": 109,
+   "printed": "τυγχάνει",
+   "form": "τυγχάνει",
+   "gold_lemma": "τυγχάνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n105829",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtugxa%2Fnw",
+    "citation": "Semon. 7.109"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 633,
+   "line": 111,
+   "printed": "ἁμαρτάνει",
+   "form": "ἁμαρτάνει",
+   "gold_lemma": "ἁμαρτάνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n4958",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%28marta%2Fnw",
+    "citation": "Semon. 7.111"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 638,
+   "line": 112,
+   "printed": "αἰνέσει",
+   "form": "αἰνέσει",
+   "gold_lemma": "αἰνέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n2515",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dai%29ne%2Fw",
+    "citation": "Semon. 7.112"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 643,
+   "line": 113,
+   "printed": "τοὐτέρου",
+   "form": "τοὐτέρου",
+   "gold_lemma": "ἕτερος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n43206",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%28%2Fteros",
+    "citation": "Semon. 7.113"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 659,
+   "line": 116,
+   "printed": "ἀμφέθηκεν",
+   "form": "ἀμφέθηκεν",
+   "gold_lemma": "ἀμφιτίθημι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n6103",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29mfiti%2Fqhmi",
+    "citation": "Semon. 7.116"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 667,
+   "line": 117,
+   "printed": "Ἀίδης",
+   "form": "Ἀίδης",
+   "gold_lemma": "Ἅιδης",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n2244",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3D%2A%28%2Faidhs",
+    "citation": "Semon. 7.117"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:semonides:7",
+   "token": 671,
+   "line": 118,
+   "printed": "ἀμφιδηριωμένους",
+   "form": "ἀμφιδηριωμένους",
+   "gold_lemma": "ἀμφιδηριάομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n5782",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29mfidhria%2Fomai",
+    "citation": "Semon. 7.118"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:solon:3",
+   "token": 126,
+   "line": 22,
+   "printed": "τρύχεται",
+   "form": "τρύχεται",
+   "gold_lemma": "τρύχω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n105769",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtru%2Fxw",
+    "citation": "Sol. 3.22"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:solon:5",
+   "token": 7,
+   "line": 1,
+   "printed": "ἀπαρκεῖ",
+   "form": "ἀπαρκεῖ",
+   "gold_lemma": "ἀπαρκέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n11534",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29parke%2Fw",
+    "citation": "Sol. 5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:solon:5",
+   "token": 10,
+   "line": 2,
+   "printed": "ἀφελὼν",
+   "form": "ἀφελὼν",
+   "gold_lemma": "ἀφαιρέω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n18107",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29faire%2Fw",
+    "citation": "Sol. 5.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:solon:5",
+   "token": 12,
+   "line": 2,
+   "printed": "ἐπορεξάμενος",
+   "form": "ἐπορεξάμενος",
+   "gold_lemma": "ἐπορέγω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n41842",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3De%29pore%2Fgw",
+    "citation": "Sol. 5.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:solon:5",
+   "token": 20,
+   "line": 3,
+   "printed": "ἀγητοί",
+   "form": "ἀγητοί",
+   "gold_lemma": "ἀγητός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n510",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29ghto%2Fs",
+    "citation": "Sol. 5.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:solon:5",
+   "token": 23,
+   "line": 4,
+   "printed": "ἐφρασάμην",
+   "form": "ἐφρασάμην",
+   "gold_lemma": "φράζω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n112217",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfra%2Fzw",
+    "citation": "Sol. 5.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 3,
+   "line": 1,
+   "printed": "ζάπεδον",
+   "form": "ζάπεδον",
+   "gold_lemma": "ζάπεδον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:7:n46098",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dza%2Fpedon",
+    "citation": "Xenoph. 1.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 10,
+   "line": 2,
+   "printed": "πλεκτοὺς",
+   "form": "πλεκτοὺς",
+   "gold_lemma": "πλεκτός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n83681",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dplekto%2Fs",
+    "citation": "Xenoph. 1.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 12,
+   "line": 2,
+   "printed": "ἀμφιτιθεῖ",
+   "form": "ἀμφιτιθεῖ",
+   "gold_lemma": "ἀμφιτίθημι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n6103",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29mfiti%2Fqhmi",
+    "citation": "Xenoph. 1.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 13,
+   "line": 2,
+   "printed": "στεφάνους",
+   "form": "στεφάνους",
+   "gold_lemma": "στέφανος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n96662",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dste%2Ffanos",
+    "citation": "Xenoph. 1.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 19,
+   "line": 3,
+   "printed": "φιάλῃ",
+   "form": "φιάλῃ",
+   "gold_lemma": "φιάλη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n110763",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfia%2Flh",
+    "citation": "Xenoph. 1.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 25,
+   "line": 4,
+   "printed": "ἐυφροσύνης",
+   "form": "ἐυφροσύνης",
+   "gold_lemma": "εὐφροσύνη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n45442",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Deu%29frosu%2Fnh",
+    "citation": "Xenoph. 1.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 33,
+   "line": 5,
+   "printed": "προδώσειν",
+   "form": "προδώσειν",
+   "gold_lemma": "προδίδωμι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n87038",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dprodi%2Fdwmi",
+    "citation": "Xenoph. 1.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 34,
+   "line": 6,
+   "printed": "μείλιχος",
+   "form": "μείλιχος",
+   "gold_lemma": "μείλιχος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n65727",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmei%2Flixos",
+    "citation": "Xenoph. 1.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 38,
+   "line": 6,
+   "printed": "ὀζόμενος",
+   "form": "ὀζόμενος",
+   "gold_lemma": "ὄζω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n72148",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%29%2Fzw",
+    "citation": "Xenoph. 1.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 41,
+   "line": 7,
+   "printed": "μέσοις",
+   "form": "μέσοις",
+   "gold_lemma": "μέσος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n66494",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dme%2Fsos",
+    "citation": "Xenoph. 1.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 42,
+   "line": 7,
+   "printed": "ἁγνὴν",
+   "form": "ἁγνὴν",
+   "gold_lemma": "ἁγνός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n729",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%28gno%2Fs",
+    "citation": "Xenoph. 1.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 44,
+   "line": 7,
+   "printed": "λιβανωτὸς",
+   "form": "λιβανωτὸς",
+   "gold_lemma": "λιβανωτός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:12:n63044",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dlibanwto%2Fs",
+    "citation": "Xenoph. 1.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 51,
+   "line": 8,
+   "printed": "γλυκὺ",
+   "form": "γλυκὺ",
+   "gold_lemma": "γλυκύς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:3:n22389",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dgluku%2Fs",
+    "citation": "Xenoph. 1.8"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 57,
+   "line": 9,
+   "printed": "ξανθοὶ",
+   "form": "ξανθοὶ",
+   "gold_lemma": "ξανθός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:15:n71450",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dcanqo%2Fs",
+    "citation": "Xenoph. 1.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 58,
+   "line": 9,
+   "printed": "γεραρή",
+   "form": "γεραρή",
+   "gold_lemma": "γεραρός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:3:n21963",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dgeraro%2Fs",
+    "citation": "Xenoph. 1.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 65,
+   "line": 10,
+   "printed": "ἀχθομένη",
+   "form": "ἀχθομένη",
+   "gold_lemma": "ἄχθομαι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n18706",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%2Fxqomai",
+    "citation": "Xenoph. 1.10"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 71,
+   "line": 11,
+   "printed": "μέσον",
+   "form": "μέσον",
+   "gold_lemma": "μέσος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n66494",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dme%2Fsos",
+    "citation": "Xenoph. 1.11"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 73,
+   "line": 11,
+   "printed": "πεπύκασται",
+   "form": "πεπύκασται",
+   "gold_lemma": "πυκάζω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n91404",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpuka%2Fzw",
+    "citation": "Xenoph. 1.11"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 76,
+   "line": 12,
+   "printed": "ἀμφὶς",
+   "form": "ἀμφὶς",
+   "gold_lemma": "ἀμφίς",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n6052",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29mfi%2Fs",
+    "citation": "Xenoph. 1.12"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 80,
+   "line": 12,
+   "printed": "θαλίη",
+   "form": "θαλίη",
+   "gold_lemma": "θαλία",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:9:n47797",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dqali%2Fa",
+    "citation": "Xenoph. 1.12"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 87,
+   "line": 13,
+   "printed": "εὔφρονας",
+   "form": "εὔφρονας",
+   "gold_lemma": "εὔφρων",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n45445",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Deu%29%2Ffrwn",
+    "citation": "Xenoph. 1.13"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 89,
+   "line": 14,
+   "printed": "εὐφήμοις",
+   "form": "εὐφήμοις",
+   "gold_lemma": "εὔφημος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n45408",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Deu%29%2Ffhmos",
+    "citation": "Xenoph. 1.14"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 94,
+   "line": 15,
+   "printed": "σπείσαντάς",
+   "form": "σπείσαντάς",
+   "gold_lemma": "σπένδω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n95849",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dspe%2Fndw",
+    "citation": "Xenoph. 1.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 106,
+   "line": 16,
+   "printed": "προχειρότερον",
+   "form": "προχειρότερον",
+   "gold_lemma": "πρόχειρος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n90753",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpro%2Fxeiros",
+    "citation": "Xenoph. 1.16"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 108,
+   "line": 17,
+   "printed": "ὕβρις",
+   "form": "ὕβρις",
+   "gold_lemma": "ὕβρις",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:23:n106177",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Du%28%2Fbris1",
+    "citation": "Xenoph. 1.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 116,
+   "line": 18,
+   "printed": "προπόλου",
+   "form": "προπόλου",
+   "gold_lemma": "πρόπολος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n88356",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpro%2Fpolos",
+    "citation": "Xenoph. 1.18"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 118,
+   "line": 18,
+   "printed": "πάνυ",
+   "form": "πάνυ",
+   "gold_lemma": "πάνυ^",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n77699",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpa%2Fnu%5E",
+    "citation": "Xenoph. 1.18"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 130,
+   "line": 20,
+   "printed": "μνημοσύνη",
+   "form": "μνημοσύνη",
+   "gold_lemma": "μνημοσύνη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n68189",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmnhmosu%2Fnh",
+    "citation": "Xenoph. 1.20"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 132,
+   "line": 20,
+   "printed": "τόνος",
+   "form": "τόνος",
+   "gold_lemma": "τόνος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n104274",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dto%2Fnos",
+    "citation": "Xenoph. 1.20"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 138,
+   "line": 21,
+   "printed": "διέπει",
+   "form": "διέπει",
+   "gold_lemma": "διέπω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n26637",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddie%2Fpw",
+    "citation": "Xenoph. 1.21"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 145,
+   "line": 22,
+   "printed": "πλάσματα",
+   "form": "πλάσματα",
+   "gold_lemma": "πλάσμα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n83490",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpla%2Fsma",
+    "citation": "Xenoph. 1.22"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:1",
+   "token": 150,
+   "line": 23,
+   "printed": "σφεδανάς",
+   "form": "σφεδανάς",
+   "gold_lemma": "σφεδανός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n101625",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dsfedano%2Fs",
+    "citation": "Xenoph. 1.23"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:10",
+   "token": 3,
+   "line": 1,
+   "printed": "Ὅμηρός",
+   "form": "Ὅμηρός",
+   "gold_lemma": "Ὅμηρος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n73492",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3D%2A%28%2Fomhros",
+    "citation": "Xenoph. 10"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 3,
+   "line": 1,
+   "printed": "ταχυτῆτι",
+   "form": "ταχυτῆτι",
+   "gold_lemma": "ταχυτής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n102739",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dtaxuth%2Fs",
+    "citation": "Xenoph. 2.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 9,
+   "line": 2,
+   "printed": "πενταθλεύων",
+   "form": "πενταθλεύων",
+   "gold_lemma": "πενταθλεύω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n80641",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpentaqleu%2Fw",
+    "citation": "Xenoph. 2.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 22,
+   "line": 4,
+   "printed": "πυκτοσύνην",
+   "form": "πυκτοσύνην",
+   "gold_lemma": "πυκτοσύνη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n91470",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpuktosu%2Fnh",
+    "citation": "Xenoph. 2.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 23,
+   "line": 4,
+   "printed": "ἀλγινόεσσαν",
+   "form": "ἀλγινόεσσαν",
+   "gold_lemma": "ἀλγινόεις",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n3901",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29lgino%2Feis",
+    "citation": "Xenoph. 2.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 28,
+   "line": 5,
+   "printed": "ἄεθλον",
+   "form": "ἄεθλον",
+   "gold_lemma": "ἆθλον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n2031",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29%3Dqlon",
+    "citation": "Xenoph. 2.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 30,
+   "line": 5,
+   "printed": "παγκράτιον",
+   "form": "παγκράτιον",
+   "gold_lemma": "παγκράτιον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n76474",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpagkra%2Ftion",
+    "citation": "Xenoph. 2.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 35,
+   "line": 6,
+   "printed": "κυδρότερος",
+   "form": "κυδρότερος",
+   "gold_lemma": "κυδρός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n60559",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkudro%2Fs",
+    "citation": "Xenoph. 2.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 36,
+   "line": 6,
+   "printed": "προσορᾶν",
+   "form": "προσορᾶν",
+   "gold_lemma": "προσοράω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n89840",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dprosora%2Fw",
+    "citation": "Xenoph. 2.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 39,
+   "line": 7,
+   "printed": "προεδρίην",
+   "form": "προεδρίην",
+   "gold_lemma": "προεδρία",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n87137",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dproedri%2Fa",
+    "citation": "Xenoph. 2.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 40,
+   "line": 7,
+   "printed": "φανερὴν",
+   "form": "φανερὴν",
+   "gold_lemma": "φανερός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n110243",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfanero%2Fs",
+    "citation": "Xenoph. 2.7"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 46,
+   "line": 8,
+   "printed": "σῖτ’",
+   "form": "σῖτ’",
+   "gold_lemma": "σῖτος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n94426",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dsi%3Dtos",
+    "citation": "Xenoph. 2.8"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 48,
+   "line": 8,
+   "printed": "δημοσίων",
+   "form": "δημοσίων",
+   "gold_lemma": "δημόσιος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n24444",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddhmo%2Fsios",
+    "citation": "Xenoph. 2.8"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 49,
+   "line": 8,
+   "printed": "κτεάνων",
+   "form": "κτεάνων",
+   "gold_lemma": "κτέανον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n60312",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkte%2Fanon",
+    "citation": "Xenoph. 2.8"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 51,
+   "line": 9,
+   "printed": "πόλιος",
+   "form": "πόλιος",
+   "gold_lemma": "πόλις",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n84494",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpo%2Flis",
+    "citation": "Xenoph. 2.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 56,
+   "line": 9,
+   "printed": "κειμήλιον",
+   "form": "κειμήλιον",
+   "gold_lemma": "κειμήλιον",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:11:n56396",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dkeimh%2Flion",
+    "citation": "Xenoph. 2.9"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 70,
+   "line": 11,
+   "printed": "ῥώμης",
+   "form": "ῥώμης",
+   "gold_lemma": "ῥώμη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:20:n92927",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dr%28w%2Fmh",
+    "citation": "Xenoph. 2.11"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 79,
+   "line": 13,
+   "printed": "εἰκῇ",
+   "form": "εἰκῇ",
+   "gold_lemma": "εἰκῇ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n30941",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dei%29kh%3D%7C",
+    "citation": "Xenoph. 2.13"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 82,
+   "line": 13,
+   "printed": "νομίζεται",
+   "form": "νομίζεται",
+   "gold_lemma": "νομίζω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:14:n70958",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dnomi%2Fzw",
+    "citation": "Xenoph. 2.13"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 85,
+   "line": 14,
+   "printed": "προκρίνειν",
+   "form": "προκρίνειν",
+   "gold_lemma": "προκρίνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n87859",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dprokri%2Fnw",
+    "citation": "Xenoph. 2.14"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 93,
+   "line": 15,
+   "printed": "πύκτης",
+   "form": "πύκτης",
+   "gold_lemma": "πύκτης",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n91462",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpu%2Fkths",
+    "citation": "Xenoph. 2.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 94,
+   "line": 15,
+   "printed": "ἀγαθὸς",
+   "form": "ἀγαθὸς",
+   "gold_lemma": "ἀγαθός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n260",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29gaqo%2Fs",
+    "citation": "Xenoph. 2.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 96,
+   "line": 15,
+   "printed": "μετείη",
+   "form": "μετείη",
+   "gold_lemma": "μέτειμι",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n67068",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dme%2Fteimi1",
+    "citation": "Xenoph. 2.15"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 109,
+   "line": 17,
+   "printed": "πρότιμον",
+   "form": "πρότιμον",
+   "gold_lemma": "πρότιμος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n90528",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpro%2Ftimos",
+    "citation": "Xenoph. 2.17"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 122,
+   "line": 19,
+   "printed": "εὐνομίῃ",
+   "form": "εὐνομίῃ",
+   "gold_lemma": "εὐνομία",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:5:n44558",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Deu%29nomi%2Fa",
+    "citation": "Xenoph. 2.19"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 140,
+   "line": 21,
+   "printed": "ὄχθας",
+   "form": "ὄχθας",
+   "gold_lemma": "ὄχθη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:16:n76219",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Do%29%2Fxqh",
+    "citation": "Xenoph. 2.21"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 143,
+   "line": 22,
+   "printed": "πιαίνει",
+   "form": "πιαίνει",
+   "gold_lemma": "πιαίνω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n83033",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpiai%2Fnw",
+    "citation": "Xenoph. 2.22"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:2",
+   "token": 145,
+   "line": 22,
+   "printed": "μυχοὺς",
+   "form": "μυχοὺς",
+   "gold_lemma": "μυχός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n69527",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmuxo%2Fs",
+    "citation": "Xenoph. 2.22"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 0,
+   "line": 1,
+   "printed": "ἁβροσύνας",
+   "form": "ἁβροσύνας",
+   "gold_lemma": "ἁβροσύνη",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n187",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%28brosu%2Fnh",
+    "citation": "Xenoph. 3.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 3,
+   "line": 1,
+   "printed": "ἀνωφελέας",
+   "form": "ἀνωφελέας",
+   "gold_lemma": "ἀνωφελής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n10979",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29nwfelh%2Fs",
+    "citation": "Xenoph. 3.1"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 7,
+   "line": 2,
+   "printed": "τυραννίης",
+   "form": "τυραννίης",
+   "gold_lemma": "τυραννία",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:22:n105960",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dturanni%2Fa",
+    "citation": "Xenoph. 3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 10,
+   "line": 2,
+   "printed": "στυγερῆς",
+   "form": "στυγερῆς",
+   "gold_lemma": "στυγερός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:21:n97356",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dstugero%2Fs",
+    "citation": "Xenoph. 3.2"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 14,
+   "line": 3,
+   "printed": "παναλουργέα",
+   "form": "παναλουργέα",
+   "gold_lemma": "παναλουργής",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:17:n77229",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dpanalourgh%2Fs",
+    "citation": "Xenoph. 3.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 15,
+   "line": 3,
+   "printed": "φάρε’",
+   "form": "φάρε’",
+   "gold_lemma": "φᾶρος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:24:n110368",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dfa%3Dros1",
+    "citation": "Xenoph. 3.3"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 18,
+   "line": 4,
+   "printed": "μείους",
+   "form": "μείους",
+   "gold_lemma": "μείων",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:13:n65761",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dmei%2Fwn",
+    "citation": "Xenoph. 3.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 19,
+   "line": 4,
+   "printed": "ὥσπερ",
+   "form": "ὥσπερ",
+   "gold_lemma": "ὥσπερ",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:27:n116416",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dw%28%2Fsper",
+    "citation": "Xenoph. 3.4"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 23,
+   "line": 5,
+   "printed": "αὐχαλέοι",
+   "form": "αὐχαλέοι",
+   "gold_lemma": "αὐχαλέος",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n18050",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dau%29xale%2Fos",
+    "citation": "Xenoph. 3.5"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 27,
+   "line": 6,
+   "printed": "ἀσκητοῖς",
+   "form": "ἀσκητοῖς",
+   "gold_lemma": "ἀσκητός",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:1:n16278",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Da%29skhto%2Fs",
+    "citation": "Xenoph. 3.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 29,
+   "line": 6,
+   "printed": "χρίμασι",
+   "form": "χρίμασι",
+   "gold_lemma": "χρῖμα",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:25:n114715",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Dxri%3Dma",
+    "citation": "Xenoph. 3.6"
+   }
+  },
+  {
+   "passage_id": "campbell-glp:xenophanes:3",
+   "token": 30,
+   "line": 6,
+   "printed": "δευόμενοι",
+   "form": "δευόμενοι",
+   "gold_lemma": "δεύω",
+   "source": {
+    "dictionary": "LSJ (PerseusDL LSJ TEI)",
+    "entry_id": "lsj:4:n24277",
+    "entry_url": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus%3Atext%3A1999.04.0057%3Aentry%3Ddeu%2Fw1",
+    "citation": "Xenoph. 3.6"
+   }
+  }
+ ]
+}

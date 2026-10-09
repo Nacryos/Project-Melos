@@ -1,4 +1,4 @@
-"""Citation resolution check (release P): 30 citations, each with the words its passage must contain.
+"""Citation resolution check (release P; release Q adds five numbering-scheme cases): 35 citations, each with the words its passage must contain.
 
     python scripts/eval_citations.py --base http://127.0.0.1:8792 --out cite-eval.json
 
@@ -27,6 +27,9 @@ CASES = [
     ("urn:cts:greekLit:tlg2045.tlg001:1.1", "ειπε θεα κρονιδαο"), ("urn:cts:greekLit:tlg0012.tlg002.perseus-grc2:9.366", "ουτις"),
     ("Sappho fr. 1", "ποικιλοθρον"), ("Sappho fr. 31", "φαινεται μοι"), ("Sappho 16", "οι μεν ιππηων"),
     ("Alc. 346", "πωνωμεν"), ("Anacr. 348", "γουνουμαι σ ελαφηβολε"), ("Sappho fr. 168A LP", "#168A"),
+    # release Q: numbering schemes (Voigt, Lobel-Page, Campbell) resolve to the same poems
+    ("Sappho fr. 31 V", "φαινεται μοι"), ("Alc. 346 L-P", "πωνωμεν"), ("Sappho Campbell 16", "οι μεν ιππηων"),
+    ("Sapph. 1 Voigt", "ποικιλοθρον"), ("Alc. 38a L.P.", "πωνε"),
 ]
 
 

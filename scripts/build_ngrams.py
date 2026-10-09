@@ -36,6 +36,8 @@ from backend.lemma_index import LemmaIndex, _log_likelihood  # noqa: E402
 
 MIN_COUNT = {"author": 3, "genre": 5, "period": 5, "corpus": 10}
 KEEP = 400
+PER_LEMMA = 40
+PER_LEMMA_MIN = 3   # minimum count of a phrase in the per-headword table (every group)
 CLOSED = ("article", "particle", "conjunction", "preposition", "pronoun")
 
 
@@ -55,26 +57,19 @@ def main():
         lemma_name[lid] = lemma
         if pos in CLOSED or norm is None:
             closed.add(lid)
-    skip = set()
+    not_counted = 0
     if args.citations:
-        # One copy of each text: where several collections hold the same TLG work (Perseus Iliad and
-        # OGC ilias), only the collection with the most cited passages is counted.
-        cit = sqlite3.connect(f"file:{args.citations}?mode=ro", uri=True)
-        rows = cit.execute("SELECT w.tlg_author, w.tlg_work, l.source, l.passage_id FROM locus l JOIN work w "
-                           "ON w.work_key=l.work_key WHERE w.tlg_work IS NOT NULL").fetchall()
-        size = Counter((a, w, src) for a, w, src, _ in rows)
-        primary = {}
-        for (a, w, src), count in size.items():
-            if (a, w) not in primary or count > size[(a, w, primary[(a, w)])]:
-                primary[(a, w)] = src
-        dropped = {(a, w, src) for (a, w, src) in size if primary[(a, w)] != src}
-        skip = {pid for a, w, src, pid in rows if (a, w, src) in dropped}
-        print(time.strftime("%H:%M:%S"), "duplicate collections skipped:", len(dropped), "works,", len(skip), "passages",
-              flush=True)
+        # One copy of each text (release Q: the same rule as the frequency tables, LemmaIndex.count_mask):
+        # where several collections hold the same TLG work, the collection with the most tokens of it
+        # inside the scope; a passage repeated word for word within one work once.
+        os.environ["MELOS_CITATION_INDEX"] = args.citations
+        counted = ix.count_mask(mask)
+        not_counted = int((mask & ~counted).sum())
+        print(time.strftime("%H:%M:%S"), "passages not counted (other collection or repeat):",
+              int((mask & ~counted).sum()), flush=True)
+        mask = counted
     groups = defaultdict(list)  # (kind, name) -> pids
     for pid in np.flatnonzero(mask).tolist():
-        if ix.pid_id[pid] in skip:
-            continue
         info = ix.authors.get(ix.author_of[pid]) or {}
         groups[("author", info.get("author") or ix.author_of[pid])].append(pid)
         if info.get("genre"):
@@ -95,7 +90,10 @@ def main():
       CREATE TABLE meta(key TEXT PRIMARY KEY, value TEXT);
       CREATE TABLE grp(kind TEXT, name TEXT, passages INTEGER, tokens INTEGER, PRIMARY KEY(kind, name));
       CREATE TABLE ngram(kind TEXT, name TEXT, n INTEGER, rank INTEGER, lemma_ids TEXT, lemmas TEXT, count INTEGER,
-                         expected REAL, g2 REAL, per_10k REAL, function_only INTEGER, example TEXT);""")
+                         expected REAL, g2 REAL, per_10k REAL, function_only INTEGER, example TEXT);
+      CREATE TABLE ngram_lemma(kind TEXT, name TEXT, n INTEGER, lemma_id INTEGER, lemma_ids TEXT, lemmas TEXT,
+                               count INTEGER, expected REAL, g2 REAL, per_10k REAL, function_only INTEGER, example TEXT);""")
+    lemma_rows = []
     for (kind, name), pids in sorted(groups.items()):
         unigram = Counter()
         grams = {2: Counter(), 3: Counter(), 4: Counter()}
@@ -130,7 +128,7 @@ def main():
             prefix_total = sum(prefixes.values()) or 1
             rows = []
             for gram, c in grams[n].items():
-                if c < minimum:
+                if c < PER_LEMMA_MIN:   # release Q: the per-headword table keeps rarer phrases
                     continue
                 r1 = prefixes.get(gram[:-1] if n > 2 else gram[0], 0)   # prefix occurrences
                 c1 = unigram.get(gram[-1], 0)                            # last headword occurrences
@@ -141,18 +139,36 @@ def main():
                 g2 = _log_likelihood(c, r1, c1, N)
                 rows.append((g2, c, expected, gram))
             rows.sort(key=lambda r: (-r[0], -r[1]))
-            for rank, (g2, c, expected, gram) in enumerate(rows[:KEEP], 1):
+            top_rows = [r for r in rows if r[1] >= minimum]
+            # Release Q: phrases indexed by headword, so a headword's phrases are found beyond the
+            # group's top list (up to PER_LEMMA per group, length and headword).
+            kept = Counter()
+            for g2, c, expected, gram in rows:
+                for lid in set(gram):
+                    if kept[lid] >= PER_LEMMA:
+                        continue
+                    kept[lid] += 1
+                    lemma_rows.append((kind, name, n, lid, " ".join(map(str, gram)),
+                                       " ".join(lemma_name.get(x, "?") for x in gram), c, round(expected, 3),
+                                       round(g2, 2), round(c * 1e4 / tokens, 3), int(all(x in closed for x in gram)),
+                                       example.get(gram)))
+            if len(lemma_rows) > 50000:
+                db.executemany("INSERT INTO ngram_lemma VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", lemma_rows)
+                lemma_rows.clear()
+            for rank, (g2, c, expected, gram) in enumerate(top_rows[:KEEP], 1):
                 db.execute("INSERT INTO ngram VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", (
                     kind, name, n, rank, " ".join(map(str, gram)), " ".join(lemma_name.get(x, "?") for x in gram), c,
                     round(expected, 3), round(g2, 2), round(c * 1e4 / tokens, 3),
                     int(all(x in closed for x in gram)), example.get(gram)))
         db.commit()
-    db.executescript("CREATE INDEX ngram_group ON ngram(kind, name, n, rank);")
+    db.executemany("INSERT INTO ngram_lemma VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", lemma_rows)
+    db.executescript("CREATE INDEX ngram_group ON ngram(kind, name, n, rank);"
+                     "CREATE INDEX ngram_lemma_key ON ngram_lemma(lemma_id, kind, name, n);")
     manifest = {"version": "melos-lemma-ngrams-v1", "built_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                 "index": {k: ix.manifest.get(k) for k in ("version", "built_at")},
                 "scope": "all indexed Greek records" if args.include_reference else "searchable edited Greek text",
-                "min_count": MIN_COUNT, "keep_per_group_and_length": KEEP, "groups": len(groups),
-                "duplicate_passages_skipped": len(skip),
+                "min_count": MIN_COUNT, "keep_per_group_and_length": KEEP, "per_headword": PER_LEMMA, "per_headword_min_count": PER_LEMMA_MIN, "groups": len(groups),
+                "duplicate_passages_skipped": not_counted,
                 "deduplication": ("one collection per TLG work (citation index); unnumbered fragment editions are "
                                   "not deduplicated") if args.citations else None,
                 "statistic": ("Dunning log-likelihood G2 of the last headword following the (n-1)-headword prefix "

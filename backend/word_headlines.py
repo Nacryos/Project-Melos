@@ -42,6 +42,29 @@ def _readings(index, form_ids):
     return out
 
 
+def _token_alternatives(index, pid):
+    """{token i: (lemma_id, probability)} for tokens with a genuine second reading (release Q
+    index table token_alt; empty for an older index)."""
+    import sqlite3
+    try:
+        return {i: (lemma_id, round(prob, 3)) for i, lemma_id, prob in index.con().execute(
+            "SELECT i, lemma_id, prob FROM token_alt WHERE pid=?", (int(pid),))}
+    except sqlite3.OperationalError:
+        return {}
+
+
+def _token_flags(index, pid):
+    """{token i: flags} (release Q index table token_flag; bit 1 = the contextual model named another
+    reading of the spelling). Empty for an older index."""
+    getter = getattr(index, "token_flags", None)
+    if getter is not None:
+        try:
+            return getter(pid) or {}
+        except Exception:  # noqa: BLE001 - an older index without the table
+            return {}
+    return {}
+
+
 def _lemmas(index, lemma_ids):
     ids = sorted(set(int(i) for i in lemma_ids))
     out = {}
@@ -79,11 +102,13 @@ def headlines(passage_id="", forms=()):
             raise HTTPException(404, "Passage not in the headword index (not Greek, or unknown id).")
         lem, fid, conf, src, starts, lengths = index.tokens(pid)
         readings = _readings(index, fid.tolist())
+        token_alts = _token_alternatives(index, pid)
+        token_flags = _token_flags(index, pid)
         names = _forms(index, fid.tolist())
         for i in range(len(lem)):
             tokens.append({"i": i, "start": int(starts[i]), "end": int(starts[i]) + int(lengths[i]),
                            "form_id": int(fid[i]), "lemma_id": int(lem[i]), "confidence": round(int(conf[i]) / 255, 3),
-                           "raw": int(conf[i]), "src": int(src[i])})
+                           "raw": int(conf[i]), "src": int(src[i]), "flags": token_flags.get(i, 0)})
     else:
         from .lemma_tokens import clean_form
         cleaned = [clean_form(f) for f in forms]
@@ -101,7 +126,10 @@ def headlines(passage_id="", forms=()):
             tokens.append({"i": i, "printed": printed, "form_id": f or 0, "lemma_id": top[0],
                            "confidence": round(top[1], 3) if top[0] else 0.0,
                            "raw": max(1, min(255, round(top[1] * 255))) if top[0] else 0, "src": top[2]})
+    if not passage_id:
+        token_alts = {}
     lemma_ids = {t["lemma_id"] for t in tokens if t["lemma_id"]}
+    lemma_ids.update(a[0] for a in token_alts.values())
     for rows in readings.values():
         lemma_ids.update(r[0] for r in rows)
     lemmas = _lemmas(index, lemma_ids)
@@ -121,12 +149,20 @@ def headlines(passage_id="", forms=()):
                 "lemma": head["lemma"] if head else None, "lemma_id": t["lemma_id"] or None,
                 "gloss": head["gloss"] if head else None, "gloss_source": head["gloss_source"] if head else None,
                 "pos": head["pos"] if head else None, "parses": parses, "confidence": t["confidence"],
-                "probability": probability(t["raw"], t["src"]) if t["lemma_id"] else None,
+                "probability": probability(t["raw"], t["src"], t.get("flags", 0)) if t["lemma_id"] else None,
                 "basis": describe_source(t["src"]),
                 "alternatives": [{"lemma": lemmas.get(l, {}).get("lemma"), "lemma_id": l,
                                   "gloss": lemmas.get(l, {}).get("gloss"), "form_probability": round(p, 3),
                                   "parses": ps} for l, p, _, ps in rows if l != t["lemma_id"]],
                 "tie": bool(rows) and len(rows) > 1 and rows[1][1] >= 0.8 * rows[0][1]}
+        alt = token_alts.get(t["i"])
+        if alt:
+            # Release Q: an elided word whose two readings are both genuinely possible here.
+            item["tie"] = True
+            item["tie_basis"] = "elision_model"
+            item["tie_alternative"] = {"lemma": lemmas.get(alt[0], {}).get("lemma"), "lemma_id": alt[0],
+                                       "gloss": lemmas.get(alt[0], {}).get("gloss"), "token_probability": alt[1]}
+            item["alternatives"].sort(key=lambda a: a["lemma_id"] != alt[0])
         if "start" in t:
             item.update(start=t["start"], end=t["end"], printed=text[t["start"]:t["end"]] if text else None)
         else:
@@ -140,7 +176,9 @@ def headlines(passage_id="", forms=()):
             "hash": digest, "tokens": out,
             "method": ("Headline = the corpus headword index's top reading of each token (parser, recorded forms, "
                        "generated dialect/elision spellings, rescored by the contextual model where it ran). "
-                       "Alternatives are the spelling's other readings. Confidence is a normalised score; "
+                       "Alternatives are the spelling's other readings; for an elided word whose second reading is "
+                       "genuinely possible in this context (release Q elision model) tie is true and "
+                       "tie_alternative names it. Confidence is a normalised score; "
                        "probability is that score calibrated against treebank gold lemmas (release P, "
                        "/api/lemma/status calibration), null when no calibration is deployed. /api/word gives the "
                        "full analysis."), "calibration": calibration_summary()}

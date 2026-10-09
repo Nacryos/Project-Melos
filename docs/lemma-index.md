@@ -151,3 +151,50 @@ corpus; one collection per TLG work; a passage repeated word for word within one
 3 (author), 5 (genre, period), 10 (corpus). Statistic: Dunning G² of the last headword after its (n−1)-headword
 prefix against its frequency in the group; positive associations only; top 400 per group and length;
 function-word-only n-grams flagged and hidden by default.
+
+## Release Q additions
+
+### Elided words
+
+`backend/elision.py`, model `data/elision_model.json` (`scripts/train_elision_model.py`), applied by
+`build_lemma_index.py assemble --elision-model`. Rules and ranking: `docs/morphology.md` "Release Q". Source bit 128
+(`elision_model`) marks a token whose reading the model ranked; its calibration class is `elision_model`. A genuine
+second reading is stored per token in `token_alt(pid, i, lemma_id, prob)`; the spelling's `form_lemma` order is the
+average of its tokens' readings.
+
+Evaluation (held-out treebank half, 131,011 tokens; evaluation indexes assembled with the gold works' treebank
+tokens removed from the form lists; the elision model trained on the other half only):
+
+| | Release P | Release Q |
+|---|---|---|
+| All held-out tokens, agreement with the gold lemma | 95.7 % | 96.7 % |
+| Elided tokens (13,095) | 88.2 % | 98.0 % |
+
+τ’ → τε (was σύ in 292 of 663 held-out cases), ἀλλ’ → ἀλλά (375 errors → 0), ἔνθ’ → ἔνθα, θ’ → τε, ποτ’ → ποτέ,
+αὖτ’ → αὖτε. Remaining elided errors are mostly genuine ambiguities (ὅτ’ ὅτε/ὅτι), which are kept as ties.
+
+### Counting each text once
+
+`LemmaIndex.count_mask`: frequency, distribution, concept diachrony and collocation background counts use one
+collection of each TLG work (the collection holding most of its words inside the scope, so a collection outside
+the scope never removes the in-scope copy) and count a passage repeated word for word within one collection and
+work once (`passage_repeat` table, built at assembly). N-grams use the same rule. Searchable edited Greek:
+1,386,111 → 1,067,763 counted words (293,066 in second collections of the same work, chiefly the Perseus and OGC
+copies of Homer, Hesiod, Apollonius, Theocritus, Pindar, Callimachus; 25,282 in word-for-word repeats).
+
+### Other
+
+- Recorded lemmas must be a dictionary headword or a parser lemma: 612 annotation strings dropped, chiefly treebank
+  placeholders written in Greek letters ("υνκνοων" = "unknown", "οτηερ" = "other") and malformed lemmas (τὁ, είμί).
+- Calibration classes (`backend/lemma_calibration.py`): `context_disagrees` (token_flag bit 1: the contextual model
+  named another reading of the spelling, not the same word under another lemmatisation convention such as
+  μάλιστα / μάλα) and `recorded_form_no_context` split out of `no_context_signal`; lyric reliability is reported on a
+  small gold set from LSJ entries that cite a Campbell poem and line (`data/evaluation/lyric-lemma-gold.json`,
+  report only, never fitted).
+- Variant links need agreeing meanings; "= B" must name the headword itself.
+- N-gram phrases are indexed per headword (`ngram_lemma`: up to 40 per group, length and headword, minimum count 3
+  in every group), so a headword's phrases are found beyond the group's top 400.
+- English `q` is read through sense head meanings before stems.
+- Display contexts drop printed line numbers (`line_numbers`).
+- Dates: periods from the floruit, else the middle of the active life (never the birth year); the Homeric Hymns,
+  Anacreontea and Semonides dated from Edmonds' *Lyra Graeca* pages in the corpus.

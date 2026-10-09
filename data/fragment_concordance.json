@@ -1,0 +1,57 @@
+{
+ "schema": "melos_fragment_concordance",
+ "version": 1,
+ "note": "Fragment-number statements read from sources, each with its evidence. Nothing here is inferred: an edition's own statement of the numbering it uses, a source sentence that names two numbers for one poem, or a source's general statement about two numbering systems (used only as a labelled, weaker 'convention' tier). Read by scripts/build_citation_index.py.",
+ "edition_numbering": [
+  {
+   "id": "campbell-glp-1967",
+   "scheme": "Campbell GLP",
+   "edition": "David A. Campbell, Greek Lyric Poetry (1967; reprinted 1976), Macmillan",
+   "record_id_prefix": "campbell-glp:",
+   "statement": "The numbering of the elegiac and iambic poets is that of E. Diehl, Anthologia Lyrica Graeca, rev. R. Beutler, Leipzig, 1949, 1952 (Teubner). For Sappho and Alcaeus I have used the marginal numbers of E. Lobel and D. Page, Poetarum Lesbiorum Fragmenta, for Bacchylides the numbers in the editions of Kenyon and Snell, for the other lyric poets the marginal numbers of D. Page, Poetae Melici Graeci.",
+   "printed_page": "xxxii",
+   "pdf_page": 30,
+   "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+   "evidence_check": "Read from the page image (PDF p. 30), not the corrupt text layer.",
+   "authors": {"Sappho": "Lobel-Page", "Alcaeus": "Lobel-Page"},
+   "authors_note": "Only the poets the statement names are mapped. The statement's classes 'elegiac and iambic poets' (Diehl) and 'other lyric poets' (PMG) are not mapped poet by poet here.",
+   "explicit_headings": [
+    {"pattern": "^(\\d{1,4}[a-z]?)D\\.$", "scheme": "Diehl", "rule": "a heading printed with D. (e.g. '96D.') is a Diehl number"},
+    {"pattern": "^Fr\\. Adesp\\. (\\d{1,4}[a-z]?) \\(P\\.M\\.G\\.\\)$", "scheme": "PMG adespota", "rule": "a heading printed 'Fr. Adesp. N (P.M.G.)' is fragmentum adespotum N of PMG"}
+   ]
+  }
+ ],
+ "equivalences": [
+  {"author": "Sappho", "a": ["Voigt", "1"], "b": ["Lobel-Page", "1"],
+   "source": {"kind": "wikipedia", "title": "Ode to Aphrodite", "revid": 1375758076, "url": "https://en.wikipedia.org/w/index.php?title=Ode_to_Aphrodite&oldid=1375758076",
+              "quote": "Though there are several different systems for numbering the surviving fragments of Sappho's poetry, the Ode to Aphrodite is fragment 1 in all major editions."}},
+  {"author": "Sappho", "a": ["Voigt", "31"], "b": ["Lobel-Page", "31"],
+   "source": {"kind": "wikipedia", "title": "Sappho 31", "revid": 1375954224, "url": "https://en.wikipedia.org/w/index.php?title=Sappho_31&oldid=1375954224",
+              "quote": "this article uses Voigt's numeration (which in most cases, including that of Sappho 31, matches Lobel and Page's numeration)"}},
+  {"author": "Sappho", "a": ["Voigt", "31"], "b": ["Diehl", "2"],
+   "source": {"kind": "wikipedia", "title": "Sappho 31", "revid": 1375954224, "url": "https://en.wikipedia.org/w/index.php?title=Sappho_31&oldid=1375954224",
+              "quote": "Sappho 31 in Voigt is fragment 2 in both Bergk's and Diehl's editions."}},
+  {"author": "Sappho", "a": ["Voigt", "31"], "b": ["Bergk", "2"],
+   "source": {"kind": "wikipedia", "title": "Sappho 31", "revid": 1375954224, "url": "https://en.wikipedia.org/w/index.php?title=Sappho_31&oldid=1375954224",
+              "quote": "Sappho 31 in Voigt is fragment 2 in both Bergk's and Diehl's editions."}},
+  {"author": "Sappho", "a": ["Voigt", "58"], "b": ["Lobel-Page", "58"],
+   "source": {"kind": "wikipedia", "title": "Tithonus poem", "revid": 1375758301, "url": "https://en.wikipedia.org/w/index.php?title=Tithonus_poem&oldid=1375758301",
+              "quote": "Voigt's numeration is one of the most commonly used. In most cases, including that of fragment 58, it matches the older Lobel-Page system."}},
+  {"author": "Sappho", "a": ["Voigt", "16"], "b": ["Diehl", "27"],
+   "source": {"kind": "wikipedia", "title": "Sappho 16", "revid": 1370755939, "url": "https://en.wikipedia.org/w/index.php?title=Sappho_16&oldid=1370755939",
+              "quote": "Sappho 16 Voigt is Sappho 27 in Diehl's edition"}},
+  {"author": "Sappho", "a": ["Voigt", "168b"], "b": ["PMG adespota", "976"],
+   "source": {"kind": "wikipedia", "title": "Midnight poem", "revid": 1273552931, "url": "https://en.wikipedia.org/w/index.php?title=Midnight_poem&oldid=1273552931",
+              "quote": "It is possibly by the archaic Greek poet Sappho, and is fragment 168 B in Eva-Maria Voigt's edition of her works. It is also sometimes known as PMG fr. adesp. 976"}}
+ ],
+ "conventions": [
+  {"authors": ["Sappho", "Alcaeus"], "schemes": ["Voigt", "Lobel-Page"], "relation": "same number, with minor variations",
+   "source": {"kind": "wikipedia", "title": "Sappho 96", "revid": 1374741629, "url": "https://en.wikipedia.org/w/index.php?title=Sappho_96&oldid=1374741629",
+              "quote": "Modern scholarship uses the numbering system from Eva-Maria Voigt's 1971 edition of the works of Sappho and Alcaeus, which itself follows with minor variations the numbering used by Edgar Lobel and Denys Page in their 1955 edition."},
+   "use": "Only when no explicit equivalence names either number; results reached this way are labelled 'convention' and carry a warning."}
+ ],
+ "not_used": [
+  {"source": "archive.org item sappho-et-alcaeus.-fragmenta (a scan of Voigt 1971)", "reason": "uploaded from a shadow library, not an open or licensed copy; its concordance tables were not read"},
+  {"source": "Digital Sappho note '168A Voigt = 178 Campbell, and Lobel & Page 168B ...'", "reason": "conflicts with the same site's heading '178 Campbell ( = Voigt, and Lobel & Page 168A)'; the text-pattern reader does not match it"}
+ ]
+}

@@ -41,6 +41,9 @@ DATE_BASIS = ("Wikidata biographical claim (birth, floruit, work period or death
               "data/metadata/chronology.json; not a composition date")
 WORK_DATE_BASIS = ("Wikidata inception claim on the anonymous collection's own item, from "
                    "data/metadata/chronology.json; a date range for the collection, not for each poem")
+EDITION_DATE_BASIS = ("Date printed by a source edition stored in the corpus (Edmonds, Lyra Graeca; quoted with its "
+                      "passage id in data/metadata/chronology.json), used because Wikidata has no referenced date "
+                      "claim; an author-period or collection range, not a poem date")
 
 GENRES = {
     "epic": ["Homer", "Apollonius Rhodius", "Quintus Smyrnaeus", "Nonnus", "Musaeus", "Homerica"],
@@ -148,10 +151,23 @@ def date_fields(claim):
     if not claim or claim.get("sort_start") is None:
         return None, None
     start, end = claim.get("sort_start"), claim.get("sort_end")
-    period = period_of(claim.get("sort_year"))
+    # Release Q: the period comes from the floruit when sourced, else the middle of the active life
+    # (scripts/collect_chronology.period_anchor), never the raw birth year; older files fall back
+    # to the displayed claim's midpoint.
+    anchor = claim.get("period_year")
+    rule = claim.get("period_rule") if anchor is not None else "selected_claim_midpoint"
+    if anchor is None:
+        anchor = claim.get("sort_year")
+    period = period_of(anchor)
     return ({"start": start, "end": end, "year": claim.get("sort_year"), "kind": claim.get("claim_kind"),
+             "period_year": anchor, "period_rule": rule,
+             "period_note": claim.get("period_note") or "period from the midpoint of the displayed claim",
              "scope": claim.get("scope", "author"), "entity": claim.get("entity_label"),
-             "source_url": claim.get("source_url"), "approximate": start != end,
+             "source_url": claim.get("source_url"), "approximate": start != end or bool(claim.get("approximate")),
+             # Release Q: a date printed by a source edition in the corpus (no referenced Wikidata claim).
+             **({"source_passage_ids": claim.get("source_passage_ids"),
+                 "edition_statement": claim.get("edition_statement")}
+                if claim.get("type") == "edition_date_statement" else {}),
              "range_years": (end - start) if (start is not None and end is not None) else None,
              "crosses_period_boundary": period_of(start) != period_of(end)}, period)
 
@@ -246,9 +262,11 @@ def author_record(label):
     date, period = date_fields(author_date(label))
     note = "Undated: no sourced biographical date claim in data/metadata/chronology.json."
     if date:
-        basis = WORK_DATE_BASIS if date["scope"] == "work" else DATE_BASIS
+        basis = (EDITION_DATE_BASIS if date.get("edition_statement") else
+                 WORK_DATE_BASIS if date["scope"] == "work" else DATE_BASIS)
         note = (basis + (". Approximate: the claim is a range" if date["approximate"] else "")
-                + ("; the range crosses a period boundary" if date["crosses_period_boundary"] else "") + ".")
+                + ("; the range crosses a period boundary" if date["crosses_period_boundary"] else "") + ". "
+                + "Period: " + date["period_note"] + ".")
     basis = {"source_edition_label": "Sourced: the genre named by a source edition's own collection or work label "
                                      "(genre_labels)",
              "wikidata_p136": "Sourced: the author's Wikidata genre (P136) statement (genre_labels)",

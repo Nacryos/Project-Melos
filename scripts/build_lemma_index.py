@@ -378,7 +378,25 @@ _VARIANT_PATTERNS = (
 )
 
 
-def lemma_variants(lemma_ids, lemma_tokens, heads):
+_GLOSS_STOP = {"the", "a", "an", "of", "to", "and", "or", "in", "on", "for", "with", "by", "as", "at", "from", "be",
+               "is", "one", "one's", "any", "some", "which", "that", "this", "also", "form", "used", "esp", "etc"}
+
+
+def _gloss_words(gloss):
+    return {w for w in _re.findall(r"[a-z][a-z'-]+", str(gloss or "").lower()) if len(w) > 2 and w not in _GLOSS_STOP}
+
+
+def senses_agree(gloss_a, gloss_b):
+    """Release Q: a variant link needs the two headwords' meanings to agree (a shared content word of
+    their short glosses), so a homograph's link (ἅλιος (C) "Dor. for ἥλιος") is not given to the
+    headword whose meaning is another homograph's ("fruitless"). A headword without a gloss of its
+    own (πότνα) takes its meaning from the link."""
+    if not gloss_a:
+        return True
+    return bool(_gloss_words(gloss_a) & _gloss_words(gloss_b))
+
+
+def lemma_variants(lemma_ids, lemma_tokens, heads, glosses=None):
     """Variant links between headwords (release P): a dictionary entry of headword A says it is
     a dialect or poetic form of headword B ("ἔρος ... poet. for ἔρως", "πότνα = πότνια"), and B
     is itself a corpus headword. Both stay separate headwords; the link lets counts be combined
@@ -397,9 +415,18 @@ def lemma_variants(lemma_ids, lemma_tokens, heads):
                     m = pattern.search(text)
                     if not m:
                         continue
+                    if relation == "=" and any(fold(w) != fold(head) for w in
+                                               _re.findall(_GREEK_WORD, text[:m.start(m.lastindex)])
+                                               if _re.search(r"[Ͱ-Ͽἀ-῿]", w)
+                                               and not (w == w.lower() and len(fold(w)) <= 3)):
+                        # "= B" names B as the headword itself only when no other Greek word stands
+                        # before it ("Δίς = Ζεύς" in the entry of Δίιος is about Δίς); inflection
+                        # endings and articles of the header (ά, όν, ὁ) do not count
+                        break
                     target = heads.headword_key(unicodedata.normalize("NFC", m.groups()[-1]))
                     tid = lemma_ids.get(target)
-                    if tid and tid != lid and lemma_tokens.get(tid):
+                    if tid and tid != lid and lemma_tokens.get(tid) and (
+                            glosses is None or senses_agree(glosses.get(lid), glosses.get(tid))):
                         label = "=" if relation == "=" else m.group(1)
                         rows.add((lid, tid, label, str(entry.get("source") or "")[:80],
                                   text[max(0, m.start() - 30): m.end() + 10]))
@@ -444,6 +471,18 @@ def stage_assemble(args):
                 parse_cache[key] = ""
         return parse_cache[key]
 
+    # Release Q: a lemma recorded for a spelling in a source annotation is kept only when it is a
+    # dictionary headword or a lemma the parser itself gives somewhere (a treebank placeholder
+    # "other" written in Greek letters, οτηερ, is neither).
+    parser_heads = set()
+    for _, parsed in morph.values():
+        for lemma, _ in parsed:
+            parser_heads.add(canon(lemma)[0])
+    for accepted in gen.values():
+        for _, _, parsed_g in accepted:
+            for lemma, _ in parsed_g:
+                parser_heads.add(canon(lemma)[0])
+    dropped_recorded = Counter()
     evidence = {}
     for form in forms:
         cands = {}
@@ -470,6 +509,9 @@ def stage_assemble(args):
         lookup_form = form.rstrip("’")
         for lemma in heads.morph.form_lemmas(form) or (heads.morph.form_lemmas(lookup_form) if lookup_form != form else []):
             head, rule = canon(lemma)
+            if rule is None and head not in parser_heads and not heads.lookup(head)[0]:
+                dropped_recorded[head] += forms[form][0]
+                continue
             c = cands.setdefault(head, {"src": 0, "n": 0, "pos": set(), "rules": set()})
             c["src"] |= RECORDED
         if not cands and not form.endswith("’"):
@@ -479,7 +521,9 @@ def stage_assemble(args):
             if match == "exact":
                 cands[key] = {"src": HEADWORD, "n": 0, "pos": set(), "rules": set()}
         evidence[form] = cands
-    log("evidence built", round(time.time() - started), "s;", len(canon_cache), "parser lemmas canonicalised")
+    log("evidence built", round(time.time() - started), "s;", len(canon_cache), "parser lemmas canonicalised;",
+        len(dropped_recorded), "recorded lemmas that are neither headword nor parser lemma dropped, e.g.",
+        dropped_recorded.most_common(12))
 
     def weight(c, parsed=False):
         # A lemma recorded for the spelling in a source annotation but not among the parser's
@@ -551,8 +595,29 @@ def stage_assemble(args):
             form_ids[f] = len(form_ids) + 1
         return form_ids[f]
 
-    CONTEXT_AGREES, CONTEXT_CHOSE, DAMAGED = 16, 32, 64
-    stats = {"tokens": 0, "with_lemma": 0, "context_agrees": 0, "context_changed": 0}
+    CONTEXT_AGREES, CONTEXT_CHOSE, DAMAGED, ELIDED = 16, 32, 64, 128
+    stats = {"tokens": 0, "with_lemma": 0, "context_agrees": 0, "context_changed": 0,
+             "elision_model": 0, "elision_ties": 0, "elision_changed": 0, "context_disagrees": 0}
+    flag_rows = []   # release Q: token_flag (bit 1: the context model named another reading of the spelling)
+    # Release Q: elided spellings with several readings are ranked per token by the elision model
+    # (backend/elision.py): treebank train prior, restored spellings' corpus frequency, context.
+    head_class = {h: (c.most_common(1)[0][0] if c else "unknown") for h, c in lemma_pos.items()}
+    from backend.lemma_calibration import same_lexeme
+    elision = None
+    if args.elision_model:
+        from backend.elision import ElisionModel, base_distribution, is_elided, is_tie, key as ekey, token_features
+        elision = ElisionModel.load(args.elision_model)
+        freq_by_key = defaultdict(Counter)
+        for f, ranked_f in posterior.items():
+            if not is_elided(f):
+                for h, p in ranked_f:
+                    freq_by_key[ekey(f)][h] += forms[f][0] * p
+        log("elision model", args.elision_model, elision.data.get("params"), len(freq_by_key), "restorable spellings")
+    elided_mass = defaultdict(Counter)
+    alt_rows = []
+    # Release Q: a passage repeated word for word within one collection and work (a refrain, a
+    # record stored twice) is counted once in frequency tables, as n-grams and collocations do.
+    first_copy, repeat_rows = {}, []
     prior_tokens = Counter()
     by_group = defaultdict(Counter)
     con = sqlite3.connect(f"file:{args.corpus}?mode=ro", uri=True)
@@ -591,7 +656,23 @@ def stage_assemble(args):
                     # frequency prior of English readings so search ranks as in release O.
                     prior_tokens[lid(choice)] += 1
                 pred = pred_at.get(s)
-                if pred and len(ranked) > 1:
+                if elision is not None and len(ranked) > 1 and is_elided(form):
+                    feats = token_features(row["text"], tokens, i, pred_at)
+                    base = base_distribution(form, dict(ranked), freq_by_key.get,
+                                             feats["next_initial"] == "rough")
+                    ranked_e = elision.rank(form, base, head_class, feats, ekey)
+                    flags |= ELIDED
+                    stats["elision_model"] += 1
+                    if ranked_e[0][0] != choice:
+                        stats["elision_changed"] += 1
+                    tie = is_tie(ranked_e, same=ekey)
+                    if tie:
+                        stats["elision_ties"] += 1
+                        alt_rows.append((pid, i, lid(tie[0]), round(tie[1], 4)))
+                    for h, p in ranked_e:
+                        elided_mass[form][h] += p
+                    choice, prob = ranked_e[0]
+                elif pred and len(ranked) > 1:
                     plemma, upos = heads.headword_key(pred[2]) if pred[2] else "", pred[3]
                     rescored = []
                     for h, p in ranked:
@@ -619,6 +700,13 @@ def stage_assemble(args):
                         flags |= CONTEXT_AGREES
                         stats["context_agrees"] += 1
                     choice, prob = rescored[0]
+                    other = next((h for h, _ in ranked if plemma and fold(h) == fold(plemma)), None)
+                    if other and fold(other) != fold(choice) and not same_lexeme(
+                            choice, other, head_class.get(choice), head_class.get(other), heads.morph.form_lemmas):
+                        # the contextual model named another reading of this spelling (not the same word
+                        # under another lemmatisation convention: μάλιστα / μάλα) and could not impose it
+                        flag_rows.append((pid, i, 1))
+                        stats["context_disagrees"] += 1
                 elif pred and pred[2] and fold(heads.headword_key(pred[2])) == fold(choice):
                     flags |= CONTEXT_AGREES
                     stats["context_agrees"] += 1
@@ -633,6 +721,12 @@ def stage_assemble(args):
             src[i] = flags
             stats["tokens"] += 1
             by_group[group]["tokens"] += 1
+        if lemmas.any():
+            copy_key = (row["source"], label, row["work"], lemmas.tobytes())
+            if copy_key in first_copy:
+                repeat_rows.append((pid, first_copy[copy_key]))
+            else:
+                first_copy[copy_key] = pid
         for l, n in here.items():
             lemma_tokens[int(l)] += n
             lemma_passages[int(l)] += 1
@@ -649,6 +743,11 @@ def stage_assemble(args):
     ix.executemany("INSERT INTO passage VALUES (?,?,?,?,?,?,?,?,?,?,?,?)", passage_rows)
     posting_rows.sort()
     ix.executemany("INSERT INTO posting VALUES (?,?,?)", posting_rows)
+    ix.executemany("INSERT INTO token_alt VALUES (?,?,?,?)", alt_rows)
+    ix.executemany("INSERT INTO passage_repeat VALUES (?,?)", repeat_rows)
+    ix.executemany("INSERT INTO token_flag VALUES (?,?,?)", flag_rows)
+    stats["repeated_passages"] = len(repeat_rows)
+    first_copy.clear()
     log("tokens", stats)
 
     # lemma table with a short gloss and gloss terms (English -> Greek bridge)
@@ -672,7 +771,7 @@ def stage_assemble(args):
     ix.executemany("INSERT INTO lemma VALUES (?,?,?,?,?,?,?,?,?)", lemma_rows)
     ix.executemany("INSERT INTO lemma_gloss_term VALUES (?,?,?,?)", term_rows)
     ix.executemany("INSERT INTO lemma_prior VALUES (?,?)", sorted(prior_tokens.items()))
-    variant_rows = lemma_variants(lemma_ids, lemma_tokens, heads)
+    variant_rows = lemma_variants(lemma_ids, lemma_tokens, heads, {r[0]: r[7] for r in lemma_rows})
     ix.executemany("INSERT INTO lemma_variant VALUES (?,?,?,?,?)", variant_rows)
     log("variant links", len(variant_rows))
     rules = {h: r for h, (h2, r) in ((k, v) for k, v in canon_cache.items()) if r}
@@ -688,7 +787,13 @@ def stage_assemble(args):
         normalised = next((c["rules"] for c in cands.values() if c["rules"]), None)
         form_rows.append((i, f, fold(f), forms.get(f, (0, 0))[0], label,
                           json.dumps(sorted(normalised), ensure_ascii=False) if normalised else None))
-        for rank, (h, p) in enumerate(posterior.get(f, [])[:6]):
+        ranked_f = posterior.get(f, [])
+        if f in elided_mass:
+            # Elided spelling: readings in the order of the elision model's token readings.
+            mass = elided_mass[f]
+            total = sum(mass.values()) or 1.0
+            ranked_f = sorted(((h, mass[h] / total) for h, _ in ranked_f), key=lambda kv: (-kv[1], kv[0]))
+        for rank, (h, p) in enumerate(ranked_f[:6]):
             parses = [x for x in dict.fromkeys(cands[h].get("parses") or []) if x][:6]
             fl_rows.append((i, lid(h), rank, round(p, 4), cands[h]["src"],
                             json.dumps(parses, ensure_ascii=False) if parses else None))
@@ -716,10 +821,14 @@ def stage_assemble(args):
         "stages": {k: json.loads(v) for k, v in st.execute("SELECT key,value FROM meta WHERE key IN ('forms','morph','generate')")},
         "tokens": stats, "coverage_by_group": coverage, "lemmas": len(lemma_ids), "forms": len(form_ids),
         "passages": pid, "context_passages": len(context), "assemble_seconds": round(time.time() - started),
+        "recorded_lemmas_dropped": {"lemmas": len(dropped_recorded), "examples": dropped_recorded.most_common(20)},
+        "elision_model": ({k: elision.data.get(k) for k in ("version", "built_at", "split", "params", "train")}
+                          if elision is not None else None),
         "source_bits": {"1": "local Morpheus parse of the printed form", "2": "lemma recorded for this spelling in a source annotation (treebank/lexicon form list)",
                         "4": "Morpheus parse of a generated dialect/elision spelling (release N rules)",
                         "8": "printed form is itself a dictionary headword", "16": "contextual model (OdyCy) names the same lemma",
-                        "32": "contextual model changed the choice among parser lemmas", "64": "word printed with brackets or underdots"},
+                        "32": "contextual model changed the choice among parser lemmas", "64": "word printed with brackets or underdots",
+                        "128": "elided word: reading ranked by the elision model (treebank train prior, restored spellings' frequency, context)"},
         "method": ("Distinct printed spellings are analysed once: local Morpheus, then release-N generate-and-test spellings "
                    "for forms of edited text that Morpheus does not know; parser lemmas are read to dictionary headwords "
                    "(headword, elided lemma, lemma as recorded form, Lesbian psilosis, dialect correspondences). Candidate "
@@ -747,6 +856,7 @@ def main():
     p.add_argument("--model", default="/syntax-model")
     p.add_argument("--where", default="")
     p.add_argument("--all-records", action="store_true", help="context: every Greek record, not only edited text")
+    p.add_argument("--elision-model", default="", help="assemble: release Q elided-word model (train_elision_model.py)")
     p.add_argument("--shards", type=int, default=1)
     p.add_argument("--shard", type=int, default=0)
     args = p.parse_args()

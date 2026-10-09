@@ -76,6 +76,88 @@ ATTRIBUTED = {
     "Callimachus": "Q192417", "Theocritus": "Q219484", "Posidippus": "Q1392801", "Anacreon": "Q213484",
     "Moschus": "Q957548", "Simonides": "Q273003",
 }
+# Release Q: a date printed by a source edition stored in the corpus, used only when Wikidata has no
+# referenced claim for the label (2026-10-09 check: the Homeric Hymns, Orphic hymns, Anacreontea,
+# Argonautica Orphica, Lithica Orphica and the individual Homeric Hymn items carry no date statement;
+# Semonides' birth, death and floruit statements carry no reference). Each entry quotes the stored
+# OCR text verbatim (verified against the corpus record at build time; the reading of the page image
+# was checked by eye) and transcribes the years it prints; nothing is estimated. Edmonds, Lyra Graeca
+# (Loeb, 1922-27), index of authors and closing chapter. Its "Orphic Hymns ... of uncertain date"
+# gives no range, so Orphica stays undated.
+EDITION_DATES = {
+    "Homeric Hymns": {
+        "passage_id": "lyra:lyragraecavol20002jmed:leaf:461", "citation": "Lyra Graeca, vol. II, p. 449 (index of authors)",
+        "quote": "Homeric Hymns: 63; a collection of hymns to the Gods by various hands; 750-550 B.c.?",
+        "page_reading": "Homeric Hymns: 63; a collection of hymns to the Gods by various hands; 750–550 B.C.?",
+        "interval": [-750, -550], "kind": "edition_date_range", "queried": True,
+        "also": [{"passage_id": "lyra:lyragraecabeingr03edmouoft:leaf:712", "citation": "Lyra Graeca, vol. III, p. 696",
+                  "quote": "a collection of hymns to the Gods by various hands; 750-550 B.C.?"}]},
+    "Anacreontea": {
+        "passage_id": "lyra:lyragraecabeingr03edmouoft:leaf:695", "citation": "Lyra Graeca, vol. III, p. 679",
+        "quote": "Anacreontea, which date from about 5.c. 150 to A.D. 550",
+        "page_reading": "Some of the Anacreontea, which date from about B.C. 150 to A.D. 550",
+        "interval": [-150, 550], "kind": "edition_date_range", "queried": False},
+    "Semonides": {
+        "passage_id": "lyra:lyragraecavol20002jmed:leaf:464", "citation": "Lyra Graeca, vol. II, p. 452 (index of authors)",
+        "quote": "Semonides of Amorgus: 197, 219, 339; iambic poet; 650 B.C.",
+        "page_reading": "Semonides of Amorgus: 197, 219, 339; iambic poet; 650 B.C.",
+        "interval": [-650, -650], "kind": "edition_index_year", "queried": False,
+        "note": "One round year printed by the index; the edition does not say whether it is a birth or floruit."},
+}
+EDITION_NOTE = ("Date printed by a source edition stored in the corpus (Edmonds, Lyra Graeca, Loeb 1922-27); used only "
+                "because Wikidata has no referenced date claim for this label. An author-period or collection range, "
+                "never a poem date.")
+
+
+def _squash(text: str) -> str:
+    return re.sub(r"\s+", " ", text or "").strip()
+
+
+def edition_texts(corpus: str) -> dict:
+    """Stored text of every passage EDITION_DATES quotes (for verification)."""
+    import sqlite3
+    con = sqlite3.connect(f"file:{corpus}?mode=ro", uri=True)
+    ids = [e["passage_id"] for e in EDITION_DATES.values()] + [a["passage_id"] for e in EDITION_DATES.values()
+                                                               for a in e.get("also", [])]
+    return {pid: text for pid, text in con.execute(
+        f"SELECT id, text FROM passages WHERE id IN ({','.join('?' * len(ids))})", ids)}
+
+
+def edition_chronology(site_name: str, texts: dict | None) -> dict | None:
+    """A claim from EDITION_DATES whose quote is verified in the stored corpus text, else None."""
+    entry = EDITION_DATES.get(site_name)
+    if not entry or texts is None:
+        return None
+    quotes = [entry] + entry.get("also", [])
+    if not all(_squash(q["quote"]) in _squash(texts.get(q["passage_id"], "")) for q in quotes):
+        return None
+    start, end = entry["interval"]
+    uncertainty = ["edition_statement_not_wikidata"]
+    if entry.get("queried"):
+        uncertainty.append("edition_marks_date_with_question_mark")
+    if "about" in entry.get("page_reading", ""):
+        uncertainty.append("edition_says_about")
+    if entry["kind"] == "edition_index_year":
+        uncertainty.append("single_round_year_kind_unstated")
+    return {
+        "type": "edition_date_statement", "claim_kind": entry["kind"],
+        "sort_start": start, "sort_end": end, "sort_year": (start + end) / 2,
+        # A single printed round year is still an approximate author date.
+        "approximate": True,
+        "source_url": f"corpus:{entry['passage_id']}",
+        "source_passage_ids": [q["passage_id"] for q in quotes],
+        "source_statement_ids": [],
+        "edition_statement": {"citation": entry["citation"], "quote_ocr": entry["quote"],
+                              "page_reading": entry.get("page_reading"), "note": entry.get("note"),
+                              "also": entry.get("also", [])},
+        "reference_types": ["source_edition_in_corpus"], "reference_notes": [EDITION_NOTE],
+        "uncertainty": uncertainty, "alternative_claim_count": 0,
+        "period_year": (start + end) / 2, "period_rule": "edition_range_midpoint",
+        "period_note": PERIOD_RULES["edition_range_midpoint"],
+        "method": EDITION_NOTE,
+    }
+
+
 PROPERTIES = {"P569": "birth", "P570": "death", "P1317": "floruit", "P2031": "work_period_start", "P2032": "work_period_end",
               "P571": "inception"}
 
@@ -210,6 +292,58 @@ def qualified_interval(time: dict | None, claim: dict) -> list[int] | None:
     return [start, end] if start <= end else None
 
 
+ACTIVE_AFTER_BIRTH = 40  # years: the conventional floruit ("acme") offset, capped by a sourced death
+PERIOD_RULES = {
+    "floruit": "period from the sourced floruit (midpoint of its interval)",
+    "work_period_midpoint": "period from the midpoint of the sourced work period",
+    "birth_plus_40_capped_by_death": "period from birth + 40 years, capped by the sourced death date",
+    "birth_plus_40": "period from birth + 40 years (no sourced floruit, work period or death)",
+    "death": "period from the sourced death date (no sourced floruit, work period or birth)",
+    "inception_midpoint": "period from the midpoint of the collection's sourced inception claim",
+    "edition_range_midpoint": "period from the midpoint of the range the source edition prints",
+}
+
+
+def period_anchor(claims: list[dict]) -> tuple[float | None, str | None]:
+    """(year, rule) placing a person in a period: the floruit when sourced, else the middle of the
+    active life, never the raw birth year (release Q; release P used the selected claim's midpoint,
+    so an author with a birth claim fell in the period of his birth: Euripides, born 480s BCE, Archaic).
+    Only referenced, non-deprecated claims count, as for the displayed date."""
+    def mid(kind: str) -> float | None:
+        found = [c for c in claims if c["kind"] == kind and c["rank"] != "deprecated"
+                 and c["references"] and c.get("effective_year_interval")]
+        if not found:
+            return None
+        # preferred rank first, then the narrowest interval (same spirit as the displayed claim)
+        best = min(found, key=lambda c: (c["rank"] != "preferred", c["effective_year_interval"][1]
+                                         - c["effective_year_interval"][0], c["statement_id"] or ""))
+        return sum(best["effective_year_interval"]) / 2
+
+    floruit = mid("floruit")
+    if floruit is not None:
+        return floruit, "floruit"
+    start, end = mid("work_period_start"), mid("work_period_end")
+    if start is not None or end is not None:
+        return ((start + end) / 2 if start is not None and end is not None else start if start is not None else end,
+                "work_period_midpoint")
+    birth, death = mid("birth"), mid("death")
+    if birth is not None and death is not None:
+        return min(birth + ACTIVE_AFTER_BIRTH, death), "birth_plus_40_capped_by_death"
+    if birth is not None:
+        return birth + ACTIVE_AFTER_BIRTH, "birth_plus_40"
+    if death is not None:
+        return death, "death"
+    inception = mid("inception")
+    if inception is not None:
+        return inception, "inception_midpoint"
+    return None, None
+
+
+def _period_fields(claims: list[dict]) -> dict:
+    year, rule = period_anchor(claims)
+    return {"period_year": year, "period_rule": rule, "period_note": PERIOD_RULES.get(rule)}
+
+
 def chronology_for_author(claims: list[dict], entity_url: str) -> dict:
     """Select one explicit author-date claim as a transparent sorting proxy."""
     def eligible(kind: str) -> list[dict]:
@@ -270,11 +404,12 @@ def chronology_for_author(claims: list[dict], entity_url: str) -> dict:
         },
         "uncertainty": uncertainty,
         "alternative_claim_count": len(candidates) - 1,
+        **_period_fields(claims),
         "method": "Select a referenced non-deprecated birth claim, otherwise floruit, work-period start, death, inception (in that order). Explicit earliest/latest qualifiers outrank preferred rank, then preferred rank, narrower interval, reference count, and statement ID. Sort-year is the selected interval midpoint, only an author-period proxy; it is never a poem date.",
     }
 
 
-def transform(raw_bytes: bytes) -> dict:
+def transform(raw_bytes: bytes, texts: dict | None = None) -> dict:
     payload = json.loads(raw_bytes)
     result = []
     genre_items = payload.get("genre_items", {})
@@ -313,6 +448,9 @@ def transform(raw_bytes: bytes) -> dict:
                   if c["rank"] != "deprecated" and c["kind"] in ("birth", "death", "floruit")
                   and c["effective_year_interval"]]
         entity_url = f"https://www.wikidata.org/wiki/{qid}"
+        chronology = chronology_for_author(claims, entity_url)
+        if chronology["type"] == "unknown" and scope != "attributed_author":
+            chronology = edition_chronology(site_name, texts) or chronology
         genre_claims = []
         for claim in entity.get("claims", {}).get("P136", []):
             snak = claim.get("mainsnak", {})
@@ -331,7 +469,7 @@ def transform(raw_bytes: bytes) -> dict:
             "entity_id": qid, "entity_url": entity_url,
             "claim_source": API, "claims": claims,
             "biographical_claim_envelope": [min(x[0] for x in bounds), max(x[1] for x in bounds)] if bounds else None,
-            "author_chronology": chronology_for_author(claims, entity_url),
+            "author_chronology": chronology,
             "genre_claims": genre_claims,
             "poem_date": None,
         })
@@ -413,6 +551,7 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--cached", action="store_true", help="Reparse saved raw API response")
     parser.add_argument("--attributions", metavar="CORPUS", help="Also write data/metadata/attributions.json from this corpus")
+    parser.add_argument("--corpus", metavar="CORPUS", help="Corpus for verifying EDITION_DATES quotes (default: --attributions)")
     args = parser.parse_args()
     if args.attributions:
         ATTRIBUTIONS.parent.mkdir(parents=True, exist_ok=True)
@@ -428,7 +567,13 @@ def main() -> None:
         raw_bytes = fetch()
         RAW.parent.mkdir(parents=True, exist_ok=True)
         RAW.write_bytes(raw_bytes)
-    output = transform(raw_bytes)
+    corpus = args.corpus or args.attributions
+    texts = edition_texts(corpus) if corpus else None
+    output = transform(raw_bytes, texts)
+    output["edition_dates"] = {name: ("verified" if edition_chronology(name, texts) else
+                                      "not used: quote not verified (no --corpus)" if texts is None else
+                                      "not used: quote not found in the stored text")
+                               for name in EDITION_DATES}
     OUTPUT.parent.mkdir(parents=True, exist_ok=True)
     OUTPUT.write_text(json.dumps(output, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {len(output['authors'])} author records and {sum(len(a['claims']) for a in output['authors'])} chronology claims to {OUTPUT}")

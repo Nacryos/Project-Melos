@@ -380,3 +380,28 @@ is not a tie). A
 capitalised printed word takes the capitalised headword when a dictionary prints it. The
 headline's dictionary entries are always fetched into `lexicon_entries`. Existing fields are
 unchanged (`selected_lemma` is still set only from `lemma=`).
+
+## Release Q: elided words in the headword index (2026-10-09)
+
+General rules only (`backend/elision.py`, trained by `scripts/train_elision_model.py`, applied in the index
+assembly with `--elision-model`; tests `tests/test_release_q_elision.py` use other words).
+
+- **Readings.** Elision removes only a final short vowel or diphthong, so an elided spelling's readings are its
+  parser readings, and the spellings with α ε ι ο αι οι added back. An unaccented stem restores an oxytone or atonic
+  ending (ἀλλ’ ← ἀλλά, never ἄλλα); an accented stem keeps its accent, or, when the accent is on its last vowel, an
+  oxytone that retracted (πόλλ’ ← πολλά). A final θ φ χ stands for τ π κ only before a rough breathing (καθ’ ἕνα).
+- **Ranking**, per token, naive Bayes: prior = treebank counts of the elided spelling's lemmas (train split only:
+  every PerseusDL treebank token except the gold works' held-out half), smoothed toward a base = the corpus
+  frequency of the accent-compatible restored spellings' headwords (index readings × tokens) mixed 0.8 / 0.2 with
+  the parser ranking; features = the contextual model's tag of the word (learnt from elided tokens), of the
+  previous and next word, and the clause position (text start or after . ; · : ! ?, after a comma, verse-line
+  start, medial), learnt per headword from every treebank token and backed off to the headword's part of speech.
+  Smoothing and the feature weight are chosen on a second split inside the training half (α 1, feature weight 0.5).
+  Accented homographs stay apart (ἄρα particle, ἀρά "prayer").
+- **Ties.** When the second reading is at least half as probable as the first (and not the same word in another
+  case), the token keeps it in `token_alt` and the headline API shows both (`tie_alternative`). On the held-out
+  treebank half, the gold lemma is one of the two readings in 96 % of tied tokens, split almost evenly (ὅτ’ ὅτε/ὅτι,
+  ὅθ’ ὅθι/ὅτε, μήτ’ μήτε/μήτις).
+- The spelling-level ranking (`form_lemma`) of an elided form is the average of its tokens' readings, so the
+  headline `alternatives` of the index list τ’ as τε before σύ. The live passage analysis (`/api/analyze-passage`,
+  `/api/word`) is unchanged.

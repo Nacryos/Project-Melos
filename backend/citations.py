@@ -7,8 +7,11 @@ where a record or an open catalogue states them (each mapping keeps its source).
 
 Line and book citations resolve to the stored passages whose locus range contains the cited
 locus (all editions; edited text first). Fragment citations keep the release-O rule: only a
-record's explicit fragment citation matches, numbering stays edition-specific, and an
-equivalence between editions is shown only when one record prints both numbers.
+record's explicit fragment citation matches, numbering stays edition-specific. Release Q adds
+numbering schemes ("Sappho fr. 31 V", "Alc. 346 L-P", "Sappho Campbell 16"): records citable in a
+scheme (their own citation names it, or their edition states its numbering), and equal numbers in
+other schemes where a record prints both or a cited source states them (data/fragment_concordance.json),
+each result labelled with that evidence.
 
 The abbreviation table below is query syntax (the conventional LSJ / Oxford Classical Dictionary
 abbreviations of the authors and works in this corpus), not a claim about the texts.
@@ -153,7 +156,27 @@ _SCHEMES = {"v": "Voigt", "voigt": "Voigt", "lp": "Lobel-Page", "l-p": "Lobel-Pa
             "lobelpage": "Lobel-Page", "lobel&page": "Lobel-Page",
             "pmg": "PMG", "page": "Page", "pmgf": "PMGF", "campbell": "Campbell", "c": "Campbell",
             "w": "West", "west": "West", "d": "Diehl", "diehl": "Diehl", "edmonds": "Edmonds", "bergk": "Bergk",
-            "f": "Finglass", "finglass": "Finglass", "slg": "SLG"}
+            "f": "Finglass", "finglass": "Finglass", "slg": "SLG",
+            # release Q
+            "lobelandpage": "Lobel-Page", "lobel-and-page": "Lobel-Page", "plf": "Lobel-Page",
+            "campbellglp": "Campbell GLP", "glp": "Campbell GLP", "campbell-glp": "Campbell GLP"}
+# A query naming "Campbell" means either Campbell edition in this corpus: the Loeb Greek Lyric (as the
+# Digital Sappho records name it) or Greek Lyric Poetry (1967), whose own records are cited by heading.
+_QUERY_SCHEMES = {"Campbell": ("Campbell", "Campbell GLP")}
+# Scheme names spelled out in full may stand before the number ("Sappho Campbell 16", "Voigt 31");
+# single-letter sigla only after it ("Sappho 31 V").
+_LEADING_SCHEMES = {k for k in _SCHEMES if len(k.replace("-", "")) >= 2 and k not in ("lp",)} | {"l-p", "lp"}
+
+
+def scheme_name(text):
+    """Canonical numbering-scheme name for a siglum or name ('L.P.', 'lobel page', 'V'), else None."""
+    key = _fold(text)
+    return _SCHEMES.get(key.replace(" ", "")) or _SCHEMES.get(key)
+
+
+def query_schemes(scheme):
+    """The stored scheme names a queried scheme covers."""
+    return _QUERY_SCHEMES.get(scheme, (scheme,)) if scheme else ()
 
 
 def parse_citation(query):
@@ -187,6 +210,31 @@ def parse_citation(query):
     marker = re.search(r"(?i)(?:^|\s)(?:fr(?:ag(?:ment)?)?s?|frr|f)\.?\s*$", head)
     if marker:
         head = head[: marker.start()].strip()
+    if not scheme:
+        # Release Q: a spelled-out scheme before the number ("Sappho Campbell 16", "Voigt 31",
+        # "Sapph. L-P 31", "Alc. Lobel & Page 346").
+        lead = re.search(r"(?:^|[\s,])([A-Za-z][A-Za-z.&-]*(?:\s?[&-]\s?[A-Za-z.]+)?)\s*$", head)
+        if lead:
+            folded = _fold(lead[1])
+            name = None
+            for k in (folded.replace(" ", ""), folded):
+                if k in _LEADING_SCHEMES:
+                    name = _SCHEMES[k]
+                    break
+            if name:
+                scheme = name
+                head = head[: lead.start(1)].strip().rstrip(",")
+                inner = re.search(r"(?i)(?:^|\s)(?:fr(?:ag(?:ment)?)?s?|frr|f)\.?\s*$", head)
+                if inner:
+                    head = head[: inner.start()].strip()
+                    marker = marker or inner
+                if not head:
+                    rng = parse_range(loc["locus"])
+                    if not rng or len(rng[0]) != 1:
+                        return None
+                    # No poet named: every poet with that number in that numbering (resolution time).
+                    return {"kind": "fragment", "author": None, "work": None, "work_prefix": None,
+                            "locus": list(rng[0]), "locus_end": list(rng[1]), "scheme": scheme, "query": query}
     key = _fold(head)
     words = key.split()
     author = work = None
@@ -298,9 +346,113 @@ class CitationIndex:
                             "record": r["passage_id"], "evidence": r["evidence"]})
         return out
 
+    # ------------------------------------------------------------------ fragment numbers (release Q)
+    def has_fragment_refs(self):
+        if not hasattr(self, "_has_frag"):
+            self._has_frag = bool(self.con().execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' AND name='fragment_ref'").fetchone())
+        return self._has_frag
+
+    def fragment_refs(self, author, scheme, number):
+        """Records citable as `number` in `scheme` (rows: passage_id, scheme, number, basis, evidence)."""
+        if not self.has_fragment_refs():
+            return []
+        sql = "SELECT * FROM fragment_ref WHERE scheme=? AND number=?" + (" AND author=?" if author else "")
+        args = (scheme, str(number).lower()) + ((author,) if author else ())
+        return [dict(r) for r in self.con().execute(sql + " ORDER BY passage_id", args)]
+
+    def ref_number_ids(self, number, corpus_path):
+        """Ids of every record whose citation/metadata states this fragment number (release-O reading),
+        or None when the index has no such table or was built from another corpus file."""
+        if not hasattr(self, "_has_ref_numbers"):
+            self._has_ref_numbers = bool(self.con().execute(
+                "SELECT 1 FROM sqlite_master WHERE type='table' AND name='ref_number'").fetchone())
+        if not self._has_ref_numbers:
+            return None
+        try:
+            st = os.stat(corpus_path)
+        except OSError:
+            return None
+        if (st.st_size, st.st_mtime_ns) != (self.manifest.get("corpus_size"), self.manifest.get("corpus_mtime_ns")):
+            return None
+        return [r[0] for r in self.con().execute("SELECT passage_id FROM ref_number WHERE number=?", (number,))]
+
+    def fragment_authors(self, scheme, number):
+        """Poets with a record citable as `number` in this (queried) scheme, or with an equivalence row."""
+        out = []
+        for s in query_schemes(scheme):
+            if self.has_fragment_refs():
+                out += [r[0] for r in self.con().execute(
+                    "SELECT DISTINCT author FROM fragment_ref WHERE scheme=? AND number=?", (s, str(number).lower()))]
+            out += [r[0] for r in self.con().execute(
+                "SELECT DISTINCT author FROM equiv WHERE (scheme_a=? AND num_a=?) OR (scheme_b=? AND num_b=?)",
+                (s, str(number).lower(), s, str(number).lower()))]
+        return sorted(set(out))
+
+    def concordance(self, author, scheme, number):
+        """Every (scheme, number) equal to the query for this poet, nearest first.
+
+        Edges: an equivalence printed by a record or stated by a cited source (strength 'printed'
+        / 'source'), and a source's general statement that two numberings agree (strength
+        'convention'; used only when no explicit equivalence names either number). Returns dicts
+        {scheme, number, strength, via: [edge evidence...]}; the query node itself is first."""
+        number = str(number).lower()
+        rows = [dict(r) for r in self.con().execute("SELECT * FROM equiv WHERE author=?", (author,))]
+        edges = {}
+        for r in rows:
+            a, b = (r["scheme_a"], r["num_a"]), (r["scheme_b"], r["num_b"])
+            ev = r["evidence"]
+            try:
+                parsed = json.loads(ev) if ev and ev.startswith("{") else None
+            except ValueError:
+                parsed = None
+            edge = ({"strength": "source", "source": parsed} if parsed and not r["passage_id"]
+                    else {"strength": "printed", "record": r["passage_id"], "evidence": ev})
+            edges.setdefault(a, []).append((b, edge))
+            edges.setdefault(b, []).append((a, edge))
+        conventions = [c for c in ((self.manifest.get("concordance") or {}).get("conventions") or [])
+                       if author in (c.get("authors") or [])]
+
+        def convention_edges(node):
+            out = []
+            for c in conventions:
+                pair = c.get("schemes") or []
+                if node[0] not in pair or len(pair) != 2:
+                    continue
+                other = pair[1] if node[0] == pair[0] else pair[0]
+                target = (other, node[1])
+                # An explicit equivalence between these two numberings that names either number
+                # overrides the convention (e.g. Voigt 105B = L-P 105C).
+                explicit = any(nb[0] == other for nb, _ in edges.get(node, [])) or \
+                    any(nb[0] == node[0] for nb, _ in edges.get(target, []))
+                if not explicit:
+                    out.append((target, {"strength": "convention", "relation": c.get("relation"),
+                                         "source": c.get("source")}))
+            return out
+
+        order = {"query": 0, "printed": 1, "source": 1, "convention": 2}
+        start = [(s, number) for s in query_schemes(scheme)]
+        seen = {n: {"scheme": n[0], "number": n[1], "strength": "query", "via": []} for n in start}
+        frontier = list(start)
+        while frontier:
+            node = frontier.pop(0)
+            here = seen[node]
+            for nb, edge in edges.get(node, []) + convention_edges(node):
+                # A path is as strong as its weakest edge.
+                rank = max(order[here["strength"]], order[edge["strength"]])
+                strength = ("convention" if rank == 2 else
+                            edge["strength"] if here["strength"] == "query" else here["strength"])
+                if nb in seen and (order[seen[nb]["strength"]], len(seen[nb]["via"])) <= (rank, len(here["via"]) + 1):
+                    continue
+                seen[nb] = {"scheme": nb[0], "number": nb[1], "strength": strength, "via": here["via"] + [edge]}
+                frontier.append(nb)
+        return sorted(seen.values(), key=lambda n: (order[n["strength"]], len(n["via"]), n["scheme"], n["number"]))
+
     def status(self):
-        return {"ready": True, **{k: self.manifest.get(k) for k in ("version", "built_at", "works", "loci",
-                                                                   "tlg_mapped_works", "equivalences")}}
+        out = {"ready": True, **{k: self.manifest.get(k) for k in ("version", "built_at", "works", "loci",
+                                                                  "tlg_mapped_works", "equivalences", "fragment_refs",
+                                                                  "fragment_ref_bases")}}
+        return out
 
 
 _INDEX = None
@@ -381,4 +533,5 @@ def resolve(query, limit=20):
                       "contains the cited locus, edited text first."}
 
 
-__all__ = ["parse_citation", "parse_range", "resolve", "get_citation_index", "CitationIndex"]
+__all__ = ["parse_citation", "parse_range", "resolve", "get_citation_index", "CitationIndex", "scheme_name",
+           "query_schemes"]

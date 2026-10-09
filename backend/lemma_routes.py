@@ -275,7 +275,17 @@ def lemma_ngrams(kind: str = "corpus", name: str = "all", n: int = Query(0, ge=0
                 return {"group": dict(group), "query": q, "ngrams": [], "note": "No headword found for the query."}
             ids = [str(i) for i in index.case_variants(resolved[0]["lemma_id"])]
         rows = []
-        for row in con.execute(sql + " ORDER BY g2 DESC", params):
+        source = sql + " ORDER BY g2 DESC"
+        if ids and con.execute("SELECT 1 FROM sqlite_master WHERE name='ngram_lemma'").fetchone():
+            # Release Q: phrases indexed by headword (not only the group's top list).
+            source = (sql.replace("FROM ngram WHERE", "FROM ngram_lemma WHERE") +
+                      f" AND lemma_id IN ({','.join('?' * len(ids))}) ORDER BY g2 DESC")
+            params = params + [int(i) for i in ids]
+        seen = set()
+        for row in con.execute(source, params):
+            if row["lemma_ids"] in seen:
+                continue
+            seen.add(row["lemma_ids"])
             gram_ids = row["lemma_ids"].split()
             if ids and not set(ids) & set(gram_ids):
                 continue

@@ -304,3 +304,51 @@ Citation index: `data/citation_index.sqlite` (env `MELOS_CITATION_INDEX`), built
   or for a Greek Anthology epigram its attributed poet's (`attributed_date` on lemma records), or for CTS tlg0013
   records filed as "Anonymous" the Homeric Hymns' (undated in Wikidata). Author records add `genre_source`
   (`source_edition_label` | `wikidata_p136` | `editorial`) and `genre_labels[]`.
+
+## Release Q additions
+
+- **Elided words** (`/api/words/headlines`, index built with `data/elision_model.json`). A token whose reading the
+  elision model ranked carries `basis` containing `elision_model`. When its second reading is genuinely possible
+  here (at least half as probable as the first, and not the same word in another case), the token has
+  `tie: true`, `tie_basis: "elision_model"` and `tie_alternative{lemma, lemma_id, gloss, token_probability}`, and
+  that reading is first in `alternatives`. The headline is still given; both readings should be shown.
+  Other tokens keep the release O spelling-level `tie`.
+- **Frequency tables count each text once.** `/api/lemma/frequency`, `/api/lemma/distribution`,
+  `/api/concept/diachrony` (counts, rates, period and author totals) and the background frequencies of
+  collocations count one collection of each TLG work (the collection holding most of the work's words inside
+  the scope) and a passage repeated word for word within one work once; n-grams use the same rule.
+  `counting_note` on frequency responses says so. `scope_tokens` is the counted total (searchable edited Greek:
+  1,067,763 words, was 1,386,111). Search, concordance and proximity are unchanged (they fold editions).
+  `tokens_all_records` on headword briefs is unchanged (every record).
+- **Fragment numbering** (`/api/cite`). A fragment number in a named numbering, written after the number
+  (`V`, `Voigt`, `L-P`, `LP`, `L.P.`, `C.`, `Campbell`) or before it (`Sappho Campbell 16`, `Alc. Lobel & Page 346`),
+  returns the records citable by that number in that numbering, then those citable by an equal number in another
+  numbering. Each result adds `numbering{author, scheme, number, strength (query | printed | source | convention),
+  basis, basis_text, evidence, equivalence[]}`; `equivalents[]` add `strength`, `evidence[]` (the printed record or
+  the cited source with its quotation) and `passage_ids`. `convention` = only a source's general statement that two
+  numberings agree (Voigt follows Lobel-Page "with minor variations"), labelled with a warning. A number without a
+  poet that several poets share returns all of them with a warning. Data: `data/fragment_concordance.json`.
+- **Dates.** The Homeric Hymns (750–550 BC?), the Anacreontea (150 BC – AD 550) and Semonides (650 BC, approximate)
+  are dated from Edmonds' *Lyra Graeca* pages stored in the corpus (passage id and quotation in
+  `chronology.json`, `basis` names the edition); Orphica stays undated.
+- **English headword lookup** (`/api/lemma/resolve` and every lemma endpoint's `q`, hence the lexicon/lemma
+  page): an English word is read through dictionary sense head meanings first: readings with
+  `via: "english_dictionary_head_meaning"` (a sense whose head phrase is the word, whole words, singular: "the
+  moon" → σελήνη, μήνη; not Ἰώ "identified with the moon" or Οὐρανία), `matched_terms`, `gloss_match` (relative
+  to the best); only when no sense has the word as its head meaning does the release O stem match answer
+  (`via: "english_dictionary_gloss"`). A Latin-letter word that spells a Greek headword stays first
+  (`transliterated_headword`). Hybrid search keeps the release O stems.
+- **Phrases by headword** (`/api/lemma/ngrams?q=`): with `q`, phrases are read from a per-headword table (up to 40
+  per group, length and headword, from every n-gram that passes the group's minimum count and association), no
+  longer only from the group's top 400; the whole-corpus list for σελήνη or ἔρως is no longer empty. Every author
+  with at least 50 counted words has a list (the Greek Anthology included: its in-scope collection is counted).
+- **Variant groups** name every headword counted with them: capitalisation variants (ἔρως / Ἔρως) are members with
+  a `capitalisation_of` link. Concept diachrony with `combine_variants=true` returns one row per group (the
+  first-ranked member) with `counted_lemma_ids` and `counted_lemmas`; other members are not repeated with the
+  group total. Links need the two headwords' meanings to agree and a "= B" to name the headword itself
+  (ἅλιος "fruitless" is no longer a Doric ἥλιος; Δίιος is not "= Ζεύς"; κοῦρος "loppings" not κόρος).
+- **Line numbers.** `left` / `right` / `match_text` of concordance lines, search excerpts, proximity results and
+  diachrony examples no longer contain an edition's printed line numbers (a number standing alone between words);
+  they are returned as `line_numbers` (strings, in text order).
+- **Headwords.** A lemma recorded for a spelling in a source annotation is kept only when it is a dictionary
+  headword or a lemma the parser gives somewhere (removes "οτηερ", a treebank placeholder).

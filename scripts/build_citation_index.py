@@ -16,11 +16,16 @@ Sources of a TLG author/work number, in order (each mapping keeps its source and
 Nothing is taken from the TLG website. Works without such a source stay unmapped.
 
 Fragment equivalences are read only from a record that prints two numbers for one fragment
-("178 Campbell ( = Voigt, and Lobel & Page 168A)", "fr. 9 F. (= 184 PMGF)", "40a D.  23 W.").
+("178 Campbell ( = Voigt, and Lobel & Page 168A)", "fr. 9 F. (= 184 PMGF)", "40a D.  23 W.",
+"105B Voigt = 105C Campbell, LP" in a note's text) or from a cited source sentence in
+data/fragment_concordance.json (release Q). The fragment_ref table (release Q) lists, per record,
+the numbering schemes it can be cited by: the scheme its own citation names, and an edition's stated
+numbering (Campbell, Greek Lyric Poetry p. xxxii: Sappho and Alcaeus by Lobel-Page's marginal numbers).
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -37,7 +42,8 @@ sys.path.insert(0, str(ROOT))
 
 from backend.author_aliases import canonical, fold  # noqa: E402
 from backend.author_catalogue import display_work  # noqa: E402
-from backend.citations import parse_range, normalise_depth  # noqa: E402
+from backend.citations import parse_range, normalise_depth, scheme_name  # noqa: E402
+from backend.reference_lookup import _references  # noqa: E402
 
 URN = re.compile(r"\b(tlg\d{4})\.(tlg\d{3}[a-z]?)(?:\.([A-Za-z0-9-]+))?")
 SLUG_URN = re.compile(r"\b(tlg\d{4})-(tlg\d{3}[a-z]?)\b")
@@ -148,6 +154,62 @@ _EQ_PATTERNS = [
 ]
 
 
+# Equivalences printed inside a record's text (Digital Sappho notes): "105B Voigt = 105C Campbell, LP",
+# "103C Voigt = 214 Lobel and Page, and Campbell". A sentence that does not have exactly this shape is
+# not read (e.g. "168A Voigt = 178 Campbell, and Lobel & Page 168B ...", which conflicts with the
+# site's own heading for that fragment).
+_LP = r"(?:LP|L-P|Lobel\s*(?:&|and)\s*Page)"
+_TEXT_EQ_PATTERNS = [
+    (re.compile(r"(?<![\w.])(?P<a>\d{1,4}[A-Za-z]?)\s+Voigt\s*=\s*(?P<b>\d{1,4}[A-Za-z]?)\s+Campbell,\s*" + _LP + r"(?![\w&])"),
+     [("Voigt", "a", "Campbell", "b"), ("Voigt", "a", "Lobel-Page", "b")]),
+    (re.compile(r"(?<![\w.])(?P<a>\d{1,4}[A-Za-z]?)\s+Voigt\s*=\s*(?P<b>\d{1,4}[A-Za-z]?)\s+" + _LP + r",\s*and\s+Campbell(?![\w])"),
+     [("Voigt", "a", "Lobel-Page", "b"), ("Voigt", "a", "Campbell", "b")]),
+]
+
+
+def text_equivalences(text):
+    """(scheme_a, num_a, scheme_b, num_b, evidence snippet) printed in a record's text."""
+    text = unicodedata.normalize("NFC", str(text or ""))
+    if "Voigt" not in text:
+        return []
+    out = []
+    for pattern, pairs in _TEXT_EQ_PATTERNS:
+        for m in pattern.finditer(text):
+            snippet = " ".join(text[max(0, m.start() - 20): m.end() + 20].split())
+            for sa, ga, sb, gb in pairs:
+                out.append((sa, m[ga].lower(), sb, m[gb].lower(), snippet))
+    return out
+
+
+def edition_fragment_refs(pid, author, metadata, concordance):
+    """Numbers of a record of an edition whose own numbering statement is in the concordance file:
+    (scheme, number, basis, evidence). The printed heading is the edition's own number; the
+    statement maps it to the named poets' standard edition; explicit printed suffixes ('96D.',
+    'Fr. Adesp. 976 (P.M.G.)') name their edition themselves."""
+    out = []
+    for ed in concordance.get("edition_numbering", []):
+        if not pid.startswith(ed["record_id_prefix"]):
+            continue
+        printed = unicodedata.normalize("NFC", str(metadata.get("edition_fragment") or "")).strip()
+        pages = metadata.get("pdf_pages") or []
+        where = f"PDF p. {', '.join(str(p) for p in pages)}" if pages else "the record's printed heading"
+        heading = f"{ed['edition']}: heading printed ({printed}), {where}"
+        if re.fullmatch(r"\d{1,4}[a-zA-Z]?", printed):
+            number = printed.lower()
+            out.append((ed["scheme"], number, "edition_heading", heading))
+            target = ed.get("authors", {}).get(author)
+            if target:
+                out.append((target, number, "edition_numbering_statement",
+                            f"{heading}; the edition's statement (printed p. {ed['printed_page']}, PDF p. {ed['pdf_page']}): "
+                            f"\"{ed['statement']}\""))
+        else:
+            for rule in ed.get("explicit_headings", []):
+                m = re.fullmatch(rule["pattern"], printed)
+                if m:
+                    out.append((rule["scheme"], m[1].lower(), "edition_heading_explicit", f"{heading}; {rule['rule']}"))
+    return out
+
+
 def _lines(text):
     """Verse lines reduced to their Greek letters without marks (edition punctuation differs)."""
     out = []
@@ -179,8 +241,14 @@ def main():
     p.add_argument("--cache", default=str(ROOT / "runtime/cts-cache"))
     p.add_argument("--offline", action="store_true")
     p.add_argument("--catalogue-json", default="", help="also write the TLG mapping summary here")
+    p.add_argument("--concordance", default=str(ROOT / "data/fragment_concordance.json"),
+                   help="fragment-number statements with evidence (release Q)")
     args = p.parse_args()
     started = time.time()
+    concordance_path = Path(args.concordance)
+    concordance = json.loads(concordance_path.read_text(encoding="utf-8")) if concordance_path.exists() else {}
+    frag_rows = []                      # (author, scheme, number, passage_id, basis, evidence)
+    source_poets = defaultdict(Counter)  # source -> canonical authors of its Greek text records
     con = sqlite3.connect(f"file:{args.corpus}?mode=ro", uri=True)
     groups = defaultdict(list)          # work_key -> [record tuple]
     group_meta = {}
@@ -203,6 +271,8 @@ def main():
         group_meta.setdefault(key, {"author": name, "display_work": title, "labels": Counter(), "sources": Counter()})
         group_meta[key]["labels"][f"{author} / {work}"] += 1
         group_meta[key]["sources"][source] += 1
+        if kind == "text" and language == "grc" and name:
+            source_poets[source][name] += 1
         found_urn = None
         for field in [pid, str(metadata.get("cts_urn") or ""), str(metadata.get("perseus_edition_urn") or "")]:
             m = URN.search(field)
@@ -225,10 +295,41 @@ def main():
             ogc_slugs[key].add((str(metadata.get("ogc_urn")), edition or "", str(metadata.get("ogc_source") or "")))
         for sa, na, sb, nb in equivalences(author, citation):
             equiv_rows.append((name, sa, na, sb, nb, pid, citation))
+        for sa, na, sb, nb, snippet in text_equivalences(text):
+            equiv_rows.append((name, sa, na, sb, nb, pid, snippet))
+        # Fragment numbers by numbering scheme (release Q): the scheme a record's own citation names
+        # (release-O reference reading), and an edition's stated numbering.
+        for number, scheme_key, evidence in _references({"citation": citation, "work": work, "metadata": metadata}):
+            scheme = scheme_name(scheme_key) if scheme_key else None
+            if scheme:
+                frag_rows.append((name, scheme, number.lower(), pid, "record_citation", evidence))
+        for scheme, number, basis, evidence in edition_fragment_refs(pid, name, metadata, concordance):
+            frag_rows.append((name, scheme, number, pid, basis, evidence))
         rng = parse_range(citation)
         if rng:
             groups[key].append((pid, source, kind, quality, edition, citation, seq or 0, rng))
     log("records read", sum(len(v) for v in groups.values()), "loci in", len(groups), "work groups")
+    # Every record's explicit fragment numbers (release-O reading, any scheme, every language): lets
+    # /api/cite read the few records citing a number instead of every record of the poet.
+    ref_rows = set()
+    for pid, citation, work, data in con.execute("SELECT id, citation, work, data FROM passages"):
+        if not citation and '"edmonds_fragment_number"' not in (data or "") and "source_citation_aliases" not in (data or ""):
+            continue
+        record = json.loads(data or "{}")
+        for number, _, _ in _references({"citation": citation, "work": work, "metadata": record.get("metadata") or {},
+                                         "source_url": record.get("source_url")}):
+            ref_rows.add((number, pid))
+    log("records with an explicit fragment number", len({r[1] for r in ref_rows}))
+    # Notes in other languages (English commentary) can print equivalences too. Such a note's author is
+    # its commentator, so the poet is the author of at least 95 % of its source collection's Greek texts.
+    poets = {s: v.most_common(1)[0][0] for s, v in source_poets.items()
+             if v and v.most_common(1)[0][1] >= 0.95 * sum(v.values())}
+    for pid, source, text in con.execute("SELECT id, source, text FROM passages WHERE language NOT IN ('grc','mul') "
+                                         "AND text LIKE '%Voigt%=%'"):
+        if source not in poets:
+            continue
+        for sa, na, sb, nb, snippet in text_equivalences(text):
+            equiv_rows.append((poets[source], sa, na, sb, nb, pid, snippet))
 
     readme = {}
     if args.ogc_readme and Path(args.ogc_readme).exists():
@@ -296,7 +397,16 @@ def main():
       CREATE TABLE locus(work_key TEXT, s0 INTEGER, e0 INTEGER, start TEXT, end TEXT, passage_id TEXT, source TEXT,
                          kind TEXT, quality TEXT, edition TEXT, citation TEXT, seq INTEGER);
       CREATE TABLE equiv(author TEXT, scheme_a TEXT, num_a TEXT, scheme_b TEXT, num_b TEXT, passage_id TEXT, evidence TEXT);
+      CREATE TABLE fragment_ref(author TEXT, scheme TEXT, number TEXT, passage_id TEXT, basis TEXT, evidence TEXT);
+      CREATE TABLE ref_number(number TEXT, passage_id TEXT, PRIMARY KEY(number, passage_id)) WITHOUT ROWID;
     """)
+    ix.executemany("INSERT INTO ref_number VALUES (?,?)", sorted(ref_rows))
+    # Equivalences stated by a cited source in the concordance file (passage_id NULL; evidence = JSON
+    # {kind, title, revid, url, quote}).
+    for eq in concordance.get("equivalences", []):
+        (sa, na), (sb, nb) = eq["a"], eq["b"]
+        equiv_rows.append((eq["author"], sa, str(na).lower(), sb, str(nb).lower(), None,
+                           json.dumps(eq["source"], ensure_ascii=False)))
     total_loci = 0
     for key, meta in group_meta.items():
         rows = groups.get(key, [])
@@ -315,12 +425,25 @@ def main():
                     json.dumps(m.get("example"), ensure_ascii=False) if m else None, depth, len(loc_rows), first,
                     json.dumps(dict(meta["labels"].most_common(8)), ensure_ascii=False),
                     json.dumps(dict(meta["sources"]), ensure_ascii=False)))
-    ix.executemany("INSERT INTO equiv VALUES (?,?,?,?,?,?,?)", sorted(set(equiv_rows)))
-    ix.executescript("CREATE INDEX locus_work ON locus(work_key, s0, e0); CREATE INDEX locus_passage ON locus(passage_id); CREATE INDEX equiv_author ON equiv(author);")
+    ix.executemany("INSERT INTO equiv VALUES (?,?,?,?,?,?,?)", sorted(set(equiv_rows), key=lambda r: tuple(str(x) for x in r)))
+    frag_rows = sorted(set(frag_rows))
+    ix.executemany("INSERT INTO fragment_ref VALUES (?,?,?,?,?,?)", frag_rows)
+    ix.executescript("CREATE INDEX locus_work ON locus(work_key, s0, e0); CREATE INDEX locus_passage ON locus(passage_id); "
+                     "CREATE INDEX equiv_author ON equiv(author); CREATE INDEX fragment_ref_key ON fragment_ref(scheme, number, author);")
     by_source = Counter(m["source"] for m in mapping.values())
     manifest = {"version": "melos-citation-index-v1", "built_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                 "corpus": args.corpus, "works": len(group_meta), "loci": total_loci, "tlg_mapped_works": len(mapping),
                 "tlg_sources": dict(by_source), "equivalences": len(set(equiv_rows)),
+                "corpus_size": os.path.getsize(args.corpus), "corpus_mtime_ns": os.stat(args.corpus).st_mtime_ns,
+                "ref_numbers": len(ref_rows),
+                "fragment_refs": len(frag_rows), "fragment_ref_bases": dict(Counter(r[4] for r in frag_rows)),
+                "fragment_ref_schemes": dict(Counter(r[1] for r in frag_rows)),
+                "concordance": {"file": concordance_path.name if concordance else None,
+                                "sha256": hashlib.sha256(concordance_path.read_bytes()).hexdigest() if concordance else None,
+                                "edition_numbering": [{k: ed.get(k) for k in ("id", "scheme", "edition", "statement",
+                                                                             "printed_page", "pdf_page", "authors")}
+                                                      for ed in concordance.get("edition_numbering", [])],
+                                "conventions": concordance.get("conventions", [])},
                 "cts_catalogue": {k: {"repo": v["repo"], "tree_sha": v["sha"]} for k, v in catalogue.items()},
                 "seconds": round(time.time() - started)}
     ix.execute("INSERT INTO meta VALUES ('manifest', ?)", (json.dumps(manifest),))
