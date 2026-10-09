@@ -115,7 +115,7 @@ vowel:
             reason: the lexical sources mark it short
             cite: Morpheus; Wiktionary; LSJ
           - id: DIA-ETA
-            when: alpha_for_eta and dialect in ("aeolic", "doric")
+            when: alpha_for_eta and dialect in ("aeolic", "doric") and lex == "unknown_word"
             p: dialect_alpha_long
             reason: Doric/Aeolic α where the Attic-Ionic form has η (σελάννα = σελήνη), so ᾱ
             cite: Smyth §30; Buck, Greek Dialects §8 (via backend/dialect_generate.py)

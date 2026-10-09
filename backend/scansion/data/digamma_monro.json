@@ -529,20 +529,6 @@
    "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
   },
   {
-   "word": "ἔθος",
-   "section": "§392 ϝ inferred from meter only",
-   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
-   "quote": "ἔθνος (perhaps akin to ἔθος, ἦθος)",
-   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
-  },
-  {
-   "word": "ἦθος",
-   "section": "§392 ϝ inferred from meter only",
-   "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
-   "quote": "ἔθνος (perhaps akin to ἔθος, ἦθος)",
-   "effect": "initial ϝ (hiatus before it / lengthening of a preceding short syllable)"
-  },
-  {
    "word": "ἐρύω",
    "section": "§392 ϝ inferred from meter only",
    "source_url": "https://dcc.dickinson.edu/grammar/monro/%CF%9D-inferred-meter-only",
@@ -609,28 +595,28 @@
    "word": "ἔδεισα",
    "section": "§394 Words with initial δϝ",
    "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
-   "quote": "δϝει- (δϝι-)ἔδεισα[fn]So Ar.[/fn] δεὸς δεινός δειλός, etc.",
+   "quote": "δϝει- (δϝι-) ἔδεισα δεὸς δεινός δειλός, etc.",
    "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
   },
   {
    "word": "δεὸς",
    "section": "§394 Words with initial δϝ",
    "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
-   "quote": "δϝει- (δϝι-)ἔδεισα[fn]So Ar.[/fn] δεὸς δεινός δειλός, etc.",
+   "quote": "δϝει- (δϝι-) ἔδεισα δεὸς δεινός δειλός, etc.",
    "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
   },
   {
    "word": "δεινός",
    "section": "§394 Words with initial δϝ",
    "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
-   "quote": "δϝει- (δϝι-)ἔδεισα[fn]So Ar.[/fn] δεὸς δεινός δειλός, etc.",
+   "quote": "δϝει- (δϝι-) ἔδεισα δεὸς δεινός δειλός, etc.",
    "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
   },
   {
    "word": "δειλός",
    "section": "§394 Words with initial δϝ",
    "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
-   "quote": "δϝει- (δϝι-)ἔδεισα[fn]So Ar.[/fn] δεὸς δεινός δειλός, etc.",
+   "quote": "δϝει- (δϝι-) ἔδεισα δεὸς δεινός δειλός, etc.",
    "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
   },
   {
@@ -638,21 +624,21 @@
    "section": "§394 Words with initial δϝ",
    "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
    "quote": "δὴν, δηρόν, δηθά",
-   "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
+   "effect": "initial δϝ: required in the phrases cited (Monro: no contrary instances)"
   },
   {
    "word": "δηρόν",
    "section": "§394 Words with initial δϝ",
    "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
    "quote": "δὴν, δηρόν, δηθά",
-   "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
+   "effect": "initial δϝ: traced in two places, more commonly absent (Monro)"
   },
   {
    "word": "δηθά",
    "section": "§394 Words with initial δϝ",
    "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CE%B4%CF%9D",
    "quote": "δὴν, δηρόν, δηθά",
-   "effect": "initial δϝ: a preceding short vowel is frequently lengthened"
+   "effect": "initial δϝ: the instances show nothing (Monro)"
   },
   {
    "word": "ῥήγνυμι",
@@ -680,10 +666,31 @@
    "section": "§395 Initial ϝρ",
    "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
    "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
-   "effect": "initial ϝρ: always lengthens a preceding short syllable"
+   "effect": "initial ϝρ: nearly always lengthens a preceding short syllable (exceptions Od. 5.281, 9.390)"
   },
   {
    "word": "ῥίζα",
+   "section": "§395 Initial ϝρ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
+   "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
+   "effect": "initial ϝρ: nearly always lengthens a preceding short syllable (exceptions Od. 5.281, 9.390)"
+  },
+  {
+   "word": "ῥυτός",
+   "section": "§395 Initial ϝρ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
+   "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
+   "effect": "initial ϝρ: always lengthens a preceding short syllable"
+  },
+  {
+   "word": "ῥητός",
+   "section": "§395 Initial ϝρ",
+   "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
+   "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",
+   "effect": "initial ϝρ: always lengthens a preceding short syllable"
+  },
+  {
+   "word": "ῥητήρ",
    "section": "§395 Initial ϝρ",
    "source_url": "https://dcc.dickinson.edu/grammar/monro/words-initial-%CF%9D%CF%81-etc",
    "quote": "double consonant in ῥήγνυμι ῥίπτω ῥάκος ῥυ-[fn]In ῥυτός, etc.[/fn] ῥη-[fn]In ῥητός, ῥητήρ[/fn] and nearly always in ῥινός (except Od. 5.281), ῥίζα (Od. 9.390). But lengthening is optional in ῥέζω, ῥιγέω, ῥεῖα, thus",

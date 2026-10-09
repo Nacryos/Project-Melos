@@ -26,9 +26,9 @@
     "share": 0.4286
    },
    "DIG-LEN": {
-    "n": 164,
-    "long": 49,
-    "share": 0.2988
+    "n": 165,
+    "long": 50,
+    "share": 0.303
    },
    "EPL-INIT": {
     "n": 4378,
@@ -36,9 +36,9 @@
     "share": 0.0352
    },
    "EPL-RHO": {
-    "n": 59,
-    "long": 25,
-    "share": 0.4237
+    "n": 58,
+    "long": 24,
+    "share": 0.4138
    },
    "HIA-SHORT": {
     "n": 602,
@@ -108,12 +108,12 @@
   },
   "vowel": {
    "ACC-PAROX-LONG": {
-    "n": 89,
+    "n": 88,
     "long": 88,
-    "share": 0.9888
+    "share": 1.0
    },
    "ACC-PAROX-SHORT": {
-    "n": 604,
+    "n": 603,
     "long": 2,
     "share": 0.0033
    },
@@ -123,14 +123,14 @@
     "share": 0.051
    },
    "ACC-PROPAROX": {
-    "n": 1521,
+    "n": 1508,
     "long": 17,
-    "share": 0.0112
+    "share": 0.0113
    },
    "ACC-PROPERISP": {
-    "n": 707,
+    "n": 682,
     "long": 17,
-    "share": 0.024
+    "share": 0.0249
    },
    "CRA-1": {
     "n": 13,
@@ -143,9 +143,9 @@
     "share": 0.1352
    },
    "DICH-UNK": {
-    "n": 21174,
+    "n": 21214,
     "long": 3142,
-    "share": 0.1484
+    "share": 0.1481
    },
    "NAT-CIRC": {
     "n": 1861,
@@ -187,9 +187,9 @@
     "share": 0.2463
    },
    "dichronon_default": {
-    "n": 21174,
+    "n": 21214,
     "long": 3142,
-    "share": 0.1484
+    "share": 0.1481
    },
    "digamma_keep": {
     "n": 94,
@@ -197,9 +197,9 @@
     "share": 0.8191
    },
    "digamma_lengthening": {
-    "n": 104,
-    "long": 29,
-    "share": 0.2788
+    "n": 105,
+    "long": 30,
+    "share": 0.2857
    },
    "epic_lengthening": {
     "n": 2993,
@@ -207,9 +207,9 @@
     "share": 0.021
    },
    "epic_lengthening_rho": {
-    "n": 35,
-    "long": 16,
-    "share": 0.4571
+    "n": 34,
+    "long": 15,
+    "share": 0.4412
    },
    "internal_keep": {
     "n": 4440,
@@ -246,9 +246,9 @@
     "share": 0.2204
    },
    "COR-INT": {
-    "n": 4449,
-    "long": 4428,
-    "share": 0.9953
+    "n": 4440,
+    "long": 4426,
+    "share": 0.9968
    },
    "DIG-HIA": {
     "n": 357,
@@ -256,9 +256,9 @@
     "share": 0.4258
    },
    "DIG-LEN": {
-    "n": 395,
-    "long": 111,
-    "share": 0.281
+    "n": 396,
+    "long": 112,
+    "share": 0.2828
    },
    "EPL-INIT": {
     "n": 4373,
@@ -266,9 +266,9 @@
     "share": 0.0343
    },
    "EPL-RHO": {
-    "n": 40,
-    "long": 14,
-    "share": 0.35
+    "n": 39,
+    "long": 13,
+    "share": 0.3333
    },
    "HIA-SHORT": {
     "n": 602,
@@ -301,13 +301,13 @@
     "share": 0.9814
    },
    "NATURE": {
-    "n": 60516,
-    "long": 20887,
+    "n": 60525,
+    "long": 20889,
     "share": 0.3451
    },
    "OPEN": {
-    "n": 77443,
-    "long": 25029,
+    "n": 77452,
+    "long": 25031,
     "share": 0.3232
    },
    "POS": {
@@ -338,12 +338,12 @@
   },
   "vowel": {
    "ACC-PAROX-LONG": {
-    "n": 89,
+    "n": 88,
     "long": 88,
-    "share": 0.9888
+    "share": 1.0
    },
    "ACC-PAROX-SHORT": {
-    "n": 604,
+    "n": 603,
     "long": 2,
     "share": 0.0033
    },
@@ -353,64 +353,59 @@
     "share": 0.051
    },
    "ACC-PROPAROX": {
-    "n": 1505,
+    "n": 1492,
     "long": 17,
-    "share": 0.0113
+    "share": 0.0114
    },
    "ACC-PROPERISP": {
-    "n": 689,
+    "n": 665,
     "long": 17,
-    "share": 0.0247
+    "share": 0.0256
    },
    "CRA-1": {
     "n": 13,
     "long": 13,
     "share": 1.0
    },
-   "DIA-ETA": {
-    "n": 37,
-    "long": 2,
-    "share": 0.0541
-   },
    "DICH": {
-    "n": 24081,
-    "long": 3245,
+    "n": 24090,
+    "long": 3247,
     "share": 0.1348
    },
    "LEX": {
-    "n": 21096,
-    "long": 3116,
-    "share": 0.1477
+    "n": 21144,
+    "long": 3118,
+    "share": 0.1475
    },
    "LEX-CONFLICT": {
-    "n": 1831,
-    "long": 289,
-    "share": 0.1578
+    "n": 1833,
+    "long": 290,
+    "share": 0.1582
    },
    "LEX-ENDING": {
-    "n": 190,
+    "n": 194,
     "long": 6,
-    "share": 0.0316
+    "share": 0.0309
    },
    "LEX-L": {
-    "n": 2525,
-    "long": 2310,
+    "n": 2527,
+    "long": 2312,
     "share": 0.9149
    },
    "LEX-OTHER": {
-    "n": 1208,
-    "long": 228,
-    "share": 0.1887
+    "n": 1193,
+    "long": 225,
+    "share": 0.1886
    },
    "LEX-S": {
-    "n": 11633,
+    "n": 11659,
     "long": 117,
-    "share": 0.0101
+    "share": 0.01
    },
    "LEX-UNMARKED": {
-    "n": 3672,
-    "long": 164,
-    "share": 0.0447
+    "n": 3738,
+    "long": 168,
+    "share": 0.0449
    },
    "NAT-CIRC": {
     "n": 1861,
@@ -446,11 +441,6 @@
    }
   },
   "params": {
-   "alpha_for_eta": {
-    "n": 37,
-    "long": 2,
-    "share": 0.0541
-   },
    "correption": {
     "n": 2890,
     "long": 666,
@@ -463,8 +453,8 @@
    },
    "digamma_lengthening": {
     "n": 255,
-    "long": 60,
-    "share": 0.2353
+    "long": 61,
+    "share": 0.2392
    },
    "epic_lengthening": {
     "n": 2992,
@@ -472,29 +462,29 @@
     "share": 0.0207
    },
    "epic_lengthening_rho": {
-    "n": 23,
-    "long": 9,
-    "share": 0.3913
+    "n": 22,
+    "long": 8,
+    "share": 0.3636
    },
    "internal_keep": {
-    "n": 4449,
-    "long": 4428,
-    "share": 0.9953
+    "n": 4440,
+    "long": 4426,
+    "share": 0.9968
    },
    "lex_long": {
-    "n": 2525,
-    "long": 2310,
+    "n": 2527,
+    "long": 2312,
     "share": 0.9149
    },
    "lex_short": {
-    "n": 11633,
+    "n": 11659,
     "long": 117,
-    "share": 0.0101
+    "share": 0.01
    },
    "lex_unmarked": {
-    "n": 3672,
-    "long": 164,
-    "share": 0.0447
+    "n": 3738,
+    "long": 168,
+    "share": 0.0449
    },
    "mcl_boundary": {
     "n": 623,

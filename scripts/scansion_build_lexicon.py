@@ -116,8 +116,8 @@ def lsj_rows(lsj_dir: Path):
                 continue
             letters_q = beta_letters(beta)
             spelling = _beta_to_unicode(beta)
-            if base_letters(spelling) != "".join(b for b, _ in letters_q):
-                continue
+            if not GREEK_WORD.match(spelling) or base_letters(spelling) != "".join(b for b, _ in letters_q):
+                continue  # unconverted Beta Code (e.g. a+ / o= left by the converter) is skipped
             marks = "".join((q or "u") if b in DICHRONA else "." for b, q in letters_q)
             yield spelling, marks, spelling
 
@@ -132,7 +132,10 @@ def logeion_rows(logeion_dir: Path):
         text = Path(path).read_text(encoding="utf-8", errors="replace")
         for orig in re.findall(r'<head[^>]*orth_orig="([^"]*)"', text):
             for word in re.split(r"[\s,]+", orig):
-                word = word.replace("-", "").strip("·.:;()[]")
+                word = word.strip("··.:;()[]")
+                if word.startswith("-") or word.endswith("-"):
+                    continue  # prefix/suffix stems (ἀρῐ-, δῠσ-) are not words
+                word = word.replace("-", "")
                 if not word or not GREEK_WORD.match(word):
                     continue
                 marks = quantity_marks(word)
@@ -177,7 +180,9 @@ def main() -> None:
     db.execute("CREATE INDEX q_key ON q(key)")
     db.execute("CREATE INDEX q_akey ON q(akey)")
     db.execute("CREATE TABLE meta (k TEXT PRIMARY KEY, v TEXT)")
-    db.execute("INSERT INTO meta VALUES ('counts', ?)", (json.dumps(counts),))
+    db.execute("INSERT INTO meta VALUES ('yields', ?)", (json.dumps(counts),))  # rows read per source, before de-duplication
+    db.execute("INSERT INTO meta VALUES ('rows', ?)", (json.dumps(
+        dict(db.execute("SELECT source, count(*) FROM q GROUP BY source").fetchall())),))
     db.execute("INSERT INTO meta VALUES ('built', ?)", (time.strftime("%Y-%m-%dT%H:%M:%S"),))
     db.commit()
     db.close()

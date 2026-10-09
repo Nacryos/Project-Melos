@@ -63,7 +63,7 @@ class QuantityLexicon:
     def counts(self) -> dict:
         if not self.available:
             return {}
-        row = self._db().execute("SELECT v FROM meta WHERE k='counts'").fetchone()
+        row = self._db().execute("SELECT v FROM meta WHERE k='rows'").fetchone()
         return json.loads(row[0]) if row else {}
 
 

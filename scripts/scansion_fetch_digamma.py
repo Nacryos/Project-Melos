@@ -105,27 +105,37 @@ def rows_for(name: str, raw: bytes) -> list[dict]:
     if kind == "headword_paragraphs":
         for p in paras:
             if 0 < len(p) < 60 and HEADWORD_PARA.match(p):
-                for w in words_in(p):
+                # "(perhaps akin to ἔθος, ἦθος)" names related words listed elsewhere: cross-references
+                main_part = re.sub(r"\(perhaps akin to[^)]*\)", "", p)
+                for w in words_in(main_part):
                     add(w, p, "initial ϝ (hiatus before it / lengthening of a preceding short syllable)")
     elif kind == "prose_dw":
-        m = re.search(r"δϝει- \(δϝι-\)(.*?)A short vowel is frequently lengthened", text)
+        clean = re.sub(r"\[fn\].*?\[/fn\]", "", text)
+        m = re.search(r"(δϝει- \(δϝι-\)(.*?))A short vowel is frequently lengthened", clean)
         if not m:
             sys.exit("§394 sentence not found")
-        for w in words_in(m.group(1)):
-            add(w, "δϝει- (δϝι-)" + m.group(1).strip(), "initial δϝ: a preceding short vowel is frequently lengthened")
-        m = re.search(r"(δὴν, δηρόν, δηθά)", text)
+        for w in words_in(m.group(2)):
+            add(w, m.group(1).strip(), "initial δϝ: a preceding short vowel is frequently lengthened")
+        m = re.search(r"(δὴν, δηρόν, δηθά)", clean)
         if m:
+            effects = {"δὴν": "initial δϝ: required in the phrases cited (Monro: no contrary instances)",
+                       "δηρόν": "initial δϝ: traced in two places, more commonly absent (Monro)",
+                       "δηθά": "initial δϝ: the instances show nothing (Monro)"}
             for w in words_in(m.group(1)):
-                add(w, m.group(1), "initial δϝ: a preceding short vowel is frequently lengthened")
+                add(w, m.group(1), effects.get(w, "initial δϝ"))
     elif kind == "prose_wr":
         m = re.search(r"double consonant in (.*?) But lengthening is optional in (.*?), thus", text)
         if not m:
             sys.exit("§395 sentence not found")
         always, optional = m.group(1), m.group(2)
+        footnoted = " ".join(re.findall(r"\[fn\](.*?)\[/fn\]", always))   # "In ῥυτός, etc.", "In ῥητός, ῥητήρ"
         always = re.sub(r"\[fn\].*?\[/fn\]", "", always)
-        for w in words_in(always):
-            if not w.endswith("-"):
-                add(w, m.group(0)[:300], "initial ϝρ: always lengthens a preceding short syllable")
+        quote = re.sub(r"\s+", " ", m.group(0))[:400]
+        for w in words_in(always + " " + footnoted):
+            if w in ("ῥινός", "ῥίζα"):
+                add(w, quote, "initial ϝρ: nearly always lengthens a preceding short syllable (exceptions Od. 5.281, 9.390)")
+            else:
+                add(w, quote, "initial ϝρ: always lengthens a preceding short syllable")
         for w in words_in(optional):
             add(w, m.group(0)[:300], "initial ϝρ: lengthening of a preceding short syllable optional")
     return rows
@@ -139,8 +149,8 @@ def main() -> None:
     rows, seen = [], set()
     for name, raw in pages.items():
         for row in rows_for(name, raw):
-            if (row["word"], row["section"]) not in seen:
-                seen.add((row["word"], row["section"]))
+            if row["word"] not in seen:          # a word listed in two sections is kept once (first)
+                seen.add(row["word"])
                 rows.append(row)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     doc = {
