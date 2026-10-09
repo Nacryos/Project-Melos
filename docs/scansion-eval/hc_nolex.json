@@ -1,0 +1,762 @@
+{
+ "lexicon": false,
+ "passages": [
+  {
+   "id": "sappho-1",
+   "edition": "Sappho fr. 1 Lobel-Page, as printed in the CGL anthology (corpus record p2_cgl_anthology:279)",
+   "metre": "sapphic",
+   "lines": [
+    {
+     "line": 1,
+     "text": "ποικιλόθρον᾽ ἀθανάτ᾽ Ἀφρόδιτα,",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–⏑–⏑⏑–⏑–⏑",
+     "scanner": "–??⏑????⏑?⏑"
+    },
+    {
+     "line": 2,
+     "text": "παῖ Δίος δολόπλοκε, λίσσομαί σε·",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–⏑–⏑⏑–⏑–⏑",
+     "scanner": "–⏑–⏑?⏑⏑–⏑–⏑"
+    },
+    {
+     "line": 3,
+     "text": "μή μ᾽ ἄσαισι μηδ᾽ ὀνίαισι δάμνα,",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–⏑–⏑⏑–⏑––",
+     "scanner": "–?–⏑–⏑?–⏑–?"
+    },
+    {
+     "line": 4,
+     "text": "πότνια, θῦμον,",
+     "units": 5,
+     "fit": true,
+     "pattern": "–⏑⏑–⏑",
+     "scanner": "??⏑–⏑"
+    },
+    {
+     "line": 5,
+     "text": "ἀλλὰ τυίδ᾽ ἔλθ᾽, αἴ ποτα κἀτέρωτα",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑–⏑",
+     "scanner": "–?–––⏑?–⏑–⏑"
+    },
+    {
+     "line": 6,
+     "text": "τὰς ἔμας αὔδας ἀίοισα πήλοι",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "?⏑?––??–⏑––"
+    },
+    {
+     "line": 7,
+     "text": "ἔκλυες, πάτρος δὲ δόμον λίποισα",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑–⏑",
+     "scanner": "??–?–⏑⏑–?–⏑"
+    },
+    {
+     "line": 8,
+     "text": "χρύσιον ἦλθες",
+     "units": 5,
+     "fit": true,
+     "pattern": "–⏑⏑–⏑",
+     "scanner": "??⏑–⏑"
+    },
+    {
+     "line": 9,
+     "text": "ἄρμ᾽ ὐπασδεύξαισα· κάλοι δέ σ᾽ ἆγον",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑–⏑",
+     "scanner": "–?–––⏑⏑–⏑–⏑"
+    },
+    {
+     "line": 10,
+     "text": "ὤκεες στροῦθοι περὶ γᾶς μελαίνας",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–⏑–––⏑?–⏑––"
+    },
+    {
+     "line": 11,
+     "text": "πύκνα δίννεντες πτέρ᾽ ἀπ᾽ ὠράνωἴθε-",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑–⏑",
+     "scanner": "??–––⏑?–?–⏑"
+    },
+    {
+     "line": 12,
+     "text": "ρος διὰ μέσσω·",
+     "units": 5,
+     "fit": true,
+     "pattern": "–⏑⏑––",
+     "scanner": "–??––"
+    },
+    {
+     "line": 13,
+     "text": "αἶψα δ᾽ ἐξίκοντο, σὺ δ᾽ ὦ μάκαιρα",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑–⏑",
+     "scanner": "–⏑–?–⏑?–?–⏑"
+    },
+    {
+     "line": 14,
+     "text": "μειδιαίσαισ᾽ ἀθανάτωι προσώπωι",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–?––???–⏑––"
+    },
+    {
+     "line": 15,
+     "text": "ἤρε᾽ ὄττι δηὖτε πέπονθα κὤττι",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–⏑–?–⏑⏑–⏑–?"
+    },
+    {
+     "line": 16,
+     "text": "δηὖτε κάλημμι",
+     "units": 5,
+     "fit": true,
+     "pattern": "–⏑⏑–⏑",
+     "scanner": "–⏑?–⏑"
+    },
+    {
+     "line": 17,
+     "text": "κὤττι μοι μάλιστα θέλω γένεσθαι",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–?–?–⏑⏑–⏑––"
+    },
+    {
+     "line": 18,
+     "text": "μαινόλαι θύμωι· τίνα δηὖτε πείθω",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–⏑–?–??–⏑––"
+    },
+    {
+     "line": 19,
+     "text": "†. .σάγην† ἐς σὰν φιλότατα; τίς σ᾽ ὦ",
+     "excluded": "obelised, corrupt (†. .σάγην†)"
+    },
+    {
+     "line": 20,
+     "text": "Ψάπφ᾽ ἀδικήει;",
+     "units": 5,
+     "fit": true,
+     "pattern": "–⏑⏑––",
+     "scanner": "–??––"
+    },
+    {
+     "line": 21,
+     "text": "καὶ γὰρ αἰ φεύγει, ταχέως διώξει,",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–?–––?⏑–?––"
+    },
+    {
+     "line": 22,
+     "text": "αἰ δὲ δῶρα μὴ δέκετ᾽, ἀλλὰ δώσει,",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–⏑–⏑⏑–⏑––",
+     "scanner": "–⏑–⏑–⏑⏑–?––"
+    },
+    {
+     "line": 23,
+     "text": "αἰ δὲ μὴ φίλει, ταχέως φιλήσει",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–⏑–?–?⏑–?––"
+    },
+    {
+     "line": 24,
+     "text": "κωὐκ ἐθέλοισα.",
+     "units": 5,
+     "fit": true,
+     "pattern": "–⏑⏑–⏑",
+     "scanner": "–⏑⏑–⏑"
+    },
+    {
+     "line": 25,
+     "text": "ἔλθε μοι καὶ νῦν, χαλέπαν δὲ λῦσον",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑–⏑",
+     "scanner": "–⏑–––?⏑–⏑–⏑"
+    },
+    {
+     "line": 26,
+     "text": "ἐκ μερίμναν, ὄσσα δέ μοι τέλεσσαι",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–⏑–?–?⏑–⏑––"
+    },
+    {
+     "line": 27,
+     "text": "θῦμος ἰμέρρει, τέλεσον, σὺ δ᾽ αὔτα",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–⏑?––⏑⏑–?––"
+    },
+    {
+     "line": 28,
+     "text": "σύμμαχος ἔσσο.",
+     "units": 5,
+     "fit": true,
+     "pattern": "–⏑⏑–⏑",
+     "scanner": "–?⏑–⏑"
+    }
+   ],
+   "scored": 208,
+   "decided": 154,
+   "correct": 154,
+   "ambiguous": 54,
+   "anceps_or_final_skipped": 47,
+   "metre_fits": 27,
+   "lines_aligned": 27,
+   "auto_detect_top": {
+    "sapphic_hendecasyllable": 20,
+    "adonean": 7
+   },
+   "disagreements": []
+  },
+  {
+   "id": "sappho-31",
+   "edition": "Sappho fr. 31 Lobel-Page, CGL anthology (p2_cgl_anthology:287)",
+   "metre": "sapphic",
+   "lines": [
+    {
+     "line": 1,
+     "text": "φαίνεταί μοι κῆνος ἴσος θέοισιν",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑–⏑",
+     "scanner": "–⏑–––?⏑–⏑–⏑"
+    },
+    {
+     "line": 2,
+     "text": "ἔμμεν᾽ ὤνηρ, ὄττις ἐνάντιός τοι",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–⏑–––?⏑–?––"
+    },
+    {
+     "line": 3,
+     "text": "ἰσδάνει καὶ πλάσιον ἆδυ φωνεί-",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–?––??⏑–⏑––"
+    },
+    {
+     "line": 4,
+     "text": "σας ὐπακούει",
+     "units": 5,
+     "fit": true,
+     "pattern": "–⏑⏑––",
+     "scanner": "???––"
+    },
+    {
+     "line": 5,
+     "text": "καὶ γελαίσας ἰμέροεν, τό μ᾽ ἦ μὰν",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–⏑––?⏑⏑–⏑–?"
+    },
+    {
+     "line": 6,
+     "text": "καρδίαν ἐν στήθεσιν ἐπτόαισεν·",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑–⏑",
+     "scanner": "–??––⏑⏑–⏑–⏑"
+    },
+    {
+     "line": 7,
+     "text": "ὠς γὰρ ἔς σ᾽ ἴδω βρόχε᾽, ὤς με φώναι-",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–?–?–⏑⏑–⏑––"
+    },
+    {
+     "line": 8,
+     "text": "σ᾽ οὐδ᾽ ἒν ἔτ᾽ εἴκει,",
+     "units": 5,
+     "fit": true,
+     "pattern": "–⏑⏑––",
+     "scanner": "–⏑⏑––"
+    },
+    {
+     "line": 9,
+     "text": "ἀλλ᾽ ἄκαν μὲν γλῶσσα †ἔαγε†, λέπτον",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑–⏑",
+     "scanner": "–?–––⏑⏑?⏑–⏑"
+    },
+    {
+     "line": 10,
+     "text": "δ᾽ αὔτικα χρῶι πῦρ ὐπαδεδρόμηκεν,",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑–⏑",
+     "scanner": "–??––???⏑–⏑"
+    },
+    {
+     "line": 11,
+     "text": "ὀππάτεσσι δ᾽ οὐδ᾽ ἒν ὄρημμ᾽, ἐπιρρόμ-",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–⏑–⏑⏑–⏑–⏑",
+     "scanner": "–?–⏑–⏑⏑–⏑–⏑"
+    },
+    {
+     "line": 12,
+     "text": "βεισι δ᾽ ἄκουαι,",
+     "units": 5,
+     "fit": true,
+     "pattern": "–⏑⏑––",
+     "scanner": "–??––"
+    },
+    {
+     "line": 13,
+     "text": "†έκαδε μ᾽ ἴδρως ψῦχρος κακχέεται†, τρόμος δὲ",
+     "excluded": "obelised, corrupt and over-long (†έκαδε μ᾽ ἴδρως ψῦχρος κακχέεται†)"
+    },
+    {
+     "line": 14,
+     "text": "παῖσαν ἄγρει, χλωροτέρα δὲ ποίας",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–⏑?––⏑⏑?⏑––"
+    },
+    {
+     "line": 15,
+     "text": "ἔμμι, τεθνάκην δ᾽ ὀλίγω ᾽πιδεύης",
+     "units": 11,
+     "fit": true,
+     "pattern": "–⏑–––⏑⏑–⏑––",
+     "scanner": "–???–⏑?–?––"
+    },
+    {
+     "line": 16,
+     "text": "φαίνομ᾽ ἔμ᾽ αὔται·",
+     "units": 5,
+     "fit": true,
+     "pattern": "–⏑⏑––",
+     "scanner": "–⏑⏑––"
+    },
+    {
+     "line": 17,
+     "text": "ἀλλὰ πὰν τόλματον ἐπεὶ †καὶ πένητα†",
+     "excluded": "first line of a new, corrupt stanza (†καὶ πένητα†)"
+    }
+   ],
+   "scored": 115,
+   "decided": 86,
+   "correct": 86,
+   "ambiguous": 29,
+   "anceps_or_final_skipped": 26,
+   "metre_fits": 15,
+   "lines_aligned": 15,
+   "auto_detect_top": {
+    "sapphic_hendecasyllable": 11,
+    "adonean": 4
+   },
+   "disagreements": []
+  },
+  {
+   "id": "alcaeus-346",
+   "edition": "Alcaeus fr. 346 Lobel-Page, CGL anthology (p2_cgl_anthology:260)",
+   "metre": "greater_asclepiad",
+   "lines": [
+    {
+     "line": 1,
+     "text": "πώνωμεν· τί τὰ λύχν᾽ ὀμμένομεν; δάκτυλος ἀμέρα.",
+     "units": 16,
+     "fit": true,
+     "pattern": "–––⏑⏑––⏑⏑––⏑⏑–⏑–",
+     "scanner": "–––???–⏑⏑––?⏑?⏑?"
+    },
+    {
+     "line": 2,
+     "text": "κὰδ δἄερρε κυλίχναις μεγάλαις †αιταποικιλλις†·",
+     "excluded": "obelised, corrupt (†αιταποικιλλις†)"
+    },
+    {
+     "line": 3,
+     "text": "οἶνον γὰρ Σεμέλας καὶ Δίος υἶος λαθικάδεον",
+     "units": 16,
+     "fit": true,
+     "pattern": "–––⏑⏑––⏑⏑––⏑⏑–⏑⏑",
+     "scanner": "–––⏑⏑––⏑⏑––???⏑⏑"
+    },
+    {
+     "line": 4,
+     "text": "ἀνθρώποισιν ἔδωκ᾽. ἔγχεε κέρναις ἔνα καὶ δύο",
+     "units": 16,
+     "fit": true,
+     "pattern": "–––⏑⏑––⏑⏑––⏑⏑–⏑⏑",
+     "scanner": "–––⏑⏑––⏑⏑––⏑?–⏑⏑"
+    },
+    {
+     "line": 5,
+     "text": "πλήαις κὰκ κεφάλας, ‹ἀ› δ᾽ ἀτέρα τὰν ἀτέραν κύλιξ",
+     "units": 16,
+     "fit": true,
+     "pattern": "–––⏑⏑––⏑⏑––⏑⏑–⏑–",
+     "scanner": "–––⏑????⏑???⏑–?–"
+    },
+    {
+     "line": 6,
+     "text": "ὠθήτω",
+     "excluded": "a single word, the poem breaks off"
+    }
+   ],
+   "scored": 52,
+   "decided": 35,
+   "correct": 35,
+   "ambiguous": 17,
+   "anceps_or_final_skipped": 12,
+   "metre_fits": 4,
+   "lines_aligned": 4,
+   "auto_detect_top": {
+    "greater_asclepiad": 4
+   },
+   "disagreements": []
+  },
+  {
+   "id": "sophocles-ot-1-15",
+   "edition": "Sophocles, Oedipus Tyrannus 1-15 (Storr 1912, Perseus)",
+   "metre": "iambic_trimeter",
+   "lines": [
+    {
+     "line": 1,
+     "text": "ὦ τέκνα, Κάδμου τοῦ πάλαι νέα τροφή,",
+     "units": 12,
+     "fit": true,
+     "pattern": "––⏑–––⏑–⏑–⏑–",
+     "scanner": "–???––⏑–⏑?⏑–"
+    },
+    {
+     "line": 2,
+     "text": "τίνας ποθʼ ἕδρας τάσδε μοι θοάζετε",
+     "units": 12,
+     "fit": true,
+     "pattern": "––⏑–––⏑–⏑–⏑⏑",
+     "scanner": "?–⏑?––⏑–⏑–⏑⏑"
+    },
+    {
+     "line": 3,
+     "text": "ἱκτηρίοις κλάδοισιν ἐξεστεμμένοι;",
+     "units": 12,
+     "fit": true,
+     "pattern": "––⏑–––⏑–––⏑–",
+     "scanner": "––?–?–⏑–––⏑–"
+    },
+    {
+     "line": 4,
+     "text": "πόλις δʼ ὁμοῦ μὲν θυμιαμάτων γέμει,",
+     "units": 12,
+     "fit": true,
+     "pattern": "⏑–⏑–––⏑–––⏑–",
+     "scanner": "⏑–⏑––????–⏑–"
+    },
+    {
+     "line": 5,
+     "text": "ὁμοῦ δὲ παιάνων τε καὶ στεναγμάτων·",
+     "units": 12,
+     "fit": true,
+     "pattern": "⏑–⏑–––⏑–⏑–⏑–",
+     "scanner": "⏑–⏑–?–⏑–⏑??–"
+    },
+    {
+     "line": 6,
+     "text": "ἁγὼ δικαιῶν μὴ παρʼ ἀγγέλων, τέκνα,",
+     "units": 12,
+     "fit": true,
+     "pattern": "––⏑–––⏑–⏑–⏑–",
+     "scanner": "?–?–––?–⏑–??"
+    },
+    {
+     "line": 7,
+     "text": "ἄλλων ἀκούειν αὐτὸς ὧδʼ ἐλήλυθα,",
+     "units": 12,
+     "fit": true,
+     "pattern": "––⏑–––⏑–⏑–⏑⏑",
+     "scanner": "––?–––⏑–⏑–?⏑"
+    },
+    {
+     "line": 8,
+     "text": "ὁ πᾶσι κλεινὸς Οἰδίπους καλούμενος.",
+     "units": 12,
+     "fit": true,
+     "pattern": "⏑–⏑–⏑–⏑–––⏑⏑",
+     "scanner": "⏑–?–⏑–?–?–⏑⏑"
+    },
+    {
+     "line": 9,
+     "text": "ἀλλʼ ὦ γεραιέ, φράζʼ, ἐπεὶ πρέπων ἔφυς",
+     "units": 12,
+     "fit": true,
+     "pattern": "––⏑–––⏑–⏑–⏑–",
+     "scanner": "––⏑–?–⏑–⏑–⏑?"
+    },
+    {
+     "line": 10,
+     "text": "πρὸ τῶνδε φωνεῖν, τίνι τρόπῳ καθέστατε,",
+     "units": 13,
+     "fit": true,
+     "pattern": "⏑–⏑––⏑⏑⏑–––⏑⏑",
+     "scanner": "⏑–⏑––??⏑–?–?⏑"
+    },
+    {
+     "line": 11,
+     "text": "δείσαντες ἢ στέρξαντες; ὡς θέλοντος ἂν",
+     "units": 12,
+     "fit": true,
+     "pattern": "––⏑–––⏑–⏑–⏑–",
+     "scanner": "––⏑–––⏑–⏑–⏑?"
+    },
+    {
+     "line": 12,
+     "text": "ἐμοῦ προσαρκεῖν πᾶν· δυσάλγητος γὰρ ἂν",
+     "units": 12,
+     "fit": true,
+     "pattern": "⏑–⏑–––⏑–––⏑–",
+     "scanner": "⏑–⏑–––?–––??"
+    },
+    {
+     "line": 13,
+     "text": "εἴην τοιάνδε μὴ οὐ κατοικτίρων ἕδραν.",
+     "units": 13,
+     "fit": true,
+     "pattern": "––⏑–⏑⏑–⏑–––⏑–",
+     "scanner": "––––⏑?–?–?–??"
+    },
+    {
+     "line": 14,
+     "text": "ἀλλʼ ὦ κρατύνων Οἰδίπους χώρας ἐμῆς,",
+     "units": 12,
+     "fit": true,
+     "pattern": "––⏑–––⏑–––⏑–",
+     "scanner": "––??––?–––⏑–"
+    },
+    {
+     "line": 15,
+     "text": "ὁρᾷς μὲν ἡμᾶς ἡλίκοι προσήμεθα",
+     "units": 12,
+     "fit": true,
+     "pattern": "⏑–⏑–––⏑–⏑–⏑⏑",
+     "scanner": "⏑–⏑–––⏑–⏑–⏑⏑"
+    }
+   ],
+   "scored": 121,
+   "decided": 93,
+   "correct": 92,
+   "ambiguous": 28,
+   "anceps_or_final_skipped": 61,
+   "metre_fits": 15,
+   "lines_aligned": 15,
+   "auto_detect_top": {
+    "iambic_trimeter": 15
+   },
+   "disagreements": [
+    {
+     "line": 13,
+     "unit": "οι",
+     "gold": "S",
+     "scanner": "L",
+     "p_long": 0.95,
+     "rule": "COR-INT",
+     "vowel_rule": "NAT-DIPH"
+    }
+   ]
+  },
+  {
+   "id": "archilochus-19",
+   "edition": "Archilochus fr. 19 West (Greek Wikisource transcription, corpus record lyric_web:elws:10410:165084:8)",
+   "metre": "iambic_trimeter",
+   "lines": [
+    {
+     "line": 1,
+     "text": "Οὔ μοι τὰ Γύγεω τοῦ πολυχρύσου μέλει",
+     "units": 13,
+     "fit": true,
+     "pattern": "––⏑⏑⏑––⏑–––⏑–",
+     "scanner": "––??⏑––⏑??–⏑–"
+    },
+    {
+     "line": 2,
+     "text": "οὐδ᾽ εἶλέ πώ με ζῆλος οὐδ᾽ ἀγαίομαι",
+     "units": 12,
+     "fit": true,
+     "pattern": "––⏑–––⏑–––⏑–",
+     "scanner": "––⏑–––⏑–?–⏑–"
+    },
+    {
+     "line": 3,
+     "text": "θεῶν ἔργα, μεγάλης δ᾽ οὐκ ἐρέω τυραννίδος·",
+     "units": 15,
+     "fit": true,
+     "pattern": "––⏑⏑⏑––⏑–––⏑⏑",
+     "scanner": "⏑––?⏑?––⏑⏑–?–⏑⏑"
+    },
+    {
+     "line": 4,
+     "text": "ἀπόπροθεν γάρ ἐστιν ὀφθαλμῶν ἐμῶν.",
+     "units": 12,
+     "fit": true,
+     "pattern": "––⏑–––⏑–––⏑–",
+     "scanner": "??⏑–?–?–––⏑–"
+    }
+   ],
+   "scored": 33,
+   "decided": 26,
+   "correct": 26,
+   "ambiguous": 7,
+   "anceps_or_final_skipped": 19,
+   "metre_fits": 4,
+   "lines_aligned": 4,
+   "auto_detect_top": {
+    "iambic_trimeter": 4
+   },
+   "disagreements": []
+  },
+  {
+   "id": "pindar-o1",
+   "edition": "Pindar, Olympian 1 (Perseus grc2, OGC), strophes 1.1-11, 1.30-40, 1.59-69, 1.88-98 and antistrophes 1.12-22, 1.41-51, 1.70-80, 1.99-109",
+   "positions": 134,
+   "gold_positions": 122,
+   "conflicting_positions": 12,
+   "layer1": {
+    "ambiguous": 70,
+    "right": 166
+   },
+   "responsion": {
+    "resolved_right": 46,
+    "ambiguous_after": 24
+   },
+   "lines_with_unequal_units": 2,
+   "disagreements": [],
+   "strophe_1_vs_antistrophe_1": [
+    {
+     "line": 0,
+     "strophe": "⏑––⏑⏑–⏑––⏑–⏑⏑––",
+     "antistrophe": "⏑––⏑⏑–⏑––⏑–⏑⏑––",
+     "mismatches": 0
+    },
+    {
+     "line": 1,
+     "strophe": "–⏑––⏑––⏑⏑–⏑⏑–⏑⏑––",
+     "antistrophe": "–⏑––⏑––⏑⏑–⏑⏑–⏑⏑––",
+     "mismatches": 0
+    },
+    {
+     "line": 2,
+     "strophe": "–––⏑–⏑⏑",
+     "antistrophe": "–––⏑–⏑–",
+     "mismatches": 0
+    },
+    {
+     "line": 3,
+     "strophe": "–⏑–⏑⏑–⏑",
+     "antistrophe": "–⏑–⏑⏑––",
+     "mismatches": 0
+    },
+    {
+     "line": 4,
+     "strophe": "–⏑–⏑–⏑–",
+     "antistrophe": "–⏑–⏑–⏑–",
+     "mismatches": 0
+    },
+    {
+     "line": 5,
+     "strophe": "–⏑–⏑⏑⏑⏑–⏑–––⏑–⏑⏑––⏑–⏑⏑",
+     "antistrophe": "–⏑–⏑⏑⏑⏑–⏑–––⏑–⏑⏑––⏑–⏑–",
+     "mismatches": 0
+    },
+    {
+     "line": 6,
+     "strophe": "–⏑–––––⏑–⏑⏑––⏑⏑",
+     "antistrophe": "–⏑–––––⏑–⏑⏑––⏑–",
+     "mismatches": 0
+    },
+    {
+     "line": 7,
+     "strophe": "⏑⏑⏑⏑––⏑–⏑–––⏑–",
+     "antistrophe": "⏑⏑⏑⏑––⏑–⏑–––⏑–",
+     "mismatches": 0
+    },
+    {
+     "line": 8,
+     "strophe": "⏑––⏑–⏑⏑⏑–",
+     "antistrophe": "⏑⏑⏑–⏑–⏑⏑⏑–",
+     "mismatches": 0
+    },
+    {
+     "line": 9,
+     "strophe": "⏑––⏑–⏑–⏑⏑⏑–",
+     "antistrophe": "⏑––⏑–⏑–⏑⏑⏑–",
+     "mismatches": 0
+    },
+    {
+     "line": 10,
+     "strophe": "––⏑⏑⏑–⏑–⏑–",
+     "antistrophe": "––⏑⏑⏑–⏑–⏑–",
+     "mismatches": 0
+    }
+   ]
+  },
+  {
+   "id": "prose-plutarch-vita-homeri",
+   "edition": "[Plutarch], Vita Homeri 1.1 (First1KGreek)",
+   "units": 119,
+   "bands": {
+    "certain short (0.0)": 34,
+    "certain long (1.0)": 57,
+    "ambiguous": 24,
+    "likely long (≥0.9)": 4
+   },
+   "ambiguous_by_rule": {
+    "DICH-UNK": 14,
+    "COR-EXT": 7,
+    "MCL-WORD": 2,
+    "DIG-LEN": 1
+   }
+  }
+ ],
+ "verse_total": {
+  "scored": 529,
+  "decided": 394,
+  "correct": 393,
+  "ambiguous": 135,
+  "decided_accuracy": 0.9975,
+  "ambiguous_share": 0.2552
+ }
+}

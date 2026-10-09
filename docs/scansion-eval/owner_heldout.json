@@ -1,0 +1,1979 @@
+{
+ "split": "heldout",
+ "params": "written",
+ "chunk_lines": 20,
+ "works": {
+  "iliad": {
+   "without_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 3,
+    "units_scored": 2320,
+    "decided_share": 0.7379,
+    "decided_accuracy": 0.9965,
+    "ambiguous_share": 0.2621,
+    "brier": 0.0665,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 667,
+      "observed_long": 0.006
+     },
+     "0.1-0.2": {
+      "n": 60,
+      "observed_long": 0.017
+     },
+     "0.2-0.3": {
+      "n": 5,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 568,
+      "observed_long": 0.201
+     },
+     "0.6-0.7": {
+      "n": 2,
+      "observed_long": 0.0
+     },
+     "0.7-0.8": {
+      "n": 31,
+      "observed_long": 1.0
+     },
+     "0.8-0.9": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.9-1.0": {
+      "n": 985,
+      "observed_long": 0.999
+     }
+    },
+    "ambiguous_by_rule": {
+     "NATURE/DICH-UNK": 373,
+     "COR-EXT": 73,
+     "MCL-WORD": 54,
+     "EPL-INIT": 43,
+     "CONS-VOW/DICH-UNK": 43,
+     "MCL-INIT": 18,
+     "DIG-LEN": 3,
+     "DIG-HIA": 1
+    },
+    "errors_by_rule": {
+     "NATURE/NAT-EO": {
+      "wrong": 2,
+      "of_decided": 463,
+      "examples": [
+       "iliad 19.400: 'ε τ' gold long, scanner S p=0.00",
+       "iliad 23.446: 'οδ' gold long, scanner S p=0.00"
+      ]
+     },
+     "EPL-INIT": {
+      "wrong": 1,
+      "of_decided": 60,
+      "examples": [
+       "iliad 19.395: 'ὲ μ' gold long, scanner S p=0.10"
+      ]
+     },
+     "CONS-VOW/NAT-EO": {
+      "wrong": 1,
+      "of_decided": 125,
+      "examples": [
+       "iliad 24.736: 'ος' gold long, scanner S p=0.00"
+      ]
+     },
+     "COR-INT": {
+      "wrong": 1,
+      "of_decided": 87,
+      "examples": [
+       "iliad 15.83: 'αυ' gold short, scanner L p=0.95"
+      ]
+     },
+     "CONS-VOW/ACC-PROPAROX": {
+      "wrong": 1,
+      "of_decided": 22,
+      "examples": [
+       "iliad 19.396: 'ιν' gold long, scanner S p=0.00"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 1.199,
+     "p95": 1.474
+    }
+   },
+   "with_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 3,
+    "units_scored": 2320,
+    "decided_share": 0.906,
+    "decided_accuracy": 0.9952,
+    "ambiguous_share": 0.094,
+    "brier": 0.0256,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 917,
+      "observed_long": 0.004
+     },
+     "0.1-0.2": {
+      "n": 172,
+      "observed_long": 0.029
+     },
+     "0.3-0.4": {
+      "n": 6,
+      "observed_long": 0.0
+     },
+     "0.4-0.5": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 183,
+      "observed_long": 0.47
+     },
+     "0.7-0.8": {
+      "n": 1,
+      "observed_long": 1.0
+     },
+     "0.8-0.9": {
+      "n": 2,
+      "observed_long": 0.5
+     },
+     "0.9-1.0": {
+      "n": 1038,
+      "observed_long": 0.999
+     }
+    },
+    "ambiguous_by_rule": {
+     "COR-EXT": 67,
+     "MCL-WORD": 53,
+     "EPL-INIT": 43,
+     "NATURE/LEX-CONFLICT": 25,
+     "MCL-INIT": 18,
+     "DIG-LEN": 6,
+     "CONS-VOW/LEX-CONFLICT": 3,
+     "DIG-HIA": 3
+    },
+    "errors_by_rule": {
+     "NATURE/LEX-UNMARKED": {
+      "wrong": 4,
+      "of_decided": 85,
+      "examples": [
+       "iliad 14.30: 'ύ' gold long, scanner S p=0.10",
+       "iliad 15.716: 'ί' gold long, scanner S p=0.10",
+       "iliad 17.467: 'α' gold long, scanner S p=0.10"
+      ]
+     },
+     "NATURE/NAT-EO": {
+      "wrong": 2,
+      "of_decided": 463,
+      "examples": [
+       "iliad 19.400: 'ε τ' gold long, scanner S p=0.00",
+       "iliad 23.446: 'οδ' gold long, scanner S p=0.00"
+      ]
+     },
+     "EPL-INIT": {
+      "wrong": 1,
+      "of_decided": 60,
+      "examples": [
+       "iliad 19.395: 'ὲ μ' gold long, scanner S p=0.10"
+      ]
+     },
+     "CONS-VOW/NAT-EO": {
+      "wrong": 1,
+      "of_decided": 123,
+      "examples": [
+       "iliad 24.736: 'ος' gold long, scanner S p=0.00"
+      ]
+     },
+     "COR-INT": {
+      "wrong": 1,
+      "of_decided": 87,
+      "examples": [
+       "iliad 15.83: 'αυ' gold short, scanner L p=0.95"
+      ]
+     },
+     "CONS-VOW/ACC-PROPAROX": {
+      "wrong": 1,
+      "of_decided": 21,
+      "examples": [
+       "iliad 19.396: 'ιν' gold long, scanner S p=0.00"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 3.665,
+     "p95": 5.677
+    }
+   }
+  },
+  "odyssey": {
+   "without_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 3,
+    "units_scored": 2319,
+    "decided_share": 0.7443,
+    "decided_accuracy": 0.9965,
+    "ambiguous_share": 0.2557,
+    "brier": 0.0656,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 655,
+      "observed_long": 0.005
+     },
+     "0.1-0.2": {
+      "n": 57,
+      "observed_long": 0.053
+     },
+     "0.2-0.3": {
+      "n": 5,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 1,
+      "observed_long": 1.0
+     },
+     "0.4-0.5": {
+      "n": 3,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 561,
+      "observed_long": 0.168
+     },
+     "0.6-0.7": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.7-0.8": {
+      "n": 19,
+      "observed_long": 1.0
+     },
+     "0.8-0.9": {
+      "n": 3,
+      "observed_long": 0.333
+     },
+     "0.9-1.0": {
+      "n": 1014,
+      "observed_long": 1.0
+     }
+    },
+    "ambiguous_by_rule": {
+     "NATURE/DICH-UNK": 390,
+     "COR-EXT": 60,
+     "CONS-VOW/DICH-UNK": 52,
+     "MCL-WORD": 34,
+     "EPL-INIT": 31,
+     "MCL-INIT": 16,
+     "DIG-HIA": 6,
+     "DIG-LEN": 2,
+     "EPL-RHO": 2
+    },
+    "errors_by_rule": {
+     "EPL-INIT": {
+      "wrong": 3,
+      "of_decided": 57,
+      "examples": [
+       "odyssey 9.145: 'ὲ ν' gold long, scanner S p=0.10",
+       "odyssey 9.154: 'ὲ ν' gold long, scanner S p=0.10",
+       "odyssey 17.604: 'ε μ' gold long, scanner S p=0.10"
+      ]
+     },
+     "CONS-VOW/NAT-EO": {
+      "wrong": 2,
+      "of_decided": 120,
+      "examples": [
+       "odyssey 18.412: 'ος' gold long, scanner S p=0.00",
+       "odyssey 22.150: 'ον' gold long, scanner S p=0.00"
+      ]
+     },
+     "NATURE/ACC-PAROX-SHORT-AIOI": {
+      "wrong": 1,
+      "of_decided": 2,
+      "examples": [
+       "odyssey 22.138: 'ύκ' gold long, scanner S p=0.05"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 1.182,
+     "p95": 1.467
+    }
+   },
+   "with_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 3,
+    "units_scored": 2319,
+    "decided_share": 0.9207,
+    "decided_accuracy": 0.9948,
+    "ambiguous_share": 0.0793,
+    "brier": 0.024,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 961,
+      "observed_long": 0.006
+     },
+     "0.1-0.2": {
+      "n": 141,
+      "observed_long": 0.043
+     },
+     "0.2-0.3": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 4,
+      "observed_long": 0.5
+     },
+     "0.4-0.5": {
+      "n": 3,
+      "observed_long": 0.667
+     },
+     "0.5-0.6": {
+      "n": 144,
+      "observed_long": 0.417
+     },
+     "0.7-0.8": {
+      "n": 2,
+      "observed_long": 1.0
+     },
+     "0.8-0.9": {
+      "n": 8,
+      "observed_long": 0.5
+     },
+     "0.9-1.0": {
+      "n": 1055,
+      "observed_long": 0.998
+     }
+    },
+    "ambiguous_by_rule": {
+     "COR-EXT": 51,
+     "MCL-WORD": 34,
+     "EPL-INIT": 31,
+     "NATURE/LEX-CONFLICT": 22,
+     "MCL-INIT": 16,
+     "CONS-VOW/LEX-CONFLICT": 12,
+     "DIG-HIA": 9,
+     "DIG-LEN": 4,
+     "EPL-RHO": 2,
+     "NATURE/LEX-OTHER": 2,
+     "CONS-VOW/LEX-OTHER": 1
+    },
+    "errors_by_rule": {
+     "EPL-INIT": {
+      "wrong": 3,
+      "of_decided": 57,
+      "examples": [
+       "odyssey 9.145: 'ὲ ν' gold long, scanner S p=0.10",
+       "odyssey 9.154: 'ὲ ν' gold long, scanner S p=0.10",
+       "odyssey 17.604: 'ε μ' gold long, scanner S p=0.10"
+      ]
+     },
+     "NATURE/LEX-S": {
+      "wrong": 2,
+      "of_decided": 262,
+      "examples": [
+       "odyssey 18.3: 'ι' gold long, scanner S p=0.05",
+       "odyssey 19.304: 'ί' gold long, scanner S p=0.05"
+      ]
+     },
+     "NATURE/LEX-L": {
+      "wrong": 2,
+      "of_decided": 39,
+      "examples": [
+       "odyssey 8.527: 'ύ' gold short, scanner L p=0.90",
+       "odyssey 18.405: 'ἱ' gold short, scanner L p=0.90"
+      ]
+     },
+     "CONS-VOW/NAT-EO": {
+      "wrong": 1,
+      "of_decided": 119,
+      "examples": [
+       "odyssey 18.412: 'ος' gold long, scanner S p=0.00"
+      ]
+     },
+     "CONS-VOW/LEX-S": {
+      "wrong": 1,
+      "of_decided": 34,
+      "examples": [
+       "odyssey 18.400: 'ις' gold long, scanner S p=0.05"
+      ]
+     },
+     "NATURE/ACC-PAROX-SHORT-AIOI": {
+      "wrong": 1,
+      "of_decided": 2,
+      "examples": [
+       "odyssey 22.138: 'ύκ' gold long, scanner S p=0.05"
+      ]
+     },
+     "CONS-VOW/LEX-ENDING": {
+      "wrong": 1,
+      "of_decided": 2,
+      "examples": [
+       "odyssey 18.407: 'ὺν' gold long, scanner S p=0.05"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 3.364,
+     "p95": 6.012
+    }
+   }
+  },
+  "homeric_hymns": {
+   "without_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 7,
+    "units_scored": 2270,
+    "decided_share": 0.7335,
+    "decided_accuracy": 0.9988,
+    "ambiguous_share": 0.2665,
+    "brier": 0.0659,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 634,
+      "observed_long": 0.002
+     },
+     "0.1-0.2": {
+      "n": 68,
+      "observed_long": 0.015
+     },
+     "0.2-0.3": {
+      "n": 4,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 5,
+      "observed_long": 0.4
+     },
+     "0.4-0.5": {
+      "n": 2,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 563,
+      "observed_long": 0.178
+     },
+     "0.6-0.7": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.7-0.8": {
+      "n": 29,
+      "observed_long": 0.966
+     },
+     "0.8-0.9": {
+      "n": 1,
+      "observed_long": 1.0
+     },
+     "0.9-1.0": {
+      "n": 963,
+      "observed_long": 1.0
+     }
+    },
+    "ambiguous_by_rule": {
+     "NATURE/DICH-UNK": 402,
+     "COR-EXT": 58,
+     "MCL-WORD": 50,
+     "CONS-VOW/DICH-UNK": 37,
+     "EPL-INIT": 32,
+     "MCL-INIT": 17,
+     "DIG-LEN": 6,
+     "DIG-HIA": 2,
+     "EPL-RHO": 1
+    },
+    "errors_by_rule": {
+     "CONS-VOW/NAT-EO": {
+      "wrong": 1,
+      "of_decided": 127,
+      "examples": [
+       "homeric_hymns 24.1: 'ος' gold long, scanner S p=0.00"
+      ]
+     },
+     "EPL-INIT": {
+      "wrong": 1,
+      "of_decided": 68,
+      "examples": [
+       "homeric_hymns 3.401: 'ε δ' gold long, scanner S p=0.10"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 1.258,
+     "p95": 1.537
+    }
+   },
+   "with_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 7,
+    "units_scored": 2270,
+    "decided_share": 0.9119,
+    "decided_accuracy": 0.9928,
+    "ambiguous_share": 0.0881,
+    "brier": 0.0259,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 878,
+      "observed_long": 0.003
+     },
+     "0.1-0.2": {
+      "n": 190,
+      "observed_long": 0.011
+     },
+     "0.2-0.3": {
+      "n": 2,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 9,
+      "observed_long": 0.444
+     },
+     "0.4-0.5": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 161,
+      "observed_long": 0.429
+     },
+     "0.6-0.7": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.7-0.8": {
+      "n": 1,
+      "observed_long": 1.0
+     },
+     "0.8-0.9": {
+      "n": 2,
+      "observed_long": 1.0
+     },
+     "0.9-1.0": {
+      "n": 1025,
+      "observed_long": 0.99
+     }
+    },
+    "ambiguous_by_rule": {
+     "COR-EXT": 55,
+     "MCL-WORD": 47,
+     "EPL-INIT": 31,
+     "NATURE/LEX-CONFLICT": 24,
+     "MCL-INIT": 17,
+     "CONS-VOW/LEX-CONFLICT": 12,
+     "DIG-LEN": 10,
+     "DIG-HIA": 2,
+     "EPL-RHO": 1,
+     "NATURE/LEX-OTHER": 1
+    },
+    "errors_by_rule": {
+     "NATURE/LEX-L": {
+      "wrong": 9,
+      "of_decided": 54,
+      "examples": [
+       "homeric_hymns 2.464: 'άτ' gold short, scanner L p=0.90",
+       "homeric_hymns 2.476: 'ἱ' gold short, scanner L p=0.90",
+       "homeric_hymns 3.405: 'υ' gold short, scanner L p=0.90"
+      ]
+     },
+     "NATURE/LEX-S": {
+      "wrong": 3,
+      "of_decided": 217,
+      "examples": [
+       "homeric_hymns 4.127: 'ύσ' gold long, scanner S p=0.05",
+       "homeric_hymns 18.1: 'ἀ' gold long, scanner S p=0.05",
+       "homeric_hymns 25.2: 'Ἀπ' gold long, scanner S p=0.05"
+      ]
+     },
+     "NATURE/LEX-UNMARKED": {
+      "wrong": 2,
+      "of_decided": 99,
+      "examples": [
+       "homeric_hymns 4.116: 'ύχ' gold long, scanner S p=0.10",
+       "homeric_hymns 4.177: 'ί' gold long, scanner S p=0.10"
+      ]
+     },
+     "EPL-INIT": {
+      "wrong": 1,
+      "of_decided": 68,
+      "examples": [
+       "homeric_hymns 4.121: 'α δ' gold short, scanner L p=0.91"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 3.628,
+     "p95": 5.821
+    }
+   }
+  },
+  "theogony": {
+   "without_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 11,
+    "units_scored": 2210,
+    "decided_share": 0.748,
+    "decided_accuracy": 0.9994,
+    "ambiguous_share": 0.252,
+    "brier": 0.063,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 657,
+      "observed_long": 0.0
+     },
+     "0.1-0.2": {
+      "n": 53,
+      "observed_long": 0.0
+     },
+     "0.2-0.3": {
+      "n": 5,
+      "observed_long": 0.4
+     },
+     "0.4-0.5": {
+      "n": 2,
+      "observed_long": 0.5
+     },
+     "0.5-0.6": {
+      "n": 526,
+      "observed_long": 0.192
+     },
+     "0.7-0.8": {
+      "n": 23,
+      "observed_long": 0.913
+     },
+     "0.8-0.9": {
+      "n": 1,
+      "observed_long": 1.0
+     },
+     "0.9-1.0": {
+      "n": 943,
+      "observed_long": 0.999
+     }
+    },
+    "ambiguous_by_rule": {
+     "NATURE/DICH-UNK": 378,
+     "COR-EXT": 59,
+     "MCL-WORD": 40,
+     "EPL-INIT": 31,
+     "CONS-VOW/DICH-UNK": 30,
+     "MCL-INIT": 16,
+     "EPL-RHO": 2,
+     "DIG-HIA": 1
+    },
+    "errors_by_rule": {
+     "CONS-VOW/ACC-PAROX-LONG": {
+      "wrong": 1,
+      "of_decided": 2,
+      "examples": [
+       "theogony None.804: 'ας' gold short, scanner L p=1.00"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 1.203,
+     "p95": 1.405
+    }
+   },
+   "with_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 11,
+    "units_scored": 2210,
+    "decided_share": 0.9204,
+    "decided_accuracy": 0.9936,
+    "ambiguous_share": 0.0796,
+    "brier": 0.0228,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 885,
+      "observed_long": 0.001
+     },
+     "0.1-0.2": {
+      "n": 174,
+      "observed_long": 0.04
+     },
+     "0.2-0.3": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 4,
+      "observed_long": 0.0
+     },
+     "0.4-0.5": {
+      "n": 3,
+      "observed_long": 0.667
+     },
+     "0.5-0.6": {
+      "n": 141,
+      "observed_long": 0.433
+     },
+     "0.7-0.8": {
+      "n": 1,
+      "observed_long": 1.0
+     },
+     "0.8-0.9": {
+      "n": 1,
+      "observed_long": 1.0
+     },
+     "0.9-1.0": {
+      "n": 1000,
+      "observed_long": 0.995
+     }
+    },
+    "ambiguous_by_rule": {
+     "COR-EXT": 56,
+     "MCL-WORD": 39,
+     "EPL-INIT": 31,
+     "NATURE/LEX-CONFLICT": 20,
+     "MCL-INIT": 16,
+     "CONS-VOW/LEX-CONFLICT": 6,
+     "DIG-LEN": 4,
+     "EPL-RHO": 2,
+     "DIG-HIA": 1,
+     "NATURE/LEX-OTHER": 1
+    },
+    "errors_by_rule": {
+     "NATURE/LEX-UNMARKED": {
+      "wrong": 7,
+      "of_decided": 96,
+      "examples": [
+       "theogony None.150: 'ἀ' gold long, scanner S p=0.10",
+       "theogony None.528: 'Ἰ' gold long, scanner S p=0.10",
+       "theogony None.528: 'ι' gold long, scanner S p=0.10"
+      ]
+     },
+     "NATURE/LEX-L": {
+      "wrong": 3,
+      "of_decided": 53,
+      "examples": [
+       "theogony None.125: 'ιγ' gold short, scanner L p=0.90",
+       "theogony None.785: 'υσ' gold short, scanner L p=0.90",
+       "theogony None.788: 'ἱ' gold short, scanner L p=0.90"
+      ]
+     },
+     "COR-EXT": {
+      "wrong": 1,
+      "of_decided": 3,
+      "examples": [
+       "theogony None.819: 'α' gold long, scanner S p=0.03"
+      ]
+     },
+     "CONS-VOW/LEX-L": {
+      "wrong": 1,
+      "of_decided": 3,
+      "examples": [
+       "theogony None.534: 'ὰς' gold short, scanner L p=0.90"
+      ]
+     },
+     "CONS-VOW/ACC-PAROX-LONG": {
+      "wrong": 1,
+      "of_decided": 2,
+      "examples": [
+       "theogony None.804: 'ας' gold short, scanner L p=1.00"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 3.391,
+     "p95": 5.918
+    }
+   }
+  },
+  "works_and_days": {
+   "without_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 8,
+    "units_scored": 2209,
+    "decided_share": 0.766,
+    "decided_accuracy": 0.9976,
+    "ambiguous_share": 0.234,
+    "brier": 0.0594,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 606,
+      "observed_long": 0.007
+     },
+     "0.1-0.2": {
+      "n": 53,
+      "observed_long": 0.0
+     },
+     "0.2-0.3": {
+      "n": 4,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 3,
+      "observed_long": 0.333
+     },
+     "0.5-0.6": {
+      "n": 489,
+      "observed_long": 0.16
+     },
+     "0.6-0.7": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.7-0.8": {
+      "n": 20,
+      "observed_long": 0.95
+     },
+     "0.9-1.0": {
+      "n": 1033,
+      "observed_long": 1.0
+     }
+    },
+    "ambiguous_by_rule": {
+     "NATURE/DICH-UNK": 368,
+     "COR-EXT": 52,
+     "MCL-WORD": 35,
+     "CONS-VOW/DICH-UNK": 27,
+     "EPL-INIT": 24,
+     "MCL-INIT": 7,
+     "DIG-LEN": 4
+    },
+    "errors_by_rule": {
+     "CONS-VOW/NAT-EO": {
+      "wrong": 3,
+      "of_decided": 125,
+      "examples": [
+       "works_and_days None.364: 'ἐν' gold long, scanner S p=0.00",
+       "works_and_days None.407: 'ἐν' gold long, scanner S p=0.00",
+       "works_and_days None.443: 'ὃς' gold long, scanner S p=0.00"
+      ]
+     },
+     "NATURE/ACC-PAROX-SHORT-AIOI": {
+      "wrong": 1,
+      "of_decided": 4,
+      "examples": [
+       "works_and_days None.28: 'ύκ' gold long, scanner S p=0.05"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 1.18,
+     "p95": 1.403
+    }
+   },
+   "with_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 8,
+    "units_scored": 2209,
+    "decided_share": 0.9298,
+    "decided_accuracy": 0.9942,
+    "ambiguous_share": 0.0702,
+    "brier": 0.0208,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 832,
+      "observed_long": 0.001
+     },
+     "0.1-0.2": {
+      "n": 161,
+      "observed_long": 0.05
+     },
+     "0.3-0.4": {
+      "n": 10,
+      "observed_long": 0.4
+     },
+     "0.4-0.5": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 123,
+      "observed_long": 0.35
+     },
+     "0.8-0.9": {
+      "n": 2,
+      "observed_long": 1.0
+     },
+     "0.9-1.0": {
+      "n": 1080,
+      "observed_long": 0.997
+     }
+    },
+    "ambiguous_by_rule": {
+     "COR-EXT": 46,
+     "MCL-WORD": 32,
+     "NATURE/LEX-CONFLICT": 31,
+     "EPL-INIT": 24,
+     "DIG-LEN": 10,
+     "MCL-INIT": 7,
+     "DIG-HIA": 3,
+     "CONS-VOW/LEX-CONFLICT": 2
+    },
+    "errors_by_rule": {
+     "NATURE/LEX-UNMARKED": {
+      "wrong": 8,
+      "of_decided": 87,
+      "examples": [
+       "works_and_days None.50: 'Ἰ' gold long, scanner S p=0.10",
+       "works_and_days None.54: 'Ἰ' gold long, scanner S p=0.10",
+       "works_and_days None.54: 'ι' gold long, scanner S p=0.10"
+      ]
+     },
+     "NATURE/LEX-L": {
+      "wrong": 3,
+      "of_decided": 43,
+      "examples": [
+       "works_and_days None.52: 'ΐλ' gold short, scanner L p=0.90",
+       "works_and_days None.185: 'ἀτ' gold short, scanner L p=0.90",
+       "works_and_days None.374: 'α κ' gold short, scanner L p=0.90"
+      ]
+     },
+     "NATURE/ACC-PAROX-SHORT-AIOI": {
+      "wrong": 1,
+      "of_decided": 4,
+      "examples": [
+       "works_and_days None.28: 'ύκ' gold long, scanner S p=0.05"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 3.393,
+     "p95": 5.148
+    }
+   }
+  },
+  "shield": {
+   "without_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 8,
+    "units_scored": 2247,
+    "decided_share": 0.729,
+    "decided_accuracy": 0.9945,
+    "ambiguous_share": 0.271,
+    "brier": 0.07,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 632,
+      "observed_long": 0.009
+     },
+     "0.1-0.2": {
+      "n": 55,
+      "observed_long": 0.018
+     },
+     "0.2-0.3": {
+      "n": 6,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 5,
+      "observed_long": 0.2
+     },
+     "0.4-0.5": {
+      "n": 3,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 564,
+      "observed_long": 0.199
+     },
+     "0.6-0.7": {
+      "n": 1,
+      "observed_long": 1.0
+     },
+     "0.7-0.8": {
+      "n": 30,
+      "observed_long": 0.9
+     },
+     "0.9-1.0": {
+      "n": 951,
+      "observed_long": 0.998
+     }
+    },
+    "ambiguous_by_rule": {
+     "NATURE/DICH-UNK": 411,
+     "MCL-WORD": 53,
+     "COR-EXT": 50,
+     "CONS-VOW/DICH-UNK": 35,
+     "EPL-INIT": 31,
+     "MCL-INIT": 20,
+     "DIG-LEN": 6,
+     "DIG-HIA": 3
+    },
+    "errors_by_rule": {
+     "CONS-VOW/NAT-EO": {
+      "wrong": 6,
+      "of_decided": 112,
+      "examples": [
+       "shield None.77: 'ὸν' gold long, scanner S p=0.00",
+       "shield None.100: 'ος' gold long, scanner S p=0.00",
+       "shield None.310: 'ον' gold long, scanner S p=0.00"
+      ]
+     },
+     "POS-WORD": {
+      "wrong": 2,
+      "of_decided": 239,
+      "examples": [
+       "shield None.35: 'εκτρ' gold short, scanner L p=1.00",
+       "shield None.86: 'εκτρ' gold short, scanner L p=1.00"
+      ]
+     },
+     "EPL-INIT": {
+      "wrong": 1,
+      "of_decided": 55,
+      "examples": [
+       "shield None.195: 'ὲ Δ' gold long, scanner S p=0.10"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 1.209,
+     "p95": 1.562
+    }
+   },
+   "with_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 8,
+    "units_scored": 2247,
+    "decided_share": 0.9146,
+    "decided_accuracy": 0.9835,
+    "ambiguous_share": 0.0854,
+    "brier": 0.0333,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 873,
+      "observed_long": 0.007
+     },
+     "0.1-0.2": {
+      "n": 184,
+      "observed_long": 0.06
+     },
+     "0.3-0.4": {
+      "n": 6,
+      "observed_long": 0.333
+     },
+     "0.4-0.5": {
+      "n": 4,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 158,
+      "observed_long": 0.475
+     },
+     "0.7-0.8": {
+      "n": 2,
+      "observed_long": 0.5
+     },
+     "0.8-0.9": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.9-1.0": {
+      "n": 1019,
+      "observed_long": 0.983
+     }
+    },
+    "ambiguous_by_rule": {
+     "MCL-WORD": 52,
+     "COR-EXT": 43,
+     "EPL-INIT": 31,
+     "MCL-INIT": 20,
+     "NATURE/LEX-CONFLICT": 17,
+     "NATURE/LEX-OTHER": 9,
+     "CONS-VOW/LEX-CONFLICT": 8,
+     "DIG-HIA": 6,
+     "DIG-LEN": 6
+    },
+    "errors_by_rule": {
+     "NATURE/LEX-L": {
+      "wrong": 15,
+      "of_decided": 64,
+      "examples": [
+       "shield None.29: 'ἀρ' gold short, scanner L p=0.90",
+       "shield None.36: 'ίγ' gold short, scanner L p=0.90",
+       "shield None.37: 'ύ' gold short, scanner L p=0.90"
+      ]
+     },
+     "NATURE/LEX-UNMARKED": {
+      "wrong": 10,
+      "of_decided": 107,
+      "examples": [
+       "shield None.23: 'ἱ' gold long, scanner S p=0.10",
+       "shield None.33: 'Φίκ' gold long, scanner S p=0.10",
+       "shield None.65: 'ἱ' gold long, scanner S p=0.10"
+      ]
+     },
+     "CONS-VOW/NAT-EO": {
+      "wrong": 6,
+      "of_decided": 112,
+      "examples": [
+       "shield None.77: 'ὸν' gold long, scanner S p=0.00",
+       "shield None.100: 'ος' gold long, scanner S p=0.00",
+       "shield None.310: 'ον' gold long, scanner S p=0.00"
+      ]
+     },
+     "POS-WORD": {
+      "wrong": 2,
+      "of_decided": 239,
+      "examples": [
+       "shield None.35: 'εκτρ' gold short, scanner L p=1.00",
+       "shield None.86: 'εκτρ' gold short, scanner L p=1.00"
+      ]
+     },
+     "EPL-INIT": {
+      "wrong": 1,
+      "of_decided": 55,
+      "examples": [
+       "shield None.195: 'ὲ Δ' gold long, scanner S p=0.10"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 3.194,
+     "p95": 5.509
+    }
+   }
+  },
+  "argonautica": {
+   "without_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 4,
+    "units_scored": 2312,
+    "decided_share": 0.7215,
+    "decided_accuracy": 0.9988,
+    "ambiguous_share": 0.2785,
+    "brier": 0.0683,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 623,
+      "observed_long": 0.002
+     },
+     "0.1-0.2": {
+      "n": 60,
+      "observed_long": 0.017
+     },
+     "0.2-0.3": {
+      "n": 4,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 3,
+      "observed_long": 0.0
+     },
+     "0.4-0.5": {
+      "n": 4,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 600,
+      "observed_long": 0.17
+     },
+     "0.6-0.7": {
+      "n": 2,
+      "observed_long": 0.0
+     },
+     "0.7-0.8": {
+      "n": 28,
+      "observed_long": 1.0
+     },
+     "0.8-0.9": {
+      "n": 3,
+      "observed_long": 1.0
+     },
+     "0.9-1.0": {
+      "n": 985,
+      "observed_long": 1.0
+     }
+    },
+    "ambiguous_by_rule": {
+     "NATURE/DICH-UNK": 433,
+     "COR-EXT": 67,
+     "MCL-WORD": 46,
+     "CONS-VOW/DICH-UNK": 44,
+     "EPL-INIT": 31,
+     "MCL-INIT": 10,
+     "DIG-HIA": 6,
+     "DIG-LEN": 5,
+     "EPL-RHO": 2
+    },
+    "errors_by_rule": {
+     "CONS-VOW/NAT-EO": {
+      "wrong": 1,
+      "of_decided": 116,
+      "examples": [
+       "argonautica 2.1023: 'ες' gold long, scanner S p=0.00"
+      ]
+     },
+     "EPL-INIT": {
+      "wrong": 1,
+      "of_decided": 60,
+      "examples": [
+       "argonautica 2.747: 'ε ν' gold long, scanner S p=0.10"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 1.201,
+     "p95": 1.458
+    }
+   },
+   "with_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 4,
+    "units_scored": 2312,
+    "decided_share": 0.9126,
+    "decided_accuracy": 0.9953,
+    "ambiguous_share": 0.0874,
+    "brier": 0.024,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 879,
+      "observed_long": 0.001
+     },
+     "0.1-0.2": {
+      "n": 216,
+      "observed_long": 0.037
+     },
+     "0.2-0.3": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 9,
+      "observed_long": 0.111
+     },
+     "0.4-0.5": {
+      "n": 2,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 160,
+      "observed_long": 0.438
+     },
+     "0.6-0.7": {
+      "n": 2,
+      "observed_long": 0.0
+     },
+     "0.7-0.8": {
+      "n": 1,
+      "observed_long": 1.0
+     },
+     "0.8-0.9": {
+      "n": 4,
+      "observed_long": 0.75
+     },
+     "0.9-1.0": {
+      "n": 1038,
+      "observed_long": 0.998
+     }
+    },
+    "ambiguous_by_rule": {
+     "COR-EXT": 63,
+     "MCL-WORD": 44,
+     "EPL-INIT": 31,
+     "NATURE/LEX-CONFLICT": 21,
+     "DIG-LEN": 11,
+     "CONS-VOW/LEX-CONFLICT": 11,
+     "MCL-INIT": 10,
+     "NATURE/LEX-OTHER": 5,
+     "DIG-HIA": 5,
+     "EPL-RHO": 1
+    },
+    "errors_by_rule": {
+     "NATURE/LEX-UNMARKED": {
+      "wrong": 6,
+      "of_decided": 133,
+      "examples": [
+       "argonautica 2.747: 'Νισ' gold long, scanner S p=0.10",
+       "argonautica 2.986: 'ί γʼ' gold long, scanner S p=0.10",
+       "argonautica 2.989: 'Ἄρ' gold long, scanner S p=0.10"
+      ]
+     },
+     "CONS-VOW/NAT-EO": {
+      "wrong": 1,
+      "of_decided": 114,
+      "examples": [
+       "argonautica 2.1023: 'ες' gold long, scanner S p=0.00"
+      ]
+     },
+     "EPL-INIT": {
+      "wrong": 1,
+      "of_decided": 60,
+      "examples": [
+       "argonautica 2.747: 'ε ν' gold long, scanner S p=0.10"
+      ]
+     },
+     "NATURE/LEX-L": {
+      "wrong": 1,
+      "of_decided": 50,
+      "examples": [
+       "argonautica 2.738: 'ἀ' gold short, scanner L p=0.90"
+      ]
+     },
+     "CONS-VOW/LEX-L": {
+      "wrong": 1,
+      "of_decided": 1,
+      "examples": [
+       "argonautica 2.1034: 'ιν' gold short, scanner L p=0.90"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 3.563,
+     "p95": 6.388
+    }
+   }
+  },
+  "quintus_posthomerica": {
+   "without_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 8,
+    "units_scored": 2308,
+    "decided_share": 0.7396,
+    "decided_accuracy": 0.9994,
+    "ambiguous_share": 0.2604,
+    "brier": 0.0639,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 729,
+      "observed_long": 0.0
+     },
+     "0.1-0.2": {
+      "n": 61,
+      "observed_long": 0.0
+     },
+     "0.2-0.3": {
+      "n": 5,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 3,
+      "observed_long": 0.0
+     },
+     "0.4-0.5": {
+      "n": 2,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 551,
+      "observed_long": 0.156
+     },
+     "0.6-0.7": {
+      "n": 3,
+      "observed_long": 0.0
+     },
+     "0.7-0.8": {
+      "n": 36,
+      "observed_long": 0.917
+     },
+     "0.8-0.9": {
+      "n": 1,
+      "observed_long": 1.0
+     },
+     "0.9-1.0": {
+      "n": 917,
+      "observed_long": 0.999
+     }
+    },
+    "ambiguous_by_rule": {
+     "NATURE/DICH-UNK": 385,
+     "CONS-VOW/DICH-UNK": 55,
+     "MCL-WORD": 51,
+     "COR-EXT": 46,
+     "EPL-INIT": 39,
+     "MCL-INIT": 16,
+     "DIG-LEN": 6,
+     "DIG-HIA": 3
+    },
+    "errors_by_rule": {
+     "NATURE/CRA-1": {
+      "wrong": 1,
+      "of_decided": 1,
+      "examples": [
+       "quintus_posthomerica 14.193: 'ἀλ' gold short, scanner L p=1.00"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 1.238,
+     "p95": 1.458
+    }
+   },
+   "with_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 8,
+    "units_scored": 2308,
+    "decided_share": 0.909,
+    "decided_accuracy": 0.9952,
+    "ambiguous_share": 0.091,
+    "brier": 0.0243,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 968,
+      "observed_long": 0.002
+     },
+     "0.1-0.2": {
+      "n": 181,
+      "observed_long": 0.017
+     },
+     "0.2-0.3": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 15,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 164,
+      "observed_long": 0.366
+     },
+     "0.7-0.8": {
+      "n": 2,
+      "observed_long": 0.5
+     },
+     "0.8-0.9": {
+      "n": 3,
+      "observed_long": 0.333
+     },
+     "0.9-1.0": {
+      "n": 974,
+      "observed_long": 0.995
+     }
+    },
+    "ambiguous_by_rule": {
+     "MCL-WORD": 49,
+     "COR-EXT": 40,
+     "EPL-INIT": 38,
+     "NATURE/LEX-CONFLICT": 31,
+     "MCL-INIT": 16,
+     "DIG-LEN": 15,
+     "CONS-VOW/LEX-CONFLICT": 15,
+     "DIG-HIA": 3,
+     "NATURE/LEX-OTHER": 3
+    },
+    "errors_by_rule": {
+     "NATURE/LEX-L": {
+      "wrong": 4,
+      "of_decided": 52,
+      "examples": [
+       "quintus_posthomerica 1.471: 'υμ' gold short, scanner L p=0.90",
+       "quintus_posthomerica 6.136: 'ιγ' gold short, scanner L p=0.90",
+       "quintus_posthomerica 9.444: 'ίκ' gold short, scanner L p=0.90"
+      ]
+     },
+     "NATURE/LEX-UNMARKED": {
+      "wrong": 3,
+      "of_decided": 93,
+      "examples": [
+       "quintus_posthomerica 3.295: 'ι' gold long, scanner S p=0.10",
+       "quintus_posthomerica 9.452: 'ὑλ' gold long, scanner S p=0.10",
+       "quintus_posthomerica 12.530: 'ἀ' gold long, scanner S p=0.10"
+      ]
+     },
+     "NATURE/LEX-S": {
+      "wrong": 2,
+      "of_decided": 204,
+      "examples": [
+       "quintus_posthomerica 12.522: 'ά' gold long, scanner S p=0.05",
+       "quintus_posthomerica 14.202: 'ί' gold long, scanner S p=0.05"
+      ]
+     },
+     "NATURE/CRA-1": {
+      "wrong": 1,
+      "of_decided": 1,
+      "examples": [
+       "quintus_posthomerica 14.193: 'ἀλ' gold short, scanner L p=1.00"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 3.285,
+     "p95": 5.96
+    }
+   }
+  },
+  "nonnus_dionysiaca": {
+   "without_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 3,
+    "units_scored": 2392,
+    "decided_share": 0.7467,
+    "decided_accuracy": 1.0,
+    "ambiguous_share": 0.2533,
+    "brier": 0.0605,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 788,
+      "observed_long": 0.0
+     },
+     "0.1-0.2": {
+      "n": 82,
+      "observed_long": 0.0
+     },
+     "0.2-0.3": {
+      "n": 2,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 2,
+      "observed_long": 0.0
+     },
+     "0.4-0.5": {
+      "n": 3,
+      "observed_long": 0.0
+     },
+     "0.5-0.6": {
+      "n": 549,
+      "observed_long": 0.179
+     },
+     "0.7-0.8": {
+      "n": 48,
+      "observed_long": 0.958
+     },
+     "0.8-0.9": {
+      "n": 2,
+      "observed_long": 1.0
+     },
+     "0.9-1.0": {
+      "n": 916,
+      "observed_long": 1.0
+     }
+    },
+    "ambiguous_by_rule": {
+     "NATURE/DICH-UNK": 418,
+     "MCL-WORD": 82,
+     "EPL-INIT": 34,
+     "CONS-VOW/DICH-UNK": 33,
+     "COR-EXT": 22,
+     "MCL-INIT": 8,
+     "EPL-RHO": 5,
+     "DIG-HIA": 2,
+     "DIG-LEN": 2
+    },
+    "errors_by_rule": {},
+    "ms_per_line": {
+     "median": 1.244,
+     "p95": 1.506
+    }
+   },
+   "with_lexicon": {
+    "lines": 160,
+    "lines_unit_count_differs": 3,
+    "units_scored": 2392,
+    "decided_share": 0.9135,
+    "decided_accuracy": 0.9936,
+    "ambiguous_share": 0.0865,
+    "brier": 0.0237,
+    "reliability": {
+     "0.0-0.1": {
+      "n": 988,
+      "observed_long": 0.001
+     },
+     "0.1-0.2": {
+      "n": 268,
+      "observed_long": 0.041
+     },
+     "0.2-0.3": {
+      "n": 1,
+      "observed_long": 0.0
+     },
+     "0.3-0.4": {
+      "n": 8,
+      "observed_long": 0.0
+     },
+     "0.4-0.5": {
+      "n": 6,
+      "observed_long": 0.167
+     },
+     "0.5-0.6": {
+      "n": 158,
+      "observed_long": 0.563
+     },
+     "0.7-0.8": {
+      "n": 4,
+      "observed_long": 1.0
+     },
+     "0.8-0.9": {
+      "n": 3,
+      "observed_long": 0.667
+     },
+     "0.9-1.0": {
+      "n": 956,
+      "observed_long": 0.998
+     }
+    },
+    "ambiguous_by_rule": {
+     "MCL-WORD": 81,
+     "EPL-INIT": 34,
+     "NATURE/LEX-CONFLICT": 29,
+     "COR-EXT": 20,
+     "NATURE/LEX-OTHER": 11,
+     "MCL-INIT": 8,
+     "DIG-LEN": 8,
+     "CONS-VOW/LEX-CONFLICT": 7,
+     "EPL-RHO": 5,
+     "DIG-HIA": 4
+    },
+    "errors_by_rule": {
+     "NATURE/LEX-UNMARKED": {
+      "wrong": 11,
+      "of_decided": 158,
+      "examples": [
+       "nonnus_dionysiaca 1.70: 'ίμ' gold long, scanner S p=0.10",
+       "nonnus_dionysiaca 1.74: 'υδ' gold long, scanner S p=0.10",
+       "nonnus_dionysiaca 10.232: 'ί' gold long, scanner S p=0.10"
+      ]
+     },
+     "NATURE/LEX-L": {
+      "wrong": 2,
+      "of_decided": 37,
+      "examples": [
+       "nonnus_dionysiaca 1.63: 'ὑμ' gold short, scanner L p=0.90",
+       "nonnus_dionysiaca 11.515: 'υσ' gold short, scanner L p=0.90"
+      ]
+     },
+     "NATURE/LEX-S": {
+      "wrong": 1,
+      "of_decided": 169,
+      "examples": [
+       "nonnus_dionysiaca 1.63: 'ἀ' gold long, scanner S p=0.05"
+      ]
+     }
+    },
+    "ms_per_line": {
+     "median": 3.689,
+     "p95": 6.329
+    }
+   }
+  }
+ },
+ "all_works": {
+  "without_lexicon": {
+   "lines": 1440,
+   "lines_unit_count_differs": 55,
+   "units_scored": 20587,
+   "decided_share": 0.7406,
+   "decided_accuracy": 0.998,
+   "ambiguous_share": 0.2594,
+   "brier": 0.0648,
+   "reliability": {
+    "0.0-0.1": {
+     "n": 5991,
+     "observed_long": 0.003
+    },
+    "0.1-0.2": {
+     "n": 549,
+     "observed_long": 0.013
+    },
+    "0.2-0.3": {
+     "n": 40,
+     "observed_long": 0.05
+    },
+    "0.3-0.4": {
+     "n": 23,
+     "observed_long": 0.217
+    },
+    "0.4-0.5": {
+     "n": 19,
+     "observed_long": 0.053
+    },
+    "0.5-0.6": {
+     "n": 4971,
+     "observed_long": 0.178
+    },
+    "0.6-0.7": {
+     "n": 11,
+     "observed_long": 0.091
+    },
+    "0.7-0.8": {
+     "n": 264,
+     "observed_long": 0.955
+    },
+    "0.8-0.9": {
+     "n": 12,
+     "observed_long": 0.75
+    },
+    "0.9-1.0": {
+     "n": 8707,
+     "observed_long": 0.999
+    }
+   },
+   "ambiguous_by_rule": {
+    "NATURE/DICH-UNK": 3558,
+    "COR-EXT": 487,
+    "MCL-WORD": 445,
+    "CONS-VOW/DICH-UNK": 356,
+    "EPL-INIT": 296,
+    "MCL-INIT": 128,
+    "DIG-LEN": 34,
+    "DIG-HIA": 24,
+    "EPL-RHO": 12
+   },
+   "errors_by_rule": {
+    "CONS-VOW/NAT-EO": {
+     "wrong": 14,
+     "of_decided": 1184,
+     "examples": [
+      "iliad 24.736: 'ος' gold long, scanner S p=0.00",
+      "odyssey 18.412: 'ος' gold long, scanner S p=0.00",
+      "odyssey 22.150: 'ον' gold long, scanner S p=0.00"
+     ]
+    },
+    "EPL-INIT": {
+     "wrong": 7,
+     "of_decided": 549,
+     "examples": [
+      "iliad 19.395: 'ὲ μ' gold long, scanner S p=0.10",
+      "odyssey 9.145: 'ὲ ν' gold long, scanner S p=0.10",
+      "odyssey 9.154: 'ὲ ν' gold long, scanner S p=0.10"
+     ]
+    },
+    "NATURE/NAT-EO": {
+     "wrong": 2,
+     "of_decided": 4117,
+     "examples": [
+      "iliad 19.400: 'ε τ' gold long, scanner S p=0.00",
+      "iliad 23.446: 'οδ' gold long, scanner S p=0.00"
+     ]
+    },
+    "POS-WORD": {
+     "wrong": 2,
+     "of_decided": 2154,
+     "examples": [
+      "shield None.35: 'εκτρ' gold short, scanner L p=1.00",
+      "shield None.86: 'εκτρ' gold short, scanner L p=1.00"
+     ]
+    },
+    "NATURE/ACC-PAROX-SHORT-AIOI": {
+     "wrong": 2,
+     "of_decided": 16,
+     "examples": [
+      "odyssey 22.138: 'ύκ' gold long, scanner S p=0.05",
+      "works_and_days None.28: 'ύκ' gold long, scanner S p=0.05"
+     ]
+    },
+    "COR-INT": {
+     "wrong": 1,
+     "of_decided": 717,
+     "examples": [
+      "iliad 15.83: 'αυ' gold short, scanner L p=0.95"
+     ]
+    },
+    "CONS-VOW/ACC-PROPAROX": {
+     "wrong": 1,
+     "of_decided": 106,
+     "examples": [
+      "iliad 19.396: 'ιν' gold long, scanner S p=0.00"
+     ]
+    },
+    "NATURE/CRA-1": {
+     "wrong": 1,
+     "of_decided": 6,
+     "examples": [
+      "quintus_posthomerica 14.193: 'ἀλ' gold short, scanner L p=1.00"
+     ]
+    },
+    "CONS-VOW/ACC-PAROX-LONG": {
+     "wrong": 1,
+     "of_decided": 5,
+     "examples": [
+      "theogony None.804: 'ας' gold short, scanner L p=1.00"
+     ]
+    }
+   },
+   "ms_per_line": {
+    "median": 1.209,
+    "p95": 1.502
+   }
+  },
+  "with_lexicon": {
+   "lines": 1440,
+   "lines_unit_count_differs": 55,
+   "units_scored": 20587,
+   "decided_share": 0.9153,
+   "decided_accuracy": 0.9932,
+   "ambiguous_share": 0.0847,
+   "brier": 0.025,
+   "reliability": {
+    "0.0-0.1": {
+     "n": 8181,
+     "observed_long": 0.003
+    },
+    "0.1-0.2": {
+     "n": 1687,
+     "observed_long": 0.036
+    },
+    "0.2-0.3": {
+     "n": 7,
+     "observed_long": 0.0
+    },
+    "0.3-0.4": {
+     "n": 71,
+     "observed_long": 0.183
+    },
+    "0.4-0.5": {
+     "n": 21,
+     "observed_long": 0.238
+    },
+    "0.5-0.6": {
+     "n": 1392,
+     "observed_long": 0.44
+    },
+    "0.6-0.7": {
+     "n": 3,
+     "observed_long": 0.0
+    },
+    "0.7-0.8": {
+     "n": 14,
+     "observed_long": 0.857
+    },
+    "0.8-0.9": {
+     "n": 26,
+     "observed_long": 0.615
+    },
+    "0.9-1.0": {
+     "n": 9185,
+     "observed_long": 0.995
+    }
+   },
+   "ambiguous_by_rule": {
+    "COR-EXT": 441,
+    "MCL-WORD": 431,
+    "EPL-INIT": 294,
+    "NATURE/LEX-CONFLICT": 220,
+    "MCL-INIT": 128,
+    "CONS-VOW/LEX-CONFLICT": 76,
+    "DIG-LEN": 74,
+    "DIG-HIA": 36,
+    "NATURE/LEX-OTHER": 32,
+    "EPL-RHO": 11,
+    "CONS-VOW/LEX-OTHER": 1
+   },
+   "errors_by_rule": {
+    "NATURE/LEX-UNMARKED": {
+     "wrong": 51,
+     "of_decided": 919,
+     "examples": [
+      "iliad 14.30: 'ύ' gold long, scanner S p=0.10",
+      "iliad 15.716: 'ί' gold long, scanner S p=0.10",
+      "iliad 17.467: 'α' gold long, scanner S p=0.10"
+     ]
+    },
+    "NATURE/LEX-L": {
+     "wrong": 39,
+     "of_decided": 440,
+     "examples": [
+      "odyssey 8.527: 'ύ' gold short, scanner L p=0.90",
+      "odyssey 18.405: 'ἱ' gold short, scanner L p=0.90",
+      "homeric_hymns 2.464: 'άτ' gold short, scanner L p=0.90"
+     ]
+    },
+    "CONS-VOW/NAT-EO": {
+     "wrong": 9,
+     "of_decided": 1157,
+     "examples": [
+      "iliad 24.736: 'ος' gold long, scanner S p=0.00",
+      "odyssey 18.412: 'ος' gold long, scanner S p=0.00",
+      "shield None.77: 'ὸν' gold long, scanner S p=0.00"
+     ]
+    },
+    "NATURE/LEX-S": {
+     "wrong": 8,
+     "of_decided": 1884,
+     "examples": [
+      "odyssey 18.3: 'ι' gold long, scanner S p=0.05",
+      "odyssey 19.304: 'ί' gold long, scanner S p=0.05",
+      "homeric_hymns 4.127: 'ύσ' gold long, scanner S p=0.05"
+     ]
+    },
+    "EPL-INIT": {
+     "wrong": 7,
+     "of_decided": 550,
+     "examples": [
+      "iliad 19.395: 'ὲ μ' gold long, scanner S p=0.10",
+      "odyssey 9.145: 'ὲ ν' gold long, scanner S p=0.10",
+      "odyssey 9.154: 'ὲ ν' gold long, scanner S p=0.10"
+     ]
+    },
+    "NATURE/NAT-EO": {
+     "wrong": 2,
+     "of_decided": 4117,
+     "examples": [
+      "iliad 19.400: 'ε τ' gold long, scanner S p=0.00",
+      "iliad 23.446: 'οδ' gold long, scanner S p=0.00"
+     ]
+    },
+    "POS-WORD": {
+     "wrong": 2,
+     "of_decided": 2154,
+     "examples": [
+      "shield None.35: 'εκτρ' gold short, scanner L p=1.00",
+      "shield None.86: 'εκτρ' gold short, scanner L p=1.00"
+     ]
+    },
+    "NATURE/ACC-PAROX-SHORT-AIOI": {
+     "wrong": 2,
+     "of_decided": 16,
+     "examples": [
+      "odyssey 22.138: 'ύκ' gold long, scanner S p=0.05",
+      "works_and_days None.28: 'ύκ' gold long, scanner S p=0.05"
+     ]
+    },
+    "CONS-VOW/LEX-L": {
+     "wrong": 2,
+     "of_decided": 20,
+     "examples": [
+      "theogony None.534: 'ὰς' gold short, scanner L p=0.90",
+      "argonautica 2.1034: 'ιν' gold short, scanner L p=0.90"
+     ]
+    },
+    "COR-EXT": {
+     "wrong": 1,
+     "of_decided": 11,
+     "examples": [
+      "theogony None.819: 'α' gold long, scanner S p=0.03"
+     ]
+    },
+    "COR-INT": {
+     "wrong": 1,
+     "of_decided": 717,
+     "examples": [
+      "iliad 15.83: 'αυ' gold short, scanner L p=0.95"
+     ]
+    },
+    "CONS-VOW/ACC-PROPAROX": {
+     "wrong": 1,
+     "of_decided": 103,
+     "examples": [
+      "iliad 19.396: 'ιν' gold long, scanner S p=0.00"
+     ]
+    },
+    "CONS-VOW/LEX-S": {
+     "wrong": 1,
+     "of_decided": 230,
+     "examples": [
+      "odyssey 18.400: 'ις' gold long, scanner S p=0.05"
+     ]
+    },
+    "NATURE/CRA-1": {
+     "wrong": 1,
+     "of_decided": 6,
+     "examples": [
+      "quintus_posthomerica 14.193: 'ἀλ' gold short, scanner L p=1.00"
+     ]
+    },
+    "CONS-VOW/ACC-PAROX-LONG": {
+     "wrong": 1,
+     "of_decided": 5,
+     "examples": [
+      "theogony None.804: 'ας' gold short, scanner L p=1.00"
+     ]
+    },
+    "CONS-VOW/LEX-ENDING": {
+     "wrong": 1,
+     "of_decided": 11,
+     "examples": [
+      "odyssey 18.407: 'ὺν' gold long, scanner S p=0.05"
+     ]
+    }
+   },
+   "ms_per_line": {
+    "median": 1.662,
+    "p95": 2.141
+   }
+  }
+ }
+}

@@ -1,0 +1,71 @@
+{
+ "about": "Non-hexameter check set. Texts are read from data/corpus.sqlite by passage id (never retyped); the only edits are listed under `replace`, each with its reason. Gold = the metrical scheme of each line: positions the scheme fixes as long or short are scored; anceps positions and the line-final position are not. Schemes: Sapphic stanza and Alcaic stanza (Wikipedia 'Sapphic stanza', 'Alcaic stanza'), greater asclepiad (Wikipedia 'Asclepiad (poetry)'), iambic trimeter (Wikipedia 'Iambic trimeter'), each checked by hand line by line (notes below). Pindar is scored by responsion (scripts/scansion_handcheck.py).",
+ "passages": [
+  {
+   "id": "sappho-1",
+   "passage": "p2_cgl_anthology:279",
+   "edition": "Sappho fr. 1 Lobel-Page, as printed in the CGL anthology (corpus record p2_cgl_anthology:279)",
+   "metre": "sapphic", "dialect": "aeolic",
+   "exclude_lines": [19],
+   "exclude_reason": {"19": "obelised, corrupt (†. .σάγην†)"},
+   "replace": [["ἀθανάτἈφρόδιτα", "ἀθανάτ᾽ Ἀφρόδιτα", "the transcription joins two words that Lobel-Page print apart (ἀθανάτ᾽ Ἀφρόδιτα, also so in the Dickinson text, corpus record ogc:sappho.fragmenta.jsonl:2)"]],
+   "notes": {
+    "1": "ποικιλόθρον᾽: λό before θρ is long (position 3); ἀ- of ἀθάνατος stands in a long position (lengthened, cf. Monro §386 on ἀθάνατος)",
+    "11": "ὠράνωἴθε-ρος: crasis ω + αι written joined (Lobel-Page), one long syllable"
+   }
+  },
+  {
+   "id": "sappho-31",
+   "passage": "p2_cgl_anthology:287",
+   "edition": "Sappho fr. 31 Lobel-Page, CGL anthology (p2_cgl_anthology:287)",
+   "metre": "sapphic", "dialect": "aeolic",
+   "exclude_lines": [13, 17],
+   "exclude_reason": {"13": "obelised, corrupt and over-long (†έκαδε μ᾽ ἴδρως ψῦχρος κακχέεται†)", "17": "first line of a new, corrupt stanza (†καὶ πένητα†)"},
+   "replace": []
+  },
+  {
+   "id": "alcaeus-346",
+   "passage": "p2_cgl_anthology:260",
+   "edition": "Alcaeus fr. 346 Lobel-Page, CGL anthology (p2_cgl_anthology:260)",
+   "metre": "greater_asclepiad", "dialect": "aeolic",
+   "exclude_lines": [2, 6],
+   "exclude_reason": {"2": "obelised, corrupt (†αιταποικιλλις†)", "6": "a single word, the poem breaks off"},
+   "replace": [],
+   "notes": {"1": "ἀμέρα: Aeolic ᾱ for η (Smyth §30) in a long position"}
+  },
+  {
+   "id": "sophocles-ot-1-15",
+   "passage": "perseus:tlg0011.tlg004.perseus-grc2:1–20:1",
+   "edition": "Sophocles, Oedipus Tyrannus 1-15 (Storr 1912, Perseus)",
+   "metre": "iambic_trimeter",
+   "lines": [1, 15],
+   "exclude_lines": [],
+   "replace": [],
+   "notes": {"13": "μὴ οὐ: synizesis across the word boundary (one syllable)"}
+  },
+  {
+   "id": "archilochus-19",
+   "passage": "lyric_web:elws:10410:165084:8",
+   "edition": "Archilochus fr. 19 West (Greek Wikisource transcription, corpus record lyric_web:elws:10410:165084:8)",
+   "metre": "iambic_trimeter",
+   "exclude_lines": [],
+   "replace": [],
+   "notes": {"3": "θεῶν (synizesis) and ἐρέω (synizesis); the line has a resolved long"}
+  },
+  {
+   "id": "pindar-o1",
+   "kind": "responsion", "dialect": "doric",
+   "work_prefix": "ogc:pindarus.olympia.jsonl:",
+   "edition": "Pindar, Olympian 1 (Perseus grc2, OGC), strophes 1.1-11, 1.30-40, 1.59-69, 1.88-98 and antistrophes 1.12-22, 1.41-51, 1.70-80, 1.99-109",
+   "strophes": [1, 30, 59, 88],
+   "antistrophes": [12, 41, 70, 99],
+   "length": 11
+  },
+  {
+   "id": "prose-plutarch-vita-homeri",
+   "kind": "prose",
+   "passage": "ogc:vitae-homeri.plutarchi-vita.jsonl:1",
+   "edition": "[Plutarch], Vita Homeri 1.1 (First1KGreek)"
+  }
+ ]
+}

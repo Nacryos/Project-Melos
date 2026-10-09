@@ -1,0 +1,267 @@
+# Greek scansion meta-grammar (metre-free).  Edit this file and reload: the engine
+# (backend/scansion/engine.py) interprets it; no code change is needed.
+#
+# A scansion UNIT is one vowel nucleus (a vowel or a diphthong) plus the consonants after it up to
+# the next nucleus on the same line.  Spaces and punctuation are ignored; word boundaries are kept
+# only as features.  The onset is irrelevant.
+#
+# Two trees are evaluated for every unit, top to bottom, first match wins inside each list:
+#   vowel: how likely the nucleus itself is long        -> sets  p_vowel, vowel_rule
+#   unit:  how likely the whole unit counts long         -> sets  p_long (the output)
+# A node either has `p` (a number 0..1, a parameter name, or a small formula) or `then:` (children).
+# `flags:` are annotations evaluated for every unit; they never change p_long.
+#
+# Conditions (`when`) and formulas use a tiny language: feature names, "strings", numbers,
+# == != < <= > >= in, and / or / not, ( ), + - *.  Unknown names are reported when the file loads.
+# Features are listed (with their meaning) in docs/scansion.md, "Features".
+#
+# Citations: Smyth = H. W. Smyth, Greek Grammar (1920), Perseus 1999.04.0007, section numbers;
+# Monro = D. B. Monro, Homeric Grammar (1891), Dickinson College Commentaries edition.
+# `measured` values (share long in the gold Iliad, books 1-12) are written to
+# backend/scansion/data/rule_calibration.json by scripts/scansion_eval.py and shown on rules.html.
+
+version: 1
+
+params:
+  correption: 0.5          # long vowel/diphthong at word end before a vowel: kept long (owner default)
+  digamma_keep: 0.85       # ... when the next word once began with ϝ (Monro §§390-392)
+  internal_keep: 0.95      # long vowel/diphthong before a vowel inside a word (inner correption is rare)
+  mcl_word: 0.5            # stop + liquid/nasal inside the word after a short vowel
+  mcl_boundary: 0.5        # stop + liquid/nasal opening the next word after a short vowel
+  dichronon_default: 0.5   # α ι υ with no accent rule and no lexical mark (owner band 0.4-0.7)
+  lex_long: 0.9            # lexical sources mark α ι υ long
+  lex_short: 0.05          # lexical sources mark α ι υ short
+  lex_unmarked: 0.1        # lexicon knows the word but gives this α ι υ no mark
+  dialect_alpha_long: 0.95 # α where the attested Attic-Ionic form of the same word has η (Doric/Aeolic ᾱ)
+  digamma_lengthening: 0.3 # short syllable before a word that once began with ϝ
+  epic_lengthening: 0.1    # short final vowel before initial λ μ ν σ δ (Monro §371)
+  epic_lengthening_rho: 0.4 # ... before initial ρ ("appears always to have this power", Monro §371)
+  synizesis: 0.05          # ε/η + vowel inside a word form one syllable
+
+vowel:
+  - id: CRA-1
+    when: crasis
+    p: 1
+    reason: crasis (coronis inside the word) gives a long vowel
+    cite: Smyth §62, §147b
+  - id: NAT-DIPH
+    when: nucleus == "diphthong" and not adscript
+    p: 1
+    reason: diphthong, long by nature
+    cite: Smyth §5, §143
+  - id: NAT-ISUB
+    when: iota_sub or adscript
+    p: 1
+    reason: iota subscript / adscript, long by nature
+    cite: Smyth §5, §143
+  - id: NAT-CIRC
+    when: circumflex
+    p: 1
+    reason: circumflex accent, so the vowel is long
+    cite: Smyth §147a, §170
+  - id: NAT-ETA
+    when: vowel in ("η", "ω")
+    p: 1
+    reason: η / ω, long by nature
+    cite: Smyth §143
+  - id: NAT-EO
+    when: vowel in ("ε", "ο")
+    p: 0
+    reason: ε / ο, short by nature
+    cite: Smyth §142
+  - id: DICH
+    when: vowel in ("α", "ι", "υ")
+    reason: α ι υ can be long or short
+    cite: Smyth §147
+    then:
+      - id: ACC-PROPAROX
+        when: is_ultima and accent == "antepenult_acute" and not enclitic_compound
+        p: 0
+        reason: accent on the antepenult, so the final α ι υ is short
+        cite: Smyth §163, §170
+      - id: ACC-PROPERISP
+        when: is_ultima and accent == "penult_circumflex" and not enclitic_compound
+        p: 0
+        reason: circumflex on the penult, so the final α ι υ is short
+        cite: Smyth §167c, §170
+      - id: ACC-PAROX-LONG
+        when: is_ultima and accent == "penult_acute" and penult_long_by_nature and not enclitic_compound
+        p: 1
+        reason: acute on a long penult, so the final α ι υ is long
+        cite: Smyth §166-167
+      - id: ACC-PAROX-SHORT
+        when: is_penult and accent == "penult_acute" and ultima_short_by_nature and not enclitic_compound
+        p: 0
+        reason: acute on this penult before a short final vowel, so it is short (φίλος)
+        cite: Smyth §167b, §170
+      - id: ACC-PAROX-SHORT-AIOI
+        when: is_penult and accent == "penult_acute" and ultima_ai_oi and not enclitic_compound
+        p: 0.05
+        reason: as above, final -αι/-οι counting short (not in the optative)
+        cite: Smyth §169
+      - id: LEX
+        when: lex != "none"
+        reason: vowel length from the lexical sources (optional layer)
+        cite: Morpheus stems and endings; Wiktionary; LSJ (Perseus, Logeion)
+        then:
+          - id: LEX-L
+            when: lex == "L"
+            p: lex_long
+            reason: the lexical sources mark it long
+            cite: Morpheus; Wiktionary; LSJ
+          - id: LEX-S
+            when: lex == "S"
+            p: lex_short
+            reason: the lexical sources mark it short
+            cite: Morpheus; Wiktionary; LSJ
+          - id: DIA-ETA
+            when: alpha_for_eta and dialect in ("aeolic", "doric") and lex == "unknown_word"
+            p: dialect_alpha_long
+            reason: Doric/Aeolic α where the Attic-Ionic form has η (σελάννα = σελήνη), so ᾱ
+            cite: Smyth §30; Buck, Greek Dialects §8 (via backend/dialect_generate.py)
+          - id: LEX-CONFLICT
+            when: lex == "conflict"
+            p: dichronon_default
+            reason: the lexical sources disagree (homographs or variant lengths)
+            cite: Morpheus; Wiktionary; LSJ
+          - id: LEX-ENDING
+            when: lex == "ending"
+            p: lex_short
+            reason: a Morpheus ending without a length mark (its tables mark the long ones)
+            cite: Morpheus stemlib endtables
+          - id: LEX-UNMARKED
+            when: lex == "unmarked"
+            p: lex_unmarked
+            reason: the lexicon knows the word but gives this α ι υ no mark
+            cite: Morpheus stems; Wiktionary forms
+          - id: LEX-OTHER
+            when: true
+            p: dichronon_default
+            reason: no usable lexical mark
+            cite: Smyth §147
+      - id: DICH-UNK
+        when: true
+        p: dichronon_default
+        reason: α ι υ of unknown length
+        cite: Smyth §147
+
+unit:
+  - id: POS
+    when: (consonants >= 2 or double) and not mcl
+    reason: long by position
+    cite: Smyth §144
+    then:
+      - id: POS-DOUBLE
+        when: double
+        p: 1
+        reason: double consonant ζ ξ ψ follows
+        cite: Smyth §144
+      - id: POS-ACROSS
+        when: boundary_inside_interval
+        p: 1
+        reason: two consonants across a word boundary
+        cite: Smyth §144a
+      - id: POS-INIT
+        when: interval_opens_next_word
+        p: 1
+        reason: the next word begins with two consonants
+        cite: Smyth §144a
+      - id: POS-WORD
+        when: true
+        p: 1
+        reason: two consonants inside the word
+        cite: Smyth §144
+  - id: MCL
+    when: mcl
+    reason: stop + liquid/nasal (muta cum liquida)
+    cite: Smyth §145; Monro §370
+    then:
+      - id: MCL-LONGV
+        when: p_vowel >= 0.99
+        p: 1
+        reason: the vowel is long anyway
+        cite: Smyth §143
+      - id: MCL-WORD
+        when: not interval_opens_next_word
+        p: p_vowel + (1 - p_vowel) * mcl_word
+        reason: stop + liquid/nasal inside the word, weak position
+        cite: Smyth §145; Monro §370
+      - id: MCL-INIT
+        when: true
+        p: p_vowel + (1 - p_vowel) * mcl_boundary
+        reason: stop + liquid/nasal opening the next word, weak position
+        cite: Smyth §145; Monro §370
+  - id: HIATUS
+    when: consonants == 0 and hiatus == "external"
+    reason: vowel before the next word's vowel (hiatus)
+    cite: Monro §379
+    then:
+      - id: DIG-HIA
+        when: next_digamma and p_vowel > 0
+        p: p_vowel * digamma_keep
+        reason: the next word once began with ϝ, so the long vowel usually stays long
+        cite: Monro §§390-392
+      - id: COR-EXT
+        when: p_vowel > 0
+        p: p_vowel * correption
+        reason: long vowel or diphthong before a vowel, may be shortened (epic correption)
+        cite: Monro §380
+      - id: HIA-SHORT
+        when: true
+        p: 0
+        reason: short vowel in hiatus stays short
+        cite: Monro §379
+  - id: COR-INT
+    when: consonants == 0 and hiatus == "internal" and p_vowel >= 0.99
+    p: internal_keep
+    reason: long vowel or diphthong before a vowel in the same word (inner correption is rare)
+    cite: Smyth §148; Monro §380
+  - id: OPEN
+    when: true
+    reason: at most one consonant follows, so the vowel decides
+    cite: Smyth §141-143
+    then:
+      - id: DIG-LEN
+        when: p_vowel < 1 and word_final and next_digamma
+        p: p_vowel + (1 - p_vowel) * digamma_lengthening
+        reason: the next word once began with ϝ, which can lengthen this syllable
+        cite: Monro §§390-395
+      - id: EPL-RHO
+        when: p_vowel < 1 and word_final and consonants == 1 and interval_opens_next_word and next_initial == "ρ"
+        p: p_vowel + (1 - p_vowel) * epic_lengthening_rho
+        reason: short final vowel before initial ρ, often long in epic
+        cite: Monro §371
+      - id: EPL-INIT
+        when: p_vowel < 1 and word_final and consonants == 1 and interval_opens_next_word and next_initial in ("λ", "μ", "ν", "σ", "δ")
+        p: p_vowel + (1 - p_vowel) * epic_lengthening
+        reason: short final vowel before initial λ μ ν σ δ, sometimes long in epic
+        cite: Monro §371
+      - id: CONS-VOW
+        when: final_consonant_before_vowel
+        p: p_vowel
+        reason: final consonant before the next word's vowel, it joins that vowel
+        cite: Smyth §140; Monro §375
+      - id: NATURE
+        when: true
+        p: p_vowel
+        reason: the vowel's own length decides
+        cite: Smyth §141-143
+
+flags:
+  - id: SYN-CAND
+    when: consonants == 0 and hiatus == "internal" and vowel in ("ε", "η") and not circumflex
+    p: synizesis
+    reason: may merge with the next vowel into one long syllable (synizesis)
+    cite: Smyth §60; Monro §378
+  - id: ELI-1
+    when: elided and word_final
+    reason: elided word; the lost vowel is not pronounced
+    cite: Smyth §70; Monro §376
+  - id: DIG-WORD
+    when: next_digamma and word_final
+    reason: the next word once began with ϝ (Homer)
+    cite: Monro §§390-395
+  - id: FIN-ANC
+    when: line_final
+    reason: last unit of the line; in verse its length is indifferent (brevis in longo), so a metre does not test it
+    cite: Monro §366

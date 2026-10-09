@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Scansion Rules</title>
+<link rel="icon" href="data:,">
+<style>
+:root {
+  --bg: #fbfaf7; --fg: #1d1c1a; --muted: #6b6760; --line: #e3dfd6; --panel: #ffffff; --code: #f3f0ea;
+  --short: 214, 64, 52; --mid: 140, 82, 190; --long: 38, 98, 214; --accent: #2a5bd7; --warn: #b3261e;
+  --font-greek: "Gentium Plus", "GFS Didot", "Noto Serif", "Palatino Linotype", serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #16161a; --fg: #ecebe6; --muted: #a29f97; --line: #2c2c33; --panel: #1e1e24; --code: #26262d; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+header { padding: 14px 20px; border-bottom: 1px solid var(--line); display: flex; gap: 16px; align-items: baseline; flex-wrap: wrap; }
+header h1 { font-size: 17px; margin: 0; }
+header a { color: var(--accent); text-decoration: none; font-size: 13px; }
+main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 20px; padding: 16px 20px 80px; max-width: 1400px; margin: 0 auto; }
+@media (max-width: 960px) { main { grid-template-columns: 1fr; } }
+h2 { font-size: 15px; margin: 18px 0 8px; }
+.tree, .tree ul { list-style: none; margin: 0; padding-left: 18px; }
+.tree { padding-left: 0; }
+.tree li { position: relative; margin: 4px 0; }
+.tree ul li::before { content: ""; position: absolute; left: -12px; top: 0; bottom: 0; border-left: 1px solid var(--line); }
+.tree ul li::after { content: ""; position: absolute; left: -12px; top: 18px; width: 10px; border-top: 1px solid var(--line); }
+.tree ul li:last-child::before { bottom: auto; height: 18px; }
+details > summary { list-style: none; cursor: pointer; }
+details > summary::-webkit-details-marker { display: none; }
+.node { display: block; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+.node:hover { border-color: var(--accent); }
+.head { display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }
+.id { font: 600 12px ui-monospace, "Cascadia Mono", monospace; }
+.reason { font-weight: 500; }
+.badge { font: 11px ui-monospace, monospace; padding: 1px 6px; border-radius: 10px; background: var(--code); color: var(--muted); }
+.p { font: 600 12px ui-monospace, monospace; padding: 1px 7px; border-radius: 10px; color: #fff; }
+code { font: 12px ui-monospace, "Cascadia Mono", monospace; background: var(--code); padding: 1px 4px; border-radius: 4px; }
+.when { margin-top: 3px; color: var(--muted); font-size: 12px; }
+.cite { color: var(--muted); font-size: 12px; }
+.ex { margin-top: 4px; font: 16px/1.6 var(--font-greek); }
+.ex .src { font: 11px system-ui, sans-serif; color: var(--muted); margin-right: 6px; }
+.ex mark { background: rgba(42, 91, 215, .16); color: inherit; border-radius: 3px; padding: 0 1px; }
+.kids-toggle { font-size: 11px; color: var(--muted); }
+aside { position: sticky; top: 10px; align-self: start; max-height: calc(100vh - 20px); overflow: auto; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; margin-bottom: 14px; }
+.param { display: grid; grid-template-columns: 1fr 56px; gap: 2px 8px; align-items: center; margin: 8px 0; font-size: 12px; }
+.param input[type=range] { grid-column: 1 / 3; width: 100%; }
+.param .m { grid-column: 1 / 3; color: var(--muted); font-size: 11px; }
+textarea { width: 100%; font: 12px/1.45 ui-monospace, "Cascadia Mono", monospace; min-height: 280px; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--code); color: var(--fg); }
+#try { font: 18px/1.5 var(--font-greek); min-height: 60px; }
+button { font: 13px system-ui, sans-serif; padding: 5px 12px; border-radius: 6px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; }
+button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+.errors { color: var(--warn); font-size: 12px; white-space: pre-wrap; }
+.okmsg { color: #2e8b57; font-size: 12px; }
+.u { border-bottom: 3px solid currentColor; border-radius: 3px; padding: 0 1px; }
+.small { font-size: 12px; color: var(--muted); }
+table.feat { border-collapse: collapse; font-size: 12px; width: 100%; }
+table.feat td { border-top: 1px solid var(--line); padding: 3px 4px; vertical-align: top; }
+</style>
+</head>
+<body>
+<header>
+  <h1>Scansion meta-grammar</h1>
+  <span class="small">backend/scansion/rules.yaml · first matching rule wins at each level</span>
+  <a href="/scan.html">← Scanner</a>
+</header>
+<main>
+  <section>
+    <div class="small" id="calnote"></div>
+    <h2>1. Vowel tree — how likely the nucleus itself is long (<code>p_vowel</code>)</h2>
+    <ul class="tree" id="vowel"></ul>
+    <h2>2. Unit tree — how likely the unit (vowel + following consonants) counts long (<code>p_long</code>)</h2>
+    <ul class="tree" id="unit"></ul>
+    <h2>3. Flags — possibilities shown with a unit, never applied</h2>
+    <ul class="tree" id="flags"></ul>
+    <h2>Features a rule may test</h2>
+    <table class="feat" id="features"></table>
+  </section>
+  <aside>
+    <div class="panel">
+      <b>Tune the parameters</b>
+      <div class="small">Sliders change this page's preview only. ▲ marks the share measured on the gold Iliad (Books 1-12). To keep a value, edit it in the YAML below and save.</div>
+      <div id="params"></div>
+    </div>
+    <div class="panel">
+      <b>Try a line</b>
+      <textarea id="try" spellcheck="false">μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος</textarea>
+      <div id="tryout" style="font: 22px/2 var(--font-greek)"></div>
+    </div>
+    <div class="panel">
+      <b>Edit the rules file</b>
+      <div class="small">Validate checks every condition and formula; Save writes backend/scansion/rules.yaml (local dev server only) and reloads the tree.</div>
+      <textarea id="yaml" spellcheck="false"></textarea>
+      <div style="display:flex; gap:8px; margin-top:6px"><button id="validate">Validate</button><button id="save" class="primary">Save</button><button id="reload">Reload</button></div>
+      <div id="msg"></div>
+    </div>
+  </aside>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (ch) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
+let DOC = null, overrides = {};
+
+function rgbFor(p) {
+  const css = getComputedStyle(document.documentElement);
+  const c = (n) => css.getPropertyValue(n).split(",").map(Number);
+  const [a, b, t] = p < 0.5 ? [c("--short"), c("--mid"), p / 0.5] : [c("--mid"), c("--long"), (p - 0.5) / 0.5];
+  return a.map((x, i) => Math.round(x + (b[i] - x) * t));
+}
+function pBadge(src) {
+  const v = Number(src);
+  if (src === undefined) return "";
+  if (!isNaN(v)) { const [r, g, b] = rgbFor(v); return `<span class="p" style="background: rgb(${r},${g},${b})">p = ${v}</span>`; }
+  return `<span class="badge">p = ${esc(src)}</span>`;
+}
+function measured(tree, id) {
+  const cal = DOC.rule_calibration;
+  if (!cal) return "";
+  const t = cal.with_lexicon?.[tree]?.[id];
+  const t0 = cal.without_lexicon?.[tree]?.[id];
+  const f = (x) => x && x.n ? `${Math.round(x.share * 1000) / 10}% long of ${x.n}` : "—";
+  if (!t && !t0) return "";
+  return `<span class="badge" title="share of gold-long units reaching this rule, Iliad 1-12 (Hypotactic)">measured: ${f(t0)} (core) · ${f(t)} (with lexicon)</span>`;
+}
+function examples(id) {
+  const ex = DOC.rule_examples?.examples?.[id] || [];
+  const n = DOC.rule_examples?.counts?.[id];
+  if (!ex.length) return `<div class="small">no example in the sample</div>`;
+  return `<div class="small">${n} units in the sample; e.g.</div>` + ex.map((e) => {
+    const off = 0; const line = e.line;
+    // offsets are within the scanned line text
+    const a = e.start, b = e.end;
+    return `<div class="ex"><span class="src">${esc(e.source)}</span>${esc(line.slice(0, a))}<mark>${esc(line.slice(a, b))}</mark>${esc(line.slice(b))} <span class="badge">${Math.round(e.p_long * 100)}%</span></div>`;
+  }).join("");
+}
+function nodeHTML(n, tree) {
+  const kids = n.then || [];
+  const body = `<div class="head"><span class="id">${esc(n.id)}</span><span class="reason">${esc(n.reason)}</span>${pBadge(n.p)}${tree !== "flags" ? measured(tree, n.id) : ""}</div>
+    <div class="when">when <code>${esc(n.when)}</code></div><div class="cite">${esc(n.cite)}</div>`;
+  if (kids.length) {
+    return `<li><details open><summary class="node">${body}<span class="kids-toggle">▾ ${kids.length} sub-rules · examples</span></summary>
+      <div class="node" style="margin-top:4px">${examples(n.id)}</div><ul>${kids.map((k) => nodeHTML(k, tree)).join("")}</ul></details></li>`;
+  }
+  return `<li><details><summary class="node">${body}<span class="kids-toggle">▸ examples</span></summary><div class="node" style="margin-top:4px">${examples(n.id)}</div></details></li>`;
+}
+function renderTree() {
+  for (const t of ["vowel", "unit", "flags"]) $(t).innerHTML = (DOC[t] || []).map((n) => nodeHTML(n, t)).join("");
+  $("features").innerHTML = Object.entries(DOC.features || {}).map(([k, v]) => `<tr><td><code>${esc(k)}</code></td><td>${esc(v)}</td></tr>`).join("");
+  const cal = DOC.rule_calibration;
+  $("calnote").textContent = cal ? `Measured shares: ${cal.gold}; ${cal.lines} lines (${cal.built}).` : "";
+  const mp = cal?.with_lexicon?.params || {};
+  $("params").innerHTML = Object.entries(DOC.params || {}).map(([k, v]) => {
+    const m = mp[k]?.share;
+    return `<div class="param"><span><code>${esc(k)}</code></span><span id="pv-${k}">${(overrides[k] ?? v).toFixed(2)}</span>
+      <input type="range" min="0" max="1" step="0.01" value="${overrides[k] ?? v}" data-k="${k}">
+      <span class="m">${m !== undefined && m !== null ? `▲ measured ${m.toFixed(3)} (n=${mp[k].n})` : "not measured on the gold Iliad"}</span></div>`;
+  }).join("");
+  document.querySelectorAll("#params input").forEach((el) => el.addEventListener("input", () => {
+    overrides[el.dataset.k] = Number(el.value);
+    $("pv-" + el.dataset.k).textContent = Number(el.value).toFixed(2);
+    tryScan();
+  }));
+}
+async function load() {
+  const r = await fetch("/api/scan/rules");
+  DOC = await r.json();
+  $("yaml").value = DOC.yaml;
+  if (DOC.errors && DOC.errors.length) $("msg").innerHTML = `<div class="errors">The saved file has errors:\n${esc(DOC.errors.join("\n"))}</div>`;
+  renderTree();
+  tryScan();
+}
+let tt = null;
+function tryScan() { clearTimeout(tt); tt = setTimeout(async () => {
+  const text = $("try").value;
+  if (!text.trim()) { $("tryout").innerHTML = ""; return; }
+  const params = {}; for (const [k, v] of Object.entries(overrides)) if (DOC.params[k] !== v) params[k] = v;
+  const r = await fetch("/api/scan", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({text, params})});
+  const res = await r.json();
+  if (!r.ok) { $("tryout").innerHTML = `<div class="errors">${esc(JSON.stringify(res.detail))}</div>`; return; }
+  let h = "", pos = 0;
+  for (const u of res.units) {
+    if (u.start > pos) h += esc(text.slice(pos, u.start));
+    const [r_, g, b] = rgbFor(u.p_long);
+    h += `<span class="u" style="color: rgb(${r_},${g},${b})" title="${Math.round(u.p_long * 100)}% · ${esc(u.vowel.rule)} › ${esc(u.rule)}">${esc(text.slice(u.start, u.end))}</span>`;
+    pos = Math.max(pos, u.end);
+  }
+  $("tryout").innerHTML = h + esc(text.slice(pos)) + `<div class="small">${res.units.map((u) => Math.round(u.p_long * 100)).join(" · ")}</div>`;
+}, 120); }
+$("try").addEventListener("input", tryScan);
+$("validate").addEventListener("click", async () => {
+  const r = await fetch("/api/scan/rules/validate", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({yaml: $("yaml").value})});
+  const res = await r.json();
+  $("msg").innerHTML = res.ok ? `<div class="okmsg">Valid: ${res.tree.vowel.length} vowel rules, ${res.tree.unit.length} unit rules, ${res.tree.flags.length} flags at the top level.</div>` : `<div class="errors">${esc(res.errors.join("\n"))}</div>`;
+});
+$("save").addEventListener("click", async () => {
+  const r = await fetch("/api/scan/rules/save", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({yaml: $("yaml").value})});
+  const res = await r.json();
+  if (!r.ok) { $("msg").innerHTML = `<div class="errors">${esc(res.detail || "save failed")}</div>`; return; }
+  if (!res.ok) { $("msg").innerHTML = `<div class="errors">Not saved:\n${esc(res.errors.join("\n"))}</div>`; return; }
+  $("msg").innerHTML = `<div class="okmsg">Saved. The scanner uses the new rules from the next request.</div>`;
+  overrides = {}; await load();
+});
+$("reload").addEventListener("click", () => { overrides = {}; load(); });
+load();
+</script>
+</body>
+</html>
