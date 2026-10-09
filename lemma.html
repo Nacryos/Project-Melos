@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Lexicon · Melos</title>
+  <meta name="description" content="A Greek headword in the lyric corpus: dictionaries side by side, frequency by author, genre and period, every occurrence in context, the words it keeps company with, and its inflected forms.">
+  <link rel="icon" type="image/svg+xml" href="assets/branding/melos-favicon-white.svg?v=white-1">
+  <meta name="theme-color" content="#14223a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/loading.css">
+  <link rel="stylesheet" href="css/lemma-page.css?v=lemma-20261009">
+  <script src="js/config.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/word-panel.js?v=lemma-20261009" defer></script>
+  <script src="js/lemma-common.js?v=lemma-20261009" defer></script>
+  <script src="js/lemma-page.js?v=lemma-20261009" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the entry</a>
+  <header class="site-bar">
+    <a class="site-mark" href="/" aria-label="Melos, home"><span lang="grc">Μέλος</span><small>A Greek Lyric Lexicon</small></a>
+    <nav aria-label="Main navigation"><a href="/">Reader</a><a href="lemma.html" aria-current="page">Lexicon</a><a href="concept.html">Concepts</a></nav>
+  </header>
+  <main id="main" class="page">
+    <form id="lookup" class="lookup" role="search">
+      <label for="lookup-input">Look up a Greek headword, any form of it, or an English meaning</label>
+      <div class="lookup-line"><input id="lookup-input" name="q" type="search" maxlength="100" autocomplete="off" spellcheck="false" placeholder="σελήνη, σελάννα, selene or moon"><button type="submit">Look up</button></div>
+    </form>
+    <div id="readings" class="readings" hidden></div>
+    <section id="entry" class="entry" aria-live="polite">
+      <div class="intro">
+        <h1>Lexicon</h1>
+        <p>Every Greek word of the corpus has been read to its dictionary headword. Choose a headword to see its dictionaries side by side, how often it occurs and where, every passage that uses it, the words it keeps company with, and the forms it takes.</p>
+        <p class="examples">Try <a href="lemma.html?lemma=%CF%83%CE%B5%CE%BB%CE%AE%CE%BD%CE%B7" lang="grc">σελήνη</a>, <a href="lemma.html?lemma=%E1%BC%94%CF%81%CF%89%CF%82" lang="grc">ἔρως</a>, <a href="lemma.html?lemma=%CE%B8%CE%AC%CE%BB%CE%B1%CF%83%CF%83%CE%B1" lang="grc">θάλασσα</a> or the Aeolic <a href="lemma.html?q=%E1%BC%80%CF%83%CF%85%CE%BD%CE%BD%CE%AD%CF%84%CE%B7%CE%BC%CE%BC%CE%B9" lang="grc">ἀσυννέτημμι</a>.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="site-foot"><span lang="grc">Μέλος</span> <span>Counts come from machine reading of every word; each reading carries a confidence. <a href="concept.html">Trace a meaning through time →</a></span></footer>
+  <noscript><p class="notice">Enable JavaScript to look up headwords.</p></noscript>
+</body>
+</html>

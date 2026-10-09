@@ -250,8 +250,8 @@ test('panel zones run headword, dictionaries, notes, then one collapsed Sources 
   assert.match(h.ui.inspector.querySelector('.word-headline-parse').textContent, /accusative singular feminine/);
   assert.doesNotMatch(h.ui.inspector.textContent, /No exact source match|No sourced dictionary or morphology analysis/);
   assert.match(sources.textContent, /come from reading this word in its passage/);
-  // Dictionaries follow the headline's headword, fetched by headword when the form lookup has none.
-  assert.deepEqual(h.lookups, ['αβ', 'λέμμα']);
+  // Dictionaries follow the headline's headword: its dictionary-only lookup runs beside the form lookup.
+  assert.deepEqual([...h.lookups].sort(), ['αβ', 'λέμμα']);
   assert.match(h.ui.inspector.querySelector('.word-dictionaries').textContent, /Middle Liddell.*fixture sense/);
 });
 
@@ -263,8 +263,8 @@ test('the form lookup carries the headline headword as lemma=, and the dictionar
   await new Promise(resolve => setTimeout(resolve, 0));
   const lookup = h.calls.find(call => call.path === '/api/word' && call.form === 'αβ');
   assert.equal(lookup.lemma, 'λέμμα'); assert.equal(lookup.passage_id, 'synthetic:passage');
-  // The form lookup already brought the headword's entries: no second lookup.
-  assert.deepEqual(h.lookups, ['αβ']);
+  // The headword's fast dictionary lookup runs beside the form lookup (it does not wait for it).
+  assert.deepEqual([...h.lookups].sort(), ['αβ', 'λέμμα']);
   const dictionaries = h.ui.inspector.querySelector('.word-dictionaries').textContent;
   assert.match(dictionaries, /headline sense/); assert.doesNotMatch(dictionaries, /other sense/);
 });

@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
-  <link rel="stylesheet" href="css/reader.css?v=prefetch-20261008b">
+  <link rel="stylesheet" href="css/reader.css?v=lemma-20261009">
   <link rel="stylesheet" href="css/icons.css">
   <link rel="stylesheet" href="css/loading.css">
   <link rel="stylesheet" href="css/fullscreen.css?v=reader-touch-20261006">
@@ -23,7 +23,7 @@
   <a class="skip-link" href="#passage">Skip to passage</a>
   <header class="bar">
     <a class="mark" href="./" aria-label="Melos, home"><span class="mark-gr" lang="grc">Μέλος</span><span class="mark-en">A Greek Lyric Lexicon</span></a>
-    <nav aria-label="Main navigation"><a href="#reader">Reader</a><a href="#collection">Poets &amp; works</a><a href="legacy">Design studio</a></nav>
+    <nav aria-label="Main navigation"><a href="#reader">Reader</a><a href="#collection">Poets &amp; works</a><a class="nav-tool" href="lemma.html">Lexicon</a><a class="nav-tool" href="concept.html">Concepts</a><a href="legacy">Design studio</a></nav>
   </header>
   <section class="hero reader-hero" id="top" aria-label="Explore the lyric corpus">
     <div class="stage"><canvas id="dither" aria-hidden="true"></canvas><img id="fallback" alt="" hidden></div>
@@ -31,7 +31,12 @@
     <div class="hero-copy">
       <blockquote class="verse" id="verse" aria-live="polite"><p id="verse-gr" lang="grc"></p><footer><span id="verse-tr"></span> <cite id="verse-cite"></cite></footer></blockquote>
       <form class="search" id="search-form" role="search" autocomplete="off"><label class="sr" for="search-input">Search Greek, Latin, or English</label><input id="search-input" name="q" type="search" spellcheck="false" placeholder="Search Greek, Beta Code or English — try λύσιμελής, glukupikros, moon"><button type="submit">Search</button></form>
-      <div class="search-options"><fieldset class="mode-picker"><legend>Search by</legend><label><input type="radio" name="search-mode" value="hybrid" checked><span>All evidence</span></label><label><input type="radio" name="search-mode" value="exact"><span>Exact words</span></label><label><input type="radio" name="search-mode" value="fuzzy"><span>Fuzzy words</span></label><label><input type="radio" name="search-mode" value="forms"><span>Forms</span></label><label><input type="radio" name="search-mode" value="themes"><span>Themes</span></label></fieldset><p class="bridge-note" id="bridge-note">English searches may use translations or commentary as a bridge. Results identify the indexed text.</p></div>
+      <div class="search-options"><fieldset class="mode-picker"><legend>Search by</legend><label><input type="radio" name="search-mode" value="hybrid" checked><span>All evidence</span></label><label><input type="radio" name="search-mode" value="lemma"><span>Headword</span></label><label><input type="radio" name="search-mode" value="exact"><span>Exact words</span></label><label><input type="radio" name="search-mode" value="fuzzy"><span>Fuzzy words</span></label><label><input type="radio" name="search-mode" value="forms"><span>Forms</span></label><label><input type="radio" name="search-mode" value="themes"><span>Themes</span></label></fieldset><p class="bridge-note" id="bridge-note">English searches may use translations or commentary as a bridge. Results identify the indexed text.</p></div>
+      <div class="forms-options lemma-options" id="lemma-options" hidden>
+        <label class="lemma-near-label" for="lemma-near"><input id="lemma-near" type="checkbox"> Near</label>
+        <label id="lemma-window-label" for="lemma-window">within <input id="lemma-window" type="number" min="1" max="20" step="1" value="5" inputmode="numeric" aria-describedby="lemma-note"> words, any order</label>
+        <p id="lemma-note">One word finds every form of its headword (ἔρωτος, ἔρωτι… for ἔρως). Several words find them side by side, in any of their forms; tick Near to allow other words in between.</p>
+      </div>
       <div class="forms-options" id="forms-options" hidden>
         <label for="forms-relation">Word relationship <select id="forms-relation" aria-describedby="forms-note"><option value="ordered">In this order</option><option value="proximity">Nearby, any order</option><option value="all_terms">All words in passage</option></select></label>
         <label id="forms-slop-label" for="forms-slop">Extra words allowed <input id="forms-slop" type="number" min="0" max="50" step="1" value="0" inputmode="numeric" aria-describedby="forms-note"></label>
@@ -92,8 +97,8 @@
   <script src="js/nature-preset-data.js" defer></script>
   <script src="js/nature-presets.js?v=reader-touch-20261006" defer></script>
   <script src="js/word-context.js?v=lyric-context-20261007b" defer></script>
-  <script src="js/word-panel.js?v=prefetch-20261008b" defer></script>
-  <script src="js/reader.js?v=prefetch-20261008b" defer></script>
+  <script src="js/word-panel.js?v=lemma-20261009" defer></script>
+  <script src="js/reader.js?v=lemma-20261009" defer></script>
   <script src="js/reader-fullscreen.js?v=reader-touch-20261006" defer></script>
   <script type="module" src="js/reader-hero.js?v=p2-20260930"></script>
 </body>

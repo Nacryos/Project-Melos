@@ -19,7 +19,7 @@ test('reader-only release excludes discovery without changing the full local bui
   });
   await mkdir(path.join(fixture, 'scripts'));
   await cp(path.join(root, 'scripts/build_frontend.mjs'), path.join(fixture, 'scripts/build_frontend.mjs'));
-  for (const entry of ['reader.html', 'index.html', 'lexicon.html', 'authors.html', 'themes.html', 'js', 'css', 'assets/branding', 'assets/authors', 'assets/nature-presets', 'assets/paintings']) {
+  for (const entry of ['reader.html', 'index.html', 'lemma.html', 'concept.html', 'lexicon.html', 'authors.html', 'themes.html', 'js', 'css', 'assets/branding', 'assets/authors', 'assets/nature-presets', 'assets/paintings']) {
     await cp(path.join(root, entry), path.join(fixture, entry), { recursive: true });
   }
   const originalReader = await readFile(path.join(fixture, 'reader.html'), 'utf8');
@@ -44,6 +44,8 @@ test('reader-only release excludes discovery without changing the full local bui
     }
     assert.ok(!paths.some(name => name === 'assets/authors' || name.startsWith('assets/authors/')));
     assert.ok(!paths.includes('css/discovery-nav.css'));
+    // The Lexicon (headword) and Concepts pages ship in the reader-only release.
+    for (const name of ['lemma.html', 'concept.html', 'js/lemma-common.js', 'js/lemma-page.js', 'js/concept-page.js', 'css/lemma-page.css']) assert.ok(paths.includes(name), name);
     assert.equal(await readFile(path.join(fixture, 'reader.html'), 'utf8'), originalReader);
   };
 

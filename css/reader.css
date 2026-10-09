@@ -280,3 +280,32 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
   .greek-text .word{position:relative}
   .greek-text .word::before{content:'';position:absolute;z-index:1;top:min(-8px,calc((100% - 44px)/2));bottom:min(-8px,calc((100% - 44px)/2));left:min(-3px,calc((100% - 44px)/2));right:min(-3px,calc((100% - 44px)/2))}
 }
+/* Headword search (release O lemma index), other editions, site menu on phones. */
+.lemma-options .lemma-near-label{display:inline-flex;align-items:center;gap:.4em;cursor:pointer}
+.lemma-options .is-disabled{opacity:.5}
+.lemma-result-head{padding:12px 0 10px;border-bottom:1px solid var(--line,#d7e1e9);margin-bottom:6px}
+.lemma-result-title{margin:0 0 4px;font-size:1.05rem}
+.lemma-result-word{font:400 1.6rem/1.1 var(--greek);text-decoration:none}
+.lemma-result-word:hover{text-decoration:underline}
+.lemma-result-gloss{font-style:italic}
+.lemma-result-count{color:var(--muted,#617083);font-size:.92rem}
+.lemma-result-forms{margin:4px 0 8px;font-size:.92rem;line-height:1.6}
+.lemma-result-form{font-family:var(--greek);font-size:1.05rem}
+.lemma-result-form-count,.lemma-result-label{color:var(--muted,#617083);font-size:.82rem}
+.lemma-reading-note .inline-link,.result-edition-open{border:0;background:none;padding:0;color:var(--sea,#2b5a87);text-decoration:underline;text-underline-offset:.2em;cursor:pointer;font:inherit}
+.lemma-reading-note .inline-link{font-family:var(--greek);font-size:1.05em}
+.kwic-excerpt{display:block}
+.kwic-excerpt .kwic-key{background:#fdf1c7;color:inherit;font-weight:700;padding:0 .12em;margin:0 .28em}
+.result-with-editions{display:flex;flex-direction:column}
+.result-editions{margin:-2px 0 10px;padding:0 12px;font-size:.88rem}
+.result-editions summary{cursor:pointer;color:var(--sea,#2b5a87)}
+.result-editions summary:hover{text-decoration:underline}
+.result-edition-list{margin:4px 0 0;padding-left:1.1em}
+.result-edition-list li{margin:2px 0}
+@media (max-width:820px){.bar nav{display:flex;gap:1rem}.bar nav a:not(.nav-tool){display:none}}
+.result-with-editions>.result-button{width:100%}
+.word-headline-link{color:inherit;text-decoration:underline;text-decoration-color:rgb(43 90 135 / .35);text-underline-offset:.18em}
+.word-headline-link:hover{text-decoration-color:currentColor;color:var(--sea,#2b5a87)}
+.result-edition-list{list-style:none;padding-left:0}
+.result-edition-open{text-align:left;font-size:.88rem}
+.word-headline-lexicon{display:inline-block;margin-top:6px;font-size:.85rem;color:var(--sea,#2b5a87)}

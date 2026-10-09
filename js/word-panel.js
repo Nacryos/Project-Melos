@@ -254,6 +254,19 @@
   // each with its restored form, parse and short gloss.
   function decorateHeadline(head, value, node) {
     if (!head || !value || value.pending) return head;
+    // The headword opens its lexicon page (dictionaries, frequency, contexts).
+    const title = head.querySelector?.('.word-headline-lemma');
+    if (title && value.lemma && typeof document !== 'undefined' && !title.querySelector?.('a')) {
+      const link = document.createElement('a');
+      link.className = 'word-headline-link'; link.href = `lemma.html?lemma=${encodeURIComponent(value.lemma)}`;
+      link.textContent = title.textContent; link.lang = 'grc';
+      link.title = `Open ${value.lemma} in the lexicon: all its forms, how often it is used, every passage and its usual companions`;
+      title.textContent = ''; title.append(link);
+      const more = document.createElement('a');
+      more.className = 'word-headline-lexicon'; more.href = link.href;
+      more.textContent = 'All forms, frequency and passages in the lexicon →';
+      head.append(more);
+    }
     const parse = head.querySelector?.('.word-headline-parse');
     const short = typeof value.parse === 'string' ? value.parse : '';
     const words = plainParse(short);

@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Concepts · Melos</title>
+  <meta name="description" content="Follow a meaning through Greek poetry: the headwords that express it, how often each is used in each period, the words around them, and example passages.">
+  <link rel="icon" type="image/svg+xml" href="assets/branding/melos-favicon-white.svg?v=white-1">
+  <meta name="theme-color" content="#14223a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/loading.css">
+  <link rel="stylesheet" href="css/lemma-page.css?v=lemma-20261009">
+  <script src="js/config.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/lemma-common.js?v=lemma-20261009" defer></script>
+  <script src="js/concept-page.js?v=lemma-20261009" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to the concept</a>
+  <header class="site-bar">
+    <a class="site-mark" href="/" aria-label="Melos, home"><span lang="grc">Μέλος</span><small>A Greek Lyric Lexicon</small></a>
+    <nav aria-label="Main navigation"><a href="/">Reader</a><a href="lemma.html">Lexicon</a><a href="concept.html" aria-current="page">Concepts</a></nav>
+  </header>
+  <main id="main" class="page">
+    <form id="lookup" class="lookup" role="search">
+      <label for="lookup-input">Follow a meaning through time: an English word or a Greek headword</label>
+      <div class="lookup-line"><input id="lookup-input" name="q" type="search" maxlength="100" autocomplete="off" spellcheck="false" placeholder="moon, love, sea or σελήνη"><button type="submit">Show</button></div>
+    </form>
+    <section id="concept" class="entry" aria-live="polite">
+      <div class="intro">
+        <h1>Concepts</h1>
+        <p>Choose a meaning to see which Greek words express it, how often poets of each period use each word, the words that keep them company, and example passages.</p>
+        <p class="examples">Try <a href="concept.html?q=moon">moon</a>, <a href="concept.html?q=love">love</a>, <a href="concept.html?q=sea">sea</a> or <a href="concept.html?q=%E1%BC%94%CF%81%CF%89%CF%82" lang="grc">ἔρως</a>.</p>
+      </div>
+    </section>
+  </main>
+  <footer class="site-foot"><span lang="grc">Μέλος</span> <span>Dates are author lifetimes, not composition dates. <a href="lemma.html">Look up a single headword →</a></span></footer>
+  <noscript><p class="notice">Enable JavaScript to explore concepts.</p></noscript>
+</body>
+</html>

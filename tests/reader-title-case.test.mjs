@@ -19,5 +19,5 @@ test('title presentation retains supplied accents without adding missing ones', 
   assert.equal(context.formatPassageTitlePart('Sappho · Collected Fragments'), 'Sappho · Collected Fragments');
 });
 test('formatting is restricted to the displayed passage heading', () => {
-  assert.match(source, /\[passage\.author, passage\.work\]\.filter\(Boolean\)\.map\(formatPassageTitlePart\)/);
+  assert.match(source, /\[passage\.display_author \|\| passage\.author, passage\.display_work \|\| passage\.work\]\.filter\(Boolean\)\.map\(formatPassageTitlePart\)/);
 });

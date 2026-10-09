@@ -5,6 +5,7 @@
   const ui = {
     searchForm: $('search-form'), searchInput: $('search-input'), bridgeNote: $('bridge-note'),
     formsOptions: $('forms-options'), formsRelation: $('forms-relation'), formsSlop: $('forms-slop'), formsSlopLabel: $('forms-slop-label'), formsNote: $('forms-note'),
+    lemmaOptions: $('lemma-options'), lemmaNear: $('lemma-near'), lemmaWindow: $('lemma-window'), lemmaWindowLabel: $('lemma-window-label'),
     status: $('corpus-status'), authors: $('author-list'), authorCount: $('author-count'),
     browseToggle: $('browse-toggle'), browseBody: $('browse-body'),
     authorFilter: $('author-filter'), edition: $('edition-filter'), language: $('language-filter'),
@@ -92,6 +93,8 @@
     updateFormsControls();
     ui.bridgeNote.textContent = formMode() === 'themes'
       ? 'Theme search may bridge through translations or commentary. Each result identifies the text that was indexed.'
+      : formMode() === 'lemma'
+        ? 'Headword search reads every word of the corpus to its dictionary headword, so one search finds all its forms. Type Greek, a form, or an English meaning.'
       : formMode() === 'hybrid'
         ? 'Searches exact words, related word forms and similar meanings together. Each result says why it matched; its place in the list is not a measure of certainty.'
         : formMode() === 'forms'
@@ -260,6 +263,7 @@
     prefetcher()?.cancel();
     globalThis.clearTimeout?.(state.hoverTimer);
     state.batchHeadlines = null;
+    state.batchReady = null;
     state.wordContextSession?.select(null);
     window.MelosNaturePresets?.select(null);
     state.passageAnalysis?.reset();
@@ -290,7 +294,8 @@
     resetPassageContext(true);
     state.selectedAuthor = work.author || state.selectedAuthor;
     state.selectedWork = work.id;
-    ui.results.hidden = true;
+    // The opening poem never hides a search the reader started meanwhile.
+    if (!(state.initialLoad && state.search)) ui.results.hidden = true;
     renderAuthors();
     ui.title.textContent = work.work || 'Opening work';
     message(ui.text, 'Loading a passage from this work…', 'loading-line melos-loading');
@@ -793,6 +798,7 @@
     resetPassageContext(true);
     ui.title.textContent = 'Opening passage';
     message(ui.text, 'Loading the original text…', 'loading-line melos-loading');
+    requestBatchHeadlines(id);
     try {
       const passage = await api('/api/passage', { id });
       if (sequence !== state.passageSequence) return;
@@ -806,7 +812,7 @@
       state.selectedAuthor = passage.author_canonical || passage.author || state.selectedAuthor;
       if (passage.work_id) state.selectedWork = passage.work_id;
       ui.kicker.textContent = passage.kind === 'text' ? 'FROM THE LYRIC COLLECTION' : 'REFERENCE RECORD';
-      ui.title.textContent = [passage.author, passage.work].filter(Boolean).map(formatPassageTitlePart).join(' · ') || 'Unattributed passage';
+      ui.title.textContent = [passage.display_author || passage.author, passage.display_work || passage.work].filter(Boolean).map(formatPassageTitlePart).join(' · ') || 'Unattributed passage';
       ui.subtitle.textContent = passage.citation || 'Citation not supplied by source';
       renderPassageText(passage);
       state.passageAnalysis?.bind(passage);
@@ -870,10 +876,10 @@
   function renderResult(record, searchContract = null) {
     // Search signals and reasons arrive as retrieval terms; show them in words a
     // reader of Greek would use. Unknown reasons pass through unchanged.
-    const SIGNAL_LABELS = { lexical: 'Same words', forms: 'Related word forms', semantic: 'Similar meaning' };
+    const SIGNAL_LABELS = { lexical: 'Same words', forms: 'Related word forms', semantic: 'Similar meaning', lemma: 'Same headword' };
     function plainMatchReason(value) {
       const text = String(value || '');
-      const signals = text.match(/^((?:lexical|forms|semantic)(?: \+ (?:lexical|forms|semantic))*); (linked translation\/commentary evidence|direct passage match)(.*)$/s);
+      const signals = text.match(/^((?:lexical|forms|semantic|lemma)(?: \+ (?:lexical|forms|semantic|lemma))*); (linked translation\/commentary evidence|direct passage match)(.*)$/s);
       if (signals) {
         const kinds = signals[1].split(' + ').map((name, index) => index ? SIGNAL_LABELS[name].toLowerCase() : SIGNAL_LABELS[name]);
         const how = signals[2] === 'direct passage match' ? 'found in the Greek text' : 'found through a linked translation or commentary';
@@ -885,8 +891,8 @@
     }
     const button = node('button', 'result-button');
     button.type = 'button';
-    const source = node('span', 'result-source', record.author || 'Unattributed');
-    source.append(node('small', '', [record.work, record.citation, record.kind && record.kind !== 'text' ? `indexed ${record.kind}` : record.language !== 'grc' ? record.language : 'Greek text'].filter(Boolean).join(' · ')));
+    const source = node('span', 'result-source', record.display_author || record.author || 'Unattributed');
+    source.append(node('small', '', [record.display_work || record.work, record.citation, record.kind && record.kind !== 'text' ? `indexed ${record.kind}` : record.language !== 'grc' ? record.language : 'Greek text'].filter(Boolean).join(' · ')));
     if (record.quality && record.quality !== 'source_text') source.append(node('span', 'quality-tag caution', qualityLabel(record.quality)));
     const body = node('span', 'result-body');
     const sequenceProof = record.sequence_match ? sequenceMatchProof(record, searchContract) : null;
@@ -960,12 +966,34 @@
     if (record.retrieval_score_kind === 'reciprocal_rank_fusion') body.append(node('span', 'result-reason', 'Listed by how well several kinds of match agree; the order is not a measure of certainty.'));
     button.append(source, body);
     button.addEventListener('click', () => openPassage(record.id));
-    if (sequenceProof) {
-      const item = node('div', 'result-with-proof');
-      item.append(button, sequenceProof.details);
+    const editions = renderOtherEditions(record);
+    if (sequenceProof || editions) {
+      const item = node('div', sequenceProof ? 'result-with-proof' : 'result-with-editions');
+      item.append(button, ...(sequenceProof ? [sequenceProof.details] : []), ...(editions ? [editions] : []));
       return item;
     }
     return button;
+  }
+  // Other editions of the same passage, folded under the first-ranked copy by
+  // the search service: one expander listing each edition, each opening it.
+  function renderOtherEditions(record) {
+    const editions = (Array.isArray(record?.editions) ? record.editions : []).filter(item => item && typeof item.id === 'string' && item.id);
+    if (!editions.length) return null;
+    const box = node('details', 'result-editions');
+    box.append(node('summary', '', `${editions.length} other ${editions.length === 1 ? 'edition' : 'editions'} of this passage`));
+    const list = node('ul', 'result-edition-list');
+    for (const edition of editions) {
+      const item = node('li');
+      const open = node('button', 'inline-link result-edition-open', [edition.edition || edition.source_label || edition.source || 'Another edition', edition.citation].filter(Boolean).join(' · '));
+      open.type = 'button';
+      open.title = 'Read this edition';
+      open.addEventListener('click', () => openPassage(edition.id));
+      item.append(open);
+      if (edition.quality && edition.quality !== 'source_text') item.append(node('span', 'quality-tag caution', qualityLabel(edition.quality)));
+      list.append(item);
+    }
+    box.append(list);
+    return box;
   }
   function sequenceMatchProof(record, searchContract = null) {
     const proof = record.sequence_match;
@@ -1186,14 +1214,15 @@
     } else if (rawSlop) slop = Number(rawSlop);
     if (formsRelation === 'all_terms' && slop !== 0) issues.push('All words in passage has no gap allowance; the saved slop must be 0. Choose the relationship again before searching.');
     return { query: value('q', 1000),
-      mode: choice('mode', ['hybrid', 'exact', 'fuzzy', 'forms', 'themes'], 'hybrid'),
+      mode: choice('mode', ['hybrid', 'lemma', 'exact', 'fuzzy', 'forms', 'themes'], 'hybrid'),
       author: value('author'), edition: value('edition', 1000),
       language: (() => { const language = value('lang', 16);
         if (!language || /^[a-z]{2,8}(?:-[a-z]{2,8})?$/.test(language)) return language;
         issues.push('The saved language is invalid; choose it again before searching.'); return '';
       })(),
       order: choice('order', ['relevance', 'chronological'], 'relevance'),
-      include_reference: choice('ref', ['0', '1'], '0') === '1', forms_relation: formsRelation, slop: formsRelation === 'all_terms' ? 0 : slop, issues };
+      include_reference: choice('ref', ['0', '1'], '0') === '1', forms_relation: formsRelation, slop: formsRelation === 'all_terms' ? 0 : slop,
+      near: value('near') === '1', window: (raw => /^(?:[1-9]|1[0-9]|20)$/.test(raw) ? Number(raw) : 5)(value('window')), issues };
   }
   function writeSearchUrl(base, snapshot) {
     const url = new URL(base);
@@ -1201,7 +1230,9 @@
       edition: snapshot.edition, lang: snapshot.language, order: snapshot.order,
       ref: snapshot.include_reference ? '1' : '0',
       forms_relation: snapshot.mode === 'forms' ? snapshot.forms_relation || 'ordered' : null,
-      slop: snapshot.mode === 'forms' ? snapshot.slop ?? 0 : null };
+      slop: snapshot.mode === 'forms' ? snapshot.slop ?? 0 : null,
+      near: snapshot.mode === 'lemma' && snapshot.near ? '1' : null,
+      window: snapshot.mode === 'lemma' && snapshot.near ? snapshot.window ?? 5 : null };
     for (const [key, value] of Object.entries(values)) {
       if (value === '' || value == null) url.searchParams.delete(key);
       else url.searchParams.set(key, String(value));
@@ -1223,6 +1254,8 @@
     showSearchQueryIssue(searchQueryIssue(saved.query));
     if (ui.formsRelation) ui.formsRelation.value = saved.forms_relation;
     if (ui.formsSlop) ui.formsSlop.value = String(saved.slop);
+    if (ui.lemmaNear) ui.lemmaNear.checked = saved.near;
+    if (ui.lemmaWindow) ui.lemmaWindow.value = String(saved.window);
     setFormMode(saved.mode);
     retainSearchOption(ui.authorFilter, saved.author, 'author');
     retainSearchOption(ui.edition, saved.edition, 'edition');
@@ -1232,12 +1265,14 @@
     return saved;
   }
   function snapshotSearch(query, mode) {
-    return Object.freeze({ query, mode: ['hybrid', 'exact', 'fuzzy', 'forms', 'themes'].includes(mode) ? mode : 'fuzzy',
+    return Object.freeze({ query, mode: ['hybrid', 'lemma', 'exact', 'fuzzy', 'forms', 'themes'].includes(mode) ? mode : 'fuzzy',
       author: ui.authorFilter.value, edition: ui.edition.value, language: ui.language.value,
       order: ['relevance', 'chronological'].includes(ui.order.value) ? ui.order.value : 'relevance',
       include_reference: ui.reference.checked,
       forms_relation: mode === 'forms' ? ui.formsRelation?.value || 'ordered' : 'ordered',
-      slop: mode === 'forms' && ui.formsRelation?.value !== 'all_terms' ? Number(ui.formsSlop?.value ?? 0) : 0 });
+      slop: mode === 'forms' && ui.formsRelation?.value !== 'all_terms' ? Number(ui.formsSlop?.value ?? 0) : 0,
+      near: mode === 'lemma' && Boolean(ui.lemmaNear?.checked),
+      window: Math.min(20, Math.max(1, Math.round(Number(ui.lemmaWindow?.value) || 5))) });
   }
   function searchTransport(snapshot) {
     return { q: snapshot.query, mode: ['forms', 'themes', 'hybrid'].includes(snapshot.mode) ? snapshot.mode : 'words',
@@ -1247,6 +1282,11 @@
       ...(snapshot.mode === 'forms' ? { forms_relation: snapshot.forms_relation || 'ordered', slop: snapshot.slop ?? 0 } : {}) };
   }
   function updateFormsControls() {
+    if (ui.lemmaOptions) {
+      ui.lemmaOptions.hidden = formMode() !== 'lemma';
+      ui.lemmaWindow.disabled = !ui.lemmaNear.checked;
+      ui.lemmaWindowLabel.classList.toggle('is-disabled', !ui.lemmaNear.checked);
+    }
     if (!ui.formsOptions) return;
     ui.formsOptions.hidden = formMode() !== 'forms';
     const allTerms = ui.formsRelation.value === 'all_terms';
@@ -1350,7 +1390,8 @@
       ui.resultsHeading.textContent = `Results for “${query}”`;
       ui.resultsSummary.textContent = 'Searching the source index…';
       ui.moreResults.hidden = true;
-      loadDictionaryPreview(query);
+      // Headword search shows its own headword line (with a link to the lexicon page).
+      loadDictionaryPreview(mode === 'lemma' ? '' : query);
       ui.results.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     const active = state.search;
@@ -1366,6 +1407,7 @@
     const params = {
       ...searchTransport(snapshot), limit: 30, offset: append ? active.offset : 0
     };
+    if (mode === 'lemma') { await lemmaSearch(snapshot, active, append, sequence, scopeWarnings); return; }
     try {
       const data = await api('/api/search', params);
       if (sequence !== state.searchSequence) return;
@@ -1415,6 +1457,171 @@
       state.displayedSearch = snapshot;
       const url = writeSearchUrl(location.href, snapshot);
       history.replaceState(null, '', url);
+    } catch (error) {
+      if (sequence !== state.searchSequence) return;
+      ui.resultsSummary.textContent = 'Search could not be completed.';
+      ui.resultsList.append(node('p', 'warning error-message', errorText(error)));
+      ui.moreResults.hidden = true;
+    } finally {
+      if (sequence === state.searchSequence) ui.resultsSummary.classList.remove('melos-loading');
+    }
+  }
+
+  // Headword search (release O lemma index): one word lists every occurrence
+  // of any form of its headword (keyword in context); two to six words find
+  // the headwords side by side (a phrase in any forms) or, with Near, within
+  // a few words of each other in any order.
+  function keywordLine(record, left, key, right) {
+    const button = node('button', 'result-button lemma-result');
+    button.type = 'button';
+    const source = node('span', 'result-source', record.author || 'Unattributed');
+    const date = record.author_date && Number.isFinite(Number(record.author_date.start))
+      ? `${record.author_date.kind === 'birth' ? 'born ' : ''}${record.author_date.approximate ? 'c. ' : ''}${Math.abs(record.author_date.start)} ${record.author_date.start < 0 ? 'BCE' : 'CE'}` : 'undated';
+    source.append(node('small', '', [record.display_work || record.work, record.citation !== (record.display_work || record.work) ? record.citation : '', date].filter(Boolean).join(' · ')));
+    const body = node('span', 'result-body');
+    const excerpt = node('span', 'result-excerpt kwic-excerpt'); excerpt.lang = 'grc';
+    // Keep the matched words in view: at most ~70 characters either side.
+    const before = String(left || ''), after = String(right || '');
+    excerpt.append(node('span', 'kwic-left', before.length > 70 ? `…${before.slice(-70).replace(/^\S*\s/u, '')}` : before), node('mark', 'kwic-key', key || ''),
+      node('span', 'kwic-right', after.length > 70 ? `${after.slice(0, 70).replace(/\s\S*$/u, '')}…` : after));
+    body.append(excerpt);
+    if (Number(record.confidence) < 0.8) body.append(node('span', 'result-reason', 'The machine reading of this word is less certain; it may belong to another headword.'));
+    button.append(source, body);
+    button.addEventListener('click', () => openPassage(record.id));
+    return button;
+  }
+  // The same words by the same author in another edition fold under the
+  // first line shown, behind an "other editions" expander.
+  function appendKeywordLine(active, record, left, key, right) {
+    const fold = value => String(value || '').normalize('NFD').replace(/[\p{M}\p{P}\s]/gu, '').toLowerCase();
+    const id = `${record.author}|${fold(String(left || '').slice(-40))}|${fold(key)}|${fold(String(right || '').slice(0, 40))}`;
+    active.folded ||= new Map();
+    // Only a copy from another collection is another edition: formulaic lines
+    // repeated within one text (ῥοδοδάκτυλος Ἠώς) stay separate results.
+    const collection = String(record.id || '').split(':')[0];
+    const first = active.folded.get(id);
+    if (first && first.collections.has(collection)) { ui.resultsList.append(keywordLine(record, left, key, right)); return; }
+    if (!first) {
+      const item = node('div', 'result-with-editions');
+      item.append(keywordLine(record, left, key, right));
+      active.folded.set(id, { item, list: null, collections: new Set([collection]) });
+      ui.resultsList.append(item);
+      return;
+    }
+    if (!first.list) {
+      const box = node('details', 'result-editions');
+      box.append(node('summary', ''));
+      first.list = node('ul', 'result-edition-list'); box.append(first.list); first.item.append(box);
+    }
+    first.collections.add(collection);
+    const li = node('li');
+    const open = node('button', 'inline-link result-edition-open', [record.display_work || record.work, record.citation, record.source].filter(Boolean).join(' · '));
+    open.type = 'button'; open.title = 'Read this edition';
+    open.addEventListener('click', () => openPassage(record.id));
+    li.append(open); first.list.append(li);
+    const count = first.list.children.length;
+    first.item.querySelector('.result-editions summary').textContent = `${count} other ${count === 1 ? 'edition' : 'editions'} of this passage`;
+  }
+  function lemmaHeader(reading, forms, total, passages) {
+    const head = node('div', 'lemma-result-head');
+    const title = node('p', 'lemma-result-title');
+    const word = node('a', 'lemma-result-word', reading.lemma); word.lang = 'grc';
+    word.href = `lemma.html?lemma=${encodeURIComponent(reading.lemma)}`;
+    word.title = 'Open the lexicon page: dictionaries, frequency, companions and forms';
+    title.append(word);
+    if (reading.gloss) title.append(node('span', 'lemma-result-gloss', ` “${reading.gloss}”`));
+    title.append(node('span', 'lemma-result-count', ` · ${describeCount(total, 'occurrence')}${passages ? ` in ${describeCount(passages, 'passage')}` : ''}`));
+    head.append(title);
+    if (forms?.length) {
+      const list = node('p', 'lemma-result-forms');
+      list.append(node('span', 'lemma-result-label', 'Forms found: '));
+      for (const form of forms.slice(0, 14)) {
+        const item = node('span', 'lemma-result-form', form.form); item.lang = 'grc';
+        list.append(item, node('span', 'lemma-result-form-count', ` ${Number(form.count).toLocaleString()}  `));
+      }
+      if (forms.length > 14) list.append(node('span', 'lemma-result-label', `and ${forms.length - 14} more`));
+      head.append(list);
+    }
+    const open = node('a', 'text-action', 'Open the lexicon page →'); open.href = word.href;
+    head.append(open);
+    return head;
+  }
+  function lemmaReadingNote(resolution, query) {
+    const first = resolution?.[0];
+    if (!first) return null;
+    const via = { printed_form_reading: `“${query}” read as a form of ${first.lemma}`, headword_without_accents: `“${query}” read as ${first.lemma}`,
+      english_dictionary_gloss: `“${query}” is a meaning of ${first.lemma} in the dictionaries` }[first.via];
+    const others = resolution.slice(1, 6);
+    if (!via && !others.length) return null;
+    const note = node('p', 'candidate-reason lemma-reading-note', via ? `${via}.` : '');
+    if (others.length) {
+      note.append(node('span', '', ' Also possible: '));
+      others.forEach((other, index) => {
+        const b = node('button', 'inline-link', other.lemma); b.type = 'button'; b.lang = 'grc';
+        b.title = other.gloss ? `Search ${other.lemma} “${other.gloss}” instead` : `Search ${other.lemma} instead`;
+        b.addEventListener('click', () => { ui.searchInput.value = other.lemma; search(other.lemma, 'lemma'); });
+        note.append(b, node('span', '', index < others.length - 1 ? ', ' : '.'));
+      });
+    }
+    return note;
+  }
+  async function lemmaSearch(snapshot, active, append, sequence, scopeWarnings) {
+    const words = snapshot.query.split(/\s+/u).filter(Boolean);
+    const offset = append ? active.offset : 0;
+    try {
+      if (!append) active.folded = new Map();
+      if (words.length > 6) {
+        clear(ui.resultsList);
+        ui.resultsSummary.textContent = 'Headword search takes one word, or two to six words for a phrase.';
+        return;
+      }
+      let lines = [], total = 0;
+      if (words.length === 1) {
+        const [data, facet] = await Promise.all([
+          api('/api/lemma/concordance', { q: snapshot.query, author: snapshot.author, order: 'chronological', limit: 30, offset }),
+          append ? Promise.resolve(null) : api('/api/lemma/search', { q: snapshot.query, author: snapshot.author, limit: 1 }).catch(() => null),
+        ]);
+        if (sequence !== state.searchSequence) return;
+        total = Number(data.total || 0);
+        lines = Array.isArray(data.lines) ? data.lines : [];
+        if (!append) {
+          clear(ui.resultsList);
+          const reading = data.resolution?.[0];
+          if (reading) {
+            ui.resultsList.append(lemmaHeader(reading, facet?.forms_found, total, facet?.total_passages));
+            const note = lemmaReadingNote(data.resolution, snapshot.query);
+            if (note) ui.resultsList.append(note);
+          }
+        }
+        for (const line of lines) appendKeywordLine(active, line, line.left, line.keyword, line.right);
+        const reading = data.resolution?.[0];
+        ui.resultsSummary.textContent = reading
+          ? `${describeCount(total, 'occurrence')} of ${reading.lemma} in any form · ${ui.resultsList.querySelectorAll('.result-button').length} shown · in order of author date`
+          : `No headword was found for “${snapshot.query}”.`;
+        if (!reading) ui.resultsList.append(node('p', 'inspector-message', 'Try the dictionary form, another spelling, or an English word; or switch to All evidence.'));
+      } else {
+        const params = { q: snapshot.query, window: snapshot.near ? snapshot.window : 0, ordered: snapshot.near ? 'false' : 'true', author: snapshot.author, limit: 30, offset };
+        const data = await api('/api/lemma/proximity', params);
+        if (sequence !== state.searchSequence) return;
+        total = Number(data.total || 0);
+        lines = Array.isArray(data.results) ? data.results : [];
+        if (!append) {
+          clear(ui.resultsList);
+          const parts = (data.resolution || []).map(item => item.lemmas?.[0]?.lemma ? `${item.lemmas[0].lemma}` : `“${item.word}” (no headword)`);
+          const note = node('p', 'candidate-reason lemma-reading-note', `Read as ${parts.join(snapshot.near ? ' near ' : ' + ')}, in any of their forms${snapshot.near ? `, at most ${snapshot.window} other ${snapshot.window === 1 ? 'word' : 'words'} apart, in any order` : ', side by side, in this order'}. Matches stay within one passage.`);
+          note.lang = 'en';
+          ui.resultsList.append(note);
+        }
+        for (const hit of lines) appendKeywordLine(active, hit, hit.left, hit.match_text, hit.right);
+        ui.resultsSummary.textContent = `${describeCount(total, 'passage')} · ${ui.resultsList.querySelectorAll('.result-button').length} shown${snapshot.near ? ' · near each other' : ' · as a phrase'}`;
+        if (!total) ui.resultsList.append(node('p', 'inspector-message', data.note || (snapshot.near ? 'No passage has these headwords this close together. Try a larger distance.' : 'No passage has these headwords side by side. Tick Near to allow words in between.')));
+      }
+      active.total = total;
+      active.offset = offset + lines.length;
+      appendWarnings(ui.resultsList, scopeWarnings);
+      ui.moreResults.hidden = active.offset >= total || !lines.length;
+      state.displayedSearch = snapshot;
+      history.replaceState(null, '', writeSearchUrl(location.href, snapshot));
     } catch (error) {
       if (sequence !== state.searchSequence) return;
       ui.resultsSummary.textContent = 'Search could not be completed.';
@@ -2195,17 +2402,19 @@
       if (blocks.length) { panel.renderDictionaryBlocks(dictionaryHost, blocks, node, safeLink); return; }
       if (wordData) renderDictionaryPreview(dictionaryHost, wordData, { openEntries: false, wiktionary: wiktionaryData });
       else if (!dictionaryLookupFailed) dictionaryHost.append(node('p', 'inspector-message melos-loading word-dictionary-pending', 'Looking up the dictionaries…'));
-      // Only after the form lookup (which already carried `lemma=`) has none.
-      if (lemma && panel?.dictionaryBlocks && wordData && !lemmaEntries.has(lemma)) {
+      // As soon as a headword is known: its dictionary-only lookup (`lemma=`
+      // fast path, a few milliseconds) runs beside the slower form analysis.
+      if (lemma && panel?.dictionaryBlocks && !lemmaEntries.has(lemma)) {
         lemmaEntries.set(lemma, []);
-        const loading = node('p', 'inspector-message melos-loading', `Looking up ${lemma} in the dictionaries…`);
-        if (!dictionaryHost.children.length) dictionaryHost.append(loading);
         wordLookup({ form: lemma, lemma }).then(data => {
           lemmaEntries.set(lemma, Array.isArray(data?.lexicon_entries) ? data.lexicon_entries : []); drawDictionaries(); refreshHeadline();
-          if (sequence === state.wordSequence && !dictionaryHost.children.length) message(dictionaryHost, `No dictionary entry for ${lemma} was found.`);
+          if (sequence === state.wordSequence && wordData && !dictionaryHost.querySelector('.word-dictionaries, .dictionary-glimpse')) {
+            clear(dictionaryHost); message(dictionaryHost, `No dictionary entry for ${lemma} was found.`);
+          }
         }).catch(() => {
-          loading.remove();
-          if (sequence === state.wordSequence && !dictionaryHost.children.length) message(dictionaryHost, 'The dictionaries could not be reached just now (server error). Choose the word again to retry.', 'warning error-message');
+          if (sequence === state.wordSequence && wordData && !dictionaryHost.querySelector('.word-dictionaries, .dictionary-glimpse')) {
+            clear(dictionaryHost); message(dictionaryHost, 'The dictionaries could not be reached just now (server error). Choose the word again to retry.', 'warning error-message');
+          }
         });
       }
     };
@@ -2233,6 +2442,10 @@
     // corpus index's headline until the passage reading arrives.
     const known = button && !joined && !fragmentSegment ? knownHeadline(button) : null;
     if (known) showHeadline(known.value, known.final);
+    // A click before the passage's headwords arrive takes them when they do.
+    else if (button && !joined && !fragmentSegment && state.batchReady) state.batchReady.then(() => {
+      const late = knownHeadline(button); if (late) showHeadline(late.value, late.final);
+    });
     const contextualHeadline = button && !joined && !fragmentSegment
       ? passageWordHeadline(button, form).catch(() => null) : Promise.resolve(null);
     contextualHeadline.then(value => showHeadline(value));
@@ -2517,21 +2730,28 @@
       const params = { form, passage_id: passage.id, ...(lemma ? { lemma } : {}) };
       const needHead = !known?.final && !cache.pending(headlineKey(passage.id, start));
       const needWord = !cache.peek(wordKey(params)) && !cache.peek(wordKey({ ...params, lemma: '' })) && !cache.pending(wordKey(params));
-      if ((!needHead && !needWord) || (state.hoverBudget ?? 0) <= 0) return;
+      // The headword's dictionaries (fast `lemma=` path), so they open with the click.
+      const headword = known?.value?.lemma || '', dictionary = headword ? { form: headword, lemma: headword } : null;
+      const needDictionary = dictionary && !cache.peek(wordKey(dictionary)) && !cache.pending(wordKey(dictionary));
+      if ((!needHead && !needWord && !needDictionary) || (state.hoverBudget ?? 0) <= 0) return;
       state.hoverBudget -= 1;
       if (needHead) passageWordHeadline(button, form, 'high', false).catch(() => {});
+      if (needDictionary) wordLookup(dictionary, 'high', false).catch(() => {});
       if (needWord) wordLookup(params, 'high', false).catch(() => {});
     }, delay);
   }
   // POST /api/words/headlines (release O), detected at run time: a missing
   // route (404 "Not Found" or 405) is remembered for this session and the
   // reader keeps to the per-word endpoints.
-  async function loadBatchHeadlines(passage) {
+  // The request starts with the passage request itself (it needs only the id),
+  // so the headwords are usually there when the words become clickable.
+  function requestBatchHeadlines(id, priority = 'low') {
     const cache = prefetcher(), tools = window.MelosWordPrefetch, flag = 'melos:headlines-endpoint';
     const absent = () => { try { return Number(window.sessionStorage?.getItem(flag)) > Date.now() - 600000; } catch { return false; } };
-    if (!cache || !tools || absent()) return null;
-    const payload = await cache.load(`batch|${apiVersion()}|${passage.id}`, async ({ signal, priority } = {}) => {
-      try { return await apiPost('/api/words/headlines', { passage_id: passage.id }, { signal, priority }); }
+    if (!cache || !tools || !id || absent()) return Promise.resolve(null);
+    if (tools.networkPolicy && !tools.networkPolicy(navigator.connection).batch) return Promise.resolve(null);
+    return cache.load(`batch|${apiVersion()}|${id}`, async ({ signal, priority: hint } = {}) => {
+      try { return await apiPost('/api/words/headlines', { passage_id: id }, { signal, priority: hint }); }
       catch (error) {
         if (error?.status === 405 || error?.status === 501 || (error?.status === 404 && /^not found$/i.test(String(error.response?.detail || '')))) {
           try { window.sessionStorage?.setItem(flag, String(Date.now())); } catch { /* memory only */ }
@@ -2539,14 +2759,19 @@
         if (error?.status === 404 || error?.status === 405 || error?.status === 501) return { none: true };
         throw error;
       }
-    }, { priority: 'low', claim: false, group: passage.id });
-    if (!payload || payload.none) return null;
+    }, { priority, claim: false, group: id }).catch(() => null);
+  }
+  async function loadBatchHeadlines(passage) {
+    const tools = window.MelosWordPrefetch;
+    const payload = await requestBatchHeadlines(passage.id);
+    if (!tools || !payload || payload.none) return null;
     return { passageId: passage.id, values: tools.batchHeadlines(payload, passage.text, window.MelosWordPanel?.plainParse) };
   }
-  // On opening a passage, in idle time and at low priority: the batch headlines
-  // (one request), then the words most likely to be clicked (content words,
-  // rarer spellings first; frequent particles are left to the click). Bounded
-  // by the connection policy; nothing speculative under Data Saver.
+  // On opening a passage: the batch headlines (one request, already started
+  // with the passage request) as soon as they arrive; then, in idle time, the
+  // words most likely to be clicked (content words, rarer spellings first;
+  // frequent particles are left to the click). Bounded by the connection
+  // policy; nothing speculative under Data Saver.
   function schedulePassagePrefetch(passage, sequence) {
     const cache = prefetcher(), tools = window.MelosWordPrefetch;
     if (!cache || !tools || passage?.language !== 'grc' || !passage.id || typeof passage.text !== 'string') return;
@@ -2554,13 +2779,12 @@
     cache.setLimit(policy.maxLow);
     state.hoverBudget = 24;
     const current = () => sequence === state.passageSequence && state.passage?.id === passage.id;
-    tools.whenIdle(async () => {
+    const batchReady = state.batchReady = policy.batch ? loadBatchHeadlines(passage).catch(() => null).then(batch => {
+      if (current()) state.batchHeadlines = batch;
+      return current() ? batch : null;
+    }) : Promise.resolve(null);
+    batchReady.then(() => tools.whenIdle(async () => {
       if (!current()) return;
-      if (policy.batch) {
-        const batch = await loadBatchHeadlines(passage).catch(() => null);
-        if (!current()) return;
-        state.batchHeadlines = batch;
-      }
       if (!policy.idle) return;
       // On a slow link the first tap after opening must not share bandwidth.
       const later = fn => policy.delay ? globalThis.setTimeout(() => tools.whenIdle(fn), policy.delay) : tools.whenIdle(fn);
@@ -2581,7 +2805,7 @@
           wordLookup({ form: word.form, passage_id: passage.id, ...(lemma && known.final ? { lemma } : {}) }, 'low', false).catch(() => {});
         }
       });
-    });
+    }));
   }
   // Headline for lookups without a passage reading, from /api/word: a headword
   // only when every exact candidate names the same one; its gloss is the same
@@ -2761,12 +2985,14 @@
       || state.authors.find(a => /pindar/i.test(a.author || ''))
       || state.authors.find(a => /bacchylides/i.test(a.author || ''))
       || state.authors[0];
-    if (preferred) await selectAuthor(preferred.author, true);
-    else renderPassageEmpty('The corpus has no indexed authors yet.');
+    state.initialLoad = true;
+    try { if (preferred) await selectAuthor(preferred.author, true); } finally { state.initialLoad = false; }
+    if (!preferred) renderPassageEmpty('The corpus has no indexed authors yet.');
   }
 
   ui.searchForm.addEventListener('submit', event => { event.preventDefault(); search(ui.searchInput.value); });
   for (const radio of document.querySelectorAll('input[name="search-mode"]')) radio.addEventListener('change', updateBridgeNote);
+  ui.lemmaNear?.addEventListener('change', updateFormsControls);
   ui.formsRelation.addEventListener('change', updateFormsControls);
   ui.browseToggle.addEventListener('click', () => {
     const open = ui.browseToggle.getAttribute('aria-expanded') !== 'true';
