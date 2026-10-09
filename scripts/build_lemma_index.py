@@ -553,6 +553,7 @@ def stage_assemble(args):
 
     CONTEXT_AGREES, CONTEXT_CHOSE, DAMAGED = 16, 32, 64
     stats = {"tokens": 0, "with_lemma": 0, "context_agrees": 0, "context_changed": 0}
+    prior_tokens = Counter()
     by_group = defaultdict(Counter)
     con = sqlite3.connect(f"file:{args.corpus}?mode=ro", uri=True)
     con.row_factory = sqlite3.Row
@@ -585,6 +586,10 @@ def stage_assemble(args):
             flags = DAMAGED if dmg else 0
             if ranked:
                 choice, prob = ranked[0]
+                if not (row["kind"] == "text" and row["quality"] in SEARCHABLE):
+                    # Release O's reading of non-edited records (no contextual model): kept as the
+                    # frequency prior of English readings so search ranks as in release O.
+                    prior_tokens[lid(choice)] += 1
                 pred = pred_at.get(s)
                 if pred and len(ranked) > 1:
                     plemma, upos = heads.headword_key(pred[2]) if pred[2] else "", pred[3]
@@ -621,6 +626,8 @@ def stage_assemble(args):
                 lemmas[i] = lid(choice)
                 conf[i] = max(1, min(255, round(prob * 255)))
                 here[lemmas[i]] += 1
+                if row["kind"] == "text" and row["quality"] in SEARCHABLE:
+                    prior_tokens[int(lemmas[i])] += 1
                 stats["with_lemma"] += 1
                 by_group[group]["with_lemma"] += 1
             src[i] = flags
@@ -664,6 +671,7 @@ def stage_assemble(args):
             term_rows.append((term, i, field, w))
     ix.executemany("INSERT INTO lemma VALUES (?,?,?,?,?,?,?,?,?)", lemma_rows)
     ix.executemany("INSERT INTO lemma_gloss_term VALUES (?,?,?,?)", term_rows)
+    ix.executemany("INSERT INTO lemma_prior VALUES (?,?)", sorted(prior_tokens.items()))
     variant_rows = lemma_variants(lemma_ids, lemma_tokens, heads)
     ix.executemany("INSERT INTO lemma_variant VALUES (?,?,?,?,?)", variant_rows)
     log("variant links", len(variant_rows))

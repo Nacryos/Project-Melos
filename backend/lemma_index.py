@@ -70,6 +70,7 @@ SCHEMA = """
       CREATE TABLE tok(pid INTEGER PRIMARY KEY, lemmas BLOB, forms BLOB, conf BLOB, src BLOB, starts BLOB, ends BLOB);
       CREATE TABLE posting(lemma_id INTEGER, pid INTEGER, n INTEGER, PRIMARY KEY(lemma_id, pid)) WITHOUT ROWID;
       CREATE TABLE lemma_gloss_term(term TEXT, lemma_id INTEGER, field INTEGER, weight REAL);
+      CREATE TABLE lemma_prior(lemma_id INTEGER PRIMARY KEY, tokens INTEGER);
       CREATE TABLE lemma_variant(lemma_id INTEGER, target_id INTEGER, relation TEXT, dictionary TEXT, evidence TEXT);
     """
 
@@ -575,7 +576,7 @@ class LemmaIndex:
                 continue
             if head_hit[i] == 0:
                 continue  # the words are only in the entry's body text: too weak
-            ranked.append((score[i] * (1 + 0.15 * math.log1p(row["tokens"])), i))
+            ranked.append((score[i] * (1 + 0.15 * math.log1p(self.prior_tokens(i, row["tokens"]))), i))
         ranked.sort(reverse=True)
         if not ranked:
             return []
@@ -594,6 +595,18 @@ class LemmaIndex:
                         "gloss_match": round(value / best, 3), "matched_terms": sorted(matched[i]),
                         "matched_words": sorted({w for w in _query_words(query) if stem(w) in matched[i]})})
         return out
+
+    def prior_tokens(self, lemma_id, fallback):
+        """Frequency prior of an English reading: tokens as release O counted them (the contextual
+        model's choices in edited text only), so the re-read OCR pages and scholia do not move search."""
+        table = getattr(self, "_prior", None)
+        if table is None:
+            try:
+                table = dict(self.con().execute("SELECT lemma_id, tokens FROM lemma_prior").fetchall())
+            except sqlite3.OperationalError:
+                table = {}
+            self._prior = table
+        return table.get(lemma_id, fallback if not table else 0)
 
     def case_variants(self, lemma_id):
         """Headwords spelled with the same letters and accents, differing only in capitalisation
