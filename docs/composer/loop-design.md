@@ -94,6 +94,21 @@ form positively attested in the target dialect", with an upgrade path for `form_
 | G11 | Lemma index error: οἶος "alone" has 1 token (absorbed by οἷος) | #29 | Audit breathing and accent homographs |
 | G12 | No surface-form or metrical n-grams (style shapes, Aeolic forms) | #24 | A form-level n-gram table with scansion shapes per author |
 
+**Release U (backend, 2026-10-09)** closed these gaps in the API (contract: docs/api-contract.md "Release U additions";
+numbers: docs/deployment.md, release U). Design decisions and the open questions in § 7 are unchanged.
+
+| Gap | Release U |
+|---|---|
+| G1 | `POST /api/analyze-text {text, dialect?, author?}`: a draft analysed like a stored passage (compact response). Latency is about 0.8 s for a warm 4-line stanza, not the 150 ms keystroke budget of § 4.8. |
+| G2 | `POST /api/dialectize`: Attic → Lesbian/Doric/Ionic spellings, kept only when attested in the corpus or parsed by local Morpheus, each labelled with its rules (πήλοθεν, σελάννα, ἀέλιος, φέροισα, ἄγην, μόνα) |
+| G3 | Each fragment counted once across editions (frequency, `forms_found`, collocations, concordance, n-grams): Sappho σελήνη 13 → 4, πόθος 13 → 4, μόνα 4 → 1 |
+| G5 | Local Morpheus has no per-visitor allowance; a per-client rate limit protects it |
+| G6 | `/api/words/headlines` forms mode: θῦμόν, εὔδω, σελάννα and μόνα (singular with a Lesbian author), αὖτε, Ἄτθι (the name Atthis) |
+| G7 | `/api/lemma/proximity` combines variant groups by default |
+| G8 | Concept search scoped by `author` / `genre`, read through head meanings ("longing": πόθος, ἵμερος; no μακρός, λέων); `max_lemmas` honoured |
+| G10 | `best_line` on search results, `line` on concept examples, `cited_line` on cite results |
+| G4, G9, G11, G12 | Not in release U (scanner branch, slot index, οἶος/οἷος audit, form n-grams) |
+
 ## 4. The composer loop
 
 ```
