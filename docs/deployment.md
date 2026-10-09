@@ -1,6 +1,96 @@
 # Deployment handoff
 
-## Current: release N — local Morpheus, generate-and-test normalisation, word-panel fixes (2026-10-08)
+## Current: release O — corpus headword index, lemma features, search quality, parser fixes (2026-10-09)
+
+Public backend: image `melos-api:20261009o`
+(`sha256:77f70495fa90eaa99d5033085e6f3c0474e9850c2f56bf22a3ea2f7c6fc4d127`), built on Basecamp with
+`deploy/Dockerfile.patch` atop the N image from the O source tarball (`git archive` of `54c9580`, sha256
+`3475f711d44d291de6f6c8a3dbb37bb99341102ecd7d9023911de61e24c2747a`, unpacked in `/home/alvin/melos-o/src`).
+Recipe: `deploy/release_o.sh build|dev|canary|stop-canary|promote|rollback`. N is kept stopped as
+`melos-api-before-o`, the O canary as `melos-api-canary-o` (stopped). **Rollback:**
+`sh /home/alvin/melos-o/src/deploy/release_o.sh rollback` (stops O, renames it `melos-api-failed-o`, restarts N
+with its own mounts: L corpus, L manifest, old chronology; the Morpheus sidecar is untouched).
+
+New read-only data, all under `/home/alvin/melos-o/data` (the live data mount is unchanged):
+- `corpus.sqlite` (1.71 GB): the L corpus (288,821 passages) with two repairs by `scripts/stage_corpus_o.py`: the
+  edition sign "⊗" printed before a poem's first line removed from the start of 77 stored texts (Digital Sappho,
+  DCC Sappho via OGC, CGL anthology; recorded in each record's metadata; signs inside a text kept), and author
+  columns recomputed with the extended alias table (108 merged authors; `apollonius-rhodius-epic` = Apollonius
+  Rhodius, OGC slugs, scholia collections).
+- `embeddings/`: the L vectors plus the 237 Campbell GLP poems that were pending and the 77 re-encoded texts
+  (`scripts/embed_release_o.py`, encoded on the laptop's CUDA in float16 with the pinned BGE-M3 contract): 116,428
+  rows = every eligible record.
+- `lemma_index.sqlite` (273 MB): the corpus headword index (`docs/lemma-index.md`), mounted at `/lemma`.
+- `chronology.json`: Wikidata author date claims for 55 authors (was 10; `scripts/collect_chronology.py`).
+
+**Headword index build** (`deploy/lemma_index_build.sh`, batch containers on the N image, own Morpheus container
+with 10 CPUs, removed afterwards): 277,602 Greek passages, 3,899,386 word tokens, 395,102 distinct spellings.
+Forms 9 s; Morpheus 32 min (257,301 spellings analysed, 137,608 not, 193 invalid); generate-and-test 11 min
+(12,542 unknown spellings of edited text, 2,277 resolved); contextual model (OdyCy) 45 min on 102,206 edited Greek
+passages in three 3-CPU shards; assembly 74 s. 53,797 headwords. Coverage, searchable edited Greek text
+(1,386,111 tokens): **98.9 % of tokens have a headword**, 98.4 % from an exact parse, 91.1 % with confidence ≥ 0.8.
+By genre: epic 99.6 %, tragedy 99.6 %, epigram 98.9 %, melic lyric (Sappho 84.3 %, Alcaeus 92.8 %, Corinna
+81.7 %: fragments and Aeolic/Boeotian spellings), choral lyric (Pindar 99.4 %, Bacchylides 93.4 %). All Greek
+records, including OCR pages and scholia: 93.6 %. Per-author table: `/home/alvin/melos-o/eval/coverage.json`.
+
+**What O adds** (details: `docs/lemma-index.md`, `docs/api-contract.md`, `docs/morphology.md` "Release O parser fixes"):
+- Lemma API: `/api/lemma/{resolve,search,frequency,distribution,concordance,collocations,proximity,status}`,
+  `/api/concept/diachrony`, `POST|GET /api/words/headlines` (headline headword, gloss, parses and alternatives for
+  every word of a passage; 2–3 ms warm).
+- Search: a headword signal in hybrid fusion (Greek words read as headwords; English through dictionary glosses,
+  e.g. moon → σελήνη, μήνη; weight 3 English / 2 Greek, chosen on the development queries); word and form lists
+  ranked by query-word frequency with length normalisation (they were in catalogue order, which put Aeschylus and
+  Aristophanes first); an English word matching only English translations is treated as English; editions of one
+  passage folded under the first-ranked copy (`editions`, `edition_count`); hub correction of dense scores
+  (weight 0.5); `display_author`, `display_work`, `author_genre`, `author_period` on results and passages.
+- Parser: the printed-headword reading (ἴψοι → ὑψοῦ "aloft") is kept over a model POS guess when a parse of it
+  exists; capitalised names take the sense naming the being (Νύμφαις "a Nymph"); every row and `/api/word` carry
+  a headline headword with ranked alternatives and restored readings (σ’ → σύ, alternative σός); `/api/word`
+  `lemma=` dictionary fast path (~10 ms).
+
+**Search evaluation** (`scripts/search_eval.py`, 42 queries in `data/evaluation/search-eval-o.json`: English concepts,
+Greek headwords, epithets and phrases; every third held out; relevance = the concept's Greek vocabulary is in the
+passage, other editions of a counted passage gain nothing), hybrid search, nDCG@10:
+
+| Split | N (production) | O (canary) |
+|---|---|---|
+| Development (28) | 0.365 | **0.707** |
+| Held out (14) | 0.401 | **0.577** |
+| All (42) | 0.377 | **0.664** |
+| English concepts / epithets / Greek headwords / Greek phrases | 0.197 / 0.297 / 0.990 / 0.519 | 0.557 / 0.769 / 1.000 / 0.530 |
+
+Sappho fr. 34 is now 2nd for "moon" (was 11th); "rose-fingered" returns only passages with ῥοδοδάκτυλος. Sappho
+fr. 96 still ranks high for moon, rose-fingered, sun and sea, because it contains βροδοδάκτυλος σελάννα, ἀελίω and
+θάλασσαν; it no longer appears for eros or night. The hub correction barely moved it (development nDCG 0.688 at
+weight 0, 0.679 at 0.5); it is kept for the meaning-only mode. One held-out query (bittersweet) exposed a compound
+spelling gap ("bitter-sweet"); the general fix (hyphenated and joined English compounds are one term) went in after
+the held-out run, so the held-out figure above is the clean one.
+
+Canary (8792) before promotion: smoke pass (the edition notice added to the smoke's expected warnings);
+`verify_campbell_glp.py --analyze sample`: 237/237 identical, 214 translations, 50 lines analysed, 0 failures;
+`check_span_parses.py --random 30`: 227 spans, 816 word rows, **0 failures** (the first build had 5, all ἄχω in
+Alcaeus 130b left without a parse by the new printed-headword rule; fixed generally in `54c9580`: the rule applies
+only when a parse of the headword's reading exists). Sampler vs N: seed 101 (421 rows) parse 96.9 → 96.9 %, lemma
+96.4 → 96.4 %, plausible lemma 94.3 → 94.5 %, all checks 89.1 → 89.3 % (1 row gains: ἴψοι; none loses);
+held-out seed 20261008 (487 rows) identical on every metric, no gains or losses. Endpoint timings on the canary:
+frequency 5 ms, concordance 9 ms, collocations 29 ms, proximity 10 ms, diachrony 0.7 s, headlines 2 ms. Memory:
+canary 3.3 GiB of 8 GiB (N 3.8 GiB at the same time).
+
+Frontend deploy `d089138` (other agent, same day): https://project-melos-is0wyjwyz-nacryos-projects.vercel.app;
+rollback `vercel rollback project-melos-fiu97xnc9-nacryos-projects.vercel.app --yes`.
+
+Verified on https://greeklyric.com after promotion (run from Basecamp, `deploy/canary_checks_o.sh`, output in
+`/home/alvin/melos-o/prod-checks`): smoke (288,821) pass; `verify_campbell_glp.py`: 237/237 identical, 0 failures;
+`check_span_parses.py --random 30`: 227 spans, 816 word rows, 0 failures; search evaluation live: nDCG@10 0.664
+all, 0.577 held out (same as the canary); every lemma endpoint 200 (60–100 ms through the public route, diachrony
+0.8 s); "moon": Sappho 154, fr. 34, fr. 96 in the first three. Memory: O 3.1 GiB of 8 GiB, sidecar 26 MiB.
+
+Known gaps: dates exist for 45 of 55 catalogued authors (Nonnus, Quintus, Musaeus, Callinus, Semonides and others
+have no Wikidata birth/floruit claim and are reported as undated: 26 % of edited tokens); genres are an editorial
+table; the contextual model ran on edited text only (not scholia or OCR pages); headword confidence is a normalised
+score, not a calibrated probability; proximity search stays inside one stored passage.
+
+## Historical: release N — local Morpheus, generate-and-test normalisation, word-panel fixes (2026-10-08)
 
 Public backend: image `melos-api:20261008n`
 (`sha256:a0ecd6baf572ee96974445ebd40bd2329d703970877da3261f8deedec519dbf4`), built on Basecamp with
