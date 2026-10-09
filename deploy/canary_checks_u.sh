@@ -25,6 +25,7 @@ python3 scripts/eval_citations.py --base "$B" --out "$OUT/cite-eval.json" > "$OU
 for s in 7 11 13; do
   python3 scripts/bench_word_latency.py --base "$B" --n 80 --seed $s --json "$OUT/word-latency-$s.json" >> "$OUT/word-latency.txt" 2>&1
 done
+[ -f scripts/word_latency.py ] && python3 scripts/word_latency.py --base "$B" --out "$OUT/word-latency-s-method.json" > "$OUT/word-latency-s-method.txt" 2>&1
 echo "word latency done" >> "$OUT/progress"
 python3 scripts/check_release_u.py --base "$B" --out "$OUT/release-u.json" > "$OUT/release-u.txt" 2>&1; echo "release-u exit $?" >> "$OUT/progress"
 for u in "/api/lemma/status" "/api/cite?q=Il.%201.5" "/api/cite?q=Sappho%20fr.%2031" \
