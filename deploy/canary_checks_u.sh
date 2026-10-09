@@ -9,7 +9,7 @@
 set -u
 B=$1; OUT=$2; SAMPLES=${3:-}
 SRC=${MELOS_U_SRC:-/home/alvin/melos-u/src}
-R=/home/alvin/melos-r
+BASE_CHECKS=${MELOS_U_BASELINE:-/home/alvin/melos-s/canary-checks}
 mkdir -p "$OUT"; cd "$SRC"
 echo "start $(date -u)" > "$OUT/progress"
 python3 deploy/smoke_backend.py --origin "$B" --expected-passages 288821 > "$OUT/smoke.txt" 2>&1; echo "smoke exit $?" >> "$OUT/progress"
@@ -43,8 +43,8 @@ echo "endpoints done" >> "$OUT/progress"
 if [ -n "$SAMPLES" ]; then
   python3 scripts/sample_glp_quality.py --base "$B" --seed 101 --spans 120 --out "$OUT/sampleU-101.jsonl" > "$OUT/sampleU-101.out" 2>&1
   python3 scripts/sample_glp_quality.py --base "$B" --seed 20261008 --spans 150 --no-print --out "$OUT/sampleU-heldout.jsonl" > "$OUT/sampleU-heldout.out" 2>&1
-  python3 scripts/compare_sample_runs.py "$R/canary-checks/sampleR-101.jsonl" "$OUT/sampleU-101.jsonl" --json "$OUT/compare-101.json" > "$OUT/compare-101.txt" 2>&1
-  python3 scripts/compare_sample_runs.py "$R/canary-checks/sampleR-heldout.jsonl" "$OUT/sampleU-heldout.jsonl" --json "$OUT/compare-heldout.json" > "$OUT/compare-heldout.txt" 2>&1
+  python3 scripts/compare_sample_runs.py "$BASE_CHECKS/sampleS-101.jsonl" "$OUT/sampleU-101.jsonl" --json "$OUT/compare-101.json" > "$OUT/compare-101.txt" 2>&1
+  python3 scripts/compare_sample_runs.py "$BASE_CHECKS/sampleS-heldout.jsonl" "$OUT/sampleU-heldout.jsonl" --json "$OUT/compare-heldout.json" > "$OUT/compare-heldout.txt" 2>&1
   python3 scripts/eval_lyric_gold.py dump --base "$B" --out "$OUT/lyric-dump.json" > "$OUT/lyric-dump.out" 2>&1
   python3 scripts/eval_lyric_gold.py score --gold data/evaluation/lyric-gold-r.json --dump "$OUT/lyric-dump.json" --json "$OUT/lyric-score.json" > "$OUT/lyric-score.txt" 2>&1
   echo "samples done" >> "$OUT/progress"
