@@ -1,5 +1,83 @@
 # Deployment handoff
 
+## Pending: release U — composer-ready backend: draft analysis, dialect spellings, each fragment counted once, fast-lookup and analysis fixes, concept and line-level parallels, word latency (2026-10-09)
+
+**Status: built and measured on a development container; not canaried or promoted.** The queue is S → T → U and
+release T was not live when this was written (S promoted about 16:10 CEST; T's tree on the box unchanged since
+12:41). The U branch `release-u` is rebased on S (`semantic-search-s`) and must be rebased on T before its canary.
+All numbers below come from `melos-api-dev-u2` (127.0.0.1:8799): the live S image with the U backend mounted and
+the U data mounts, on a box at load 40 (other sessions).
+
+Recipe: `deploy/release_u.sh build|dev|canary|stop-canary|promote|rollback` (release T's pattern: a code-only
+image `deploy/Dockerfile.u` atop the live image; canary and promote copy the live container's mounts, environment
+and command with `deploy/clone_run.py`, adding the U data below; the canary reads T's synthetic private store).
+Checks: `deploy/canary_checks_u.sh ORIGIN OUTDIR samples` (release R's checks plus `scripts/check_release_u.py`,
+`scripts/bench_word_latency.py`, release S's `scripts/word_latency.py`, both search sets). **Rollback, once
+promoted:** `sh /home/alvin/melos-u/src/deploy/release_u.sh rollback` (stops U, renames it `melos-api-failed-u`,
+restarts the kept live container `melos-api-before-u` with its own mounts).
+
+Data (read-only mounts, under `/home/alvin/melos-u/data`):
+- `edition_groups.sqlite` (430 kB, `scripts/build_edition_groups.py`): 431 groups, 3,365 passages, 2,614 not
+  counted (173 same-collection copies) → `MELOS_EDITION_GROUPS`;
+- `ngrams.sqlite` (73 MB, `scripts/build_ngrams.py` on R's index with the edition groups; R's was 97 MB);
+- `render_cache.sqlite` (532 MB, `scripts/build_render_cache.py`: 161,575 dictionary renderings, each checked to
+  round-trip exactly) → `MELOS_RENDER_CACHE`.
+The lemma index, calibration and corpus are R's and S's, unchanged.
+
+**What changed** (contract: docs/api-contract.md "Release U additions"):
+
+| Item | Change |
+|---|---|
+| 1 Draft analysis | `POST /api/analyze-text {text, dialect?, author?, detail?}`: typed Greek through the passage-analysis pipeline as an ephemeral passage; compact response (72 kB for the exercise stanza, was 20–23 MB) with the reader's headline, gloss, parse, alternatives, dialect rules, multi-word groups and syntax relations |
+| 2 Unseen forms | Local Morpheus had no per-visitor quota in the code already (the 20 a day of the docs applies to remote Alpheios); docs corrected. New per-client rate limit on the parsing routes (300/min, 20,000/day per client; 1,200/min per connecting address; host tooling without X-Forwarded-For exempt) |
+| 3 Dialect spellings | `POST /api/dialectize`: Attic → Lesbian/Doric/Ionic candidates kept only when attested in the corpus or parsed by Morpheus, each with its rules |
+| 4 Each fragment once | Edition groups (search's folding rule over every pair) in frequency, `forms_found`, collocations, concordance, n-grams: Sappho σελήνη 13 → 4 (four places), πόθος 13 → 4, μόνα 4 → 1; Sappho 1.1 no longer a repeated bigram |
+| 5 Fast lookup | Headline rules: θῦμόν (enclitic accent), εὔδω (psilosis), σελάννα nom. sg. and μόνα fem. sg. for a Lesbian author, duals last, αὖτε not αὐτός, Ἄτθι "Atthis (a name; vocative)" (also in analyses). Analysis: φαῖσ’ / ἄγοισ’ 3rd plural when the clause has no other finite verb (χαίροισ’ stays a participle), Lesbian αισ/οισ (παῖσαν = πᾶσαν), θναίσκω read as θνῄσκω with its gloss (τεθνάκην "die", perf. inf.) |
+| 6 Concept search | `author` / `genre` scope; neighbours must share a head meaning (longing: πόθος, ἵμερος; no μακρός, λέων); `max_lemmas` honoured; proximity combines variant groups by default (Ἔρος … δόνει, fr. 130, found) |
+| 7 Line-level parallels | `best_line` on search results (Sappho 96 "δύντος ἀ βροδοδάκτυλος σελάννα", Fragment 96, l. 8), `line` on concept examples, `cited_line` on cite results (Il. 1.5) |
+| 8 Latency | Memoised static lookups (rendered entries, headword entries, evidence answers, occurrences, settled parser results, linked dictionary), file-cache sizes that had thrashed (entry offsets 8 → 512 files, file digests 8 → 512), precomputed renderings, a JSON-tree copy in place of `copy.deepcopy`, `gc.freeze()` after a background warm-up of the 600 commonest Campbell words, generate-and-test bounded to 2 s in a word lookup |
+| Coordinator | 17 public-domain English comparison translations (partial ones labelled); variant links never carry a null label (the lexicon page printed "(null)") |
+
+**Measurements** (development container; the canary repeats them):
+
+| Check | Before | U |
+|---|---|---|
+| Lyric gold, held-out certain (430): headword / full parse / index | 92.6 % / 86.5 % (R, same scorer) | 93.3 % / 87.0 % / 94.2 % |
+| Lyric gold, development certain (390) | 94.9 % / 89.0 % / 95.4 % | unchanged |
+| Sampler seed 101 / held-out seed 20261008 (all-ok rows) | 88.4 % / 88.6 % (S) | identical, 0 rows gained or lost |
+| Search, 42 queries (nDCG@10 all / held) | 0.794 / 0.675 (S) | identical per query |
+| Search, S's 120 queries (nDCG@10 all / held) | 0.581 / 0.527 (S) | identical |
+| Citations | 35/35 | 35/35 |
+| 237-poem identity check | 237 identical | 237 identical, 231 translations (214 + 17), 50 lines analysed, 0 failures |
+| Span check | 0 failures | 227 spans, 816 word rows, 0 failures |
+| `/api/word` click (form + passage + headword, 80 words, seeds 7/11/13): median / p90 | R live: 370 / 1,396 ms | 186 / 405, 164 / 374, 180 / 377 ms |
+| `/api/word` (S's method, 42 forms): median / p90 | S canary: 0.22 / 1.14 s | 0.12 / 0.48 s |
+| `/api/analyze-text`, exercise stanza (4 lines, 21 words) | — | 3.8 s first, 0.9–1.1 s warm (target 300 ms not met) |
+| `/api/dialectize`, 6 forms | — | 97 ms first, 22 ms warm |
+| Memory (API container) | S live 4.7 GiB | 5.6 GiB (limit 8 GiB) |
+
+The held-out gains are named in the brief (φαῖσ’, ἄγοισ’, παῖσαν, τεθνάκην ×2), so the held-out half is no longer
+blind for these forms; the development half is unchanged. The draft analysis target was not met: in a warm
+stanza the contextual syntax model alone takes about 0.25 s and the interlinear's per-candidate dictionary sense
+inventories about 0.5 s; getting under 300 ms needs per-line caching or a lighter path for keystroke linting.
+Drafts agree with the stored-passage reading on 87.5 % of words over 40 gold lines (headword 96.4 %;
+`scripts/check_draft_parity.py`): a draft has no passage-linked annotations or neighbouring lines.
+
+**Open data (coordinator):**
+- Translations: added (see the commit; gaps 23 → 6).
+- GLAUx and Diorisis as headword priors (`scripts/eval_open_priors.py`, GLAUx's Sappho text excluded): re-ranking
+  the reader's own candidates on R's gold dump did not help: development accuracy 94.87 % at weight 0 and lower
+  for any weight; held-out unchanged (91.86 %). As a fallback for words without a headword they would apply to 1
+  token per half. Not wired in.
+- Papyri (139 new, 67 with text): left for later. Only 40 have text after the selection; 32 of those were picked
+  by a genre keyword (epigrams, medical text, scholia, school exercises); the 8 named-poet ones are mostly not lyric
+  texts (scholia, a glossary, anthologies, two Theognis witnesses); 24 of 40 have the papyrus and corrected readings
+  fused into one word; 16 keep glyph codes. Licence (CC BY 3.0) is fine. Adding them properly needs a fixed
+  ingester and a corpus/index rebuild.
+- Wiktionary vowel lengths: left to the scansion branch.
+
+**Owner rulings:** the seven open questions of docs/composer/loop-design.md § 7 are unchanged.
+
 ## Frontend: site menu (commit `473e440`, 2026-10-09)
 
 The hamburger menu (every page: design studio, visual controls (dither, background painting), About page, the
