@@ -8,6 +8,7 @@
     { "source": "/lexicon", "destination": "/lemma.html" },
     { "source": "/concepts", "destination": "/concept.html" },
     { "source": "/about", "destination": "/about.html" },
+    { "source": "/composer", "destination": "/composer.html" },
     { "source": "/authors", "destination": "/authors.html" },
     { "source": "/owner", "destination": "/owner.html" },
     { "source": "/themes", "destination": "/themes.html" },

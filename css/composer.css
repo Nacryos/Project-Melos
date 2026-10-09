@@ -1,0 +1,132 @@
+/* Composer canvas (composer.html, js/composer.js): one textarea over a rendered copy that carries the scansion.
+   Light by default like the tool pages; dark follows the system (or the page's theme switch) using the site's
+   navy surfaces (the header, menu and footers). */
+:root {
+  --canvas-bg: #fff; --ghost: #7a8797; --pass: #2e7d4f; --warn: #a86a00; --fail: #b3261e;
+  --canvas-size: 22px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ink: #eef2f5; --ink-2: #c9d4de; --muted: #9fb0c1; --sea: #8cb8e3; --sea-wash: rgb(140 184 227 / .12);
+    --line: #2c3f58; --wash: #182a43; --paper: #0f1b2e; --canvas-bg: #14223a; --ghost: #8696a8;
+    --pass: #6cc58f; --warn: #e2a64b; --fail: #ff8a80;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --ink: #eef2f5; --ink-2: #c9d4de; --muted: #9fb0c1; --sea: #8cb8e3; --sea-wash: rgb(140 184 227 / .12);
+  --line: #2c3f58; --wash: #182a43; --paper: #0f1b2e; --canvas-bg: #14223a; --ghost: #8696a8;
+  --pass: #6cc58f; --warn: #e2a64b; --fail: #ff8a80;
+  color-scheme: dark;
+}
+body { background: var(--paper); color: var(--ink); }
+html, body { overflow-x: hidden; }
+.composer { max-width: 980px; padding-bottom: 60px; }
+.composer h1 { font-weight: 400; font-size: 2rem; margin: 18px 0 4px; }
+.composer .lede { color: var(--ink-2); margin: 0 0 14px; max-width: 46rem; }
+
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin: 0 0 10px; font-size: .92rem; }
+.toolbar label { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.toolbar select { padding: 6px 8px; border: 1px solid var(--line); background: var(--canvas-bg); color: var(--ink); max-width: 46vw; }
+.toolbar .check { gap: 4px; }
+.mode-toggle {
+  min-width: 132px; min-height: 48px; padding: 8px 16px; font-size: 1.05rem; border: 2px solid var(--sea);
+  background: var(--sea); color: #fff; touch-action: manipulation;
+}
+.mode-toggle[aria-pressed="false"] { background: var(--canvas-bg); color: var(--sea); }
+.mode-toggle kbd { font: .72rem/1 ui-monospace, monospace; opacity: .8; margin-left: 6px; }
+
+.canvas { position: relative; border: 1px solid var(--line); background: var(--canvas-bg); }
+.canvas:focus-within { border-color: var(--sea); }
+.canvas textarea, .canvas .backdrop {
+  display: block; width: 100%; margin: 0; border: 0; padding: 14px 16px 18px;
+  font: 400 var(--canvas-size)/2.15 "GFS Didot", "Gentium Book Plus", Georgia, serif; letter-spacing: 0;
+  white-space: pre-wrap; overflow-wrap: break-word; word-break: normal; tab-size: 4;
+}
+.canvas .backdrop { color: var(--ink); min-height: 9.5em; pointer-events: none; }
+.canvas .backdrop .u, .canvas .backdrop .ghost { pointer-events: auto; }
+.canvas textarea {
+  position: absolute; inset: 0; height: 100%; resize: none; overflow: hidden; background: transparent;
+  color: transparent; caret-color: var(--ink); outline: none; -webkit-text-fill-color: transparent;
+}
+.canvas textarea::selection { background: rgb(43 90 135 / .28); color: transparent; }
+.canvas textarea::placeholder { color: var(--ghost); -webkit-text-fill-color: var(--ghost); }
+.canvas.pct textarea, .canvas.pct .backdrop { line-height: 2.9; }
+
+.u { position: relative; border-radius: 3px; }
+.bars .u.b::before {
+  content: ""; position: absolute; left: -1.5px; top: .12em; bottom: .02em; width: 2.5px;
+  background: var(--ink); border-radius: 1px;
+}
+.u.violation { text-decoration: underline wavy var(--fail); text-underline-offset: .32em; text-decoration-thickness: 2px; }
+.u.sel { outline: 2px solid var(--sea); outline-offset: 1px; }
+.u .pct { display: none; }
+.canvas.pct .u .pct {
+  display: block; position: absolute; left: 50%; top: 100%; transform: translate(-50%, -.35em);
+  font: 600 10px/1 system-ui, sans-serif; color: var(--muted); white-space: nowrap; pointer-events: none;
+}
+.ghost { color: var(--ghost); font-style: italic; }
+.ghost-hint { font: 12px/1 system-ui, sans-serif; color: var(--ghost); font-style: normal; margin-left: 8px; }
+
+.legend { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
+.legend .bar { width: 90px; height: 9px; background: linear-gradient(90deg, rgb(var(--scan-short)), rgb(var(--scan-mid)), rgb(var(--scan-long))); }
+.statusline { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: center; margin: 8px 0 0; font-size: .85rem; color: var(--muted); min-height: 1.4em; }
+.statusline .preview { color: var(--ink); font-family: var(--greek); font-size: 1rem; }
+
+.lines { margin: 12px 0 0; padding: 0; list-style: none; font-size: .88rem; }
+.lines li { display: flex; flex-wrap: wrap; gap: 2px 10px; padding: 4px 0; border-bottom: 1px solid var(--line); }
+.lines .n { color: var(--muted); min-width: 1.6em; }
+.pattern { font: 15px/1.4 ui-monospace, "Cascadia Mono", monospace; letter-spacing: 2px; overflow-wrap: anywhere; }
+.ok { color: var(--pass); }
+.bad { color: var(--fail); }
+
+.suggest-row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin: 16px 0 8px; }
+.primary { min-height: 44px; padding: 8px 18px; border: 1px solid var(--sea); background: var(--sea); color: #fff; }
+.primary:not(:disabled):hover { filter: brightness(1.1); }
+.quiet { background: var(--canvas-bg); color: var(--sea); border: 1px solid var(--line); min-height: 40px; padding: 6px 12px; }
+.notice { background: var(--wash); color: var(--ink-2); font-size: .9rem; }
+.tray { display: grid; gap: 10px; margin: 8px 0 0; }
+.card { border: 1px solid var(--line); background: var(--canvas-bg); padding: 10px 12px; }
+.card.active { border-color: var(--sea); box-shadow: inset 3px 0 0 var(--sea); }
+.card .greek { font: 1.25rem/1.5 var(--greek); overflow-wrap: anywhere; }
+.card .source { font-size: .85rem; color: var(--muted); }
+.card .actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.card .actions button { min-height: 40px; }
+.verdict { display: inline-block; padding: 1px 8px; font: 600 .74rem/1.6 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .04em; border: 1px solid currentColor; }
+.verdict.pass { color: var(--pass); } .verdict.warn { color: var(--warn); } .verdict.fail { color: var(--fail); } .verdict.info { color: var(--muted); }
+.checks { margin: 6px 0 0; padding: 0; list-style: none; font-size: .86rem; color: var(--ink-2); }
+.checks li { display: flex; gap: 8px; align-items: baseline; padding: 2px 0; }
+.checks .id { font: .74rem ui-monospace, monospace; color: var(--muted); min-width: 2.4em; }
+
+.inspector { margin: 14px 0 0; border-left: 3px solid var(--sea); padding: 8px 12px; background: var(--wash); font-size: .92rem; }
+.inspector h3 { margin: 0 0 4px; font: 1.3rem/1.3 var(--greek); }
+.inspector .big { font-size: 1.3rem; font-weight: 700; }
+.inspector ul { margin: 4px 0 0; padding-left: 18px; }
+.inspector .rid { font: .74rem ui-monospace, monospace; color: var(--muted); }
+.inspector .word { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); }
+.tip {
+  position: fixed; z-index: 50; max-width: min(320px, calc(100vw - 32px)); padding: 8px 10px; font-size: .88rem;
+  background: var(--canvas-bg); color: var(--ink); border: 1px solid var(--line); box-shadow: 0 8px 24px rgb(0 0 0 / .18);
+  pointer-events: none;
+}
+.tip strong { font-family: var(--greek); font-size: 1.05rem; }
+.keys { margin: 22px 0 0; font-size: .9rem; color: var(--ink-2); }
+.keys table { border-collapse: collapse; margin: 8px 0; }
+.keys td, .keys th { border: 1px solid var(--line); padding: 3px 8px; text-align: left; }
+.keys code { font-size: .9rem; }
+.credits { color: var(--muted); font-size: .82rem; margin-top: 18px; }
+.composer .notice { padding: 10px 14px; border-left: 3px solid var(--sea); max-width: 46rem; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+@media (max-width: 600px) {
+  :root { --canvas-size: 20px; }
+  .composer { padding-left: 16px; padding-right: 16px; }
+  .composer h1 { font-size: 1.6rem; }
+  .toolbar { gap: 8px; }
+  .toolbar label { flex: 1 1 45%; justify-content: space-between; }
+  .toolbar label.check { flex: 0 1 auto; }
+  .toolbar select { max-width: 60%; }
+  .mode-toggle { flex: 1 1 100%; min-height: 52px; font-size: 1.15rem; }
+  .canvas textarea, .canvas .backdrop { padding: 12px 12px 16px; }
+}

@@ -13,8 +13,8 @@
     ['Lexicon', '/lexicon', 'One headword: dictionaries, counts, every use'],
     ['Concepts', '/concepts', 'Follow a meaning through time'],
     ['Search', '/#search', 'Greek, English, or a passage reference'],
-    ['Scansion', null, 'Coming soon'],
-    ['Composer', null, 'Coming soon'],
+    ['Scansion', '/', 'Turn on Scansion above any poem in the Reader'],
+    ['Composer', '/composer', 'Write Greek verse with live scansion'],
   ];
   const ALIASES = { '/index': '/', '/reader': '/', '/lemma': '/lexicon', '/concept': '/concepts', '/design-studio': '/legacy' };
   const path = location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';

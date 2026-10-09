@@ -1943,6 +1943,12 @@ app.include_router(commentary_router)
 
 from .dialectize_routes import router as dialectize_router  # release U: Attic -> Lesbian/Doric/Ionic spellings
 app.include_router(dialectize_router)
+from .scansion.api import router as scansion_router  # release V: metre-free scanner, metre fit (docs/scansion.md)
+app.include_router(scansion_router)
+from .compose_routes import router as compose_router  # release V: composer next-line suggestions
+app.include_router(compose_router)
+from .reader_scan_routes import router as reader_scan_router  # release V: reader scansion overlay (metre lock)
+app.include_router(reader_scan_router)
 
 
 def _startup_warm():

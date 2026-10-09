@@ -1,0 +1,45 @@
+/* Scansion palette and marks, shared by the reader (js/reader-scansion.js) and the composer (js/composer.js).
+   A continuous spectrum by longness: short = the site's saffron (deepened for text contrast), uncertain = slate,
+   long = the site's sea blue. Checked under Machado-2009 protanopia, deuteranopia and tritanopia simulation:
+   every pair of stops stays ≥ 25 ΔE apart in both themes (docs/scansion.md §10). */
+:root {
+  --scan-short: 166, 96, 0;        /* #a66000, 4.9:1 on white */
+  --scan-mid: 108, 114, 122;       /* #6c727a, 4.8:1 on white */
+  --scan-long: 43, 90, 135;        /* #2b5a87, the site's --sea, 7.2:1 on white */
+  --scan-bar: var(--ink, #14223a);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --scan-short: 240, 176, 72; --scan-mid: 158, 166, 176; --scan-long: 122, 176, 235; }
+}
+:root[data-theme="dark"] { --scan-short: 240, 176, 72; --scan-mid: 158, 166, 176; --scan-long: 122, 176, 235; }
+
+/* Reader overlay: marks above syllables, optional bars between them. Both are generated content, so text
+   selection and copying never include them, and they sit inside the word's button, so a click anywhere on the
+   word (bars included) still selects the whole word. */
+.scansion-tools { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 10px; font: 13px/1.3 "Gentium Book Plus", Georgia, serif; }
+.scansion-tools button {
+  min-height: 36px; padding: 4px 12px; border: 1px solid var(--line, #cbd3d3); background: transparent;
+  color: var(--ink, #14223a); font: inherit; cursor: pointer;
+}
+.scansion-tools button[aria-pressed="true"] { background: var(--ink, #14223a); border-color: var(--ink, #14223a); color: var(--on-dark, #f4f6f5); }
+.scansion-tools .scansion-note { color: var(--muted, #56616b); }
+.scansion-tools .legend-bar { display: inline-block; width: 64px; height: 7px; vertical-align: middle;
+  background: linear-gradient(90deg, rgb(var(--scan-short)), rgb(var(--scan-mid)), rgb(var(--scan-long))); }
+.scan-marks .line { padding-top: .62em; }
+.scan-marks .greek-text > p { line-height: 2.6; }
+.sy { position: relative; }
+.sy-n { position: relative; }
+.scan-marks .sy-n::before {
+  content: attr(data-m); position: absolute; left: 50%; bottom: 100%; transform: translate(-50%, -.08em);
+  font: 700 .56em/1 "Gentium Book Plus", Georgia, serif; color: rgb(var(--sc, var(--scan-mid)));
+  pointer-events: none; user-select: none; -webkit-user-select: none; white-space: nowrap;
+}
+.scan-marks .sy-n.unsure::before { opacity: .55; font-weight: 400; }
+.scan-marks .sy-n.conflict::before { text-decoration: underline wavy rgb(var(--scan-short)); }
+.scan-bars .sy.b::before {
+  content: "|"; font-weight: 700; margin: 0 .05em; color: var(--scan-bar);
+  pointer-events: none; user-select: none; -webkit-user-select: none;
+}
+.scansion-detail { margin: 10px 0 0; padding: 8px 12px; border-left: 3px solid rgb(var(--scan-long)); font: 14px/1.45 "Gentium Book Plus", Georgia, serif; color: var(--ink, #14223a); background: rgb(43 90 135 / .06); }
+.scansion-detail ul { margin: 4px 0 0; padding-left: 18px; }
+.scansion-detail .meta { color: var(--muted, #56616b); font-size: 12px; }

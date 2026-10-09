@@ -19,7 +19,10 @@ import time
 from collections import defaultdict, deque
 
 LIMITED_PATHS = ("/api/machine-analysis", "/api/analyze-text", "/api/dialectize", "/api/analyze-passage",
-                 "/api/passage-analysis", "/api/words/headlines", "/api/passage-morphology/warm")
+                 "/api/passage-analysis", "/api/words/headlines", "/api/passage-morphology/warm",
+                 # release V: the scanner (cheap, but up to 20,000 characters a call) and the composer's
+                 # suggestions (which also have their own, lower limit in backend/compose_routes.py)
+                 "/api/scan", "/api/scan/rules/validate", "/api/compose/suggest")
 
 
 def _env(name, default):

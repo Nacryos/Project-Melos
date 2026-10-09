@@ -27,9 +27,12 @@ test('panel lists the sections in order and ends with Log in', () => {
   assert.deepEqual([...at].sort((a, b) => a - b), at, 'sections in the requested order');
   assert.match(menu, /item\('Design studio', '\/legacy'/);
   assert.match(menu, /item\('What Melos does', '\/about'/);
-  for (const feature of ["['Reader', '/'", "['Poets & works', '/#collection'", "['Lexicon', '/lexicon'", "['Concepts', '/concepts'", "['Search', '/#search'", "['Scansion', null, 'Coming soon']", "['Composer', null, 'Coming soon']"]) {
+  for (const feature of ["['Reader', '/'", "['Poets & works', '/#collection'", "['Lexicon', '/lexicon'", "['Concepts', '/concepts'", "['Search', '/#search'", "['Scansion', '/'", "['Composer', '/composer'"]) {
     assert.ok(menu.includes(feature), feature);
   }
+  // Release V: the composer page is a real route and ships in the build.
+  assert.match(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'), /"source": "\/composer", "destination": "\/composer\.html"/);
+  assert.match(readFileSync(new URL('../scripts/build_frontend.mjs', import.meta.url), 'utf8'), /'composer\.html'/);
   // Modules not yet released are shown but cannot be followed.
   assert.match(menu, /className: 'site-menu-item is-soon', ariaDisabled: 'true'/);
 });

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Composer · Melos</title>
+  <meta name="description" content="Write Greek verse with TypeGreek typing on any keyboard, live scansion, word analysis and suggested next lines from the poets, each checked and cited.">
+  <link rel="icon" type="image/svg+xml" href="assets/branding/melos-favicon-white.svg?v=white-1">
+  <meta name="theme-color" content="#14223a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/lemma-page.css?v=release-p-20261009">
+  <link rel="stylesheet" href="css/site-menu.css?v=site-menu-20261009">
+  <link rel="stylesheet" href="css/scansion.css?v=release-v">
+  <link rel="stylesheet" href="css/composer.css?v=release-v">
+  <script>try { const t = localStorage.getItem('melos-composer-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}</script>
+  <script src="js/site-menu.js?v=site-menu-20261009" defer></script>
+  <script src="js/config.js" defer></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/typegreek.js?v=release-v" defer></script>
+  <script src="js/composer.js?v=release-v" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#canvas-input">Skip to the canvas</a>
+  <header class="site-bar">
+    <a class="site-mark" href="/" aria-label="Melos, home"><span lang="grc">Μέλος</span><small>A Greek Lyric Lexicon</small></a>
+    <button class="site-menu-button" id="site-menu-button" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </header>
+  <main id="main" class="page composer">
+    <h1>Composer</h1>
+    <p class="lede">Type Greek with TypeGreek keys on any keyboard, phone included. Each syllable is coloured by how likely it is to be long, every word is read as you write, and Melos can offer a next line from the poets.</p>
+
+    <div class="toolbar" role="group" aria-label="Composer settings">
+      <button type="button" id="mode" class="mode-toggle" aria-pressed="true">Αα Greek</button>
+      <label>Poet <select id="author">
+        <option value="Sappho">Sappho</option><option value="Alcaeus">Alcaeus</option><option value="Anacreon">Anacreon</option>
+        <option value="Alcman">Alcman</option><option value="Pindar">Pindar</option><option value="Bacchylides">Bacchylides</option>
+        <option value="Simonides">Simonides</option><option value="Ibycus">Ibycus</option><option value="Theognis">Theognis</option>
+        <option value="Archilochus">Archilochus</option><option value="Homer">Homer</option><option value="">Any poet</option>
+      </select></label>
+      <label>Metre <select id="metre"><option value="">none</option><option value="auto">detect</option></select></label>
+      <label>Dialect <select id="dialect">
+        <option value="">from the poet</option><option value="none">none</option><option value="aeolic">Aeolic</option>
+        <option value="doric">Doric</option><option value="ionic">Ionic</option><option value="attic">Attic</option>
+      </select></label>
+      <label class="check"><input type="checkbox" id="bars" checked> syllable bars</label>
+      <label class="check"><input type="checkbox" id="pct"> %</label>
+      <label>Theme <select id="theme"><option value="">system</option><option value="light">light</option><option value="dark">dark</option></select></label>
+    </div>
+
+    <div class="canvas bars" id="canvas">
+      <div class="backdrop" id="backdrop" aria-hidden="true"></div>
+      <textarea id="canvas-input" rows="6" aria-label="Greek verse (TypeGreek keys; Ctrl+` switches Greek and English)" placeholder="Type here: fai/netai/ moi kh=nos …"></textarea>
+    </div>
+    <div class="statusline" id="status" aria-live="polite"></div>
+    <ul class="lines" id="lines" aria-label="Lines"></ul>
+    <div class="inspector" id="inspector" hidden aria-live="polite"></div>
+
+    <div class="suggest-row">
+      <button type="button" class="primary" id="suggest">Suggest next line</button>
+      <span class="legend"><span>short</span><span class="bar"></span><span>long</span></span>
+    </div>
+    <p class="notice" id="suggest-note" hidden></p>
+    <div class="tray" id="tray" aria-live="polite"></div>
+
+    <details class="keys">
+      <summary>TypeGreek keys</summary>
+      <table>
+        <tr><th>Letters</th><td><code>a b g d e z h q i k l m n c o p r s t u f x y w</code> → α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω; <code>v</code> ϝ; <code>j</code> ς; Shift for capitals; final ς is automatic</td></tr>
+        <tr><th>After a letter</th><td><code>/</code> acute, <code>\</code> grave, <code>=</code> circumflex, <code>)</code> smooth, <code>(</code> rough, <code>|</code> iota subscript, <code>+</code> diaeresis, in any order: <code>a)/|</code> → ᾄ</td></tr>
+        <tr><th>Punctuation</th><td><code>;</code> or <code>:</code> → ·, <code>?</code> → ; (question mark)</td></tr>
+        <tr><th>Switch</th><td>the Greek / English button, or Ctrl+`</td></tr>
+      </table>
+      <p>Rules from typegreek.com, matched exactly. On phones a word converts when the keyboard commits it.</p>
+    </details>
+    <p class="credits">Scansion: Melos scanner (rules with vowel lengths from Wiktionary, CC BY-SA; Morpheus, CC BY-SA 3.0 US; LSJ, CC BY-SA 4.0; digamma list from Monro via DCC, CC BY-SA). Suggested lines are quoted from the corpus with their citation.</p>
+  </main>
+  <div class="tip" id="tip" hidden></div>
+</body>
+</html>

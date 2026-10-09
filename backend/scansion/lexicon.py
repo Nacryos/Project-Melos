@@ -67,7 +67,7 @@ class QuantityLexicon:
         return json.loads(row[0]) if row else {}
 
 
-@lru_cache(maxsize=200_000)
+@lru_cache(maxsize=50_000)  # release V: bounded for the public API (8 GB container); ~1.7 ms/line uncached
 def _lookup_cached(lex: QuantityLexicon, k: str) -> Evidence:
     n = len(base_letters(k))
     rows = lex.rows(k)
