@@ -323,8 +323,7 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .cite-wait{margin:0;padding:.55rem .9rem;font-size:.9rem;color:#5c6b7d}
 .word-headline-probability{margin:2px 0 0;font-size:.82rem;color:#5c6b7d}
 .word-headline-probability.is-low{color:#8a5a00}
-.word-headline-uncertain .word-headline-lemma{text-decoration:underline dotted #c98500;text-underline-offset:.22em}
-.word-headline-uncertain .word-headline-link{text-decoration:underline dotted #c98500}
+.word-headline-uncertain .word-headline-link{text-decoration:underline dotted #c98500;text-decoration-thickness:2px;text-underline-offset:.2em}
 .word-dictionary-partial{margin:.2rem 0 .4rem;font-size:.82rem;color:#5c6b7d}
 .result-uncertain{color:#8a5a00}
 .author-phrases{margin:2px 0 10px 12px;font-size:.92rem}
