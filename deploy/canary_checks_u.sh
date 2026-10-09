@@ -15,12 +15,10 @@ echo "start $(date -u)" > "$OUT/progress"
 python3 deploy/smoke_backend.py --origin "$B" --expected-passages 288821 > "$OUT/smoke.txt" 2>&1; echo "smoke exit $?" >> "$OUT/progress"
 python3 scripts/verify_campbell_glp.py --origin "$B" --expected-passages 288821 --analyze sample > "$OUT/verify.json" 2> "$OUT/verify.err"; echo "verify exit $?" >> "$OUT/progress"
 python3 scripts/check_span_parses.py --base "$B" --random 30 > "$OUT/span.txt" 2>&1; echo "span exit $?" >> "$OUT/progress"
+python3 scripts/search_eval.py run --base "$B" --out "$OUT/search-eval.json" --counts data/evaluation/search-eval-o-counts.json > "$OUT/search-eval.txt" 2>&1; echo "search-eval exit $?" >> "$OUT/progress"
 if [ -f data/evaluation/search-eval-s.json ]; then
-  python3 scripts/search_eval.py run --base "$B" --out "$OUT/search-eval.json" --counts data/evaluation/search-eval-s-counts.json > "$OUT/search-eval.txt" 2>&1
-else
-  python3 scripts/search_eval.py run --base "$B" --out "$OUT/search-eval.json" --counts data/evaluation/search-eval-o-counts.json > "$OUT/search-eval.txt" 2>&1
+  python3 scripts/search_eval.py run --base "$B" --queries data/evaluation/search-eval-s.json --counts data/evaluation/search-eval-s-counts.json --out "$OUT/search-eval-s.json" > "$OUT/search-eval-s.txt" 2>&1; echo "search-eval-s exit $?" >> "$OUT/progress"
 fi
-echo "search-eval exit $?" >> "$OUT/progress"
 python3 scripts/eval_citations.py --base "$B" --out "$OUT/cite-eval.json" > "$OUT/cite-eval.txt" 2>&1; echo "cite-eval exit $?" >> "$OUT/progress"
 for s in 7 11 13; do
   python3 scripts/bench_word_latency.py --base "$B" --n 80 --seed $s --json "$OUT/word-latency-$s.json" >> "$OUT/word-latency.txt" 2>&1
