@@ -32,3 +32,4 @@ screenshots/
 .benchmarks/
 runtime/
 secrets/
+data/training/
