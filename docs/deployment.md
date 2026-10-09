@@ -1,6 +1,105 @@
 # Deployment handoff
 
-## Current: release P — citations, sourced dates and genres, n-grams, calibrated confidence, lemma UI gaps (2026-10-09)
+## Current: release Q — elided words, each text counted once, fragment-number concordance, sourced dates, lyric calibration classes, P frontend gaps (2026-10-09)
+
+Public backend: image `melos-api:20261009q`
+(`sha256:bf2bc81cf79cb27cd21b50f959918740bd95589c81d803f7380b11d9410b2647`), built on Basecamp with
+`deploy/Dockerfile.patch` atop the P image from the Q source tarball (`git archive` of `5e87638`, sha256
+`1eabaded930ebc83243f69bba00d1d7a7722db617a719a9653a80fec06a8dc13`, unpacked in `/home/alvin/melos-q/src`).
+Recipe: `deploy/release_q.sh build|dev|canary|stop-canary|promote|rollback`; checks `deploy/canary_checks_q.sh`.
+P is kept stopped as `melos-api-before-q`, the Q canary as `melos-api-canary-q` (stopped). **Rollback:**
+`sh /home/alvin/melos-q/src/deploy/release_q.sh rollback` (stops Q, renames it `melos-api-failed-q`, restarts P with
+its own mounts; the Morpheus sidecar is untouched). No frontend change in this release.
+
+Data (read-only mounts): O's `corpus.sqlite` and `embeddings/` (unchanged), and under `/home/alvin/melos-q/data`:
+`lemma_index.sqlite` (280 MB, reassembled from P's staging file), `elision_model.json` (1.4 MB),
+`citation_index.sqlite` (46 MB), `ngrams.sqlite` (98 MB: phrases per headword), `lemma_calibration.json`, and
+`metadata/` (`chronology.json`, `attributions.json`, `genre_sources.json`). Evaluation reports in
+`/home/alvin/melos-q/eval` (`calibration-report.json`, `calibration-report-before.json`, `elision-eval-report.json`,
+`freqdiff.json`).
+
+**What Q adds** (details: `docs/api-contract.md` "Release Q additions", `docs/lemma-index.md` "Release Q additions",
+`docs/morphology.md` "Release Q"):
+
+- **Elided words.** Readings restored by adding a vowel or diphthong only (θ φ χ as τ π κ only before a rough
+  breathing), ranked per token by a naive Bayes model: treebank prior (train half only) smoothed toward the restored
+  spellings' corpus frequency, contextual tags of the word and its neighbours, clause position. Genuine second
+  readings kept per token and shown by the headline API (`tie_alternative`; 2,636 tokens corpus-wide).
+  Held-out treebank half (131,011 tokens, evaluation indexes without the gold works' annotations):
+
+  | | P | Q |
+  |---|---|---|
+  | Lemma agreement, all held-out tokens | 95.7 % | 96.7 % |
+  | Elided tokens (13,095) | 88.2 % | 98.0 % |
+
+  τ’ read as σύ for τε: 292 held-out errors → 0 (12 the other way, σύ read as τε), ἀλλ’ → ἀλλά (375 → 0), θ’ → τε (90 → 0), ἔνθ’ → ἔνθα (93 → 0), ποτ’ → ποτέ
+  (66 → 0). Tied tokens: the gold lemma is one of the two readings in 178 of 184 (ὅτ’ ὅτε/ὅτι, ὅθ’ ὅθι/ὅτε).
+- **Each text counted once** in frequency, distribution, diachrony and collocation background counts (and n-grams):
+  one collection per TLG work, the one with most of the work's words in scope; word-for-word repeats within one work
+  once. Searchable edited Greek counted words 1,386,111 → 1,067,763 (293,066 in second collections, 25,282 repeats).
+  Homer 399,457 → 199,673 words; Apollonius 74,511 → 38,787; Theocritus 41,283 → 21,065; Pindar 38,908 → 21,136;
+  Hesiod 30,215 → 15,920. Rates per 10,000: ἔρως 8.12 → 9.67, θάλασσα 6.55 → 6.80, θεός 34.1 → 32.9, ἵππος
+  12.0 → 10.2, Ὀδυσσεύς 11.4 → 8.0, τε 145.3 → 127.7 (epic weight halves). The P n-gram rule (global primary
+  collection) had dropped the whole Greek Anthology, whose larger OGC copy is outside the scope; fixed.
+- **Fragment numbers (Voigt / Lobel-Page / Campbell).** Campbell, *Greek Lyric Poetry* (1967) heads each poem with a
+  standard number and states (p. xxxii, page image) that for Sappho and Alcaeus he uses the Lobel-Page numbers; it
+  prints no Voigt numbers. Voigt equivalences: Digital Sappho notes (exact), seven Wikipedia statements quoted with
+  revision ids, and the general "Voigt follows Lobel-Page with minor variations" statement, used last and labelled
+  `convention`. `data/fragment_concordance.json`. Coverage of Campbell's poems:
+
+  | Poet | Poems | Campbell number | Lobel-Page | Voigt stated by a source | Voigt by convention only |
+  |---|---|---|---|---|---|
+  | Sappho | 24 | 23 | 23 | 4 | 20 |
+  | Alcaeus | 18 | 18 | 18 | 0 | 18 |
+  | Other poets | 195 | 148 | – | – | – |
+
+  The CGL anthology adds 55 Sappho and 46 Alcaeus records that print Lobel-Page numbers. "Sappho fr. 31 V",
+  "Alc. 346 L-P" and "Sappho Campbell 16" resolve to the same poems. Fragment lookups indexed (`ref_number`):
+  Sappho fr. 31 1.34 s → 0.02 s on the container.
+- **Dates.** Wikidata has no referenced date for the Homeric Hymns, Orphica, Anacreontea or Semonides; Edmonds'
+  *Lyra Graeca* pages in the corpus (checked against the page images) date the Homeric Hymns 750–550 BC (with his
+  "?"), the Anacreontea c. 150 BC – AD 550, Semonides 650 BC (approximate). Orphica stays undated ("of uncertain
+  date"). Dated share of searchable edited Greek 90.9 % → 93.2 %. Periods now come from the floruit, else the middle
+  of the active life (birth + 40 capped by death, work period), never the birth year: Euripides, Sophocles, Pindar,
+  Bacchylides Archaic → Classical; Corinna Classical → Archaic (sourced floruit 500 BC); Crinagoras, Alpheus,
+  Lollius Bassus Hellenistic → Roman imperial.
+- **Calibration** (cross-fitted on the treebank halves; `context_disagrees` = the contextual model named another
+  reading of the spelling, 13 % correct, and `recorded_form_no_context` split from `no_context_signal`; an
+  `elision_model` class). Held-out ECE 0.022 raw → 0.0012 calibrated. Lyric gold (427 tokens from LSJ entries citing
+  a Campbell poem and line, report only): accuracy 96.5 %, mean calibrated 0.950, ECE 0.022. Sappho 1: tokens below
+  0.8 15 → 14 (the four αἰ read as ὁ are wrong, so their low scores are right); θέοισιν 0.48 → 0.72, μάλιστα
+  0.48 → 0.61. Known gap: ταχέως / ταχύς is not recognised as one word (one token 0.15).
+- **P frontend gaps.** Junk recorded lemmas dropped (612 annotation strings that are neither a headword nor a parser
+  lemma: "υνκνοων" = unknown, "οτηερ" = other); phrases indexed per headword (σελήνη, ἔρως have whole-corpus
+  lists; every author group including the Greek Anthology); combined variant groups counted once and every
+  counted headword named (Ἔρως); variant links need agreeing meanings and a "= B" naming the headword itself
+  (3,175 → 1,969 links: ἅλιος, Δίιος, κοῦρος, πᾶς = πατήρ, δράω = ὁράω gone); English `q` read through sense head
+  meanings ("moon": σελήνη, μήνη, no Ἰώ or Οὐρανία); printed line numbers moved from display text to
+  `line_numbers`; `english_dictionary_head_meaning` documented.
+
+Canary (8792) before promotion: smoke pass; `verify_campbell_glp.py --analyze sample`: 237/237 identical, 0 failures;
+`check_span_parses.py --random 30`: 227 spans, 816 word rows, **0 failures**. Search evaluation (42 queries): nDCG@10
+development 0.707, held out 0.577, all 0.664 (as P). Sampler vs P: seed 101 (421 rows) and held-out seed 20261008 (487
+rows) identical on every metric, no row gains or loses (the sampler reads the live passage analysis, which Q does not
+change). Citation test 35/35 (30 of P plus Voigt / L-P / Campbell cases). Memory: canary 3.4 GiB of 8 GiB.
+Backend tests: 2,012 pass; the same 5 fail as on P's HEAD.
+
+Verified on https://greeklyric.com after promotion (`deploy/canary_checks_q.sh`, output in
+`/home/alvin/melos-q/prod-checks`): smoke pass; 237/237 identical, 0 failures; span check 227 spans, 816 rows,
+0 failures; search evaluation 0.707 / 0.577 / 0.664; citations 35/35; every endpoint 200 through the public route
+(75–200 ms; cross-passage proximity 0.5 s; diachrony 0.8–1.0 s; fragment citations 0.08–0.11 s). Memory: Q 3.3 GiB
+of 8 GiB.
+
+Frontend deploy `7f47fef` (other agent, before this release; P frontend wiring `3deb44b` + thinner marker):
+https://project-melos-of5xiu2tj-nacryos-projects.vercel.app; rollback
+`vercel promote https://project-melos-24oq9tooh-nacryos-projects.vercel.app --yes`.
+
+Known gaps: the live passage analysis (`/api/analyze-passage`, `/api/word`) keeps its own elision handling (the index
+and headline API use the model); Voigt numbers for 38 Sappho/Alcaeus poems rest on the "minor variations" convention;
+Alcaeus has no lyric gold (LSJ cites an older numbering); some genuine variant links were lost with the
+meaning check (γαῖα "a land" / γῆ "earth").
+
+## Historical: release P — citations, sourced dates and genres, n-grams, calibrated confidence, lemma UI gaps (2026-10-09)
 
 Public backend: image `melos-api:20261009p`
 (`sha256:cdd0a3dce06c6c39d1be386a776308e8fe4f998237985af5f304253377932f9d`), built on Basecamp with
