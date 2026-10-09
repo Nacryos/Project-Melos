@@ -1,0 +1,481 @@
+{
+ "checked": "2026-10-09",
+ "auditor": "independent subagent, visual comparison with IA page images (round 2, final build)",
+ "sample": "36 records, 9 per volume, random seed 1009",
+ "records": [
+  {
+   "id": "edmonds-lg:I:alcman:92",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "All boundaries match; pp. 103 (E)/102 (G). Greek starts with the source abbreviation."
+  },
+  {
+   "id": "edmonds-lg:I:terpander:7",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": false,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": false,
+   "note": "English end runs past the fragment: includes the 'Thales' Life' text from pp. 35/37 (Plutarch, Ephorus...) and footnotes; real end is 'torn in pieces by the Titans.' on p. 33. printed_pages_english should be [33] not [33,35,37]. Greek (p. 32) correct."
+  },
+  {
+   "id": "edmonds-lg:I:sappho:94~2",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Number printed '94 1' (footnote mark). All boundaries correct; pp. 253/252."
+  },
+  {
+   "id": "edmonds-lg:I:alcman:35",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct. Source printed 'Eustathius' (OCR 'Kustathius'), content-identical."
+  },
+  {
+   "id": "edmonds-lg:I:alcaeus:50",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct; translation ends 'as being a madman.' and Greek ends '...ὡς μαινόμενον.'"
+  },
+  {
+   "id": "edmonds-lg:I:sappho:114",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": false,
+   "greek_start_ok": true,
+   "greek_end_ok": false,
+   "source_line_ok": true,
+   "pages_ok": false,
+   "note": "Fragment 114 is only the Hephaestion note on p. 263 plus the poem 'Thus of old did the dainty feet... grass.' at top of p. 265; Greek ends 'μαλακὸν ματεῖσαι' at top of p. 264. Record runs on through frr. 115, 116, 117 (ends 'pleasing to the Gods' / 'τοὺς θύοντας', p. 267/266). Pages should be E [263,265], G [262,264]."
+  },
+  {
+   "id": "edmonds-lg:I:sappho:89",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": false,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "English correct. Greek end includes the page-bottom footnote text ('...ἀπελείφθημεν, ἀλλὰ γὰρ καὶ ἀεὶ χαῖρε : metre cf. 82, 85'); real text ends 'ἀπελείφθημεν.⁶ — ᴗ —'."
+  },
+  {
+   "id": "edmonds-lg:I:alcaeus:144",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": false,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "English end includes page footnotes ('1416, but this may not be technically accurate...' / 'Matr. An. 389'); real end is 'turning his intention elsewhither.' Greek correct."
+  },
+  {
+   "id": "edmonds-lg:I:alcaeus:113",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct."
+  },
+  {
+   "id": "edmonds-lg:I-1928:alcaeus:119",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct. Source printed 'Eustathius on the Iliad' (OCR 'liad')."
+  },
+  {
+   "id": "edmonds-lg:I-1928:alcman:82",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct. Source 'Old Etymologicum Magnum'; Greek begins at 'E.M. Vet.'"
+  },
+  {
+   "id": "edmonds-lg:I-1928:sappho:98",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct (number printed '98 1')."
+  },
+  {
+   "id": "edmonds-lg:I-1928:alcaeus:65",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct; Greek source ref printed 'Aristid. 2. 155' (OCR 9)."
+  },
+  {
+   "id": "edmonds-lg:I-1928:alcaeus:90",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct."
+  },
+  {
+   "id": "edmonds-lg:I-1928:alcaeus:64",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct; source note spans two lines and is captured whole."
+  },
+  {
+   "id": "edmonds-lg:I-1928:alcaeus:85",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct."
+  },
+  {
+   "id": "edmonds-lg:I-1928:alcman:119",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct; source 'The Same; Arrhyba:' as printed."
+  },
+  {
+   "id": "edmonds-lg:I-1928:alcman:107",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct (final period of 'neighbour.' OCR'd as comma)."
+  },
+  {
+   "id": "edmonds-lg:II:anacreon:146",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct."
+  },
+  {
+   "id": "edmonds-lg:II:ibycus:11",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct; source note 'Etymologicum Magnum ῥῆγος :' has no italic, ends with colon."
+  },
+  {
+   "id": "edmonds-lg:II:stesichorus:42",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct."
+  },
+  {
+   "id": "edmonds-lg:II:anacreon:68",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": false,
+   "greek_start_ok": true,
+   "greek_end_ok": false,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "English end includes the following section heading 'Book III'; Greek end includes the book marker 'Γ′' (OCR 'Τ΄') that precedes fr. 69. Real ends: 'meaning quiet and not blustering.' / 'θορυβωδῶν.'"
+  },
+  {
+   "id": "edmonds-lg:II:anacreon:60",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct."
+  },
+  {
+   "id": "edmonds-lg:II:stesichorus:95",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct."
+  },
+  {
+   "id": "edmonds-lg:II:simonides:214",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct; source 'Plut. Life of Lycurgus:' as printed."
+  },
+  {
+   "id": "edmonds-lg:II:anacreon:21",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct (number printed '21'; Greek ends at 'ἔρωτι.⁶')."
+  },
+  {
+   "id": "edmonds-lg:II:simonides:292",
+   "number_ok": false,
+   "poet_ok": true,
+   "english_start_ok": false,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": false,
+   "pages_ok": true,
+   "note": "Printed number is 232 (not 292). English start and source line are contaminated with the tail of fr. 231 ('the genitive is ὕιος ... etc.') and the number '232 3' (OCR '2323') before 'Scholiast on Dionysius of Thrace:'. English end and Greek correct; pp. 417/416 correct."
+  },
+  {
+   "id": "edmonds-lg:III:bacchylides:6",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": false,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Number/English/source/pages correct. Greek end includes the section heading 'B′' (Book II marker) after '...Συρακόσιοι.' Greek OCR is garbage (Latin-letter) so only boundaries judged."
+  },
+  {
+   "id": "edmonds-lg:III:other-ritual-folksongs:20",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct; spans pp. 527/529 (E), 526/528 (G). Head 'OTHER RITUAL FOLK-SONGS'."
+  },
+  {
+   "id": "edmonds-lg:III:polyidus:2",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": false,
+   "greek_start_ok": true,
+   "greek_end_ok": false,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Fragment 2 (Aristotle Poetics, quoted on p. 407 and continuing to 'which saves his life.' p. 409) ends before the new heading 'on TELLES, TELLEN, or TELLIS'. Record runs on through that whole section (Plutarch/Zenobius/Ptolemy, ending 'beside his pillow.'). Same on the Greek side (should end 'ἡ σωτηρία.' p. 408, record ends with Ptolemy Hephaestion text)."
+  },
+  {
+   "id": "edmonds-lg:III:anonymous-later-poets:80",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct (English 'Compare Sophocles... [and . . .]' garbled in OCR but boundaries right)."
+  },
+  {
+   "id": "edmonds-lg:III:corinna:14",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct."
+  },
+  {
+   "id": "edmonds-lg:III:anonymous-later-poets:105a",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "Correct (printed '105 A')."
+  },
+  {
+   "id": "edmonds-lg:III:bacchylides:40",
+   "number_ok": false,
+   "poet_ok": true,
+   "english_start_ok": false,
+   "english_end_ok": false,
+   "greek_start_ok": false,
+   "greek_end_ok": false,
+   "source_line_ok": true,
+   "pages_ok": false,
+   "note": "Badly wrong. The ode is Edmonds 31 (iii) 'For Hiero of Syracuse' (starts p. 137 E / p. 136 G); '40' is merely a line number in the Greek margin of p. 138 (flag number_greek_side_only). English starts mid-ode at p. 139 ('now; sweetest it is to die') and runs ~31 pages (36,449 chars, to p. 199) ending in apparatus footnotes; Greek starts mid-page-138 and ends on p. 142 mid-ode. English pages should begin 137, Greek 136. source_line null is correct only in the sense that this ode has no source note."
+  },
+  {
+   "id": "edmonds-lg:III:gamesongs:36",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": true,
+   "greek_start_ok": true,
+   "greek_end_ok": false,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "English correct (pp. 541/540). Greek end includes page-bottom footnote 4 ('cf. Plut. Q. Gr. 35 ...'); real end is 'Ἴωμεν εἰς Ἀθήνας.'"
+  },
+  {
+   "id": "edmonds-lg:III:anonymous-alcman:14",
+   "number_ok": true,
+   "poet_ok": true,
+   "english_start_ok": true,
+   "english_end_ok": false,
+   "greek_start_ok": true,
+   "greek_end_ok": true,
+   "source_line_ok": true,
+   "pages_ok": true,
+   "note": "English end runs into the next fragment's number ('15, 16'). Real end 'particularly good.' Greek correct."
+  }
+ ],
+ "summary": {
+  "number_ok": {
+   "true": 34,
+   "false": 2,
+   "n/a": 0
+  },
+  "poet_ok": {
+   "true": 36,
+   "false": 0,
+   "n/a": 0
+  },
+  "english_start_ok": {
+   "true": 34,
+   "false": 2,
+   "n/a": 0
+  },
+  "english_end_ok": {
+   "true": 29,
+   "false": 7,
+   "n/a": 0
+  },
+  "greek_start_ok": {
+   "true": 35,
+   "false": 1,
+   "n/a": 0
+  },
+  "greek_end_ok": {
+   "true": 29,
+   "false": 7,
+   "n/a": 0
+  },
+  "source_line_ok": {
+   "true": 35,
+   "false": 1,
+   "n/a": 0
+  },
+  "pages_ok": {
+   "true": 33,
+   "false": 3,
+   "n/a": 0
+  }
+ }
+}

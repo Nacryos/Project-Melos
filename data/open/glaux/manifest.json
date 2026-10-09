@@ -1,0 +1,1589 @@
+{
+ "dataset": "GLAUx (the Greek Language AUtomated)",
+ "creator": "Alek Keersmaekers",
+ "source_urls": [
+  "https://github.com/alekkeersmaekers/glaux",
+  "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/metadata.txt",
+  "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/README.md"
+ ],
+ "zenodo_doi": "10.5281/zenodo.10948374 (Zenodo API returned an empty response on 2026-10-09; not re-verified)",
+ "commit": "b077d8f6ff429a5c7245954bc16bb7d1d7948823",
+ "commit_date": "2026-02-19T17:15:08+01:00",
+ "licence": {
+  "repo_licence_file": "none (no LICENSE file; GitHub API license = null)",
+  "readme_quote_license_section": "GLAUx is generally available under a [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) license. Please note though that some of the texts and/or the manual annotations may have a more restrictive license.",
+  "readme_quote_intro": "Most of the data is available under a CC BY-SA license but some texts are more restrictive (e.g. CC BY-NC): the license of each source text is also specified in the metadata file.",
+  "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/README.md",
+  "source_license_field": "metadata.txt column SOURCE_LICENSE gives the licence of the source text each GLAUx file was built from; it overrides the general CC BY-SA 4.0 for that text.",
+  "source_license_values_seen": {
+   "CC BY-SA 4.0": 999,
+   "CC-BY-SA 3.0": 227,
+   "NA": 174,
+   "CC BY 4.0": 10,
+   "CC BY-NC-SA 4.0": 3,
+   "CC BY-NC-ND 4.0": 2,
+   "OpenEdition Books License": 1,
+   "CC BY-NC-ND 2.0": 1,
+   "CC BY-SA 2.0": 1,
+   "CC BY-SA 2.5": 1,
+   "GNU General Public License": 1,
+   "CC BY-NC-ND 3.0": 1
+  },
+  "mapping": {
+   "CC BY-SA 4.0": "open",
+   "CC-BY-SA 3.0": "open",
+   "CC BY 4.0": "open",
+   "CC BY-SA 2.0": "open",
+   "CC BY-SA 2.5": "open",
+   "NA": "exclude: no licence stated",
+   "CC BY-NC-SA 4.0": "exclude: NC",
+   "CC BY-NC-ND 4.0": "exclude: NC/ND",
+   "CC BY-NC-ND 3.0": "exclude: NC/ND",
+   "CC BY-NC-ND 2.0": "exclude: NC/ND",
+   "OpenEdition Books License": "exclude: not CC BY/BY-SA/PD (licence terms not verified)",
+   "GNU General Public License": "exclude: GPL is not CC BY/BY-SA/PD (outside selection rule)"
+  },
+  "manual_annotation_projects": {
+   "NA": "none",
+   "Perseus Ancient Greek Dependency Treebank": "open",
+   "Pedalion Trees": "open",
+   "Harrington Trees": "open",
+   "PROIEL": "drop-manual: CC BY-NC-SA 3.0",
+   "Vanessa Gorman's Ancient Greek Prose Dependency Treebanks": "drop-manual: CC BY-NC-SA 4.0"
+  },
+  "manual_annotation_rule": "sentences with analysis=\"manual\" in texts whose TREEBANK_ANNOTATIONS project is NC (PROIEL, Gorman) are dropped"
+ },
+ "attribution_required": "Keersmaekers, A. GLAUx: the Greek Language AUtomated, github.com/alekkeersmaekers/glaux (commit b077d8f6ff429a5c7245954bc16bb7d1d7948823), CC BY-SA 4.0; plus the SOURCE and, for manual parses, the treebank project and annotators named per text in metadata.txt (Perseus AGDT CC BY-SA 3.0; Pedalion Trees CC BY-SA 4.0; Harrington Trees CC BY-SA 4.0).",
+ "raw_archive": {
+  "basecamp_clone": "~/storagebox/archive/melos-open/glaux/repo (git clone --depth 1, HEAD b077d8f6ff429a5c7245954bc16bb7d1d7948823, 3.6 GB)",
+  "metadata.txt": {
+   "sha256": "40ed4a63fb57520ce6bc11823cf805472017495c1e3ad933174bc0291be7345b",
+   "bytes": 200187,
+   "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/metadata.txt"
+  },
+  "xml_files_used": {
+   "xml/0012-003.xml": {
+    "sha256": "325de96b82042e6a16f839d15bef48eca9bfa60bb73f0a9857db2fed7cbc9a55",
+    "bytes": 5182,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0012-003.xml"
+   },
+   "xml/0020-001.xml": {
+    "sha256": "30cbded40431b8a91e1b6280dc5448ce0d55b4d81e06216e18d9aad396cb6ec9",
+    "bytes": 1170882,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0020-001.xml"
+   },
+   "xml/0020-002.xml": {
+    "sha256": "7f1bb9f1b2df920770b7fb3f63f9507771d46e11f20d76820db03a11e866193a",
+    "bytes": 1005862,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0020-002.xml"
+   },
+   "xml/0020-003.xml": {
+    "sha256": "7bef7cff500fd17ad0da4fafa6ea18b9509a834b8eee0685b8211b1b23bbbb5c",
+    "bytes": 556081,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0020-003.xml"
+   },
+   "xml/0020-006.xml": {
+    "sha256": "23d7374b55be76b2538c35faada2157d243c0bdcafa7868b1738f9b640d6d585",
+    "bytes": 6507,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0020-006.xml"
+   },
+   "xml/0020-008.xml": {
+    "sha256": "f97a60bfb63f73886547014fdc0cef5aa741dad14ac752f0744c9f9766ef3ff9",
+    "bytes": 1222,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0020-008.xml"
+   },
+   "xml/0232-003.xml": {
+    "sha256": "764bb3233007e7ba0b8d9384afb28ae5ab664f985d2a33a1b767ce571f607149",
+    "bytes": 4835,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0232-003.xml"
+   },
+   "xml/0013-001.xml": {
+    "sha256": "d11fc9ea0aef02f4f2911ff1470ff4e991ffa510e775c68b57b3ba730db8fdfe",
+    "bytes": 25246,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-001.xml"
+   },
+   "xml/0013-005.xml": {
+    "sha256": "3412c1f3d11dd3ea2c714e134b3c3d29e36cf93e0c7c0193d9d57128a226135f",
+    "bytes": 337414,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-005.xml"
+   },
+   "xml/0013-009.xml": {
+    "sha256": "f9183a64b9a4c652f81ab6c55e782e49ecdaa788d290f9c61cb5ec9e5bbc6db1",
+    "bytes": 9538,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-009.xml"
+   },
+   "xml/0255-002.xml": {
+    "sha256": "148436f6ad06ac0a26fc129a02e7d05ae0c34b865c18a7f2f1d4aeedb5d2184f",
+    "bytes": 3186,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0255-002.xml"
+   },
+   "xml/0242-003.xml": {
+    "sha256": "c7e312edb78747a0e4da50ad4e8537a1ee9baa14f51de70ada9307882de186ce",
+    "bytes": 16535,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0242-003.xml"
+   },
+   "xml/1274-002.xml": {
+    "sha256": "2fa41077502deeb3b750f71b07d053878d4bf00a55e08f34cef709d31e4e4480",
+    "bytes": 13328,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1274-002.xml"
+   },
+   "xml/0013-006.xml": {
+    "sha256": "2b481a655fd4dc50918f19b339af74ccb73d7c4383d093ca7520abc3a1c185e5",
+    "bytes": 21859,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-006.xml"
+   },
+   "xml/0013-007.xml": {
+    "sha256": "eebae046613f3cc8e78051bb15a4a3dd31ee0984a75e416d7086cfd18dabbf43",
+    "bytes": 71535,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-007.xml"
+   },
+   "xml/0013-010.xml": {
+    "sha256": "37876571b1e7eff40817d5938e0d5201d9be71d1a447f40168d41298212184af",
+    "bytes": 6635,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-010.xml"
+   },
+   "xml/0013-011.xml": {
+    "sha256": "d1a548f3788270851824526de3e9bead3b019d41019e909e62a0ba6dc468e7ff",
+    "bytes": 5841,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-011.xml"
+   },
+   "xml/0013-012.xml": {
+    "sha256": "9a84002048bcb88be3c86ab9f3a258c4216d4212993e5b04f8f5b03815c8b1c2",
+    "bytes": 4898,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-012.xml"
+   },
+   "xml/0013-013.xml": {
+    "sha256": "a903b2459f251a68f322f9cf31042aeae2b1f14230ef0cc5648ff912d0277b5d",
+    "bytes": 4054,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-013.xml"
+   },
+   "xml/0013-014.xml": {
+    "sha256": "c34f578bb7abb391724250169f4242c2eb7d3022fc4259ac85ff05c624c8a9b7",
+    "bytes": 7184,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-014.xml"
+   },
+   "xml/0013-016.xml": {
+    "sha256": "cfb89933caa3dfdf1721e5ded95b0b6680408ab21a95fdafcfe1f2c820a4d119",
+    "bytes": 6008,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-016.xml"
+   },
+   "xml/0013-017.xml": {
+    "sha256": "390386696cdbe2a787f23b9e7a255619ff8ebec70ef7dee63aab43847a2c425f",
+    "bytes": 5101,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-017.xml"
+   },
+   "xml/0013-021.xml": {
+    "sha256": "662f4371446329f0f40e3ed8865f49bf2f97c4608376c08fc1b316ffec981062",
+    "bytes": 6303,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-021.xml"
+   },
+   "xml/0013-022.xml": {
+    "sha256": "6972015d09c45e9e623908eccafab8ae7abb90593715419915daff87e5301dfe",
+    "bytes": 7922,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-022.xml"
+   },
+   "xml/0013-023.xml": {
+    "sha256": "52f642536ee54f24641f7c075139bed9d6a86e6bc7944fc2bf9d04a5b4d03ff6",
+    "bytes": 4133,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-023.xml"
+   },
+   "xml/0013-024.xml": {
+    "sha256": "3f09d34b4cec4cecfb741e376bf525c789a6bb47ec224e7f2a3fcbf9c4445af2",
+    "bytes": 5698,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-024.xml"
+   },
+   "xml/0013-025.xml": {
+    "sha256": "5fe593d7759bc19aed0ac25a73dbf0539b91a3921e633505adfdf08c09f43ee6",
+    "bytes": 9013,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-025.xml"
+   },
+   "xml/0013-026.xml": {
+    "sha256": "6da3be3622ef860d98011f0b277cec340c106c5168269f681721becf24047183",
+    "bytes": 14604,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-026.xml"
+   },
+   "xml/0013-027.xml": {
+    "sha256": "4019e0eee1fd4e676a46bfc031e7b7ca4cdb3b4084944676033eb5638ef15216",
+    "bytes": 22353,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-027.xml"
+   },
+   "xml/0013-028.xml": {
+    "sha256": "1c232daf6482d080a9869dd1faf74b3c5c74c09b7e7afbeb069489ca794d1d1f",
+    "bytes": 19551,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-028.xml"
+   },
+   "xml/0013-029.xml": {
+    "sha256": "8fc938c7aecb5d770ebb36088b9b9b88d7438b1ac3493bc0bbf843f112675c15",
+    "bytes": 16319,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-029.xml"
+   },
+   "xml/0013-030.xml": {
+    "sha256": "d30a3726130213f5da1cf6edd214a8e27bf1bdfc458232a13a619f54b7de91d2",
+    "bytes": 22224,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-030.xml"
+   },
+   "xml/0288-003.xml": {
+    "sha256": "9c363fbf4396fb88052377da792b1b50434d4ae381ede9bb796e9423901e0cc9",
+    "bytes": 6754,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0288-003.xml"
+   },
+   "xml/0631-002.xml": {
+    "sha256": "152461bdc8c089adf6fd0c7560d5fab3ee639d8141fc25822fd6f10b55dbe973",
+    "bytes": 1729,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0631-002.xml"
+   },
+   "xml/0009-002.xml": {
+    "sha256": "29a89137780740148edd16f3b8d99be39421c7a52da6c1ff0dee5e985e9fa56a",
+    "bytes": 15188,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0009-002.xml"
+   },
+   "xml/0237-004.xml": {
+    "sha256": "4cc8a3965c955dc2d609b623c64d514b9f6ca6a287f8ec344f55bfcabe44dfab",
+    "bytes": 82355,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0237-004.xml"
+   },
+   "xml/0245-002.xml": {
+    "sha256": "8754129ca5986b22a1c7e5ecdc64191d4155a67ff0d31a844d1dc9759ccfee98",
+    "bytes": 20925,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0245-002.xml"
+   },
+   "xml/0249-001.xml": {
+    "sha256": "0c3c345c5533e654ab90acd97f23af967a6912de26fcbaac52d7542af342ba4b",
+    "bytes": 2812,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0249-001.xml"
+   },
+   "xml/1433-001.xml": {
+    "sha256": "3997b7a1fe564bee3a113e7d573b9846fe8546d75d177f40568a0e31341802fd",
+    "bytes": 1354,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1433-001.xml"
+   },
+   "xml/0013-002.xml": {
+    "sha256": "3103c7310c203adbadb5a82dd4d612abb07cb1494f309a5034dac0d980a959b6",
+    "bytes": 567226,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-002.xml"
+   },
+   "xml/0013-003.xml": {
+    "sha256": "97c659b049b49cc3869773a7eaef837a25fda72aaad6019002795c3df6a7de9c",
+    "bytes": 635228,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-003.xml"
+   },
+   "xml/0013-004.xml": {
+    "sha256": "9fa3ff1c086bac206eadc532472e3ce542ba93bf8448e9426d435d405b0b17bd",
+    "bytes": 679848,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-004.xml"
+   },
+   "xml/0013-015.xml": {
+    "sha256": "e73451a3298b601cb043b7678d0288ec67b4acc8b29c1e9a74fa212defaa3d71",
+    "bytes": 10237,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-015.xml"
+   },
+   "xml/0013-018.xml": {
+    "sha256": "3060af02453c11e16374af848e0d7e68d00376d467ace3e3b0ae9511aaf30840",
+    "bytes": 12995,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-018.xml"
+   },
+   "xml/0366-001.xml": {
+    "sha256": "266211c029c1bfa02eec6254cc5762593c9da1a2d8d0bd11472a3b41755b6543",
+    "bytes": 2342,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0366-001.xml"
+   },
+   "xml/1604-001.xml": {
+    "sha256": "3c48d25027c3d5ef12ecb2f1be69c0e302b5f3ee49e7f3ce2c9e45c3a5f65b08",
+    "bytes": 44983,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1604-001.xml"
+   },
+   "xml/1604-002.xml": {
+    "sha256": "27af4bdb343dbf8a54a5342b68c0c063d28fc7dbbf4a11d8981c7f8715296c6d",
+    "bytes": 6210,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1604-002.xml"
+   },
+   "xml/0002-001.xml": {
+    "sha256": "6ed609cfec600ec95a4c42c7b2c1ab87c0a207189553ad3d837f1a7573a232b1",
+    "bytes": 2022332,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0002-001.xml"
+   },
+   "xml/0085-010.xml": {
+    "sha256": "b166d59129618605b3a916d1829aee360dd4311cb91e5349b1ad8c84cb84adc6",
+    "bytes": 8923,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0085-010.xml"
+   },
+   "xml/0258-001.xml": {
+    "sha256": "dc19359db278745d33abc0c883a790a5b6fcfe491e7a183e60f8b5bfbb6f2ebf",
+    "bytes": 2196,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0258-001.xml"
+   },
+   "xml/0033-001.xml": {
+    "sha256": "d79bc4e7aafeeba437f4d1f9e388d3ae5b1fc507b1d21f142ee1c0dd493b618e",
+    "bytes": 1270023,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0033-001.xml"
+   },
+   "xml/0033-002.xml": {
+    "sha256": "a0c0878caa5b3230b73a32feff8d8d7a91fc8a01bfe800bfc09138a9c7a7af9d",
+    "bytes": 1631143,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0033-002.xml"
+   },
+   "xml/0033-003.xml": {
+    "sha256": "162d6b4f9ee7393072f31c3193816755c0634cbe63a1779d368fc06afa0796a4",
+    "bytes": 1062104,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0033-003.xml"
+   },
+   "xml/0033-004.xml": {
+    "sha256": "874b492b176426912fe3bdb14ef84a62833c06b2ba5333ba1bf0bcb35f3d8709",
+    "bytes": 627859,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0033-004.xml"
+   },
+   "xml/0632-005.xml": {
+    "sha256": "0db072efe9e72146c68514d25e59c10d3b81d85c78a9044cb2f6ea6cad3fdb8c",
+    "bytes": 1513,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0632-005.xml"
+   },
+   "xml/0261-003.xml": {
+    "sha256": "bfee606ea9d5db026928163e5dcf90b84faf1b55acf3c15a31175f0f27dc2455",
+    "bytes": 343859,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0261-003.xml"
+   },
+   "xml/0367-001.xml": {
+    "sha256": "e21551763deea03a508d8cf42726f1b39b88476adc5e1834f662fa863e2d63fb",
+    "bytes": 820,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0367-001.xml"
+   },
+   "xml/0267-002.xml": {
+    "sha256": "9153c02f72238e82e1beef4f79fd5e462455cd39eb4689e26c9e972d3ad50f0f",
+    "bytes": 69862,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0267-002.xml"
+   },
+   "xml/0267-003.xml": {
+    "sha256": "b74f8b0985741ea743531dc324037874becb63382adb816e36acd5afc05edf51",
+    "bytes": 5869,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0267-003.xml"
+   },
+   "xml/0199-001.xml": {
+    "sha256": "130d956f392117b834a40a9a4b1093fa9fb8ce99f6fe082320393fbe2f7baa51",
+    "bytes": 778479,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0199-001.xml"
+   },
+   "xml/0199-002.xml": {
+    "sha256": "ebc11d5fee2692876bd1b712e89d6f8dcfc32513b044ddb663c2972efe66f504",
+    "bytes": 279239,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0199-002.xml"
+   },
+   "xml/0199-009.xml": {
+    "sha256": "58cc14cd59827fc6bf6d867ec5075e536c4bee04eded43bc5b11fac4af711358",
+    "bytes": 9351,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0199-009.xml"
+   },
+   "xml/2138-001.xml": {
+    "sha256": "4b805004d04653579783853bc5d999e4c4d8adba24edd92f0be5b3cc1820f68b",
+    "bytes": 4738,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/2138-001.xml"
+   },
+   "xml/1342-002.xml": {
+    "sha256": "ae05b6ff304bc9d939b6b8f3d472440fa505f00c32d33cf72d271f017924a1ef",
+    "bytes": 11347,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1342-002.xml"
+   },
+   "xml/0006-031.xml": {
+    "sha256": "8031a9c930d0c797fe60d69dbf7cd443ca4914b6bdbe5f63f52efd32c749fbb3",
+    "bytes": 5485,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0006-031.xml"
+   },
+   "xml/0013-019.xml": {
+    "sha256": "253b3033d756a9186ecf3a02d8553a7529c9a13364b7d28d6455215711e6a309",
+    "bytes": 55158,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-019.xml"
+   },
+   "xml/0013-020.xml": {
+    "sha256": "4588ddc3c2bfc6a0415e3d4fd01802d9dd7e882befd93cd07f17bcd153ca0bcc",
+    "bytes": 8747,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-020.xml"
+   },
+   "xml/0013-031.xml": {
+    "sha256": "1c4f44df79e7ce543c8f7a1c9cd63d10503ccd9e48e40e107ac84509c5f36c2d",
+    "bytes": 22211,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-031.xml"
+   },
+   "xml/0013-032.xml": {
+    "sha256": "80a97158f592b8cb961db1a906567a2e82bb8c52bc928100ed8f2ecc5e107ce0",
+    "bytes": 21734,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-032.xml"
+   },
+   "xml/0013-033.xml": {
+    "sha256": "66b21fe9c1bb1837921c4aab9141d44726c8b15af6d5ec76ea07582d46feab93",
+    "bytes": 19571,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0013-033.xml"
+   },
+   "xml/0003-002.xml": {
+    "sha256": "1f0e869390bd4f6132d7a6d91bec5b00f884ba699c7ca13d27ff1bf980eb1783",
+    "bytes": 6414,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0003-002.xml"
+   },
+   "xml/0265-003.xml": {
+    "sha256": "34960cfdd5b1f3c6b1261552557fc65d9a23edd0598977cdc8ea5dedd306dc30",
+    "bytes": 2621,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0265-003.xml"
+   },
+   "xml/0239-003.xml": {
+    "sha256": "be6cc94007f6869ba12add45d26b9a7a34115e9f1604e7f3dc3476c452f2ae8d",
+    "bytes": 8678,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0239-003.xml"
+   },
+   "xml/1567-001.xml": {
+    "sha256": "457a5b9d5a87349a714f8e9d92adedcfeb1d9c4ec078ce2a829c9310731c9e54",
+    "bytes": 12054,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1567-001.xml"
+   },
+   "xml/0497-005.xml": {
+    "sha256": "f553fb48ff84ecdb200e450115400c5b0db7eb987e91eaf206663b5efc044194",
+    "bytes": 14583,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0497-005.xml"
+   },
+   "xml/0679-001.xml": {
+    "sha256": "5851b2b2e1d05eef492d2f576ac4cc84bf0f81bf2d82957f84634828726d4863",
+    "bytes": 12608,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0679-001.xml"
+   },
+   "xml/0227-001.xml": {
+    "sha256": "069fa5467a27ef687351c7ab764f2f8f58b1146e27cf85a698ef92562268a009",
+    "bytes": 40488,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0227-001.xml"
+   },
+   "xml/1355-002.xml": {
+    "sha256": "b79731c9f55ecb852138779e2becfd96f073c7cc2f0057ffd06b09444c3b4d48",
+    "bytes": 30762,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1355-002.xml"
+   },
+   "xml/1692-004.xml": {
+    "sha256": "c4a0c8b4655af2e175fb4736b86a63d236556ab11584bfb4318870fe8aab900b",
+    "bytes": 3041,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1692-004.xml"
+   },
+   "xml/0336-003.xml": {
+    "sha256": "a1e38327d3cf9c937d0c7cdaf41664598e3826605e66ff88ee88a567dc322abb",
+    "bytes": 12027,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0336-003.xml"
+   },
+   "xml/0216-002.xml": {
+    "sha256": "6b10080fbf90c367a0f0b8737ef6ed8b75d5fbed3e457e7163e36d7eb5ae97b8",
+    "bytes": 20257,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0216-002.xml"
+   },
+   "xml/0533-003.xml": {
+    "sha256": "8a8403550ad8edf27d73bc875cba1db46a64f082571896f215e0a10f929bee9f",
+    "bytes": 380077,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0533-003.xml"
+   },
+   "xml/0533-004.xml": {
+    "sha256": "841192b5bbfb68e01798fee4b21469b8f761a141692937fc209c36a664b0344f",
+    "bytes": 392511,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0533-004.xml"
+   },
+   "xml/0533-006.xml": {
+    "sha256": "e34ff03ffc674924b18f11f9bf4f8650c44f438c53338053e31d31aa8a1cf261",
+    "bytes": 852826,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0533-006.xml"
+   },
+   "xml/0533-015.xml": {
+    "sha256": "a63c4563e2e3a7e57de819476bfea0b52adee9310bf56c5e4e3bac73d60da733",
+    "bytes": 119861,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0533-015.xml"
+   },
+   "xml/0533-016.xml": {
+    "sha256": "e41a7197e63e464de635df44d7d57fa0d98e27cf55ff52551a0f8310a565c321",
+    "bytes": 136138,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0533-016.xml"
+   },
+   "xml/0533-017.xml": {
+    "sha256": "7d0b1d029231cac0722d12e20c954ca8253a730a27a582666c86f622e23ba61c",
+    "bytes": 311187,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0533-017.xml"
+   },
+   "xml/0533-018.xml": {
+    "sha256": "2eabb224adf9fa1a182fdd75f4655ce35425c0bee8cac1b55bbde540e70d8c89",
+    "bytes": 365911,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0533-018.xml"
+   },
+   "xml/0533-019.xml": {
+    "sha256": "384a8bf7a6f55b518d737d7fcc6f7d0f81a3fa275fdd47cddc0fee3a1e97753d",
+    "bytes": 155407,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0533-019.xml"
+   },
+   "xml/0533-020.xml": {
+    "sha256": "39fe9689fe164327abe9b2cf2be6dfcb7b39a911195a375685d16fdd78d26f00",
+    "bytes": 167067,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0533-020.xml"
+   },
+   "xml/0541-042a.xml": {
+    "sha256": "c026bc0323ea22f5514d30cc0c8e1d38b6c570dfec913422b5ff361801c876bc",
+    "bytes": 383042,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0541-042a.xml"
+   },
+   "xml/0541-042b.xml": {
+    "sha256": "43ba9a1674efc56e1ce4426bab1570d65fce2da187c27f60ff44381d95bd9250",
+    "bytes": 74728,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0541-042b.xml"
+   },
+   "xml/0541-042c.xml": {
+    "sha256": "526ab5955f3eea276219ec2af34d34fb512d96bf4aa86fe67c685328c354569f",
+    "bytes": 29595,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0541-042c.xml"
+   },
+   "xml/0541-044.xml": {
+    "sha256": "737714a185d7dbd3753a528c6d68eb441fbbc7064e569cb54ed24920a0d15396",
+    "bytes": 4868,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0541-044.xml"
+   },
+   "xml/0220-002.xml": {
+    "sha256": "de3b2a81cc6e33e278a9be9a6df6c419ba976bc1fb52b14544d4717e54750931",
+    "bytes": 11125,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0220-002.xml"
+   },
+   "xml/0487-008.xml": {
+    "sha256": "a3536e6c12f6cea180908f10706f0141f915524ed3df1da372f41a14e2aac6d6",
+    "bytes": 3687,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0487-008.xml"
+   },
+   "xml/0211-002.xml": {
+    "sha256": "04c81331606d483658935ed15b6695186f0cc7f369ffd46be9ebf51cbe6fc063",
+    "bytes": 87671,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0211-002.xml"
+   },
+   "xml/0005-001.xml": {
+    "sha256": "071e694d117cbb0e28a831f620c4341760b7e168b057e4c1f783b2f3156d11fa",
+    "bytes": 4239570,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0005-001.xml"
+   },
+   "xml/0005-002.xml": {
+    "sha256": "2a2673eef04c27b07b95365684eb1f11aa39ba8f4887ca52dd6f6a7de5929248",
+    "bytes": 323233,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0005-002.xml"
+   },
+   "xml/0005-005.xml": {
+    "sha256": "db458e26d3117a2409718fc8ae51d08fd5852a89df4d02f2fff55d1934c47439",
+    "bytes": 152508,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0005-005.xml"
+   },
+   "xml/1735-002.xml": {
+    "sha256": "1489c5aff6bf51b48717258f64830d618b5b9d6f605153b8fd7555093c3bd799",
+    "bytes": 3783,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1735-002.xml"
+   },
+   "xml/0215-002.xml": {
+    "sha256": "ebbb2416250358654f1f7f679aad571ac81cc1e24387aa0c4d1b9c767a1e9b0b",
+    "bytes": 12572,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0215-002.xml"
+   },
+   "xml/0568-002.xml": {
+    "sha256": "849d51ffc7e46e11bd01aa8124dc2487bad55bcbfcbeaa3e13c25c342346d7eb",
+    "bytes": 8433,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0568-002.xml"
+   },
+   "xml/0001-001.xml": {
+    "sha256": "766d6e50c395415172c4b534b08222967207b770a74fe15cb59e9ee8c46882c6",
+    "bytes": 7247304,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0001-001.xml"
+   },
+   "xml/0570-002.xml": {
+    "sha256": "46efb4cfac6197d4d3fe91722f56801ad03f51cdaa7b11ae123b8cf559c014f1",
+    "bytes": 6905,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0570-002.xml"
+   },
+   "xml/0131-001.xml": {
+    "sha256": "cb5240b9a4e4232f24db851956641f02c163ba8711c1b64c4c7b5ca3626832a7",
+    "bytes": 8992,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0131-001.xml"
+   },
+   "xml/0137-001.xml": {
+    "sha256": "a82ed833448bd38c754577d808332a6b2b15d531c26e851634ea9bbfd4486d6f",
+    "bytes": 273363,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0137-001.xml"
+   },
+   "xml/0174-001.xml": {
+    "sha256": "e7a5df202efcf00b8a035712d4182c4333d2e83598356ab226bf846848e68bba",
+    "bytes": 54213,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0174-001.xml"
+   },
+   "xml/2622-001.xml": {
+    "sha256": "e0fa00450a13c4fe2cd93925a1c04ef78a634d763e5e9d1f87342f465766f699",
+    "bytes": 8755,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/2622-001.xml"
+   },
+   "xml/1799-017.xml": {
+    "sha256": "a4192e3bc5d47f862dffd499bb24a75aa5cb2130c70d9cc5435c99a4a19a8167",
+    "bytes": 8075,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1799-017.xml"
+   },
+   "xml/0221-004.xml": {
+    "sha256": "0351d55f0f65463136fca897c5c5528e2faa3d663b3ab95059a28a7993db068e",
+    "bytes": 12988,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0221-004.xml"
+   },
+   "xml/0198-001.xml": {
+    "sha256": "bcb70544fc5175d1c4ecb21d0d2e77180aa877011b5caf927b43b54ce9e508ab",
+    "bytes": 34060,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0198-001.xml"
+   },
+   "xml/1391-001.xml": {
+    "sha256": "bf8ac2b5f7322da5291e984cbb32cc1288c6d78755c45912c1c5ea07219e1ea0",
+    "bytes": 5788,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1391-001.xml"
+   },
+   "xml/0218-002.xml": {
+    "sha256": "02b9a0a12c7a3f6bf9b54a820f56f513bbb97b8cfcb7bb082062991eba6eee0a",
+    "bytes": 26938,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0218-002.xml"
+   },
+   "xml/1533-001.xml": {
+    "sha256": "51e4a78452c333e68c26b7bb943242d46363f5ba9094920af43049cd8bc01d54",
+    "bytes": 38000,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1533-001.xml"
+   },
+   "xml/1577-001.xml": {
+    "sha256": "3e292508adef50a95d08e3924c322a54b3c6b6dc5cf1a21f4786b7420a643b7d",
+    "bytes": 31754,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1577-001.xml"
+   },
+   "xml/1632-001.xml": {
+    "sha256": "7cb3990d9cbf5a51ea561b6e389338ef87508e8847a7bbfd16ac5de592de27cd",
+    "bytes": 165980,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1632-001.xml"
+   },
+   "xml/0059-039.xml": {
+    "sha256": "114964335158a9416b705129341420878d5db27bdfce6a697462980221e7eb1a",
+    "bytes": 109925,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0059-039.xml"
+   },
+   "xml/0219-002.xml": {
+    "sha256": "b6bf3ead6767444f4c020d982a17e940d445aa4a2483a305aa6b0f60576fefe6",
+    "bytes": 73796,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0219-002.xml"
+   },
+   "xml/1715-001.xml": {
+    "sha256": "238ec16c31b00b8a06b112c59177ec8e2cd3ba2504a4f8438ead31587401f4ed",
+    "bytes": 110135,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1715-001.xml"
+   },
+   "xml/0208-001.xml": {
+    "sha256": "6e065a91cc44cf8cd676860f775aaf855acedf6bbb808030e229c088df0af47d",
+    "bytes": 15211,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0208-001.xml"
+   },
+   "xml/0022-006.xml": {
+    "sha256": "6ef8952ef3424e0459a42a233946d9016e8a2d602439572d5270d2b8f08f1e7f",
+    "bytes": 14875,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0022-006.xml"
+   },
+   "xml/1556-002.xml": {
+    "sha256": "56cb99bae3f9edaa2d17df9b166aaf320c81233c25db73551b2d357b50a83bf2",
+    "bytes": 16748,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/1556-002.xml"
+   },
+   "xml/0036-001.xml": {
+    "sha256": "d790b64b1d4a16b8b3246817ef9f9b5741107e3da4eaa6696a048e50f23a5871",
+    "bytes": 137645,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0036-001.xml"
+   },
+   "xml/0036-002.xml": {
+    "sha256": "6ccb5c90621267254ad6b4f51147a045d2d95ea06730467e40eb5c59dadb36a7",
+    "bytes": 49284,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0036-002.xml"
+   },
+   "xml/0036-003.xml": {
+    "sha256": "859ca216cbeb9a29b2b016362a560e243974b37c19be9ef0f7717408ef2b37ac",
+    "bytes": 186436,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0036-003.xml"
+   },
+   "xml/0035-001.xml": {
+    "sha256": "375557828bad110f921376344f2852b200ea35c27f4d6673076bf96b925fb979",
+    "bytes": 48742,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0035-001.xml"
+   },
+   "xml/0035-002.xml": {
+    "sha256": "4f498c3297721ade507fc6b4a1c0e7a27fc4cb8bcd185ee82b1cfb88644bf345",
+    "bytes": 208933,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0035-002.xml"
+   },
+   "xml/0035-003.xml": {
+    "sha256": "7b76fe6fcc0f71c3dbdfa7fb5778a837e35e3402b88f1886e020bf19621b7b69",
+    "bytes": 166880,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0035-003.xml"
+   },
+   "xml/0035-004.xml": {
+    "sha256": "2fcab98478f2739497e7bac884b63f05fa6de10e9c3250db4e4b9e2e78e01b58",
+    "bytes": 159319,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0035-004.xml"
+   },
+   "xml/0035-005.xml": {
+    "sha256": "53538ab0c00ea7727411069150cccebac55e28d398a9f9e9e1a2a904f923d7c7",
+    "bytes": 48137,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0035-005.xml"
+   },
+   "xml/0035-006.xml": {
+    "sha256": "d2aa8f06b41d2d1555074283d53ccc2bf70bc766f6c77f9aaed4292894bd7b4d",
+    "bytes": 63830,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0035-006.xml"
+   },
+   "xml/0209-001.xml": {
+    "sha256": "9728e7748d035a8a03c8950242fa426136c10eeea88e9359e7b20b41e4a747d0",
+    "bytes": 2969,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0209-001.xml"
+   },
+   "xml/0127-001.xml": {
+    "sha256": "6583e4a1b774ef86d7a41cc2d094592f943acbe002232adb93b1e112e1183b17",
+    "bytes": 4460,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0127-001.xml"
+   },
+   "xml/0165-001.xml": {
+    "sha256": "a756da4c5fa7551b5510f2f9680141d476dfea289baa11269fcdaebbbd0e205a",
+    "bytes": 43106,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0165-001.xml"
+   },
+   "xml/0146-001.xml": {
+    "sha256": "b1ca1d247c50998aa8415e1875a4775d39e70855f26b64ff448b1b8c2999c1c5",
+    "bytes": 8194,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0146-001.xml"
+   },
+   "xml/2139-001.xml": {
+    "sha256": "1c71335a95792a848c22fd68876a40b20c90a6bdf60205ba5916569189fea8ea",
+    "bytes": 10331,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/2139-001.xml"
+   },
+   "xml/0614-001.xml": {
+    "sha256": "81436b42f40baf4fcf6a30773b74af5344144d33f6b31b2a733cc1500e34e8c0",
+    "bytes": 2468106,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0614-001.xml"
+   },
+   "xml/0186-005.xml": {
+    "sha256": "872825b0465014154e3c05077d2eed497ada59faac185d8fd85163cc72a1980d",
+    "bytes": 11201,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0186-005.xml"
+   },
+   "xml/0062-071.xml": {
+    "sha256": "356c2a6502f8ec6e2680a5ec31201bbb408e8d5d922cb966b989d713ce054dda",
+    "bytes": 419597,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0062-071.xml"
+   },
+   "xml/0268-002.xml": {
+    "sha256": "38d15bd8390e81feca2960d8dda5ded10271102cf72feecad9e2318af853bc7c",
+    "bytes": 23864,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0268-002.xml"
+   },
+   "xml/0061-010.xml": {
+    "sha256": "b738227911caa524a3c5e9a946bfa5a75d94665b479ba330acbfc0ec2e83a102",
+    "bytes": 228413,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0061-010.xml"
+   },
+   "xml/0141-002.xml": {
+    "sha256": "64dfdd7fd12b65bed283b883869c7b1adc6cb071044ae92301ee93ee48f790a3",
+    "bytes": 8087,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0141-002.xml"
+   },
+   "xml/0638-009.xml": {
+    "sha256": "c143b5bfa383e1ae0e2226f639922f870963831afb9032dfb1c5b6bf74c48052",
+    "bytes": 9933,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0638-009.xml"
+   },
+   "xml/0004-002.xml": {
+    "sha256": "c8a9220a480ce5805d4988a5fb6355605d2c27e9d439cac30d70f5e6d28480ae",
+    "bytes": 221175,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0004-002.xml"
+   },
+   "xml/0658-002.xml": {
+    "sha256": "f0ffa86a0b3ea2049bce0c9610ffee7bca4b6256d2a500a8abaef3bc829d1c72",
+    "bytes": 16931,
+    "url": "https://raw.githubusercontent.com/alekkeersmaekers/glaux/b077d8f6ff429a5c7245954bc16bb7d1d7948823/xml/0658-002.xml"
+   }
+  }
+ },
+ "selection_rules": {
+  "genre": [
+   "Lyric poetry"
+  ],
+  "melos_author_exact_AUTHOR_STANDARD": {
+   "Sappho": "Sappho",
+   "Alcaeus": "Alcaeus",
+   "Alcman": "Alcman",
+   "Anacreon": "Anacreon",
+   "Anacreontea": "Anacreontea",
+   "Archilochus": "Archilochus",
+   "Hipponax": "Hipponax",
+   "Semonides": "Semonides",
+   "Mimnermus": "Mimnermus",
+   "Tyrtaeus": "Tyrtaeus",
+   "Solon": "Solon",
+   "Theognis": "Theognis",
+   "Phocylides": "Phocylides",
+   "Simonides": "Simonides",
+   "Pindar": "Pindarus",
+   "Bacchylides": "Bacchylides",
+   "Stesichorus": "Stesichorus",
+   "Ibycus": "Ibycus",
+   "Corinna": "Corinna",
+   "Callinus": "Callinus",
+   "Xenophanes": "Xenophanes",
+   "Hesiod": "Hesiodus",
+   "Homeric Hymns": "Hymni Homerici",
+   "Theocritus": "Theocritus",
+   "Callimachus": "Callimachus",
+   "Apollonius": "Apollonius Rhodius"
+  },
+  "rule": "candidate if GENRE_STANDARD == 'Lyric poetry' OR AUTHOR_STANDARD in the Melos list; kept only if SOURCE_LICENSE maps to open"
+ },
+ "melos_authors_present_in_glaux": [
+  "Anacreon",
+  "Anacreontea",
+  "Apollonius",
+  "Archilochus",
+  "Bacchylides",
+  "Callimachus",
+  "Hesiod",
+  "Homeric Hymns",
+  "Mimnermus",
+  "Phocylides",
+  "Pindar",
+  "Sappho",
+  "Simonides",
+  "Theocritus",
+  "Theognis",
+  "Xenophanes"
+ ],
+ "melos_authors_absent_from_glaux": [
+  "Alcaeus",
+  "Alcman",
+  "Hipponax",
+  "Semonides",
+  "Tyrtaeus",
+  "Solon",
+  "Stesichorus",
+  "Ibycus",
+  "Corinna",
+  "Callinus"
+ ],
+ "selected_texts": 146,
+ "excluded_candidates": [
+  {
+   "glaux_text_id": "7",
+   "tlg": "0298-001",
+   "author_standard": "Eumelus",
+   "title_standard": "Fragmentum",
+   "source_license": "NA",
+   "tokens": "14",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "12",
+   "tlg": "0020-004",
+   "author_standard": "Hesiodus",
+   "title_standard": "Fragmenta",
+   "source_license": "NA",
+   "tokens": "9107",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "14",
+   "tlg": "0020-007",
+   "author_standard": "Hesiodus",
+   "title_standard": "Fragmenta",
+   "source_license": "NA",
+   "tokens": "513",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "18",
+   "tlg": "0232-002",
+   "author_standard": "Archilochus",
+   "title_standard": "Fragmenta lyrica",
+   "source_license": "NA",
+   "tokens": "319",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "32",
+   "tlg": "0299-001",
+   "author_standard": "Terpander",
+   "title_standard": "Fragmenta",
+   "source_license": "NA",
+   "tokens": "70",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "69",
+   "tlg": "0631-001",
+   "author_standard": "Pittacus",
+   "title_standard": "Fragmentum",
+   "source_license": "NA",
+   "tokens": "24",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "71",
+   "tlg": "0253-001",
+   "author_standard": "Homerus",
+   "title_standard": "Margites",
+   "source_license": "CC BY-NC-ND 4.0",
+   "tokens": "143",
+   "reason": "exclude: NC/ND"
+  },
+  {
+   "glaux_text_id": "76",
+   "tlg": "1667-004",
+   "author_standard": "Septem Sapientes",
+   "title_standard": "Sententiae",
+   "source_license": "NA",
+   "tokens": "673",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "77",
+   "tlg": "1667-005",
+   "author_standard": "Septem Sapientes",
+   "title_standard": "Praecepta",
+   "source_license": "NA",
+   "tokens": "535",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "85",
+   "tlg": "0237-003",
+   "author_standard": "Anacreon",
+   "title_standard": "Fragmenta",
+   "source_license": "OpenEdition Books License",
+   "tokens": "11",
+   "reason": "exclude: not CC BY/BY-SA/PD (licence terms not verified)"
+  },
+  {
+   "glaux_text_id": "88",
+   "tlg": "0365-001",
+   "author_standard": "Apollodorus",
+   "title_standard": "Fragmentum",
+   "source_license": "NA",
+   "tokens": "9",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "89",
+   "tlg": "1223-001",
+   "author_standard": "Bias",
+   "title_standard": "Fragmentum",
+   "source_license": "NA",
+   "tokens": "23",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "91",
+   "tlg": "0244-001",
+   "author_standard": "Cleobulina Scriptor Aenigmatum",
+   "title_standard": "Fragmenta",
+   "source_license": "NA",
+   "tokens": "35",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "93",
+   "tlg": "0245-001",
+   "author_standard": "Demodocus",
+   "title_standard": "Fragmenta",
+   "source_license": "NA",
+   "tokens": "120",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "127",
+   "tlg": "0368-001",
+   "author_standard": "Cydias",
+   "title_standard": "Fragmentum",
+   "source_license": "NA",
+   "tokens": "11",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "655",
+   "tlg": "0215-001",
+   "author_standard": "Antagoras",
+   "title_standard": "Epigrammata",
+   "source_license": "NA",
+   "tokens": "65",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "757",
+   "tlg": "1493-001",
+   "author_standard": "Melinno",
+   "title_standard": "Εἰς Ῥώμην",
+   "source_license": "NA",
+   "tokens": "98",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "907",
+   "tlg": "4150-001a",
+   "author_standard": "Anacreontea",
+   "title_standard": "Anacreontea",
+   "source_license": "NA",
+   "tokens": "2540",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "908",
+   "tlg": "1836-001",
+   "author_standard": "Anonymi Aulodia",
+   "title_standard": "Anonymi aulodia",
+   "source_license": "NA",
+   "tokens": "273",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "1345",
+   "tlg": "1353-001",
+   "author_standard": "Epitaphium Abercii",
+   "title_standard": "Epitaphium",
+   "source_license": "NA",
+   "tokens": "173",
+   "reason": "exclude: no licence stated"
+  },
+  {
+   "glaux_text_id": "1656",
+   "tlg": "0061-009",
+   "author_standard": "Pseudo-Lucianus",
+   "title_standard": "Epigramma",
+   "source_license": "NA",
+   "tokens": "33",
+   "reason": "exclude: no licence stated"
+  }
+ ],
+ "annotation_counts": {
+  "auto": 190038,
+  "manual": 23585
+ },
+ "manual_tokens_dropped_nc": 0,
+ "tokens_per_author_word_tokens": {
+  "Apollonius": 39540,
+  "Theocritus": 22659,
+  "Pindar": 21743,
+  "Hesiod": 16717,
+  "Callimachus": 16375,
+  "Homeric Hymns": 16161,
+  "Valerius Babrius": 11684,
+  "Theognis": 9948,
+  "Bacchylides": 4868,
+  "Moschus": 3814,
+  "Menander": 2596,
+  "Bion": 1884,
+  "Lucianus": 1812,
+  "Simonides": 1592,
+  "Asclepiades": 1256,
+  "Pseudo-Lucianus": 1066,
+  "Diogenes Laertius": 1056,
+  "Posidippus": 760,
+  "Plato": 558,
+  "Theodoridas": 505,
+  "Simias": 417,
+  "Xenophanes": 404,
+  "Anacreon": 379,
+  "Rhianus": 345,
+  "Phocylides": 269,
+  "Diotimus": 255,
+  "Anonymi Curetum Hymnus": 220,
+  "Diodorus": 197,
+  "Nicias": 173,
+  "Hedylus": 154,
+  "Erinna": 143,
+  "Phaedimus": 139,
+  "Nicaenetus": 121,
+  "Mesomedes": 108,
+  "Demodocus": 95,
+  "Alexander": 92,
+  "Asius": 88,
+  "Plato Comicus": 84,
+  "Heliodorus": 83,
+  "Pancrates": 77,
+  "Dosiadas": 70,
+  "Sappho": 69,
+  "Nicander": 69,
+  "Parrhasius": 65,
+  "Epitaphium Sicili": 65,
+  "Euphorion": 63,
+  "Cleobulus": 61,
+  "Aeschrion": 61,
+  "Antagoras": 58,
+  "Crates": 57,
+  "Dorieus Poeta": 54,
+  "Empedocles": 53,
+  "Marcus Cornelius Fronto": 53,
+  "Moero": 51,
+  "Flavius Philostratus": 47,
+  "Euclides": 46,
+  "Aeschylus": 42,
+  "Antimachus": 41,
+  "Archimelus": 41,
+  "Antigonus": 39,
+  "Athenaeus": 38,
+  "Boethus": 37,
+  "Canticum Euripidis": 32,
+  "Thucydides": 32,
+  "Pisander": 29,
+  "Archelaus": 29,
+  "Euripides": 26,
+  "Aulus Licinius Archias": 26,
+  "Hegemon": 25,
+  "Homerus": 24,
+  "Archilochus": 21,
+  "Seleucus": 18,
+  "Echembrotus": 17,
+  "Philemon": 17,
+  "Timon": 16,
+  "Mimnermus": 15,
+  "Speusippus": 14,
+  "Lasus": 13,
+  "Pigres": 12,
+  "Timocreon": 12,
+  "Pittacus": 7,
+  "Pythagoras": 7,
+  "Hipparchus": 6,
+  "Tynnichus": 4
+ },
+ "coverage_vs_forms_jsonl": {
+  "Aeschrion": {
+   "distinct_forms": 53,
+   "not_in_forms_jsonl_exact_nfc": 15,
+   "not_in_forms_jsonl_elision_folded": 12
+  },
+  "Aeschylus": {
+   "distinct_forms": 40,
+   "not_in_forms_jsonl_exact_nfc": 7,
+   "not_in_forms_jsonl_elision_folded": 6
+  },
+  "Alexander": {
+   "distinct_forms": 86,
+   "not_in_forms_jsonl_exact_nfc": 25,
+   "not_in_forms_jsonl_elision_folded": 22
+  },
+  "Anacreon": {
+   "distinct_forms": 316,
+   "not_in_forms_jsonl_exact_nfc": 113,
+   "not_in_forms_jsonl_elision_folded": 94
+  },
+  "Anonymi Curetum Hymnus": {
+   "distinct_forms": 85,
+   "not_in_forms_jsonl_exact_nfc": 41,
+   "not_in_forms_jsonl_elision_folded": 37
+  },
+  "Antagoras": {
+   "distinct_forms": 55,
+   "not_in_forms_jsonl_exact_nfc": 16,
+   "not_in_forms_jsonl_elision_folded": 13
+  },
+  "Antigonus": {
+   "distinct_forms": 38,
+   "not_in_forms_jsonl_exact_nfc": 17,
+   "not_in_forms_jsonl_elision_folded": 14
+  },
+  "Antimachus": {
+   "distinct_forms": 39,
+   "not_in_forms_jsonl_exact_nfc": 17,
+   "not_in_forms_jsonl_elision_folded": 15
+  },
+  "Apollonius": {
+   "distinct_forms": 13152,
+   "not_in_forms_jsonl_exact_nfc": 6213,
+   "not_in_forms_jsonl_elision_folded": 5939
+  },
+  "Archelaus": {
+   "distinct_forms": 28,
+   "not_in_forms_jsonl_exact_nfc": 9,
+   "not_in_forms_jsonl_elision_folded": 6
+  },
+  "Archilochus": {
+   "distinct_forms": 21,
+   "not_in_forms_jsonl_exact_nfc": 6,
+   "not_in_forms_jsonl_elision_folded": 4
+  },
+  "Archimelus": {
+   "distinct_forms": 36,
+   "not_in_forms_jsonl_exact_nfc": 13,
+   "not_in_forms_jsonl_elision_folded": 12
+  },
+  "Asclepiades": {
+   "distinct_forms": 859,
+   "not_in_forms_jsonl_exact_nfc": 313,
+   "not_in_forms_jsonl_elision_folded": 275
+  },
+  "Asius": {
+   "distinct_forms": 81,
+   "not_in_forms_jsonl_exact_nfc": 22,
+   "not_in_forms_jsonl_elision_folded": 17
+  },
+  "Athenaeus": {
+   "distinct_forms": 36,
+   "not_in_forms_jsonl_exact_nfc": 13,
+   "not_in_forms_jsonl_elision_folded": 12
+  },
+  "Aulus Licinius Archias": {
+   "distinct_forms": 23,
+   "not_in_forms_jsonl_exact_nfc": 8,
+   "not_in_forms_jsonl_elision_folded": 5
+  },
+  "Bacchylides": {
+   "distinct_forms": 3082,
+   "not_in_forms_jsonl_exact_nfc": 1473,
+   "not_in_forms_jsonl_elision_folded": 1394
+  },
+  "Bion": {
+   "distinct_forms": 1089,
+   "not_in_forms_jsonl_exact_nfc": 428,
+   "not_in_forms_jsonl_elision_folded": 400
+  },
+  "Boethus": {
+   "distinct_forms": 37,
+   "not_in_forms_jsonl_exact_nfc": 12,
+   "not_in_forms_jsonl_elision_folded": 11
+  },
+  "Callimachus": {
+   "distinct_forms": 7455,
+   "not_in_forms_jsonl_exact_nfc": 3992,
+   "not_in_forms_jsonl_elision_folded": 3869
+  },
+  "Canticum Euripidis": {
+   "distinct_forms": 32,
+   "not_in_forms_jsonl_exact_nfc": 11,
+   "not_in_forms_jsonl_elision_folded": 10
+  },
+  "Cleobulus": {
+   "distinct_forms": 53,
+   "not_in_forms_jsonl_exact_nfc": 15,
+   "not_in_forms_jsonl_elision_folded": 12
+  },
+  "Crates": {
+   "distinct_forms": 52,
+   "not_in_forms_jsonl_exact_nfc": 17,
+   "not_in_forms_jsonl_elision_folded": 12
+  },
+  "Demodocus": {
+   "distinct_forms": 71,
+   "not_in_forms_jsonl_exact_nfc": 16,
+   "not_in_forms_jsonl_elision_folded": 13
+  },
+  "Diodorus": {
+   "distinct_forms": 169,
+   "not_in_forms_jsonl_exact_nfc": 64,
+   "not_in_forms_jsonl_elision_folded": 55
+  },
+  "Diogenes Laertius": {
+   "distinct_forms": 723,
+   "not_in_forms_jsonl_exact_nfc": 198,
+   "not_in_forms_jsonl_elision_folded": 177
+  },
+  "Diotimus": {
+   "distinct_forms": 212,
+   "not_in_forms_jsonl_exact_nfc": 71,
+   "not_in_forms_jsonl_elision_folded": 60
+  },
+  "Dorieus Poeta": {
+   "distinct_forms": 54,
+   "not_in_forms_jsonl_exact_nfc": 15,
+   "not_in_forms_jsonl_elision_folded": 12
+  },
+  "Dosiadas": {
+   "distinct_forms": 68,
+   "not_in_forms_jsonl_exact_nfc": 47,
+   "not_in_forms_jsonl_elision_folded": 42
+  },
+  "Echembrotus": {
+   "distinct_forms": 17,
+   "not_in_forms_jsonl_exact_nfc": 7,
+   "not_in_forms_jsonl_elision_folded": 5
+  },
+  "Empedocles": {
+   "distinct_forms": 48,
+   "not_in_forms_jsonl_exact_nfc": 15,
+   "not_in_forms_jsonl_elision_folded": 10
+  },
+  "Epitaphium Sicili": {
+   "distinct_forms": 55,
+   "not_in_forms_jsonl_exact_nfc": 26,
+   "not_in_forms_jsonl_elision_folded": 26
+  },
+  "Erinna": {
+   "distinct_forms": 124,
+   "not_in_forms_jsonl_exact_nfc": 58,
+   "not_in_forms_jsonl_elision_folded": 50
+  },
+  "Euclides": {
+   "distinct_forms": 42,
+   "not_in_forms_jsonl_exact_nfc": 11,
+   "not_in_forms_jsonl_elision_folded": 8
+  },
+  "Euphorion": {
+   "distinct_forms": 61,
+   "not_in_forms_jsonl_exact_nfc": 27,
+   "not_in_forms_jsonl_elision_folded": 23
+  },
+  "Euripides": {
+   "distinct_forms": 25,
+   "not_in_forms_jsonl_exact_nfc": 4,
+   "not_in_forms_jsonl_elision_folded": 4
+  },
+  "Flavius Philostratus": {
+   "distinct_forms": 42,
+   "not_in_forms_jsonl_exact_nfc": 17,
+   "not_in_forms_jsonl_elision_folded": 16
+  },
+  "Hedylus": {
+   "distinct_forms": 129,
+   "not_in_forms_jsonl_exact_nfc": 54,
+   "not_in_forms_jsonl_elision_folded": 48
+  },
+  "Hegemon": {
+   "distinct_forms": 25,
+   "not_in_forms_jsonl_exact_nfc": 8,
+   "not_in_forms_jsonl_elision_folded": 7
+  },
+  "Heliodorus": {
+   "distinct_forms": 72,
+   "not_in_forms_jsonl_exact_nfc": 33,
+   "not_in_forms_jsonl_elision_folded": 32
+  },
+  "Hesiod": {
+   "distinct_forms": 6804,
+   "not_in_forms_jsonl_exact_nfc": 313,
+   "not_in_forms_jsonl_elision_folded": 22
+  },
+  "Hipparchus": {
+   "distinct_forms": 6,
+   "not_in_forms_jsonl_exact_nfc": 1,
+   "not_in_forms_jsonl_elision_folded": 1
+  },
+  "Homeric Hymns": {
+   "distinct_forms": 6328,
+   "not_in_forms_jsonl_exact_nfc": 2034,
+   "not_in_forms_jsonl_elision_folded": 1817
+  },
+  "Homerus": {
+   "distinct_forms": 20,
+   "not_in_forms_jsonl_exact_nfc": 4,
+   "not_in_forms_jsonl_elision_folded": 3
+  },
+  "Lasus": {
+   "distinct_forms": 13,
+   "not_in_forms_jsonl_exact_nfc": 8,
+   "not_in_forms_jsonl_elision_folded": 8
+  },
+  "Lucianus": {
+   "distinct_forms": 1253,
+   "not_in_forms_jsonl_exact_nfc": 529,
+   "not_in_forms_jsonl_elision_folded": 499
+  },
+  "Marcus Cornelius Fronto": {
+   "distinct_forms": 51,
+   "not_in_forms_jsonl_exact_nfc": 15,
+   "not_in_forms_jsonl_elision_folded": 13
+  },
+  "Menander": {
+   "distinct_forms": 1195,
+   "not_in_forms_jsonl_exact_nfc": 314,
+   "not_in_forms_jsonl_elision_folded": 282
+  },
+  "Mesomedes": {
+   "distinct_forms": 87,
+   "not_in_forms_jsonl_exact_nfc": 28,
+   "not_in_forms_jsonl_elision_folded": 25
+  },
+  "Mimnermus": {
+   "distinct_forms": 14,
+   "not_in_forms_jsonl_exact_nfc": 3,
+   "not_in_forms_jsonl_elision_folded": 3
+  },
+  "Moero": {
+   "distinct_forms": 50,
+   "not_in_forms_jsonl_exact_nfc": 18,
+   "not_in_forms_jsonl_elision_folded": 17
+  },
+  "Moschus": {
+   "distinct_forms": 2097,
+   "not_in_forms_jsonl_exact_nfc": 811,
+   "not_in_forms_jsonl_elision_folded": 759
+  },
+  "Nicaenetus": {
+   "distinct_forms": 111,
+   "not_in_forms_jsonl_exact_nfc": 35,
+   "not_in_forms_jsonl_elision_folded": 31
+  },
+  "Nicander": {
+   "distinct_forms": 67,
+   "not_in_forms_jsonl_exact_nfc": 23,
+   "not_in_forms_jsonl_elision_folded": 19
+  },
+  "Nicias": {
+   "distinct_forms": 162,
+   "not_in_forms_jsonl_exact_nfc": 63,
+   "not_in_forms_jsonl_elision_folded": 54
+  },
+  "Pancrates": {
+   "distinct_forms": 71,
+   "not_in_forms_jsonl_exact_nfc": 28,
+   "not_in_forms_jsonl_elision_folded": 28
+  },
+  "Parrhasius": {
+   "distinct_forms": 63,
+   "not_in_forms_jsonl_exact_nfc": 6,
+   "not_in_forms_jsonl_elision_folded": 0
+  },
+  "Phaedimus": {
+   "distinct_forms": 126,
+   "not_in_forms_jsonl_exact_nfc": 45,
+   "not_in_forms_jsonl_elision_folded": 42
+  },
+  "Philemon": {
+   "distinct_forms": 17,
+   "not_in_forms_jsonl_exact_nfc": 5,
+   "not_in_forms_jsonl_elision_folded": 4
+  },
+  "Phocylides": {
+   "distinct_forms": 199,
+   "not_in_forms_jsonl_exact_nfc": 49,
+   "not_in_forms_jsonl_elision_folded": 38
+  },
+  "Pigres": {
+   "distinct_forms": 12,
+   "not_in_forms_jsonl_exact_nfc": 2,
+   "not_in_forms_jsonl_elision_folded": 1
+  },
+  "Pindar": {
+   "distinct_forms": 9675,
+   "not_in_forms_jsonl_exact_nfc": 5161,
+   "not_in_forms_jsonl_elision_folded": 4970
+  },
+  "Pisander": {
+   "distinct_forms": 28,
+   "not_in_forms_jsonl_exact_nfc": 9,
+   "not_in_forms_jsonl_elision_folded": 7
+  },
+  "Pittacus": {
+   "distinct_forms": 7,
+   "not_in_forms_jsonl_exact_nfc": 0,
+   "not_in_forms_jsonl_elision_folded": 0
+  },
+  "Plato": {
+   "distinct_forms": 452,
+   "not_in_forms_jsonl_exact_nfc": 146,
+   "not_in_forms_jsonl_elision_folded": 129
+  },
+  "Plato Comicus": {
+   "distinct_forms": 65,
+   "not_in_forms_jsonl_exact_nfc": 19,
+   "not_in_forms_jsonl_elision_folded": 16
+  },
+  "Posidippus": {
+   "distinct_forms": 566,
+   "not_in_forms_jsonl_exact_nfc": 204,
+   "not_in_forms_jsonl_elision_folded": 183
+  },
+  "Pseudo-Lucianus": {
+   "distinct_forms": 712,
+   "not_in_forms_jsonl_exact_nfc": 219,
+   "not_in_forms_jsonl_elision_folded": 198
+  },
+  "Pythagoras": {
+   "distinct_forms": 7,
+   "not_in_forms_jsonl_exact_nfc": 1,
+   "not_in_forms_jsonl_elision_folded": 1
+  },
+  "Rhianus": {
+   "distinct_forms": 273,
+   "not_in_forms_jsonl_exact_nfc": 98,
+   "not_in_forms_jsonl_elision_folded": 90
+  },
+  "Sappho": {
+   "distinct_forms": 67,
+   "not_in_forms_jsonl_exact_nfc": 27,
+   "not_in_forms_jsonl_elision_folded": 27
+  },
+  "Seleucus": {
+   "distinct_forms": 17,
+   "not_in_forms_jsonl_exact_nfc": 4,
+   "not_in_forms_jsonl_elision_folded": 4
+  },
+  "Simias": {
+   "distinct_forms": 360,
+   "not_in_forms_jsonl_exact_nfc": 163,
+   "not_in_forms_jsonl_elision_folded": 140
+  },
+  "Simonides": {
+   "distinct_forms": 1167,
+   "not_in_forms_jsonl_exact_nfc": 412,
+   "not_in_forms_jsonl_elision_folded": 358
+  },
+  "Speusippus": {
+   "distinct_forms": 14,
+   "not_in_forms_jsonl_exact_nfc": 2,
+   "not_in_forms_jsonl_elision_folded": 1
+  },
+  "Theocritus": {
+   "distinct_forms": 9653,
+   "not_in_forms_jsonl_exact_nfc": 5078,
+   "not_in_forms_jsonl_elision_folded": 4860
+  },
+  "Theodoridas": {
+   "distinct_forms": 415,
+   "not_in_forms_jsonl_exact_nfc": 185,
+   "not_in_forms_jsonl_elision_folded": 172
+  },
+  "Theognis": {
+   "distinct_forms": 3870,
+   "not_in_forms_jsonl_exact_nfc": 1250,
+   "not_in_forms_jsonl_elision_folded": 1097
+  },
+  "Thucydides": {
+   "distinct_forms": 30,
+   "not_in_forms_jsonl_exact_nfc": 5,
+   "not_in_forms_jsonl_elision_folded": 4
+  },
+  "Timocreon": {
+   "distinct_forms": 8,
+   "not_in_forms_jsonl_exact_nfc": 3,
+   "not_in_forms_jsonl_elision_folded": 3
+  },
+  "Timon": {
+   "distinct_forms": 15,
+   "not_in_forms_jsonl_exact_nfc": 6,
+   "not_in_forms_jsonl_elision_folded": 5
+  },
+  "Tynnichus": {
+   "distinct_forms": 4,
+   "not_in_forms_jsonl_exact_nfc": 3,
+   "not_in_forms_jsonl_elision_folded": 3
+  },
+  "Valerius Babrius": {
+   "distinct_forms": 5065,
+   "not_in_forms_jsonl_exact_nfc": 2224,
+   "not_in_forms_jsonl_elision_folded": 2138
+  },
+  "Xenophanes": {
+   "distinct_forms": 295,
+   "not_in_forms_jsonl_exact_nfc": 83,
+   "not_in_forms_jsonl_elision_folded": 67
+  },
+  "ALL_SELECTED": {
+   "distinct_forms": 49195,
+   "not_in_forms_jsonl_exact_nfc": 28312,
+   "not_in_forms_jsonl_elision_folded": 27505
+  },
+  "forms_jsonl_distinct_nfc_forms": 79835,
+  "note": "exact = NFC equality; elision_folded maps U+2019/U+0027/U+02BC to U+1FBD. Tokens without letters excluded."
+ },
+ "corpus_wide_form_lemma_postag_counts": "PENDING - needs Basecamp (3.4 GB of XML); run this table from ~/storagebox/archive/melos-open/glaux/repo once SSH is available",
+ "files": {
+  "texts_selected.json": {
+   "sha256": "22534868aeab880b9252cbc732d714d7175c7026a772f0b909a4d1537ca07399",
+   "bytes": 71514,
+   "rows": 167
+  },
+  "lyric_tokens.jsonl.gz": {
+   "sha256": "33351ec475aaa9bb5181bd492cefa6804d86cbc952726070e851c82c1a77b49e",
+   "bytes": 4476225,
+   "rows": 213623
+  }
+ },
+ "date": "2026-10-09",
+ "user_agent": "Melos/1.0 (+https://greeklyric.com)",
+ "script": "scripts/ingest_open_glaux.py"
+}

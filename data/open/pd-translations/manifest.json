@@ -1,0 +1,418 @@
+{
+ "name": "Public-domain translations for Campbell GLP translation gaps",
+ "date": "2026-10-09",
+ "user_agent": "Melos/1.0 (+https://greeklyric.com)",
+ "builder": "scripts/ingest_open_pd_translations.py",
+ "sources": [
+  {
+   "source_id": "knox1929",
+   "ia": "charactersofthe00theouoft",
+   "title": "The Characters of Theophrastus (ed. J. M. Edmonds) with Herodes, Cercidas and the Greek Choliambic Poets (except Callimachus and Babrius)",
+   "translator": "A. D. Knox",
+   "year": 1929,
+   "publisher": "London: W. Heinemann; Loeb Classical Library 225",
+   "language": "eng",
+   "pd_basis": "Published 1929; US copyright term (95 years) ended 2024-12-31, public domain in the US since 2025-01-01. IA possible-copyright-status: \"Permission Granted to Digitize Item\".",
+   "ia_url": "https://archive.org/details/charactersofthe00theouoft"
+  },
+  {
+   "source_id": "brooks1896",
+   "ia": "greeklyricpoets00broo",
+   "title": "Greek Lyric Poets",
+   "translator": "Francis Brooks",
+   "year": 1896,
+   "publisher": "London: David Nutt",
+   "language": "eng",
+   "pd_basis": "Published 1896 (before 1931): public domain in the US.",
+   "ia_url": "https://archive.org/details/greeklyricpoets00broo"
+  },
+  {
+   "source_id": "muller1858",
+   "ia": "historyofliterat01mluoft",
+   "title": "A History of the Literature of Ancient Greece, vol. I (K. O. Mueller; English translation by G. C. Lewis, continued by J. W. Donaldson)",
+   "translator": "Sir George Cornewall Lewis (translator of K. O. Mueller)",
+   "year": 1858,
+   "publisher": "London: Longmans [preface 1858; first English ed. 1840]",
+   "language": "eng",
+   "pd_basis": "Published 1858 (before 1931): public domain in the US. IA possible-copyright-status: NOT_IN_COPYRIGHT.",
+   "ia_url": "https://archive.org/details/historyofliterat01mluoft"
+  },
+  {
+   "source_id": "columbia1912",
+   "ia": "cu31924022691251",
+   "title": "Greek Literature: A Series of Lectures Delivered at Columbia University (lecture \"Lyric Poetry\")",
+   "translator": "Edward Delavan Perry",
+   "year": 1912,
+   "publisher": "New York: The Columbia University Press",
+   "language": "eng",
+   "pd_basis": "Published 1912 (before 1931): public domain in the US. Cornell scan note: \"There are no known copyright restrictions in the United States on the use of the text.\"",
+   "ia_url": "https://archive.org/details/cu31924022691251"
+  },
+  {
+   "source_id": "marchant1905",
+   "ia": "cu31924021601640",
+   "title": "Greek Reader, selected and adapted with English notes from Prof. von Wilamowitz-Moellendorff's Griechisches Lesebuch, vol. I",
+   "translator": "E. C. Marchant (adapting U. von Wilamowitz-Moellendorff)",
+   "year": 1905,
+   "publisher": "Oxford: Clarendon Press",
+   "language": "eng",
+   "pd_basis": "Published 1905 (before 1931): public domain in the US.",
+   "ia_url": "https://archive.org/details/cu31924021601640"
+  },
+  {
+   "source_id": "jevons1886",
+   "ia": "historyofgreekli00jevouoft",
+   "title": "A History of Greek Literature from the Earliest Period to the Death of Demosthenes",
+   "translator": "F. B. Jevons",
+   "year": 1886,
+   "publisher": "New York: Scribner [London: Griffin]",
+   "language": "eng",
+   "pd_basis": "Published 1886 (before 1931): public domain in the US. IA possible-copyright-status: NOT_IN_COPYRIGHT.",
+   "ia_url": "https://archive.org/details/historyofgreekli00jevouoft"
+  },
+  {
+   "source_id": "thudichum1859",
+   "ia": "diegriechischenl00thuduoft",
+   "title": "Die griechischen Lyriker oder Elegiker, Iambographen und Meliker: ausgewaehlte Proben im Versmass der Urschrift uebersetzt",
+   "translator": "G. Thudichum",
+   "year": 1859,
+   "publisher": "Stuttgart: Metzler",
+   "language": "deu",
+   "pd_basis": "Published 1859 (before 1931): public domain in the US. IA possible-copyright-status: NOT_IN_COPYRIGHT.",
+   "ia_url": "https://archive.org/details/diegriechischenl00thuduoft"
+  },
+  {
+   "source_id": "hartung1859",
+   "ia": "diegriechischen02hartgoog",
+   "title": "Die griechischen Elegiker. Griechisch mit metrischer Uebersetzung und pruefenden und erklaerenden Anmerkungen",
+   "translator": "J. A. Hartung",
+   "year": 1859,
+   "publisher": "Leipzig: W. Engelmann",
+   "language": "deu",
+   "pd_basis": "Published 1859 (before 1931): public domain in the US. IA possible-copyright-status: NOT_IN_COPYRIGHT.",
+   "ia_url": "https://archive.org/details/diegriechischen02hartgoog"
+  }
+ ],
+ "counts": {
+  "records": 20,
+  "poems_covered": 19,
+  "poems_with_english": 17,
+  "poems_with_non_english_only": 2,
+  "ocr_corrections": 31
+ },
+ "translations_jsonl": {
+  "path": "translations.jsonl",
+  "sha256": "2eddfcd5795b64ac1ebec913f21229e167389be94d5b246db20f56ef313925a3",
+  "bytes": 45524
+ },
+ "raw_files": [
+  {
+   "path": "raw/knox1929/charactersofthe00theouoft_meta.xml",
+   "sha256": "82ab0537465de4513c098254dea28c9b096bab5c51033c4a3f46897201dcf122",
+   "bytes": 3056,
+   "url": "https://archive.org/download/charactersofthe00theouoft/charactersofthe00theouoft_meta.xml"
+  },
+  {
+   "path": "raw/knox1929/charactersofthe00theouoft_djvu_leaves.json",
+   "sha256": "85e83b3a7719c4f4d4d600266a3cf6b6cc6e0e2ebd902cf1ecec91add8a53181",
+   "bytes": 16722,
+   "url": "https://archive.org/download/charactersofthe00theouoft/charactersofthe00theouoft_djvu.xml"
+  },
+  {
+   "path": "raw/knox1929/leaf_0177.jpg",
+   "sha256": "8fc4c5eb258abd59552bcf8962c76e033b5cdbd12f119da54f8273d284f461ec",
+   "bytes": 301671,
+   "url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0177.jp2/full/1200,/0/default.jpg",
+   "leaf": 177,
+   "printed_page": "5"
+  },
+  {
+   "path": "raw/knox1929/leaf_0178.jpg",
+   "sha256": "3ff991a11135b4ca5ea38da9bbe1d3f30e59fe2182d08a8ccd4fedc4b42d19f3",
+   "bytes": 281876,
+   "url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0178.jp2/full/1200,/0/default.jpg",
+   "leaf": 178,
+   "printed_page": "6"
+  },
+  {
+   "path": "raw/knox1929/leaf_0212.jpg",
+   "sha256": "ad81d46331b734340e08e130ef41094506c4e67f03cd1e2365e4f1a7ef2b7995",
+   "bytes": 310688,
+   "url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0212.jp2/full/1200,/0/default.jpg",
+   "leaf": 212,
+   "printed_page": "40"
+  },
+  {
+   "path": "raw/knox1929/leaf_0213.jpg",
+   "sha256": "65a14c792436503182c28b99c1ad14f399dcb7f46bf571504303afa6b701a224",
+   "bytes": 326940,
+   "url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0213.jp2/full/1200,/0/default.jpg",
+   "leaf": 213,
+   "printed_page": "41"
+  },
+  {
+   "path": "raw/knox1929/leaf_0214.jpg",
+   "sha256": "5c8611ae20148abed51e589eaa17429f35325095fb990e514ee55881dcc65ccb",
+   "bytes": 262963,
+   "url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0214.jp2/full/1200,/0/default.jpg",
+   "leaf": 214,
+   "printed_page": "42"
+  },
+  {
+   "path": "raw/knox1929/leaf_0215.jpg",
+   "sha256": "e25fb235ce3c6be3311388f7bbc61d4acfa6c8232aa5f657c035e3a269e221a4",
+   "bytes": 316341,
+   "url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0215.jp2/full/1200,/0/default.jpg",
+   "leaf": 215,
+   "printed_page": "43"
+  },
+  {
+   "path": "raw/knox1929/leaf_0226.jpg",
+   "sha256": "1f7d43c99c22f7d4f0986570cb5d69e53e00d3ddea6d341a46108e7dd5eda007",
+   "bytes": 252517,
+   "url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0226.jp2/full/1200,/0/default.jpg",
+   "leaf": 226,
+   "printed_page": "54"
+  },
+  {
+   "path": "raw/knox1929/leaf_0227.jpg",
+   "sha256": "7b14e0f7a14ccfe41645d7208af727aff992b6d1f564129ee6b0aa2cb10431c9",
+   "bytes": 227065,
+   "url": "https://iiif.archive.org/image/iiif/3/charactersofthe00theouoft%2Fcharactersofthe00theouoft_jp2.zip%2Fcharactersofthe00theouoft_jp2%2Fcharactersofthe00theouoft_0227.jp2/full/1200,/0/default.jpg",
+   "leaf": 227,
+   "printed_page": "55"
+  },
+  {
+   "path": "raw/brooks1896/greeklyricpoets00broo_meta.xml",
+   "sha256": "9534b9a98fa27ca7b0a780ce93061e33aec6b637d5cad2df05d4a6cebc4deec7",
+   "bytes": 2518,
+   "url": "https://archive.org/download/greeklyricpoets00broo/greeklyricpoets00broo_meta.xml"
+  },
+  {
+   "path": "raw/brooks1896/greeklyricpoets00broo_djvu_leaves.json",
+   "sha256": "938514885f84fcbfc1ab475ec293fa44e1e558bb6ea0ffa1251eedf0d1aa0bd0",
+   "bytes": 5965,
+   "url": "https://archive.org/download/greeklyricpoets00broo/greeklyricpoets00broo_djvu.xml"
+  },
+  {
+   "path": "raw/brooks1896/leaf_0023.jpg",
+   "sha256": "adc8bf249e4c7e6978273815f2c581ae34181297d4583e2d5db6a4477f4e33f9",
+   "bytes": 212870,
+   "url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0023.jp2/full/1200,/0/default.jpg",
+   "leaf": 23,
+   "printed_page": "9"
+  },
+  {
+   "path": "raw/brooks1896/leaf_0025.jpg",
+   "sha256": "5e745dbd0daceff0f7566a2087498c4d6fec397cae618cb828428acf6634920e",
+   "bytes": 199493,
+   "url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0025.jp2/full/1200,/0/default.jpg",
+   "leaf": 25,
+   "printed_page": "11"
+  },
+  {
+   "path": "raw/brooks1896/leaf_0026.jpg",
+   "sha256": "2a4d4bb544dac2998b2242ef78fbeb66c3530fdb815d5a7debd87458f0b65626",
+   "bytes": 192320,
+   "url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0026.jp2/full/1200,/0/default.jpg",
+   "leaf": 26,
+   "printed_page": "12"
+  },
+  {
+   "path": "raw/brooks1896/leaf_0027.jpg",
+   "sha256": "a7e5a7860d4e4c230f2498bbd431fa4ff011bdc6ebb1f7e56e0f8c5f3183db3b",
+   "bytes": 195620,
+   "url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0027.jp2/full/1200,/0/default.jpg",
+   "leaf": 27,
+   "printed_page": "13"
+  },
+  {
+   "path": "raw/brooks1896/leaf_0028.jpg",
+   "sha256": "116b1cd7f340612ce0dc1796f7c7e777016fc980221707399eb95bdc1cf4a97d",
+   "bytes": 178306,
+   "url": "https://iiif.archive.org/image/iiif/3/greeklyricpoets00broo%2Fgreeklyricpoets00broo_jp2.zip%2Fgreeklyricpoets00broo_jp2%2Fgreeklyricpoets00broo_0028.jp2/full/1200,/0/default.jpg",
+   "leaf": 28,
+   "printed_page": "14"
+  },
+  {
+   "path": "raw/muller1858/historyofliterat01mluoft_meta.xml",
+   "sha256": "b2b58395edc7a3bacfbb35677f157fea85ec0b503b063eaebb523279f258ba64",
+   "bytes": 2919,
+   "url": "https://archive.org/download/historyofliterat01mluoft/historyofliterat01mluoft_meta.xml"
+  },
+  {
+   "path": "raw/muller1858/historyofliterat01mluoft_djvu_leaves.json",
+   "sha256": "424755022f521240604561f0df937883efd76599747b153f8e7acccbea6b8339",
+   "bytes": 3124,
+   "url": "https://archive.org/download/historyofliterat01mluoft/historyofliterat01mluoft_djvu.xml"
+  },
+  {
+   "path": "raw/muller1858/leaf_0242.jpg",
+   "sha256": "3a7d1352f80b5305df65eab9d8dcfd66d7bde54d764ea681500293363904cda3",
+   "bytes": 444357,
+   "url": "https://iiif.archive.org/image/iiif/3/historyofliterat01mluoft%2Fhistoryofliterat01mluoft_jp2.zip%2Fhistoryofliterat01mluoft_jp2%2Fhistoryofliterat01mluoft_0242.jp2/full/1200,/0/default.jpg",
+   "leaf": 242,
+   "printed_page": "186"
+  },
+  {
+   "path": "raw/columbia1912/cu31924022691251_meta.xml",
+   "sha256": "15b81ede0df021b7a3b22755b2f41cf95ff61e5c4a967bcb86e71c219bed9914",
+   "bytes": 2334,
+   "url": "https://archive.org/download/cu31924022691251/cu31924022691251_meta.xml"
+  },
+  {
+   "path": "raw/columbia1912/cu31924022691251_djvu_leaves.json",
+   "sha256": "80767d8e00fb52ece41c8e39ccf30aad813f03e6436a5d2bbcbe28e602f7e176",
+   "bytes": 2347,
+   "url": "https://archive.org/download/cu31924022691251/cu31924022691251_djvu.xml"
+  },
+  {
+   "path": "raw/columbia1912/leaf_0081.jpg",
+   "sha256": "7e4fe03f444707ec90e4cf1377a0c03159cff8cea705cc885e3bf2a44d5b3b57",
+   "bytes": 279492,
+   "url": "https://iiif.archive.org/image/iiif/3/cu31924022691251%2Fcu31924022691251_jp2.zip%2Fcu31924022691251_jp2%2Fcu31924022691251_0081.jp2/full/1200,/0/default.jpg",
+   "leaf": 81,
+   "printed_page": "70"
+  },
+  {
+   "path": "raw/marchant1905/cu31924021601640_meta.xml",
+   "sha256": "ae47c54176a6b49cf7c9d4d24c5d91f8d25e7465142c4765e9dfc6b4e979e41f",
+   "bytes": 2695,
+   "url": "https://archive.org/download/cu31924021601640/cu31924021601640_meta.xml"
+  },
+  {
+   "path": "raw/marchant1905/cu31924021601640_djvu_leaves.json",
+   "sha256": "66295c8426c72ada56b69537d2d132c86f02fc8f77348da0cd8138925e677f81",
+   "bytes": 2268,
+   "url": "https://archive.org/download/cu31924021601640/cu31924021601640_djvu.xml"
+  },
+  {
+   "path": "raw/marchant1905/leaf_0012.jpg",
+   "sha256": "2477487863c9c692d08a7ac64538e3f8511832e8e896b3305628e6c2ae4ea138",
+   "bytes": 277260,
+   "url": "https://iiif.archive.org/image/iiif/3/cu31924021601640%2Fcu31924021601640_jp2.zip%2Fcu31924021601640_jp2%2Fcu31924021601640_0012.jp2/full/1200,/0/default.jpg",
+   "leaf": 12,
+   "printed_page": "3"
+  },
+  {
+   "path": "raw/jevons1886/historyofgreekli00jevouoft_meta.xml",
+   "sha256": "3bafbbce0c81038d52daaec60e1ffb1258746addbb38c5d8b77d2cd33eaee13a",
+   "bytes": 2756,
+   "url": "https://archive.org/download/historyofgreekli00jevouoft/historyofgreekli00jevouoft_meta.xml"
+  },
+  {
+   "path": "raw/jevons1886/historyofgreekli00jevouoft_djvu_leaves.json",
+   "sha256": "7c8e7a88066d1e1368fcf17e2bd3826a84f98a383a7caf31bed69e62329249ce",
+   "bytes": 3108,
+   "url": "https://archive.org/download/historyofgreekli00jevouoft/historyofgreekli00jevouoft_djvu.xml"
+  },
+  {
+   "path": "raw/jevons1886/leaf_0175.jpg",
+   "sha256": "fc0d9f6ce366a8e03a95e9de2847dfd584c61aa15cf342558f5389e45118beb2",
+   "bytes": 363512,
+   "url": "https://iiif.archive.org/image/iiif/3/historyofgreekli00jevouoft%2Fhistoryofgreekli00jevouoft_jp2.zip%2Fhistoryofgreekli00jevouoft_jp2%2Fhistoryofgreekli00jevouoft_0175.jp2/full/1200,/0/default.jpg",
+   "leaf": 175,
+   "printed_page": "153"
+  },
+  {
+   "path": "raw/thudichum1859/diegriechischenl00thuduoft_meta.xml",
+   "sha256": "615a2f7a39ff1f2732189ac7b73f5301abd52195c33b822f4120d594f714ea97",
+   "bytes": 2916,
+   "url": "https://archive.org/download/diegriechischenl00thuduoft/diegriechischenl00thuduoft_meta.xml"
+  },
+  {
+   "path": "raw/thudichum1859/diegriechischenl00thuduoft_djvu_leaves.json",
+   "sha256": "a3cf106f926d95e9ff3171eb2aa25feea5f0d67e91a590ed4d9bfa82f091bbd0",
+   "bytes": 1389,
+   "url": "https://archive.org/download/diegriechischenl00thuduoft/diegriechischenl00thuduoft_djvu.xml"
+  },
+  {
+   "path": "raw/thudichum1859/leaf_0116.jpg",
+   "sha256": "094a21c695f1e248e511363edd2f4215161bfcdc30fb88f0bc6fb24d335191aa",
+   "bytes": 275339,
+   "url": "https://iiif.archive.org/image/iiif/3/diegriechischenl00thuduoft%2Fdiegriechischenl00thuduoft_jp2.zip%2Fdiegriechischenl00thuduoft_jp2%2Fdiegriechischenl00thuduoft_0116.jp2/full/1200,/0/default.jpg",
+   "leaf": 116,
+   "printed_page": "110"
+  },
+  {
+   "path": "raw/hartung1859/diegriechischen02hartgoog_meta.xml",
+   "sha256": "b869f8efda7b617a902a7ccd3774b5a9d48e6ac34a41f260aff54ed2044d91ac",
+   "bytes": 2727,
+   "url": "https://archive.org/download/diegriechischen02hartgoog/diegriechischen02hartgoog_meta.xml"
+  },
+  {
+   "path": "raw/hartung1859/diegriechischen02hartgoog_djvu_leaves.json",
+   "sha256": "79bec424ae42291becb002ce789c260accf06dec2d9f4f86cbb2e98dd2682ce9",
+   "bytes": 3976,
+   "url": "https://archive.org/download/diegriechischen02hartgoog/diegriechischen02hartgoog_djvu.xml"
+  },
+  {
+   "path": "raw/hartung1859/leaf_0082.jpg",
+   "sha256": "b29087303ec95f36254ab978f6b21f9cbd3f23db744c235c706167b579fa66de",
+   "bytes": 1043824,
+   "url": "https://archive.org/download/diegriechischen02hartgoog/page/n81_w1200.jpg",
+   "leaf": 82,
+   "printed_page": "68"
+  },
+  {
+   "path": "raw/hartung1859/leaf_0083.jpg",
+   "sha256": "93b9e9229b4dad46c031591a4308935b6f1c08417c7304188af6a36effb7dcf5",
+   "bytes": 859869,
+   "url": "https://archive.org/download/diegriechischen02hartgoog/page/n82_w1200.jpg",
+   "leaf": 83,
+   "printed_page": "69"
+  }
+ ],
+ "ocr_text_layers_not_stored": [
+  {
+   "source": "knox1929",
+   "url": "https://archive.org/download/charactersofthe00theouoft/charactersofthe00theouoft_djvu.xml",
+   "sha256": "210121096826b03f84804cef9e237a3197b41375bef26caa2688c0b042d08e7a",
+   "bytes": 9965294
+  },
+  {
+   "source": "brooks1896",
+   "url": "https://archive.org/download/greeklyricpoets00broo/greeklyricpoets00broo_djvu.xml",
+   "sha256": "8c1955197e68c0a7d87667b33fbfe3aa6c41363bfdbbd40f7366bd587d4c1011",
+   "bytes": 2330198
+  },
+  {
+   "source": "muller1858",
+   "url": "https://archive.org/download/historyofliterat01mluoft/historyofliterat01mluoft_djvu.xml",
+   "sha256": "4cadb491a63d4b7eea69051748c35fd1cb49a6cc4d1d1b5fc9d894a6dfcdd281",
+   "bytes": 17102180
+  },
+  {
+   "source": "columbia1912",
+   "url": "https://archive.org/download/cu31924022691251/cu31924022691251_djvu.xml",
+   "sha256": "c2fd4a40944f071e3c2a0fd98db8143f03e3dccd21461cd39a96749ba329f886",
+   "bytes": 6060888
+  },
+  {
+   "source": "marchant1905",
+   "url": "https://archive.org/download/cu31924021601640/cu31924021601640_djvu.xml",
+   "sha256": "21f72c9a98b8dec96be0a41de8871ef43dade3d1816ffa1f8c903c411f780f49",
+   "bytes": 2800409
+  },
+  {
+   "source": "jevons1886",
+   "url": "https://archive.org/download/historyofgreekli00jevouoft/historyofgreekli00jevouoft_djvu.xml",
+   "sha256": "82cf7ab5a4cbd784e55c7966e0ce9099264290bb3c9573d0af908f36ab39e017",
+   "bytes": 18441013
+  },
+  {
+   "source": "thudichum1859",
+   "url": "https://archive.org/download/diegriechischenl00thuduoft/diegriechischenl00thuduoft_djvu.xml",
+   "sha256": "b8243f2201399d3a65d4f05df41fead6bc9bc3cbc7ede56e37a8a423e56dcd30",
+   "bytes": 8723376
+  },
+  {
+   "source": "hartung1859",
+   "url": "https://archive.org/download/diegriechischen02hartgoog/diegriechischen02hartgoog_djvu.xml",
+   "sha256": "b287dfc9909abf08dee0a813269a668a13a00b1bd100dacfb56ef0761e11404e",
+   "bytes": 13611768
+  }
+ ],
+ "ocr_text_layers_note": "Full IA djvu.xml OCR layers are not kept in the repo (82 MB); their URL and sha256 at download time are listed; the leaves used are stored verbatim in raw/<source>/*_djvu_leaves.json.",
+ "warnings": []
+}

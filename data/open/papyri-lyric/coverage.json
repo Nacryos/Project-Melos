@@ -1,0 +1,61 @@
+{
+ "per_poet_rule_A": {
+  "Archilochus": 23,
+  "Alcaeus": 29,
+  "Sappho": 22,
+  "Alcman": 16,
+  "Anacreon": 8,
+  "Hipponax": 7,
+  "Bacchylides": 17,
+  "Callinus": 1,
+  "Corinna": 7,
+  "Ibycus": 2,
+  "Simonides": 13,
+  "Pindar": 52,
+  "Theognis": 4,
+  "Stesichorus": 10,
+  "Tyrtaeus": 3
+ },
+ "overlap_with_earlier_melos_dclp": {
+  "earlier_collector_files": 175,
+  "selected_already_in_melos": 174,
+  "selected_new": 139,
+  "earlier_not_selected_now": [
+   "61294"
+  ]
+ },
+ "campbell": {
+  "campbell_records": 232,
+  "dclp_explicit_refs": 2,
+  "matches": [
+   {
+    "dclp": "62695",
+    "poet": "Sappho",
+    "stated_scheme": "Lobel-Page",
+    "stated_number": "31",
+    "context": "Sappho; 01 (fr. 31 Lobel-Page) with commentary",
+    "campbell_id": "campbell-glp:sappho:31",
+    "basis": "same numbering scheme as Campbell, number stated explicitly"
+   }
+  ],
+  "unmatched_explicit_refs": [
+   {
+    "dclp": "65823",
+    "poet": "Alcaeus",
+    "stated_scheme": "Voigt",
+    "stated_number": "34",
+    "context": "= Alcaeus fr. 34 (Voigt)",
+    "reason": "no Campbell poem with that number in that scheme, or no explicit equivalence"
+   }
+  ],
+  "campbell_poems_with_papyrus_witness": [
+   "campbell-glp:sappho:31"
+  ]
+ },
+ "rule_counts": {
+  "A": 202,
+  "B1": 54,
+  "B2": 57
+ },
+ "hgv_matches": 0
+}

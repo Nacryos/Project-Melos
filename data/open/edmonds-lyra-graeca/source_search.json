@@ -1,0 +1,26 @@
+{
+ "checked": "2026-10-09",
+ "conclusion": "No clean transcription (TEI, Wikisource, Gutenberg) of Edmonds' Lyra Graeca exists on an open host; the best open digital form is Internet Archive page OCR. Among the IA scans, the Princeton-contributed 2022 Tesseract derivations (lyragraecabeingr01unse, lyragraecabeingr02unse) and the 1928 revised vol. I (lyragraeca0001jmed_c0b1) were OCR'd with Greek models and give real Greek text; the Toronto scans already in data/raw/lyra (lyragraecabeingr01edmouoft, lyragraecavol20002jmed, lyragraecabeingr03edmouoft) have Latin-only OCR (no Greek characters at all). No open vol. III scan with Greek OCR was found.",
+ "candidates": [
+  {"name": "Perseus Digital Library TEI (catalog.perseus.org / PerseusDL canonical-greekLit, canonical-pdlrefwk)",
+   "result": "not available as TEI. The Perseus Catalog lists Edmonds vol. III only as 'opp' (Open Content Alliance) editions/translations that link to the Internet Archive scan, e.g. urn:cts:greekLit:plg0001.plg001.opp-grc3 and .opp-eng1 -> http://www.archive.org/stream/lyragraecabeingr03edmouoft. canonical-greekLit has no plg0001 or tlg0009 directory (GitHub contents API: 'Not Found'; recursive tree of master has no path containing 'plg' or 'edmonds'). canonical-pdlrefwk data/ holds only viaf32364342, viaf39744457, viaf66541464, viaf88890045.",
+   "licence": "n/a (no TEI file, so no <availability> statement to quote)",
+   "evidence_urls": ["https://catalog.perseus.org/catalog/urn:cts:greekLit:plg0001.plg001", "https://api.github.com/repos/PerseusDL/canonical-greekLit/contents/data/plg0001", "https://api.github.com/repos/PerseusDL/canonical-pdlrefwk/contents/data"]},
+  {"name": "English Wikisource",
+   "result": "no Index: or Page: namespace entries beginning 'Lyra' other than unrelated works (Lyra Ecclesiastica, Lyra Catholica, Lyra Davidica, Lyra heroica); no main-namespace page 'Lyra Graeca'; search 'Edmonds intitle:Lyra' = 0 hits.",
+   "licence": "n/a",
+   "evidence_urls": ["https://en.wikisource.org/w/api.php?action=query&list=allpages&apnamespace=106&apprefix=Lyra&format=json", "https://en.wikisource.org/w/api.php?action=query&list=allpages&apnamespace=0&apprefix=Lyra%20Graeca&format=json"]},
+  {"name": "Project Gutenberg",
+   "result": "none (gutendex search 'lyra graeca' and 'J. M. Edmonds': 0 results).",
+   "licence": "n/a",
+   "evidence_urls": ["https://gutendex.com/books/?search=lyra%20graeca"]},
+  {"name": "HathiTrust",
+   "result": "full-view copies exist: record 001193232 (1922 set; mdp.39015008534631 v.1, mdp.39015013496958 v.2, mdp.39015027244782 / mdp.39015014179462 / mdp.39015066291942 v.3; all 'Full view', rights 'pdus'); record 103016138 rul.39030027182049 v.2 'Full view' pdus. The 1928 revised vol. I (record 010556428, inu.30000003148073, inu.30000038729087) is 'Limited (search-only)'. Not ingested: no open bulk text download was attempted (HathiTrust page text is produced by its own OCR, quality not assessed here); IA scans OCR'd with Greek models were preferred because their Greek is real Greek text. A follow-up could compare HathiTrust vol. III text against the Latin-only IA vol. III OCR.",
+   "licence": "HathiTrust rights code 'pdus' = public domain in the United States (catalog API usRightsString 'Full view')",
+   "evidence_urls": ["https://catalog.hathitrust.org/api/volumes/full/recordnumber/001193232.json", "https://catalog.hathitrust.org/api/volumes/full/recordnumber/103016138.json", "https://catalog.hathitrust.org/api/volumes/full/recordnumber/010556428.json"]},
+  {"name": "Internet Archive scans (open, not lending-restricted)",
+   "result": "Greek-capable OCR: lyragraecabeingr01unse (vol. I, title page 'MCMXXII', Tesseract 5 '-l grc+eng'); lyragraecabeingr02unse (vol. II, 'MCMXXIV', Tesseract 5 '-l eng+grc'); lyragraeca0002unse (vol. II, Tesseract 4.1.1, Greek present; not used, r02unse preferred); lyragraeca0001jmed_c0b1 (vol. I 'REVISED AND AUGMENTED EDITION', 'MCMXXVIII', 'Second and enlarged edition'; Greek present). Latin-only OCR: lyragraecabeingr03unse (vol. III, 'MCMXXVII', Tesseract '-l eng'), lyragraeca0003jmed (vol. III), lyragraeca0001jmed (vol. I 1922), lyragraecabeing00edmogoog, and the three Toronto items already in data/raw/lyra. Lending-restricted (not used): lyragraecavol10000jmed (1952), bwb_W9-DEI-866 (1959), bwb_KU-141-865_3 (1967). User uploads of Loeb PDFs ('loeb.-144...', 'L144LyraGraecaIII...') were not used.",
+   "licence": "IA metadata gives no licence for these items (only lyragraecabeingr02edmouoft / lyragraecabeing00edmogoog carry 'possible-copyright-status: NOT_IN_COPYRIGHT'). PD basis is publication date: published 1922/1924/1927/1928 - US public domain (pre-1931 publication).",
+   "evidence_urls": ["https://archive.org/details/lyragraecabeingr01unse", "https://archive.org/details/lyragraecabeingr02unse", "https://archive.org/details/lyragraecabeingr03unse", "https://archive.org/details/lyragraeca0001jmed_c0b1"]}
+ ]
+}

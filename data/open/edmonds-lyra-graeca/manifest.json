@@ -1,0 +1,1946 @@
+{
+ "name": "edmonds-lyra-graeca",
+ "title": "J. M. Edmonds, Lyra Graeca (Loeb Classical Library), vols I-III: per-fragment OCR segmentation",
+ "date": "2026-10-09",
+ "builder": "scripts/ingest_open_edmonds_lyra.py",
+ "license": "public_domain_us",
+ "pd_basis": "published 1922/1924/1927 - US public domain (pre-1931 publication); revised vol. I published 1928 - likewise pre-1931",
+ "volumes": [
+  {
+   "volume": "I",
+   "ia_item": "lyragraecabeingr01unse",
+   "edition": "Lyra Graeca vol. I, first edition (London: Heinemann; New York: Putnam)",
+   "publication_year": 1922,
+   "greek_ocr_usable": true,
+   "ia_url": "https://archive.org/details/lyragraecabeingr01unse"
+  },
+  {
+   "volume": "I-1928",
+   "ia_item": "lyragraeca0001jmed_c0b1",
+   "edition": "Lyra Graeca vol. I, revised and augmented edition (London: Heinemann; New York: Putnam)",
+   "publication_year": 1928,
+   "greek_ocr_usable": true,
+   "ia_url": "https://archive.org/details/lyragraeca0001jmed_c0b1"
+  },
+  {
+   "volume": "II",
+   "ia_item": "lyragraecabeingr02unse",
+   "edition": "Lyra Graeca vol. II (London: Heinemann; New York: Putnam)",
+   "publication_year": 1924,
+   "greek_ocr_usable": true,
+   "ia_url": "https://archive.org/details/lyragraecabeingr02unse"
+  },
+  {
+   "volume": "III",
+   "ia_item": "lyragraecabeingr03unse",
+   "edition": "Lyra Graeca vol. III (London: Heinemann; New York: Putnam)",
+   "publication_year": 1927,
+   "greek_ocr_usable": false,
+   "ia_url": "https://archive.org/details/lyragraecabeingr03unse"
+  }
+ ],
+ "inputs": [
+  {
+   "volume": "I",
+   "item": "lyragraecabeingr01unse",
+   "kind": "metadata",
+   "url": "https://archive.org/metadata/lyragraecabeingr01unse",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr01unse/metadata.json",
+   "bytes": 93340,
+   "sha256": "36aed16101754e3ed0d1c9c30c69f11e0b54d1308793ab7fb743295eca87e195"
+  },
+  {
+   "volume": "I",
+   "item": "lyragraecabeingr01unse",
+   "kind": "djvu_xml",
+   "url": "https://archive.org/download/lyragraecabeingr01unse/lyragraecabeingr01unse_djvu.xml",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr01unse/lyragraecabeingr01unse_djvu.xml",
+   "bytes": 8898858,
+   "sha256": "60ae2ab71a674e99388368abdfc41bd904b734b2d4f068d06bc284ec303972da"
+  },
+  {
+   "volume": "I",
+   "item": "lyragraecabeingr01unse",
+   "kind": "scandata",
+   "url": "https://archive.org/download/lyragraecabeingr01unse/lyragraecabeingr01unse_scandata.xml",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr01unse/lyragraecabeingr01unse_scandata.xml",
+   "bytes": 536771,
+   "sha256": "7f96f834615bfe97dce622e825505129a0ed321e9661ea11e9df397ea17617c1"
+  },
+  {
+   "volume": "I",
+   "item": "lyragraecabeingr01unse",
+   "kind": "page_numbers",
+   "url": "https://archive.org/download/lyragraecabeingr01unse/lyragraecabeingr01unse_page_numbers.json",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr01unse/lyragraecabeingr01unse_page_numbers.json",
+   "bytes": 82677,
+   "sha256": "4a69a4be19c8260c3b2906b5be732fc5d1e853f4de2813a037567da2dcdd2e8c"
+  },
+  {
+   "volume": "I",
+   "item": "lyragraecabeingr01unse",
+   "kind": "iiif_manifest",
+   "url": "https://iiif.archive.org/iiif/3/lyragraecabeingr01unse/manifest.json",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr01unse/iiif-manifest.json",
+   "bytes": 533172,
+   "sha256": "a2ccda3ffa826a88ee8d7ffaea2763b3098a0847a00da7212746b3fdbbf2dd83"
+  },
+  {
+   "volume": "I-1928",
+   "item": "lyragraeca0001jmed_c0b1",
+   "kind": "metadata",
+   "url": "https://archive.org/metadata/lyragraeca0001jmed_c0b1",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraeca0001jmed_c0b1/metadata.json",
+   "bytes": 104290,
+   "sha256": "98e0cc0efe595409d7823489ae414dcbe825494775aed4b10f7224fc9b544e22"
+  },
+  {
+   "volume": "I-1928",
+   "item": "lyragraeca0001jmed_c0b1",
+   "kind": "djvu_xml",
+   "url": "https://archive.org/download/lyragraeca0001jmed_c0b1/lyragraeca0001jmed_c0b1_djvu.xml",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraeca0001jmed_c0b1/lyragraeca0001jmed_c0b1_djvu.xml",
+   "bytes": 9377669,
+   "sha256": "6b9b739f4b0ab174ab6a6a598fc8124a7ffe4c58c7af2b09d31238fb494bec15"
+  },
+  {
+   "volume": "I-1928",
+   "item": "lyragraeca0001jmed_c0b1",
+   "kind": "scandata",
+   "url": "https://archive.org/download/lyragraeca0001jmed_c0b1/lyragraeca0001jmed_c0b1_scandata.xml",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraeca0001jmed_c0b1/lyragraeca0001jmed_c0b1_scandata.xml",
+   "bytes": 572744,
+   "sha256": "de3b180ea35a650f55939d9c843ef4bab0acfc7c9bd8c10b048f78aac680bc82"
+  },
+  {
+   "volume": "I-1928",
+   "item": "lyragraeca0001jmed_c0b1",
+   "kind": "page_numbers",
+   "url": "https://archive.org/download/lyragraeca0001jmed_c0b1/lyragraeca0001jmed_c0b1_page_numbers.json",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraeca0001jmed_c0b1/lyragraeca0001jmed_c0b1_page_numbers.json",
+   "bytes": 90214,
+   "sha256": "176ef6bf3c9411d088718c464a4f81f8bc72dfc04265d3c6605746212fa99243"
+  },
+  {
+   "volume": "I-1928",
+   "item": "lyragraeca0001jmed_c0b1",
+   "kind": "iiif_manifest",
+   "url": "https://iiif.archive.org/iiif/3/lyragraeca0001jmed_c0b1/manifest.json",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraeca0001jmed_c0b1/iiif-manifest.json",
+   "bytes": 589161,
+   "sha256": "76f5d2d4a7560c47692150238af2eb087dd8b81a265a3b858913f22a1a841196"
+  },
+  {
+   "volume": "II",
+   "item": "lyragraecabeingr02unse",
+   "kind": "metadata",
+   "url": "https://archive.org/metadata/lyragraecabeingr02unse",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr02unse/metadata.json",
+   "bytes": 93096,
+   "sha256": "3811dab07b05f2acdd15ee1f78e3e42e1343f120486b6ea77c76b1ea686b19ba"
+  },
+  {
+   "volume": "II",
+   "item": "lyragraecabeingr02unse",
+   "kind": "djvu_xml",
+   "url": "https://archive.org/download/lyragraecabeingr02unse/lyragraecabeingr02unse_djvu.xml",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr02unse/lyragraecabeingr02unse_djvu.xml",
+   "bytes": 9440049,
+   "sha256": "39d900f8bed9802d244a5080b6af8734364213391e11e0fce954704031942dbf"
+  },
+  {
+   "volume": "II",
+   "item": "lyragraecabeingr02unse",
+   "kind": "scandata",
+   "url": "https://archive.org/download/lyragraecabeingr02unse/lyragraecabeingr02unse_scandata.xml",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr02unse/lyragraecabeingr02unse_scandata.xml",
+   "bytes": 532682,
+   "sha256": "275faaab9336ecfdac273e726917e792986769e1ea4e4bc16667761ff8ea4978"
+  },
+  {
+   "volume": "II",
+   "item": "lyragraecabeingr02unse",
+   "kind": "page_numbers",
+   "url": "https://archive.org/download/lyragraecabeingr02unse/lyragraecabeingr02unse_page_numbers.json",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr02unse/lyragraecabeingr02unse_page_numbers.json",
+   "bytes": 82362,
+   "sha256": "9d29a00dc4292474612b717ac06bff9db652bca254653889b7794ec755f90c9a"
+  },
+  {
+   "volume": "II",
+   "item": "lyragraecabeingr02unse",
+   "kind": "iiif_manifest",
+   "url": "https://iiif.archive.org/iiif/3/lyragraecabeingr02unse/manifest.json",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr02unse/iiif-manifest.json",
+   "bytes": 531174,
+   "sha256": "51425611ee7b2fecf54c280efab6f039b8f458e8cf47ce71064602d5bb2852eb"
+  },
+  {
+   "volume": "III",
+   "item": "lyragraecabeingr03unse",
+   "kind": "metadata",
+   "url": "https://archive.org/metadata/lyragraecabeingr03unse",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr03unse/metadata.json",
+   "bytes": 135352,
+   "sha256": "d14023da21a2b82cd92e936f5b385bcac98ae38fe24b5e0b296940a997b407c9"
+  },
+  {
+   "volume": "III",
+   "item": "lyragraecabeingr03unse",
+   "kind": "djvu_xml",
+   "url": "https://archive.org/download/lyragraecabeingr03unse/lyragraecabeingr03unse_djvu.xml",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr03unse/lyragraecabeingr03unse_djvu.xml",
+   "bytes": 15399928,
+   "sha256": "a02d8f5beaf5b88b56b2e980716fad18923a8b6fade197d9342d579f0effcf0c"
+  },
+  {
+   "volume": "III",
+   "item": "lyragraecabeingr03unse",
+   "kind": "scandata",
+   "url": "https://archive.org/download/lyragraecabeingr03unse/lyragraecabeingr03unse_scandata.xml",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr03unse/lyragraecabeingr03unse_scandata.xml",
+   "bytes": 808786,
+   "sha256": "22e981b2413499ce233004752c5c5f5ff2c8a7c49159a6854bedc9f7f1d34bb5"
+  },
+  {
+   "volume": "III",
+   "item": "lyragraecabeingr03unse",
+   "kind": "page_numbers",
+   "url": "https://archive.org/download/lyragraecabeingr03unse/lyragraecabeingr03unse_page_numbers.json",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr03unse/lyragraecabeingr03unse_page_numbers.json",
+   "bytes": 124890,
+   "sha256": "c1f418a7cf04ccbc7ceb8f4c1591cc1ab2a0be43850e8fa1bb925c8cfd6bf6d7"
+  },
+  {
+   "volume": "III",
+   "item": "lyragraecabeingr03unse",
+   "kind": "iiif_manifest",
+   "url": "https://iiif.archive.org/iiif/3/lyragraecabeingr03unse/manifest.json",
+   "path": "data/raw/edmonds-lyra-graeca-open/lyragraecabeingr03unse/iiif-manifest.json",
+   "bytes": 803226,
+   "sha256": "ca2617bdc47bc3ef3a336bb02dcfc7ad492d2998eacd0aa02a5148eaee10c9fe"
+  },
+  {
+   "volume": null,
+   "item": null,
+   "kind": "campbell_glp (read-only, for incipit matching)",
+   "url": null,
+   "path": "data/campbell_glp/campbell_glp.jsonl",
+   "bytes": 720864,
+   "sha256": "bd11e1c24e43771afd97c49799cd713c9d466f13300062d6add9260d1e560306"
+  }
+ ],
+ "output": {
+  "path": "data/open/edmonds-lyra-graeca/fragments.jsonl",
+  "sha256": "17b8d08d1f24bca4467a9ca3fcff27ee997e16f4a01f32bf073de83f2fc0b659",
+  "records": 1879
+ },
+ "counts_per_volume": {
+  "I": 503,
+  "I-1928": 509,
+  "II": 530,
+  "III": 337
+ },
+ "counts_per_volume_poet": {
+  "I": {
+   "ALCAEUS": 164,
+   "ALCMAN": 159,
+   "CONTENTS": 1,
+   "EUMELUS": 1,
+   "LIST OF NEW FRAGMENTS": 1,
+   "SAPPHO": 172,
+   "TERPANDER": 5
+  },
+  "I-1928": {
+   "ALCAEUS": 165,
+   "ALCMAN": 161,
+   "EUMELUS": 1,
+   "SAPPHO": 176,
+   "TERPANDER": 6
+  },
+  "II": {
+   "ANACREON": 161,
+   "IBYCUS": 61,
+   "LASUS": 4,
+   "SACADAS": 3,
+   "SIMONIDES": 205,
+   "STESICHORUS": 80,
+   "TELESILLA": 9,
+   "TIMOCREON": 7
+  },
+  "III": {
+   "ANONYMOUS ALCMAN": 9,
+   "ANONYMOUS FRAGMENTS": 13,
+   "ANONYMOUS LATER POETS": 56,
+   "ANONYMOUS SAPPHO OR ALCAEUS": 24,
+   "ATTIC SCOLIA": 18,
+   "BACCHYLIDES": 63,
+   "CEDEIDES": 2,
+   "CHARIXENA": 1,
+   "CINESIAS": 1,
+   "CORINNA": 26,
+   "CYDIAS": 2,
+   "DIAGORAS": 2,
+   "FOLKSONGS": 3,
+   "FOLKSONGS INTRODUCTION": 1,
+   "FOLKSONGS TO GODS": 6,
+   "GAMESONGS": 7,
+   "ION OF CHIOS": 1,
+   "LICYMNIUS": 4,
+   "LOVESONGS": 6,
+   "LYSIMACHUS": 2,
+   "MELANIPPIDES": 10,
+   "OCCUPATIONAL SONGS": 3,
+   "OTHER RITUAL FOLKSONGS": 9,
+   "PHILOXENUS SON OF ERYXIS": 3,
+   "POLYIDUS": 2,
+   "PRATINAS": 5,
+   "PRAXILLA": 7,
+   "SCOLIA OF THE SEVEN WISE MEN": 4,
+   "TELESTES": 6,
+   "THE DITHYRAMBS OF PHILOXENUS": 15,
+   "THEANO": 3,
+   "TIMOTHEUS": 23
+  }
+ },
+ "flag_counts": {
+  "number_greek_side_only": 115,
+  "english_boundary_placed_by_facing_page_position": 145,
+  "english_source_line_colon_not_found": 60,
+  "number_two_sided_resolved_by_sequence": 383,
+  "number_english_side_only": 152,
+  "greek_boundary_placed_by_facing_page_position": 165,
+  "number_trailing_digit_taken_as_footnote_mark": 33,
+  "number_inferred_between_neighbours": 94,
+  "number_out_of_sequence_uncertain": 18,
+  "english_text_empty": 16,
+  "greek_text_empty": 23,
+  "inside_testimonia_section": 3
+ },
+ "segmentation": {
+  "quality": "machine_ocr_segmented",
+  "method": [
+   "IA djvu.xml (Tesseract) lines with coordinates; accent-row/speck lines dropped",
+   "running head = first line in top 12% of page; printed page number from bottom-line OCR, propagated by local majority offset",
+   "footnote block = highest large vertical gap in the lower page followed by a left-aligned numbered note line, set in small type, with no centred fragment number below it; footnotes are kept per page, not cut per fragment",
+   "page role: Greek (Greek-letter ratio > 0.3, or < 15% English function words) vs English; facing spread = Greek page followed by English page",
+   "fragment marker = short centred line reading as a number (+ optional a-d suffix, ', N' pair, footnote digit, or capitals title), or an unreadable tiny centred line of number height",
+   "markers of the two facing pages aligned (Needleman-Wunsch) with a hard vertical-position constraint (Edmonds prints corresponding numbers at the same height)",
+   "numbers chosen per poet by a longest ascending chain (dynamic programming over all OCR readings, incl. dropping a trailing superscript footnote digit); unplaced markers between numbers a and a+k+1 receive a+1..a+k (flagged inferred); unplaced two-page markers kept as boundaries (flagged out_of_sequence); unplaced one-page markers dropped",
+   "fragment text = body lines from its marker to the next marker on the same page side; when the number was not found on one page, that page's boundary is placed at the facing number's height (flagged); cut at a centred all-caps heading or a running-head change",
+   "english_source_line = English segment up to its first colon within 250 characters (Edmonds' italic source note ends with a colon); greek_source_ref = Latin-letter text before the first Greek letter",
+   "Greek is uncorrected OCR (never corrected by hand); vol. III Greek is unusable (Latin-only OCR)"
+  ],
+  "volume_stats": {
+   "I": {
+    "title_page": {
+     "leaf": 11,
+     "image": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr01unse%2Flyragraecabeingr01unse_jp2.zip%2Flyragraecabeingr01unse_jp2%2Flyragraecabeingr01unse_0011.jp2/full/max/0/default.jpg",
+     "ocr_imprint_lines": [
+      "IN THREE VOLUMES",
+      "VoLuME I",
+      "MOMXXII 7"
+     ]
+    },
+    "pages": 490,
+    "type_size_thresholds_px": {
+     "eng": 58.5,
+     "grc": 68.5
+    },
+    "facing_spreads": 218,
+    "noise_lines_dropped": 510,
+    "raw_markers": 536,
+    "accepted_markers": 503,
+    "rejected_one_sided_markers": [
+     {
+      "leaf": 28,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 36,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 40,
+      "ocr": "Blos"
+     },
+     {
+      "leaf": 58,
+      "ocr": "Βώς"
+     },
+     {
+      "leaf": 62,
+      "ocr": "Βίος"
+     },
+     {
+      "leaf": 68,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 76,
+      "ocr": "5 [Ἱππόσ]ων τε τὸν κορυστὰν"
+     },
+     {
+      "leaf": 104,
+      "ocr": "hie"
+     },
+     {
+      "leaf": 114,
+      "ocr": "04"
+     },
+     {
+      "leaf": 118,
+      "ocr": "5 , \\ Se ΝᾺ"
+     },
+     {
+      "leaf": 124,
+      "ocr": "7 δὲ ΔΊΣ θ / 1"
+     },
+     {
+      "leaf": 134,
+      "ocr": "3 Ν ΕῚ n"
+     },
+     {
+      "leaf": 142,
+      "ocr": "N’"
+     },
+     {
+      "leaf": 146,
+      "ocr": "π΄’"
+     },
+     {
+      "leaf": 150,
+      "ocr": "iS"
+     },
+     {
+      "leaf": 152,
+      "ocr": "Soap"
+     },
+     {
+      "leaf": 157,
+      "ocr": "jaws"
+     },
+     {
+      "leaf": 160,
+      "ocr": "Βίος"
+     },
+     {
+      "leaf": 164,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 229,
+      "ocr": "362 To THe Nereips —"
+     },
+     {
+      "leaf": 258,
+      "ocr": "14"
+     },
+     {
+      "leaf": 284,
+      "ocr": "ς"
+     },
+     {
+      "leaf": 294,
+      "ocr": "{γί"
+     },
+     {
+      "leaf": 300,
+      "ocr": "Η΄"
+     },
+     {
+      "leaf": 332,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 340,
+      "ocr": "A’"
+     },
+     {
+      "leaf": 345,
+      "ocr": "92-5 To Hermes"
+     },
+     {
+      "leaf": 363,
+      "ocr": "19"
+     },
+     {
+      "leaf": 386,
+      "ocr": "682 [eis ΑἸα]"
+     },
+     {
+      "leaf": 396,
+      "ocr": "φ'"
+     },
+     {
+      "leaf": 412,
+      "ocr": "112."
+     },
+     {
+      "leaf": 412,
+      "ocr": "ὄιδα"
+     },
+     {
+      "leaf": 417,
+      "ocr": "11g"
+     }
+    ],
+    "number_status": {
+     "greek_side_only": 21,
+     "two_sided_resolved_by_sequence": 121,
+     "english_side_only": 41,
+     "inferred_between_neighbours": 31,
+     "agreed": 286,
+     "out_of_sequence_uncertain": 3
+    }
+   },
+   "I-1928": {
+    "title_page": {
+     "leaf": 9,
+     "image": "https://iiif.archive.org/image/iiif/3/lyragraeca0001jmed_c0b1%2Flyragraeca0001jmed_c0b1_jp2.zip%2Flyragraeca0001jmed_c0b1_jp2%2Flyragraeca0001jmed_c0b1_0009.jp2/full/max/0/default.jpg",
+     "ocr_imprint_lines": [
+      "IN THREE VOLUMES",
+      "% REVISED AND AUGMENTED EDITION"
+     ]
+    },
+    "pages": 536,
+    "type_size_thresholds_px": {
+     "eng": 42.5,
+     "grc": 48.5
+    },
+    "facing_spreads": 228,
+    "noise_lines_dropped": 730,
+    "raw_markers": 539,
+    "accepted_markers": 509,
+    "rejected_one_sided_markers": [
+     {
+      "leaf": 32,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 40,
+      "ocr": "Βίος"
+     },
+     {
+      "leaf": 44,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 62,
+      "ocr": "Βίος"
+     },
+     {
+      "leaf": 66,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 72,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 80,
+      "ocr": "10 [’ ΄Άρεος ајри πώρω κλόνον"
+     },
+     {
+      "leaf": 80,
+      "ocr": "15 [σιῶν' ἀπ]έδιλος ἁλκά."
+     },
+     {
+      "leaf": 108,
+      "ocr": "I"
+     },
+     {
+      "leaf": 146,
+      "ocr": "190"
+     },
+     {
+      "leaf": 154,
+      "ocr": "S"
+     },
+     {
+      "leaf": 161,
+      "ocr": "jaws"
+     },
+     {
+      "leaf": 164,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 168,
+      "ocr": "Βίος"
+     },
+     {
+      "leaf": 270,
+      "ocr": "30 [ἀήδων ἔχε ποι]κιλᾳοιδίᾳ,ϑ"
+     },
+     {
+      "leaf": 288,
+      "ocr": "ς’"
+     },
+     {
+      "leaf": 288,
+      "ocr": "11"
+     },
+     {
+      "leaf": 298,
+      "ocr": "z"
+     },
+     {
+      "leaf": 307,
+      "ocr": "141 АЗ"
+     },
+     {
+      "leaf": 336,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 416,
+      "ocr": "діда"
+     },
+     {
+      "leaf": 453,
+      "ocr": "172"
+     },
+     {
+      "leaf": 456,
+      "ocr": "150"
+     },
+     {
+      "leaf": 458,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 469,
+      "ocr": "192"
+     },
+     {
+      "leaf": 474,
+      "ocr": "77 B"
+     },
+     {
+      "leaf": 478,
+      "ocr": "187"
+     },
+     {
+      "leaf": 480,
+      "ocr": "188"
+     },
+     {
+      "leaf": 499,
+      "ocr": "128"
+     },
+     {
+      "leaf": 499,
+      "ocr": "53"
+     }
+    ],
+    "number_status": {
+     "two_sided_resolved_by_sequence": 60,
+     "english_side_only": 66,
+     "agreed": 325,
+     "greek_side_only": 43,
+     "inferred_between_neighbours": 13,
+     "out_of_sequence_uncertain": 2
+    }
+   },
+   "II": {
+    "title_page": {
+     "leaf": 7,
+     "image": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr02unse%2Flyragraecabeingr02unse_jp2.zip%2Flyragraecabeingr02unse_jp2%2Flyragraecabeingr02unse_0007.jp2/full/max/0/default.jpg",
+     "ocr_imprint_lines": [
+      "IN THREE VOLUMES φ",
+      "MCMXXIV"
+     ]
+    },
+    "pages": 488,
+    "type_size_thresholds_px": {
+     "eng": 58.5,
+     "grc": 65.5
+    },
+    "facing_spreads": 217,
+    "noise_lines_dropped": 577,
+    "raw_markers": 567,
+    "accepted_markers": 530,
+    "rejected_one_sided_markers": [
+     {
+      "leaf": 16,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 26,
+      "ocr": "Βίος"
+     },
+     {
+      "leaf": 65,
+      "ocr": "39"
+     },
+     {
+      "leaf": 91,
+      "ocr": "LIFE"
+     },
+     {
+      "leaf": 100,
+      "ocr": "Ὁ» 9"
+     },
+     {
+      "leaf": 104,
+      "ocr": "7 NN / \\"
+     },
+     {
+      "leaf": 121,
+      "ocr": "vain"
+     },
+     {
+      "leaf": 132,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 184,
+      "ocr": "Τ΄'"
+     },
+     {
+      "leaf": 188,
+      "ocr": "77"
+     },
+     {
+      "leaf": 192,
+      "ocr": "ἦν"
+     },
+     {
+      "leaf": 196,
+      "ocr": "laa"
+     },
+     {
+      "leaf": 208,
+      "ocr": "τ"
+     },
+     {
+      "leaf": 234,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 244,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 246,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 248,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 258,
+      "ocr": "Βίος"
+     },
+     {
+      "leaf": 288,
+      "ocr": "B’"
+     },
+     {
+      "leaf": 290,
+      "ocr": "τ΄"
+     },
+     {
+      "leaf": 294,
+      "ocr": "A’"
+     },
+     {
+      "leaf": 310,
+      "ocr": "8 [περὶ προνοίας\""
+     },
+     {
+      "leaf": 312,
+      "ocr": "H’"
+     },
+     {
+      "leaf": 312,
+      "ocr": "ΟἹ"
+     },
+     {
+      "leaf": 314,
+      "ocr": "Θ΄"
+     },
+     {
+      "leaf": 316,
+      "ocr": "TA’"
+     },
+     {
+      "leaf": 320,
+      "ocr": "IB’"
+     },
+     {
+      "leaf": 326,
+      "ocr": "1"
+     },
+     {
+      "leaf": 344,
+      "ocr": "II”"
+     },
+     {
+      "leaf": 362,
+      "ocr": "JA’"
+     },
+     {
+      "leaf": 362,
+      "ocr": "{ΠῚ"
+     },
+     {
+      "leaf": 406,
+      "ocr": "9"
+     },
+     {
+      "leaf": 426,
+      "ocr": "4 1"
+     },
+     {
+      "leaf": 429,
+      "ocr": "2323"
+     },
+     {
+      "leaf": 430,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 432,
+      "ocr": "A’"
+     },
+     {
+      "leaf": 438,
+      "ocr": "0"
+     }
+    ],
+    "number_status": {
+     "two_sided_resolved_by_sequence": 136,
+     "english_side_only": 21,
+     "agreed": 298,
+     "greek_side_only": 30,
+     "inferred_between_neighbours": 42,
+     "out_of_sequence_uncertain": 3
+    }
+   },
+   "III": {
+    "title_page": {
+     "leaf": 7,
+     "image": "https://iiif.archive.org/image/iiif/3/lyragraecabeingr03unse%2Flyragraecabeingr03unse_jp2.zip%2Flyragraecabeingr03unse_jp2%2Flyragraecabeingr03unse_0007.jp2/full/max/0/default.jpg",
+     "ocr_imprint_lines": [
+      "IN THREE VOLUMES",
+      "MCMXXVII"
+     ]
+    },
+    "pages": 742,
+    "type_size_thresholds_px": {
+     "eng": 59.5,
+     "grc": 68.5
+    },
+    "facing_spreads": 290,
+    "noise_lines_dropped": 618,
+    "raw_markers": 395,
+    "accepted_markers": 337,
+    "rejected_one_sided_markers": [
+     {
+      "leaf": 18,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 22,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 33,
+      "ocr": "him"
+     },
+     {
+      "leaf": 44,
+      "ocr": "30 [oépve] A\\uTTAda TéTpar,"
+     },
+     {
+      "leaf": 52,
+      "ocr": "1’"
+     },
+     {
+      "leaf": 52,
+      "ocr": "A’"
+     },
+     {
+      "leaf": 56,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 62,
+      "ocr": "Bio"
+     },
+     {
+      "leaf": 72,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 88,
+      "ocr": "Béos"
+     },
+     {
+      "leaf": 90,
+      "ocr": "r"
+     },
+     {
+      "leaf": 96,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 102,
+      "ocr": "[A"
+     },
+     {
+      "leaf": 104,
+      "ocr": "B’"
+     },
+     {
+      "leaf": 108,
+      "ocr": "Yr"
+     },
+     {
+      "leaf": 129,
+      "ocr": "Io"
+     },
+     {
+      "leaf": 133,
+      "ocr": "Ipas"
+     },
+     {
+      "leaf": 136,
+      "ocr": "ae"
+     },
+     {
+      "leaf": 138,
+      "ocr": "Utd"
+     },
+     {
+      "leaf": 138,
+      "ocr": "os"
+     },
+     {
+      "leaf": 148,
+      "ocr": "175 Twy EVLA PEL oucev YyAVEU"
+     },
+     {
+      "leaf": 164,
+      "ocr": "14 o eTLOKNTTOV 1 mupave Ke"
+     },
+     {
+      "leaf": 170,
+      "ocr": "2"
+     },
+     {
+      "leaf": 176,
+      "ocr": "5 [e]yros aipalcias kdeevvas |"
+     },
+     {
+      "leaf": 204,
+      "ocr": "85 [Oools <ava yav> le\\pav >"
+     },
+     {
+      "leaf": 208,
+      "ocr": "150 vavol S €UT PULVOLS Tapa |"
+     },
+     {
+      "leaf": 208,
+      "ocr": "155 [77 AvO]é 7 HutOéor-"
+     },
+     {
+      "leaf": 210,
+      "ocr": "191 [lv@éa, werérav te Bpotw-"
+     },
+     {
+      "leaf": 230,
+      "ocr": "H’"
+     },
+     {
+      "leaf": 241,
+      "ocr": "3 To Coronis 2"
+     },
+     {
+      "leaf": 246,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 264,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 288,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 296,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 315,
+      "ocr": "91"
+     },
+     {
+      "leaf": 314,
+      "ocr": "B’"
+     },
+     {
+      "leaf": 318,
+      "ocr": "g"
+     },
+     {
+      "leaf": 330,
+      "ocr": "70 [o]Te dé TQ > Nei TroLeyv aAvPAl,"
+     },
+     {
+      "leaf": 332,
+      "ocr": "95 dxvay eT AVEPEVY OfLEVOS"
+     },
+     {
+      "leaf": 346,
+      "ocr": "la Kvaveov * TOXOY aTTPwWV"
+     },
+     {
+      "leaf": 350,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 356,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 378,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 416,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 420,
+      "ocr": "Bios"
+     },
+     {
+      "leaf": 444,
+      "ocr": "2"
+     },
+     {
+      "leaf": 495,
+      "ocr": "123 Al"
+     },
+     {
+      "leaf": 532,
+      "ocr": "B"
+     },
+     {
+      "leaf": 548,
+      "ocr": "T’"
+     },
+     {
+      "leaf": 552,
+      "ocr": "AS"
+     },
+     {
+      "leaf": 558,
+      "ocr": "FE’"
+     },
+     {
+      "leaf": 560,
+      "ocr": "Gc!"
+     },
+     {
+      "leaf": 564,
+      "ocr": "Vi"
+     },
+     {
+      "leaf": 576,
+      "ocr": "ra"
+     },
+     {
+      "leaf": 596,
+      "ocr": "Te"
+     },
+     {
+      "leaf": 704,
+      "ocr": "125 G75 p. 302 117"
+     },
+     {
+      "leaf": 704,
+      "ocr": "113 65 A 6 1Z3A oD."
+     },
+     {
+      "leaf": 704,
+      "ocr": "119 TAR C35 128"
+     }
+    ],
+    "number_status": {
+     "agreed": 208,
+     "greek_side_only": 21,
+     "two_sided_resolved_by_sequence": 66,
+     "inferred_between_neighbours": 8,
+     "out_of_sequence_uncertain": 10,
+     "english_side_only": 24
+    }
+   }
+  },
+  "spot_check": {
+   "file": "data/open/edmonds-lyra-graeca/spotcheck.json",
+   "sha256": "18d7f0aceb8280fc90d3ae5c7740fcef6ac8e0f64091171bd9df9b8b69c688ea",
+   "checked": "2026-10-09",
+   "auditor": "independent subagent, visual comparison with IA page images (round 2, final build)",
+   "sample": "36 records, 9 per volume, random seed 1009",
+   "records_checked": 36,
+   "sampled_ids_present_in_output": 36,
+   "error_rates": {
+    "number_ok": {
+     "checked": 36,
+     "errors": 2,
+     "error_rate": 0.056
+    },
+    "poet_ok": {
+     "checked": 36,
+     "errors": 0,
+     "error_rate": 0.0
+    },
+    "english_start_ok": {
+     "checked": 36,
+     "errors": 2,
+     "error_rate": 0.056
+    },
+    "english_end_ok": {
+     "checked": 36,
+     "errors": 7,
+     "error_rate": 0.194
+    },
+    "greek_start_ok": {
+     "checked": 36,
+     "errors": 1,
+     "error_rate": 0.028
+    },
+    "greek_end_ok": {
+     "checked": 36,
+     "errors": 7,
+     "error_rate": 0.194
+    },
+    "source_line_ok": {
+     "checked": 36,
+     "errors": 1,
+     "error_rate": 0.028
+    },
+    "pages_ok": {
+     "checked": 36,
+     "errors": 3,
+     "error_rate": 0.083
+    }
+   }
+  },
+  "spot_check_round1_prefix": {
+   "file": "data/open/edmonds-lyra-graeca/spotcheck_round1_prefix.json",
+   "sha256": "efd4a5409541200eba471a1c863bdd0cc627dce4b306b719338f922298cee9a2",
+   "checked": "2026-10-09",
+   "auditor": "independent subagent, visual comparison with IA page images",
+   "sample": "36 records, 9 per volume, random seed 20261009",
+   "records_checked": 36,
+   "sampled_ids_present_in_output": 36,
+   "error_rates": {
+    "number_ok": {
+     "checked": 36,
+     "errors": 2,
+     "error_rate": 0.056
+    },
+    "poet_ok": {
+     "checked": 36,
+     "errors": 2,
+     "error_rate": 0.056
+    },
+    "english_start_ok": {
+     "checked": 36,
+     "errors": 1,
+     "error_rate": 0.028
+    },
+    "english_end_ok": {
+     "checked": 36,
+     "errors": 12,
+     "error_rate": 0.333
+    },
+    "greek_start_ok": {
+     "checked": 36,
+     "errors": 3,
+     "error_rate": 0.083
+    },
+    "greek_end_ok": {
+     "checked": 36,
+     "errors": 8,
+     "error_rate": 0.222
+    },
+    "source_line_ok": {
+     "checked": 36,
+     "errors": 1,
+     "error_rate": 0.028
+    },
+    "pages_ok": {
+     "checked": 36,
+     "errors": 1,
+     "error_rate": 0.028
+    }
+   },
+   "note": "first audit, run on an earlier build; its failures (footnotes leaking into fragment ends, number/title lines kept as text, missed page-signature lines) led to the footnote and boundary fixes in this script. Error rates of the final build are in spot_check."
+  },
+  "provenance_check": {
+   "text_lines_checked": 31761,
+   "lines_not_found_in_cited_ocr_pages": 0
+  }
+ },
+ "campbell_glp_mapping": {
+  "method": "exact Greek incipit match (first 20 normalised Greek letters of the Campbell text found in the same poet's Edmonds Greek OCR segment); Edmonds prints no Campbell cross-references (Campbell 1967 postdates him)",
+  "campbell_poems_total": 232,
+  "matched_campbell_poems": 33,
+  "matched_with_certain_edmonds_number": 30,
+  "edmonds_records_matched": 39,
+  "matches": [
+   {
+    "campbell_id": "campbell-glp:alcman:20",
+    "campbell_author": "Alcman",
+    "campbell_fragment": "20",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:alcman:137",
+      "edmonds_number": "137",
+      "volume": "I",
+      "offset_in_greek_text": 62,
+      "greek_text_letters": 152,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ωρασδεσηκετρεισθεροσ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:alcman:27",
+    "campbell_author": "Alcman",
+    "campbell_fragment": "27",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:alcman:43",
+      "edmonds_number": "43",
+      "volume": "I",
+      "offset_in_greek_text": 35,
+      "greek_text_letters": 107,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "μωσαγεκαλλιοπαθυγατε",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:alcman:56",
+    "campbell_author": "Alcman",
+    "campbell_fragment": "56",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:alcman:47",
+      "edmonds_number": "47",
+      "volume": "I",
+      "offset_in_greek_text": 158,
+      "greek_text_letters": 455,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "πολλακιδενκορυφαισορ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:alcman:58",
+    "campbell_author": "Alcman",
+    "campbell_fragment": "58",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:alcman:131",
+      "edmonds_number": "131",
+      "volume": "I",
+      "offset_in_greek_text": 78,
+      "greek_text_letters": 306,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "αφροδιταμενουκεστιμα",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:stesichorus:187",
+    "campbell_author": "Stesichorus",
+    "campbell_fragment": "187",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:stesichorus:15",
+      "edmonds_number": "15",
+      "volume": "II",
+      "offset_in_greek_text": 45,
+      "greek_text_letters": 150,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "πολλαμενκυδωνιαμαλαπ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:stesichorus:192",
+    "campbell_author": "Stesichorus",
+    "campbell_fragment": "192",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:stesichorus:17",
+      "edmonds_number": "17",
+      "volume": "II",
+      "offset_in_greek_text": 1134,
+      "greek_text_letters": 1310,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ουκεστετυμοσλογοσουτ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:stesichorus:219",
+    "campbell_author": "Stesichorus",
+    "campbell_fragment": "219",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:stesichorus:43",
+      "edmonds_number": "43",
+      "volume": "II",
+      "offset_in_greek_text": 105,
+      "greek_text_letters": 641,
+      "number_certain": false,
+      "possible_alternative": "edmonds-lg:II:stesichorus:47"
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ταδεδρακωνεδοκησεμολ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:stesichorus:223",
+    "campbell_author": "Stesichorus",
+    "campbell_fragment": "223",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:stesichorus:12",
+      "edmonds_number": "12",
+      "volume": "II",
+      "offset_in_greek_text": 503,
+      "greek_text_letters": 637,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ουνεκατυνδαρεοσρεζων",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:sappho:1",
+    "campbell_author": "Sappho",
+    "campbell_fragment": "1",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:sappho:1",
+      "edmonds_number": "1",
+      "volume": "I",
+      "offset_in_greek_text": 432,
+      "greek_text_letters": 1235,
+      "number_certain": true,
+      "possible_alternative": null
+     },
+     {
+      "edmonds_id": "edmonds-lg:I-1928:sappho:1",
+      "edmonds_number": "1",
+      "volume": "I-1928",
+      "offset_in_greek_text": 440,
+      "greek_text_letters": 1259,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ποικιλοθροναθαναταφρ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:sappho:16",
+    "campbell_author": "Sappho",
+    "campbell_fragment": "16",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I-1928:sappho:38",
+      "edmonds_number": "38",
+      "volume": "I-1928",
+      "offset_in_greek_text": 0,
+      "greek_text_letters": 517,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "οιμενιππηωνστροτονοι",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:sappho:31",
+    "campbell_author": "Sappho",
+    "campbell_fragment": "31",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:sappho:2",
+      "edmonds_number": "2",
+      "volume": "I",
+      "offset_in_greek_text": 484,
+      "greek_text_letters": 1188,
+      "number_certain": true,
+      "possible_alternative": null
+     },
+     {
+      "edmonds_id": "edmonds-lg:I-1928:sappho:2",
+      "edmonds_number": "2",
+      "volume": "I-1928",
+      "offset_in_greek_text": 538,
+      "greek_text_letters": 1205,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "φαινεταιμοικηνοσισοσ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:sappho:34",
+    "campbell_author": "Sappho",
+    "campbell_fragment": "34",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I-1928:sappho:3",
+      "edmonds_number": "3",
+      "volume": "I-1928",
+      "offset_in_greek_text": 130,
+      "greek_text_letters": 217,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "αστερεσμεναμφικαλανσ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:sappho:49",
+    "campbell_author": "Sappho",
+    "campbell_fragment": "49",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I-1928:sappho:48",
+      "edmonds_number": "48",
+      "volume": "I-1928",
+      "offset_in_greek_text": 290,
+      "greek_text_letters": 378,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ηραμανμενεγωσεθενατθ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:sappho:81b",
+    "campbell_author": "Sappho",
+    "campbell_fragment": "81b",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:sappho:114",
+      "edmonds_number": "114",
+      "volume": "I",
+      "offset_in_greek_text": 637,
+      "greek_text_letters": 951,
+      "number_certain": true,
+      "possible_alternative": null
+     },
+     {
+      "edmonds_id": "edmonds-lg:I-1928:sappho:114",
+      "edmonds_number": "114",
+      "volume": "I-1928",
+      "offset_in_greek_text": 704,
+      "greek_text_letters": 1070,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "συδεστεφανοισωδικαπε",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:sappho:102",
+    "campbell_author": "Sappho",
+    "campbell_fragment": "102",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I-1928:sappho:135",
+      "edmonds_number": "135",
+      "volume": "I-1928",
+      "offset_in_greek_text": 120,
+      "greek_text_letters": 189,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "γλυκηαματερουτοιδυνα",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:sappho:105a",
+    "campbell_author": "Sappho",
+    "campbell_fragment": "105a",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:sappho:150",
+      "edmonds_number": "150",
+      "volume": "I",
+      "offset_in_greek_text": 297,
+      "greek_text_letters": 423,
+      "number_certain": true,
+      "possible_alternative": null
+     },
+     {
+      "edmonds_id": "edmonds-lg:I-1928:sappho:150",
+      "edmonds_number": "150",
+      "volume": "I-1928",
+      "offset_in_greek_text": 301,
+      "greek_text_letters": 419,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "οιοντογλυκυμαλονερευ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:sappho:110a",
+    "campbell_author": "Sappho",
+    "campbell_fragment": "110a",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:sappho:154",
+      "edmonds_number": "154",
+      "volume": "I",
+      "offset_in_greek_text": 46,
+      "greek_text_letters": 542,
+      "number_certain": true,
+      "possible_alternative": null
+     },
+     {
+      "edmonds_id": "edmonds-lg:I-1928:sappho:154",
+      "edmonds_number": "154",
+      "volume": "I-1928",
+      "offset_in_greek_text": 40,
+      "greek_text_letters": 726,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "θυρωρωποδεσεπτορογυι",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:sappho:111",
+    "campbell_author": "Sappho",
+    "campbell_fragment": "111",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:sappho:148",
+      "edmonds_number": "148",
+      "volume": "I",
+      "offset_in_greek_text": 83,
+      "greek_text_letters": 310,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ιψοιδητομελαθρονυμην",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:alcaeus:346",
+    "campbell_author": "Alcaeus",
+    "campbell_fragment": "346",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:alcaeus:163",
+      "edmonds_number": "163",
+      "volume": "I",
+      "offset_in_greek_text": 155,
+      "greek_text_letters": 361,
+      "number_certain": false,
+      "possible_alternative": "edmonds-lg:I:alcaeus:164"
+     },
+     {
+      "edmonds_id": "edmonds-lg:I-1928:alcaeus:163",
+      "edmonds_number": "163",
+      "volume": "I-1928",
+      "offset_in_greek_text": 150,
+      "greek_text_letters": 360,
+      "number_certain": false,
+      "possible_alternative": "edmonds-lg:I-1928:alcaeus:164"
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "πωνωμεντιταλυχνομμεν",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:alcaeus:347",
+    "campbell_author": "Alcaeus",
+    "campbell_fragment": "347",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I-1928:alcaeus:160",
+      "edmonds_number": "160",
+      "volume": "I-1928",
+      "offset_in_greek_text": 589,
+      "greek_text_letters": 777,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "τεγγεπλευμονασοινωτο",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:alcaeus:357",
+    "campbell_author": "Alcaeus",
+    "campbell_fragment": "357",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:alcaeus:19",
+      "edmonds_number": "19",
+      "volume": "I",
+      "offset_in_greek_text": 219,
+      "greek_text_letters": 660,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "μαρμαιρειδεμεγασδομο",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:alcaeus:362",
+    "campbell_author": "Alcaeus",
+    "campbell_fragment": "362",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:I:alcaeus:159",
+      "edmonds_number": "159",
+      "volume": "I",
+      "offset_in_greek_text": 70,
+      "greek_text_letters": 143,
+      "number_certain": true,
+      "possible_alternative": null
+     },
+     {
+      "edmonds_id": "edmonds-lg:I-1928:alcaeus:158",
+      "edmonds_number": "158",
+      "volume": "I-1928",
+      "offset_in_greek_text": 176,
+      "greek_text_letters": 262,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "αλλανητωμενπεριταισδ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:anacreon:360",
+    "campbell_author": "Anacreon",
+    "campbell_fragment": "360",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:anacreon:4",
+      "edmonds_number": "4",
+      "volume": "II",
+      "offset_in_greek_text": 37,
+      "greek_text_letters": 109,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ωπαιπαρθενιονβλεπωνδ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:anacreon:396",
+    "campbell_author": "Anacreon",
+    "campbell_fragment": "396",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:anacreon:75",
+      "edmonds_number": "75",
+      "volume": "II",
+      "offset_in_greek_text": 68,
+      "greek_text_letters": 138,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "φερυδωρφεροινονωπαιφ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:anacreon:417",
+    "campbell_author": "Anacreon",
+    "campbell_fragment": "417",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:anacreon:84",
+      "edmonds_number": "84",
+      "volume": "II",
+      "offset_in_greek_text": 119,
+      "greek_text_letters": 410,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "πωλεθρηκιητιδημελοξο",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:simonides:520",
+    "campbell_author": "Simonides",
+    "campbell_fragment": "520",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:simonides:29",
+      "edmonds_number": "29",
+      "volume": "II",
+      "offset_in_greek_text": 23,
+      "greek_text_letters": 165,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ανθρωπωνολιγονμενκαρ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:simonides:521",
+    "campbell_author": "Simonides",
+    "campbell_fragment": "521",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:simonides:22",
+      "edmonds_number": "22",
+      "volume": "II",
+      "offset_in_greek_text": 232,
+      "greek_text_letters": 356,
+      "number_certain": false,
+      "possible_alternative": "edmonds-lg:II:simonides:23"
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ανθρωποσεωνμηποτεφασ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:simonides:579",
+    "campbell_author": "Simonides",
+    "campbell_fragment": "579",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:simonides:65",
+      "edmonds_number": "65",
+      "volume": "II",
+      "offset_in_greek_text": 167,
+      "greek_text_letters": 321,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "εστιτισλογοσταναρετα",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:simonides:595",
+    "campbell_author": "Simonides",
+    "campbell_fragment": "595",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:simonides:52",
+      "edmonds_number": "52",
+      "volume": "II",
+      "offset_in_greek_text": 79,
+      "greek_text_letters": 167,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ουδεγαρεννοσιφυλλοσα",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:simonides:84d",
+    "campbell_author": "Simonides",
+    "campbell_fragment": "84D.",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:simonides:141",
+      "edmonds_number": "141",
+      "volume": "II",
+      "offset_in_greek_text": 30,
+      "greek_text_letters": 95,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "σημακαταφθιμενοιομεγ",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:simonides:91d",
+    "campbell_author": "Simonides",
+    "campbell_fragment": "91D.",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:simonides:116",
+      "edmonds_number": "116",
+      "volume": "II",
+      "offset_in_greek_text": 544,
+      "greek_text_letters": 1188,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "μυριασινποτετηδετρια",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:simonides:92d",
+    "campbell_author": "Simonides",
+    "campbell_fragment": "92D.",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:simonides:116",
+      "edmonds_number": "116",
+      "volume": "II",
+      "offset_in_greek_text": 660,
+      "greek_text_letters": 1188,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ωξειναγγελλεινλακεδα",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   },
+   {
+    "campbell_id": "campbell-glp:simonides:142d",
+    "campbell_author": "Simonides",
+    "campbell_fragment": "142D.",
+    "hits": [
+     {
+      "edmonds_id": "edmonds-lg:II:simonides:159",
+      "edmonds_number": "159",
+      "volume": "II",
+      "offset_in_greek_text": 84,
+      "greek_text_letters": 226,
+      "number_certain": true,
+      "possible_alternative": null
+     }
+    ],
+    "evidence": "exact_greek_incipit_match",
+    "incipit_key": "ησευκαιφθιμενασλευκο",
+    "note": "first 20 Greek letters of Campbell's text (lower-cased, accents/punctuation stripped, final sigma folded) found verbatim in the OCR Greek of an Edmonds record by the same poet"
+   }
+  ]
+ },
+ "source_search": {
+  "checked": "2026-10-09",
+  "conclusion": "No clean transcription (TEI, Wikisource, Gutenberg) of Edmonds' Lyra Graeca exists on an open host; the best open digital form is Internet Archive page OCR. Among the IA scans, the Princeton-contributed 2022 Tesseract derivations (lyragraecabeingr01unse, lyragraecabeingr02unse) and the 1928 revised vol. I (lyragraeca0001jmed_c0b1) were OCR'd with Greek models and give real Greek text; the Toronto scans already in data/raw/lyra (lyragraecabeingr01edmouoft, lyragraecavol20002jmed, lyragraecabeingr03edmouoft) have Latin-only OCR (no Greek characters at all). No open vol. III scan with Greek OCR was found.",
+  "candidates": [
+   {
+    "name": "Perseus Digital Library TEI (catalog.perseus.org / PerseusDL canonical-greekLit, canonical-pdlrefwk)",
+    "result": "not available as TEI. The Perseus Catalog lists Edmonds vol. III only as 'opp' (Open Content Alliance) editions/translations that link to the Internet Archive scan, e.g. urn:cts:greekLit:plg0001.plg001.opp-grc3 and .opp-eng1 -> http://www.archive.org/stream/lyragraecabeingr03edmouoft. canonical-greekLit has no plg0001 or tlg0009 directory (GitHub contents API: 'Not Found'; recursive tree of master has no path containing 'plg' or 'edmonds'). canonical-pdlrefwk data/ holds only viaf32364342, viaf39744457, viaf66541464, viaf88890045.",
+    "licence": "n/a (no TEI file, so no <availability> statement to quote)",
+    "evidence_urls": [
+     "https://catalog.perseus.org/catalog/urn:cts:greekLit:plg0001.plg001",
+     "https://api.github.com/repos/PerseusDL/canonical-greekLit/contents/data/plg0001",
+     "https://api.github.com/repos/PerseusDL/canonical-pdlrefwk/contents/data"
+    ]
+   },
+   {
+    "name": "English Wikisource",
+    "result": "no Index: or Page: namespace entries beginning 'Lyra' other than unrelated works (Lyra Ecclesiastica, Lyra Catholica, Lyra Davidica, Lyra heroica); no main-namespace page 'Lyra Graeca'; search 'Edmonds intitle:Lyra' = 0 hits.",
+    "licence": "n/a",
+    "evidence_urls": [
+     "https://en.wikisource.org/w/api.php?action=query&list=allpages&apnamespace=106&apprefix=Lyra&format=json",
+     "https://en.wikisource.org/w/api.php?action=query&list=allpages&apnamespace=0&apprefix=Lyra%20Graeca&format=json"
+    ]
+   },
+   {
+    "name": "Project Gutenberg",
+    "result": "none (gutendex search 'lyra graeca' and 'J. M. Edmonds': 0 results).",
+    "licence": "n/a",
+    "evidence_urls": [
+     "https://gutendex.com/books/?search=lyra%20graeca"
+    ]
+   },
+   {
+    "name": "HathiTrust",
+    "result": "full-view copies exist: record 001193232 (1922 set; mdp.39015008534631 v.1, mdp.39015013496958 v.2, mdp.39015027244782 / mdp.39015014179462 / mdp.39015066291942 v.3; all 'Full view', rights 'pdus'); record 103016138 rul.39030027182049 v.2 'Full view' pdus. The 1928 revised vol. I (record 010556428, inu.30000003148073, inu.30000038729087) is 'Limited (search-only)'. Not ingested: no open bulk text download was attempted (HathiTrust page text is produced by its own OCR, quality not assessed here); IA scans OCR'd with Greek models were preferred because their Greek is real Greek text. A follow-up could compare HathiTrust vol. III text against the Latin-only IA vol. III OCR.",
+    "licence": "HathiTrust rights code 'pdus' = public domain in the United States (catalog API usRightsString 'Full view')",
+    "evidence_urls": [
+     "https://catalog.hathitrust.org/api/volumes/full/recordnumber/001193232.json",
+     "https://catalog.hathitrust.org/api/volumes/full/recordnumber/103016138.json",
+     "https://catalog.hathitrust.org/api/volumes/full/recordnumber/010556428.json"
+    ]
+   },
+   {
+    "name": "Internet Archive scans (open, not lending-restricted)",
+    "result": "Greek-capable OCR: lyragraecabeingr01unse (vol. I, title page 'MCMXXII', Tesseract 5 '-l grc+eng'); lyragraecabeingr02unse (vol. II, 'MCMXXIV', Tesseract 5 '-l eng+grc'); lyragraeca0002unse (vol. II, Tesseract 4.1.1, Greek present; not used, r02unse preferred); lyragraeca0001jmed_c0b1 (vol. I 'REVISED AND AUGMENTED EDITION', 'MCMXXVIII', 'Second and enlarged edition'; Greek present). Latin-only OCR: lyragraecabeingr03unse (vol. III, 'MCMXXVII', Tesseract '-l eng'), lyragraeca0003jmed (vol. III), lyragraeca0001jmed (vol. I 1922), lyragraecabeing00edmogoog, and the three Toronto items already in data/raw/lyra. Lending-restricted (not used): lyragraecavol10000jmed (1952), bwb_W9-DEI-866 (1959), bwb_KU-141-865_3 (1967). User uploads of Loeb PDFs ('loeb.-144...', 'L144LyraGraecaIII...') were not used.",
+    "licence": "IA metadata gives no licence for these items (only lyragraecabeingr02edmouoft / lyragraecabeing00edmogoog carry 'possible-copyright-status: NOT_IN_COPYRIGHT'). PD basis is publication date: published 1922/1924/1927/1928 - US public domain (pre-1931 publication).",
+    "evidence_urls": [
+     "https://archive.org/details/lyragraecabeingr01unse",
+     "https://archive.org/details/lyragraecabeingr02unse",
+     "https://archive.org/details/lyragraecabeingr03unse",
+     "https://archive.org/details/lyragraeca0001jmed_c0b1"
+    ]
+   }
+  ]
+ }
+}

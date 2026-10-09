@@ -1,0 +1,59 @@
+{
+  "title": "Wiktionary vowel-quantity table (macron/breve marked Greek spellings)",
+  "source_url": "https://kaikki.org/dictionary/Ancient%20Greek/kaikki.org-dictionary-AncientGreek.jsonl",
+  "source_index_url": "https://kaikki.org/dictionary/Ancient%20Greek/",
+  "dump_note": "extracted 2026-10-03 from the enwiktionary dump dated 2026-09-02 (kaikki.org index page; Last-Modified Sat, 03 Oct 2026 10:27:59 GMT; Content-Length 403924438)",
+  "kaikki_newer_dump_available": false,
+  "kaikki_check": "2026-10-09: live index page identical size to the held copy, live jsonl Content-Length 403924438 and Last-Modified 2026-10-03 = held file; local file used.",
+  "raw_path": "data/raw/wiktionary/kaikki.org-dictionary-AncientGreek.jsonl",
+  "raw_sha256": "69d7185819de51cc746d96f8033eb6c3f3e2016a314c2ee640ec09ce80623029",
+  "raw_line_sha256_convention": "sha256 of the raw line bytes without trailing CR/LF",
+  "licence": "Creative Commons Attribution-ShareAlike 4.0 International License; GNU Free Documentation License (as named on Wiktionary:Copyrights)",
+  "licence_url": "https://en.wiktionary.org/wiki/Wiktionary:Copyrights",
+  "attribution": "Wiktionary contributors, via Kaikki.org (Tatu Ylonen, wiktextract)",
+  "licence_note": "Share-alike: derived tables must carry CC BY-SA 4.0 and the attribution.",
+  "date": "2026-10-09",
+  "script": "scripts/ingest_open_wiktionary_quantities.py",
+  "counts": {
+    "entries_scanned": 68196,
+    "rows": 799910,
+    "rows_by_source_field": {
+      "head_template_arg": 53983,
+      "canonical": 42054,
+      "other_form": 20312,
+      "table": 683559,
+      "head_template_expansion": 2
+    },
+    "distinct_plain_forms": 655016,
+    "distinct_marked_spellings": 667770,
+    "forms_with_conflicts": 6262,
+    "dichrona_row_level": {
+      "short": 1133625,
+      "long": 160238,
+      "unmarked": 146894,
+      "ambiguous": 1044
+    },
+    "dichrona_distinct_marked_spelling_level": {
+      "long": 128042,
+      "short": 958907,
+      "unmarked": 128471,
+      "ambiguous": 620
+    },
+    "marks_on_non_dichrona_vowels_or_other_letters_rows": 83
+  },
+  "schema": {
+    "quantities.jsonl.gz": "marked, plain, lemma, pos, tags (list of tag lists from the source form object), source_field (canonical|head_template_arg|head_template_expansion|table|other_form), table_kind, dialects, quantities [[char index in plain, vowel, long|short|ambiguous|unmarked]], raw_line, raw_line_sha256, form_full (multi-word source string)",
+    "forms.jsonl.gz": "plain, variants[{marked,n_entries,n_rows,lemmas (<=10),quantities}], conflict (same dichronon index both long and short across variants), conflict_indices",
+    "quantity_rule": "long = U+0304 present, short = U+0306 present, ambiguous = both; vowels in orthographic diphthongs without diaeresis are not listed; circumflex/iota subscript not interpreted (stay 'unmarked')."
+  },
+  "files": {
+    "quantities.jsonl.gz": {
+      "bytes": 14369307,
+      "sha256": "73f7d169103788cf7fa6ce90e0e5bf2966d2705a619d7f292ac953664a7d96db"
+    },
+    "forms.jsonl.gz": {
+      "bytes": 6442830,
+      "sha256": "3373550dcf85c7b3907fff7136bc68ef21d958e007e40ed2377654111ed0257e"
+    }
+  }
+}

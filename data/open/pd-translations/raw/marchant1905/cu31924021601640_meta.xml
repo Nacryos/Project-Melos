@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <mediatype>texts</mediatype>
+  <collection>cornell</collection>
+  <collection>americana</collection>
+  <title>Greek reader; selected &amp; adapted with English notes from Prof. von Wilamowitz-Moellendorff's Griechisches Lesebuch</title>
+  <identifier>cu31924021601640</identifier>
+  <uploader>hank@archive.org</uploader>
+  <addeddate>2012-08-21 21:03:57</addeddate>
+  <publicdate>2012-08-21 21:18:15</publicdate>
+  <identifier-access>http://archive.org/details/cu31924021601640</identifier-access>
+  <identifier-ark>ark:/13960/t0bv8pf6j</identifier-ark>
+  <sponsor>MSN</sponsor>
+  <contributor>Cornell University Library</contributor>
+  <description>The metadata below describe the original scanning. Follow the "All Files: HTTP" link in the "View the book" box to the left to find XML files that contain more metadata about the original images and the derived formats (OCR results, PDF etc.). See also the &lt;a href="http://archive.org/about/faqs.php#140" rel="ugc nofollow"&gt;What is the directory structure for the texts?&lt;/a&gt; FAQ for information about file content and naming conventions.</description>
+  <description>2 v. 20 cm</description>
+  <camera>EOS-IDS Mark II</camera>
+  <lcamid>333778</lcamid>
+  <rcamid>325888</rcamid>
+  <operator>adavila</operator>
+  <scanner>Kirtas APT 2400</scanner>
+  <ppi>300</ppi>
+  <publisher>Oxford, Clarendon</publisher>
+  <date>1905</date>
+  <subject>Greek language</subject>
+  <subject>Greek language -- Readers</subject>
+  <language>eng</language>
+  <language>grc</language>
+  <language>grc</language>
+  <imagecount>108</imagecount>
+  <bookplateleaf>0009</bookplateleaf>
+  <scandate>20071023033353</scandate>
+  <foldoutcount>0</foldoutcount>
+  <repub_state>4</repub_state>
+  <backup_location>ia903906_14</backup_location>
+  <creator>Marchant, E. C. (Edgar Cardew), 1864-1960</creator>
+  <oclc-id>8315546</oclc-id>
+  <associated-names>Wilamowitz-Moellendorff, Ulrich von, 1848-1931</associated-names>
+  <ocr>tesseract 5.1.0-1-ge935</ocr>
+  <ocr_parameters>-l grc+eng</ocr_parameters>
+  <ocr_module_version>0.0.16</ocr_module_version>
+  <ocr_detected_script>Latin</ocr_detected_script>
+  <ocr_detected_script_conf>0.7214</ocr_detected_script_conf>
+  <ocr_detected_lang>el</ocr_detected_lang>
+  <ocr_detected_lang_conf>1.0000</ocr_detected_lang_conf>
+  <page_number_confidence>89</page_number_confidence>
+  <page_number_module_version>1.0.5</page_number_module_version>
+  <pdf_degraded>invalid-jp2-headers</pdf_degraded>
+  <pdf_module_version>0.0.25</pdf_module_version>
+  <external-identifier>urn:lcp:cu31924021601640:epub:f549bb4e-97a3-4611-9429-5e5c14f03cb7</external-identifier>
+</metadata>

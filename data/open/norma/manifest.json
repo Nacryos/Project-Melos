@@ -1,0 +1,108 @@
+{
+ "name": "Norma Syllabarum Graecarum (Macronizer/norma)",
+ "date": "2026-10-09",
+ "user_agent": "Melos/1.0 (+https://greeklyric.com)",
+ "source_url": "https://huggingface.co/datasets/Macronizer/norma",
+ "revision": "3b4f79fadd4fbe76143adac1329fc041d4447b82",
+ "licence": {
+  "name": "GPL-3.0",
+  "verbatim_card_front_matter": "license: gpl-3.0\nconfigs:\n- config_name: default\n  data_files:\n  - split: test\n    path: data/test.jsonl\n  - split: validation\n    path: data/validation.jsonl",
+  "url": "https://www.gnu.org/licenses/gpl-3.0.html",
+  "note": "licence appears only in the card YAML front matter; the repo has no LICENSE file and the card states no origin/provenance of the underlying Greek texts or of who marked them"
+ },
+ "required_attribution": "Norma Syllabarum Graecarum, HuggingFace Macronizer/norma (author not named on the card), GPL-3.0",
+ "inputs": {
+  "README.md": {
+   "url": "https://huggingface.co/datasets/Macronizer/norma/resolve/3b4f79fadd4fbe76143adac1329fc041d4447b82/README.md",
+   "sha256": "4bc8f4c37e9e8cbf5fcff37f263c8fa1f216d6aba4c3251dccba0037ad49ee5b",
+   "bytes": 2948
+  },
+  "data/test.jsonl": {
+   "url": "https://huggingface.co/datasets/Macronizer/norma/resolve/3b4f79fadd4fbe76143adac1329fc041d4447b82/data/test.jsonl",
+   "sha256": "5e69f6fd9bd861cf76f496c5710f1b8a28ad7735ff9cf05c31f475158f4affb5",
+   "bytes": 191398
+  },
+  "data/validation.jsonl": {
+   "url": "https://huggingface.co/datasets/Macronizer/norma/resolve/3b4f79fadd4fbe76143adac1329fc041d4447b82/data/validation.jsonl",
+   "sha256": "ed0c586215cc6a5b6983207664928d59d47afbaa2455c81e3d31840c48cfce2d",
+   "bytes": 105104
+  }
+ },
+ "outputs": {
+  "norma.jsonl.gz": {
+   "sha256": "ca24f62d868b20469b56d5fe783dd799b7da4cee0d69e4b350f3e0b885621ebc"
+  }
+ },
+ "counts": {
+  "rows": 1992,
+  "by_source_task_split": {
+   "acharnenses|macronize|test": 16,
+   "acharnenses|syllabify|test": 16,
+   "aristophanes|macronize|test": 299,
+   "aristophanes|macronize|validation": 764,
+   "aristophanes|syllabify|test": 299,
+   "bacchylides|macronize|test": 102,
+   "bacchylides|syllabify|test": 102,
+   "contracelsum|macronize|test": 20,
+   "contracelsum|syllabify|test": 20,
+   "cratylus|macronize|test": 9,
+   "cratylus|syllabify|test": 9,
+   "cyclops|macronize|test": 20,
+   "cyclops|syllabify|test": 20,
+   "dionysiaca|macronize|test": 20,
+   "dionysiaca|syllabify|test": 20,
+   "dioscorides|macronize|test": 8,
+   "dioscorides|syllabify|test": 8,
+   "enchiridion|macronize|test": 20,
+   "enchiridion|syllabify|test": 20,
+   "oedipus|macronize|test": 20,
+   "oedipus|syllabify|test": 20,
+   "partheneion|macronize|test": 13,
+   "partheneion|syllabify|test": 13,
+   "plutarchus|macronize|test": 24,
+   "plutarchus|syllabify|test": 24,
+   "quintus|macronize|test": 20,
+   "quintus|syllabify|test": 20,
+   "supplices|macronize|test": 3,
+   "supplices|syllabify|test": 3,
+   "thucydides|macronize|test": 20,
+   "thucydides|syllabify|test": 20
+  },
+  "unmapped_sources": {},
+  "rows_per_source": {
+   "acharnenses": 32,
+   "aristophanes": 1362,
+   "bacchylides": 204,
+   "contracelsum": 40,
+   "cratylus": 18,
+   "cyclops": 40,
+   "dionysiaca": 40,
+   "dioscorides": 16,
+   "enchiridion": 40,
+   "oedipus": 40,
+   "partheneion": 26,
+   "plutarchus": 48,
+   "quintus": 40,
+   "supplices": 6,
+   "thucydides": 40
+  },
+  "task_pairs_same_plain_text": {
+   "test/acharnenses": true,
+   "test/aristophanes": true,
+   "test/bacchylides": true,
+   "test/contracelsum": true,
+   "test/cratylus": true,
+   "test/cyclops": true,
+   "test/dionysiaca": true,
+   "test/dioscorides": true,
+   "test/enchiridion": true,
+   "test/oedipus": true,
+   "test/partheneion": true,
+   "test/plutarchus": true,
+   "test/quintus": true,
+   "test/supplices": true,
+   "test/thucydides": true
+  }
+ },
+ "work_map_note": "work labels are hand-copied from the dataset card's author list; 'cyclops' source has no matching card entry"
+}

@@ -1,0 +1,34 @@
+{
+  "date": "2026-10-09",
+  "campbell_source": "data/campbell_glp/campbell_glp.jsonl field text",
+  "method": "Greek letter runs, NFC, lower-cased; exact = spelling equals a table plain spelling; fold = accents/breathings stripped, final sigma folded; 'sourced dichronon' = a variant of the matched form carries long/short/ambiguous at that letter (diphthong members excluded); for fold matches, letter ordinals are aligned across spellings",
+  "campbell": {
+    "types": 7045,
+    "tokens": 13102,
+    "dichrona_in_types": 7265,
+    "dichrona_in_tokens": 10091,
+    "types_fold_in_table": 3145,
+    "tokens_fold_in_table": 5556,
+    "dichrona_sourced_exact_types": 2957,
+    "dichrona_sourced_exact_tokens": 4722,
+    "dichrona_sourced_fold_types": 4204,
+    "dichrona_sourced_fold_tokens": 6806,
+    "types_with_any_sourced_dichronon_fold": 3047,
+    "types_with_dichrona": 4822,
+    "types_exact_in_table": 2170,
+    "tokens_exact_in_table": 3635,
+    "types_exact_with_sourced_length": 2169
+  },
+  "lexica_comparison": {
+    "lexica_forms_distinct_nfc": 79835,
+    "lexica_forms_distinct_fold": 73376,
+    "table_plain_forms": 655016,
+    "table_plain_forms_present_in_lexica_exact": 28778,
+    "table_forms_fold_present_in_lexica_fold": 36127,
+    "lexica_forms_with_quantity_match_exact": 28432,
+    "lexica_forms_with_quantity_match_fold": 33730,
+    "campbell_types_in_lexica_exact": 3587,
+    "campbell_types_in_lexica_fold": 4239,
+    "campbell_types_in_table_not_in_lexica_fold": 495
+  }
+}

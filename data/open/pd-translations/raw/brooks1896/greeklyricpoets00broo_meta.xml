@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <title>Greek lyric poets</title>
+  <creator>Brooks, Francis, 1861-1936, ed. [and] tr</creator>
+  <subject>Greek poetry</subject>
+  <description>Greek text followed by English translations</description>
+  <description>26</description>
+  <publisher>London, David Nutt</publisher>
+  <date>1896</date>
+  <language>eng</language>
+  <language>grc</language>
+  <language>grc</language>
+  <page-progression>lr</page-progression>
+  <sponsor>University of Toronto</sponsor>
+  <contributor>Robarts - University of Toronto</contributor>
+  <scanningcenter>uoft</scanningcenter>
+  <mediatype>texts</mediatype>
+  <collection>robarts</collection>
+  <collection>toronto</collection>
+  <call_number>AEL-4114</call_number>
+  <repub_state>4</repub_state>
+  <updatedate>2010-07-02 13:30:07</updatedate>
+  <updater>lexw@archive.org</updater>
+  <identifier>greeklyricpoets00broo</identifier>
+  <uploader>lexw@archive.org</uploader>
+  <addeddate>2010-07-02 13:30:09</addeddate>
+  <publicdate>2010-07-02 13:30:15</publicdate>
+  <ppi>400</ppi>
+  <camera>Canon 5D</camera>
+  <operator>scanner-d-knox@archive.org</operator>
+  <scanner>scribe17.toronto.archive.org</scanner>
+  <scandate>20100705184830</scandate>
+  <imagecount>228</imagecount>
+  <foldoutcount>0</foldoutcount>
+  <identifier-access>http://www.archive.org/details/greeklyricpoets00broo</identifier-access>
+  <identifier-ark>ark:/13960/t0pr8hd25</identifier-ark>
+  <bookplateleaf>0002</bookplateleaf>
+  <curation>[curator]sharda@archive.org[/curator][date]20100706213345[/date][state]approved[/state][comment]199[/comment]</curation>
+  <sponsordate>20100731</sponsordate>
+  <backup_location>ia903605_27</backup_location>
+  <openlibrary_edition>OL24345553M</openlibrary_edition>
+  <openlibrary_work>OL15359106W</openlibrary_work>
+  <external-identifier>urn:oclc:record:1045565384</external-identifier>
+  <filesxml>Thu Dec 24 12:07:31 UTC 2020</filesxml>
+  <ocr>tesseract 5.1.0-1-ge935</ocr>
+  <ocr_parameters>-l grc+eng</ocr_parameters>
+  <ocr_module_version>0.0.16</ocr_module_version>
+  <ocr_detected_script>Latin</ocr_detected_script>
+  <ocr_detected_script_conf>1.0000</ocr_detected_script_conf>
+  <ocr_detected_lang>el</ocr_detected_lang>
+  <ocr_detected_lang_conf>1.0000</ocr_detected_lang_conf>
+  <page_number_confidence>97</page_number_confidence>
+  <pdf_module_version>0.0.18</pdf_module_version>
+  <page_number_module_version>1.0.5</page_number_module_version>
+  <collection>university_of_toronto</collection>
+</metadata>

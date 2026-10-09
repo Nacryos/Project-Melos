@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <title>The Characters of Theophrastus, newly edited and translated by J.M. Edmonds</title>
+  <creator>Theophrastus</creator>
+  <creator>Edmonds, J. M. (John Maxwell)</creator>
+  <creator>Knox, A. D. (Alfred Dillwyn), 1884-1943</creator>
+  <creator>Herodas. Herodes, Cercidas and the Greek choliambic poets (except Callimachus and Babrius)</creator>
+  <subject>Characters and characteristics</subject>
+  <description>26</description>
+  <publisher>London W. Heinemann, ltd</publisher>
+  <date>1929</date>
+  <language>eng</language>
+  <language>grc</language>
+  <possible-copyright-status>Permission Granted to Digitize Item</possible-copyright-status>
+  <sponsor>Andrew W. Mellon Foundation</sponsor>
+  <contributor>Robarts - University of Toronto</contributor>
+  <scanningcenter>uoft</scanningcenter>
+  <mediatype>texts</mediatype>
+  <collection>robarts</collection>
+  <collection>toronto</collection>
+  <call_number>AAM-5378</call_number>
+  <updatedate>2008-10-21 16:30:26</updatedate>
+  <updater>KatieLawson</updater>
+  <identifier>charactersofthe00theouoft</identifier>
+  <uploader>katie@archive.org</uploader>
+  <addeddate>2008-10-21 16:30:28</addeddate>
+  <publicdate>2008-10-21 16:30:33</publicdate>
+  <ppi>400</ppi>
+  <camera>Canon 5D</camera>
+  <operator>becky@archive.org</operator>
+  <scanner>scribe14.toronto.archive.org</scanner>
+  <scandate>20081021183400</scandate>
+  <imagecount>554</imagecount>
+  <foldoutcount>1</foldoutcount>
+  <identifier-access>http://www.archive.org/details/charactersofthe00theouoft</identifier-access>
+  <identifier-ark>ark:/13960/t33206h3w</identifier-ark>
+  <scanfactors>0</scanfactors>
+  <repub_state>4</repub_state>
+  <notes>narrow margins, tight binding</notes>
+  <curation>[curator]julie@archive.org[/curator][date]20081108001213[/date][state]approved[/state]</curation>
+  <sponsordate>20081031</sponsordate>
+  <backup_location>ia903602_17</backup_location>
+  <openlibrary_edition>OL20424848M</openlibrary_edition>
+  <openlibrary_work>OL10328777W</openlibrary_work>
+  <external-identifier>urn:oclc:record:697656486</external-identifier>
+  <filesxml>Wed Dec 23 17:48:38 UTC 2020</filesxml>
+  <filesxml>Thu Dec 31 21:29:27 UTC 2020</filesxml>
+  <page_number_confidence>94</page_number_confidence>
+  <associated-names>Edmonds, J. M. (John Maxwell); Knox, A. D. (Alfred Dillwyn), 1884-1943; Herodas. Herodes, Cercidas and the Greek choliambic poets (except Callimachus and Babrius)</associated-names>
+  <bookplateleaf>0003</bookplateleaf>
+  <ocr>tesseract 5.0.0-1-g862e</ocr>
+  <ocr_parameters>-l grc+eng</ocr_parameters>
+  <ocr_module_version>0.0.15</ocr_module_version>
+  <ocr_detected_script>Latin</ocr_detected_script>
+  <ocr_detected_script_conf>0.6909</ocr_detected_script_conf>
+  <ocr_detected_lang>el</ocr_detected_lang>
+  <ocr_detected_lang_conf>1.0000</ocr_detected_lang_conf>
+  <pdf_module_version>0.0.18</pdf_module_version>
+  <page_number_module_version>1.0.5</page_number_module_version>
+  <collection>university_of_toronto</collection>
+</metadata>

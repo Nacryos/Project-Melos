@@ -1,0 +1,1105 @@
+{
+ "ruleB_selected": [
+  {
+   "dclp": "59113",
+   "title": "P. Achm. 3",
+   "authors": [
+    "Hesiodus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "59116",
+   "title": "TM 59116",
+   "authors": [
+    "Anthologia Palatina"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "59117",
+   "title": "TM 59117",
+   "authors": [
+    "Anthologia Palatina"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "59118",
+   "title": "P. Oxy. 54 3724",
+   "authors": [
+    "Asclepiades"
+   ],
+   "reasons": [
+    "genre-word:lyric catalogue"
+   ]
+  },
+  {
+   "dclp": "59145",
+   "title": "Apollodorus De dis ?",
+   "authors": [
+    "Apollodorus of Athens",
+    "0006",
+    "0033",
+    "0012"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric"
+   ]
+  },
+  {
+   "dclp": "59362",
+   "title": "P. Oxy. 1 14",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:elegy"
+   ]
+  },
+  {
+   "dclp": "59365",
+   "title": "P. Oxy. 15 1793",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric elegiacs"
+   ]
+  },
+  {
+   "dclp": "59366",
+   "title": "P. Oxy. 23 2375",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric elegiacs",
+    "genre-word:Callimachus; Elegiac distichs"
+   ]
+  },
+  {
+   "dclp": "59369",
+   "title": "Psi. 11 1216",
+   "authors": [
+    "Callimachus",
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:Callimachus; Iambus 4-7, 17, Branchus"
+   ]
+  },
+  {
+   "dclp": "59372",
+   "title": "P. Oxy. 64 4427",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric"
+   ]
+  },
+  {
+   "dclp": "59373",
+   "title": "TM 59373",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "59375",
+   "title": "P. Oxy. 4 661",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric",
+    "genre-word:Callimachus; Iambus 7"
+   ]
+  },
+  {
+   "dclp": "59376",
+   "title": "TM 59376",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:Callimachus; Iambus 1 scholia \"scholia Florentina\""
+   ]
+  },
+  {
+   "dclp": "59378",
+   "title": "Fragment of Callimachus' Aetia on the Arcadian Prince Teuthis",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:elegy"
+   ]
+  },
+  {
+   "dclp": "59379",
+   "title": "TM 59379",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:Callimachus; Iambus 012 57-70"
+   ]
+  },
+  {
+   "dclp": "59401",
+   "title": "TM 59401",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "59403",
+   "title": "P. Oxy. 19 2215",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric",
+    "genre-word:Callimachus; Iambus 3-4"
+   ]
+  },
+  {
+   "dclp": "59404",
+   "title": "P. Oxy. 19 2218",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:Callimachus; Iambus 012"
+   ]
+  },
+  {
+   "dclp": "59405",
+   "title": "P. Oxy. 11 1363",
+   "authors": [
+    "Callimachus",
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:Callimachus; Iambus 1 + Paeans?"
+   ]
+  },
+  {
+   "dclp": "59412",
+   "title": "P. Ryl. 3 485",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric",
+    "genre-word:Callimachus; Iambus 4-5"
+   ]
+  },
+  {
+   "dclp": "59428",
+   "title": "TM 59428",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "59429",
+   "title": "TM 59429",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric elegiac distychs",
+    "genre-word:Callimachus?; encomium in elegiac distichs on a Ptolemaic king"
+   ]
+  },
+  {
+   "dclp": "59437",
+   "title": "P. Oxy. 8 1082",
+   "authors": [
+    "Cercidas"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric"
+   ]
+  },
+  {
+   "dclp": "59438",
+   "title": "Anthology including Cercidas and Epictetus",
+   "authors": [
+    "Cercidas",
+    "Epictetus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "59439",
+   "title": "TM 59439",
+   "authors": [
+    "Cercidas"
+   ],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:Cercidas; Choliambi; part of an anthology?"
+   ]
+  },
+  {
+   "dclp": "59663",
+   "title": "P. Yale 2 135",
+   "authors": [
+    "Homerus",
+    "Demosthenes",
+    "Xenophon",
+    "Anthologia Palatina"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "59701",
+   "title": "TM 59701",
+   "authors": [
+    "Dioscorus of Aphrodito"
+   ],
+   "reasons": [
+    "genre-word:Dioscorus of Aphrodito; An Epistle in Iambics"
+   ]
+  },
+  {
+   "dclp": "59702",
+   "title": "TM 59702",
+   "authors": [
+    "Dioscorus of Aphrodito"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "59704",
+   "title": "TM 59704",
+   "authors": [
+    "Dioscorus of Aphrodito"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric ethopoea"
+   ]
+  },
+  {
+   "dclp": "59705",
+   "title": "TM 59705",
+   "authors": [
+    "Dioscorus of Aphrodito"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric"
+   ]
+  },
+  {
+   "dclp": "59709",
+   "title": "TM 59709",
+   "authors": [
+    "Dioscorus of Aphrodito"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric encomium"
+   ]
+  },
+  {
+   "dclp": "59716",
+   "title": "TM 59716",
+   "authors": [
+    "Dioscorus of Aphrodito"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric epithalamium"
+   ]
+  },
+  {
+   "dclp": "59717",
+   "title": "TM 59717",
+   "authors": [
+    "Dioscorus of Aphrodito"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric encomium"
+   ]
+  },
+  {
+   "dclp": "59770",
+   "title": "Ars Eudoxi",
+   "authors": [
+    "Pseudo- Eudoxus"
+   ],
+   "reasons": [
+    "genre-word:Pseudo- Eudoxus; Ars astronomica; one column, in iambics, gives the title as an acrostic; with drawings"
+   ]
+  },
+  {
+   "dclp": "59839",
+   "title": "Mpern. S. 3 19",
+   "authors": [
+    "Euripides"
+   ],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:Euripides; dithyramb (?) or choral song from tragedy (?)"
+   ]
+  },
+  {
+   "dclp": "59853",
+   "title": "Mpern. S. 3 18",
+   "authors": [
+    "Euripides",
+    "Carcinus"
+   ],
+   "reasons": [
+    "genre-word:Euripides? Carcinus?; choral lyric or monody from tragedy"
+   ]
+  },
+  {
+   "dclp": "59932",
+   "title": "P. Schub. 17",
+   "authors": [
+    "Euripides"
+   ],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:Euripides; Hellenistic lyric or choral song from tragedy (?)"
+   ]
+  },
+  {
+   "dclp": "59936",
+   "title": "TM 59936",
+   "authors": [
+    "Euripides",
+    "Aeschylus",
+    "Posidippus Pellaeus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "59939",
+   "title": "TM 59939",
+   "authors": [
+    "Euripides",
+    "Euripides",
+    "Astydamas",
+    "Phoenix",
+    "Melanippus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "59942",
+   "title": "TM 59942",
+   "authors": [
+    "Homerus",
+    "Euripides",
+    "Euripides",
+    "Strato com."
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "60002",
+   "title": "P. Brux. 2 22",
+   "authors": [
+    "Hermesianax"
+   ],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:elegy",
+    "genre-word:Hermesianax; Elegy: \" tattoo poem\""
+   ]
+  },
+  {
+   "dclp": "61267",
+   "title": "P. Michael. 5",
+   "authors": [
+    "Homerus",
+    "Choerilus"
+   ],
+   "reasons": [
+    "genre-word:Homerus, Choerilus?; verse anthology, iambics and hexameters, including Ilias 03.424a-429a and possibly Persica"
+   ]
+  },
+  {
+   "dclp": "61271",
+   "title": "Writing exercises, with alphabetic hexameters from Homerus, Ilias and Odyssea; a hexameter adespoton, and a iambic trimeter otherwise unknown; two lines of pangramma (Hagedorn)",
+   "authors": [],
+   "reasons": [
+    "genre-word:Writing exercises, with alphabetic hexameters from Homerus, Ilias and Odyssea; a hexameter adespoton, and a iambic trimeter otherwise unknown; two lines of pangramma (Hagedorn)"
+   ]
+  },
+  {
+   "dclp": "61295",
+   "title": "Alphabetic iambics and hexameters (incl. palindrome verse transmitted as Anth. Pal. 016 387c)",
+   "authors": [
+    "Anthologia Palatina"
+   ],
+   "reasons": [
+    "genre-word:Alphabetic iambics and hexameters (incl. palindrome verse transmitted as Anth. Pal. 016 387c)"
+   ]
+  },
+  {
+   "dclp": "61298",
+   "title": "TM 61298",
+   "authors": [
+    "Cercidas",
+    "Phoenix"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric",
+    "genre-word:Phoenix e.a.; anthology: ethical choliambics with title"
+   ]
+  },
+  {
+   "dclp": "61302",
+   "title": "O. Wilck. 2 1488",
+   "authors": [
+    "Leonidas"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "61303",
+   "title": "P. Oxy. 4 662",
+   "authors": [
+    "Antipater Sidonius",
+    "Anthologia Palatina",
+    "Leonidas",
+    "Amyntas"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "61314",
+   "title": "P. Oxy. 54 3726",
+   "authors": [
+    "Anthologia Palatina",
+    "Theocritus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "61439",
+   "title": "TM 61439",
+   "authors": [
+    "Lycophron"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "61440",
+   "title": "P. Oxy. 64 4429",
+   "authors": [
+    "Lycophron"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric"
+   ]
+  },
+  {
+   "dclp": "61441",
+   "title": "P. Oxy. 17 2094",
+   "authors": [
+    "Lycophron"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "61442",
+   "title": "P. Oxy. 49 3446",
+   "authors": [
+    "Lycophron"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "61444",
+   "title": "P. Oxy. 64 4428",
+   "authors": [
+    "Lycophron"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric"
+   ]
+  },
+  {
+   "dclp": "61460",
+   "title": "P. Oxy. 47 3324",
+   "authors": [
+    "Anthologia Palatina",
+    "Meleager"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric"
+   ]
+  },
+  {
+   "dclp": "61601",
+   "title": "P. Koeln. 5 204",
+   "authors": [
+    "Anthologia Palatina",
+    "Mnesalcas"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "61918",
+   "title": "P. Oxy. 54 3725",
+   "authors": [
+    "Anthologia Palatina",
+    "Nicarchus"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric"
+   ]
+  },
+  {
+   "dclp": "62820",
+   "title": "P. Freib. 1 4",
+   "authors": [
+    "Posidippus Pellaeus",
+    "Theodorides Syracusius"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "62825",
+   "title": "P. Oxy. 31 2536",
+   "authors": [
+    "Theon grammaticus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "62930",
+   "title": "P. Grenf. 2 8",
+   "authors": [
+    "Timotheus"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric",
+    "genre-word:Timotheus?; Lyric fragments"
+   ]
+  },
+  {
+   "dclp": "62931",
+   "title": "TM 62931",
+   "authors": [
+    "Timotheus"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric"
+   ]
+  },
+  {
+   "dclp": "63262",
+   "title": "Callimachus? Commentary on elegiac distichs",
+   "authors": [],
+   "reasons": [
+    "genre-word:elegiac distichs",
+    "genre-word:Callimachus? Commentary on elegiac distichs"
+   ]
+  },
+  {
+   "dclp": "63276",
+   "title": "TM 63276",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:fragment of a late lyric"
+   ]
+  },
+  {
+   "dclp": "63352",
+   "title": "Lyric fragment (Stesichorus?)",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:Lyric fragment (Stesichorus?)"
+   ]
+  },
+  {
+   "dclp": "63359",
+   "title": "Doric lyric or tragedy",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric or tragedy",
+    "genre-word:Doric lyric or tragedy"
+   ]
+  },
+  {
+   "dclp": "63398",
+   "title": "Anecdote about Anacharsis in iambic trimeters",
+   "authors": [],
+   "reasons": [
+    "genre-word:Anecdote about Anacharsis in iambic trimeters"
+   ]
+  },
+  {
+   "dclp": "63411",
+   "title": "O. Claud. 1 188",
+   "authors": [],
+   "reasons": [
+    "genre-word:elegiac verses"
+   ]
+  },
+  {
+   "dclp": "63417",
+   "title": "lyric verses to a reluctant bridegroom (?)",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:lyric",
+    "genre-word:lyric verses to a reluctant bridegroom (?)"
+   ]
+  },
+  {
+   "dclp": "63420",
+   "title": "O. Claud. 2 411",
+   "authors": [],
+   "reasons": [
+    "genre-word:verses on Hero and Leander; mixed dactylic hexameters and iambic trimeters"
+   ]
+  },
+  {
+   "dclp": "63422",
+   "title": "Verses related to Dares Phrygius 34; mixed dactylic hexameters and iambic trimeters",
+   "authors": [],
+   "reasons": [
+    "genre-word:Verses related to Dares Phrygius 34; mixed dactylic hexameters and iambic trimeters"
+   ]
+  },
+  {
+   "dclp": "63620",
+   "title": "P. Oxy. 39 2885",
+   "authors": [
+    "Parthenius"
+   ],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:Parthenius?; elegiac verse and epode"
+   ]
+  },
+  {
+   "dclp": "63633",
+   "title": "Ionic Verse",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric (?)"
+   ]
+  },
+  {
+   "dclp": "63685",
+   "title": "O. Bodl. 2 2174",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "63772",
+   "title": "TM 63772",
+   "authors": [
+    "Timotheus"
+   ],
+   "reasons": [
+    "genre-word:lyric and tragedy"
+   ]
+  },
+  {
+   "dclp": "63868",
+   "title": "Iambic Trimeters about Tyche",
+   "authors": [],
+   "reasons": [
+    "genre-word:Iambic Trimeters about Tyche"
+   ]
+  },
+  {
+   "dclp": "63921",
+   "title": "two verse sententiae, iambic trimeters",
+   "authors": [],
+   "reasons": [
+    "genre-word:two verse sententiae, iambic trimeters"
+   ]
+  },
+  {
+   "dclp": "64145",
+   "title": "TM 64145",
+   "authors": [
+    "Herodianus",
+    "Ion of Chios"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "64188",
+   "title": "P. Oxy. 63 4352",
+   "authors": [
+    "Soterichus Oasita"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "64225",
+   "title": "Epitaph of Anubion, son of Chaeremon, age twenty",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "64569",
+   "title": "TM 64569",
+   "authors": [
+    "Callimachus",
+    "Parthenius"
+   ],
+   "reasons": [
+    "genre-word:poetry lyric"
+   ]
+  },
+  {
+   "dclp": "64961",
+   "title": "Anthology of Ethopoeae with Titles",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65002",
+   "title": "P. Aphrod. Lit. 14, P. Aphrod. Lit. 15, P. Aphrod. Lit. 21",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65003",
+   "title": "P. Aphrod. Lit. 12, P. Aphrod. Lit. 23",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65010",
+   "title": "P. Aphrod. Lit. 8, P. Aphrod. Lit. 9",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65011",
+   "title": "P. Aphrod. Lit. 28, P. Aphrod. Lit. 43",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65013",
+   "title": "TM 65013",
+   "authors": [
+    "Dioscorus of Aphrodito"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65014",
+   "title": "P. Aphrod. Lit. 7, P. Aphrod. Lit. 42",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65546",
+   "title": "O. Bodl. 2 2173",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65548",
+   "title": "O. Bodl. 2 2172",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65564",
+   "title": "Verse: (lyric or tragic?)",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:Verse: (lyric or tragic?)"
+   ]
+  },
+  {
+   "dclp": "65590",
+   "title": "P. Schub. 13",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:elegy",
+    "genre-word:Fragment of a Hellenistic elegy on boxing (?)"
+   ]
+  },
+  {
+   "dclp": "65591",
+   "title": "P. Schub. 14",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65599",
+   "title": "P. Bagnall. 37",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65628",
+   "title": "New Fragments of Euripidean Lyric",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:New Fragments of Euripidean Lyric"
+   ]
+  },
+  {
+   "dclp": "65660",
+   "title": "A literary ostracon purchased in Naukratis",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65673",
+   "title": "TM 65673",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65682",
+   "title": "Two epitaphs for Tauron, the hunting dog of Zenon",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "65709",
+   "title": "TM 65709",
+   "authors": [
+    "Chares"
+   ],
+   "reasons": [
+    "genre-word:Chares; gnomic anthology : sententiae in iambics"
+   ]
+  },
+  {
+   "dclp": "65793",
+   "title": "TM 65793",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:Callimachus?; lyric fragment, Archebulean metre"
+   ]
+  },
+  {
+   "dclp": "65901",
+   "title": "P. Oxy. 66 4502",
+   "authors": [
+    "Anthologia Palatina",
+    "Nicarchus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "66624",
+   "title": "P. Aphrod. Lit. 44, P. Aphrod. Lit. 45",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "67364",
+   "title": "TM 67364",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "68658",
+   "title": "P. Oxy. 32 2628",
+   "authors": [
+    "Euripides"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "88398",
+   "title": "TM 88398",
+   "authors": [
+    "Anthologia Palatina"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "98079",
+   "title": "TM 98079",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "128467",
+   "title": "TM 128467",
+   "authors": [
+    "Sosianus"
+   ],
+   "reasons": [
+    "genre-word:Sosianus; lyric prose on love"
+   ]
+  },
+  {
+   "dclp": "128468",
+   "title": "TM 128468",
+   "authors": [
+    "Sosianus"
+   ],
+   "reasons": [
+    "genre-word:Sosianus; lyric prose on love"
+   ]
+  },
+  {
+   "dclp": "140279",
+   "title": "Lyric dialogue from drama",
+   "authors": [],
+   "reasons": [
+    "genre-word:Lyric dialogue from drama"
+   ]
+  },
+  {
+   "dclp": "144439",
+   "title": "TM 144439",
+   "authors": [
+    "Callimachus"
+   ],
+   "reasons": [
+    "genre-word:lyric",
+    "genre-word:elegy"
+   ]
+  },
+  {
+   "dclp": "145040",
+   "title": "Dioskoros, Encomium for the dux Kallinikos",
+   "authors": [
+    "Dioscorus of Aphrodito"
+   ],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  },
+  {
+   "dclp": "397915",
+   "title": "Verses Concerning Cybele",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric (or comedy?)"
+   ]
+  },
+  {
+   "dclp": "653675",
+   "title": "A Hexameter fragment in the Beinecke Library",
+   "authors": [],
+   "reasons": [
+    "genre-word:lyric"
+   ]
+  }
+ ]
+}

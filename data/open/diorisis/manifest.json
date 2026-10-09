@@ -1,0 +1,240 @@
+{
+ "dataset": "Diorisis Ancient Greek Corpus",
+ "creators": [
+  "Alessandro Vatri",
+  "Barbara McGillivray"
+ ],
+ "doi": "10.6084/m9.figshare.6187256.v1",
+ "source_urls": [
+  "https://doi.org/10.6084/m9.figshare.6187256.v1",
+  "https://api.figshare.com/v2/articles/6187256",
+  "https://ndownloader.figshare.com/files/11296247"
+ ],
+ "licence": {
+  "dataset_licence_figshare": "CC BY 4.0",
+  "dataset_licence_figshare_quote": "\"license\": {\"value\": 1, \"name\": \"CC BY 4.0\", \"url\": \"https://creativecommons.org/licenses/by/4.0/\"}",
+  "dataset_licence_url": "https://creativecommons.org/licenses/by/4.0/",
+  "dataset_licence_checked_at": "https://api.figshare.com/v2/articles/6187256",
+  "per_text_licence_in_xml_headers": [
+   [
+    "Creative Commons Attribution-ShareAlike 3.0 United States License",
+    "https://creativecommons.org/licenses/by-sa/3.0/us/"
+   ]
+  ],
+  "note": "figshare labels the dataset CC BY 4.0, but every one of the 820 XML headers carries <licence><ref target=\"https://creativecommons.org/licenses/by-sa/3.0/us/\">Creative Commons Attribution-ShareAlike 3.0 United States License</ref></licence> (the texts derive from Perseus canonical-greekLit etc.). Treat derived files as CC BY-SA 3.0 US with attribution to Diorisis and to the text source named in each texts.json row."
+ },
+ "attribution_required": "Vatri, Alessandro; McGillivray, Barbara (2018). The Diorisis Ancient Greek Corpus. figshare. Dataset. https://doi.org/10.6084/m9.figshare.6187256.v1 -- texts from Perseus canonical-greekLit (Trustees of Tufts University), The Little Sailing and Bibliotheca Augustana as named per text (texts.json source_name/source_url); licensed CC BY-SA 3.0 US.",
+ "raw_archive": {
+  "file": "Diorisis.zip",
+  "bytes": 194443428,
+  "sha256": "fb32b7ff4bcfc433f1234aff8134096f524c9a32accbfdf0a072df4a5f019b65",
+  "md5": "f3a26efa7e7d2b93d1bcca26900d180a",
+  "md5_matches_figshare_computed_md5": true,
+  "note": "Archived on Basecamp at ~/storagebox/archive/melos-open/diorisis/Diorisis.zip (same sha256; unzipped copy in raw/). Downloaded on the laptop because figshare returns HTTP 403 to Basecamp's datacenter IP; laptop copy C:\\Users\\alvin\\AppData\\Local\\Temp\\claude\\C--Users-alvin\\16f4cc31-c8eb-4532-88fe-345250bb9067\\scratchpad\\dl_diorisis\\Diorisis.zip (session scratchpad, temporary)."
+ },
+ "transform": "form = NFC(betacode.conv.beta_to_uni(form_betacode)) with PyPI betacode 1.1 (TLG Beta Code Manual); lemma = NFC(entry). No other changes.",
+ "selection_rules": {
+  "genre": [
+   "Poetry"
+  ],
+  "melos_author_regex_on_author_header": {
+   "Sappho": "^Sappho\\b",
+   "Alcaeus": "^Alcaeus\\b",
+   "Alcman": "^Alcman\\b",
+   "Anacreon": "^Anacreon\\b",
+   "Anacreontea": "^Anacreontea\\b",
+   "Archilochus": "^Archilochus\\b",
+   "Hipponax": "^Hipponax\\b",
+   "Semonides": "^Semonides\\b",
+   "Mimnermus": "^Mimnermus\\b",
+   "Tyrtaeus": "^Tyrtaeus\\b",
+   "Solon": "^Solon\\b",
+   "Theognis": "^Theognis\\b",
+   "Phocylides": "^Phocylides\\b",
+   "Simonides": "^Simonides\\b",
+   "Pindar": "^Pindar\\b",
+   "Bacchylides": "^Bacchylides\\b",
+   "Stesichorus": "^Stesichorus\\b",
+   "Ibycus": "^Ibycus\\b",
+   "Corinna": "^Corinna\\b",
+   "Callinus": "^Callinus\\b",
+   "Xenophanes": "^Xenophanes\\b",
+   "Hesiod": "^Hesiod\\b",
+   "Homeric Hymns": "^Hymns$",
+   "Theocritus": "^Theocritus\\b",
+   "Callimachus": "^Callimachus\\b",
+   "Apollonius": "^Apollonius Rhodius$"
+  },
+  "rule": "text selected if genre == 'Poetry' OR author header matches a Melos author regex"
+ },
+ "melos_authors_found": [
+  "Apollonius",
+  "Callimachus",
+  "Hesiod",
+  "Homeric Hymns",
+  "Pindar",
+  "Theocritus"
+ ],
+ "melos_authors_absent": [
+  "Sappho",
+  "Alcaeus",
+  "Alcman",
+  "Anacreon",
+  "Anacreontea",
+  "Archilochus",
+  "Hipponax",
+  "Semonides",
+  "Mimnermus",
+  "Tyrtaeus",
+  "Solon",
+  "Theognis",
+  "Phocylides",
+  "Simonides",
+  "Bacchylides",
+  "Stesichorus",
+  "Ibycus",
+  "Corinna",
+  "Callinus",
+  "Xenophanes"
+ ],
+ "selected_texts": 67,
+ "texts_not_selected": 753,
+ "files": {
+  "texts.json": {
+   "sha256": "c1fff50fa32524fe759f335cf41f9564c52cea05ef9c595285e523b28ee9ebe4",
+   "bytes": 600486,
+   "rows": 820
+  },
+  "poetry_tokens.jsonl.gz": {
+   "sha256": "743e73200023aaa0467d3fa3c2a3702d01e59a6eceb3fa9ec56dc714ca88ceae",
+   "bytes": 16705059,
+   "rows": 578110
+  },
+  "form_lemma_pos_counts.tsv.gz": {
+   "sha256": "d23930921f2e6ee0afa6d4b977149ca8a29f44ce897460252de860917de74e82",
+   "bytes": 6339103,
+   "rows": 516119
+  }
+ },
+ "tokens_per_author_in_selection": {
+  "Homer": 199050,
+  "Nonnus": 126892,
+  "Quintus Smyrnaeus": 60107,
+  "Apollonius": 38808,
+  "Oppian": 22752,
+  "Pindar": 21120,
+  "Theocritus": 20866,
+  "Hesiod": 16025,
+  "Homeric Hymns": 15788,
+  "Oppian of Apamaea": 13482,
+  "Callimachus": 13340,
+  "Aratus": 7685,
+  "Lycophron": 7464,
+  "Parthenius of Nicaea": 6399,
+  "Triphiodorus": 4232,
+  "Moschus": 3158,
+  "Bion of Phlossa": 942
+ },
+ "coverage_vs_forms_jsonl": {
+  "Apollonius": {
+   "distinct_forms": 13297,
+   "not_in_forms_jsonl_exact_nfc": 6392,
+   "not_in_forms_jsonl_elision_folded": 6118
+  },
+  "Aratus": {
+   "distinct_forms": 3243,
+   "not_in_forms_jsonl_exact_nfc": 1495,
+   "not_in_forms_jsonl_elision_folded": 1423
+  },
+  "Bion of Phlossa": {
+   "distinct_forms": 577,
+   "not_in_forms_jsonl_exact_nfc": 214,
+   "not_in_forms_jsonl_elision_folded": 203
+  },
+  "Callimachus": {
+   "distinct_forms": 5328,
+   "not_in_forms_jsonl_exact_nfc": 2657,
+   "not_in_forms_jsonl_elision_folded": 2552
+  },
+  "Hesiod": {
+   "distinct_forms": 6778,
+   "not_in_forms_jsonl_exact_nfc": 299,
+   "not_in_forms_jsonl_elision_folded": 9
+  },
+  "Homer": {
+   "distinct_forms": 30798,
+   "not_in_forms_jsonl_exact_nfc": 1817,
+   "not_in_forms_jsonl_elision_folded": 86
+  },
+  "Homeric Hymns": {
+   "distinct_forms": 6374,
+   "not_in_forms_jsonl_exact_nfc": 2077,
+   "not_in_forms_jsonl_elision_folded": 1860
+  },
+  "Lycophron": {
+   "distinct_forms": 4702,
+   "not_in_forms_jsonl_exact_nfc": 2680,
+   "not_in_forms_jsonl_elision_folded": 2623
+  },
+  "Moschus": {
+   "distinct_forms": 1940,
+   "not_in_forms_jsonl_exact_nfc": 738,
+   "not_in_forms_jsonl_elision_folded": 694
+  },
+  "Nonnus": {
+   "distinct_forms": 25874,
+   "not_in_forms_jsonl_exact_nfc": 16940,
+   "not_in_forms_jsonl_elision_folded": 16910
+  },
+  "Oppian": {
+   "distinct_forms": 9142,
+   "not_in_forms_jsonl_exact_nfc": 4682,
+   "not_in_forms_jsonl_elision_folded": 4566
+  },
+  "Oppian of Apamaea": {
+   "distinct_forms": 6654,
+   "not_in_forms_jsonl_exact_nfc": 3399,
+   "not_in_forms_jsonl_elision_folded": 3318
+  },
+  "Parthenius of Nicaea": {
+   "distinct_forms": 2820,
+   "not_in_forms_jsonl_exact_nfc": 1104,
+   "not_in_forms_jsonl_elision_folded": 1077
+  },
+  "Pindar": {
+   "distinct_forms": 9688,
+   "not_in_forms_jsonl_exact_nfc": 5171,
+   "not_in_forms_jsonl_elision_folded": 4981
+  },
+  "Quintus Smyrnaeus": {
+   "distinct_forms": 14327,
+   "not_in_forms_jsonl_exact_nfc": 6328,
+   "not_in_forms_jsonl_elision_folded": 6032
+  },
+  "Theocritus": {
+   "distinct_forms": 9556,
+   "not_in_forms_jsonl_exact_nfc": 5149,
+   "not_in_forms_jsonl_elision_folded": 4939
+  },
+  "Triphiodorus": {
+   "distinct_forms": 2741,
+   "not_in_forms_jsonl_exact_nfc": 977,
+   "not_in_forms_jsonl_elision_folded": 953
+  },
+  "ALL_SELECTED": {
+   "distinct_forms": 88690,
+   "not_in_forms_jsonl_exact_nfc": 50635,
+   "not_in_forms_jsonl_elision_folded": 48659
+  },
+  "forms_jsonl_distinct_nfc_forms": 79835,
+  "note": "exact = NFC string equality; elision_folded maps U+2019/U+0027/U+02BC to U+1FBD (forms.jsonl writes elision with U+1FBD, betacode emits U+2019). Tokens without any letter excluded."
+ },
+ "corpus_totals": {
+  "texts": 820,
+  "words": 10206421,
+  "unlemmatized_words": 153593
+ },
+ "date": "2026-10-09",
+ "user_agent": "Melos/1.0 (+https://greeklyric.com)",
+ "script": "scripts/ingest_open_diorisis.py"
+}

@@ -1,0 +1,52 @@
+{
+ "campbell_poems": 232,
+ "campbell_authors": {
+  "Archilochus": 31,
+  "Callinus": 2,
+  "Tyrtaeus": 2,
+  "Semonides": 5,
+  "Alcman": 12,
+  "Mimnermus": 5,
+  "Solon": 9,
+  "Stesichorus": 5,
+  "Sappho": 24,
+  "Alcaeus": 13,
+  "Ibycus": 5,
+  "Anacreon": 17,
+  "Xenophanes": 9,
+  "Phocylides": 4,
+  "Demodocus": 2,
+  "Theognis": 23,
+  "Hipponax": 8,
+  "Simonides": 25,
+  "Pratinas": 1,
+  "Timocreon": 2,
+  "Corinna": 3,
+  "Bacchylides": 6,
+  "Praxilla": 1,
+  "Carmina Popularia": 3,
+  "Scolia": 15
+ },
+ "authors_with_hand_scansion": [
+  "Semonides",
+  "Solon",
+  "Theognis",
+  "Tyrtaeus"
+ ],
+ "poems_by_authors_with_hand_scansion": 39,
+ "word_spelling_types": 6926,
+ "word_tokens": 12517,
+ "exact_nfc_lower": {
+  "types": 4162,
+  "tokens": 9115,
+  "unique_pattern_types": 2634,
+  "unique_pattern_tokens": 4064
+ },
+ "accent_folded": {
+  "types": 5050,
+  "tokens": 10085,
+  "unique_pattern_types": 2934,
+  "unique_pattern_tokens": 4039
+ },
+ "note": "matching on whole-word spellings; hypotactic words that contain elision/crasis are single table keys"
+}

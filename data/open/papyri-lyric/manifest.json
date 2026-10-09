@@ -1,0 +1,84 @@
+{
+ "date": "2026-10-09",
+ "user_agent": "Melos/1.0 (+https://greeklyric.com)",
+ "source": {
+  "repo": "https://github.com/papyri/idp.data",
+  "commit": "aed3076ee2d512c180ffb2fdfbb531e95d9d1b7c",
+  "paths": [
+   "DCLP/",
+   "HGV_meta_EpiDoc/"
+  ],
+  "basecamp_archive": "~/storagebox/archive/melos-open/idp.data/ (sparse checkout DCLP + HGV_meta_EpiDoc at the same commit; ssh to Basecamp 100.64.176.44)",
+  "local_checkout": "data/cache/idp.data-git (gitignored)"
+ },
+ "licence": {
+  "quote": "This data is made available under a [Creative Commons Attribution 3.0 License](https://creativecommons.org/licenses/by/3.0/), with copyright and attribution to the respective projects.",
+  "url": "https://github.com/papyri/idp.data#license",
+  "licence_url": "https://creativecommons.org/licenses/by/3.0/",
+  "per_file": "each DCLP file repeats: (c) Digital Corpus of Literary Papyri and LDAB (Trismegistos) ... Creative Commons Attribution 3.0 License"
+ },
+ "attribution": "papyri.info / Digital Corpus of Literary Papyri (DCLP) / LDAB (Trismegistos) and the respective contributing projects, CC BY 3.0; texts are papyrus witnesses transcribed by DCLP editors; cite each record by its papyri.info URL.",
+ "counts": {
+  "dclp_files_scanned": 14845,
+  "prefilter_hits": 1097,
+  "selected": 313,
+  "by_rule": {
+   "A": 202,
+   "B1": 54,
+   "B2": 57
+  },
+  "per_poet_rule_A": {
+   "Archilochus": 23,
+   "Alcaeus": 29,
+   "Sappho": 22,
+   "Alcman": 16,
+   "Anacreon": 8,
+   "Hipponax": 7,
+   "Bacchylides": 17,
+   "Callinus": 1,
+   "Corinna": 7,
+   "Ibycus": 2,
+   "Simonides": 13,
+   "Pindar": 52,
+   "Theognis": 4,
+   "Stesichorus": 10,
+   "Tyrtaeus": 3
+  },
+  "with_edition_text": 67,
+  "metadata_only": 246,
+  "with_hgv": 0
+ },
+ "selection_rules": {
+  "A": "DCLP bibliography/ancientEdition <author> (TLG/LDAB author field) matches one of the poet names in POETS (script) -- brief list plus Phocylides, Terpander, Telesilla, Praxilla, Lasus; \"Alcaeus of Messene\" excluded (Hellenistic epigrammatist); \"Pseudo- Anacreon\" included.",
+  "B1": "no listed poet; edition xml:lang=grc; a descriptive keyword or title contains lyric/melic/elegy/elegiac/iambic/iambus/choliamb/epode/dithyramb/paean/partheneion/skolion; no keyword for christian/bible/psalm/manichaean/gnostic/coptic/magic/amulet/liturgy/hymn/jewish/testament; no Testamentum author.",
+  "B2": "as B1 but the only genre word is the DCLP bare category tag (\"lyric\", \"poetry lyric\"). Many are Hellenistic/late poets (Callimachus, Lycophron, Dioscorus of Aphrodito, epigram anthologies) or drama; kept but flagged -- filter on selection.rule."
+ },
+ "borderline_calls": [
+  "Callimachus Iambi/Aetia papyri (B1/B2): Hellenistic imitations of iambus/elegy, selected only through genre words.",
+  "Timotheus, Cercidas (choliambi), Hermesianax (elegy), Euripidean/tragic lyric: appear in B only if genre words say so; not poets named in the brief.",
+  "Commentaries/lexica/scholia on a listed poet are selected under rule A (record shows them in title/keywords).",
+  "Simonides is not disambiguated in DCLP (Ceos vs Amorgos): kept as stated.",
+  "Records with a \"?\" author (e.g. 59081 \"Alcaeus? Sappho?\") keep every stated author and the title verbatim."
+ ],
+ "outputs": {
+  "papyri.jsonl": {
+   "bytes": 1547589,
+   "sha256": "a210bdf4eebfa0330affd12c66b73feaf019c0b7b13b5b112fea481995f061d1"
+  },
+  "selection_log.json": {
+   "bytes": 22393,
+   "sha256": "712fa628367331c8949043bf042193011a20095baf8df40bc625f8e01fdf94c1"
+  },
+  "coverage.json": {
+   "bytes": 1359,
+   "sha256": "7eb03be92448bb102031b041dbf844bc9b311cd287ac3256391f958b47e67f46"
+  }
+ },
+ "script": "scripts/ingest_open_papyri_lyric.py",
+ "notes": [
+  "manuscript_date is the date of the papyrus copy, not of composition.",
+  "edition_text is a deterministic Leiden-style rendering of <div type=edition>; most DCLP records are metadata-only (no transcription).",
+  "No DDbDP/HGV record matched any selected papyrus (by ddb-hybrid id or TM id); the hgv field is null for all.",
+  "Reads blobs from the git object store of the pinned commit; raw_sha256 is of the blob bytes."
+ ]
+}

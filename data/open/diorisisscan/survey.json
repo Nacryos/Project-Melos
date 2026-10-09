@@ -1,0 +1,18 @@
+{
+ "name": "alevatri/diorisisscan (Diorisis Scan beta 0.3, 9-2026) - greekScansions.json",
+ "url": "https://github.com/alevatri/diorisisscan",
+ "commit": "be020b7560b8a11c1b6d83c57a6d83da8352bb81",
+ "commit_date": "2026-09-14",
+ "checked": "2026-10-09",
+ "user_agent": "Melos/1.0 (+https://greeklyric.com)",
+ "licence": "MIT License / Copyright (c) 2022 alevatri / 'Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the \"Software\"), to deal in the Software without restriction...'",
+ "licence_url": "https://github.com/alevatri/diorisisscan/blob/be020b7560b8a11c1b6d83c57a6d83da8352bb81/LICENSE",
+ "licence_file_sha256": "83ddc39e8c082bfc0763b004feb56a4aa7c87d82be741f593dbe222dbec814b7",
+ "file": "greekScansions.json",
+ "file_bytes": 21436243,
+ "file_sha256": "ec583fc4df8c2912eb2fb38dd1bc89fb9891e52ab54909b8d9b15c2ea7b02a24",
+ "structure": "JSON object: 577,570 keys (Beta Code word forms, e.g. '!a/bais') -> list of [syllable_index, mark] pairs (922,185 pairs in total); marks include the dash for long, a breve for short, plus overlong/resolved/anceps-type symbols. Only the syllables the scanner treats as needing a lookup are listed (not full per-word patterns).",
+ "derivation_statement": "NONE found. The README (5,384 bytes) describes the scanner module only and never says how greekScansions.json was produced (no source corpus, no hand-marking claim, no dataset citation). The only code that writes the file is prosodyScanner.py manualScan(), which appends a form with a scansion typed in interactively by the user at the console to the dictionary. The repo name suggests a link to the Diorisis corpus but nothing states it.",
+ "decision": "Survey only; NOT ingested (provenance not stated; the MIT licence covers the repository as a software licence and does not by itself establish rights in data of unknown origin). A scanner-generated dictionary is also not independent hand scansion.",
+ "see_also": "If wanted later, ask the repository owner (alevatri) how the table was built (Diorisis corpus is CC BY 4.0 per Melos notes, figshare doi 10.6084/m9.figshare.6187256)."
+}

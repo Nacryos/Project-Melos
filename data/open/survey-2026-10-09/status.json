@@ -1,0 +1,14 @@
+{
+  "Diorisis Ancient Greek Corpus": "INGESTED data/open/diorisis/ (poetry tokens 578,110; corpus-wide form-lemma-POS counts 516,119 rows over 10.2M words); raw zip on Basecamp ~/storagebox/archive/melos-open/diorisis/Diorisis.zip",
+  "GLAUx": "INGESTED data/open/glaux/ (213,623 lyric/poetry tokens from 146 open-licence texts; NA/NC/ND texts dropped); corpus-wide count table pending (needs Basecamp clone at ~/storagebox/archive/melos-open/glaux/repo)",
+  "papyri.info idp.data": "INGESTED data/open/papyri-lyric/ (313 lyric/elegiac/iambic DCLP papyri, 67 with text; 139 new to Melos)",
+  "DCLP (Digital Corpus": "INGESTED data/open/papyri-lyric/",
+  "Hypotactic for NLP": "INGESTED data/open/hypotactic/ (93,215 hand-scanned lines; Pindar, Theognis, Solon, Semonides, Tyrtaeus + epic)",
+  "Urdatorn/hypotactic": "INGESTED data/open/hypotactic/",
+  "Norma Syllabarum": "INGESTED data/open/norma/ (1,992 rows, GPL-3.0; provenance of the Greek not stated)",
+  "Wiktionary / kaikki": "INGESTED data/open/wiktionary-quantities/ (799,910 length-marked spellings, 655,016 plain forms)",
+  "Edmonds, Lyra Graeca I-III": "INGESTED data/open/edmonds-lyra-graeca/ (1,879 per-fragment records, Greek-OCR scans found for I, I rev. 1928, II)",
+  "Edmonds, Lyra Graeca vol. I revised": "INGESTED in data/open/edmonds-lyra-graeca/ (title page reads 1928, 2nd ed.)",
+  "Knox/Edmonds, Theophrastus": "USED for 6 Hipponax translations in data/open/pd-translations/ (Univ. of Toronto scan charactersofthe00theouoft found after the survey)",
+  "Diorisis Scan (alevatri": "SURVEYED only (data/open/diorisisscan/survey.json): derivation of greekScansions.json not stated"
+}
