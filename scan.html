@@ -38,6 +38,9 @@ select { background: var(--panel); color: var(--fg); border: 1px solid var(--lin
 .showpct .verse { line-height: 1.5; }
 .showpct .gap { display: inline-block; vertical-align: top; line-height: 1.5; white-space: pre; }
 .gap { color: var(--muted); }
+.sep { color: var(--muted); opacity: .55; font-weight: 300; margin: 0 1px; user-select: none; }
+.nosep .sep { display: none; }
+.showpct .sep { display: inline-block; vertical-align: top; line-height: 1.5; }
 .meta { font-size: 13px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 12px; }
 .pattern { font: 15px/1.4 ui-monospace, "Cascadia Mono", monospace; letter-spacing: 2px; color: var(--fg); }
 .bad { color: rgb(var(--short)); }
@@ -64,6 +67,7 @@ select { background: var(--panel); color: var(--fg); border: 1px solid var(--lin
 μῆνιν ἄειδε θεὰ Πηληϊάδεω Ἀχιλῆος</textarea>
   <div class="controls">
     <label><input type="checkbox" id="pct"> show %</label>
+    <label><input type="checkbox" id="sep" checked> syllable bars |</label>
     <label><input type="checkbox" id="lex" checked> lexical vowel lengths</label>
     <label>dialect <select id="dialect"><option value="none">none</option><option value="aeolic">Aeolic</option><option value="doric">Doric</option><option value="ionic">Ionic</option><option value="attic">Attic</option></select></label>
     <label>metre <select id="metre"><option value="">none (metre-free)</option><option value="auto">auto-detect</option></select></label>
@@ -78,7 +82,7 @@ select { background: var(--panel); color: var(--fg); border: 1px solid var(--lin
 const $ = (id) => document.getElementById(id);
 const METRES = ["hexameter","pentameter","elegiac","iambic_trimeter","trochaic_tetrameter","sapphic","sapphic_hendecasyllable","adonean","alcaic","glyconic","pherecratean","hipponactean","telesillean","reizianum","aristophanean","lesser_asclepiad","greater_asclepiad"];
 for (const m of METRES) { const o = document.createElement("option"); o.value = m; o.textContent = m.replace(/_/g, " "); $("metre").appendChild(o); }
-try { const s = JSON.parse(localStorage.getItem("scan-prefs") || "{}"); for (const k of ["pct","lex","post"]) if (k in s) $(k).checked = s[k]; for (const k of ["dialect","metre"]) if (s[k]) $(k).value = s[k]; if (s.text) $("text").value = s.text; } catch (e) {}
+try { const s = JSON.parse(localStorage.getItem("scan-prefs") || "{}"); for (const k of ["pct","sep","lex","post"]) if (k in s) $(k).checked = s[k]; for (const k of ["dialect","metre"]) if (s[k]) $(k).value = s[k]; if (s.text) $("text").value = s.text; } catch (e) {}
 
 function rgbFor(p) {
   const css = getComputedStyle(document.documentElement);
@@ -92,7 +96,7 @@ let last = null, timer = null, seq = 0;
 async function scan() {
   const my = ++seq;
   const text = $("text").value;
-  try { localStorage.setItem("scan-prefs", JSON.stringify({pct: $("pct").checked, lex: $("lex").checked, post: $("post").checked, dialect: $("dialect").value, metre: $("metre").value, text})); } catch (e) {}
+  try { localStorage.setItem("scan-prefs", JSON.stringify({pct: $("pct").checked, sep: $("sep").checked, lex: $("lex").checked, post: $("post").checked, dialect: $("dialect").value, metre: $("metre").value, text})); } catch (e) {}
   if (!text.trim()) { $("out").innerHTML = ""; return; }
   const body = {text, lexicon: $("lex").checked, dialect: $("dialect").value, metre: $("metre").value || null};
   const t0 = performance.now();
@@ -122,8 +126,9 @@ function render() {
     const start = offset, end = offset + lt.length; offset = end + 1;
     const units = (byLine[li] || []);
     let pos = start, h = "";
-    for (const u of units) {
+    for (const [k, u] of units.entries()) {
       if (u.start > pos) h += `<span class="gap">${esc(text.slice(pos, u.start))}</span>`;
+      if (k) h += `<span class="sep" aria-hidden="true">|</span>`;
       const p = usePost && post[u.i] !== undefined ? post[u.i] : u.p_long;
       const [r, g, b] = rgbFor(p);
       const pct = Math.round(p * 100);
@@ -146,6 +151,7 @@ function render() {
   if (res.auto) html += `<div class="meta">auto-detect: ${res.auto.map((a) => `${esc(a.metre.replace(/_/g, " "))} (${a.lines_fitting}/${a.lines} fit)`).join(" · ")}</div>`;
   $("out").innerHTML = html;
   $("out").classList.toggle("showpct", $("pct").checked);
+  $("out").classList.toggle("nosep", !$("sep").checked);
 }
 
 function showPop(el) {
@@ -174,7 +180,7 @@ document.addEventListener("click", (e) => {
 document.addEventListener("keydown", (e) => { if (e.key === "Escape") $("pop").style.display = "none"; });
 $("text").addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(scan, 150); });
 for (const id of ["lex", "dialect", "metre"]) $(id).addEventListener("change", scan);
-for (const id of ["pct", "post"]) $(id).addEventListener("change", render);
+for (const id of ["pct", "sep", "post"]) $(id).addEventListener("change", () => { try { const s = JSON.parse(localStorage.getItem("scan-prefs") || "{}"); s[id] = $(id).checked; localStorage.setItem("scan-prefs", JSON.stringify(s)); } catch (e) {} render(); });
 scan();
 </script>
 </body>
