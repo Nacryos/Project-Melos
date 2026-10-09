@@ -1,4 +1,4 @@
-# Corpus headword index and lemma features (release O)
+# Corpus headword index and lemma features (releases O and P)
 
 Every Greek word token of the corpus carries its ranked headword(s). The index is a
 SQLite file (`data/lemma_index.sqlite`, env `MELOS_LEMMA_INDEX`) built as a batch job by
@@ -81,3 +81,73 @@ index and sharing a gloss word with the concept.
   `edition`, `source`, `citation`, `quality`, `work`; `edition_count` = 1 + len(editions).
 - Hybrid responses add `query_lemmas`: the headwords used by the new headword signal
   (`retrieval_ranks.lemma` on each result says where it ranked in that list).
+
+## Release P additions
+
+### Contextual model on every Greek record
+
+Release O ran OdyCy on edited Greek text only. Release P ran it on the other 176,037 Greek records as well
+(scholia, commentary, apparatus, OCR pages; `build_lemma_index.py context --all-records`, five 3-CPU shards,
+texts processed in length order so a batch is not padded to its longest page) and reassembled the index. Edited
+text is unaffected (its predictions were already stored and the corpus prior does not use the model); for the
+other records the model's lemma and POS now rescore ambiguous spellings exactly as for edited text. The model
+was trained on edited literary Greek; on OCR pages with Latin apparatus and broken words its agreement is lower
+(see the calibration by evidence class).
+
+### Calibrated confidence
+
+`scripts/calibrate_lemma_confidence.py`. Gold: PerseusDL Greek Dependency Treebank v1.6 tokens (already in the
+lexica form lists) of the works that are stored as Perseus passages with line citations: Iliad, Odyssey, Theogony,
+Shield, Sophocles and Aeschylus. Each gold token is aligned to the index token of the Perseus passage whose
+range contains its line (folded forms, longest-common-subsequence alignment).
+
+Leakage control: the index uses lemmas recorded for a spelling in the source annotations, which include these
+treebanks. The evaluation index is assembled from the same staging data with every treebank token of the gold
+works removed from the form lists (`filter-lexica`), so no gold token's own annotation supports its prediction.
+The contextual model was trained on UD treebanks derived from the same texts, so the `context_agrees` and
+`context_chose` classes are optimistic on this gold set.
+
+Split: gold tokens are grouped in blocks (work, book, 25-line group); a fixed hash assigns each block to the
+fitting half or the held-out half. Fit: isotonic regression (pool-adjacent-violators) of agreement with the gold
+lemma on the raw 0–255 score, per evidence class (`damaged_word`, `generated_spelling`, `context_chose`,
+`context_agrees`, `no_context_signal`) with at least 300 fitting tokens, else pooled. Correct = the predicted
+headword equals the gold lemma after homograph digits, length marks, accents and breathings are removed;
+treebank lemma conventions that differ from the dictionaries' headwords count as errors. The map is stored in
+`data/lemma_calibration.json` and applied to the production index; `probability` is null without it.
+
+### Variant groups, glosses, head meanings (assembly)
+
+- `lemma_variant`: a dictionary entry of headword A that says it is a dialect/poetic form of headword B
+  ("= B", "Ep./Ion./Dor./Aeol./Att./poet./Lesb./… for|of B") links A to B when both are corpus headwords. Both stay
+  headwords; the API offers the group and `combine_variants`.
+- Short gloss: within one dictionary the main entry is read first; an entry whose gloss is only a cross-reference
+  ("= οὐδός") or a shorter homograph is read after the fuller one (ὁδός "way", not ὁδός (B) "threshold"). A headword
+  with no gloss of its own shows its variant target's (πότνα → πότνια), labelled `gloss_via_variant`.
+- Head meanings (`lemma_gloss_term` field 3, terms `=word`): each dictionary gloss is cut into sense phrases at
+  ; , : and "or"; a phrase of one or two words gives its content words, a longer phrase only its first. Concept
+  diachrony reads English through these whole words; search keeps the release O stems (fields 1–2), unchanged.
+
+### Dates, genres, works
+
+- A passage's date: its author's sourced claim; for a Greek Anthology epigram the claim of the poet its record
+  names (`metadata.attributed_author`, 36 unambiguous poets mapped to Wikidata items); for CTS tlg0013 records
+  filed as "Anonymous" the Homeric Hymns' item (no referenced claim: undated). `data/metadata/attributions.json`.
+- Wikidata century and decade precision for CE dates is now read (release O read BCE ones only, which left
+  Nonnus "5th century", Quintus, Musaeus undated); claim order birth → floruit → work period → death → inception.
+- Genre: a source edition's own collection/work label first (`data/metadata/genre_sources.json`: the CGL anthology's
+  sections ΜΕΛΙΚΟΙ ΠΟΙΗΤΕΣ / ΕΛΕΓΕΙΟΓΡΑΦΟΙ ΚΑΙ ΙΑΜΒΟΓΡΑΦΟΙ and their subsections, Greek Wikisource collection
+  titles), deciding when one genre covers at least two thirds of the author's labelled records ("elegy and iambus"
+  when only those two occur); then the author's Wikidata genre (P136) statements; else the editorial table
+  (`genre_source: editorial`).
+- Work order and collections: from the citation index (TLG work numbers). Chronological lists sort by author
+  date, then work number, then position; a second collection of a TLG work that another collection holds in more
+  cited passages is folded under the primary (concordance, proximity, collocations, n-grams).
+
+### N-grams
+
+`scripts/build_ngrams.py` → `data/ngrams.sqlite`: 2–4 consecutive top-ranked headwords inside one stored passage
+(searchable edited text; a token without a headword breaks the sequence), per author, genre, period and the whole
+corpus; one collection per TLG work; a passage repeated word for word within one work counted once. Minimum count
+3 (author), 5 (genre, period), 10 (corpus). Statistic: Dunning G² of the last headword after its (n−1)-headword
+prefix against its frequency in the group; positive associations only; top 400 per group and length;
+function-word-only n-grams flagged and hidden by default.

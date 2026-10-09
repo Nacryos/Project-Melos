@@ -881,15 +881,20 @@ def word(form: str, passage_id: str=''):
 
 
 @app.get('/api/word')
-def word_request(form: str, passage_id: str='', lemma: str=''):
+def word_request(form: str, passage_id: str='', lemma: str='', compact: bool=False, senses: int=Query(6,ge=1,le=50)):
     # Keep internal word/headword lookups source-only. Cached machine evidence
     # is added only at the ordinary user-facing HTTP boundary.
     from .passage_analysis import editorial_lookup_form
     printed, form = form, editorial_lookup_form(form)
-    from .word_parser_candidates import lemma_dictionary_result, lemma_key
+    from .word_parser_candidates import lemma_dictionary_result, lemma_key, compact_entry
     if lemma and lemma_key(form) == lemma_key(lemma):
         # lemma= fast path: the dictionary of a headline headword, without the form analysis.
-        return lemma_dictionary_result(printed, lemma, lambda value: morph_service().headword_entries(value))
+        result = lemma_dictionary_result(printed, lemma, lambda value: morph_service().headword_entries(value))
+        if compact:
+            # Release P: entries without provenance blobs, the first `senses` senses each.
+            result['lexicon_entries'] = [compact_entry(e, senses=senses) for e in result['lexicon_entries']]
+            result['lookup_mode'] = 'lemma_dictionary_compact'
+        return result
     result = word(form, passage_id)
     if printed != form:
         result['printed_form'] = printed
@@ -1188,6 +1193,20 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
     # Explicit references are navigation intent, not a bag of vocabulary.
     # Keep catalogue-only coverage visible without pretending it is poem text.
     if re.search(r'\d', q):
+        # Release P: a line/book citation or CTS URN ("Il. 1.1", "Pind. O. 1.1") goes to the
+        # passage; an abbreviated fragment citation ("Sapph. fr. 31 V") is rewritten to the
+        # release-O reference syntax below. See backend/citations.py.
+        from .citations import parse_citation, _locus_text
+        cited=parse_citation(q)
+        if cited and cited.get('kind') in ('locus','urn') and not author:
+            from .citation_routes import citation_search
+            found=citation_search(q,include_reference=include_reference,limit=limit,offset=offset)
+            if found:
+                return found
+        elif cited and cited.get('kind')=='fragment':
+            from .citation_routes import _REFERENCE_SCHEMES
+            scheme=cited.get('scheme') or ''
+            q=f"{cited['author']} fr. {_locus_text(cited['locus'])}"+(f' {scheme}' if scheme in _REFERENCE_SCHEMES else '')
         from .reference_lookup import parse_reference_query, rank_reference_records
         with connect() as con:
             labels=[row[0] for row in con.execute('SELECT DISTINCT author FROM works')]
@@ -1810,6 +1829,8 @@ from .discovery import router as discovery_router
 app.include_router(discovery_router)
 from .lemma_routes import router as lemma_router
 app.include_router(lemma_router)
+from .citation_routes import router as citation_router
+app.include_router(citation_router)
 from .word_headlines import router as headlines_router
 app.include_router(headlines_router)
 

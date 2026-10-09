@@ -381,7 +381,7 @@ class Morphology:
         ids = {str(row.get("id")) for row in rows}
         return [row for row in rows if self._superseded.get(str(row.get("id"))) not in ids]
 
-    def headword_entries(self, lemma: str) -> dict[str, Any]:
+    def headword_entries(self, lemma: str, limit: int = 24) -> dict[str, Any]:
         """Dictionary entries whose printed headword is this lemma, rendered.
 
         Exact NFC (case-sensitive) headword match first; only when there is
@@ -400,7 +400,7 @@ class Morphology:
         except ImportError:  # pragma: no cover - renderer is part of the package
             render_source_record = None
         entries = []
-        for row in rows[:24]:
+        for row in rows[:limit]:
             display = {field: row.get(field) for field in
                        ("id", "entry_id", "lemma", "lemma_beta", "lemma_raw", "homograph_id", "lemma_identity",
                         "key", "gloss", "entry_text", "source", "source_url", "entry_url", "license",

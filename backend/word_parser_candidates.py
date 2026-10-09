@@ -335,6 +335,45 @@ def lemma_dictionary_result(form, lemma, headword_lookup):
             "headline_alternatives": [], "headline_tie_broken": False, "alternatives": []}
 
 
+def compact_entry(entry, senses=3, excerpt=400, brief=False):
+    """A dictionary entry without its provenance blobs (release P): the source's gloss, the first
+    `senses` sense texts in source order with their printed labels, a short entry excerpt and the
+    entry's own link and licence. The full entry stays available from /api/word."""
+    from .short_gloss import DICTIONARY_LABELS
+    rows = [x for x in (entry.get("dictionary_senses") or []) if isinstance(x, dict) and x.get("text")]
+    out = []
+    for row in rows[:senses]:
+        path = row.get("sense_path") or []
+        label = ".".join(str(level.get("n")) for level in path
+                         if isinstance(level, dict) and level.get("n") not in (None, "", "0"))
+        out.append({"label": label or None, "text": row["text"]})
+    text = str(entry.get("rendered_entry_text") or entry.get("entry_text") or "")
+    out = {"id": entry.get("id"), "lemma": entry.get("lemma"),
+           "dictionary": DICTIONARY_LABELS.get(entry.get("source"), entry.get("source")), "source": entry.get("source"),
+           "gloss": entry.get("gloss"), "senses": out, "sense_count": len(rows),
+           "entry_excerpt": text[:excerpt] + ("…" if len(text) > excerpt else ""),
+           "entry_url": entry.get("entry_url"), "license": entry.get("license"), "attribution": entry.get("attribution")}
+    if brief:  # headline batches: the dictionary label, link and licence identify the source
+        for key in ("source", "attribution", "entry_excerpt"):
+            out.pop(key)
+    return out
+
+
+def lemma_dictionary_compact(lemma, headword_lookup, senses=6, first_only=False):
+    """Compact entries of a headword (the lemma= fast path's entries, compacted). With first_only,
+    only the first dictionary entry that has a gloss or senses (no copy of the full entries)."""
+    if first_only:
+        for entry in _headword_entries(headword_lookup, lemma):
+            compact = compact_entry(entry, senses=senses, brief=True)
+            if compact["senses"] or compact["gloss"]:
+                if isinstance(compact.get("lemma"), str):
+                    compact["lemma"] = unicodedata.normalize("NFC", compact["lemma"])
+                return [compact]
+        return []
+    full = lemma_dictionary_result(lemma, lemma, headword_lookup)["lexicon_entries"]
+    return [compact_entry(e, senses=senses) for e in full]
+
+
 ELISION_RESTORATIONS = ("ε", "έ", "α", "ά", "ο", "ό", "ι", "ί", "αι", "αί", "οι", "οί")
 
 

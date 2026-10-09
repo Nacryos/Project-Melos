@@ -4,15 +4,19 @@
 #   sh deploy/lemma_index_build.sh engine     # start melos-morpheus-batch (own container, 10 CPUs) on melos-morpheus
 #   sh deploy/lemma_index_build.sh forms|morph|generate|assemble
 #   sh deploy/lemma_index_build.sh context <shards>   # OdyCy over edited Greek text, <shards> parallel containers
+#   sh deploy/lemma_index_build.sh context-all <shards>   # release P: also scholia, commentary and OCR pages
 #   sh deploy/lemma_index_build.sh engine-stop
 #
-# Uses the deployed N image with the O source tree mounted read-only; writes only to $O/build and $O/data.
+# Uses the deployed N image with the source tree mounted read-only; writes only to $O/build and $O/data.
+# Release P: MELOS_O_DIR=/home/alvin/melos-p MELOS_O_CORPUS=/home/alvin/melos-o/data/corpus.sqlite NAME=melos-p
+# (the O staging file copied to $O/build first, so O's build state is not touched).
 set -eu
 O=${MELOS_O_DIR:-/home/alvin/melos-o}
 TREE=${MELOS_O_TREE:-$O/dev-tree}
 CORPUS=${MELOS_O_CORPUS:-$O/data/corpus.sqlite}
 IMAGE=${MELOS_O_BUILD_IMAGE:-melos-api:20261008n}
 NET=melos-morpheus
+NAME=${NAME:-melos-o}
 BATCH=melos-morpheus-batch
 ENDPOINT=http://$BATCH:8080/api/v1/analysis/word
 step=${1:-}
@@ -38,18 +42,19 @@ case "$step" in
     sleep 2; docker ps --filter name="$BATCH" --format '{{.Names}} {{.Status}}'
     ;;
   engine-stop) docker rm -f "$BATCH" >/dev/null && echo "removed $BATCH" ;;
-  forms) CPUS=2 run melos-o-forms forms ;;
-  morph) CPUS=4 run melos-o-morph morph --threads 24 ;;
-  generate) CPUS=8 run melos-o-generate generate --threads 40 ;;
-  context)
-    shards=${2:-4}; i=0
+  forms) CPUS=2 run $NAME-forms forms ;;
+  morph) CPUS=4 run $NAME-morph morph --threads 24 ;;
+  generate) CPUS=8 run $NAME-generate generate --threads 40 ;;
+  context|context-all)
+    shards=${2:-4}; i=0; extra=""
+    [ "$step" = context-all ] && extra="--all-records"
     while [ $i -lt "$shards" ]; do
-      CPUS=3 THREADS_PER=3 run melos-o-context-$i context --model /syntax-model --shards "$shards" --shard $i \
+      CPUS=3 THREADS_PER=3 run $NAME-context-$i context --model /syntax-model --shards "$shards" --shard $i $extra \
         > "$O/build/context-$i.log" 2>&1 &
       i=$((i+1))
     done
     wait; tail -n 2 "$O"/build/context-*.log
     ;;
-  assemble) CPUS=4 run melos-o-assemble assemble ;;
-  *) echo "usage: lemma_index_build.sh engine|engine-stop|forms|morph|generate|context N|assemble" >&2; exit 1 ;;
+  assemble) CPUS=4 run $NAME-assemble assemble ${ASSEMBLE_ARGS:-} ;;
+  *) echo "usage: lemma_index_build.sh engine|engine-stop|forms|morph|generate|context N|context-all N|assemble" >&2; exit 1 ;;
 esac

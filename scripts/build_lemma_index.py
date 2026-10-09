@@ -254,9 +254,15 @@ def stage_context(args):
     import spacy
     st = staging(args.build)
     done = {r[0] for r in st.execute("SELECT rowid_ FROM context")}
+    # Release O ran the model on edited text only; release P (--all-records) adds the other
+    # Greek records (scholia, commentary, apparatus, OCR pages); finished rows are skipped.
     rows = [(rowid, text) for rowid, _, _, kind, quality, text in corpus_rows(args.corpus, args.where)
-            if rowid not in done and kind == "text" and quality in SEARCHABLE]
+            if rowid not in done and (args.all_records or (kind == "text" and quality in SEARCHABLE))]
     shard = [r for r in rows if r[0] % args.shards == args.shard]
+    if args.all_records:
+        # OCR pages and scholia vary from a few words to whole pages: process them in length
+        # order so a batch is not padded to its longest text (order does not change results).
+        shard.sort(key=lambda r: len(r[1]))
     log("context todo", len(shard), "of", len(rows))
     nlp = spacy.load(args.model, exclude=["parser", "frequency_lemmatizer"])
     started, n = time.time(), 0
@@ -356,6 +362,49 @@ class Headwords:
 
 def _pos_of(features):
     return str((features or {}).get("pofs") or "").lower()
+
+
+import re as _re
+_GREEK_WORD = r"([\u0370-\u03ff\u1f00-\u1fff\u0300-\u036f]+)"
+_VARIANT_PATTERNS = (
+    # Middle Liddell / LSJ: "= πότνια", "poet. for ἔρως", "Ep. form of ἠώς", "Aeol. for ..."
+    ("=", _re.compile(r"^\s*=\s*" + _GREEK_WORD)),
+    ("=", _re.compile(r"^[^=.;]{0,40}?\s=\s*" + _GREEK_WORD)),
+    ("dialect", _re.compile(r"\b((?:Ep|Ion|Dor|Aeol|Att|Lacon|Boeot|poet|Lesb|Thess|Arc|Cret|Hom|old)\.)"
+                            r"(?:\s+(?:and|&)\s+\w+\.)?\s+(?:also\s+)?(?:form\s+)?(?:for|of)\s+" + _GREEK_WORD)),
+    # "shorter form of πότνια", "later form of …"
+    ("form", _re.compile(r"\b((?:shorter|longer|later|earlier|older|contracted|lengthened)\s+form)\s+of\s+"
+                         + _GREEK_WORD)),
+)
+
+
+def lemma_variants(lemma_ids, lemma_tokens, heads):
+    """Variant links between headwords (release P): a dictionary entry of headword A says it is
+    a dialect or poetic form of headword B ("ἔρος ... poet. for ἔρως", "πότνα = πότνια"), and B
+    is itself a corpus headword. Both stay separate headwords; the link lets counts be combined
+    and pages cross-reference. Rows (lemma_id, target_id, relation, dictionary, evidence)."""
+    rows = set()
+    for head, lid in lemma_ids.items():
+        if not lemma_tokens.get(lid):
+            continue
+        match, entries = heads.lookup(head)
+        if not match:
+            continue
+        for entry in entries[:8]:
+            texts = [str(entry.get("gloss") or ""), str(entry.get("entry_text") or "")[:220]]
+            for relation, pattern in _VARIANT_PATTERNS:
+                for text in texts:
+                    m = pattern.search(text)
+                    if not m:
+                        continue
+                    target = heads.headword_key(unicodedata.normalize("NFC", m.groups()[-1]))
+                    tid = lemma_ids.get(target)
+                    if tid and tid != lid and lemma_tokens.get(tid):
+                        label = "=" if relation == "=" else m.group(1)
+                        rows.add((lid, tid, label, str(entry.get("source") or "")[:80],
+                                  text[max(0, m.start() - 30): m.end() + 10]))
+                    break
+    return sorted(rows)
 
 
 def stage_assemble(args):
@@ -615,6 +664,9 @@ def stage_assemble(args):
             term_rows.append((term, i, field, w))
     ix.executemany("INSERT INTO lemma VALUES (?,?,?,?,?,?,?,?,?)", lemma_rows)
     ix.executemany("INSERT INTO lemma_gloss_term VALUES (?,?,?,?)", term_rows)
+    variant_rows = lemma_variants(lemma_ids, lemma_tokens, heads)
+    ix.executemany("INSERT INTO lemma_variant VALUES (?,?,?,?,?)", variant_rows)
+    log("variant links", len(variant_rows))
     rules = {h: r for h, (h2, r) in ((k, v) for k, v in canon_cache.items()) if r}
     form_rows, fl_rows = [], []
     for f, i in form_ids.items():
@@ -686,6 +738,7 @@ def main():
     p.add_argument("--threads", type=int, default=16)
     p.add_argument("--model", default="/syntax-model")
     p.add_argument("--where", default="")
+    p.add_argument("--all-records", action="store_true", help="context: every Greek record, not only edited text")
     p.add_argument("--shards", type=int, default=1)
     p.add_argument("--shard", type=int, default=0)
     args = p.parse_args()

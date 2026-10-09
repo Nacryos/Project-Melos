@@ -213,3 +213,94 @@ parser): ~10 ms instead of a full lookup. Every top-level field of the full resp
 and `headline_lemma` are the lemma. With a different `form` (the clicked word plus the passage
 headline as `lemma=`) the full analysis runs as before and `lemma` only leads the headline,
 entries and candidates.
+
+## Citations (release P)
+
+Citation index: `data/citation_index.sqlite` (env `MELOS_CITATION_INDEX`), built by
+`scripts/build_citation_index.py` from the corpus. Code: `backend/citations.py`, routes `backend/citation_routes.py`.
+
+- `GET /api/cite?q=...&include_reference=false&limit=20` resolves a citation:
+  - line/book citations with conventional (LSJ/OCD) author and work abbreviations or names: `Il. 1.1`,
+    `Hom. Il. 6.146`, `Hes. Th. 116`, `Pind. O. 1.1`, `Pi. P. 8.95`, `A.R. 1.1`, `Nonn. D. 1.1`, `Q.S. 1.1`,
+    `AP 7.1`, `Bacchylides 3.1`; any other title abbreviation is matched against the author's stored titles
+    (`Eur. Med. 1` → Medea; several matches → a warning, no guess);
+  - CTS URNs `urn:cts:greekLit:tlg0012.tlg001[.edition][:1.1[-1.5]]` (a URN naming an edition lists that
+    edition first; a URN without a passage returns the work's `first_passage`);
+  - fragments `Sappho fr. 31`, `Sappho 31`, `Sapph. fr. 31 V`, `Alc. 130b`, `Sappho fr. 168A LP`: the release O
+    exact-reference lookup (only explicit recorded citations; numbering edition-specific) plus `equivalents`.
+
+  Response: `{query, parsed{kind: locus|urn|fragment, author, work, work_prefix, locus, locus_end, scheme,
+  tlg_author, tlg_work, edition}, results[], total, warnings[], method}`. Locus results:
+  `{id, author, work, citation, source, edition, kind, quality, locus_start, locus_end, contains_locus, tlg,
+  text_preview, language}`: every collection whose printed range contains the locus, edited text first.
+  Fragment results are the release O reference records; `equivalents[]` =
+  `{scheme, number, from_scheme, record, evidence, results[]}` only where one record prints both numbers
+  ("178 Campbell ( = Voigt, and Lobel & Page 168A)"); no concordance is inferred. A query that is not
+  citation-shaped returns `parsed: null`.
+- `GET /api/cite/catalogue?author=` lists every work group with its TLG author/work number and the source of
+  that number: `record_urn` (the record's CTS URN), `ogc_readme`, `cts_catalogue` (PerseusDL canonical-greekLit /
+  First1KGreek `__cts__.xml`, rule `title`, `title_stem` or `edition_only`), `text_match` (≥ 60% of at least 15
+  sampled verse lines found in Perseus records carrying the URN); `authors` maps each author to TLG author
+  numbers. Nothing comes from the TLG website.
+- `GET /api/cite/status`: index version, works, loci, mapped works, equivalences.
+- `/api/search` (any mode): a line/book citation or URN (without an author filter) returns `mode: "citation"`
+  with the cited passages as ordinary result records (`match_reason`, `citation_match{locus_start, locus_end,
+  contains_locus, tlg}`, `citation` = the parsed citation). An abbreviated fragment citation is rewritten to the
+  release O reference syntax (`Sapph. fr. 31 V` → `Sappho fr. 31 Voigt`) and answered by the reference lookup
+  (`mode: "reference"`). A word with digits (`a123b`) is not a citation: a space or full stop must precede the locus.
+
+## Headword index additions (release P)
+
+- **Calibrated probability.** `probability` beside `confidence` on `/api/words/headlines` tokens and
+  `/api/lemma/concordance` lines: the raw score mapped through isotonic regression fitted on treebank gold
+  lemmas (`data/lemma_calibration.json`, env `MELOS_LEMMA_CALIBRATION`; method in `docs/lemma-index.md`). Null
+  when no calibration is deployed. `/api/lemma/status` → `calibration` (method, classes, fit counts).
+- **Headline dictionaries.** `POST /api/words/headlines` with `{"passage_id": ..., "dictionary": true}` (or GET
+  `&dictionary=true`) adds `dictionaries: {lemma: {id, lemma, dictionary, gloss, senses[{label, text}] (first
+  three, source order), sense_count, entry_url, license} | null}`: the first dictionary (site order) with a gloss
+  or senses, for every headline lemma. The `hash`/ETag differs from the plain payload. Cold 0.2–0.7 s for a poem
+  of 30–90 headwords, then cached (~10 ms).
+- **Compact dictionary lookup.** `/api/word?form=L&lemma=L&compact=true[&senses=6]`: the lemma fast path with
+  each entry reduced to `{id, lemma, dictionary, source, gloss, senses (first N), sense_count, entry_excerpt (400
+  characters), entry_url, license, attribution}`; `lookup_mode: "lemma_dictionary_compact"` (φαίνω 439 KB → 6.6 KB
+  uncompressed).
+- **`/api/lemma/search`** results add `excerpt{left, keyword, right, offset}` (first occurrence) and
+  `match_offsets[[start, end], …]` (up to 20; code points in `/api/passage` text). `order=chronological` uses the
+  work order below.
+- **Concordance** (`/api/lemma/concordance`): `period=<label>` or `undated=true`; `fold_editions` (default true):
+  a second collection of a TLG work that another collection holds in more cited passages (Perseus 20-line chunks
+  beside OGC lines) is not listed again: its overlapping passages become the line's `editions[{id, source,
+  citation, quality, work, display_work}]`; among unnumbered texts (fragments) a line with the same headwords
+  around the keyword in another collection is folded the same way; a formula repeated within one collection
+  stays. `edition_count`, `folded_other_collections`. Chronological order = author date, then work order (TLG
+  work number where known, else after), then the passage's place in its collection (Iliad before the Epigrams).
+- **Proximity** (`/api/lemma/proximity`): `cross_passages=true` lets a match run on into the following stored
+  passages of the same collection when their line numbers continue (same book; fragments never continue);
+  such results carry `crosses_passages: true`, `match_passages[]`, `match_end_passage`, and `match_text` joins the
+  pieces with " / ". Editions are folded as in the concordance (`editions`, `edition_count`,
+  `folded_other_collections`).
+- **Rates.** Every `by_author` / `by_genre` / `by_period` row and every diachrony period adds `per_10k_ci95`
+  (95% Wilson interval) and `small_sample` (group under 50,000 words).
+- **Variant groups.** `variant_group{lemma_ids, members[{lemma_id, lemma, gloss, tokens_all_records, links[{lemma_id,
+  lemma, direction variant_of|has_variant, relation, dictionary, evidence}]}], note}` on `/api/lemma/frequency`,
+  `/api/lemma/resolve` (first three readings) and diachrony lemmas; `GET /api/lemma/variants?q=`. Links come from
+  the dictionaries ("ἔρος … poet. for ἔρως", "πότνα = πότνια"); the headwords stay separate.
+  `combine_variants=true` on search, frequency, distribution, concordance, proximity and diachrony counts the
+  group together. A headword without its own gloss shows its variant target's (`gloss_via_variant`).
+- **Collocations** count an identical context repeated within one work once (`repeated_contexts_skipped`) and
+  read one collection of each text.
+- **N-grams.** `GET /api/lemma/ngrams?kind=author|genre|period|corpus&name=...&n=0|2|3|4&q=&include_function_words=false&limit=30`
+  → `{group{kind, name, passages, tokens}, ngrams[{n, lemmas[], lemma_ids[], count, expected, g2, per_10k,
+  function_only, example_passage}], statistic, scope, min_count}`; `q` keeps n-grams containing that headword.
+  `GET /api/lemma/ngrams/groups` lists the groups. Built by `scripts/build_ngrams.py` (`data/ngrams.sqlite`, env
+  `MELOS_NGRAM_INDEX`).
+- **Concept diachrony v2** (`/api/concept/diachrony`): English concepts are read through dictionary sense head
+  meanings (`resolution_rule: head_meaning`, fallback `gloss_terms`); `matched_words` are whole words;
+  `concept_score` weights the gloss match by enrichment in the meaning index's nearest passages
+  (`semantic_support.enrichment`); weak dictionary-only readings without semantic support are listed in
+  `dropped_without_semantic_support`. Each `by_period` entry (now including `undated`) has collocates (≥ 2
+  co-occurrences) and `examples[]` (one KWIC line from each of the three authors using the headword most there).
+- **Dates and genres on records.** `author_period` and lemma records use the passage's date: the author's claim,
+  or for a Greek Anthology epigram its attributed poet's (`attributed_date` on lemma records), or for CTS tlg0013
+  records filed as "Anonymous" the Homeric Hymns' (undated in Wikidata). Author records add `genre_source`
+  (`source_edition_label` | `wikidata_p136` | `editorial`) and `genre_labels[]`.

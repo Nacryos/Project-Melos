@@ -26,8 +26,9 @@ from pathlib import Path
 
 import numpy as np
 
-from .author_catalogue import PERIODS, author_record, display_work
-from .lemma_glosses_index import english_terms
+from .author_catalogue import PERIODS, author_record, display_work, passage_date
+from .lemma_calibration import probability as calibrated_probability, summary as calibration_summary
+from .lemma_glosses_index import english_terms, stem
 from .lemma_tokens import fold
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -37,6 +38,22 @@ GREEK = lambda text: any("Ͱ" <= c <= "Ͽ" or "ἀ" <= c <= "῿" for c in text 
 SOURCE_BITS = {1: "parser", 2: "recorded_form", 4: "generated_spelling", 8: "printed_headword",
                16: "context_agrees", 32: "context_chose", 64: "damaged_word"}
 MAX_SCAN_PASSAGES = 40000
+SMALL_GROUP_TOKENS = 50000   # release P: rates over fewer words are flagged small_sample
+UNMAPPED_ORDER = 9999
+
+
+def rate_fields(count, total):
+    """Rate per 10,000 words with a 95% Wilson score interval; small_sample when the group has
+    fewer than 50,000 words (one poem can move the rate)."""
+    if not total:
+        return {"per_10k": None, "per_10k_ci95": None, "small_sample": True}
+    z, p = 1.96, count / total
+    denom = 1 + z * z / total
+    centre = (p + z * z / (2 * total)) / denom
+    half = z * math.sqrt(p * (1 - p) / total + z * z / (4 * total * total)) / denom
+    return {"per_10k": round(p * 1e4, 2), "per_10k_ci95": [round(max(0.0, centre - half) * 1e4, 2),
+                                                           round((centre + half) * 1e4, 2)],
+            "small_sample": total < SMALL_GROUP_TOKENS}
 PERIOD_ORDER = [label for label, _, _ in PERIODS]
 SCHEMA = """
       
@@ -53,11 +70,21 @@ SCHEMA = """
       CREATE TABLE tok(pid INTEGER PRIMARY KEY, lemmas BLOB, forms BLOB, conf BLOB, src BLOB, starts BLOB, ends BLOB);
       CREATE TABLE posting(lemma_id INTEGER, pid INTEGER, n INTEGER, PRIMARY KEY(lemma_id, pid)) WITHOUT ROWID;
       CREATE TABLE lemma_gloss_term(term TEXT, lemma_id INTEGER, field INTEGER, weight REAL);
+      CREATE TABLE lemma_variant(lemma_id INTEGER, target_id INTEGER, relation TEXT, dictionary TEXT, evidence TEXT);
     """
 
 
 def index_path():
     return Path(os.getenv("MELOS_LEMMA_INDEX", str(DEFAULT_PATH)))
+
+
+def load_attributions():
+    """{passage id: attributed poet or collection label} (release P); {} when absent."""
+    path = Path(os.getenv("MELOS_ATTRIBUTIONS", str(ROOT / "data/metadata/attributions.json")))
+    if not path.exists():
+        return {}
+    data = json.loads(path.read_text(encoding="utf-8"))
+    return {pid: label for pid, label in data.get("passages", {}).items()}
 
 
 def _nfc(text):
@@ -99,6 +126,25 @@ class LemmaIndex:
         self.authors = {}
         for name in set(self.author_of):
             self.authors[name] = author_record(name)
+        # Release P: a passage's date is its author's sourced claim, else the sourced claim of the
+        # poet its record names (Greek Anthology epigrams) or of its collection (CTS tlg0013 ->
+        # Homeric Hymns): data/metadata/attributions.json, built by scripts/collect_chronology.py.
+        attributions = load_attributions()
+        self.pid_period = [None] * n
+        self.pid_year = np.full(n, 99999.0)
+        self.pid_date = [None] * n
+        cache = {}
+        for pid, pid_text in enumerate(self.pid_id):
+            if pid_text is None:
+                continue
+            key = (self.author_of[pid], attributions.get(pid_text))
+            if key not in cache:
+                cache[key] = passage_date(*key)
+            date, period, basis = cache[key]
+            self.pid_period[pid] = period
+            self.pid_date[pid] = date
+            if date and date.get("year") is not None:
+                self.pid_year[pid] = date["year"]
         self._scope_counts = {}
         self._lock = threading.Lock()
 
@@ -115,7 +161,8 @@ class LemmaIndex:
         m = self.manifest
         return {"ready": True, "version": m.get("version"), "built_at": m.get("built_at"), "lemmas": m.get("lemmas"),
                 "forms": m.get("forms"), "passages": m.get("passages"), "tokens": m.get("tokens"),
-                "bytes": self.path.stat().st_size, "method": m.get("method")}
+                "bytes": self.path.stat().st_size, "method": m.get("method"),
+                "context_passages": m.get("context_passages"), "calibration": calibration_summary()}
 
     def scope_mask(self, include_reference=False, author="", genre=""):
         mask = np.ones(len(self.pid_id), dtype=bool) if include_reference else self.edited.copy()
@@ -141,8 +188,188 @@ class LemmaIndex:
 
     def lemma_brief(self, lemma_id):
         row = self.lemma_row(lemma_id) or {}
-        return {"lemma_id": row.get("id"), "lemma": row.get("lemma"), "gloss": row.get("gloss"),
-                "gloss_source": row.get("gloss_source"), "pos": row.get("pos"), "tokens_all_records": row.get("tokens")}
+        out = {"lemma_id": row.get("id"), "lemma": row.get("lemma"), "gloss": row.get("gloss"),
+               "gloss_source": row.get("gloss_source"), "pos": row.get("pos"), "tokens_all_records": row.get("tokens")}
+        if row.get("id") and not row.get("gloss"):
+            # Release P: a variant headword without its own gloss (πότνα) shows the gloss of the
+            # headword its dictionary entry names (πότνια), labelled as such.
+            for link in self.variant_links().get(int(row["id"]), []):
+                if link["direction"] != "variant_of":
+                    continue
+                target = self.lemma_row(link["lemma_id"]) or {}
+                if target.get("gloss"):
+                    out.update(gloss=target["gloss"], gloss_source=target.get("gloss_source"),
+                               gloss_via_variant=target.get("lemma"))
+                    break
+        return out
+
+    def variant_links(self):
+        """{lemma_id: [{lemma_id, direction (variant_of | has_variant), relation, dictionary, evidence}]}."""
+        with self._lock:
+            if getattr(self, "_variants", None) is not None:
+                return self._variants
+        links = defaultdict(list)
+        try:
+            rows = self.con().execute("SELECT lemma_id, target_id, relation, dictionary, evidence FROM lemma_variant").fetchall()
+        except sqlite3.OperationalError:
+            rows = []  # an index built before release P
+        for a, b, relation, dictionary, evidence in rows:
+            links[a].append({"lemma_id": b, "direction": "variant_of", "relation": relation, "dictionary": dictionary,
+                             "evidence": evidence})
+            links[b].append({"lemma_id": a, "direction": "has_variant", "relation": relation, "dictionary": dictionary,
+                             "evidence": evidence})
+        with self._lock:
+            self._variants = dict(links)
+        return self._variants
+
+    def variant_group(self, lemma_id):
+        """The headwords linked to this one as dialect/poetic variants (one hop each way, then their
+        own links: the connected group), or None. Counts are not merged unless asked."""
+        links = self.variant_links()
+        lemma_id = int(lemma_id)
+        if lemma_id not in links:
+            return None
+        group, todo = {lemma_id}, [lemma_id]
+        while todo and len(group) < 12:
+            for link in links.get(todo.pop(), []):
+                if link["lemma_id"] not in group:
+                    group.add(link["lemma_id"])
+                    todo.append(link["lemma_id"])
+        members = []
+        for i in sorted(group, key=lambda i: -(self.lemma_row(i) or {}).get("tokens", 0)):
+            row = self.lemma_row(i) or {}
+            members.append({"lemma_id": i, "lemma": row.get("lemma"), "gloss": row.get("gloss"),
+                            "tokens_all_records": row.get("tokens"),
+                            "links": [dict(l, lemma=(self.lemma_row(l["lemma_id"]) or {}).get("lemma"))
+                                      for l in links.get(i, []) if l["lemma_id"] in group]})
+        return {"lemma_ids": [m["lemma_id"] for m in members], "members": members,
+                "note": ("Headwords a dictionary entry names as dialect or poetic forms of one another; they stay "
+                         "separate headwords. Pass combine_variants=true to count them together.")}
+
+    def expand_variants(self, lemma_ids):
+        out = list(lemma_ids)
+        for lemma_id in lemma_ids:
+            group = self.variant_group(lemma_id)
+            for i in (group or {}).get("lemma_ids", []):
+                for j in self.case_variants(i):
+                    if j not in out:
+                        out.append(j)
+        return out
+
+    # ------------------------------------------------------------------ release P: works, periods
+    def work_info(self):
+        """From the citation index: per passage the work order (TLG work number, else last) and
+        whether the passage belongs to a second collection of a text another collection holds in
+        full (same TLG work; the collection with the most cited passages is primary). None when
+        the citation index is not deployed."""
+        with self._lock:
+            if getattr(self, "_work_info", None) is not None:
+                return self._work_info or None
+        try:
+            from .citations import get_citation_index
+            cit = get_citation_index()
+        except (FileNotFoundError, ImportError):
+            with self._lock:
+                self._work_info = {}
+            return None
+        n = len(self.pid_id)
+        order = np.full(n, UNMAPPED_ORDER, dtype=np.int32)
+        duplicate = np.zeros(n, dtype=bool)
+        work_key = [None] * n
+        works = {w["work_key"]: w for w in cit.works}
+        rows = cit.con().execute("SELECT work_key, passage_id, source FROM locus").fetchall()
+        # The collection (source) holding most cited passages of a TLG work is primary; the same
+        # work in another collection (Perseus 20-line chunks beside OGC lines) is a duplicate.
+        size = Counter()
+        for key, passage_id, source in rows:
+            w = works.get(key) or {}
+            if w.get("tlg_work"):
+                size[(w["tlg_author"], w["tlg_work"], source)] += 1
+        primary = {}
+        for (a, w, source), count in size.items():
+            if (a, w) not in primary or count > size[(a, w, primary[(a, w)])]:
+                primary[(a, w)] = source
+        for key, passage_id, source in rows:
+            pid = self.id_pid.get(passage_id)
+            if pid is None:
+                continue
+            w = works.get(key) or {}
+            work_key[pid] = key
+            if w.get("tlg_work"):
+                digits = "".join(c for c in w["tlg_work"] if c.isdigit())
+                order[pid] = int(digits or UNMAPPED_ORDER)
+                duplicate[pid] = primary.get((w["tlg_author"], w["tlg_work"])) != source
+            else:
+                order[pid] = UNMAPPED_ORDER - 1
+        value = {"order": order, "duplicate": duplicate, "work_key": work_key, "works": works, "citations": cit}
+        with self._lock:
+            self._work_info = value
+        return value
+
+    def period_mask(self, period):
+        """Passages of one period label, or 'undated'."""
+        labels = getattr(self, "_period_labels", None)
+        if labels is None:
+            labels = self._period_labels = np.asarray([p or "undated" for p in self.pid_period], dtype=object)
+        if period != "undated" and period not in PERIOD_ORDER:
+            raise ValueError("period must be one of: " + ", ".join(PERIOD_ORDER + ["undated"]))
+        return labels == period
+
+    def sort_key(self, order):
+        """Concordance/search ordering: by author date (sourced), author, work order (TLG work
+        number where known, else after), then the passage's place in its collection."""
+        info = self.work_info()
+        work_order = info["order"] if info else None
+
+        def chronological(pid):
+            return (self._year(pid), self.author_of[pid], int(work_order[pid]) if work_order is not None else 0, pid)
+
+        def by_author(pid):
+            return (self.author_of[pid], int(work_order[pid]) if work_order is not None else 0, pid)
+        return chronological if order == "chronological" else by_author
+
+    def _edition_record(self, pid):
+        kind, quality, label, work, citation, source = self.meta[pid]
+        return {"id": self.pid_id[pid], "source": source, "citation": citation, "quality": quality, "work": work,
+                "display_work": display_work(work)}
+
+    def other_collections(self, pid):
+        """Passages of other collections holding the same TLG work at an overlapping locus."""
+        info = self.work_info()
+        if not info or not info["work_key"][pid]:
+            return []
+        cit = info["citations"]
+        key = info["work_key"][pid]
+        w = info["works"].get(key) or {}
+        if not w.get("tlg_work"):
+            return []
+        row = cit.con().execute("SELECT start, end FROM locus WHERE passage_id=? LIMIT 1", (self.pid_id[pid],)).fetchone()
+        if not row:
+            return []
+        others = [x for x in cit.works if x["tlg_author"] == w["tlg_author"] and x["tlg_work"] == w["tlg_work"]]
+        hits, _ = cit.loci(others, json.loads(row["start"]), json.loads(row["end"]), limit=12)
+        out = []
+        for h in hits:
+            if h["source"] == self.meta[pid][5]:
+                continue
+            other = self.id_pid.get(h["passage_id"])
+            if other is not None and self.edited[other] == self.edited[pid]:
+                out.append(self._edition_record(other))
+        return out[:4]
+
+    def fold_lines(self, keyed):
+        """keyed: [(pid, key)] in display order. Lines with the same key from another collection
+        (source) are folded under the first: {(pid, key): primary (pid, key)}."""
+        first, folded = {}, {}
+        for pid, key in keyed:
+            if key in first:
+                primary = first[key]
+                if self.meta[primary[0]][5] != self.meta[pid][5]:
+                    folded[(pid, key)] = primary
+            else:
+                first[key] = (pid, key)
+        return folded
+
 
     def tokens(self, pid):
         row = self.con().execute("SELECT lemmas,forms,conf,src,starts,ends FROM tok WHERE pid=?", (int(pid),)).fetchone()
@@ -189,7 +416,7 @@ class LemmaIndex:
             if key in self._scope_counts:
                 return self._scope_counts[key]
         mask = self.scope_mask(include_reference)
-        labels = np.asarray([(self.authors.get(a) or {}).get("period") or "" for a in self.author_of], dtype=object)
+        labels = np.asarray([p or "" for p in self.pid_period], dtype=object)
         out = {label: mask & (labels == label) for label in PERIOD_ORDER}
         with self._lock:
             self._scope_counts[key] = out
@@ -278,6 +505,44 @@ class LemmaIndex:
         out.sort(key=lambda r: -r["tokens_all_records"])
         return out[:limit]
 
+    def head_meaning_lemmas(self, query, limit=6):
+        """Release P (concepts): Greek headwords one of whose dictionary senses has a query word as
+        its head meaning (lemma_glosses_index.head_meanings: "the moon" -> moon; "Io, identified with
+        the moon" -> io only). Whole words, not stems: "love" matches ἔρως "love", not φίλος
+        "loved, dear". Empty for an index built before release P."""
+        from .lemma_glosses_index import STOP, _WORD, singular
+        words = [singular(w.lower()) for w in _WORD.findall(query or "") if w.lower() not in STOP and len(w) > 1]
+        words = list(dict.fromkeys(words))
+        if not words:
+            return []
+        con = self.con()
+        score, matched = defaultdict(float), defaultdict(set)
+        for word in words:
+            for lemma_id, weight in con.execute(
+                    "SELECT lemma_id, weight FROM lemma_gloss_term WHERE term=? AND field=3", ("=" + word,)):
+                score[lemma_id] += weight
+                matched[lemma_id].add(word)
+        need = len(words) if len(words) <= 2 else math.ceil(len(words) * 2 / 3)
+        ids = [i for i in score if len(matched[i]) >= need]
+        if not ids:
+            return []
+        rows = {r["id"]: r for r in con.execute(f"SELECT * FROM lemma WHERE id IN ({','.join('?' * len(ids))})", ids)}
+        ranked = sorted(((score[i] * (1 + 0.15 * math.log1p(rows[i]["tokens"])), i) for i in ids
+                         if i in rows and rows[i]["tokens"]), reverse=True)
+        if not ranked:
+            return []
+        best = ranked[0][0]
+        out = []
+        for value, i in ranked:
+            if value < 0.35 * best or len(out) >= limit:
+                break
+            row = rows[i]
+            out.append({"lemma_id": i, "lemma": row["lemma"], "gloss": row["gloss"], "gloss_source": row["gloss_source"],
+                        "pos": row["pos"], "tokens_all_records": row["tokens"], "via": "english_dictionary_head_meaning",
+                        "gloss_match": round(value / best, 3), "matched_terms": sorted(matched[i]),
+                        "matched_words": sorted(matched[i])})
+        return out
+
     def english_lemmas(self, query, limit=6):
         """Greek headwords whose dictionary glosses use the query's English words.
 
@@ -326,7 +591,8 @@ class LemmaIndex:
             row = rows[i]
             out.append({"lemma_id": i, "lemma": row["lemma"], "gloss": row["gloss"], "gloss_source": row["gloss_source"],
                         "pos": row["pos"], "tokens_all_records": row["tokens"], "via": "english_dictionary_gloss",
-                        "gloss_match": round(value / best, 3), "matched_terms": sorted(matched[i])})
+                        "gloss_match": round(value / best, 3), "matched_terms": sorted(matched[i]),
+                        "matched_words": sorted({w for w in _query_words(query) if stem(w) in matched[i]})})
         return out
 
     def case_variants(self, lemma_id):
@@ -359,15 +625,18 @@ class LemmaIndex:
         info = self.authors.get(self.author_of[pid]) or {}
         return {"id": self.pid_id[pid], "author": info.get("author") or label, "author_label": label,
                 "work": work, "display_work": display_work(work), "citation": citation, "kind": kind,
-                "quality": quality, "source": source, "genre": info.get("genre"), "period": info.get("period"),
-                "author_date": info.get("date")}
+                "quality": quality, "source": source, "genre": info.get("genre"), "period": self.pid_period[pid],
+                "author_date": info.get("date"),
+                **({"attributed_date": self.pid_date[pid]} if self.pid_date[pid] and not info.get("date") else {})}
 
-    def search(self, lemma_ids, *, include_reference=False, author="", genre="", limit=30, offset=0, order="frequency"):
+    def search(self, lemma_ids, *, include_reference=False, author="", genre="", limit=30, offset=0, order="frequency",
+               text_lookup=None, width=80):
         mask = self.scope_mask(include_reference, author, genre)
         hits = self.lemma_passages(lemma_ids, mask)
         items = list(hits.items())
         if order == "chronological":
-            items.sort(key=lambda kv: (self._year(kv[0]), self.pid_id[kv[0]]))
+            key = self.sort_key("chronological")
+            items.sort(key=lambda kv: key(kv[0]))
         else:
             items.sort(key=lambda kv: (-kv[1] / math.sqrt(max(self.ntok[kv[0]], 1)), self.pid_id[kv[0]]))
         forms = Counter()
@@ -380,9 +649,25 @@ class LemmaIndex:
                 forms[form_id] += 1
         form_names = self._form_names(list(forms))
         return {"total_passages": len(items), "total_tokens": int(sum(hits.values())),
-                "results": [dict(self.record(pid), occurrences=n) for pid, n in items[offset: offset + limit]],
+                "results": [self._with_excerpt(dict(self.record(pid), occurrences=n), pid, lemma_ids, text_lookup, width)
+                            for pid, n in items[offset: offset + limit]],
                 "forms_found": [{"form": form_names.get(fid), "count": n} for fid, n in forms.most_common(40)],
                 "forms_note": "Forms counted in the first 400 listed passages." if len(items) > 400 else None}
+
+    def _with_excerpt(self, item, pid, lemma_ids, text_lookup, width=80):
+        """Release P: the first occurrence in context and every match offset (code points in the
+        stored passage text, as /api/passage)."""
+        toks = self.tokens(pid)
+        if toks is None:
+            return item
+        idx = np.flatnonzero(np.isin(toks[0], np.asarray(lemma_ids, dtype=np.uint32))).tolist()
+        item["match_offsets"] = [[int(toks[4][i]), int(toks[4][i]) + int(toks[5][i])] for i in idx[:20]]
+        text = text_lookup(self.pid_id[pid]) if text_lookup else None
+        if text is not None and idx:
+            start, end = item["match_offsets"][0]
+            item["excerpt"] = {"left": " ".join(text[max(0, start - width):start].split()), "keyword": text[start:end],
+                               "right": " ".join(text[end:end + width].split()), "offset": start}
+        return item
 
     def _form_names(self, ids):
         if not ids:
@@ -395,8 +680,7 @@ class LemmaIndex:
         return out
 
     def _year(self, pid):
-        date = (self.authors.get(self.author_of[pid]) or {}).get("date")
-        return date["year"] if date and date.get("year") is not None else 99999
+        return float(self.pid_year[pid])
 
     def frequency(self, lemma_id, *, include_reference=False):
         """Counts for one headword, or a list of ids counted together (capitalisation variants)."""
@@ -416,7 +700,7 @@ class LemmaIndex:
             info = self.authors.get(self.author_of[pid]) or {}
             by_author[info.get("author") or self.author_of[pid]] += c
             by_genre[info.get("genre") or "unclassified"] += c
-            by_period[info.get("period") or "undated"] += c
+            by_period[self.pid_period[pid] or "undated"] += c
         totals = self._totals(mask)
         alt = self.con().execute("SELECT coalesce(sum(f.tokens),0) FROM form_lemma fl JOIN form f ON f.id=fl.form_id "
                                  f"WHERE fl.lemma_id IN ({','.join('?' * len(ids))}) AND fl.rank>0", ids).fetchone()[0]
@@ -427,7 +711,7 @@ class LemmaIndex:
             rows = []
             for name, c in counter.most_common():
                 d = denominators.get(name, 0)
-                row = {key: name, "count": c, "tokens_in_group": d, "per_10k": round(c * 1e4 / d, 2) if d else None}
+                row = {key: name, "count": c, "tokens_in_group": d, **rate_fields(c, d)}
                 if key == "author":
                     info = author_record(name)
                     row.update(genre=info["genre"], period=info["period"], date=info["date"], date_note=info["date_note"])
@@ -436,7 +720,9 @@ class LemmaIndex:
 
         return {"lemma": self.lemma_brief(lemma_id), "tokens": n, "passages": int(len(pids)),
                 "scope_tokens": total_tokens, "per_10k": round(n * 1e4 / total_tokens, 3) if total_tokens else None,
-                "rank": rank, "lemmas_in_scope": int((counts > 0).sum()),
+                "rank": rank, "lemmas_in_scope": int((counts > 0).sum()), "variant_group": self.variant_group(lemma_id),
+                "rate_note": ("per_10k_ci95 is a 95% Wilson interval; small_sample marks groups under "
+                              f"{SMALL_GROUP_TOKENS:,} words, where one poem can move the rate."),
                 "possible_additional_tokens": int(alt),
                 "possible_additional_note": ("Tokens whose spelling has this headword as a lower-ranked reading "
                                              "(counted under another headword); an upper bound, not occurrences."),
@@ -458,23 +744,60 @@ class LemmaIndex:
             n = int(self.ntok[pid])
             author[info.get("author") or self.author_of[pid]] += n
             genre[info.get("genre") or "unclassified"] += n
-            period[info.get("period") or "undated"] += n
+            period[self.pid_period[pid] or "undated"] += n
         value = {"author": author, "genre": genre, "period": period}
         with self._lock:
             self._scope_counts[key] = value
         return value
 
     def concordance(self, lemma_ids, *, include_reference=False, author="", genre="", width=60, limit=50, offset=0,
-                    order="chronological", text_lookup=None):
+                    order="chronological", text_lookup=None, period="", fold_editions=True):
+        """KWIC lines. Release P: `period` (a period label or 'undated'); other collections' copies
+        of the same line are folded under one line (`editions`), as search does: a second collection
+        of a TLG work another collection holds in full is not listed separately, and among
+        unnumbered texts (fragments) a line with the same headwords around the keyword in another
+        collection is folded. A formula repeated within one collection stays separate."""
         mask = self.scope_mask(include_reference, author, genre)
+        if period:
+            mask = mask & self.period_mask(period)
         hits = self.lemma_passages(lemma_ids, mask)
-        pids = sorted(hits, key=(lambda p: (self._year(p), self.author_of[p], self.pid_id[p])) if order == "chronological"
-                      else (lambda p: (self.author_of[p], self.pid_id[p])))
-        total = int(sum(hits.values()))
+        info = self.work_info() if fold_editions else None
+        folded_collection = 0
+        if info is not None:
+            for pid in [p for p in hits if info["duplicate"][p]]:
+                folded_collection += hits.pop(pid)
+        pids = sorted(hits, key=self.sort_key(order))
         wanted = np.asarray(lemma_ids, dtype=np.uint32)
+        folded, copies = {}, defaultdict(list)
+        if fold_editions:
+            loose = [p for p in pids if info is None or info["order"][p] >= UNMAPPED_ORDER - 1]
+            by_author = defaultdict(set)
+            for p in loose:
+                by_author[self.author_of[p]].add(self.meta[p][5])
+            keyed = []
+            for p in loose:
+                if len(by_author[self.author_of[p]]) < 2:
+                    continue
+                toks = self.tokens(p)
+                if toks is None:
+                    continue
+                lem = toks[0]
+                for i in np.flatnonzero(np.isin(lem, wanted)).tolist():
+                    keyed.append((p, (self.author_of[p], tuple(lem[max(0, i - 3):i + 4].tolist()), i)))
+            # the key without the token index identifies the line; keep the index to address it
+            first = {}
+            for p, (a, window, i) in keyed:
+                k = (a, window)
+                if k in first and self.meta[first[k][0]][5] != self.meta[p][5]:
+                    folded[(p, i)] = first[k]
+                    copies[first[k]].append(p)
+                elif k not in first:
+                    first[k] = (p, i)
+        total = int(sum(hits.values())) - len(folded)
+        folded_count = Counter(p for p, _ in folded)
         lines, seen = [], 0
         for pid in pids:
-            n = hits[pid]
+            n = hits[pid] - folded_count.get(pid, 0)
             if seen + n <= offset:
                 seen += n
                 continue
@@ -484,37 +807,61 @@ class LemmaIndex:
                 seen += n
                 continue
             for i in np.flatnonzero(np.isin(toks[0], wanted)).tolist():
+                if (pid, i) in folded:
+                    continue
                 if seen < offset:
                     seen += 1
                     continue
                 start, end = int(toks[4][i]), int(toks[4][i]) + int(toks[5][i])
                 left = " ".join(text[max(0, start - width):start].split())
                 right = " ".join(text[end:end + width].split())
+                editions = [self._edition_record(c) for c in dict.fromkeys(copies.get((pid, i), []))]
+                if fold_editions:
+                    editions += self.other_collections(pid)
                 lines.append(dict(self.record(pid), left=left, keyword=text[start:end], right=right, offset=start,
                                   token_index=i, confidence=round(int(toks[2][i]) / 255, 3),
-                                  source=describe_source(int(toks[3][i]))))
+                                  probability=calibrated_probability(int(toks[2][i]), int(toks[3][i])),
+                                  source=describe_source(int(toks[3][i])), editions=editions,
+                                  edition_count=1 + len(editions)))
                 seen += 1
                 if len(lines) >= limit:
-                    return {"total": total, "lines": lines, "order": order}
-        return {"total": total, "lines": lines, "order": order}
+                    break
+            if len(lines) >= limit:
+                break
+        return {"total": total, "lines": lines, "order": order, "period": period or None,
+                "folded_other_collections": int(folded_collection + len(folded)),
+                "fold_note": ("Copies of a line in another collection are listed under it (editions) and not counted "
+                              "again." if fold_editions else None)}
 
     def collocations(self, lemma_id, *, window=5, min_count=3, measure="log_likelihood", include_reference=False,
                      author="", genre="", limit=30, mask=None, function_words=False):
         mask = self.scope_mask(include_reference, author, genre) if mask is None else mask
         pids, _ = self.postings(lemma_id)
         pids = pids[mask[pids]] if len(pids) else pids
+        info = self.work_info()
+        if info is not None and len(pids):
+            pids = pids[~info["duplicate"][pids]]  # one collection of each text (release P)
         sampled = False
         if len(pids) > MAX_SCAN_PASSAGES:
             pids = pids[:: math.ceil(len(pids) / MAX_SCAN_PASSAGES)]
             sampled = True
         co, slots, nodes = Counter(), 0, 0
         example = {}
+        contexts, repeated = set(), 0
         for pid in pids.tolist():
             toks = self.tokens(pid)
             if toks is None:
                 continue
             lem = toks[0]
+            work = (self.meta[pid][5], self.meta[pid][2], self.meta[pid][3])
             for i in np.flatnonzero(lem == lemma_id).tolist():
+                # Release P: a repeated line within one work (a refrain, Theocritus 2's
+                # "φράζεό μευ τὸν ἔρωθ᾽ ὅθεν ἵκετο, πότνα Σελάνα") is counted once.
+                key = (work, tuple(lem[max(0, i - window):i + 1 + window].tolist()))
+                if key in contexts:
+                    repeated += 1
+                    continue
+                contexts.add(key)
                 nodes += 1
                 ctx = np.concatenate([lem[max(0, i - window):i], lem[i + 1:i + 1 + window]])
                 ctx = ctx[(ctx != 0) & (ctx != lemma_id)]
@@ -547,14 +894,48 @@ class LemmaIndex:
         return {"node": self.lemma_brief(lemma_id), "occurrences_scanned": nodes, "context_slots": slots,
                 "scope_tokens": N, "window": window, "min_count": min_count, "measure": measure,
                 "sampled": sampled, "collocates": out, "function_words_excluded": not function_words,
+                "repeated_contexts_skipped": repeated,
                 "method": (f"Lemmas within ±{window} tokens of the node in the same stored passage; counts are passages-"
-                           "occurrence pairs (a collocate counted once per node occurrence). Log-likelihood (Dunning G²) "
+                           "occurrence pairs (a collocate counted once per node occurrence; an identical context repeated "
+                           "within one work, such as a refrain, counted once). Log-likelihood (Dunning G²) "
                            "and PMI (log₂ observed/expected) against the collocate's frequency in the same scope; only "
                            f"positive associations with at least {min_count} co-occurrences.")}
 
+    def continuation(self):
+        """next_pid[pid]: the following stored passage when it continues the same edition's text
+        (same source, author label and work; its first line is the next line after this passage's
+        last line within the same book), else 0. Fragments and unnumbered records never continue."""
+        with self._lock:
+            if getattr(self, "_next_pid", None) is not None:
+                return self._next_pid
+        from .citations import parse_range
+        n = len(self.pid_id)
+        nxt = np.zeros(n, dtype=np.int64)
+        prev_key = prev_end = None
+        for pid in range(1, n):
+            if self.pid_id[pid] is None:
+                prev_key = prev_end = None
+                continue
+            kind, quality, label, work, citation, source = self.meta[pid]
+            rng = parse_range(citation)
+            key = (source, label, work)
+            if rng and prev_end is not None and key == prev_key:
+                start = rng[0]
+                if (len(start) == len(prev_end) and start[:-1] == prev_end[:-1]
+                        and start[-1][0] in (prev_end[-1][0], prev_end[-1][0] + 1)):
+                    nxt[pid - 1] = pid
+            prev_key, prev_end = key, (rng[1] if rng else None)
+        with self._lock:
+            self._next_pid = nxt
+        return nxt
+
     def proximity(self, terms, *, window=0, ordered=True, include_reference=False, author="", genre="", limit=30,
-                  offset=0, text_lookup=None):
-        """Passages where each term (a set of lemma ids) occurs within `window` extra tokens of the next."""
+                  offset=0, text_lookup=None, cross_passages=False):
+        """Passages where each term (a set of lemma ids) occurs within `window` extra tokens of the next.
+
+        With cross_passages the match may run on into the following stored passages of the same
+        edition when they continue its numbering (continuation()); such a result names every
+        passage it spans."""
         mask = self.scope_mask(include_reference, author, genre)
         sets = []
         for ids in terms:
@@ -571,26 +952,134 @@ class LemmaIndex:
             positions = [np.flatnonzero(np.isin(lem, np.asarray(ids, dtype=np.uint32))).tolist() for ids in terms]
             match = _find_span(positions, span, ordered)
             if match:
-                results.append((pid, match))
+                results.append((pid, match, None))
+        crossing_checked = 0
+        if cross_passages and sets:
+            nxt = self.continuation()
+            matched_inside = {pid for pid, _, _ in results}
+            for pid in sorted(set().union(*sets)):
+                if not nxt[pid] or pid in matched_inside:
+                    continue
+                chain = [pid]
+                while len(chain) < 8 and nxt[chain[-1]] and mask[nxt[chain[-1]]] and \
+                        int(self.ntok[chain[1:]].sum()) < span + 1:
+                    chain.append(int(nxt[chain[-1]]))
+                if len(chain) < 2 or not all(any(c in s for c in chain) for s in sets):
+                    continue
+                crossing_checked += 1
+                parts = [self.tokens(c) for c in chain]
+                if any(t is None for t in parts):
+                    continue
+                lem = np.concatenate([t[0] for t in parts])
+                first_len = len(parts[0][0])
+                positions = [np.flatnonzero(np.isin(lem, np.asarray(ids, dtype=np.uint32))).tolist() for ids in terms]
+                if ordered:
+                    positions[0] = [x for x in positions[0] if x < first_len]
+                match = _find_span(positions, span, ordered)
+                if match and match[0] < first_len <= match[1]:
+                    results.append((pid, match, (chain, parts)))
+        # Release P: fold other collections' copies (as the concordance does).
+        info = self.work_info()
+        folded_collection = 0
+        if info is not None:
+            kept = [r for r in results if not info["duplicate"][r[0]]]
+            folded_collection = len(results) - len(kept)
+            results = kept
+        first_key, copies, kept = {}, defaultdict(list), []
+        for pid, match, crossing in results:
+            if crossing is None and (info is None or info["order"][pid] >= UNMAPPED_ORDER - 1):
+                toks = self.tokens(pid)
+                key = (self.author_of[pid], tuple(toks[0][match[0]:match[1] + 1].tolist()))
+                if key in first_key and self.meta[first_key[key]][5] != self.meta[pid][5]:
+                    copies[first_key[key]].append(pid)
+                    continue
+                first_key.setdefault(key, pid)
+            kept.append((pid, match, crossing))
+        folded_lines = len(results) - len(kept)
+        results = kept
         total = len(results)
         out = []
-        for pid, (first, last) in results[offset: offset + limit]:
-            toks = self.tokens(pid)
-            start, end = int(toks[4][first]), int(toks[4][last]) + int(toks[5][last])
-            text = text_lookup(self.pid_id[pid]) if text_lookup else None
-            item = dict(self.record(pid), match_start=start, match_end=end)
-            if text is not None:
-                item.update(match_text=text[start:end], left=" ".join(text[max(0, start - 50):start].split()),
-                            right=" ".join(text[end:end + 50].split()))
+        for pid, (first, last), crossing in results[offset: offset + limit]:
+            if crossing is None:
+                toks = self.tokens(pid)
+                start, end = int(toks[4][first]), int(toks[4][last]) + int(toks[5][last])
+                text = text_lookup(self.pid_id[pid]) if text_lookup else None
+                item = dict(self.record(pid), match_start=start, match_end=end, crosses_passages=False)
+                editions = [self._edition_record(c) for c in copies.get(pid, [])] + self.other_collections(pid)
+                item.update(editions=editions, edition_count=1 + len(editions))
+                if text is not None:
+                    item.update(match_text=text[start:end], left=" ".join(text[max(0, start - 50):start].split()),
+                                right=" ".join(text[end:end + 50].split()))
+                out.append(item)
+                continue
+            chain, parts = crossing
+            bounds = np.cumsum([0] + [len(t[0]) for t in parts])
+            last_part = int(np.searchsorted(bounds, last, side="right") - 1)
+            local_last = last - int(bounds[last_part])
+            start = int(parts[0][4][first])
+            end = int(parts[last_part][4][local_last]) + int(parts[last_part][5][local_last])
+            item = dict(self.record(pid), match_start=start, match_end=end, crosses_passages=True,
+                        match_passages=[self.pid_id[c] for c in chain[:last_part + 1]],
+                        match_end_passage=self.pid_id[chain[last_part]])
+            if text_lookup:
+                texts = [text_lookup(self.pid_id[c]) or "" for c in chain[:last_part + 1]]
+                middle = [" ".join(t.split()) for t in texts[1:-1]]
+                pieces = [texts[0][start:]] + middle + [texts[-1][:end]]
+                item.update(match_text=" / ".join(" ".join(x.split()) for x in pieces),
+                            left=" ".join(texts[0][max(0, start - 50):start].split()),
+                            right=" ".join(texts[-1][end:end + 50].split()))
             out.append(item)
-        return {"total": total, "candidate_passages": len(candidates), "results": out}
+        return {"total": total, "candidate_passages": len(candidates), "crossing_chains_checked": crossing_checked,
+                "folded_other_collections": int(folded_collection + folded_lines), "results": out}
 
     # ------------------------------------------------------------------ diachrony
-    def diachrony(self, concept, *, dense_ids=(), include_reference=False, max_lemmas=8, collocates=5):
-        """Headwords expressing a concept, each with counts by period and by dated author, and
-        typical collocates per period. Honest output: counts, sources, date uncertainty."""
+    def _kwic(self, pid, lemma_ids, text_lookup, width=60):
+        toks = self.tokens(pid)
+        text = text_lookup(self.pid_id[pid]) if text_lookup else None
+        if toks is None or text is None:
+            return None
+        idx = np.flatnonzero(np.isin(toks[0], np.asarray(lemma_ids, dtype=np.uint32))).tolist()
+        if not idx:
+            return None
+        start, end = int(toks[4][idx[0]]), int(toks[4][idx[0]]) + int(toks[5][idx[0]])
+        return dict(self.record(pid), left=" ".join(text[max(0, start - width):start].split()), keyword=text[start:end],
+                    right=" ".join(text[end:end + width].split()), offset=start)
+
+    def _examples(self, lemma_ids, pids, ns, text_lookup, per_group=3):
+        """One line from each of the (up to three) authors using the headword most in this group."""
+        if not text_lookup:
+            return []
+        info = self.work_info()
+        by_author = defaultdict(list)
+        for pid, c in zip(pids, ns):
+            if info is not None and info["duplicate"][pid]:
+                continue
+            by_author[self.author_of[pid]].append((pid, c))
+        ranked = sorted(by_author.items(), key=lambda kv: -sum(c for _, c in kv[1]))
+        out = []
+        for name, items in ranked[:per_group]:
+            pid = min((p for p, _ in items), key=self.sort_key("chronological"))
+            line = self._kwic(pid, lemma_ids, text_lookup)
+            if line:
+                out.append(line)
+        return out
+
+    def diachrony(self, concept, *, dense_ids=(), include_reference=False, max_lemmas=8, collocates=5,
+                  text_lookup=None, combine_variants=False):
+        """Headwords expressing a concept, each with counts by period and by dated author, typical
+        collocates and example passages per period (and for undated authors). Honest output: counts,
+        sources, date uncertainty, interval and small-sample flag on every rate."""
         mask = self.scope_mask(include_reference)
-        chosen = self.resolve(concept, limit=max_lemmas)
+        english = not GREEK(concept) and not concept.startswith("lemma:")
+        # A single Latin-letter word that spells a Greek headword (eros -> ἔρως) is that headword.
+        chosen = self.transliterated_lemmas(concept) if english else []
+        resolution_rule = "transliterated_headword" if chosen else None
+        if english and not chosen:
+            chosen = self.head_meaning_lemmas(concept, limit=max_lemmas * 2)
+            resolution_rule = "head_meaning" if chosen else None
+        resolution_rule = resolution_rule or "gloss_terms"
+        if not chosen:
+            chosen = self.resolve(concept, limit=max_lemmas * 2)
         dense = [self.id_pid[i] for i in dense_ids if i in self.id_pid]
         dense_set = set(dense)
         semantic_candidates = []
@@ -629,67 +1118,103 @@ class LemmaIndex:
                     continue
                 semantic_candidates.append(dict(brief, via="semantic_neighbourhood_and_shared_gloss_word",
                                                 shared_gloss_terms=shared, in_nearest_passages=c,
-                                                expected=round(expected, 2), log_likelihood=round(ll, 1)))
+                                                expected=round(expected, 2), log_likelihood=round(ll, 1),
+                                                gloss_match=0.5))
                 if len(semantic_candidates) >= 5:
                     break
         period_masks = self.period_masks(include_reference)
+        undated_mask = mask & self.period_mask("undated")
         totals = self._totals(mask)
+        n_scope_passages = int(mask.sum()) or 1
         lemmas_out = []
         absent = []
+        dropped = []
         for row in chosen + semantic_candidates:
             lemma_id = row["lemma_id"]
-            pids, ns = self.postings(lemma_id)
+            ids = [lemma_id]
+            group = self.variant_group(lemma_id)
+            if combine_variants and group:
+                ids = self.expand_variants([lemma_id])
+            parts = [self.postings(i) for i in ids]
+            pids = np.concatenate([p for p, _ in parts]) if parts else np.zeros(0, dtype=np.int64)
+            ns = np.concatenate([c for _, c in parts]) if parts else np.zeros(0, dtype=np.int64)
             keep = mask[pids] if len(pids) else np.zeros(0, dtype=bool)
             pids, ns = pids[keep], ns[keep]
             if not len(pids):
                 absent.append({k: row.get(k) for k in ("lemma", "gloss", "via")})
                 continue
+            support, enrichment = None, None
+            occurrence_passages = len(set(pids.tolist()))
+            if dense_set:
+                inside_n = int(sum(1 for p in set(pids.tolist()) if p in dense_set))
+                enrichment = round((inside_n / len(dense_set)) / (occurrence_passages / n_scope_passages), 2)
+                support = {"occurrence_passages": occurrence_passages, "in_nearest_passages": inside_n,
+                           "enrichment": enrichment}
+                # Weight by the meaning index: a dictionary-only reading whose passages are not
+                # among those nearest the concept, and whose gloss matched weakly, is dropped.
+                if inside_n == 0 and occurrence_passages >= 5 and row.get("via") not in (
+                        "headword", "headword_without_accents", "transliterated_headword", "printed_form_reading"):
+                    dropped.append({k: row.get(k) for k in ("lemma", "gloss", "via", "gloss_match")})
+                    continue
+            score = (row.get("gloss_match") or 1.0) * (1 + math.log1p(enrichment or 0))
             per_period, per_author = Counter(), Counter()
             for pid, c in zip(pids.tolist(), ns.tolist()):
                 info = self.authors.get(self.author_of[pid]) or {}
-                per_period[info.get("period") or "undated"] += c
+                per_period[self.pid_period[pid] or "undated"] += c
                 per_author[info.get("author") or self.author_of[pid]] += c
             periods = []
-            for label in PERIOD_ORDER:
+            for label in PERIOD_ORDER + ["undated"]:
                 d = totals["period"].get(label, 0)
-                entry = {"period": label, "count": per_period.get(label, 0), "tokens_in_period": d,
-                         "per_10k": round(per_period.get(label, 0) * 1e4 / d, 2) if d else None}
-                if per_period.get(label, 0) >= 2:
-                    col = self.collocations(lemma_id, min_count=2, limit=collocates, mask=period_masks[label])
+                c_here = per_period.get(label, 0)
+                entry = {"period": label, "count": c_here, "tokens_in_period": d, **rate_fields(c_here, d)}
+                if c_here >= 2:
+                    group_mask = undated_mask if label == "undated" else period_masks[label]
+                    col = self.collocations(lemma_id, min_count=2, limit=collocates, mask=group_mask)
                     entry["collocates"] = [{"lemma": c["lemma"], "gloss": c["gloss"], "count": c["count"],
                                             "log_likelihood": c["log_likelihood"]} for c in col["collocates"]]
+                if c_here and text_lookup:
+                    sel = [(p, c) for p, c in zip(pids.tolist(), ns.tolist())
+                           if (self.pid_period[p] or "undated") == label]
+                    entry["examples"] = self._examples(ids, [p for p, _ in sel], [c for _, c in sel], text_lookup)
                 periods.append(entry)
             authors = []
             for name, c in per_author.most_common():
                 info = author_record(name)
                 d = totals["author"].get(name, 0)
-                authors.append({"author": name, "count": c, "per_10k": round(c * 1e4 / d, 2) if d else None,
+                authors.append({"author": name, "count": c, **rate_fields(c, d),
                                 "period": info["period"], "date": info["date"], "genre": info["genre"]})
             authors.sort(key=lambda a: (a["date"]["year"] if a["date"] else 99999, a["author"]))
-            support = None
-            if dense_set:
-                support = {"occurrence_passages": int(len(pids)),
-                           "in_nearest_passages": int(sum(1 for p in pids.tolist() if p in dense_set))}
-            lemmas_out.append(dict(row, tokens=int(ns.sum()), passages=int(len(pids)),
+            lemmas_out.append(dict(row, tokens=int(ns.sum()), passages=occurrence_passages,
                                    undated_count=per_period.get("undated", 0), by_period=periods,
-                                   by_author=authors, semantic_support=support))
+                                   by_author=authors, semantic_support=support, concept_score=round(score, 3),
+                                   variant_group=group, counted_lemma_ids=ids))
+        lemmas_out.sort(key=lambda r: -r["concept_score"])
+        lemmas_out = lemmas_out[:max_lemmas + len(semantic_candidates)]
         dated = sum(v for k, v in totals["period"].items() if k != "undated")
         return {"concept": concept, "lemmas": lemmas_out, "headwords_without_occurrences": absent,
+                "dropped_without_semantic_support": dropped, "resolution_rule": resolution_rule,
                 "scope": "searchable edited Greek text" if not include_reference else "all indexed Greek records",
                 "scope_tokens": int(self.ntok[mask].sum()), "dated_tokens": int(dated),
                 "undated_tokens": int(totals["period"].get("undated", 0)),
                 "nearest_passages_used": len(dense),
                 "notes": [
-                    "Headwords come from dictionary glosses (English) or the headword/form index (Greek); "
+                    "English concepts are read through the head meaning of dictionary senses (a sense whose head "
+                    "word is the query word: 'the moon', not 'Io, identified with the moon'); when none has one, "
+                    "through any gloss word (resolution_rule gloss_terms). "
                     "'semantic_neighbourhood_and_shared_gloss_word' rows are over-represented in the passages "
-                    "nearest the concept in the meaning index and share a gloss word with it.",
-                    "Periods use the author's sourced biographical date claim (Wikidata birth/floruit), not "
-                    "composition dates; ranges can be wide (see each author's date). Authors without a claim "
-                    "are counted as undated and never placed in time.",
+                    "nearest the concept in the meaning index and share a gloss word with it. concept_score = "
+                    "gloss match x (1 + log(1 + enrichment in the nearest passages)); a dictionary reading with at least "
+                    "five passages none of which is among the nearest is dropped (dropped_without_semantic_support). "
+                    "A Latin-letter word that spells a Greek headword (eros) is read as that headword.",
+                    "Periods use a passage's sourced date: its author's Wikidata biographical claim, or for a Greek "
+                    "Anthology epigram its attributed poet's; never composition dates; ranges can be wide. Undated "
+                    "passages form their own column (period 'undated') and are never placed in time.",
                     "Counts are top-ranked headword readings of each token (machine lemmatisation with "
-                    "confidence); rates are per 10,000 indexed tokens of the same period or author.",
+                    "confidence); rates are per 10,000 indexed tokens of the same period or author, with a 95% "
+                    "Wilson interval (per_10k_ci95) and small_sample for groups under 50,000 words.",
                     "Collocates are lemmas within ±5 tokens in the same passage, ranked by log-likelihood "
-                    "(minimum 2 co-occurrences in that period)."]}
+                    "(minimum 2 co-occurrences in that period; a context repeated within one work counted once). "
+                    "Examples: one line from each of the three authors using the headword most in the period."]}
 
     # ------------------------------------------------------------------ search signal
     def passage_signal(self, groups, limit=400, include_reference=False):
@@ -722,6 +1247,11 @@ class LemmaIndex:
                 covered[pid] += 1
         ranked = sorted(score, key=lambda p: (-covered[p], -score[p], self.pid_id[p]))[:limit]
         return [{"id": self.pid_id[p], "score": round(score[p], 4), "groups_matched": covered[p]} for p in ranked]
+
+
+def _query_words(query):
+    import re
+    return [w.lower() for w in re.findall(r"[A-Za-z]+", query or "")]
 
 
 def _find_span(positions, span, ordered):

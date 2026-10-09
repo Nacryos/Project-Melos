@@ -21,7 +21,10 @@ form forms word words name epith epithet prob perh person persons sort kind made
 very much more most less same other another such own way part""".split())
 _WORD = re.compile(r"[A-Za-z]+(?:-[A-Za-z]+)*")
 _SUFFIXES = ("ingly", "edly", "ings", "ing", "ied", "ies", "ed", "es", "s", "ly", "y", "e")
-HEAD, BODY = 1, 2
+HEAD, BODY, MEANING = 1, 2, 3
+# A dictionary gloss that only points to another headword ("= πότνια", "v. ἔρως").
+CROSS_REFERENCE = re.compile(r"^\s*(?:=|v\.|see\b|cf\.)", re.I)
+_ARTICLE = re.compile(r"^(?:to|a|an|the|one who|that which|of)\s+", re.I)
 
 
 def stem(word: str) -> str:
@@ -59,8 +62,15 @@ def _english_part(entry_text: str, limit: int = 220) -> str:
 
 
 def _entries(headword, heads):
+    """Entries in dictionary order; within one dictionary the main entry first (release P): an
+    entry whose gloss is only a cross-reference, or a shorter homograph (LSJ's ὁδός (B)
+    "threshold" beside ὁδός "way"), comes after the fuller entry."""
     match, rows = heads.lookup(headword)
-    return sorted(rows, key=lambda row: dictionary_rank(row.get("source"))) if match else []
+    if not match:
+        return []
+    return sorted(rows, key=lambda row: (dictionary_rank(row.get("source")),
+                                         bool(CROSS_REFERENCE.match(str(row.get("gloss") or ""))),
+                                         -len(str(row.get("entry_text") or ""))))
 
 
 def short_gloss_for(headword, heads):
@@ -69,14 +79,43 @@ def short_gloss_for(headword, heads):
     gloss = source = None
     for row in rows:
         printed = row.get("gloss") or ""
+        if CROSS_REFERENCE.match(printed):
+            continue
         head = short_head(printed) if printed.strip() else None
         if head:
             gloss, source = head["text"], DICTIONARY_LABELS.get(row.get("source"), row.get("source"))
             break
-    heads_printed = [h["text"] for h in (short_head(str(r.get("gloss") or "")) for r in rows[:8]) if h]
+    heads_printed = [h["text"] for h in (short_head(str(r.get("gloss") or "")) for r in rows[:8]
+                                         if not CROSS_REFERENCE.match(str(r.get("gloss") or ""))) if h]
     full = " ; ".join(filter(None, [*(str(r.get("gloss") or "") for r in rows[:6]),
                                     *(_english_part(r.get("entry_text")) for r in rows[:3])]))
-    return gloss, source, {"heads": heads_printed, "full": full}
+    glosses = [str(r.get("gloss") or "") for r in rows[:8] if not CROSS_REFERENCE.match(str(r.get("gloss") or ""))]
+    return gloss, source, {"heads": heads_printed, "full": full, "glosses": glosses}
+
+
+def head_meanings(gloss_text, limit=8):
+    """The head words of a printed gloss's senses (release P): the gloss is cut into sense phrases at
+    ; , and "or"; a phrase of one or two words (after a leading article or "to") gives its content
+    words ("the moon" -> moon, "a mate or companion" -> mate, companion), a longer phrase only its
+    first content word ("Io, identified with the moon" -> io, identified). Whole words (a plural -s dropped), not stems; a
+    hyphenated word stays one word ("sea-man")."""
+    out = []
+    for phrase in re.split(r"\s*(?:[;,:()\[\]]|\bor\b|—|–)\s*", unicodedata.normalize("NFKC", gloss_text or ""))[:limit]:
+        phrase = _ARTICLE.sub("", phrase.strip().lower()).strip(" .")
+        tokens = _WORD.findall(phrase)
+        words = [w for w in tokens if w.lower() not in STOP and len(w) > 1]
+        if not words:
+            continue
+        for word in (words if len(tokens) <= 2 else words[:1]):
+            out.append(singular(word.lower()))
+    return list(dict.fromkeys(out))
+
+
+def singular(word):
+    """A plural -s dropped (stars -> star), not the -s of a singular (eros, chaos, iris, lotus)."""
+    if len(word) > 3 and word.endswith("s") and not word.endswith(("ss", "us", "is", "os", "as")):
+        return word[:-1]
+    return word
 
 
 def gloss_terms(gloss, texts):
@@ -94,7 +133,16 @@ def gloss_terms(gloss, texts):
     for term in english_terms(texts.get("full", "")):
         if term not in out:
             out[term] = (BODY, 0.25)
-    return [(term, field, weight) for term, (field, weight) in out.items()]
+    rows = [(term, field, weight) for term, (field, weight) in out.items()]
+    meanings = {}
+    for text in [gloss or "", *texts.get("glosses", [])]:
+        words = head_meanings(text)
+        for word in words:
+            weight = round(1.0 / max(1, len(words)), 4)
+            meanings[word] = max(meanings.get(word, 0), weight)
+    rows.extend(("=" + word, MEANING, weight) for word, weight in meanings.items())
+    return rows
 
 
-__all__ = ["short_gloss_for", "gloss_terms", "english_terms", "stem", "HEAD", "BODY"]
+__all__ = ["short_gloss_for", "gloss_terms", "english_terms", "head_meanings", "singular", "stem", "HEAD",
+           "BODY", "MEANING"]

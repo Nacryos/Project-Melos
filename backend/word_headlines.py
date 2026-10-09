@@ -9,6 +9,7 @@ own parses, and the headline is still given. Contract: docs/api-contract.md.
 from __future__ import annotations
 
 import hashlib
+from functools import lru_cache
 import json
 
 from fastapi import APIRouter, HTTPException
@@ -24,6 +25,7 @@ MAX_FORMS = 400
 class HeadlineRequest(BaseModel):
     passage_id: str = Field("", max_length=300)
     forms: list[str] = Field(default_factory=list, max_length=MAX_FORMS)
+    dictionary: bool = False  # release P: first dictionary's first senses per headline lemma
 
 
 def _readings(index, form_ids):
@@ -62,6 +64,9 @@ def _forms(index, form_ids):
     return out
 
 
+from .lemma_calibration import calibration, probability, summary as calibration_summary  # noqa: E402
+
+
 def headlines(passage_id="", forms=()):
     try:
         index = get_index()
@@ -78,7 +83,7 @@ def headlines(passage_id="", forms=()):
         for i in range(len(lem)):
             tokens.append({"i": i, "start": int(starts[i]), "end": int(starts[i]) + int(lengths[i]),
                            "form_id": int(fid[i]), "lemma_id": int(lem[i]), "confidence": round(int(conf[i]) / 255, 3),
-                           "src": int(src[i])})
+                           "raw": int(conf[i]), "src": int(src[i])})
     else:
         from .lemma_tokens import clean_form
         cleaned = [clean_form(f) for f in forms]
@@ -94,7 +99,8 @@ def headlines(passage_id="", forms=()):
             f = found.get(form)
             top = (readings.get(f) or [(0, 0, 0, [])])[0]
             tokens.append({"i": i, "printed": printed, "form_id": f or 0, "lemma_id": top[0],
-                           "confidence": round(top[1], 3) if top[0] else 0.0, "src": top[2]})
+                           "confidence": round(top[1], 3) if top[0] else 0.0,
+                           "raw": max(1, min(255, round(top[1] * 255))) if top[0] else 0, "src": top[2]})
     lemma_ids = {t["lemma_id"] for t in tokens if t["lemma_id"]}
     for rows in readings.values():
         lemma_ids.update(r[0] for r in rows)
@@ -115,6 +121,7 @@ def headlines(passage_id="", forms=()):
                 "lemma": head["lemma"] if head else None, "lemma_id": t["lemma_id"] or None,
                 "gloss": head["gloss"] if head else None, "gloss_source": head["gloss_source"] if head else None,
                 "pos": head["pos"] if head else None, "parses": parses, "confidence": t["confidence"],
+                "probability": probability(t["raw"], t["src"]) if t["lemma_id"] else None,
                 "basis": describe_source(t["src"]),
                 "alternatives": [{"lemma": lemmas.get(l, {}).get("lemma"), "lemma_id": l,
                                   "gloss": lemmas.get(l, {}).get("gloss"), "form_probability": round(p, 3),
@@ -126,13 +133,43 @@ def headlines(passage_id="", forms=()):
             item["printed"] = t["printed"]
         out.append(item)
     stamp = index.manifest.get("built_at", "")
-    digest = hashlib.sha256(json.dumps([stamp, passage_id, list(forms), (text or "")], ensure_ascii=False).encode()).hexdigest()
+    calibrated = (calibration() or {}).get("built_at")
+    digest = hashlib.sha256(json.dumps([stamp, calibrated, passage_id, list(forms), (text or "")],
+                                       ensure_ascii=False).encode()).hexdigest()
     return {"passage_id": passage_id or None, "index_version": index.manifest.get("version"), "index_built_at": stamp,
             "hash": digest, "tokens": out,
             "method": ("Headline = the corpus headword index's top reading of each token (parser, recorded forms, "
                        "generated dialect/elision spellings, rescored by the contextual model where it ran). "
-                       "Alternatives are the spelling's other readings. Confidence is a normalised score, not a "
-                       "probability. /api/word gives the full analysis.")}
+                       "Alternatives are the spelling's other readings. Confidence is a normalised score; "
+                       "probability is that score calibrated against treebank gold lemmas (release P, "
+                       "/api/lemma/status calibration), null when no calibration is deployed. /api/word gives the "
+                       "full analysis."), "calibration": calibration_summary()}
+
+
+@lru_cache(maxsize=8192)
+def _first_dictionary(lemma, senses=3):
+    from .server import morph_service
+    from .word_parser_candidates import lemma_dictionary_compact
+    # Only the first few entries are rendered: the first dictionary with text is all that is sent.
+    for limit in (1, 3):
+        entries = lemma_dictionary_compact(lemma, lambda value: morph_service().headword_entries(value, limit=limit),
+                                           senses=senses, first_only=True)
+        if entries:
+            return entries[0]
+    return None
+
+
+def with_dictionary(payload, senses=3):
+    """Release P: `dictionaries` = {lemma: compact first dictionary entry (gloss, first senses, link)}
+    for every headline lemma, so a tap needs no second request. The hash covers the option."""
+    out = {}
+    for token in payload["tokens"]:
+        lemma = token.get("lemma")
+        if lemma and lemma not in out:
+            out[lemma] = _first_dictionary(lemma, senses)
+    payload = dict(payload, dictionaries=out)
+    payload["hash"] = hashlib.sha256((payload["hash"] + ":dictionary").encode()).hexdigest()
+    return payload
 
 
 @router.post("/api/words/headlines")
@@ -140,13 +177,17 @@ def words_headlines(request: HeadlineRequest):
     if not request.passage_id and not request.forms:
         raise HTTPException(422, "Give passage_id or forms.")
     payload = headlines(request.passage_id, request.forms)
+    if request.dictionary:
+        payload = with_dictionary(payload)
     return JSONResponse(payload, headers={"ETag": '"' + payload["hash"] + '"',
                                           "Cache-Control": "public, max-age=3600"})
 
 
 @router.get("/api/words/headlines")
-def words_headlines_get(passage_id: str):
+def words_headlines_get(passage_id: str, dictionary: bool = False):
     """GET form for caching proxies; same payload as the POST with passage_id."""
     payload = headlines(passage_id, ())
+    if dictionary:
+        payload = with_dictionary(payload)
     return JSONResponse(payload, headers={"ETag": '"' + payload["hash"] + '"',
                                           "Cache-Control": "public, max-age=3600"})
