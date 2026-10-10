@@ -356,7 +356,7 @@ def test_agent_down_is_503_with_no_fallback(env, monkeypatch):
     c = signed_in(env)
     pid = c.post("/api/composer/poems", json={}, headers={"Origin": ORIGIN}).json()["id"]
     for url, body in ((f"/api/composer/poems/{pid}/chat", {"message": "hi"}),
-                      (f"/api/composer/poems/{pid}/pool", {"prefix": "", "n": 2}),
+                      (f"/api/composer/poems/{pid}/pool", {"prefix": "", "n": 2, "remaining_template": "-uu-F"}),
                       ("/api/composer/backtranslate", {"greek": "λόγος"})):
         r = c.post(url, json=body, headers={"Origin": ORIGIN})
         assert r.status_code == 503 and r.json()["agent"] == "unavailable", (url, r.text)
@@ -438,10 +438,12 @@ def test_verbatim_runs_found_in_the_corpus(monkeypatch):
         def __exit__(self, *_):
             return False
     monkeypatch.setattr(server, "connect", lambda: Keep())
+    composer_lint._phrase_in_corpus.cache_clear()
     found = composer_lint.verbatim_check("ἐγὼ δέδυκε μὲν ἀ σελάννα νῦν".split())
     assert found["ok"] is False and found["blocking"] is False
     assert found["evidence"] == [{"words": "δέδυκε μὲν ἀ σελάννα", "passage_id": "s168b", "author": "Sappho", "citation": "168B"}]
     assert composer_lint.verbatim_check("ἐγὼ δέδυκε μὲν νῦν".split())["ok"] is True
+    composer_lint._phrase_in_corpus.cache_clear()
 
 
 def test_check_is_fast_without_the_corpus():
@@ -450,3 +452,83 @@ def test_check_is_fast_without_the_corpus():
     for _ in range(10):
         composer_lint.check(SAPPHIC, metre_name="sapphic", author="Sappho")
     assert (time.perf_counter() - t0) / 10 < 0.3
+
+
+def test_pool_requires_a_concrete_template(env, agent):
+    c = signed_in(env)
+    pid = c.post("/api/composer/poems", json={"settings": {"metre": "auto"}}, headers={"Origin": ORIGIN}).json()["id"]
+    for bad in ({}, {"remaining_template": ""}, {"remaining_template": "-q-"}):
+        r = c.post(f"/api/composer/poems/{pid}/pool", json={"prefix": "", "n": 2, **bad}, headers={"Origin": ORIGIN})
+        assert r.status_code == 422 and r.json()["detail"]["code"] == "template_required"
+    assert not [k for k, _ in agent if k == "pool"]                      # nothing reached the agent
+
+
+def test_agent_check_without_template_fails_l7(env):
+    out = client().post("/api/composer/check", json={"greek": SAPPHIC, "metre": "auto"},
+                        headers={"X-Composer-Token": TOKEN}).json()
+    l7 = out["checks"][0]
+    assert out["pass"] is False and l7["ok"] is False and l7["blocking"] and l7["template"] == "missing"
+    assert "remaining_template" in l7["detail"] and out["scansion"]["template"] == "missing"
+    # The owner's own check of the same line only scans it.
+    assert composer_lint.check(SAPPHIC, metre_name=None)["pass"] is True
+
+
+def test_budget_unresolved_words_fail_l1_l2_and_caches_make_repeats_instant(monkeypatch):
+    calls = []
+
+    def slow_lemma(spelling, author):
+        calls.append(spelling)
+        time.sleep(0.5 if spelling.startswith("βραδ") else 0)
+        return "λόγος"
+
+    def row(printed, target, author):
+        time.sleep(0.5 if printed.startswith("βραδ") else 0)
+        return {"form": printed, "tokens": 3, "headwords": [], "dialect_tokens": 2, "author_tokens": 1,
+                "example": None, "other_dialects": {"lesbian": 2}}
+    composer_lint._headline_lemma.cache_clear()
+    monkeypatch.setattr(composer_lint, "_headline_lemma", composer_lint.lru_cache(maxsize=64)(slow_lemma))
+    monkeypatch.setattr(composer_lint, "attestation_row", row)
+    monkeypatch.setattr(composer_lint, "verbatim_check", lambda words: {"id": "L11", "name": "verbatim", "ok": True,
+                                                                        "blocking": False, "detail": "", "evidence": []})
+    monkeypatch.setenv("MELOS_COMPOSER_CHECK_BUDGET_MS", "200")
+    t0 = time.perf_counter()
+    out = composer_lint.check("λόγος βραδύς", dialect="aeolic", author="Sappho")
+    assert time.perf_counter() - t0 < 0.45                                # the budget, not the slow lookup
+    by = {c["id"]: c for c in out["checks"]}
+    for cid in ("L1", "L2"):
+        assert by[cid]["ok"] is False and by[cid]["blocking"] and "timeout" in by[cid]["detail"] and "βραδύς" in by[cid]["detail"]
+    assert out["pass"] is False and out["budget_ms"] == 200
+    time.sleep(0.6)                                                      # the lookup finishes in the background
+    composer_lint._headline_lemma("βραδύς", "Sappho")                     # ... and is cached (no second call)
+    assert calls.count("βραδύς") == 1
+
+
+def test_elision_marks_fold_to_the_corpus_spelling():
+    for typed in ("ἀθανάτ'", "ἀθανάτ᾽", "ἀθανάτʼ", "ἀθανάτ’", "ἀθανάτ’,"):
+        assert composer_lint.corpus_spelling(typed) == "ἀθανάτ’"
+    assert composer_lint.corpus_spelling("μ᾿") == "μ᾿"                   # psili is a distinct sign
+
+
+def test_verbatim_flags_a_short_whole_colon(monkeypatch):
+    from backend.textutils import normalize
+    con = sqlite3.connect(":memory:", check_same_thread=False)
+    con.row_factory = sqlite3.Row
+    con.execute("CREATE TABLE passages (id TEXT, author TEXT, citation TEXT)")
+    con.execute("CREATE VIRTUAL TABLE passage_fts USING fts5(id UNINDEXED, normalized)")
+    con.execute("INSERT INTO passages VALUES ('fr1','Sappho','1')")
+    con.execute("INSERT INTO passage_fts VALUES ('fr1', ?)", (normalize("ποικιλόθρον’ ἀθανάτ’ Ἀφρόδιτα, παῖ Δίος δολόπλοκε"),))
+
+    class Keep:
+        def __enter__(self):
+            return con
+
+        def __exit__(self, *_):
+            return False
+    monkeypatch.setattr(server, "connect", lambda: Keep())
+    composer_lint._phrase_in_corpus.cache_clear()
+    out = composer_lint.verbatim_check("ποικιλόθρον' ἀθανάτ' Ἀφρόδιτα".split())    # 3 words, ASCII apostrophes
+    assert out["ok"] is False and out["evidence"][0]["citation"] == "1"
+    assert composer_lint.verbatim_check("Δίος δολόπλοκε".split())["ok"] is True       # 2 words: not flagged
+    assert composer_lint._qualifies("παῖ Δίος ἄγε".split()) is False                 # 3 short words
+    assert composer_lint._qualifies("παῖ Δίος δολόπλοκε".split()) is True
+    composer_lint._phrase_in_corpus.cache_clear()

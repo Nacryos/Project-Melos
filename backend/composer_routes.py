@@ -21,11 +21,14 @@ Lint:
       The continuation must fill a prefix of those slots (all of them if it runs on into the next line; later
       lines are fitted to the metre's next templates). Without remaining_template a set metre fits whole lines.
       ``prefix`` (optional) is the line before the caret, scanned with the candidate for word-boundary
-      quantities. metre "auto"/"none" counts as no metre.
+      quantities. metre "auto"/"none" counts as no metre; for the agent (internal token) a check with neither
+      remaining_template nor a named metre fails L7 (template "missing"), since nothing could be rejected.
+      Budget: MELOS_COMPOSER_CHECK_BUDGET_MS (default 1500); per-word lookups run concurrently, cached per
+      (form, dialect); a word not resolved in time fails L1/L2 ("unresolved ... (timeout)"), never passes.
 Agent service (MELOS_COMPOSER_AGENT_URL, header X-Composer-Token); unreachable → 503 {"agent": "unavailable"}:
   POST /api/composer/poems/{id}/chat                {message, caret?}: agent /chat {poem, thread, message}; SSE relayed unchanged; the final assistant
                                                     message and the tool trace are stored when the stream ends
-  POST /api/composer/poems/{id}/pool                {line_id?, caret, prefix, remaining_template?, n ≤ 40}: agent
+  POST /api/composer/poems/{id}/pool                {line_id?, caret, prefix, remaining_template, n ≤ 40}: agent
                                                     /pool {poem, slot, n}; SSE relayed; each `candidate` stored
   POST /api/composer/backtranslate                  {greek, dialect}: JSON
 """
@@ -43,6 +46,7 @@ from pydantic import BaseModel, Field
 
 from . import composer_store as store
 from .composer_access import require_owner, require_owner_or_agent
+from .composer_lint import TEMPLATE_SYMBOLS
 
 log = logging.getLogger("melos.composer")
 ROOT = Path(__file__).resolve().parents[1]
@@ -208,13 +212,15 @@ class CheckIn(BaseModel):
     line_index: int = Field(0, ge=0, le=10_000)
 
 
-@router.post("/api/composer/check", dependencies=[Depends(require_owner_or_agent)])
-def check(body: CheckIn):
+@router.post("/api/composer/check")
+def check(body: CheckIn, caller=Depends(require_owner_or_agent)):
     from . import composer_lint
     metre = body.metre if body.metre not in (None, "", "auto", "none") else None   # poem settings may say auto/none
+    # The agent's candidates (pool and chat) must be checked against a concrete template: with metre auto/none and
+    # no remaining_template L7 fails for them (the owner's own lines are only scanned).
     return composer_lint.check(body.greek, metre_name=metre, dialect=body.dialect or None,
                                author=body.author, remaining_template=body.remaining_template, prefix=body.prefix,
-                               line_index=body.line_index)
+                               line_index=body.line_index, require_template=caller == "agent")
 
 
 # ------------------------------------------------------------------------------------------------ agent proxy
@@ -398,6 +404,12 @@ def slot_key(poem: dict, line_id, caret: dict, prefix: str) -> str:
 
 @router.post("/api/composer/poems/{poem_id}/pool", dependencies=owner)
 async def fill_pool(poem_id: int, body: PoolIn):
+    if not body.remaining_template or set(body.remaining_template) - TEMPLATE_SYMBOLS:
+        # Without the open slots the lint's metre check cannot reject anything (metre "auto" names no template).
+        raise HTTPException(422, {"code": "template_required",
+                                  "message": "remaining_template is required: the metrical slots still open at the caret "
+                                             "(symbols - u x F D R X); with metre auto or none the metre check cannot "
+                                             "reject a candidate"})
     caret = body.caret.model_dump()
     context = _store_call(store.agent_context, poem_id, caret)
     key = slot_key(context, body.line_id, caret, body.prefix + "|" + (body.remaining_template or ""))
