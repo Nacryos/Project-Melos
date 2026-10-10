@@ -87,6 +87,47 @@ test('pool filtering: most specific pool first, typed prefix, metrical fit, fail
   assert.deepEqual(C.optionsFor(ENTRIES, 'ἄλλα ').map(o => o.greek), []);
 });
 
+test('two-tier pop-up: next words first, then whole lines; one keyboard index; reuse counted per tier', () => {
+  const entries = [
+    { base: 'φαίνεταί μοι ', source: 'agent', mode: 'words', candidates: [
+      { greek: 'κῆνος', english_span: 'that man', mode: 'words' }, { greek: 'κάλα', english_span: 'lovely', mode: 'words' },
+      { greek: 'κῆνος ἴσος', english_span: 'that man equal', mode: 'words' }] },
+    { base: 'φαίνεταί μοι ', source: 'agent', candidates: [
+      { greek: 'κῆνος ἴσος θέοισιν', english_span: 'that man equal to the gods', mode: 'line' },
+      { greek: 'κάλα σελάννα', english_span: 'the lovely moon' }] },                        // no mode = a whole line
+    { base: '', source: 'corpus', candidates: [{ greek: 'φαίνεταί μοι κῆνος ἴσος θέοισιν', verdict: 'pass' }] },
+  ];
+  const t = C.tiered(entries, 'φαίνεταί μοι ');
+  assert.deepEqual(t.options.map(o => [o.mode, o.greek]), [
+    ['words', 'κῆνος'], ['words', 'κάλα'], ['words', 'κῆνος ἴσος'],
+    ['line', 'κῆνος ἴσος θέοισιν'], ['line', 'κάλα σελάννα'], ['line', 'φαίνεταί μοι κῆνος ἴσος θέοισιν']]);
+  assert.deepEqual(t.tiers, [{ name: 'words', label: 'next words', from: 0, count: 3 }, { name: 'line', label: 'whole lines', from: 3, count: 3 }]);
+  // Typing narrows both tiers; an empty tier has no header.
+  const typed = C.tiered(entries, 'φαίνεταί μοι κα');
+  assert.deepEqual(typed.options.map(o => o.greek), ['κάλα', 'κάλα σελάννα']);
+  assert.deepEqual(C.tiered(entries, 'φαίνεταί μοι ξ').tiers, []);
+  assert.deepEqual(C.tiered(entries, 'φαίνεταί μοι κῆνος ἴ').tiers.map(x => x.name), ['words', 'line']);
+  assert.equal(C.tiered(entries, 'φαίνεταί μοι ', { words: 1 }).options[0].greek, 'κῆνος');
+  // Reuse is counted per tier, so a words request is not skipped because whole lines are waiting, and the other way round.
+  assert.equal(C.reusable(entries, 'φαίνεταί μοι ', 'words'), 3);
+  assert.equal(C.reusable(entries, 'φαίνεταί μοι ', 'line'), 2);
+  assert.equal(C.reusable(entries, 'φαίνεταί μοι '), 5);
+  assert.equal(C.optionsFor(entries, 'φαίνεταί μοι ', { mode: 'words' }).length, 3);
+});
+
+test('page wiring: Tab or a pause asks for next words and whole lines side by side; prefetch is whole lines only', () => {
+  const js = read('js/composer.js');
+  assert.match(js, /fill\(row, base, \{ auto, mode: 'words' \}\);/);
+  assert.match(js, /fill\(row, base, \{ auto, mode: 'line' \}\);/);
+  assert.match(js, /fill\(row, base, \{ auto: true, mode: 'line' \}\);/);
+  assert.match(js, /n: mode === 'words' \? WORDS_N : POOL_N, mode, \.\.\.\(mode === 'words' \? \{ ahead_lines: 0 \} : \{\}\)/);
+  assert.match(js, /C\.reusable\(entriesFor\(row\), before, mode\) >= 3/);
+  assert.match(js, /const tiered = C\.tiered\(entriesFor\(row\), before\);/);
+  assert.match(js, /<li class="tier" role="presentation">/);
+  assert.match(read('css/composer.css'), /\.popup \.tier \{/);
+  assert.match(read('backend/composer_routes.py'), /mode: str = Field\("line", pattern="\^\(line\|words\)\$"\)/);
+});
+
 test('pool keys separate poem, line, slot and settings', () => {
   const s = { author: 'Sappho', metre: 'sapphic', dialect: 'aeolic' };
   assert.equal(C.poolKey(3, 7, 'φαίνεταί  μοι ', s), '3|7|φαίνεταί μοι|Sappho/sapphic/aeolic');
@@ -193,7 +234,7 @@ test('page wiring: the composer loads the core before the page, calls the compos
   for (const route of ['/api/composer/poems', '/full', '/lines', '/versions', '/pool', '/chat', '/api/composer/backtranslate', '/api/compose/suggest', '/api/scan']) {
     assert.ok(js.includes(route), route);
   }
-  assert.match(js, /if \(S\.fill && S\.fill\.row === row && S\.fill\.key !== slotKeyOf\(row\)\) abortFill\(\);/);
+  assert.match(js, /for \(const f of S\.fills\.values\(\)\) if \(f\.row === row && f\.slot !== here\) abortFill\(f\.key\);/);
   assert.match(js, /back_translation: res\.english/);
   assert.match(js, /make_current: false/);
   assert.match(read('scripts/build_frontend.mjs'), /'composer-core\.js', 'composer\.js'/);

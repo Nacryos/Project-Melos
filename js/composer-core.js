@@ -128,7 +128,7 @@
      `before`: the line up to the caret. A pool applies when the line still begins with its base; its candidates are
      matched against what was typed since (accent-insensitive), and a candidate with a pattern must fit the slots that
      were open at its base. Most specific pool first, the model's before the corpus's; one option per continuation. */
-  function optionsFor(entries, before, { limit = 8 } = {}) {
+  function optionsFor(entries, before, { limit = 8, mode } = {}) {
     const out = [], seen = new Set();
     const pools = (entries || []).filter(e => e && String(before).startsWith(e.base || ''))
       .sort((a, b) => (b.base || '').length - (a.base || '').length || (a.source === 'corpus') - (b.source === 'corpus'));
@@ -139,12 +139,14 @@
         const end = matchPrefix(greek, typed);
         if (end < 0 || !greek.slice(end).trim()) continue;          // no match, or nothing left to insert
         if (cand.verdict === 'fail') continue;                         // corpus lines that failed the lint
+        const candMode = cand.mode || entry.mode || 'line';
+        if (mode && candMode !== mode) continue;
         const pattern = patternOf(cand);
         if (entry.template && pattern && !fitsPrefix(pattern.split(' | ')[0], entry.template)) continue;
         const key = fold(greek).replace(/\s+/g, ' ');
         if (seen.has(key)) continue;
         seen.add(key);
-        out.push({ greek, from: base.length, typed: greek.slice(0, end), rest: greek.slice(end), pattern,
+        out.push({ greek, from: base.length, typed: greek.slice(0, end), rest: greek.slice(end), pattern, mode: candMode,
           english: cand.english_span || '', evidence: cand.evidence || [], checks: cand.checks || [],
           source: entry.source || cand.source_kind || 'agent', citation: cand.source && cand.source.citation
             ? `${cand.source.author || ''} ${cand.source.citation}`.trim() : '', scansion: cand.scansion || null });
@@ -153,8 +155,20 @@
     }
     return out;
   }
-  /* How many continuations earlier pools on this line still offer (used to skip a new model request). */
-  const reusable = (entries, before) => optionsFor((entries || []).filter(e => e.source !== 'corpus'), before, { limit: 99 }).length;
+  /* How many continuations earlier pools on this line still offer (used to skip a new model request); `mode`
+     counts one tier only (words | line). */
+  const reusable = (entries, before, mode) => optionsFor((entries || []).filter(e => e.source !== 'corpus'), before, { limit: 99, mode }).length;
+
+  /* The two-tier pop-up: next words (short, fast) first, then whole-line continuations (model and corpus). Returns
+     the flat option list (one keyboard index) and the tiers [{name, from, count}] for the headers. */
+  function tiered(entries, before, { words = 6, lines = 8 } = {}) {
+    const w = optionsFor(entries, before, { limit: words, mode: 'words' });
+    const l = optionsFor(entries, before, { limit: lines, mode: 'line' });
+    const tiers = [];
+    if (w.length) tiers.push({ name: 'words', label: 'next words', from: 0, count: w.length });
+    if (l.length) tiers.push({ name: 'line', label: 'whole lines', from: w.length, count: l.length });
+    return { options: [...w, ...l], tiers };
+  }
 
   // ---- spill-over insertion ---------------------------------------------------------------------------------------
   // A continuation may carry line breaks: a newline, or " / " between lines.
@@ -278,6 +292,6 @@
   const money = usd => (usd >= 10 ? `$${usd.toFixed(1)}` : `$${(Number(usd) || 0).toFixed(2)}`);
 
   return { fold, matchPrefix, slotAt, squash, TEMPLATES, templateFor, labels, remainders, remainingTemplate, fitsPrefix,
-    slotKeyText, slotKey, poolKey, settingsSig, patternOf, optionsFor, reusable, splitSpill, spillInsert, SSEParser, readSSE, checkBadges,
+    slotKeyText, slotKey, poolKey, settingsSig, patternOf, optionsFor, reusable, tiered, splitSpill, spillInsert, SSEParser, readSSE, checkBadges,
     versionsRow, archiveVersion, pacificDay, addCost, todayCost, money };
 });

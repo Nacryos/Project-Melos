@@ -1,15 +1,13 @@
 """Persistent agent sessions (docs/composer/agent.md, "Sessions").
 
-One long-lived ClaudeSDKClient per (poem, kind, poem settings): kind "pool" serves /pool and /warm, kind "chat"
-serves /chat, so chat and pool never interleave inside one conversation. The first turn of a pool session does the
-research; later turns only name new slots and reuse it from context (prompt-cache reads). History is append-only:
-every turn is a new query on the same client; nothing earlier is edited or re-sent.
+One long-lived ClaudeSDKClient per (poem, kind, poem settings): kind "pool" holds the poem's research (its first
+and only turn, at the warm effort) and is the parent of the pool fills (fills.py: sessions forked from it at the
+pool effort, one per slot and mode); kind "chat" serves /chat, so chat and pool never interleave inside one
+conversation. History is append-only: every turn is a new query on the same client; nothing earlier is edited.
 
 A turn runs as a background task; HTTP responses subscribe to its events. Within a session turns are serialised
-by a lock. A /pool or /warm for a slot the running pool turn already covers joins it (earlier candidates are
-replayed, marked ``replay``); one for another slot preempts it (the owner moved on). Idle sessions are closed after
-COMPOSER_SESSION_IDLE_MINUTES; at most COMPOSER_MAX_SESSIONS exist (the least recently used idle one is closed to
-make room, else the request is refused with 503).
+by a lock. Idle sessions are closed after COMPOSER_SESSION_IDLE_MINUTES; at most COMPOSER_MAX_SESSIONS exist (the
+least recently used idle one is closed to make room, else the request is refused with 503).
 """
 from __future__ import annotations
 
@@ -35,7 +33,7 @@ class Busy(Exception):
 
 @dataclass
 class Turn:
-    kind: str                                   # pool | warm | chat
+    kind: str                                   # pool | warm | chat | fill
     ctx: Ctx
     events: list = field(default_factory=list)
     subscribers: list = field(default_factory=list)   # (queue, joined)
@@ -83,28 +81,39 @@ class Turn:
 
 class Session:
     def __init__(self, key: str, kind: str, settings, factory, system: str):
-        self.key, self.kind, self.settings = key, kind, settings
+        self.key, self.kind, self.settings, self.system = key, kind, settings, system
+        self.effort = settings.effort_for("warm" if kind == "pool" else kind)
         self.bound = Bound()
         self.server, self.tools = server_for(self.bound)
-        self.client = factory(sdk_options(settings, system, self.server, stream_text=kind == "chat"), self.tools)
+        self.client = factory(sdk_options(settings, system, self.server, stream_text=kind == "chat", effort=self.effort),
+                              self.tools)
         self.lock = asyncio.Lock()
         self.turns = 0
         self.connected = self.closed = False
         self.last_used = time.monotonic()
         self.turn: Turn | None = None
-        self.seen: dict = {}                    # slot_key -> continuations proposed in this session
-        self.passed: Counter = Counter()        # slot_key -> how many passed in this session
+        self.seen: dict = {}                    # slot_key -> continuations proposed in this session (all fills)
+        self.passed: Counter = Counter()        # (slot_key, mode) -> how many passed in this session
         self.english: str | None = None         # the English the model last saw
+        self.session_id: str | None = None      # the CLI session id (fills fork from it)
+        self.settled = asyncio.Event()          # set when the first turn ended (or the session was dropped)
+        self.fills_active = 0                   # fills (fills.py) running or queued for this session
+
+    @property
+    def researched(self) -> bool:
+        """The research turn ended and a fill can fork from it."""
+        return self.settled.is_set() and self.session_id is not None and not self.closed
 
     @property
     def busy(self) -> bool:
-        return self.lock.locked() or (self.turn is not None and not self.turn.finished.is_set())
+        return self.lock.locked() or (self.turn is not None and not self.turn.finished.is_set()) or self.fills_active > 0
 
     def running(self) -> Turn | None:
         return self.turn if self.turn and not self.turn.finished.is_set() else None
 
     async def close(self) -> None:
         self.closed = True
+        self.settled.set()
         if self.connected:
             try:
                 await self.client.disconnect()
@@ -171,9 +180,6 @@ class Sessions:
                         out = Outcome(error="agent failed: session closed, retry")
                     elif turn.ctx.stop.is_set():               # preempted while queued: never started
                         out = Outcome(terminal_reason=turn.ctx.stop_reason or "stop")
-                    elif turn.kind == "warm" and turn.ctx.slots and all(
-                            s.passed[k] >= int(v.get("want") or 0) for k, v in turn.ctx.slots.items()):
-                        out = Outcome(terminal_reason="already_filled")
                     elif turn.kind == "warm" and not turn.ctx.slots and s.turns:
                         out = Outcome(terminal_reason="already_warm")
                     else:
@@ -191,13 +197,16 @@ class Sessions:
                         out = await drive(s.client, prompt(first, changed), turn.ctx.emit, s.kind == "chat",
                                           turn.ctx.stop, seconds(first),
                                           lambda: 0.0 if turn.ctx.stop_reason == "preempted" else self.settings.stop_grace_seconds)
-                        s.passed.update(turn.ctx.passed)
+                        s.passed.update({(k, turn.ctx.mode): v for k, v in turn.ctx.passed.items()})
+                        if out.session_id:
+                            s.session_id = out.session_id
                 except Exception as exc:  # noqa: BLE001 - the CLI died, the key is missing, ...
                     out = Outcome(error=f"agent failed: {type(exc).__name__}", broken=True)
                 info["ms"] = round((time.monotonic() - t0) * 1000)
                 s.last_used = time.monotonic()
                 if out.broken:
                     await self.drop(s)
+                s.settled.set()
             try:
                 await finish(turn, out, info)
             finally:

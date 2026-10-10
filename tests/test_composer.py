@@ -349,7 +349,7 @@ def test_pool_relays_and_stores_candidates(env, agent):
     # the current slot's candidates, plus one whose key was not asked for (filed under the current slot)
     assert [p["candidate"]["greek"] for p in stored] == ["λόγος 0", "λόγος 1", "λόγος 2", "foreign"]
     payload = next(p for k, p in agent if k == "pool")
-    assert payload["n"] == 3 and set(payload) == {"poem", "slot", "ahead", "n"}
+    assert payload["n"] == 3 and payload["mode"] == "line" and set(payload) == {"poem", "slot", "ahead", "n", "mode"}
     assert payload["slot"] | {} == {"line_position": 0, "caret": 4, "prefix": "ποι", "remaining_template": "-u-x-uu-u-F",
                                    "line_id": None, "slot_key": key}
     # the rest of the Sapphic stanza: lines 1-3, the last an adonean

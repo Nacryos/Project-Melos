@@ -15,7 +15,7 @@
   const ANALYSIS_DIALECT = { aeolic: 'lesbian', doric: 'doric', ionic: 'ionic', attic: 'attic' };
   const METRES = ['hexameter', 'pentameter', 'elegiac', 'iambic_trimeter', 'trochaic_tetrameter', 'sapphic', 'sapphic_hendecasyllable',
     'adonean', 'alcaic', 'glyconic', 'pherecratean', 'hipponactean', 'telesillean', 'reizianum', 'aristophanean', 'lesser_asclepiad', 'greater_asclepiad'];
-  const PREFS = 'melos-composer-prefs', POOL_N = 12, IDLE_MS = 600, AGENT_DOWN_MS = 60_000, STORED_MS = 3000, WARM_POLL_MS = 6 * 60_000;
+  const PREFS = 'melos-composer-prefs', POOL_N = 12, WORDS_N = 8, IDLE_MS = 600, AGENT_DOWN_MS = 60_000, STORED_MS = 3000, WARM_POLL_MS = 6 * 60_000;
   const esc = s => String(s ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
   const store = (() => { try { return window.localStorage; } catch (e) { return null; } })();
   const local = { getItem: k => { try { return store && store.getItem(k); } catch (e) { return null; } },
@@ -81,7 +81,7 @@
   const S = {
     poems: [], poem: null, rows: [], active: null, uid: 0,
     scan: { seq: 0, text: null, res: null, byIndex: new Map() },
-    pools: new Map(), fill: null, prefixScans: new Map(),
+    pools: new Map(), fills: new Map(), prefixScans: new Map(),
     popup: { open: false, row: null, index: 0, options: [], auto: false, dismissed: null },
     analysis: new Map(), pending: new Set(), selected: null, chatStream: null, showArchived: new Set(),
   };
@@ -317,7 +317,8 @@
     }
   }
   function caretMoved(row) {
-    if (S.fill && S.fill.row === row && S.fill.key !== slotKeyOf(row)) abortFill();
+    const here = slotKeyOf(row);
+    for (const f of S.fills.values()) if (f.row === row && f.slot !== here) abortFill(f.key);   // the owner left that slot
     if (S.popup.open) renderPopup();
   }
 
@@ -596,10 +597,13 @@
     return C.poolKey(S.poem?.id, row.uid, C.slotAt(row.draft, caret).base, settings());
   };
   const entriesFor = row => [...S.pools.values()].filter(e => e.lineKey === row.uid && e.sig === sig());
-  function abortFill() {
-    if (!S.fill) return;
-    S.fill.controller.abort();
-    S.fill = null;
+  /* Stop one running pool request (by its pool key), or all of them. The streamed candidates are kept. */
+  function abortFill(key) {
+    for (const [k, f] of [...S.fills]) {
+      if (key && k !== key) continue;
+      f.controller.abort();
+      S.fills.delete(k);
+    }
   }
   /* The metrical slots still open at `base` on this row's line: the line's template less the syllables already typed.
      null = no metre set; '' = the line is full; undefined = the text so far does not fit the metre. */
@@ -673,28 +677,32 @@
       if (row?.el && document.hasFocus()) loadStored(row, C.slotAt(row.draft, row.el.ta.selectionStart).base);
     }, STORED_MS);
   }
+  /* Background prefetch: whole-line continuations for the slot (next words are asked for on Tab or a pause). */
   function prefetch(row, base) {
     if (!$('auto-ask').checked || !row) return;
     ensureCorpus(row);
-    fill(row, base, { auto: true });
+    fill(row, base, { auto: true, mode: 'line' });
   }
-  async function fill(row, base, { auto }) {
+  /* One pool request for a slot in one mode: 'words' = next words (1-3 words, fast, no stanza batch), 'line' =
+     whole-line continuations plus the rest of the stanza. The two run side by side; each has its own pool entry. */
+  async function fill(row, base, { auto, mode = 'line' }) {
     if (!S.poem || Date.now() < agentDownUntil) return;
-    const key = C.poolKey(S.poem.id, row.uid, base, settings());
+    const slot = C.poolKey(S.poem.id, row.uid, base, settings());
+    const key = mode === 'words' ? slot + '|words' : slot;
     const old = S.pools.get(key);
     if (old && (old.status === 'filling' || old.status === 'done' || old.status === 'full' || old.status === 'nofit' || (auto && old.status === 'error'))) return;
     const before = S.active === row ? row.draft.slice(0, row.el.ta.selectionStart) : base;
     const poemId = S.poem.id;
     await loadStored(row, base);                                         // what earlier stanza batches left for this slot
     if (S.poem?.id !== poemId || S.pools.get(key)?.status === 'filling') return;
-    // Earlier pools on this line, or stored candidates, still cover it: no model request (Tab too; typing filters).
-    if (C.reusable(entriesFor(row), before) >= 3) { if (S.popup.open && S.popup.row === row) renderPopup(); return; }
-    if (S.fill && S.fill.key !== key) abortFill();
+    // Earlier pools on this line, or stored candidates, still cover this tier: no model request (Tab too; typing filters).
+    if (C.reusable(entriesFor(row), before, mode) >= 3) { if (S.popup.open && S.popup.row === row) renderPopup(); return; }
+    for (const f of S.fills.values()) if (f.row === row && f.slot !== slot) abortFill(f.key);     // requests for a slot left behind
     const controller = new AbortController();
-    const entry = { key, lineKey: row.uid, sig: sig(), base, source: 'agent', template: null, candidates: old?.candidates || [],
+    const entry = { key, lineKey: row.uid, sig: sig(), base, source: 'agent', mode, template: null, candidates: old?.candidates || [],
       status: 'filling', tools: [], rejected: 0, error: '', startedAt: Date.now() };
     S.pools.set(key, entry);
-    S.fill = { key, row, controller };
+    S.fills.set(key, { key, slot, row, controller });
     renderPopup();
     try {
       const template = await templateAt(row, base);
@@ -704,7 +712,8 @@
       entry.template = template;
       if (controller.signal.aborted) throw new DOMException('aborted', 'AbortError');
       const at = rowIndex(row);
-      const body = { line_id: row.line?.id ?? null, caret: { line_position: at, char_offset: base.length, prefix: base }, prefix: base.trimEnd(), remaining_template: template, n: POOL_N };
+      const body = { line_id: row.line?.id ?? null, caret: { line_position: at, char_offset: base.length, prefix: base }, prefix: base.trimEnd(),
+        remaining_template: template, n: mode === 'words' ? WORDS_N : POOL_N, mode, ...(mode === 'words' ? { ahead_lines: 0 } : {}) };
       const mine = await C.slotKey(at, body.prefix, settings());
       const r = await request('POST', `/api/composer/poems/${S.poem.id}/pool`, body, controller.signal);
       await C.readSSE(r, ({ event, data }) => {
@@ -722,7 +731,7 @@
       if (e.name === 'AbortError') { entry.status = 'aborted'; }
       else { entry.status = 'error'; entry.error = e.message; if (e.status !== 503) failed('pool', e); }
     } finally {
-      if (S.fill?.key === key) S.fill = null;
+      if (S.fills.get(key)?.controller === controller) S.fills.delete(key);
       if (S.popup.open && S.popup.row === row) renderPopup();
     }
   }
@@ -759,7 +768,11 @@
     if (!auto) S.popup.dismissed = null;
     Object.assign(S.popup, { open: true, row, index: 0, auto });
     ensureCorpus(row);
-    if (!auto || $('auto-ask').checked) fill(row, C.slotAt(row.draft, row.el.ta.selectionStart).base, { auto });
+    if (!auto || $('auto-ask').checked) {
+      const base = C.slotAt(row.draft, row.el.ta.selectionStart).base;
+      fill(row, base, { auto, mode: 'words' });          // next words first: short, fast
+      fill(row, base, { auto, mode: 'line' });           // whole lines (and the rest of the stanza) in the background
+    }
     renderPopup();
   }
   function closePopup() {
@@ -773,23 +786,30 @@
     if (!pop.open || !row?.el) { popup.hidden = true; return; }
     const ta = row.el.ta, caret = ta.selectionStart;
     const before = row.draft.slice(0, caret);
-    pop.options = C.optionsFor(entriesFor(row), before);
+    const tiered = C.tiered(entriesFor(row), before);
+    pop.options = tiered.options;
     pop.index = Math.min(pop.index, Math.max(0, pop.options.length - 1));
-    const slot = S.pools.get(slotKeyOf(row));
+    const slotKey = slotKeyOf(row), slot = S.pools.get(slotKey), words = S.pools.get(slotKey + '|words');
+    const mine = [words, slot].filter(Boolean);
     const filling = entriesFor(row).some(e => e.status === 'filling');
-    if (pop.auto && !pop.options.length && !filling && !slot?.error) { popup.hidden = true; return; }
-    const items = pop.options.map((o, k) => `<li role="option" id="opt-${k}" class="opt ${esc(o.source)}" aria-selected="${k === pop.index}" data-k="${k}">
+    const error = mine.map(e => e.error).find(Boolean);
+    if (pop.auto && !pop.options.length && !filling && !error) { popup.hidden = true; return; }
+    const option = (o, k) => `<li role="option" id="opt-${k}" class="opt ${esc(o.source)} ${esc(o.mode)}" aria-selected="${k === pop.index}" data-k="${k}">
         <div class="opt-greek" lang="grc"><span class="typed">${esc(o.typed)}</span>${esc(o.rest)}</div>
         <div class="opt-meta">${o.pattern ? `<span class="pattern">${esc(o.pattern)}</span>` : ''}${o.english ? `<span class="span">“${esc(o.english)}”</span>` : ''}<span class="src">${esc(o.source)}${o.citation ? ` · ${esc(o.citation)}` : ''}</span></div>
-      </li>`).join('');
+      </li>`;
+    const items = tiered.tiers.map(t => `<li class="tier" role="presentation">${esc(t.label)}</li>`
+      + pop.options.slice(t.from, t.from + t.count).map((o, i) => option(o, t.from + i)).join('')).join('');
     const notes = [];
     if (filling) {
-      const tools = slot?.tools?.length ? slot.tools.slice(-2).join(', ') : '';
-      notes.push(`<span class="thinking"><span class="dot"></span>thinking${tools ? ` · ${esc(tools)}` : ''}</span>`);
+      const busy = mine.filter(e => e.status === 'filling').map(e => e.mode === 'words' ? 'words' : 'lines').join(' + ');
+      const tools = mine.flatMap(e => e.tools || []).slice(-2).join(', ');
+      notes.push(`<span class="thinking"><span class="dot"></span>thinking${busy ? ` · ${esc(busy)}` : ''}${tools ? ` · ${esc(tools)}` : ''}</span>`);
     }
-    if (slot?.rejected) notes.push(`<span>${slot.rejected} rejected by the checks</span>`);
-    if (slot?.error) notes.push(`<span class="bad">${esc(slot.error)}</span>`);
-    if (!pop.options.length && !filling && !slot?.error) notes.push('<span>No continuations for this slot yet. Tab asks the model.</span>');
+    const rejected = mine.reduce((n, e) => n + (e.rejected || 0), 0);
+    if (rejected) notes.push(`<span>${rejected} rejected by the checks</span>`);
+    if (error) notes.push(`<span class="bad">${esc(error)}</span>`);
+    if (!pop.options.length && !filling && !error) notes.push('<span>No continuations for this slot yet. Tab asks the model.</span>');
     popup.innerHTML = `<ul role="listbox" aria-label="Continuations">${items}</ul><div class="popup-foot">${notes.join('')}<span class="keys-hint">↑↓ · Enter · Esc</span></div>`;
     popup.hidden = false;
     ta.setAttribute('aria-activedescendant', pop.options.length ? `opt-${pop.index}` : '');

@@ -83,15 +83,40 @@ def slots_text(slots: dict, seen: dict) -> str:
     return "\n".join(out)
 
 
+LINE_TASK = ("Task: fill the autocomplete pool for these slots (the current one first, then the rest of the stanza, "
+             "so the owner finds options already waiting on the next lines):\n{slots}\n\n"
+             "Each candidate continues the text already in its slot (Greek only, without repeating that text) and "
+             "names its slot key. Vary wording and how much English each carries: single words, phrases, the rest of "
+             "the line, and phrases that run over the line end into the next line (put a newline at the line end). "
+             "The owner is waiting at the keyboard: call propose_candidates early and repeatedly with small batches "
+             "(3-5 candidates for one slot per call, the current slot first, then the next ones in turn) until you "
+             "are told to stop. Then reply: done.")
+
+WORDS_TASK = ("Task: NEXT WORDS for this slot (the owner is typing here now):\n{slots}\n\n"
+              "Propose short continuations of one to three words each (never more than three), each a possible next "
+              "step of the line: it must fit the beginning of the open metrical slots but need not fill them. Give many "
+              "different first words, each carrying the next bit of the English in order, with the poet's forms and the "
+              "dialect. Call propose_candidates at once with 6-8 of them before any lookup, then again with 6-8 more "
+              "(different first words, learn from the rejections) until you are told to stop. No thinking at length: "
+              "the checks do the scansion and form check. Then reply: done.")
+
+COLD = ("\n\nThis request is urgent and runs on its own (the poem's research is still in progress elsewhere): do not "
+        "research first. Propose from what you know of the poet at once; the checks reject what is wrong. At most two "
+        "quick lookups, only after the first batch.")
+
+
 def pool_prompt(poem: dict, slots: dict, seen: dict, first: bool, english_changed: bool = False) -> str:
+    """A turn on the poem's research session: research only (no slots) or research + slots (first turn)."""
     head = poem_context(poem) + "\n\n" + RESEARCH if first else poem_update(poem, english_changed)
     if not slots:
         return head + "\n\nTask: research only for now; reply with a two-line summary of what you found, then: done."
-    return (head + "\n\nTask: fill the autocomplete pool for these slots (the current one first, then the rest of "
-            "the stanza, so the owner finds options already waiting on the next lines):\n" + slots_text(slots, seen)
-            + "\n\nEach candidate continues the text already in its slot (Greek only, without repeating that text) and "
-              "names its slot key. Vary wording and how much English each carries: single words, phrases, the rest of "
-              "the line, and phrases that run over the line end into the next line (put a newline at the line end). "
-              "The owner is waiting at the keyboard: call propose_candidates early and repeatedly with small batches "
-              "(3-5 candidates for one slot per call, the current slot first, then the next ones in turn) until you "
-              "are told to stop. Then reply: done.")
+    return head + "\n\n" + LINE_TASK.format(slots=slots_text(slots, seen))
+
+
+def fill_prompt(poem: dict, slots: dict, seen: dict, mode: str = "line", cold: bool = False,
+                english_changed: bool = False) -> str:
+    """One fill: a session forked from the research (``cold`` False: the context already holds the poem and the
+    research, so only an update is sent) or a cold one-off (the whole poem context, no research)."""
+    head = poem_context(poem) + COLD if cold else poem_update(poem, english_changed)
+    task = WORDS_TASK if mode == "words" else LINE_TASK
+    return head + "\n\n" + task.format(slots=slots_text(slots, seen))

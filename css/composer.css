@@ -202,6 +202,8 @@ html, body { overflow-x: hidden; }
 .popup { position: fixed; z-index: 60; width: min(460px, calc(100vw - 16px)); background: var(--canvas-bg); color: var(--ink);
   border: 1px solid var(--line); box-shadow: 0 10px 28px rgb(0 0 0 / .22); }
 .popup ul { list-style: none; margin: 0; padding: 4px 0; max-height: 320px; overflow-y: auto; }
+.popup .tier { padding: 4px 12px 1px; font-size: .68rem; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.popup .tier + .opt { border-top: none; }
 .opt { padding: 5px 12px 6px; cursor: pointer; border-left: 2px solid transparent; }
 .opt[aria-selected="true"] { background: var(--sea-wash, rgb(43 90 135 / .08)); border-left-color: var(--sea); }
 .opt-greek { font: 1.15rem/1.35 "GFS Didot", "Gentium Book Plus", Georgia, serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }

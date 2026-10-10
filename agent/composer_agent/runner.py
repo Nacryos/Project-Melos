@@ -1,4 +1,5 @@
-"""Drives Claude Agent SDK turns (model claude-fable-5-1, effort xhigh): one-shot clients and session turns."""
+"""Drives Claude Agent SDK turns (model claude-fable-5-1; effort per job kind, see settings): one-shot clients,
+session turns and forked fill sessions."""
 from __future__ import annotations
 
 import asyncio
@@ -8,7 +9,7 @@ from pathlib import Path
 from typing import Any, Awaitable, Callable
 
 from claude_agent_sdk import (AssistantMessage, ClaudeAgentOptions, ClaudeSDKClient, ResultMessage, StreamEvent,
-                              TextBlock)
+                              SystemMessage, TextBlock)
 
 from .melos import tool_names
 from .settings import EFFORT, MODEL
@@ -46,7 +47,12 @@ class Outcome:
     broken: bool = False                # the turn did not end after an interrupt: the session must be replaced
 
 
-def sdk_options(settings, system: str, server=None, stream_text: bool = False, max_turns: int | None = None) -> ClaudeAgentOptions:
+def sdk_options(settings, system: str, server=None, stream_text: bool = False, max_turns: int | None = None,
+                effort: str | None = None, resume: str | None = None) -> ClaudeAgentOptions:
+    """``effort`` defaults to EFFORT (xhigh). ``resume``: fork a new session from this session id (the CLI flags
+    ``--resume <id> --fork-session``): the fork starts with the whole conversation of the original (its research), so
+    a fill can run at another effort while the original goes on unchanged. The transcript is read from
+    ``$CLAUDE_CONFIG_DIR/projects/<cwd>/<id>.jsonl`` (both under the state dir, so the same cwd and config dir)."""
     state = Path(settings.state_dir)
     scratch = state / "scratch"
     scratch.mkdir(parents=True, exist_ok=True)
@@ -55,7 +61,8 @@ def sdk_options(settings, system: str, server=None, stream_text: bool = False, m
            "DISABLE_AUTOUPDATER": "1", "DISABLE_TELEMETRY": "1", "DISABLE_ERROR_REPORTING": "1",
            "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"}
     return ClaudeAgentOptions(
-        model=MODEL, effort=EFFORT, system_prompt=system,
+        model=MODEL, effort=effort or EFFORT, system_prompt=system,
+        resume=resume, fork_session=bool(resume),
         tools=[], allowed_tools=tool_names() if server else [], disallowed_tools=BUILTINS_DENIED,
         mcp_servers={"melos": server} if server else {}, strict_mcp_config=True,
         permission_mode="dontAsk", setting_sources=[], max_turns=max_turns,
@@ -91,6 +98,9 @@ async def consume(client, prompt: str, emit, stream_text: bool, out: Outcome) ->
             for block in msg.content:
                 if isinstance(block, TextBlock) and msg.parent_tool_use_id is None:
                     out.text += block.text
+        elif isinstance(msg, SystemMessage):
+            if msg.subtype == "init" and (msg.data or {}).get("session_id"):
+                out.session_id = msg.data["session_id"]        # known before the turn ends (forks need it)
         elif isinstance(msg, ResultMessage):
             out.sdk_cost_usd = msg.total_cost_usd
             out.session_id = msg.session_id

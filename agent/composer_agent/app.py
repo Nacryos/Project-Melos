@@ -1,5 +1,5 @@
-"""HTTP service for melos-api: POST /chat, /pool and /warm (SSE, persistent per-poem sessions), POST /backtranslate
-(JSON). Token-gated."""
+"""HTTP service for melos-api: POST /chat, /pool and /warm (SSE; a persistent research session per poem, parallel
+forked fills per slot), POST /backtranslate (JSON). Token-gated."""
 from __future__ import annotations
 
 import asyncio
@@ -15,10 +15,11 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from . import prompts
+from .fills import Fill, Fills
 from .melos import Ctx
 from .runner import Job, Outcome, SdkRunner
-from .sessions import Busy, Sessions, Turn, default_factory
-from .settings import EFFORT, MODEL, Settings, cost_usd
+from .sessions import Busy, Session, Sessions, Turn, default_factory
+from .settings import MODEL, MODES, Settings, cost_usd
 
 
 class Poem(BaseModel):
@@ -51,6 +52,7 @@ class PoolRequest(BaseModel):
     slot: Slot
     ahead: list[Slot] = Field(default_factory=list, max_length=8)
     n: int = Field(8, ge=1, le=40)
+    mode: str = Field("line", pattern="^(line|words)$")
 
 
 class WarmRequest(BaseModel):
@@ -78,8 +80,10 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
                client_factory=None) -> FastAPI:
     settings = settings or Settings()
     runner = runner or SdkRunner(settings)
-    sessions = Sessions(settings, client_factory or default_factory)
+    factory = client_factory or default_factory
+    sessions = Sessions(settings, factory)
     http: dict = {}
+    fills = Fills(settings, factory, prompts.SYSTEM, lambda: http["client"])
 
     async def reaper():
         while True:
@@ -94,11 +98,12 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
             yield
         finally:
             reap_task.cancel()
+            await fills.close_all()
             await sessions.close_all()
             await http["client"].aclose()
 
     app = FastAPI(title="melos-composer-agent", lifespan=lifespan, docs_url=None, redoc_url=None, openapi_url=None)
-    app.state.sessions = sessions
+    app.state.sessions, app.state.fills = sessions, fills
 
     def require_token(x_composer_token: str = Header("")):
         if not settings.token or not hmac.compare_digest(x_composer_token.encode(), settings.token.encode()):
@@ -112,10 +117,10 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
         except OSError:
             pass
 
-    def finish_record(endpoint: str, outcome: Outcome, ms: int, poem_id=None, **extra) -> dict:
+    def finish_record(endpoint: str, outcome: Outcome, ms: int, poem_id=None, effort: str | None = None, **extra) -> dict:
         cost = cost_usd(outcome.usage)
         log_usage({"ts": datetime.now(timezone.utc).isoformat(), "endpoint": endpoint, "poem_id": poem_id,
-                   "model": MODEL, "effort": EFFORT, "usage": outcome.usage, "cost_usd": cost,
+                   "model": MODEL, "effort": effort or settings.effort_for(endpoint), "usage": outcome.usage, "cost_usd": cost,
                    "sdk_usage": outcome.sdk_usage, "sdk_cost_usd": outcome.sdk_cost_usd, "ms": ms,
                    "stop_reason": outcome.stop_reason, "terminal_reason": outcome.terminal_reason,
                    "error": outcome.error, **extra})
@@ -127,6 +132,10 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
         except Exception as exc:  # the CLI died, the key is missing, ...; never leak details beyond the type
             return Outcome(error=f"agent failed: {type(exc).__name__}")
 
+    def stream(body):
+        return StreamingResponse(body, media_type="text/event-stream",
+                                 headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
     def respond(turn: Turn, joined: bool = False) -> StreamingResponse:
         q = turn.subscribe(joined)
 
@@ -137,8 +146,52 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
             finally:
                 turn.unsubscribe(q)      # the turn itself runs on (bounded): its candidates still reach melos-api's store
 
-        return StreamingResponse(body(), media_type="text/event-stream",
-                                 headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+        return stream(body())
+
+    def respond_fills(members: list[tuple[Fill, bool]], t0: float, skipped: list) -> StreamingResponse:
+        """One SSE stream over several fills: every event of each (replayed candidates for joined ones), each
+        fill's end as a ``fill`` event, then one ``done`` with the cost of the fills this request started."""
+        subs = [(f, joined, f.turn.subscribe(joined)) for f, joined in members]   # subscribed now, not when read
+
+        async def body():
+            if not members:
+                yield sse({"type": "done", "usage": {}, "cost_usd": 0, "terminal_reason": "already_filled",
+                           "skipped": skipped})
+                return
+            q: asyncio.Queue = asyncio.Queue()
+
+            async def pump(f, fq, joined):
+                while (ev := await fq.get()) is not None:
+                    if ev.get("type") == "done":
+                        ev = {**ev, "type": "fill", "slot_key": f.slot_key, "mode": f.mode, "cold": f.cold}
+                        if joined:
+                            ev["shared"] = True
+                    elif ev.get("type") in ("rejected", "error"):
+                        ev = {**ev, "slot_key": f.slot_key, "mode": f.mode}
+                    q.put_nowait(ev)
+                q.put_nowait({"type": "_end"})
+            tasks = [asyncio.ensure_future(pump(f, fq, joined)) for f, joined, fq in subs]
+            pending, cost, usage = len(members), 0.0, {}
+            try:
+                while pending:
+                    ev = await q.get()
+                    if ev.get("type") == "_end":
+                        pending -= 1
+                        continue
+                    if ev.get("type") == "fill" and not ev.get("shared"):
+                        cost += float(ev.get("cost_usd") or 0)
+                        for k, v in (ev.get("usage") or {}).items():
+                            usage[k] = usage.get(k, 0) + int(v or 0)
+                    yield sse(ev)
+                yield sse({"type": "done", "usage": usage, "cost_usd": round(cost, 6), "fills": len(members),
+                           "skipped": skipped, "ms": round((time.monotonic() - t0) * 1000)})
+            finally:
+                for f, _, fq in subs:
+                    f.turn.unsubscribe(fq)
+                for t in tasks:
+                    t.cancel()
+
+        return stream(body())
 
     def finisher(endpoint: str, poem: Poem, t0: float):
         async def finish(turn: Turn, outcome: Outcome, info: dict) -> None:
@@ -146,13 +199,16 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
             if outcome.error:
                 await turn.emit({"type": "error", "message": outcome.error})
             extra = {"session_turn": info.get("session_turn"), "first_turn": info.get("first"),
-                     "turn_ms": info.get("ms"), "wait_ms": round((time.monotonic() - t0) * 1000) - (info.get("ms") or 0)}
+                     "turn_ms": info.get("ms"), "wait_ms": info.get("wait_ms", round((time.monotonic() - t0) * 1000) - (info.get("ms") or 0))}
+            effort = info.get("effort")
             if ctx.slots:
                 await turn.emit({"type": "rejected", "count": ctx.rejected_count, "reasons": dict(ctx.rejected)})
                 extra.update(passed=dict(ctx.passed), rejected=ctx.rejected_count, rounds=ctx.rounds,
                              stop=ctx.stop_reason, first_candidate_ms=ctx.first_candidate_ms,
-                             first_ms_by_slot=dict(ctx.first_ms))
-            await turn.emit(finish_record(endpoint, outcome, round((time.monotonic() - t0) * 1000), poem.poem_id, **extra))
+                             first_ms_by_slot=dict(ctx.first_ms), mode=ctx.mode,
+                             **{k: info[k] for k in ("slot_key", "cold", "urgent") if k in info})
+            await turn.emit(finish_record(endpoint, outcome, round((time.monotonic() - t0) * 1000), poem.poem_id,
+                                          effort, **extra))
         return finish
 
     def new_ctx(poem: Poem, turn_holder: list) -> Ctx:
@@ -169,28 +225,54 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
             slots[key] = {**sl.model_dump(exclude={"slot_key"}), "want": n if (slot and i == 0) else settings.pool_ahead_n}
         return slots, (next(iter(slots)) if slot and slots else None)
 
-    def pool_turn(endpoint: str, poem: Poem, slot: Slot | None, ahead: list[Slot], n: int):
+    def research(s: Session, poem: Poem, t0: float) -> tuple[Turn | None, bool]:
+        """The poem's research turn (the session's first and only turn, warm effort): (the turn, started now).
+        The running one if it runs; None when it is over."""
+        running = s.running()
+        if running:
+            return running, False
+        if s.turns or s.settled.is_set():
+            return None, False
+        holder: list = []
+        ctx = new_ctx(poem, holder)
+        turn = Turn(kind="warm", ctx=ctx)
+        holder.append(turn)
+        sessions.start(s, turn, lambda first, changed: prompts.pool_prompt(ctx.poem, {}, s.seen, first, changed),
+                       lambda first: settings.warm_seconds, finisher("warm", poem, t0))
+        return turn, True
+
+    def pool_turn(endpoint: str, poem: Poem, slot: Slot | None, ahead: list[Slot], n: int, mode: str = "line"):
         t0 = time.monotonic()
         try:
             s = sessions.get(session_key(poem, "pool"), "pool", prompts.SYSTEM)
         except Busy:
             raise HTTPException(503, "agent busy: too many open sessions")
         slots, primary = slot_map(slot, ahead, n)
-        running = s.running()
-        if running and running.preemptible and (primary in running.ctx.slots if primary else endpoint == "warm"):
-            return respond(running, joined=True)            # the turn already working on this slot
-        if running and running.preemptible:
-            running.ctx.halt("preempted")
-        holder: list = []
-        ctx = new_ctx(poem, holder)
-        ctx.slots, ctx.primary, ctx.max_rounds = slots, primary, settings.pool_rounds
-        turn = Turn(kind=endpoint, ctx=ctx)
-        holder.append(turn)
-        resp = respond(turn)
-        sessions.start(s, turn, lambda first, changed: prompts.pool_prompt(ctx.poem, ctx.slots, s.seen, first, changed),
-                       lambda first: settings.warm_seconds if first else settings.pool_seconds,
-                       finisher(endpoint, poem, t0))
-        return resp
+        turn, started = research(s, poem, t0)
+        if not slots:                                    # /warm without a slot: research only
+            if turn:
+                return respond(turn, joined=not started)
+            done = Turn(kind="warm", ctx=new_ctx(poem, [None]))
+            done.events.append({"type": "done", "usage": {}, "cost_usd": 0, "terminal_reason": "already_warm"})
+            done.close()
+            return respond(done, joined=True)
+        poem_dict = poem.model_dump()
+        wanted = [(key, mode if key == primary else "line", sl) for key, sl in slots.items()]
+        if endpoint == "warm" and primary and mode == "line":       # a warm-up also readies next words for the slot
+            wanted.append((primary, "words", {**slots[primary], "want": settings.words_n}))
+        members, skipped = [], []
+        keep = set(slots)
+        for key, fill_mode, sl in wanted:
+            if endpoint == "warm" and s.passed[(key, fill_mode)] >= int(sl.get("want") or 0):
+                skipped.append({"slot_key": key, "mode": fill_mode})
+                continue
+            f = fills.running_for(s, key, fill_mode)
+            joined = f is not None
+            if not f:
+                f = fills.start(s, key, sl, fill_mode, poem_dict, endpoint == "pool" and key == primary, keep,
+                                finisher("fill", poem, t0))
+            members.append((f, joined))
+        return respond_fills(members, t0, skipped)
 
     @app.post("/chat", dependencies=[Depends(require_token)])
     async def chat(req: ChatRequest):
@@ -210,11 +292,11 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
 
     @app.post("/pool", dependencies=[Depends(require_token)])
     async def pool(req: PoolRequest):
-        return pool_turn("pool", req.poem, req.slot, req.ahead, req.n)
+        return pool_turn("pool", req.poem, req.slot, req.ahead, req.n, req.mode)
 
     @app.post("/warm", dependencies=[Depends(require_token)])
     async def warm(req: WarmRequest):
-        """Start (or join) the poem's research and first stanza batch in the background; SSE like /pool."""
+        """Start (or join) the poem's research and fill the stanza (line mode, plus next words for the slot)."""
         return pool_turn("warm", req.poem, req.slot, req.ahead, req.n)
 
     @app.post("/backtranslate", dependencies=[Depends(require_token)])
@@ -225,7 +307,7 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
         prompt = f"Dialect: {req.dialect or 'unspecified'}\nGreek:\n{req.greek}"
         outcome = await safe_run(Job(system=prompts.BACKTRANSLATE_SYSTEM, prompt=prompt, emit=ignore,
                                      seconds=settings.chat_seconds, max_turns=1))
-        done = finish_record("backtranslate", outcome, round((time.monotonic() - t0) * 1000))
+        done = finish_record("backtranslate", outcome, round((time.monotonic() - t0) * 1000), effort=settings.chat_effort)
         if outcome.error or not outcome.text.strip():
             raise HTTPException(502, outcome.error or "empty translation")
         return {"english": outcome.text.strip(), "usage": done["usage"], "cost_usd": done["cost_usd"]}

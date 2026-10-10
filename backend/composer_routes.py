@@ -28,8 +28,9 @@ Lint:
 Agent service (MELOS_COMPOSER_AGENT_URL, header X-Composer-Token); unreachable → 503 {"agent": "unavailable"}:
   POST /api/composer/poems/{id}/chat                {message, caret?}: agent /chat {poem, thread, message}; SSE relayed unchanged; the final assistant
                                                     message and the tool trace are stored when the stream ends
-  POST /api/composer/poems/{id}/pool                {line_id?, caret, prefix, remaining_template, n ≤ 40, ahead_lines?}:
-                                                    agent /pool {poem, slot, ahead, n}: the slot plus the empty lines
+  POST /api/composer/poems/{id}/pool                {line_id?, caret, prefix, remaining_template, n ≤ 40, ahead_lines?,
+                                                    mode? line|words}: agent /pool {poem, slot, ahead, n, mode}: the slot
+                                                    (whole lines, or 1-3 next words) plus the empty lines
                                                     after it (the rest of the stanza); SSE relayed; every `candidate`
                                                     stored under its own slot_key, read to the end even if the page
                                                     stops listening
@@ -433,6 +434,7 @@ class PoolIn(BaseModel):
     remaining_template: str | None = Field(None, max_length=40)
     n: int = Field(8, ge=1, le=40)
     ahead_lines: int | None = Field(None, ge=0, le=8)
+    mode: str = Field("line", pattern="^(line|words)$")     # whole-line continuations | next words (1-3 words)
 
 
 def slot_key(line_position, prefix: str, settings: dict | None) -> str:
@@ -492,7 +494,7 @@ async def fill_pool(poem_id: int, body: PoolIn):
     slot = {"line_position": caret.get("line_position"), "caret": caret.get("char_offset"), "prefix": body.prefix,
             "remaining_template": body.remaining_template, "line_id": body.line_id, "slot_key": key}
     ahead = ahead_slots(context, position, body.ahead_lines)
-    opened = await _open_stream("/pool", {"poem": context, "slot": slot, "ahead": ahead, "n": body.n})
+    opened = await _open_stream("/pool", {"poem": context, "slot": slot, "ahead": ahead, "n": body.n, "mode": body.mode})
     if isinstance(opened, JSONResponse):
         return opened
     # Detached: the agent's candidates for every slot are stored even if the page stops listening (caret moved).

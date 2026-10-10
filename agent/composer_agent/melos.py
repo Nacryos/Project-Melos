@@ -17,6 +17,7 @@ import httpx
 from claude_agent_sdk import create_sdk_mcp_server, tool
 
 SERVER = "melos"
+WORDS_MAX = 3            # a next-words candidate is one to three words
 Emit = Callable[[dict], Awaitable[None]]
 
 
@@ -119,6 +120,7 @@ class Ctx:
     poem: dict
     slots: dict = field(default_factory=dict)
     primary: str | None = None
+    mode: str = "line"                                  # line: whole-line continuations | words: 1-3 words
     max_rounds: int = 4
     rounds: int = 0
     passed: Counter = field(default_factory=Counter)
@@ -224,6 +226,11 @@ async def _propose(ctx: Ctx, args: dict) -> dict:
         if ctx.slots and key not in ctx.slots:
             unknown.append(f"- {g}: unknown slot {key!r}; use one of {', '.join(ctx.slots)}")
             continue
+        if ctx.mode == "words" and (len(g.split()) > WORDS_MAX or "\n" in g):   # next words: short, one line
+            ctx.rejected_count += 1
+            ctx.rejected["words_length"] += 1
+            unknown.append(f"- [{key}] {g}: too long for next words (one to three words, no line break)")
+            continue
         seen = ctx.seen.setdefault(key, set())
         if not g or g in seen:
             dupes += 1
@@ -245,7 +252,7 @@ async def _propose(ctx: Ctx, args: dict) -> dict:
             slot = ctx.slots.get(key) or {}
             await ctx.emit({"type": "candidate", "greek": cand["greek"], "english_span": cand.get("english_span", ""),
                             "slots": cand.get("slots", ""), "evidence": list(cand.get("evidence") or []),
-                            "checks": res["checks"], "scansion": res.get("scansion"),
+                            "checks": res["checks"], "scansion": res.get("scansion"), "mode": ctx.mode,
                             **({"slot_key": key, "line_position": slot.get("line_position"),
                                 "prefix": slot.get("prefix", "")} if key else {})})
         else:
