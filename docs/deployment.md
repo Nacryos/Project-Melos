@@ -1,5 +1,24 @@
 # Deployment handoff
 
+## Current: release W — owner-only composer with the Fable 5.1 agent (2026-10-10, ~1:25 AM PDT)
+
+Public backend: image `melos-api:20261010w` (code layer atop `melos-api:20261009u`, built from `composer-w` 0300f1e on
+Basecamp in `/home/alvin/melos-w/src`), promoted with `sh /home/alvin/melos-w/src/deploy/release_w.sh promote`; the
+previous container is kept stopped as `melos-api-before-w`. Agent service: container `melos-composer-agent`
+(image `melos-composer-agent:w3`, network `melos-net`, internal only), started with `agent/run.sh w3` and
+`MELOS_API_URL=http://melos-api:8791`; key mounted from `~/.config/basecamp/keys/anthropic-api.key`; shared token
+`services/melos/secrets/composer-agent/token`; usage log `services/melos/composer-agent-state/usage.jsonl`.
+Frontend: Vercel CLI from the Mac worktree `~/Projects/melos-v` (`vercel deploy --prod --yes --build-env
+MELOS_READER_ONLY=1`, with `.vercelignore` for the venvs) → `project-melos-3x7dy1p8g`; `/composer` is rewritten to the
+API and served only to the signed-in owner (signed out: 404). Checks after promote: signed-out `/composer`,
+`/api/composer/*`, `/api/compose/*` 404; `deploy/owner_login_check.py` 0 failures; owner sign-in through
+greeklyric.com, `/composer` 200, poem create/archive, `/api/composer/backtranslate` through the production agent.
+Settings: pool effort medium (forked fills, 4 parallel, words tier first), research and chat Fable 5.1 xhigh
+(`docs/composer/agent.md`). **Rollback:** `sh /home/alvin/melos-w/src/deploy/release_w.sh rollback` (restarts the
+kept U container), `docker stop melos-composer-agent`, then `vercel promote
+https://project-melos-d16bjzw9h-nacryos-projects.vercel.app --yes` (the release-u frontend). Never push to `main`:
+Vercel's git integration deploys the stale main frontend to production (incident 2026-10-09).
+
 ## Current: release U — composer-ready backend: draft analysis, dialect spellings, each fragment counted once, fast-lookup and analysis fixes, concept and line-level parallels, word latency (2026-10-09)
 
 Public backend: image `melos-api:20261009u`
