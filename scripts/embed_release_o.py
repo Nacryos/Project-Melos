@@ -60,18 +60,23 @@ def encode(args):
     import torch
     from sentence_transformers import SentenceTransformer
     from scripts.build_embeddings import encode_passage_batch, MODEL_NAME, MODEL_REVISION
-    if not torch.cuda.is_available():
-        raise SystemExit("CUDA unavailable: the published contract is float16 on CUDA")
+    # --device cpu: a small addition (the 59 literal-translation rows, 2026-10-10) encoded in float32 on CPU and
+    # stored as float16; the receipt records the device. Without it the published contract (float16 on CUDA) holds.
+    device = getattr(args, "device", None) or "cuda"
+    if device == "cuda" and not torch.cuda.is_available():
+        raise SystemExit("CUDA unavailable: the published contract is float16 on CUDA (pass --device cpu for a small addition)")
     todo = json.loads(Path(args.todo).read_text(encoding="utf-8"))
-    model = SentenceTransformer(MODEL_NAME, revision=MODEL_REVISION, device="cuda", local_files_only=True)
-    model.half()
+    model = SentenceTransformer(MODEL_NAME, revision=MODEL_REVISION, device=device,
+                                local_files_only=os.environ.get("MELOS_ALLOW_MODEL_DOWNLOAD") != "1")
+    if device == "cuda":
+        model.half()
     model.max_seq_length = 512
     matrix, windows = encode_passage_batch(model, [r["text"] for r in todo], 16, 512)
     if matrix.shape != (len(todo), 1024) or not np.isfinite(matrix).all():
         raise SystemExit("unexpected vector shape")
     np.save(args.out, matrix.astype(np.float16) if matrix.dtype != np.float16 else matrix)
     Path(args.out).with_suffix(".receipt.json").write_text(json.dumps({
-        "model": MODEL_NAME, "model_revision": MODEL_REVISION, "precision": "float16", "device": "cuda",
+        "model": MODEL_NAME, "model_revision": MODEL_REVISION, "precision": "float16", "device": device,
         "created_at": datetime.now(timezone.utc).isoformat(), "dtype": str(matrix.dtype),
         "rows": [{"id": r["id"], "text_sha256": r["text_sha256"], "windows": n} for r, n in zip(todo, windows)]},
         ensure_ascii=False, indent=1), encoding="utf-8")
@@ -140,6 +145,7 @@ def main():
     p.add_argument("step", choices=["export", "encode", "assemble"])
     for name in ("corpus", "manifest", "stage", "embeddings", "todo", "vectors", "out"):
         p.add_argument("--" + name)
+    p.add_argument("--device", choices=["cuda", "cpu"], default="cuda", help="encode: cpu only for a small addition")
     args = p.parse_args()
     {"export": export, "encode": encode, "assemble": assemble}[args.step](args)
 

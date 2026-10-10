@@ -722,7 +722,9 @@ def passage(id: str):
         # Explicit collector links take priority; citation equality is only a related
         # edition candidate, not a claim that two fragment numbering systems agree.
         related = con.execute("SELECT data FROM passages WHERE id<>? AND (json_extract(data,'$.parent_id')=? OR id=? OR (source=? AND json_extract(data,'$.source_url')=? AND json_extract(data,'$.metadata.scope') IN ('page','source_section'))) LIMIT 50",(id,id,result.get('parent_id',''),result.get('source',''),result.get('source_url',''))).fetchall()
-        result['related'] = [unpack(r) for r in related]
+        # The owner-commissioned literal translations (quality machine_translation) are search rows and the
+        # reader's fallback panel (`literal_translation` below), never "related source material".
+        result['related'] = [record for record in (unpack(r) for r in related) if record.get('quality') != 'machine_translation']
         # Other indexed copies of exactly this text (aggregator mirrors or
         # editions printing the same words), listed so none is hidden.
         if legacy_schema():
@@ -754,6 +756,9 @@ def passage(id: str):
     from .translation_comparisons import for_passage as translation_comparisons_for_passage
     if (translation_comparisons := translation_comparisons_for_passage(result)) is not None:
         result['translation_comparisons'] = translation_comparisons
+    from .literal_translations import for_passage as literal_translation_for_passage
+    if (literal_translation := literal_translation_for_passage(result)) is not None:
+        result['literal_translation'] = literal_translation
     return result
 
 
@@ -1274,7 +1279,7 @@ def search(q:str='',mode:str='words',author:str='',language:str='',edition:str='
                 marks=','.join('?' for _ in author_keys)
                 records=[unpack(row) for row in con.execute(f'''
                     SELECT p.data FROM passages p WHERE author_key(p.author) IN ({marks})
-                    OR (p.kind IN ('translation','commentary') AND EXISTS (
+                    OR (p.kind IN ('translation','commentary') AND p.quality<>'machine_translation' AND EXISTS (
                         SELECT 1 FROM passages parent
                         WHERE parent.id=json_extract(p.data,'$.parent_id')
                           AND parent.kind='text' AND parent.language='grc'

@@ -337,3 +337,4 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .author-phrases .phrases-more{margin-top:6px;border:1px solid #b4c1bd;background:transparent;color:var(--sea,#2b5a87);padding:3px 10px;font-size:.85rem;cursor:pointer}
 .author-phrases .phrases-empty{color:#5c6b7d;font-size:.88rem}
 @media (max-width:820px){.reader-hero .tune-toggle{top:76px}}
+.literal-translation .literal-lines{margin:10px 0 4px}.literal-line{display:grid;grid-template-columns:2.2em 1fr;column-gap:8px;row-gap:0;align-items:baseline;padding:4px 0;border-top:1px solid var(--line)}.literal-line:first-child{border-top:0}.literal-label{grid-row:1/span 2;color:var(--muted);font:11px/1.6 Georgia,serif;text-align:right}.literal-greek{margin:0;font:17px/1.5 "Gentium Book Plus","GFS Didot",Georgia,serif;color:var(--ink);overflow-wrap:anywhere}.literal-english{margin:0 0 2px;color:var(--muted);font:italic 15px/1.45 Georgia,serif;overflow-wrap:anywhere}

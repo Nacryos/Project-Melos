@@ -37,7 +37,8 @@ def eligible(row: sqlite3.Row) -> bool:
     return (
         bool(row["text"] and row["text"].strip())
         and row["kind"] in {"text", "translation", "commentary"}
-        and row["quality"] in {"source_text", "machine_corrected_ocr"}
+        and (row["quality"] in {"source_text", "machine_corrected_ocr"}
+             or (row["quality"] == "machine_translation" and row["kind"] == "translation"))
         and row["language"] in {"grc", "ell", "eng", "lat", "ita", "fra", "deu", "mul"}
     )
 
@@ -278,8 +279,8 @@ def build(
         "counts_by_source": dict(Counter(r["source"] for r in selected)),
         "rows_file": rows_file,
         "vectors_file": vectors_file,
-        "searchable_qualities": ["source_text", "machine_corrected_ocr"],
-        "indexed_text": "Original text from passages.text; source_text and explicitly labelled machine_corrected_ocr (not independently verified transcription); declared Ancient Greek, Modern Greek, English, Latin, Italian, French, German and multilingual text/translation/commentary",
+        "searchable_qualities": ["source_text", "machine_corrected_ocr", "machine_translation"],
+        "indexed_text": "Original text from passages.text; source_text and explicitly labelled machine_corrected_ocr (not independently verified transcription); declared Ancient Greek, Modern Greek, English, Latin, Italian, French, German and multilingual text/translation/commentary; machine_translation rows (owner-commissioned literal English renderings linked to their Greek poem) as translation only",
     }
     tmp = index_dir / f"manifest-{build_id}.tmp"
     tmp.write_text(json.dumps(manifest, ensure_ascii=False, indent=2), encoding="utf-8")

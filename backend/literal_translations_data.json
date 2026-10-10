@@ -1,0 +1,4000 @@
+{
+ "schema": "literal_interlinear_translations",
+ "schema_version": 1,
+ "source_file": "data/campbell_glp/literal_translations/claude-fable-5.1-2026-10-10.json",
+ "source_sha256": "af64a797c065fa287bea63530b602a09fe6e5a9ae490d45580071410b7039404",
+ "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+ "translator": "Claude Fable 5.1 (Anthropic language model), prompted and reviewed for alignment by the site owner",
+ "produced_at": "2026-10-10",
+ "status": "unpublished machine translation; owner-commissioned; not a published source",
+ "method": "One English line per printed Greek line, as literal as English allows; word order moved across a line only where the English would otherwise make no sense. Papyrus gaps and editorial supplements are rendered only as far as Campbell prints them; dots and brackets are kept. Alcaeus 350: the one-line gap in the stored text stands for Strabo’s prose frame and is rendered in parentheses.",
+ "display_policy": "fallback_only",
+ "model_eligible": false,
+ "selection_aligned": false,
+ "exact_edition_alignment": false,
+ "line_aligned": true,
+ "record_count": 59,
+ "line_count": 506,
+ "records": [
+  {
+   "campbell_record_id": "campbell-glp:sappho:1",
+   "campbell_identity": {
+    "edition_fragment": "1",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "db3cff1a902f0f6b7d3a8e2b8ca29f1693a57cd4e1ba3aeca345d7f8544924ca",
+    "line_count": 28,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ποικιλόθρον’ ἀθανάτ’ Ἀφρόδιτα,",
+     "english": "Richly-throned immortal Aphrodite,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "παῖ Δίος δολόπλοκε, λίσσομαί σε,",
+     "english": "child of Zeus, weaver of wiles, I beseech you,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "μή μ’ ἄσαισι μηδ’ ὀνίαισι δάμνα,",
+     "english": "do not with anguish nor with sorrows crush,"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "πότνια, θῦμον,",
+     "english": "lady, my heart,"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "ἀλλὰ τυίδ’ ἔλθ’, αἴ ποτα κἀτέρωτα",
+     "english": "but come hither, if ever at another time too"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "τὰς ἔμας αὔδας ἀίοισα πήλοι",
+     "english": "my voice, hearing it from afar,"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "ἔκλυες, πάτρος δὲ δόμον λίποισα",
+     "english": "you heeded, and leaving your father’s house,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "χρύσιον ἦλθες",
+     "english": "golden, you came,"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "ἄρμ’ ὐπασδεύξαισα· κάλοι δέ σ’ ἆγον",
+     "english": "having yoked your chariot; and fair ones brought you,"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "ὤκεες στροῦθοι περὶ γᾶς μελαίνας",
+     "english": "swift sparrows, over the black earth"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "πύκνα δίννεντες πτέρ’ ἀπ’ ὠράνωἴθε-",
+     "english": "whirling their close-set wings, from heaven through the mid-"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "ρος διὰ μέσσω,",
+     "english": "air;"
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": "αἶψα δ’ ἐξίκοντο· σὺ δ’, ὦ μάκαιρα,",
+     "english": "and swiftly they arrived; and you, O blessed one,"
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "μειδιαίσαισ’ ἀθανάτῳ προσώπῳ",
+     "english": "smiling with your immortal face,"
+    },
+    {
+     "index": 14,
+     "label": "15",
+     "greek": "ἤρε’ ὄττι δηὖτε πέπονθα κὤττι",
+     "english": "asked what again I had suffered and why"
+    },
+    {
+     "index": 15,
+     "label": "",
+     "greek": "δηὖτε κάλημμι,",
+     "english": "again I was calling,"
+    },
+    {
+     "index": 16,
+     "label": "",
+     "greek": "κὤττι μοι μάλιστα θέλω γένεσθαι",
+     "english": "and what I most wished to happen for me"
+    },
+    {
+     "index": 17,
+     "label": "",
+     "greek": "μαινόλᾳ θύμῳ· τίνα δηὖτε πείθω",
+     "english": "in my maddened heart: ‘Whom again am I to persuade"
+    },
+    {
+     "index": 18,
+     "label": "",
+     "greek": "ἄψ σ’ ἄγην ἐς Ϝὰν φιλότατα; τίς σ’, ὦ",
+     "english": "to lead you back into her love? Who, O"
+    },
+    {
+     "index": 19,
+     "label": "20",
+     "greek": "Ψάπφ’, ἀδικήει;",
+     "english": "Sappho, wrongs you?"
+    },
+    {
+     "index": 20,
+     "label": "",
+     "greek": "καὶ γὰρ αἰ φεύγει, ταχέως διώξει·",
+     "english": "For if she flees, soon she will pursue;"
+    },
+    {
+     "index": 21,
+     "label": "",
+     "greek": "αἰ δὲ δῶρα μὴ δέκετ’, ἀλλὰ δώσει·",
+     "english": "and if she does not accept gifts, yet she will give them;"
+    },
+    {
+     "index": 22,
+     "label": "",
+     "greek": "αἰ δὲ μὴ φίλει, ταχέως φιλήσει",
+     "english": "and if she does not love, soon she will love"
+    },
+    {
+     "index": 23,
+     "label": "",
+     "greek": "κωὐκ ἐθέλοισα.",
+     "english": "even against her will.’"
+    },
+    {
+     "index": 24,
+     "label": "25",
+     "greek": "ἔλθε μοι καὶ νῦν, χαλέπαν δὲ λῦσον",
+     "english": "Come to me now too, and from harsh"
+    },
+    {
+     "index": 25,
+     "label": "",
+     "greek": "ἐκ μερίμναν, ὄσσα δέ μοι τέλεσσαι",
+     "english": "cares release me, and all that for me to be accomplished"
+    },
+    {
+     "index": 26,
+     "label": "",
+     "greek": "θῦμος ἰμέρρει, τέλεσον· σὺ δ’ αὔτα",
+     "english": "my heart longs for, accomplish; and you yourself"
+    },
+    {
+     "index": 27,
+     "label": "",
+     "greek": "σύμμαχος ἔσσο.",
+     "english": "be my ally."
+    }
+   ],
+   "text": "Richly-throned immortal Aphrodite,\nchild of Zeus, weaver of wiles, I beseech you,\ndo not with anguish nor with sorrows crush,\nlady, my heart,\nbut come hither, if ever at another time too\nmy voice, hearing it from afar,\nyou heeded, and leaving your father’s house,\ngolden, you came,\nhaving yoked your chariot; and fair ones brought you,\nswift sparrows, over the black earth\nwhirling their close-set wings, from heaven through the mid-\nair;\nand swiftly they arrived; and you, O blessed one,\nsmiling with your immortal face,\nasked what again I had suffered and why\nagain I was calling,\nand what I most wished to happen for me\nin my maddened heart: ‘Whom again am I to persuade\nto lead you back into her love? Who, O\nSappho, wrongs you?\nFor if she flees, soon she will pursue;\nand if she does not accept gifts, yet she will give them;\nand if she does not love, soon she will love\neven against her will.’\nCome to me now too, and from harsh\ncares release me, and all that for me to be accomplished\nmy heart longs for, accomplish; and you yourself\nbe my ally.",
+   "note": "Hymn to Aphrodite (the only poem of Sappho preserved complete).",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:2",
+   "campbell_identity": {
+    "edition_fragment": "2",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "961602f971ae17be82d3f9ddf8b114d4a27be02247f7f858878fac6a28094c77",
+    "line_count": 16,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "δεῦρύ μ’ ἐκ Κρήτας ἐπ[ὶ τόνδ]ε ναῦον",
+     "english": "Hither to me from Crete, to this holy"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ἄγνον, ὄππ[ᾳ τοι] χάριεν μὲν ἄλσος",
+     "english": "temple, where is your graceful grove"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "μαλί[αν], βῶμοι δὲ τεθυμιάμε-",
+     "english": "of apple-trees, and altars smoking"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "νοι [λι]βανώτῳ·",
+     "english": "with frankincense;"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "ἐν δ’ ὔδωρ ψῦχρον κελάδει δι’ ὔσδων",
+     "english": "and in it cold water sounds through apple-"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "μαλίνων, βρόδοισι δὲ παῖς ὀ χῶρος",
+     "english": "boughs, and with roses the whole place"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "ἐσκίαστ’, αἰθυσσομένων δὲ φύλλων",
+     "english": "is shadowed, and from the quivering leaves"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "κῶμα καταίρει·",
+     "english": "deep sleep comes down;"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "ἐν δὲ λείμων ἰππόβοτος τέθαλεν",
+     "english": "and in it a horse-pasturing meadow has bloomed"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "ἠρίνοισιν ἄνθεσιν, αἰ δ’ ἄηται",
+     "english": "with spring flowers, and the breezes"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "μέλλιχα πνέοισιν [",
+     "english": "blow gently ["
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "[          ]",
+     "english": "[          ]"
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": "ἔνθα δὴ σὺ . . . . έλοισα Κύπρι",
+     "english": "There do you . . . taking, Cypris,"
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "χρυσίαισιν ἐν κυλίκεσσιν ἄβρως",
+     "english": "in golden cups gracefully"
+    },
+    {
+     "index": 14,
+     "label": "15",
+     "greek": "ὀμμεμείχμενον θαλίαισι νέκταρ",
+     "english": "nectar mingled with the festivities"
+    },
+    {
+     "index": 15,
+     "label": "",
+     "greek": "οἰνοχόαισον",
+     "english": "pour out like wine."
+    }
+   ],
+   "text": "Hither to me from Crete, to this holy\ntemple, where is your graceful grove\nof apple-trees, and altars smoking\nwith frankincense;\nand in it cold water sounds through apple-\nboughs, and with roses the whole place\nis shadowed, and from the quivering leaves\ndeep sleep comes down;\nand in it a horse-pasturing meadow has bloomed\nwith spring flowers, and the breezes\nblow gently [\n[          ]\nThere do you . . . taking, Cypris,\nin golden cups gracefully\nnectar mingled with the festivities\npour out like wine.",
+   "note": "Invocation of Aphrodite to her sacred grove (the ‘ostracon’ poem).",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:5",
+   "campbell_identity": {
+    "edition_fragment": "5",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "3a4b058caa99c852801539246ac3d6f852a0a9d9d9804bcdb5f0a5ef0d2ca292",
+    "line_count": 12,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "Κύπρι καὶ] Νηρήϊδες, ἀβλάβη[ν μοι",
+     "english": "Cypris and] Nereids, unharmed [to me"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "τὸν κασί]γνητον δ[ό]τε τυίδ’ ἴκεσθα[ι",
+     "english": "my brother] grant to arrive here,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "κὤσσα Ϝ]οι θύμῳ κε θέλῃ γένεσθαι",
+     "english": "and whatever] in his heart he wishes to happen,"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "πάντα τε]λέσθην,",
+     "english": "all be] fulfilled,"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "ὄσσα δὲ πρ]όσθ’ ἄμβροτε πάντα λῦσα[ι",
+     "english": "and all that] before he erred in, all of it may he atone for,"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "καὶ φίλοισ]ι Ϝοῖσι χάραν γένεσθαι",
+     "english": "and to his friends] a joy may he become"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "κὠνίαν ἔ]χθροισι, γένοιτο δ’ ἄμμι",
+     "english": "and a grief] to his enemies, and to us may there be"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "πῆμ’ ἔτι μ]ηδ’ εἶς·",
+     "english": "trouble] no longer, not one;"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "τὰν κασιγ]νήταν δὲ θέλοι πόησθαι",
+     "english": "and his sister] may he wish to make"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "ἔμμορον] τίμας, [ὀν]ίαν δὲ λύγραν",
+     "english": "a sharer] of honour, and grievous pain"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "]οτοισι π[ά]ροιθ’ ἀχεύων",
+     "english": "] . . . formerly grieving"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "].να",
+     "english": "] . . ."
+    }
+   ],
+   "text": "Cypris and] Nereids, unharmed [to me\nmy brother] grant to arrive here,\nand whatever] in his heart he wishes to happen,\nall be] fulfilled,\nand all that] before he erred in, all of it may he atone for,\nand to his friends] a joy may he become\nand a grief] to his enemies, and to us may there be\ntrouble] no longer, not one;\nand his sister] may he wish to make\na sharer] of honour, and grievous pain\n] . . . formerly grieving\n] . . .",
+   "note": "Prayer for the safe return of Sappho’s brother (Charaxus).",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:15b",
+   "campbell_identity": {
+    "edition_fragment": "15b",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "3510684c1aa623e441930cb5838c6ba959d03c29cda902b077895bb0c0e06e9f",
+    "line_count": 4,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "Κύ]πρι, κα[ί σ]ε πι[κροτάτ]αν ἐπεύρ[οι,",
+     "english": "Cypris, and may she find you most bitter,"
+    },
+    {
+     "index": 1,
+     "label": "10",
+     "greek": "μη]δὲ καυχάσ[α]ιτο τόδ’ ἐννέ[ποισα",
+     "english": "and may she not boast, saying this,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "Δ]ωρίχα, τὸ δεύ[τ]ερον ὠς πόθε[ννον",
+     "english": "Doricha, that a second time to a longed-for"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "εἰς] ἔρον ἦλθε.",
+     "english": "love he came."
+    }
+   ],
+   "text": "Cypris, and may she find you most bitter,\nand may she not boast, saying this,\nDoricha, that a second time to a longed-for\nlove he came.",
+   "note": "Against Doricha, the courtesan who entangled Sappho’s brother.",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:16",
+   "campbell_identity": {
+    "edition_fragment": "16",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "0282652b55719e7970f8653db15c4e302841d9824ccbf1621428f8aa3e7f1608",
+    "line_count": 20,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ο]ἰ μὲν ἰππήων στρότον οἰ δὲ πέσδων",
+     "english": "Some say a host of horsemen, others of foot-soldiers,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "οἰ δὲ νάων φαῖσ’ ἐπ[ὶ] γᾶν μέλαι[ν]αν",
+     "english": "others of ships, upon the black earth"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ἔ]μμεναι κάλλιστον, ἔγω δὲ κῆν’ ὄτ-",
+     "english": "is the most beautiful thing; but I say it is that"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "τω τις ἔραται·",
+     "english": "which one loves."
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "πά]γχυ δ’ εὔμαρες σύνετον πόησαι",
+     "english": "Wholly easy it is to make this understood"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "π]άντι τ[ο]ῦτ’, ἀ γὰρ πόλυ περσκέθοισα",
+     "english": "by everyone; for she who far surpassed"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "κάλλος [ἀνθ]ρώπων Ἐλένα [τὸ]ν ἄνδρα",
+     "english": "mankind in beauty, Helen, her husband,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "τὸν [πανάρ]ιστον",
+     "english": "the noblest of all,"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "καλλ[ίποι]σ’ ἔβα ’ς Τροΐαν πλέοι[σα",
+     "english": "left behind and went sailing to Troy,"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "κωὐδ[ὲ πα]ῖδος οὐδὲ φίλων το[κ]ήων",
+     "english": "and neither of her child nor of her dear parents"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "πά[μπαν] ἐμνάσθη, ἀλλὰ παράγαγ’ αὔταν",
+     "english": "at all took thought, but led her astray"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "]σαν",
+     "english": "] . . ."
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": "]αμπτον γὰρ [",
+     "english": "] for . . . ["
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "] . . . κούφως τ[          ]οησ̣[.]ν̣",
+     "english": "] . . . lightly [          ] . . ."
+    },
+    {
+     "index": 14,
+     "label": "15",
+     "greek": ". .]με νῦν Ἀνακτορί[ας ὀ]νέμναι-",
+     "english": ". .] me now of Anactoria has reminded,"
+    },
+    {
+     "index": 15,
+     "label": "",
+     "greek": "σ’ οὐ] παρεοίσας·",
+     "english": "who is not here;"
+    },
+    {
+     "index": 16,
+     "label": "",
+     "greek": "τᾶ]ς κε βολλοίμαν ἔρατόν τε βᾶμα",
+     "english": "whose lovely step I would rather"
+    },
+    {
+     "index": 17,
+     "label": "",
+     "greek": "κἀμάρυχμα λάμπρον ἴδην προσώπω",
+     "english": "see, and the bright sparkle of her face,"
+    },
+    {
+     "index": 18,
+     "label": "",
+     "greek": "ἢ τὰ Λύδων ἄρματα κἀν ὄπλοισι",
+     "english": "than the Lydians’ chariots and in armour"
+    },
+    {
+     "index": 19,
+     "label": "20",
+     "greek": "πεσδομ]άχεντας.",
+     "english": "foot-soldiers fighting."
+    }
+   ],
+   "text": "Some say a host of horsemen, others of foot-soldiers,\nothers of ships, upon the black earth\nis the most beautiful thing; but I say it is that\nwhich one loves.\nWholly easy it is to make this understood\nby everyone; for she who far surpassed\nmankind in beauty, Helen, her husband,\nthe noblest of all,\nleft behind and went sailing to Troy,\nand neither of her child nor of her dear parents\nat all took thought, but led her astray\n] . . .\n] for . . . [\n] . . . lightly [          ] . . .\n. .] me now of Anactoria has reminded,\nwho is not here;\nwhose lovely step I would rather\nsee, and the bright sparkle of her face,\nthan the Lydians’ chariots and in armour\nfoot-soldiers fighting.",
+   "note": "The ‘priamel’ poem: what is most beautiful; Helen and Anactoria.",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:31",
+   "campbell_identity": {
+    "edition_fragment": "31",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "535d50276f894091c0e51719be7977b24d0c630f2ffc593014793412ce049f04",
+    "line_count": 17,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "φαίνεταί μοι κῆνος ἴσος θέοισιν",
+     "english": "He seems to me equal to the gods"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ἔμμεν’ ὤνηρ, ὄττις ἐνάντιός τοι",
+     "english": "to be, that man, whoever opposite you"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ἰσδάνει καὶ πλάσιον ἆδυ φωνεί-",
+     "english": "sits and close by, as you sweetly speak,"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "σας ὐπακούει",
+     "english": "listens"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "καὶ γελαίσας ἰμέροεν, τό μ’ ἦ μὰν",
+     "english": "and as you laugh desirably, which truly"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "καρδίαν ἐν στήθεσιν ἐπτόαισεν·",
+     "english": "has set my heart fluttering in my breast;"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "ὠς γὰρ ἔς σ’ ἴδω βρόχε’, ὤς με φώναι-",
+     "english": "for when I look at you for a moment, then to speak"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "σ’ οὐδ’ ἒν ἔτ’ εἴκει,",
+     "english": "is no longer possible for me,"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "ἀλλ’ ἄκαν μὲν γλῶσσα †ἔαγε†, λέπτον",
+     "english": "but my tongue †is broken† in silence, and a thin"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "δ’ αὔτικα χρῷ πῦρ ὐπαδεδρόμηκεν,",
+     "english": "fire at once has run beneath my skin,"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "ὀππάτεσσι δ’ οὐδ’ ἒν ὄρημμ’, ἐπιρρόμ-",
+     "english": "and with my eyes I see nothing, and my ears"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "βεισι δ’ ἄκουαι,",
+     "english": "hum,"
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": "κὰδ δέ μ’ ἴδρως ψῦχρος ἔχει, τρόμος δὲ",
+     "english": "and cold sweat holds me down, and trembling"
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "παῖσαν ἄγρει, χλωροτέρα δὲ ποίας",
+     "english": "seizes me all over, and greener than grass"
+    },
+    {
+     "index": 14,
+     "label": "15",
+     "greek": "ἔμμι, τεθνάκην δ’ ὀλίγω ’πιδεύης",
+     "english": "I am, and little short of dying"
+    },
+    {
+     "index": 15,
+     "label": "",
+     "greek": "φαίνομ’ ἔμ’ αὔτ̣[ᾳ.",
+     "english": "I seem to myself."
+    },
+    {
+     "index": 16,
+     "label": "",
+     "greek": "ἀλλὰ πὰν τόλματον, ἐπεὶ †καὶ πένητα†",
+     "english": "But all must be endured, since †even a poor man†"
+    }
+   ],
+   "text": "He seems to me equal to the gods\nto be, that man, whoever opposite you\nsits and close by, as you sweetly speak,\nlistens\nand as you laugh desirably, which truly\nhas set my heart fluttering in my breast;\nfor when I look at you for a moment, then to speak\nis no longer possible for me,\nbut my tongue †is broken† in silence, and a thin\nfire at once has run beneath my skin,\nand with my eyes I see nothing, and my ears\nhum,\nand cold sweat holds me down, and trembling\nseizes me all over, and greener than grass\nI am, and little short of dying\nI seem to myself.\nBut all must be endured, since †even a poor man†",
+   "note": "‘He seems to me equal to the gods’ (quoted by ‘Longinus’).",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:34",
+   "campbell_identity": {
+    "edition_fragment": "34",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "4f56765f83313fdbc737a096417422f012b1a965e11d2136a1fa9c72f36f0514",
+    "line_count": 4,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἄστερες μὲν ἀμφὶ κάλαν σελάνναν",
+     "english": "The stars around the fair moon"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ἂψ ἀπυκρύπτοισι φάεννον εἶδος",
+     "english": "hide back their shining form"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ὄπποτα πλήθοισα μάλιστα λάμπῃ",
+     "english": "whenever at the full she shines most"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "γᾶν",
+     "english": "upon the earth"
+    }
+   ],
+   "text": "The stars around the fair moon\nhide back their shining form\nwhenever at the full she shines most\nupon the earth",
+   "note": "",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:44",
+   "campbell_identity": {
+    "edition_fragment": "44",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "fda207b9f747779c6b9ee03ceea4726cdc9e4cdf9ca9065ecdb9fe71ea506bcf",
+    "line_count": 36,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "Κυπρο. [          ]ας·",
+     "english": "Cypro[s . . .                    ] . . . ;"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "κάρυξ ἦλθε θε[          ]ελε[. . .] . θεις",
+     "english": "the herald came [          ] . . . [. . .] . . ."
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "Ἴδαος ταδεκα . . . φ[. .] . ις τάχυς ἄγγελος",
+     "english": "Idaeus, . . . [. .] . the swift messenger"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "",
+     "english": "(one verse is missing)"
+    },
+    {
+     "index": 4,
+     "label": "",
+     "greek": "τάς τ’ ἄλλας Ἀσίας . [.]δε.αν κλέος ἄφθιτον·",
+     "english": "‘and of the rest of Asia . [.] . . . imperishable fame;"
+    },
+    {
+     "index": 5,
+     "label": "5",
+     "greek": "Ἔκτωρ καὶ συνέταιρ[ο]ι ἄγοισ’ ἐλικώπιδα",
+     "english": "Hector and his companions are bringing the lively-eyed,"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "Θήβας ἐξ ἰέρας Πλακίας τ’ ἀ[π’ ἀι]ν⟨ν⟩άω",
+     "english": "from holy Thebe and from ever-flowing Placia,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "ἄβραν Ἀνδρομάχαν ἐνὶ ναῦσιν ἐπ’ ἄλμυρον",
+     "english": "delicate Andromache in their ships over the salt"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "πόντον· πόλλα δ’ [ἐλί]γματα χρύσια κἄμματα",
+     "english": "sea; and many golden bracelets and garments"
+    },
+    {
+     "index": 9,
+     "label": "",
+     "greek": "πορφύρ[α] καταύτ[. .]να, ποίκιλ’ ἀθύρματα,",
+     "english": "of purple, . . . [. .] . . , intricate trinkets,"
+    },
+    {
+     "index": 10,
+     "label": "10",
+     "greek": "ἀργύρα τ’ ἀνάριθμα ποτήρια κἀλέφαις.",
+     "english": "and countless silver cups and ivory.’"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "ὢς εἶπ’· ὀτραλέως δ’ ἀνόρουσε πάτ[η]ρ φίλος·",
+     "english": "So he spoke; and nimbly his dear father leapt up;"
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": "φάμα δ’ ἦλθε κατὰ πτόλιν εὐρύχορον φίλοις·",
+     "english": "and the news went through the wide-spaced city to his friends;"
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "αὔτικ’ Ἰλίαδαι σατίναι[ς] ὐπ’ ἐυτρόχοις",
+     "english": "at once the sons of Ilus to the well-wheeled carriages"
+    },
+    {
+     "index": 14,
+     "label": "",
+     "greek": "ἆγον αἰμιόνοις, ἐπ[έ]βαινε δὲ παῖς ὄχλος",
+     "english": "yoked the mules, and the whole throng mounted"
+    },
+    {
+     "index": 15,
+     "label": "15",
+     "greek": "γυναίκων τ’ ἄμα παρθενίκα[ν] τ . . [. .]ο̣σφύρων,",
+     "english": "of women and together of maidens with . . . ankles,"
+    },
+    {
+     "index": 16,
+     "label": "",
+     "greek": "χῶρις δ’ αὖ Περάμοιο θύγ[α]τρες[",
+     "english": "and apart, the daughters of Priam ["
+    },
+    {
+     "index": 17,
+     "label": "",
+     "greek": "ἴππ[οις] δ’ ἄνδρες ὔπαγον ὐπ’ ἀρ[ματ-",
+     "english": "and the horses the men led under the chariots ["
+    },
+    {
+     "index": 18,
+     "label": "",
+     "greek": "π[          ]ες ἠίθεοι μεγάλω[σ]τι δ[",
+     "english": ". [     ] . the young men greatly ["
+    },
+    {
+     "index": 19,
+     "label": "",
+     "greek": "δ[          ]. ἀνίοχοι φ[. . . . .] . [",
+     "english": ". [     ] . charioteers [. . . . .] . ["
+    },
+    {
+     "index": 20,
+     "label": "20",
+     "greek": "π̣[          ´]ξα.ο[",
+     "english": ". [     ] . . . ["
+    },
+    {
+     "index": 21,
+     "label": "",
+     "greek": "",
+     "english": "(several verses are missing)"
+    },
+    {
+     "index": 22,
+     "label": "",
+     "greek": "ἴ]κελοι θέοι[ς",
+     "english": "like to the gods"
+    },
+    {
+     "index": 23,
+     "label": "",
+     "greek": "]ἄγνον ἀολ[λε-",
+     "english": "] holy, all together"
+    },
+    {
+     "index": 24,
+     "label": "",
+     "greek": "ὄ̣ρ̣ματ̣α̣ι̣[          ]νον ἐς Ἴλιο[ν,",
+     "english": "set out [          ] . . . to Ilium,"
+    },
+    {
+     "index": 25,
+     "label": "",
+     "greek": "αὖλος δ’ ἀδυ[μ]έλης [κίθαρίς] τ’ ὀνεμίγνυ[το",
+     "english": "and the sweet-sounding pipe and the lyre were mingled"
+    },
+    {
+     "index": 26,
+     "label": "25",
+     "greek": "καὶ ψ[ό]φο[ς κ]ροτάλ[ων, λιγέ]ως δ’ ἄρα πάρ[θενοι",
+     "english": "and the sound of castanets, and clearly then the maidens"
+    },
+    {
+     "index": 27,
+     "label": "",
+     "greek": "ἄειδον μέλος ἄγν[ον, ἴκα]νε δ’ ἐς αἴθ[ερα",
+     "english": "sang a holy song, and reached up to the heavens"
+    },
+    {
+     "index": 28,
+     "label": "",
+     "greek": "ἄχω θεσπεσία γελ[",
+     "english": "the divine echo . . . ["
+    },
+    {
+     "index": 29,
+     "label": "",
+     "greek": "πάντᾳ δ’ ἦς κὰτ ὄδο[ις",
+     "english": "and everywhere along the roads were"
+    },
+    {
+     "index": 30,
+     "label": "",
+     "greek": "κράτηρες φίαλαί τ’ ὀ[. . .]υεδε[. .] . . εακ[.] . [",
+     "english": "mixing-bowls and cups . [. . .] . . . [. .] . . . . [.] . ["
+    },
+    {
+     "index": 31,
+     "label": "30",
+     "greek": "μύρρα καὶ κασία λίβανός τ’ ὀνεμείχνυτο·",
+     "english": "myrrh and cassia and frankincense were mingled;"
+    },
+    {
+     "index": 32,
+     "label": "",
+     "greek": "γύναικες δ’ ἐλέλυσδον ὄσαι προγενέστερα[ι,",
+     "english": "and the women cried out in triumph, all the elder ones,"
+    },
+    {
+     "index": 33,
+     "label": "",
+     "greek": "πάντες δ’ ἄνδρες ἐπήρατον ἴαχον ὄρθιον",
+     "english": "and all the men raised a lovely high-pitched shout"
+    },
+    {
+     "index": 34,
+     "label": "",
+     "greek": "Πάον’ ὀνκαλέοντες ἐκάβολον εὐλύραν,",
+     "english": "calling on Paean, the far-shooter, skilled in the lyre,"
+    },
+    {
+     "index": 35,
+     "label": "",
+     "greek": "ὔμνην δ’ Ἔκτορα κ’Ἀνδρομάχαν θεοεικέλο[ις.",
+     "english": "and they sang of Hector and Andromache, godlike."
+    }
+   ],
+   "text": "Cypro[s . . .                    ] . . . ;\nthe herald came [          ] . . . [. . .] . . .\nIdaeus, . . . [. .] . the swift messenger\n(one verse is missing)\n‘and of the rest of Asia . [.] . . . imperishable fame;\nHector and his companions are bringing the lively-eyed,\nfrom holy Thebe and from ever-flowing Placia,\ndelicate Andromache in their ships over the salt\nsea; and many golden bracelets and garments\nof purple, . . . [. .] . . , intricate trinkets,\nand countless silver cups and ivory.’\nSo he spoke; and nimbly his dear father leapt up;\nand the news went through the wide-spaced city to his friends;\nat once the sons of Ilus to the well-wheeled carriages\nyoked the mules, and the whole throng mounted\nof women and together of maidens with . . . ankles,\nand apart, the daughters of Priam [\nand the horses the men led under the chariots [\n. [     ] . the young men greatly [\n. [     ] . charioteers [. . . . .] . [\n. [     ] . . . [\n(several verses are missing)\nlike to the gods\n] holy, all together\nset out [          ] . . . to Ilium,\nand the sweet-sounding pipe and the lyre were mingled\nand the sound of castanets, and clearly then the maidens\nsang a holy song, and reached up to the heavens\nthe divine echo . . . [\nand everywhere along the roads were\nmixing-bowls and cups . [. . .] . . . [. .] . . . . [.] . [\nmyrrh and cassia and frankincense were mingled;\nand the women cried out in triumph, all the elder ones,\nand all the men raised a lovely high-pitched shout\ncalling on Paean, the far-shooter, skilled in the lyre,\nand they sang of Hector and Andromache, godlike.",
+   "note": "The wedding of Hector and Andromache (papyrus; many gaps).",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:47",
+   "campbell_identity": {
+    "edition_fragment": "47",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "ce25cf1c37f3173f5f72ec71af8803a6f6023da2b80c68defc51e396d91fa22c",
+    "line_count": 2,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "Ἔρος δ’ ἐτίναξέ μοι",
+     "english": "Eros shook my"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "φρένας, ὠς ἄνεμος κὰτ ὄρος δρύσιν ἐμπέτων.",
+     "english": "heart, like a wind down a mountain falling upon oaks."
+    }
+   ],
+   "text": "Eros shook my\nheart, like a wind down a mountain falling upon oaks.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:49",
+   "campbell_identity": {
+    "edition_fragment": "49",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "543ea386fbde1f27ff97ec297135ee3ee2e2e88b86b5e65fa143f5f37c1da62f",
+    "line_count": 2,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἠράμαν μὲν ἔγω σέθεν Ἄτθι πάλαι ποτά· . . .",
+     "english": "I loved you, Atthis, once long ago . . ."
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "σμίκρα μοι πάις ἔμμεν’ ἐφαίνεο κἄχαρις.",
+     "english": "A small child you seemed to me, and graceless."
+    }
+   ],
+   "text": "I loved you, Atthis, once long ago . . .\nA small child you seemed to me, and graceless.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:55",
+   "campbell_identity": {
+    "edition_fragment": "55",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "0003b59bd5f9b53ac6cdef101370ab2dc397110cd3e1a0be16985e494300ad40",
+    "line_count": 4,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "κατθάνοισα δὲ κείσῃ οὐδέ ποτα μναμοσύνα σέθεν",
+     "english": "But when you are dead you will lie there, nor ever any memory of you"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ἔσσετ’ οὐδὲ πόθα εἰς ὔστερον· οὐ γὰρ πεδέχῃς βρόδων",
+     "english": "will there be, nor any longing afterwards; for you have no share in the roses"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "τὼν ἐκ Πιερίας, ἀλλ’ ἀφάνης κὰν Ἀίδα δόμῳ",
+     "english": "of Pieria, but unseen in the house of Hades too"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "φοιτάσῃς πεδ’ ἀμαύρων νεκύων ἐκπεποταμένα.",
+     "english": "you will roam among the shadowy dead, flown away from here."
+    }
+   ],
+   "text": "But when you are dead you will lie there, nor ever any memory of you\nwill there be, nor any longing afterwards; for you have no share in the roses\nof Pieria, but unseen in the house of Hades too\nyou will roam among the shadowy dead, flown away from here.",
+   "note": "To an uncultured woman.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:81b",
+   "campbell_identity": {
+    "edition_fragment": "81b",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "e5016e05818b00ca7b081c2800a6325bb4746a2fd3ec74b6a253c6dcc6b94265",
+    "line_count": 4,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "σὺ δὲ στεφάνοις, ὦ Δίκα, πέρθεσθ’ ἐράτοις φόβαισιν",
+     "english": "But you, Dica, put garlands round your lovely locks,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ὄρπακας ἀνήτω συναέρραισ’ ἀπάλαισι χέρσιν·",
+     "english": "binding together shoots of anise with your soft hands;"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "εὐάνθεα γὰρ †πέλεται† καὶ Χάριτες μάκαιραι",
+     "english": "for upon what is flowery †it is† the blessed Graces"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "μᾶλλον ποτόρην, ἀστεφανώτοισι δ’ ἀπυστρέφονται.",
+     "english": "look rather, but from the ungarlanded they turn away."
+    }
+   ],
+   "text": "But you, Dica, put garlands round your lovely locks,\nbinding together shoots of anise with your soft hands;\nfor upon what is flowery †it is† the blessed Graces\nlook rather, but from the ungarlanded they turn away.",
+   "note": "",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:94",
+   "campbell_identity": {
+    "edition_fragment": "94",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "633e783c3fbb138577a73b649cce009fc13dc9dd29de78dbc846bf7ac9c23675",
+    "line_count": 30,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "τεθνάκην δ’ ἀδόλως θέλω·",
+     "english": "‘Honestly, I wish I were dead.’"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ἄ με ψισδομένα κατελίμπανεν",
+     "english": "Weeping she was leaving me"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "πόλλα καὶ τόδ’ ἔειπέ̣ [μοι·",
+     "english": "with many tears, and said this [to me:"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "‘ᾤμ’ ὠς δεῖνα πεπ[όνθ]αμεν·",
+     "english": "‘Alas, what dreadful things we have suffered;"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "Ψάπφ’, ἦ μάν σ’ ἀέκοισ’ ἀπυλιμπάνω.’",
+     "english": "Sappho, truly against my will I leave you.’"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "τὰν δ’ ἔγω τάδ’ ἀμειβόμαν·",
+     "english": "And I answered her thus:"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "‘χαίροισ’ ἔρχεο κἄμεθεν",
+     "english": "‘Go and fare well, and me"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "μέμναισ’, οἶσθα γὰρ ὤς σε πεδήπομεν·",
+     "english": "remember, for you know how we cherished you;"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "αἰ δὲ μή, ἀλλά σ’ ἔγω θέλω",
+     "english": "and if not, yet I wish"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "ὄμναισαι [. . . .] . [. . .] . . αι",
+     "english": "to remind you [. . . .] . [. . .] . ."
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": ". . [          ] καὶ κάλ’ ἐπάσχομεν.",
+     "english": ". . [          ] and the fair things we experienced."
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "πό[λλοις γὰρ στεφάν]οις ἴων",
+     "english": "For many garlands of violets"
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": "καὶ βρ[όδων κρο]κίων τ’ ὔμοι",
+     "english": "and of roses and crocuses together"
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "κα . . [          ] πὰρ ἔμοι περεθήκαο,",
+     "english": ". . . [        ] by my side you put on,"
+    },
+    {
+     "index": 14,
+     "label": "15",
+     "greek": "καὶ πό[λλαις ὐπα]θύμιδας",
+     "english": "and many woven garlands"
+    },
+    {
+     "index": 15,
+     "label": "",
+     "greek": "πλέκ[ταις ἀμφ’ ἀ]πάλᾳ δέρᾳ",
+     "english": "around your soft neck"
+    },
+    {
+     "index": 16,
+     "label": "",
+     "greek": "ἀνθέων ἔ̣[βαλες] πεποημμέναις,",
+     "english": "made of flowers you threw,"
+    },
+    {
+     "index": 17,
+     "label": "",
+     "greek": "καὶ πό̣λ̣λ̣ῳ [          ]. μύρῳ",
+     "english": "and with much [        ] . perfume"
+    },
+    {
+     "index": 18,
+     "label": "",
+     "greek": "βρενθείῳ . [          ]ρ̣υ[. .]ν",
+     "english": "costly . [        ] . . [. .] ."
+    },
+    {
+     "index": 19,
+     "label": "20",
+     "greek": "ἐξαλείψαο κα[ὶ βασ]ιληίῳ,",
+     "english": "you anointed yourself, and with royal,"
+    },
+    {
+     "index": 20,
+     "label": "",
+     "greek": "καὶ στρώμν[αν ἐ]πὶ μολθάκαν",
+     "english": "and upon soft beds"
+    },
+    {
+     "index": 21,
+     "label": "",
+     "greek": "ἀπάλαν πα . [          ] . . . ων",
+     "english": "tender . . . [    ] . . ."
+    },
+    {
+     "index": 22,
+     "label": "",
+     "greek": "ἐξίης πόθο[ν          ] . νίδων",
+     "english": "you satisfied your longing [      ] . . ."
+    },
+    {
+     "index": 23,
+     "label": "",
+     "greek": "κωὔτε τις[          οὔ]τε̣ τι",
+     "english": "and there was no [        ] nor any"
+    },
+    {
+     "index": 24,
+     "label": "25",
+     "greek": "ἶρον οὐδυ[          ]",
+     "english": "holy place nor [          ]"
+    },
+    {
+     "index": 25,
+     "label": "",
+     "greek": "ἔπλετ’ ὄππ[οθεν ἄμ]μες ἀπέσκομεν",
+     "english": "from which we were absent,"
+    },
+    {
+     "index": 26,
+     "label": "",
+     "greek": "οὐκ ἄλσος . [          χ]ό̣ρος",
+     "english": "no grove . [      ] dance"
+    },
+    {
+     "index": 27,
+     "label": "",
+     "greek": "]ψοφος",
+     "english": "] sound"
+    },
+    {
+     "index": 28,
+     "label": "",
+     "greek": "] . . . οιδιαι",
+     "english": "] . . ."
+    },
+    {
+     "index": 29,
+     "label": "",
+     "greek": ". . . . .",
+     "english": ". . ."
+    }
+   ],
+   "text": "‘Honestly, I wish I were dead.’\nWeeping she was leaving me\nwith many tears, and said this [to me:\n‘Alas, what dreadful things we have suffered;\nSappho, truly against my will I leave you.’\nAnd I answered her thus:\n‘Go and fare well, and me\nremember, for you know how we cherished you;\nand if not, yet I wish\nto remind you [. . . .] . [. . .] . .\n. . [          ] and the fair things we experienced.\nFor many garlands of violets\nand of roses and crocuses together\n. . . [        ] by my side you put on,\nand many woven garlands\naround your soft neck\nmade of flowers you threw,\nand with much [        ] . perfume\ncostly . [        ] . . [. .] .\nyou anointed yourself, and with royal,\nand upon soft beds\ntender . . . [    ] . . .\nyou satisfied your longing [      ] . . .\nand there was no [        ] nor any\nholy place nor [          ]\nfrom which we were absent,\nno grove . [      ] dance\n] sound\n] . . .\n. . .",
+   "note": "A parting: Sappho consoles a departing companion with memories.",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:96",
+   "campbell_identity": {
+    "edition_fragment": "96",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "d7b3f7451d0089c295313ef330268cf4104cd4dc15a2be5b76864f396de7e0ae",
+    "line_count": 19,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": ". . . . .",
+     "english": ". . ."
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "]Σαρδ . [. .]",
+     "english": "] Sardis . [. .]"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "πόλ]λακι τυίδε̣ [ν]ῶν ἔχοισα",
+     "english": "often turning her thoughts hither"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "ὠσπ . [. . .] . ώομεν, . [. . .] . . χ[. .]-",
+     "english": "how . [. . .] . we lived . [. . .] . . [. .]"
+    },
+    {
+     "index": 4,
+     "label": "",
+     "greek": "σε θέᾳ σ’ ἰκέλαν ἀρι-",
+     "english": "you, to a goddess easily"
+    },
+    {
+     "index": 5,
+     "label": "5",
+     "greek": "γνώτᾳ, σᾷ δὲ μάλιστ’ ἔχαιρε μόλπᾳ.",
+     "english": "recognised she likened, and in your song she delighted most."
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "νῦν δὲ Λύδαισιν ἐμπρέπεται γυναί-",
+     "english": "But now among Lydian women she stands out"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "κεσσιν ὤς ποτ’ ἀελίω",
+     "english": "as, when the sun"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "δύντος ἀ βροδοδάκτυλος σελάννα",
+     "english": "has set, the rosy-fingered moon"
+    },
+    {
+     "index": 9,
+     "label": "",
+     "greek": "πάντα περρέχοισ’ ἄστρα· φάος δ’ ἐπί-",
+     "english": "surpasses all the stars; and its light reaches"
+    },
+    {
+     "index": 10,
+     "label": "10",
+     "greek": "σχει θάλασσαν ἐπ’ ἀλμύραν",
+     "english": "over the salt sea"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "ἴσως καὶ πολυανθέμοις ἀρούραις·",
+     "english": "alike and over the many-flowered fields;"
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": "ἀ δ’ ἐέρσα κάλα κέχυται, τεθά-",
+     "english": "and the dew is poured out fair, and bloom"
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "λαισι δὲ βρόδα κἄπαλ’ ἄν-",
+     "english": "the roses and tender cher-"
+    },
+    {
+     "index": 14,
+     "label": "",
+     "greek": "θρυσκα καὶ μελίλωτος ἀνθεμώδης·",
+     "english": "vil and flowery melilot;"
+    },
+    {
+     "index": 15,
+     "label": "15",
+     "greek": "πόλλα δὲ ζαφοίταισ’, ἀγάνας ἐπι-",
+     "english": "and often wandering to and fro, gentle"
+    },
+    {
+     "index": 16,
+     "label": "",
+     "greek": "μνάσθεισ’ Ἄτθιδος ἰμέρῳ",
+     "english": "Atthis remembering with longing,"
+    },
+    {
+     "index": 17,
+     "label": "",
+     "greek": "λέπταν ποι φρένα κ[ᾶ]ρ̣[ι σᾷ] βόρηται·",
+     "english": "her tender heart, surely, [because of your] fate is consumed;"
+    },
+    {
+     "index": 18,
+     "label": "",
+     "greek": ". . . . .",
+     "english": ". . ."
+    }
+   ],
+   "text": ". . .\n] Sardis . [. .]\noften turning her thoughts hither\nhow . [. . .] . we lived . [. . .] . . [. .]\nyou, to a goddess easily\nrecognised she likened, and in your song she delighted most.\nBut now among Lydian women she stands out\nas, when the sun\nhas set, the rosy-fingered moon\nsurpasses all the stars; and its light reaches\nover the salt sea\nalike and over the many-flowered fields;\nand the dew is poured out fair, and bloom\nthe roses and tender cher-\nvil and flowery melilot;\nand often wandering to and fro, gentle\nAtthis remembering with longing,\nher tender heart, surely, [because of your] fate is consumed;\n. . .",
+   "note": "A girl now in Lydia remembers Atthis; the moon simile.",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:102",
+   "campbell_identity": {
+    "edition_fragment": "102",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "2fc3fd003a306a714b880d55b2865839cf3de93d36db71c24fcd5c614e5b6445",
+    "line_count": 2,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "γλύκηα μᾶτερ, οὔτοι δύναμαι κρέκην τὸν ἴστον,",
+     "english": "Sweet mother, I cannot weave the web,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "πόθῳ δάμεισα παῖδος βραδίναν δι’ Ἀφροδίταν.",
+     "english": "overcome with longing for a boy, because of slender Aphrodite."
+    }
+   ],
+   "text": "Sweet mother, I cannot weave the web,\novercome with longing for a boy, because of slender Aphrodite.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:104a",
+   "campbell_identity": {
+    "edition_fragment": "104a",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "99b9981d3c994ca72265f67f66183f4da6896ca1d108c2c637aaea5a64391bf6",
+    "line_count": 2,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "Ἔσπερε πάντα φέρων ὄσα φαίνολις ἐσκέδασ’ αὔως,",
+     "english": "Hesperus, bringing everything that the bright dawn scattered,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "†φέρεις ὄιν, φέρεις† αἶγα, φέρεις ἄπυ μάτερι παῖδα.",
+     "english": "†you bring the sheep, you bring† the goat, you bring the child back to its mother."
+    }
+   ],
+   "text": "Hesperus, bringing everything that the bright dawn scattered,\n†you bring the sheep, you bring† the goat, you bring the child back to its mother.",
+   "note": "Evening Star (wedding song).",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:105a",
+   "campbell_identity": {
+    "edition_fragment": "105a",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "5aa2ed333f011cdcf38b86600fa4ceea3bc704211e177c09307c84161bc71c55",
+    "line_count": 3,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "οἶον τὸ γλυκύμαλον ἐρεύθεται ἄκρῳ ἐπ’ ὔσδῳ,",
+     "english": "Like the sweet-apple that reddens on the topmost bough,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ἄκρον ἐπ’ ἀκροτάτῳ, λελάθοντο δὲ μαλοδρόπηες·",
+     "english": "top on the topmost, and the apple-pickers have forgotten it;"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "οὐ μὰν ἐκλελάθοντ’, ἀλλ’ οὐκ ἐδύναντ’ ἐπίκεσθαι.",
+     "english": "no, they have not forgotten it, but they could not reach it."
+    }
+   ],
+   "text": "Like the sweet-apple that reddens on the topmost bough,\ntop on the topmost, and the apple-pickers have forgotten it;\nno, they have not forgotten it, but they could not reach it.",
+   "note": "Wedding song: the bride as an unreached apple.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:105c",
+   "campbell_identity": {
+    "edition_fragment": "105c",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "31c6551c7861429f616e9cc43a3aae8a35e29aee43a9139a984dec116cc5d715",
+    "line_count": 2,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "οἴαν τὰν ὐάκινθον ἐν ὤρεσι ποίμενες ἄνδρες",
+     "english": "Like the hyacinth which in the mountains shepherd men"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "πόσσι καταστείβοισι, χάμαι δέ τε πόρφυρον ἄνθος . . .",
+     "english": "trample with their feet, and on the ground the purple flower . . ."
+    }
+   ],
+   "text": "Like the hyacinth which in the mountains shepherd men\ntrample with their feet, and on the ground the purple flower . . .",
+   "note": "Wedding song: the trampled hyacinth.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:110a",
+   "campbell_identity": {
+    "edition_fragment": "110a",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "5fe1338010cf0600c6b3bfee2df50a4c6fd90b1029d39efbaa60bd6033dd82fc",
+    "line_count": 3,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "θυρώρῳ πόδες ἐπτορόγυιοι,",
+     "english": "The doorkeeper’s feet are seven fathoms long,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "τὰ δὲ σάμβαλα πεμπεβόηα,",
+     "english": "and his sandals are of five ox-hides,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "πίσσυγγοι δὲ δέκ’ ἐξεπόναισαν.",
+     "english": "and ten cobblers laboured to make them."
+    }
+   ],
+   "text": "The doorkeeper’s feet are seven fathoms long,\nand his sandals are of five ox-hides,\nand ten cobblers laboured to make them.",
+   "note": "Wedding song: mockery of the doorkeeper.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:111",
+   "campbell_identity": {
+    "edition_fragment": "111",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "8201eae87801eebc94764ff7511a6a6adbd63af86c84137accbe2d7be645451e",
+    "line_count": 6,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἴψοι δὴ τὸ μέλαθρον —",
+     "english": "Up high the roof-beam —"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ὐμήναον —",
+     "english": "Hymenaeus! —"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ἀέρρετε τέκτονες ἄνδρες·",
+     "english": "raise it, carpenter men;"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "ὐμήναον.",
+     "english": "Hymenaeus!"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "γάμβρος †εἰσέρχεται ἴσος† Ἄρευι,",
+     "english": "The bridegroom †comes in equal† to Ares,"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "ἄνδρος μεγάλω πόλυ μέζων.",
+     "english": "than a big man far bigger."
+    }
+   ],
+   "text": "Up high the roof-beam —\nHymenaeus! —\nraise it, carpenter men;\nHymenaeus!\nThe bridegroom †comes in equal† to Ares,\nthan a big man far bigger.",
+   "note": "Wedding song for the bridegroom’s entrance.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:115",
+   "campbell_identity": {
+    "edition_fragment": "115",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "0fa265304f9e2976f2126c0a3b193da044d960665c91568234fc3414be703d85",
+    "line_count": 2,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "τίῳ σ’, ὦ φίλε γάμβρε, κάλως ἐικάσδω;",
+     "english": "To what, dear bridegroom, shall I fittingly liken you?"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ὄρπακι βραδίνῳ σε μάλιστ’ ἐικάσδω.",
+     "english": "To a slender sapling most of all I liken you."
+    }
+   ],
+   "text": "To what, dear bridegroom, shall I fittingly liken you?\nTo a slender sapling most of all I liken you.",
+   "note": "Wedding song.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:130",
+   "campbell_identity": {
+    "edition_fragment": "130",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "eed634a143ddb92ae97de641e2fde216b9df58e6323663a935f30589f58d6760",
+    "line_count": 2,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "Ἔρος δηὖτέ μ’ ὀ λυσιμέλης δόνει,",
+     "english": "Eros once again, the limb-loosener, shakes me,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "γλυκύπικρον ἀμάχανον ὄρπετον.",
+     "english": "a sweet-bitter, irresistible creature."
+    }
+   ],
+   "text": "Eros once again, the limb-loosener, shakes me,\na sweet-bitter, irresistible creature.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:132",
+   "campbell_identity": {
+    "edition_fragment": "132",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "1e75aeb00e92a99ced48af7c1d471e30b9f9ada2f3e2248ea72ce815bfdd8108",
+    "line_count": 3,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἔστι μοι κάλα πάις χρυσίοισιν ἀνθέμοισιν",
+     "english": "I have a beautiful child, to golden flowers"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ἐμφέρην ἔχοισα μόρφαν Κλέις ἀγαπάτα,",
+     "english": "like in her form, Cleis the beloved,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ἀντὶ τᾶς ἔγωὐδὲ Λυδίαν παῖσαν οὐδ’ ἐράνναν . . .",
+     "english": "in exchange for whom I would not take all Lydia nor lovely . . ."
+    }
+   ],
+   "text": "I have a beautiful child, to golden flowers\nlike in her form, Cleis the beloved,\nin exchange for whom I would not take all Lydia nor lovely . . .",
+   "note": "On her daughter Cleis.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:sappho:fr-adesp-976-pmg",
+   "campbell_identity": {
+    "edition_fragment": "Fr. Adesp. 976 (P.M.G.)",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "26718af0b3f778f0ad1cc99e072d2989f84f7774b47fdc7bb43f4c80cde560f6",
+    "line_count": 4,
+    "author": "Sappho"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "δέδυκε μὲν ἀ σελάννα",
+     "english": "The moon has set"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "καὶ Πληΐαδες, μέσαι δὲ",
+     "english": "and the Pleiades; it is the middle"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "νύκτες, παρὰ δ’ ἔρχετ’ ὤρα,",
+     "english": "of the night, and the hour goes by,"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "ἔγω δὲ μόνα κατεύδω.",
+     "english": "and I sleep alone."
+    }
+   ],
+   "text": "The moon has set\nand the Pleiades; it is the middle\nof the night, and the hour goes by,\nand I sleep alone.",
+   "note": "Anonymous (PMG 976), traditionally ascribed to Sappho; Campbell prints it here.",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:6",
+   "campbell_identity": {
+    "edition_fragment": "6",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "13ccc4963780a23a27a2de1fb96d36f153f0ddebef5a4e844e1e36608f78476f",
+    "line_count": 15,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "τόδ’ αὖτε κῦμα τὼ προτέρω †νέμω",
+     "english": "This wave again, than the former one †. . .†"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "στείχει, παρέξει δ’ ἄμμι πόνον πόλυν",
+     "english": "comes on, and it will give us much toil"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ἄντλην, ἐπεί κε νᾶος ἔμβᾳ",
+     "english": "to bale out, when it enters the ship"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "] .όμεθ’ ε[",
+     "english": "] . . . let us . . . ["
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "] . . [. .] · [",
+     "english": "] . . [. .] . ["
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "[          ]",
+     "english": "[                              ]"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "φαρξώμεθ’ ὢς ὤκιστα [τοίχοις,",
+     "english": "Let us shore up [the sides] as quickly as we can,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "ἐς δ’ ἔχυρον λίμενα δρό[μωμεν·",
+     "english": "and into a secure harbour let us run;"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "καὶ μή τιν’ ὄκνος μόλθ[ακος ἀμμέων",
+     "english": "and let no soft hesitation [any of us]"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "λάβῃ· πρόδηλον γὰρ μέγ’ [ἀέθλιον·",
+     "english": "seize; for clear before us is a great [ordeal];"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "μνάσθητε τὼ πάροιθα μ̣[όχθω·",
+     "english": "remember the former [toil];"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "νῦν τις ἄνηρ δόκιμος γε[νέσθω.",
+     "english": "now let every man show himself steadfast,"
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": "καὶ μὴ καταισχύνωμεν [ἀνανδρίᾳ",
+     "english": "and let us not disgrace [by cowardice]"
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "ἔσλοις τόκηας γᾶς ὔπα κε[ιμένοις·",
+     "english": "our noble fathers who lie beneath the earth;"
+    },
+    {
+     "index": 14,
+     "label": "",
+     "greek": ". . . . .",
+     "english": ". . ."
+    }
+   ],
+   "text": "This wave again, than the former one †. . .†\ncomes on, and it will give us much toil\nto bale out, when it enters the ship\n] . . . let us . . . [\n] . . [. .] . [\n[                              ]\nLet us shore up [the sides] as quickly as we can,\nand into a secure harbour let us run;\nand let no soft hesitation [any of us]\nseize; for clear before us is a great [ordeal];\nremember the former [toil];\nnow let every man show himself steadfast,\nand let us not disgrace [by cowardice]\nour noble fathers who lie beneath the earth;\n. . .",
+   "note": "The ‘ship of state’ in a storm (political allegory).",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:34a",
+   "campbell_identity": {
+    "edition_fragment": "34a",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "11871c58628739f6d91d1edf5f0b21a12855c32599d600166d856e29f3ac6a38",
+    "text_sha256": "e207a84a42c326bbe015db2f46a03205e152e59705174612762f0aada7c184cc",
+    "line_count": 13,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "δεῦτέ μοι νᾶ̣]σον Πέλοπος λίποντε[ς,",
+     "english": "Come to me, leaving the island of Pelops,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "παῖδες ἴφθ]ιμοι Δ[ίος] ἠδὲ Λήδας,",
+     "english": "mighty sons of Zeus and Leda,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "εὐνόῳ] θύ[μ]ῳ προ[φά]νητε, Κάστορ",
+     "english": "with kindly heart appear, Castor"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "καὶ Πολύδε[υ]κες·",
+     "english": "and Polydeuces;"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "οἳ κὰτ εὔρηαν χ[θόνα] καὶ θάλασσαν",
+     "english": "you who over the broad earth and all the sea"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "παῖσαν ἔρχεσθ’ ὠ[κυπό]δων ἐπ’ ἴππων,",
+     "english": "go upon swift-footed horses,"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "ῤήα δ’ ἀνθρώποι[ς] θα[ν]άτω ῤύεσθε",
+     "english": "and easily men from death you rescue,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "ζακρυόεντος,",
+     "english": "from chilling death,"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "εὐσδ[ύγ]ων θρῴσκοντ[ες ἐπ’] ἄκρα νάων",
+     "english": "leaping onto the tops of well-benched ships"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "π]ήλοθεν λάμπροι πρό̣[τον’ ὀν]τρ̣[έχο]ντες",
+     "english": "from afar, bright, running up the forestays,"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "ἀργαλέᾳ δ’ ἐν νύκτι φ[άος φέ]ροντες",
+     "english": "and in the grievous night bringing light"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "νᾶϊ μ[ε]λαίνᾳ·",
+     "english": "to the black ship;"
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": ". . . . .",
+     "english": ". . ."
+    }
+   ],
+   "text": "Come to me, leaving the island of Pelops,\nmighty sons of Zeus and Leda,\nwith kindly heart appear, Castor\nand Polydeuces;\nyou who over the broad earth and all the sea\ngo upon swift-footed horses,\nand easily men from death you rescue,\nfrom chilling death,\nleaping onto the tops of well-benched ships\nfrom afar, bright, running up the forestays,\nand in the grievous night bringing light\nto the black ship;\n. . .",
+   "note": "Hymn to the Dioscuri.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:38a",
+   "campbell_identity": {
+    "edition_fragment": "38A",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "700bf8539591057e1959e6387a3d4db3118ce51c6a360ba8a1ae10d5fe3f4e0f",
+    "line_count": 13,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "πῶνε [καὶ μέθυ’ ὦ] Μελάνιππ’ ἄμ’ ἔμοι· τί [φαῖς",
+     "english": "Drink [and get drunk, O] Melanippus, with me; why [do you say]"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "†ὄταμε[. . . .]διννάεντ’† Ἀχέροντα μεγ̣[",
+     "english": "†that when you have . . . † eddying Acheron, great ["
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ζάβαι[ς ἀ]ελίω κόθαρον φάος [ἄψερον",
+     "english": "crossed, the sun’s pure light [again]"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "ὄψεσθ’; ἀλλ’ ἄγι μὴ μεγάλων ἐπ[ιβάλλεο·",
+     "english": "you will see? Come, do not set your heart on great things;"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "καὶ γὰρ Σίσυφος Αἰολίδαις βασίλευς [ἔφα",
+     "english": "for even Sisyphus, the Aeolid king, [said]"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "ἀνδρῶν πλεῖστα νοησάμενος [θανάτω κρέτην·",
+     "english": "that he, having devised most among men, [had mastered death];"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "ἀλλὰ καὶ πολύιδρις ἔων ὐπὰ κᾶρι [δὶς",
+     "english": "but for all his great cunning, at fate’s bidding [twice]"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "διννάεντ’ Ἀχέροντ’ ἐπέραισε, μ[",
+     "english": "he crossed eddying Acheron, and ["
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "αὔτῳ μόχθον ἔχην Κρονίδαις βα̣[σίλευς κάτω",
+     "english": "for him toil to have the son of Cronos the king [ordained, below]"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "μελαίνας χθόνος· ἀλλ’ ἄγι μὴ τά[δ’ ἐπέλπεο·",
+     "english": "the black earth; but come, do not [hope for] these things;"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "θᾶς] τ’ ἀβάσομεν αἴ ποτα κἄλλοτα . [",
+     "english": "while] we are in our youth, if ever at another time too, . ["
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": ". . . ]ην ὄττινα τῶνδε πάθην τά[χα δῷ θέος.",
+     "english": ". . . ] whatever of these things to suffer [the god may soon give]."
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": ". . . . . . . ἄνε]μος βορίαις ἐπι . [",
+     "english": ". . . . . . . . the north wind [ . . . ]"
+    }
+   ],
+   "text": "Drink [and get drunk, O] Melanippus, with me; why [do you say]\n†that when you have . . . † eddying Acheron, great [\ncrossed, the sun’s pure light [again]\nyou will see? Come, do not set your heart on great things;\nfor even Sisyphus, the Aeolid king, [said]\nthat he, having devised most among men, [had mastered death];\nbut for all his great cunning, at fate’s bidding [twice]\nhe crossed eddying Acheron, and [\nfor him toil to have the son of Cronos the king [ordained, below]\nthe black earth; but come, do not [hope for] these things;\nwhile] we are in our youth, if ever at another time too, . [\n. . . ] whatever of these things to suffer [the god may soon give].\n. . . . . . . . the north wind [ . . . ]",
+   "note": "To Melanippus: drink, for even Sisyphus could not escape death.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:42",
+   "campbell_identity": {
+    "edition_fragment": "42",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "4cf0f0c77785f6649bc7a10f9c73d1ab76288f287415fae6705bfcbc98699a5f",
+    "line_count": 16,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ὠς λόγος, κάκων ἄ[χος ἔννεκ’ ἔργων",
+     "english": "As the story goes, because of evil deeds a bitter grief"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "Περράμῳ καὶ παῖσ[ί ποτ’, Ὦλεν’, ἦλθεν",
+     "english": "to Priam and his sons once, Helen, came"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ἐκ σέθεν πίκρον, π[ύρι δ’ ὤλεσε Ζεῦς",
+     "english": "from you, and with fire Zeus destroyed"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "Ἴλιον ἴραν.",
+     "english": "holy Ilium."
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "οὐ τεαύταν Αἰακίδαι[ς ἄγανος",
+     "english": "Not such was she whom the noble son of Aeacus,"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "πάντας ἐς γάμον μάκ[αρας καλέσσαις",
+     "english": "having invited all the blessed gods to the wedding,"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "ἄγετ’ ἐκ Νή[ρ]ηος ἔλων [μελάθρων",
+     "english": "led, taking her from the halls of Nereus,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "πάρθενον ἄβραν",
+     "english": "a delicate maiden,"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "ἐς δόμον Χέρρωνος· ἔλ[υσε δ’ ἄγνας",
+     "english": "to the house of Chiron; and he loosed the pure"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "ζῶμα παρθένω· φιλό[τας δ’ ἔθαλε",
+     "english": "maiden’s girdle; and love flourished"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "Πήλεος καὶ Νηρεΐδων ἀρίστ[ας,",
+     "english": "between Peleus and the best of the Nereids,"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "ἐς δ’ ἐνίαυτον",
+     "english": "and within the year"
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": "παῖδα γέννατ’ αἰμιθέων [φέριστον",
+     "english": "she bore a son, the mightiest of demigods,"
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "ὄλβιον ξάνθαν ἐλάτη[ρα πώλων·",
+     "english": "a blessed driver of chestnut horses;"
+    },
+    {
+     "index": 14,
+     "label": "15",
+     "greek": "οἰ δ’ ἀπώλοντ’ ἀμφ’ Ἐ[λένᾳ Φρύγες τε",
+     "english": "but they perished for Helen’s sake, the Phrygians"
+    },
+    {
+     "index": 15,
+     "label": "",
+     "greek": "καὶ πόλις αὔτων.",
+     "english": "and their city."
+    }
+   ],
+   "text": "As the story goes, because of evil deeds a bitter grief\nto Priam and his sons once, Helen, came\nfrom you, and with fire Zeus destroyed\nholy Ilium.\nNot such was she whom the noble son of Aeacus,\nhaving invited all the blessed gods to the wedding,\nled, taking her from the halls of Nereus,\na delicate maiden,\nto the house of Chiron; and he loosed the pure\nmaiden’s girdle; and love flourished\nbetween Peleus and the best of the Nereids,\nand within the year\nshe bore a son, the mightiest of demigods,\na blessed driver of chestnut horses;\nbut they perished for Helen’s sake, the Phrygians\nand their city.",
+   "note": "Helen contrasted with Thetis; the marriage of Peleus and Thetis.",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:45",
+   "campbell_identity": {
+    "edition_fragment": "45",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "8244d592d54881f9dc7becb1c4c28913695399491878c34142600b54c4dead13",
+    "line_count": 9,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "Ἔβρε, κ[άλ]λιστος ποτάμων πὰρ Α[ἶνον",
+     "english": "Hebrus, most beautiful of rivers, past Aenus"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ἐξί[ησθ’ ἐς] πορφυρίαν θάλασσαν",
+     "english": "you flow out into the purple sea,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "Θρᾳκ[ίας ἐρ]ευγόμενος ζὰ γαίας",
+     "english": "surging through the Thracian land"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": ".]ιππ[.] . [. .]ι̣·",
+     "english": ". ] . . . [.] . [. .] . ;"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "καί σε πόλλαι παρθένικαι ’πέπ[οισιν",
+     "english": "and many maidens visit you"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": ". . . .]λων μήρων ἀπάλαισι χέρ[σι",
+     "english": ". . . . ] . . . of thighs with soft hands"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": ". . . .]α· θέλγονται τὸ [σ]ὸν ὠς ἄλει[ππα",
+     "english": ". . . . ] . ; they are charmed, as by ointment, by your"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "θή[ϊο]ν ὔδωρ",
+     "english": "divine water"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": ". . . . .",
+     "english": ". . ."
+    }
+   ],
+   "text": "Hebrus, most beautiful of rivers, past Aenus\nyou flow out into the purple sea,\nsurging through the Thracian land\n. ] . . . [.] . [. .] . ;\nand many maidens visit you\n. . . . ] . . . of thighs with soft hands\n. . . . ] . ; they are charmed, as by ointment, by your\ndivine water\n. . .",
+   "note": "To the river Hebrus; maidens bathing in its waters.",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:129",
+   "campbell_identity": {
+    "edition_fragment": "129",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "60e0dd824a57a930c9abda0ae7223ef8909c4783ab930153e07dbae546030035",
+    "text_sha256": "27a5bb7ca2fb1f01ad4544ffeb0ac0c8ec88a7e048a936212be6b5fb93ceca58",
+    "line_count": 28,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "] . ρά . α τόδε Λέσβιοι",
+     "english": "] . . . this the Lesbians"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": ". . .] . . . . εὔδειλον τέμενος μέγα",
+     "english": ". . . ] . . . . a conspicuous great precinct"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ξῦνον κά[τε]σσαν, ἐν δὲ βώμοις",
+     "english": "in common established, and in it altars"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "ἀθανάτων μακάρων ἔθηκαν,",
+     "english": "of the blessed immortals they set up,"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "κἀπωνύμασσαν ἀντίαον Δία,",
+     "english": "and they named Zeus god of suppliants,"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "σὲ δ’ Αἰολῄαν [κ]υδαλίμαν θέον",
+     "english": "and you, Aeolian glorious goddess,"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "πάντων γενέθλαν, τὸν δὲ τέρτον",
+     "english": "mother of all, and this third one"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "τόνδε κεμήλιον ὠνύμασσ[α]ν",
+     "english": "they named Kemelios,"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "Ζόννυσσον ὠμήσταν. ἄ[γι]τ’ εὔνοον",
+     "english": "Dionysus eater of raw flesh. Come, with kindly"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "θῦμον σκέθοντες ἀμμετέρα[ς] ἄρας",
+     "english": "heart hear our prayer,"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "ἀκούσατ’, ἐκ δὲ τῶν[δ]ε μόχθων",
+     "english": "and from these toils"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "ἀργαλέας τε φύγας ῤ[ύεσθε,",
+     "english": "and grievous exile rescue us,"
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": "τὸν Ὕρραον δὲ πα[ῖδ]α πεδελθέτω",
+     "english": "and the son of Hyrrhas let there pursue"
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "κήνων Ἐ[ρίννυ]ς ὤς ποτ’ ἀπώμνυμεν",
+     "english": "their Erinys, as once we swore,"
+    },
+    {
+     "index": 14,
+     "label": "15",
+     "greek": "τόμοντες ἄ . . [          .́ . ]ν̣ . .",
+     "english": "cutting . . . [          . . ] . . ."
+    },
+    {
+     "index": 15,
+     "label": "",
+     "greek": "μηδάμα μηδένα τὼν ἐταίρων",
+     "english": "never any of our companions (to abandon),"
+    },
+    {
+     "index": 16,
+     "label": "",
+     "greek": "ἀλλ’ ἢ θάνοντες γᾶν ἐπιέμμενοι",
+     "english": "but either dying, clothed in earth,"
+    },
+    {
+     "index": 17,
+     "label": "",
+     "greek": "κείσεσθ’ ὐπ’ ἄνδρων οἶ τότ’ ἐπικ . .́ ην",
+     "english": "to lie, slain by the men who then . . . ,"
+    },
+    {
+     "index": 18,
+     "label": "",
+     "greek": "ἤπειτα κακκτάνοντες αὔτοις",
+     "english": "or else, killing them,"
+    },
+    {
+     "index": 19,
+     "label": "20",
+     "greek": "δᾶμον ὐπὲξ ἀχέων ῤύεσθαι.",
+     "english": "to rescue the people from their woes."
+    },
+    {
+     "index": 20,
+     "label": "",
+     "greek": "κήνων ὀ φύσγων οὐ διελέξατο",
+     "english": "Of these things Pot-belly did not reason"
+    },
+    {
+     "index": 21,
+     "label": "",
+     "greek": "πρὸς θῦμον, ἀλλὰ βραϊδίως πόσιν",
+     "english": "in his heart, but lightly, with his foot"
+    },
+    {
+     "index": 22,
+     "label": "",
+     "greek": "ἔ]μβαις ἐπ’ ὀρκίοισι δάπτει",
+     "english": "trampling on the oaths, he devours"
+    },
+    {
+     "index": 23,
+     "label": "",
+     "greek": "τὰν πόλιν ἄμμι δέ̣δ̣[.] . . [.] .ί.αις",
+     "english": "the city, and for us . . . [.] . . [.] . . . ."
+    },
+    {
+     "index": 24,
+     "label": "25",
+     "greek": "οὐ κὰν νόμον [.]ον̣ . . [          ] .́ [ ]",
+     "english": "not according to law [.] . . . [          ] . [ ]"
+    },
+    {
+     "index": 25,
+     "label": "",
+     "greek": "γλαύκας ἀ[.] . . [.] . . [",
+     "english": "grey . [.] . . [.] . . ["
+    },
+    {
+     "index": 26,
+     "label": "",
+     "greek": "γεγρά . [",
+     "english": "written . ["
+    },
+    {
+     "index": 27,
+     "label": "",
+     "greek": "Μύρσιλ̣[ο",
+     "english": "Myrsilus [ . . ."
+    }
+   ],
+   "text": "] . . . this the Lesbians\n. . . ] . . . . a conspicuous great precinct\nin common established, and in it altars\nof the blessed immortals they set up,\nand they named Zeus god of suppliants,\nand you, Aeolian glorious goddess,\nmother of all, and this third one\nthey named Kemelios,\nDionysus eater of raw flesh. Come, with kindly\nheart hear our prayer,\nand from these toils\nand grievous exile rescue us,\nand the son of Hyrrhas let there pursue\ntheir Erinys, as once we swore,\ncutting . . . [          . . ] . . .\nnever any of our companions (to abandon),\nbut either dying, clothed in earth,\nto lie, slain by the men who then . . . ,\nor else, killing them,\nto rescue the people from their woes.\nOf these things Pot-belly did not reason\nin his heart, but lightly, with his foot\ntrampling on the oaths, he devours\nthe city, and for us . . . [.] . . [.] . . . .\nnot according to law [.] . . . [          ] . [ ]\ngrey . [.] . . [.] . . [\nwritten . [\nMyrsilus [ . . .",
+   "note": "Prayer in the pan-Lesbian sanctuary; curse on Pittacus (‘Pot-belly’), who broke the conspirators’ oath.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:130b",
+   "campbell_identity": {
+    "edition_fragment": "130",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "25229c59dc5ee76abe7a68dfb75bf2c59bbedf3c8f91000579275f2f6ca52e96",
+    "text_sha256": "3fe7528bcf8620b5be50cc088c7e7ed390ea86b8f03bc91716a1886ec13b6d96",
+    "line_count": 20,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἀγνοι̣ς̣ . . ς̣βιότοις . . ις ὀ τάλαις ἔγω",
+     "english": ". . . pure . . living . . . I, poor wretch,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ζώω μοῖραν ἔχων ἀγροϊκωτίκαν",
+     "english": "live, having a rustic lot,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ἰμέρρων ἀγόρας ἄκουσαι",
+     "english": "longing to hear the assembly"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "καρυ[ζο]μένας Ὦγεσιλαΐδα",
+     "english": "being summoned, Agesilaidas,"
+    },
+    {
+     "index": 4,
+     "label": "20",
+     "greek": "καὶ β[ό]λλας· τὰ πάτηρ καὶ πάτερος πάτηρ",
+     "english": "and the council; what my father and my father’s father"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "καγγ[ε]γήρασ’ ἔχοντες πεδὰ τωνδέων",
+     "english": "grew old possessing, among these"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "τὼν [ἀ]λλαλοκάκων πολίταν,",
+     "english": "mutually-harming citizens,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "ἔγ[ωγ’ ἀ]πὺ τούτων ἀπελήλαμαι",
+     "english": "from these I have been driven out,"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "φεύγων ἐσχατίαισ’, ὠς δ’ Ὀνυμακλέης",
+     "english": "an exile at the edges of the land, and like Onymacles"
+    },
+    {
+     "index": 9,
+     "label": "25",
+     "greek": "ἔνθα[δ’] οἶος ἐοίκησα λυκαιμίαις",
+     "english": "here alone I have settled among the wolf-thickets"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": ". [          ]ον [π]όλεμον· στάσιν γὰρ",
+     "english": ". [              ] war; for strife"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "πρὸς κρ . [. . . .] . οὐκ †ἄμεινον† ὀννέλην·",
+     "english": "against . . [. . . . .] . it is not †better† to renounce;"
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": ".] . [. . .] . [. .] . μακάρων ἐς τέμ[ε]νος θέων·",
+     "english": ". ] . [. . .] . [. .] . to the precinct of the blessed gods"
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "ἐοι̣[. . . . .] με[λ]αίνας ἐπίβαις χθόνος·",
+     "english": ". . . [. . . . .] treading the black earth;"
+    },
+    {
+     "index": 14,
+     "label": "30",
+     "greek": "χλι . [.] . [.] . [.]ν̣ συνόδοισί μ’ αὔταις",
+     "english": ". . . [.] . [.] . [.] . in those very gatherings"
+    },
+    {
+     "index": 15,
+     "label": "",
+     "greek": "οἴκημμι κ[ά]κων ἔκτος ἔχων πόδας,",
+     "english": "I dwell, keeping my feet out of trouble,"
+    },
+    {
+     "index": 16,
+     "label": "",
+     "greek": "ὄππᾳ Λ[εσβί]αδες κριννόμεναι φύαν",
+     "english": "where the Lesbian women, being judged for beauty,"
+    },
+    {
+     "index": 17,
+     "label": "",
+     "greek": "πώλεντ’ ἐλκεσίπεπλοι, περὶ δὲ βρέμει",
+     "english": "go to and fro with trailing robes, and around rings out"
+    },
+    {
+     "index": 18,
+     "label": "",
+     "greek": "ἄχω θεσπεσία γυναίκων",
+     "english": "the divine echo of the women’s"
+    },
+    {
+     "index": 19,
+     "label": "35",
+     "greek": "ἴρα[ς ὀ]λολύγας ἐνιαυσίας",
+     "english": "holy yearly cry;"
+    }
+   ],
+   "text": ". . . pure . . living . . . I, poor wretch,\nlive, having a rustic lot,\nlonging to hear the assembly\nbeing summoned, Agesilaidas,\nand the council; what my father and my father’s father\ngrew old possessing, among these\nmutually-harming citizens,\nfrom these I have been driven out,\nan exile at the edges of the land, and like Onymacles\nhere alone I have settled among the wolf-thickets\n. [              ] war; for strife\nagainst . . [. . . . .] . it is not †better† to renounce;\n. ] . [. . .] . [. .] . to the precinct of the blessed gods\n. . . [. . . . .] treading the black earth;\n. . . [.] . [.] . [.] . in those very gatherings\nI dwell, keeping my feet out of trouble,\nwhere the Lesbian women, being judged for beauty,\ngo to and fro with trailing robes, and around rings out\nthe divine echo of the women’s\nholy yearly cry;",
+   "note": "Alcaeus in exile in the countryside; the Lesbian beauty-contest.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:308b",
+   "campbell_identity": {
+    "edition_fragment": "308b",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "083dec0bf92145f0df4162edff073cea1b748947335a1f7e505ba062464de0ac",
+    "line_count": 4,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "χαῖρε Κυλλάνας ὀ μέδεις, σὲ γάρ μοι",
+     "english": "Hail, ruler of Cyllene, for you my"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "θῦμος ὔμνην, τὸν κορύφαισιν †αὐγαῖς",
+     "english": "heart bids me hymn, whom on the peaks †with rays†"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "Μαῖα γέννατο Κρονίδᾳ μίγεισα",
+     "english": "Maia bore, having lain with the son of Cronos,"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "παμβασίληϊ.",
+     "english": "the king of all."
+    }
+   ],
+   "text": "Hail, ruler of Cyllene, for you my\nheart bids me hymn, whom on the peaks †with rays†\nMaia bore, having lain with the son of Cronos,\nthe king of all.",
+   "note": "Hymn to Hermes.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:326",
+   "campbell_identity": {
+    "edition_fragment": "326",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "a8aec94f417592b5daa1af7e03d68072252e58aedd1160a904e337b64692c158",
+    "text_sha256": "df602e007e7a1818f14413317de6540b7820d0d9a094d13fb23d9c7f81c9bf86",
+    "line_count": 10,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἀσυννέτημμι τὼν ἀνέμων στάσιν·",
+     "english": "I cannot understand the strife of the winds;"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "τὸ μὲν γὰρ ἔνθεν κῦμα κυλίνδεται,",
+     "english": "for one wave rolls from this side,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "τὸ δ’ ἔνθεν, ἄμμες δ’ ὂν τὸ μέσσον",
+     "english": "another from that, and we in the middle"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "νᾶϊ φορήμμεθα σὺν μελαίνᾳ,",
+     "english": "are carried along with the black ship,"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "χείμωνι μόχθεντες μεγάλῳ μάλα·",
+     "english": "labouring greatly in the great storm;"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "πὲρ μὲν γὰρ ἄντλος ἰστοπέδαν ἔχει,",
+     "english": "for the bilge-water holds the mast-step,"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "λαῖφος δὲ πὰν ζάδηλον ἤδη,",
+     "english": "and the sail is all torn through already,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "καὶ λάκιδες μέγαλαι κὰτ αὖτο,",
+     "english": "and there are great rents down it,"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "χόλαισι δ’ ἄγκονναι, τὰ δ’ ὀή[ϊα",
+     "english": "and the sheets are slackening, and the rudders ["
+    },
+    {
+     "index": 9,
+     "label": "",
+     "greek": ". . . . .",
+     "english": ". . ."
+    }
+   ],
+   "text": "I cannot understand the strife of the winds;\nfor one wave rolls from this side,\nanother from that, and we in the middle\nare carried along with the black ship,\nlabouring greatly in the great storm;\nfor the bilge-water holds the mast-step,\nand the sail is all torn through already,\nand there are great rents down it,\nand the sheets are slackening, and the rudders [\n. . .",
+   "note": "The ‘ship of state’ (quoted by Heraclitus the allegorist).",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:332",
+   "campbell_identity": {
+    "edition_fragment": "332",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "6d65364c19d9ca930e8cc6a1a8acbdf2bda4e32337c43796a1282e151427f614",
+    "line_count": 2,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "νῦν χρῆ μεθύσθην καί τινα πὲρ βίαν",
+     "english": "Now one must get drunk and with some violence"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "πώνην, ἐπεὶ δὴ κάτθανε Μύρσιλος . . .",
+     "english": "drink, since indeed Myrsilus is dead . . ."
+    }
+   ],
+   "text": "Now one must get drunk and with some violence\ndrink, since indeed Myrsilus is dead . . .",
+   "note": "On the death of the tyrant Myrsilus.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:333",
+   "campbell_identity": {
+    "edition_fragment": "333",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "135bb1043caf4fa388edd69731cc1bbb3b73f8b41cd81e835036715217ee4411",
+    "line_count": 1,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "οἶνος γὰρ ἀνθρώπω δίοπτρον.",
+     "english": "For wine is a window into a man."
+    }
+   ],
+   "text": "For wine is a window into a man.",
+   "note": "",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:335",
+   "campbell_identity": {
+    "edition_fragment": "335",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "f05621aaba08399e3e8316db4593b9981dada64de2d4b082247d7c763b656094",
+    "line_count": 4,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "οὐ χρῆ κάκοισι θῦμον ἐπιτρέπην·",
+     "english": "One must not surrender one’s heart to troubles;"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "προκόψομεν γὰρ οὐδὲν ἀσάμενοι,",
+     "english": "for we shall make no progress by grieving,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ὦ Βύκχι, φαρμάκων δ’ ἄριστον",
+     "english": "Bycchis; the best of remedies"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "οἶνον ἐνεικαμένοις μεθύσθην.",
+     "english": "is to bring wine and get drunk."
+    }
+   ],
+   "text": "One must not surrender one’s heart to troubles;\nfor we shall make no progress by grieving,\nBycchis; the best of remedies\nis to bring wine and get drunk.",
+   "note": "",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:338",
+   "campbell_identity": {
+    "edition_fragment": "338",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "715187238432e442ac9339eff89420288d84e30a676f6fb7c38e25aae6fc410a",
+    "line_count": 8,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ὔει μὲν ὀ Ζεῦς, ἐκ δ’ ὀράνω μέγας",
+     "english": "Zeus is raining, and from the sky a great"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "χείμων, πεπάγαισιν δ’ ὐδάτων ῤόαι",
+     "english": "storm, and the streams of water have frozen"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "⟨          ἔνθεν          ⟩",
+     "english": "‹                from there                ›"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "⟨          ⟩",
+     "english": "‹                                      ›"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "κάββαλλε τὸν χείμων’, ἐπὶ μὲν τίθεις",
+     "english": "Beat down the storm, piling on"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "πῦρ, ἐν δὲ κέρναις οἶνον ἀφειδέως",
+     "english": "fire, and mixing the wine unsparingly,"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "μέλιχρον, αὐτὰρ ἀμφὶ κόρσᾳ",
+     "english": "honey-sweet, and about your temples"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "μόλθακον ἀμφι⟨βάλων⟩ γνόφαλλον.",
+     "english": "a soft woollen cushion ‹putting› around."
+    }
+   ],
+   "text": "Zeus is raining, and from the sky a great\nstorm, and the streams of water have frozen\n‹                from there                ›\n‹                                      ›\nBeat down the storm, piling on\nfire, and mixing the wine unsparingly,\nhoney-sweet, and about your temples\na soft woollen cushion ‹putting› around.",
+   "note": "Winter drinking-song (imitated by Horace, Odes 1.9).",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:346",
+   "campbell_identity": {
+    "edition_fragment": "346",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "bb31588be3ae2dd68cb52f0d457371503ed8edd69b7cfb416e6076579b57ba09",
+    "line_count": 6,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "πώνωμεν· τί τὰ λύχν’ ὀμμένομεν; δάκτυλος ἀμέρα.",
+     "english": "Let us drink; why do we wait for the lamps? There is a finger of daylight left."
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "κὰδ δἄερρε κυλίχναις μεγάλαις †αιτα† ποικίλαις·",
+     "english": "Take down the big cups, †. . .† the painted ones;"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "οἶνον γὰρ Σεμέλας καὶ Δίος υἶος λαθικάδεον",
+     "english": "for wine, the son of Semele and Zeus, as a forgetter of cares,"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "ἀνθρώποισιν ἔδωκ’. ἔγχεε κέρναις ἔνα καὶ δύο",
+     "english": "gave to men. Pour it in, mixing one and two,"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "πλήαις κὰκ κεφάλας, ⟨ἀ⟩ δ’ ἀτέρα τὰν ἀτέραν κύλιξ",
+     "english": "full to the brim, and let one cup the other"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "ὠθήτω . . .",
+     "english": "push along . . ."
+    }
+   ],
+   "text": "Let us drink; why do we wait for the lamps? There is a finger of daylight left.\nTake down the big cups, †. . .† the painted ones;\nfor wine, the son of Semele and Zeus, as a forgetter of cares,\ngave to men. Pour it in, mixing one and two,\nfull to the brim, and let one cup the other\npush along . . .",
+   "note": "Drinking-song.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:347",
+   "campbell_identity": {
+    "edition_fragment": "347",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "0a10416e1d317a3ed9ed32ecef9ee67bb0960e451fe3738a6ffcaf49883306b8",
+    "line_count": 9,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "τέγγε πλεύμονας οἴνῳ, τὸ γὰρ ἄστρον περιτέλλεται,",
+     "english": "Wet your lungs with wine, for the star is coming round,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ἀ δ’ ὤρα χαλέπα, πάντα δὲ δίψαισ’ ὐπὰ καύματος,",
+     "english": "and the season is harsh, and all things thirst under the heat,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ἄχει δ’ ἐκ πετάλων· ἄδεα τέττιξ, πτερύγων δ’ ὔπα",
+     "english": "and sweetly from the leaves the cicada sings, and from under its wings"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "κακχέει λιγύραν ⟨πύκνον⟩ ἀοίδαν, ⟨θέρος⟩ ὄπποτα",
+     "english": "pours down its clear ‹incessant› song, when ‹summer›"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "φλόγιον †καθέταν ἐπιπτάμενον καταυδείη†",
+     "english": "blazing †. . . flying down . . . †"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "⟨          ⟩",
+     "english": "‹                                      ›"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "ἄνθει δὲ σκόλυμος· νῦν δὲ γύναικες μιαρώταται,",
+     "english": "and the artichoke is in flower; now women are most lustful,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "λέπτοι δ’ ἄνδρες, ἐπεὶ ⟨δὴ⟩ κεφάλαν καὶ γόνα Σείριος",
+     "english": "and men feeble, since ‹indeed› head and knees Sirius"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "ἄσδει . . .",
+     "english": "parches . . ."
+    }
+   ],
+   "text": "Wet your lungs with wine, for the star is coming round,\nand the season is harsh, and all things thirst under the heat,\nand sweetly from the leaves the cicada sings, and from under its wings\npours down its clear ‹incessant› song, when ‹summer›\nblazing †. . . flying down . . . †\n‹                                      ›\nand the artichoke is in flower; now women are most lustful,\nand men feeble, since ‹indeed› head and knees Sirius\nparches . . .",
+   "note": "Midsummer drinking-song (after Hesiod, Works and Days 582 ff.).",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:350",
+   "campbell_identity": {
+    "edition_fragment": "350",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "2fc0da4a1f959e1544ae3d1e227ad772959175713259c82a2ff93024910e4925",
+    "text_sha256": "827dc3b0c8c1fd564f0dd9ac97c8752cfd0b74de7fb0303c9400c71be3637838",
+    "line_count": 7,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἦλθες ἐκ περάτων γᾶς ἐλεφαντίναν",
+     "english": "You have come from the ends of the earth, an ivory"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "λάβαν τὼ ξίφεος χρυσοδέταν ἔχων",
+     "english": "hilt of your sword, bound with gold, having"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "",
+     "english": "(Strabo’s prose frame: Alcaeus says that his brother Antimenidas, fighting as an ally of the Babylonians, accomplished)"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "ἄεθλον μέγαν, εὐρύσαο δ᾽ ἐκ πόνων,",
+     "english": "a great feat, and you rescued them from troubles,"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "κτένναις ἄνδρα μαχαίταν βασιληίων",
+     "english": "killing a fighting man who, of the royal measure,"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "παλάσταν ἀπυλείποντα μόναν ἴαν",
+     "english": "a single palm only was lacking"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "παχέων ἀπὺ πέμπων . . .",
+     "english": "from five cubits . . ."
+    }
+   ],
+   "text": "You have come from the ends of the earth, an ivory\nhilt of your sword, bound with gold, having\n(Strabo’s prose frame: Alcaeus says that his brother Antimenidas, fighting as an ally of the Babylonians, accomplished)\na great feat, and you rescued them from troubles,\nkilling a fighting man who, of the royal measure,\na single palm only was lacking\nfrom five cubits . . .",
+   "note": "To his brother Antimenidas, back from service with the Babylonians; lines 3–4 are Strabo’s prose frame as Campbell prints it.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:357",
+   "campbell_identity": {
+    "edition_fragment": "357",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "b0f823fa3b8984bc089ff560a0ec9e292860860e71294f7b110cf927eeee7084",
+    "line_count": 14,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "[          ] . . . [          ]",
+     "english": "[                              ] . . . [              ]"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "μαρμαίρει δὲ μέγας δόμος χάλκῳ, παῖσα δ’ ἄρ’ εὖ κεκόσμη-",
+     "english": "And the great house gleams with bronze, and the whole roof has been well adorn-"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ται στέγα",
+     "english": "ed"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "λάμπραισιν κυνίαισι, κὰτ τᾶν λεῦκοι κατέπερθεν ἴππιοι",
+     "english": "with bright helmets, and down from them white horsehair"
+    },
+    {
+     "index": 4,
+     "label": "",
+     "greek": "λόφοι",
+     "english": "plumes"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "νεύοισιν, κεφάλαισιν ἄνδρων ἀγάλματα· χάλκιαι δὲ πασ-",
+     "english": "nod, adornments for men’s heads; and hung around the"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "σάλοις",
+     "english": "pegs,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "κρύπτοισιν περικείμεναι λάμπραι κνάμιδες, ἔρκος ἰσχύρω",
+     "english": "bright bronze greaves hide them, a bulwark against the strong"
+    },
+    {
+     "index": 8,
+     "label": "5",
+     "greek": "βέλεος,",
+     "english": "missile,"
+    },
+    {
+     "index": 9,
+     "label": "",
+     "greek": "θόρρακές τε νέω λίνω κόιλαί τε κὰτ ἄσπιδες βεβλήμεναι·",
+     "english": "and corslets of new linen and hollow shields thrown down;"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "πὰρ δὲ Χαλκίδικαι σπάθαι, πὰρ δὲ ζώματα πόλλα καὶ",
+     "english": "and beside them Chalcidian blades, beside them many belts and"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "κυπάσ̣σιδες.",
+     "english": "tunics."
+    },
+    {
+     "index": 12,
+     "label": "",
+     "greek": "τῶν οὐκ ἔστι λάθεσθ’ ἐπεὶ δὴ πρώτιστ’ ὐπὰ τὦργον",
+     "english": "These things one cannot forget, since indeed from the very first to the task"
+    },
+    {
+     "index": 13,
+     "label": "",
+     "greek": "ἔσταμεν τόδε.",
+     "english": "we have set ourselves, this one."
+    }
+   ],
+   "text": "[                              ] . . . [              ]\nAnd the great house gleams with bronze, and the whole roof has been well adorn-\ned\nwith bright helmets, and down from them white horsehair\nplumes\nnod, adornments for men’s heads; and hung around the\npegs,\nbright bronze greaves hide them, a bulwark against the strong\nmissile,\nand corslets of new linen and hollow shields thrown down;\nand beside them Chalcidian blades, beside them many belts and\ntunics.\nThese things one cannot forget, since indeed from the very first to the task\nwe have set ourselves, this one.",
+   "note": "The hall full of arms.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:alcaeus:362",
+   "campbell_identity": {
+    "edition_fragment": "362",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "089b964eed858d7e424ab52f8976adfaf28a243dfaaa43a1341f01ed2e69bb58",
+    "line_count": 4,
+    "author": "Alcaeus"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἀλλ’ ἀνήτω μὲν περὶ ταὶς δέραισι",
+     "english": "But let someone round our necks"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "περθέτω πλέκταις ὐπαθύμιδάς τις,",
+     "english": "put woven garlands of anise,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "κὰδ δὲ χευάτω μύρον ἆδυ κὰτ τὼ",
+     "english": "and let him pour sweet perfume down over our"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "στήθεος ἄμμι.",
+     "english": "breast."
+    }
+   ],
+   "text": "But let someone round our necks\nput woven garlands of anise,\nand let him pour sweet perfume down over our\nbreast.",
+   "note": "Symposium.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:348",
+   "campbell_identity": {
+    "edition_fragment": "348",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "e89b45703529d3da26b9cfb90452d47c72e35414329fc70e18a2a291d4f20c0c",
+    "line_count": 8,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "γουνοῦμαί σ’ ἐλαφηβόλε",
+     "english": "I beseech you by your knees, shooter of deer,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ξανθὴ παῖ Διὸς ἀγρίων",
+     "english": "golden-haired child of Zeus, of wild"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "δέσποιν’ Ἄρτεμι θηρῶν·",
+     "english": "beasts the mistress, Artemis;"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "ἥ κου νῦν ἐπὶ Ληθαίου",
+     "english": "you who now, no doubt, by the Lethaeus’"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "δίνῃσι θρασυκαρδίων",
+     "english": "eddies look down upon a city of bold-hearted"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "ἀνδρῶν ἐσκατορᾷς πόλιν",
+     "english": "men,"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "χαίρουσ’, οὐ γὰρ ἀνημέρους",
+     "english": "rejoicing; for it is no untamed"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "ποιμαίνεις πολιήτας.",
+     "english": "citizens that you shepherd."
+    }
+   ],
+   "text": "I beseech you by your knees, shooter of deer,\ngolden-haired child of Zeus, of wild\nbeasts the mistress, Artemis;\nyou who now, no doubt, by the Lethaeus’\neddies look down upon a city of bold-hearted\nmen,\nrejoicing; for it is no untamed\ncitizens that you shepherd.",
+   "note": "Prayer to Artemis, apparently on behalf of Magnesia on the Maeander (the river Lethaeus).",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:356",
+   "campbell_identity": {
+    "edition_fragment": "356",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "8ed06eb16b0cd1659020bd3d3adbb2f4ff973754541c1af07a3bf63fded236a9",
+    "line_count": 11,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἄγε δὴ φέρ’ ἡμὶν ὦ παῖ",
+     "english": "Come now, bring us, boy,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "κελέβην, ὅκως ἄμυστιν",
+     "english": "the bowl, so that in one draught"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "προπίω, τὰ μὲν δέκ’ ἐγχέας",
+     "english": "I may drink it down, pouring in ten ladles"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "ὕδατος, τὰ πέντε δ’ οἴνου",
+     "english": "of water, and five of wine,"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "κυάθους ὡς ἀνυβριστὶ",
+     "english": "cupfuls, so that without outrage"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "ἀνὰ δηὖτε βασσαρήσω.",
+     "english": "once again I may play the Bacchant."
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "ἄγε δηὖτε μηκέτ’ οὕτω",
+     "english": "Come, once again let us no longer thus"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "πατάγῳ τε κἀλαλητῷ",
+     "english": "with crashing and shouting"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "Σκυθικὴν πόσιν παρ’ οἴνῳ",
+     "english": "the Scythian way of drinking over wine"
+    },
+    {
+     "index": 9,
+     "label": "",
+     "greek": "μελετῶμεν, ἀλλὰ καλοῖς",
+     "english": "practise, but with fair"
+    },
+    {
+     "index": 10,
+     "label": "5",
+     "greek": "ὑποπίνοντες ἐν ὕμνοις.",
+     "english": "songs, drinking in moderation."
+    }
+   ],
+   "text": "Come now, bring us, boy,\nthe bowl, so that in one draught\nI may drink it down, pouring in ten ladles\nof water, and five of wine,\ncupfuls, so that without outrage\nonce again I may play the Bacchant.\nCome, once again let us no longer thus\nwith crashing and shouting\nthe Scythian way of drinking over wine\npractise, but with fair\nsongs, drinking in moderation.",
+   "note": "Drinking-song in two parts (a, b): the proper mixture of wine and water; no Scythian drinking.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:357",
+   "campbell_identity": {
+    "edition_fragment": "357",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "6c1d15ae4ee6c3fc0f4b466fd8936f372d4080cba28de74b8b76e2c50ce9ebfc",
+    "line_count": 11,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ὦναξ, ᾧ δαμάλης Ἔρως",
+     "english": "Lord, with whom the tamer Eros"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "καὶ Νύμφαι κυανώπιδες",
+     "english": "and the dark-eyed Nymphs"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "πορφυρῆ τ’ Ἀφροδίτη",
+     "english": "and radiant Aphrodite"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "συμπαίζουσιν, ἐπιστρέφεαι",
+     "english": "play together, and who range over"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "δ’ ὑψηλὰς ὀρέων κορυφάς·",
+     "english": "the high peaks of the mountains:"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "γουνοῦμαί σε, σὺ δ’ εὐμενὴς",
+     "english": "I beseech you by your knees; and do you graciously"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "ἔλθ’ ἡμίν, κεχαρισμένης",
+     "english": "come to us, and to a pleasing"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "δ’ εὐχωλῆς ἐπακούειν·",
+     "english": "prayer give ear;"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "Κλεοβούλῳ δ’ ἀγαθὸς γένεο",
+     "english": "to Cleobulus become a good"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "σύμβουλος, τὸν ἐμόν γ’ ἔρω-",
+     "english": "counsellor, so that my"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "τ’, ὦ Δεόνυσε, δέχεσθαι.",
+     "english": "love, O Dionysus, he may accept."
+    }
+   ],
+   "text": "Lord, with whom the tamer Eros\nand the dark-eyed Nymphs\nand radiant Aphrodite\nplay together, and who range over\nthe high peaks of the mountains:\nI beseech you by your knees; and do you graciously\ncome to us, and to a pleasing\nprayer give ear;\nto Cleobulus become a good\ncounsellor, so that my\nlove, O Dionysus, he may accept.",
+   "note": "Prayer to Dionysus for help in a love-affair with Cleobulus.",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:358",
+   "campbell_identity": {
+    "edition_fragment": "358",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "6ecd49afb5f2be98c49ef6625aaf6b2e81c2f11870817d6a16698365d36046a1",
+    "line_count": 8,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "σφαίρῃ δηὖτέ με πορφυρῇ",
+     "english": "With a purple ball once again me"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "βάλλων χρυσοκόμης Ἔρως",
+     "english": "striking, golden-haired Eros"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "νήνι ποικιλοσαμβάλῳ",
+     "english": "with a girl in embroidered sandals"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "συμπαίζειν προκαλεῖται·",
+     "english": "challenges me to play;"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "ἡ δ’, ἐστὶν γὰρ ἀπ’ εὐκτίτου",
+     "english": "but she, for she is from well-built"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "Λέσβου, τὴν μὲν ἐμὴν κόμην,",
+     "english": "Lesbos, my hair,"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "λευκὴ γάρ, καταμέμφεται,",
+     "english": "since it is white, finds fault with,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "πρὸς δ’ ἄλλην τινὰ χάσκει.",
+     "english": "and gapes after some other."
+    }
+   ],
+   "text": "With a purple ball once again me\nstriking, golden-haired Eros\nwith a girl in embroidered sandals\nchallenges me to play;\nbut she, for she is from well-built\nLesbos, my hair,\nsince it is white, finds fault with,\nand gapes after some other.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:359",
+   "campbell_identity": {
+    "edition_fragment": "359",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "a15abff04d20d770f1869819b79b7347633c5ec84834fbcbc02d25550a4807d7",
+    "line_count": 3,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "Κλεοβούλου μὲν ἔγωγ’ ἐρέω,",
+     "english": "Cleobulus I love,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "Κλεοβούλῳ δ’ ἐπιμαίνομαι,",
+     "english": "for Cleobulus I am mad,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "Κλεόβουλον δὲ διοσκέω.",
+     "english": "at Cleobulus I gaze."
+    }
+   ],
+   "text": "Cleobulus I love,\nfor Cleobulus I am mad,\nat Cleobulus I gaze.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:360",
+   "campbell_identity": {
+    "edition_fragment": "360",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "78f54fc6e4a395a2797b013e43b5280c572124bcbd1733413fdf150fdd769e2b",
+    "line_count": 4,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ὦ παῖ παρθένιον βλέπων",
+     "english": "O boy with a maiden’s glance,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "δίζημαί σε, σὺ δ’ οὐ κοεῖς,",
+     "english": "I seek you, but you do not heed,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "οὐκ εἰδὼς ὅτι τῆς ἐμῆς",
+     "english": "not knowing that of my"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "ψυχῆς ἡνιοχεύεις.",
+     "english": "soul you hold the reins."
+    }
+   ],
+   "text": "O boy with a maiden’s glance,\nI seek you, but you do not heed,\nnot knowing that of my\nsoul you hold the reins.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:361",
+   "campbell_identity": {
+    "edition_fragment": "361",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "860e18548281397999db86a10366e6bff2371105006a2473a9f6532d9d6bf6c2",
+    "line_count": 4,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἐγὼ δ’ οὔτ’ ἂν Ἀμαλθίης",
+     "english": "But I would not Amaltheia’s"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "βουλοίμην κέρας οὔτ’ ἔτεα",
+     "english": "horn wish for, nor for years"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "πεντήκοντά τε κἀκατὸν",
+     "english": "a hundred and fifty"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "Ταρτησσοῦ βασιλεῦσαι.",
+     "english": "over Tartessus to be king."
+    }
+   ],
+   "text": "But I would not Amaltheia’s\nhorn wish for, nor for years\na hundred and fifty\nover Tartessus to be king.",
+   "note": "",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:376",
+   "campbell_identity": {
+    "edition_fragment": "376",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "77616decf37e8c6063131e7dcf20e082db681015156f810021b564b603b65f98",
+    "line_count": 2,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἀρθεὶς δηὖτ’ ἀπὸ Λευκάδος",
+     "english": "Lifted up once again from the Leucadian"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "πέτρης ἐς πολιὸν κῦμα κολυμβῶ μεθύων ἔρωτι.",
+     "english": "rock into the grey wave I dive, drunk with love."
+    }
+   ],
+   "text": "Lifted up once again from the Leucadian\nrock into the grey wave I dive, drunk with love.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:388",
+   "campbell_identity": {
+    "edition_fragment": "388",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "cc7558a799570d1a730098c7cdd96c19e2a1e9644f24027487b7d3f980141d17",
+    "line_count": 12,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "πρὶν μὲν ἔχων βερβέριον, καλύμματ’ ἐσφηκωμένα,",
+     "english": "Before, he went about with a berberion, wasp-waisted coverings,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "καὶ ξυλίνους ἀστραγάλους ἐν ὠσὶ καὶ ψιλὸν περὶ",
+     "english": "and wooden dice in his ears, and round"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "πλευρῇσι ⟨δέρμ’ ἤει⟩ βοός,",
+     "english": "his ribs ‹he wore› a bare hide of ox,"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "νήπλυτον εἴλυμα κακῆς ἀσπίδος, ἀρτοπώλισιν",
+     "english": "the unwashed wrapping of a wretched shield, with bread-women"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "κἀθελοπόρνοισιν ὁμιλέων ὁ πονηρὸς Ἀρτέμων,",
+     "english": "and willing whores consorting, the knavish Artemon,"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "κίβδηλον εὑρίσκων βίον,",
+     "english": "finding himself a counterfeit livelihood,"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "πολλὰ μὲν ἐν δουρὶ τιθεὶς αὐχένα, πολλὰ δ’ ἐν τροχῷ,",
+     "english": "often in the stocks putting his neck, often on the wheel,"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "πολλὰ δὲ νῶτον σκυτίνῃ μάστιγι θωμιχθείς, κόμην",
+     "english": "often on the back with a leather whip lashed, his hair"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "πώγωνά τ’ ἐκτετιλμένος·",
+     "english": "and beard plucked out;"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "νῦν δ’ ἐπιβαίνει σατινέων χρύσεα φορέων κατέρματα",
+     "english": "but now he mounts carriages, wearing golden earrings,"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "†παῖς Κύκης† καὶ σκιαδίσκην ἐλεφαντίνην φορεῖ",
+     "english": "†the son of Cyce†, and an ivory parasol carries,"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "γυναιξὶν αὔτως ⟨ἐμφερής⟩.",
+     "english": "just like women ‹in appearance›."
+    }
+   ],
+   "text": "Before, he went about with a berberion, wasp-waisted coverings,\nand wooden dice in his ears, and round\nhis ribs ‹he wore› a bare hide of ox,\nthe unwashed wrapping of a wretched shield, with bread-women\nand willing whores consorting, the knavish Artemon,\nfinding himself a counterfeit livelihood,\noften in the stocks putting his neck, often on the wheel,\noften on the back with a leather whip lashed, his hair\nand beard plucked out;\nbut now he mounts carriages, wearing golden earrings,\n†the son of Cyce†, and an ivory parasol carries,\njust like women ‹in appearance›.",
+   "note": "Invective against the upstart Artemon.",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:395",
+   "campbell_identity": {
+    "edition_fragment": "395",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "5d1d89e689679b8c411bdf33f62e38e2d0823a12f9ca3f76fd1bf39ad2a86a6a",
+    "line_count": 12,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "πολιοὶ μὲν ἡμὶν ἤδη",
+     "english": "Grey already are our"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "κρόταφοι κάρη τε λευκόν,",
+     "english": "temples, and our head white,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "χαρίεσσα δ’ οὐκέτ’ ἥβη",
+     "english": "graceful youth no longer"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "πάρα, γηραλέοι δ’ ὀδόντες,",
+     "english": "is with us, and aged are our teeth,"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "γλυκεροῦ δ’ οὐκέτι πολλὸς",
+     "english": "and of sweet life no longer much"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "βιότου χρόνος λέλειπται·",
+     "english": "time is left;"
+    },
+    {
+     "index": 6,
+     "label": "",
+     "greek": "διὰ ταῦτ’ ἀνασταλύζω",
+     "english": "for this reason I sob"
+    },
+    {
+     "index": 7,
+     "label": "",
+     "greek": "θαμὰ Τάρταρον δεδοικώς·",
+     "english": "often, fearing Tartarus;"
+    },
+    {
+     "index": 8,
+     "label": "",
+     "greek": "Ἀίδεω γάρ ἐστι δεινὸς",
+     "english": "for Hades’ is a dreadful"
+    },
+    {
+     "index": 9,
+     "label": "10",
+     "greek": "μυχός, ἀργαλῆ δ’ ἐς αὐτὸν",
+     "english": "recess, and painful into it"
+    },
+    {
+     "index": 10,
+     "label": "",
+     "greek": "κάτοδος· καὶ γὰρ ἑτοῖμον",
+     "english": "is the way down; and indeed it is fixed"
+    },
+    {
+     "index": 11,
+     "label": "",
+     "greek": "καταβάντι μὴ ἀναβῆναι.",
+     "english": "for him who has gone down not to come up."
+    }
+   ],
+   "text": "Grey already are our\ntemples, and our head white,\ngraceful youth no longer\nis with us, and aged are our teeth,\nand of sweet life no longer much\ntime is left;\nfor this reason I sob\noften, fearing Tartarus;\nfor Hades’ is a dreadful\nrecess, and painful into it\nis the way down; and indeed it is fixed\nfor him who has gone down not to come up.",
+   "note": "",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:396",
+   "campbell_identity": {
+    "edition_fragment": "396",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "5add2846511ff2ba25f16cb8d0499274d6b23cc0183dfad3074f1e90a9daaed2",
+    "line_count": 2,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "φέρ’ ὕδωρ φέρ’ οἶνον ὦ παῖ φέρε ⟨δ’⟩ ἀνθεμόεντας ἡμὶν",
+     "english": "Bring water, bring wine, boy, bring us flowery"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "στεφάνους· ἔνεικον, ὡς δὴ πρὸς Ἔρωτα πυκταλίζω.",
+     "english": "garlands; fetch them, so that against Eros I may box."
+    }
+   ],
+   "text": "Bring water, bring wine, boy, bring us flowery\ngarlands; fetch them, so that against Eros I may box.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:398",
+   "campbell_identity": {
+    "edition_fragment": "398",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "5801e65c61f670a4b42d663df3fef0a8b545615a9aed43533d12ef4f9165de53",
+    "line_count": 2,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἀστραγάλαι δ’ Ἔρωτός εἰσιν",
+     "english": "The dice of Eros are"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "μανίαι τε καὶ κυδοιμοί.",
+     "english": "madnesses and uproars."
+    }
+   ],
+   "text": "The dice of Eros are\nmadnesses and uproars.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:408",
+   "campbell_identity": {
+    "edition_fragment": "408",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "706885451ba8bc1c68c68c200055fdf69cff1bc6b7ae09842192f8d907db39ec",
+    "line_count": 3,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἀγανῶς οἷά τε νεβρὸν νεοθηλέα",
+     "english": "Gently, like a new-born fawn"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "γαλαθηνὸν ὅς τ’ ἐν ὕλῃ κεροέσσης",
+     "english": "still suckling, which in the wood by its horned"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ἀπολειφθεὶς ἀπὸ μητρὸς ἐπτοήθη.",
+     "english": "mother left behind is frightened."
+    }
+   ],
+   "text": "Gently, like a new-born fawn\nstill suckling, which in the wood by its horned\nmother left behind is frightened.",
+   "note": "Simile, probably of a timid beloved.",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:413",
+   "campbell_identity": {
+    "edition_fragment": "413",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "b1bdef13c2861d3ab4e97e7efff9b345353bc86846068c7df9b074711dd76de1",
+    "line_count": 2,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "μεγάλῳ δηὖτέ μ’ Ἔρως ἔκοψεν ὥστε χαλκεὺς",
+     "english": "Once again Eros has struck me like a smith with a great"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "πελέκει, χειμερίῃ δ’ ἔλουσεν ἐν χαράδρῃ.",
+     "english": "axe, and has washed me in a wintry torrent."
+    }
+   ],
+   "text": "Once again Eros has struck me like a smith with a great\naxe, and has washed me in a wintry torrent.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:417",
+   "campbell_identity": {
+    "edition_fragment": "417",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "47c88980e3bac0a3752cf721191b8df54ff0a1f80d802f996a6c63311e1fdfda",
+    "line_count": 6,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "πῶλε Θρῃκίη, τί δή με λοξὸν ὄμμασι βλέπουσα",
+     "english": "Thracian filly, why, looking askance at me with your eyes,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "νηλέως φεύγεις, δοκεῖς δέ μ’ οὐδὲν εἰδέναι σοφόν;",
+     "english": "do you pitilessly flee, and think I know nothing skilful?"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ἴσθι τοι, καλῶς μὲν ἄν τοι τὸν χαλινὸν ἐμβάλοιμι,",
+     "english": "Know well: I could neatly put the bit on you,"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "ἡνίας δ’ ἔχων στρέφοιμί σ’ ἀμφὶ τέρματα δρόμου·",
+     "english": "and holding the reins turn you round the turning-posts of the course;"
+    },
+    {
+     "index": 4,
+     "label": "5",
+     "greek": "νῦν δὲ λειμῶνάς τε βόσκεαι κοῦφά τε σκιρτῶσα παίζεις·",
+     "english": "but now you graze the meadows and play, skipping lightly;"
+    },
+    {
+     "index": 5,
+     "label": "",
+     "greek": "δεξιὸν γὰρ ἱπποπείρην οὐκ ἔχεις ἐπεμβάτην.",
+     "english": "for you have no skilled horse-breaking rider to mount you."
+    }
+   ],
+   "text": "Thracian filly, why, looking askance at me with your eyes,\ndo you pitilessly flee, and think I know nothing skilful?\nKnow well: I could neatly put the bit on you,\nand holding the reins turn you round the turning-posts of the course;\nbut now you graze the meadows and play, skipping lightly;\nfor you have no skilled horse-breaking rider to mount you.",
+   "note": "",
+   "love_theme": true
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:419",
+   "campbell_identity": {
+    "edition_fragment": "419",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "9bd4f8f11beb329441ee3c10e207d396fce52f91ffa23e2d8c9f0d613f29bcae",
+    "line_count": 2,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "ἀλκίμων σ’ ὦ ’ριστοκλείδη πρῶτον οἰκτίρω φίλων·",
+     "english": "Of my valiant friends you, Aristocleides, first I pity;"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "ὤλεσας δ’ ἥβην ἀμύνων πατρίδος δουληΐην.",
+     "english": "you lost your youth warding off slavery from your fatherland."
+    }
+   ],
+   "text": "Of my valiant friends you, Aristocleides, first I pity;\nyou lost your youth warding off slavery from your fatherland.",
+   "note": "",
+   "love_theme": false
+  },
+  {
+   "campbell_record_id": "campbell-glp:anacreon:96d",
+   "campbell_identity": {
+    "edition_fragment": "96D.",
+    "source_pdf_sha256": "8cbdd94c38c824b7c7eb2920cafac13ac988038cabfe74ddf4f3139e7fa33b9f",
+    "raw_sha256": "d8ca8ded2db860ea179c507ae114a7cad02d11ad02c826f47ebb233c21ea4ea8",
+    "text_sha256": "d46a40d747f3d609f5eb9f0e8c15725907177c92542359234d5fc4e7ffae1966",
+    "line_count": 4,
+    "author": "Anacreon"
+   },
+   "lines": [
+    {
+     "index": 0,
+     "label": "",
+     "greek": "οὐ φιλέω ὃς κρητῆρι παρὰ πλέῳ οἰνοποτάζων",
+     "english": "I do not love the man who, drinking wine beside the full mixing-bowl,"
+    },
+    {
+     "index": 1,
+     "label": "",
+     "greek": "νείκεα καὶ πόλεμον δακρυόεντα λέγει,",
+     "english": "speaks of quarrels and tearful war,"
+    },
+    {
+     "index": 2,
+     "label": "",
+     "greek": "ἀλλ’ ὅστις Μουσέων τε καὶ ἀγλαὰ δῶρ’ Ἀφροδίτης",
+     "english": "but him who, the Muses’ and Aphrodite’s splendid gifts"
+    },
+    {
+     "index": 3,
+     "label": "",
+     "greek": "συμμίσγων ἐρατῆς μνῄσκεται εὐφροσύνης.",
+     "english": "mingling, remembers lovely good cheer."
+    }
+   ],
+   "text": "I do not love the man who, drinking wine beside the full mixing-bowl,\nspeaks of quarrels and tearful war,\nbut him who, the Muses’ and Aphrodite’s splendid gifts\nmingling, remembers lovely good cheer.",
+   "note": "Elegiac couplets.",
+   "love_theme": true
+  }
+ ]
+}

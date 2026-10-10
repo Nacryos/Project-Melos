@@ -20,7 +20,10 @@ citation            original source passage/fragment reference
 language            grc / eng / lat / other ISO code
 text                extracted text, unchanged except whitespace processing
 kind                text / translation / commentary / apparatus / reference
-quality             source_text / machine_corrected_ocr / machine_ocr / mixed_content / needs_review
+quality             source_text / machine_corrected_ocr / machine_ocr / mixed_content / needs_review /
+                    machine_translation (translation rows only: the owner-commissioned literal English
+                    renderings of Campbell poems, docs/decisions.md 2026-10-10; search rows and the
+                    reader's fallback panel, never a published source or meaning evidence)
 license             actual source license or unknown
 parent_id           optional related Greek passage ID
 lines               optional list of {label,text}

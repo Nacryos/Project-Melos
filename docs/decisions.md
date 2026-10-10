@@ -140,3 +140,34 @@ python scripts/report_coverage.py
 Without the OGC re-run the build still promotes corrected OCR in files
 whose rows were already typed `text`, but the poet fragment collections
 stay `reference / unknown` because the earlier collector labelled them so.
+
+## 2026-10-10: literal machine translations as search rows and a last-resort reader fallback
+
+The owner had Claude (Fable 5.1) make literal, line-by-line English renderings of every Sappho, Alcaeus and
+Anacreon poem in Campbell's *Greek Lyric Poetry* (59 poems, 506 lines; the Word document of 2026-10-10) and
+asked for them to go into the site "mostly for semantic search, backend work, and displayed only when there are
+no available English author translations for that poem".
+
+### What changed
+
+- **A new quality value `machine_translation`** (corpus contract). Rows are `kind: translation`, `language: eng`,
+  `parent_id` = the Campbell poem, `source: literal_translation_claude`, id `<poem id>:literal`
+  (`data/campbell_glp/literal_translations_rows.jsonl`, built by `scripts/build_literal_translations.py` from the
+  committed source `data/campbell_glp/literal_translations/claude-fable-5.1-2026-10-10.json`; appended to a corpus
+  copy with `scripts/import_literal_translations.py`). They enter the English BM25 bridge and the dense indexes
+  (release O BGE-M3 and the release S stack), crediting the Greek poem exactly as a published translation row does.
+- **Reader sidecar** `backend/literal_translations_data.json` (`backend/literal_translations.py`), served by
+  `/api/passage` as `literal_translation` with `display_policy: fallback_only`, `model_eligible: false`,
+  `published_source: false` and `published_english_available`. The reader renders it only when neither a published
+  translation preview nor an other-edition comparison was shown (today: Alcaeus 45 alone), under the heading
+  "Literal line-by-line rendering · unpublished, machine-made", with the translator, date and method stated.
+- Each record is bound to the Campbell text it was made from (record id, edition fragment, PDF hash, text hash,
+  line count); a changed text yields `status: unavailable`, never a stale line.
+
+### What it does not change
+
+- The rule in `docs/corpus-contract.md` against supplying missing translations from memory as *source* records
+  stands: these rows carry their own quality value and licence note, are excluded from `related` source material
+  and from reference-query listings, are never `translation_previews` or `translation_comparisons`, and never reach
+  the analysis context, the Jev ranker or the sense ranker.
+- The other-edition comparison sidecars (pre-1930 published English) are untouched and keep display priority.

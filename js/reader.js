@@ -674,11 +674,16 @@
     const translations = passageTranslationPreviews(state.passage);
     const promoted = new Set(translations.map(item => item.record_id));
     related = (Array.isArray(related) ? related : []).filter(item => !promoted.has(item?.id)
+      && item?.quality !== 'machine_translation'
       && (item?.kind !== 'translation' || /^(?:en|eng)(?:-[a-z0-9]{2,8})*$/i.test(String(item.language || '').trim())));
     if (translations.length) renderPublishedTranslations(ui.related, translations);
     const comparisonsShown = globalThis.window?.MelosPassageAnalysis?.renderTranslationComparisons?.(ui.related,
       { passage: state.passage, translation_comparisons: state.passage?.translation_comparisons }, node, safeLink) === true;
-    if (!related.length) { ui.related.hidden = !translations.length && !comparisonsShown; return; }
+    // Fallback only: the owner-commissioned literal rendering appears when no published English was shown.
+    const literalShown = !translations.length && !comparisonsShown
+      && globalThis.window?.MelosPassageAnalysis?.renderLiteralTranslation?.(ui.related,
+        { passage: state.passage, literal_translation: state.passage?.literal_translation }, node) === true;
+    if (!related.length) { ui.related.hidden = !translations.length && !comparisonsShown && !literalShown; return; }
     const heading = node('span', 'eyebrow', 'RELATED SOURCE MATERIAL');
     ui.related.append(heading);
     if (related.some(item => ['page', 'source_section'].includes(item?.metadata?.scope))) {

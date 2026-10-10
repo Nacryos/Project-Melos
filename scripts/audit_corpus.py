@@ -31,7 +31,7 @@ REQUIRED = (
     "quality", "license",
 )
 KINDS = {"text", "translation", "commentary", "apparatus", "reference"}
-QUALITIES = {"source_text", "machine_corrected_ocr", "machine_ocr", "mixed_content", "needs_review"}
+QUALITIES = {"source_text", "machine_corrected_ocr", "machine_ocr", "mixed_content", "needs_review", "machine_translation"}
 SHA256 = re.compile(r"^[0-9a-fA-F]{64}$")
 GREEK = re.compile(r"[\u0370-\u03ff\u1f00-\u1fff]")
 LATIN_WORD = re.compile(r"[A-Za-z]{3,}")

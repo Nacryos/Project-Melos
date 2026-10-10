@@ -29,7 +29,10 @@ GREEK = re.compile(r"[Ͱ-Ͽἀ-῿]")
 STOPWORDS = frozenset("""a an and are as at be but by for from has have he her his i in is it its of on or
 she that the their them they this to was were which who will with you your not no so than then
 there these those into upon when where while whom whose shall thou thee thy ye hath doth unto""".split())
-SEARCHABLE = "('source_text','machine_corrected_ocr')"
+# machine_translation: the owner-commissioned literal English renderings of Campbell poems (kind
+# translation, parent_id = the poem); they credit the Greek poem through the bridge and are never shown
+# as records of their own (docs/decisions.md, 2026-10-10).
+SEARCHABLE = "('source_text','machine_corrected_ocr','machine_translation')"
 # Fusion weights for a query without Greek letters. Measured 2026-09-30: the
 # BM25 bridge raised both Recall@10 and MRR in every round; rare-word feedback
 # (prf_hits) added recall but lowered MRR because wrong dense seeds boost wrong

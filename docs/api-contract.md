@@ -536,3 +536,24 @@ and ἔρως); `combine_variants=false` searches the one headword.
 
 A capitalisation member's link has `relation: "capitalised spelling"`, `dictionary: "Melos capitalisation rule
 (no dictionary link)"` and `evidence: "same letters, other capitalisation"`; no label is null.
+
+## Release X additions (literal translation fallback)
+
+### GET /api/passage — `literal_translation`
+
+Present for the 59 Sappho, Alcaeus and Anacreon poems of Campbell's selection (owner decision 2026-10-10,
+`docs/decisions.md`). `{evidence_type: "literal_machine_translation", scope: "whole_poem_line_by_line",
+display_policy: "fallback_only", model_eligible: false, selection_aligned: false, exact_edition_alignment: false,
+word_attestation: false, published_source: false, status, campbell_record_id, line_aligned: true,
+published_english_available, translator, produced_at, translation_status, method, line_count,
+lines: [{index, label, greek, english}], text, note, love_theme}`. `status` is `available` only when the stored
+Greek text, line count, edition fragment and PDF hash equal those the rendering was made from; otherwise
+`unavailable` with `reason` and no lines. `published_english_available` is true when the passage carries
+`translation_previews` with text or an available `translation_comparisons` set; the reader shows the panel only when
+it is false and nothing published was rendered. Rows of quality `machine_translation` are omitted from `related`.
+
+### Search
+
+Corpus rows `<poem id>:literal` (kind `translation`, language `eng`, quality `machine_translation`, `parent_id` the
+poem) take part in the English BM25 bridge and the dense `eng` retrievers; hits credit the Greek poem through
+`parent_id` as for any linked translation. They are excluded from reference-query record listings.

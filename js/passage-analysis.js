@@ -467,6 +467,42 @@
     }
     host.append(panel); return true;
   }
+  function renderLiteralTranslation(host, data, node) {
+    // Owner-commissioned literal line-by-line rendering (an unpublished machine translation). Shown only as a
+    // fallback: the caller renders it when no published English translation was shown, and the wire record
+    // itself must say no published English is available. Never a source, never meaning evidence.
+    const row = data?.literal_translation;
+    if (!row || row.status !== 'available' || row.evidence_type !== 'literal_machine_translation'
+      || row.display_policy !== 'fallback_only' || row.published_english_available !== false
+      || row.model_eligible !== false || row.selection_aligned !== false || row.published_source !== false
+      || typeof data.passage?.id !== 'string' || row.campbell_record_id !== data.passage.id
+      || !Array.isArray(row.lines) || !row.lines.length || row.line_count !== row.lines.length
+      || !['translator', 'produced_at', 'translation_status'].every(key => typeof row[key] === 'string' && row[key].trim())
+      || row.lines.some(line => typeof line?.english !== 'string' || typeof line?.greek !== 'string'
+        || !Number.isInteger(line.index))) return false;
+    const panel = node('details', 'passage-analysis-section entry-details literal-translation');
+    panel.append(node('summary', '', 'Literal line-by-line rendering · unpublished, machine-made'),
+      node('p', 'translation-scope', 'No published English translation of this poem is in the collection. '
+        + 'This literal rendering follows Campbell’s Greek line by line and was produced by a language model '
+        + `(${row.translator}, ${row.produced_at}). It is not a published source and is not used as evidence for word meanings.`));
+    if (typeof row.note === 'string' && row.note.trim()) panel.append(node('p', 'translation-edition', row.note));
+    const list = node('div', 'literal-lines');
+    for (const line of row.lines) {
+      const item = node('div', 'literal-line');
+      const label = typeof line.label === 'string' ? line.label : '';
+      item.append(node('span', 'literal-label', label), node('p', 'literal-greek', line.greek), node('p', 'literal-english', line.english));
+      list.append(item);
+    }
+    panel.append(list);
+    const details = node('details', 'entry-details');
+    details.append(node('summary', '', 'How this rendering was made'),
+      node('p', 'candidate-reason', row.translation_status), node('p', 'commentary-excerpt', typeof row.method === 'string' ? row.method : ''),
+      node('pre', 'passage-analysis-receipt', JSON.stringify({ evidence_type: row.evidence_type, campbell_record_id: row.campbell_record_id,
+        display_policy: row.display_policy, model_eligible: false, published_source: false, line_aligned: row.line_aligned === true,
+        line_count: row.line_count }, null, 2)));
+    panel.append(details); host.append(panel);
+    return true;
+  }
   function rankingCandidateLabel(candidate) {
     if (!candidate) return '';
     const labels = { pofs: 'part of speech', gend: 'gender', num: 'number', pers: 'person', dial: 'dialect', decl: 'declension', stemtype: 'stem type' };
@@ -1164,5 +1200,5 @@
       }
     };
   }
-  window.MelosPassageAnalysis = { mount, holdInView, sourceMap, selectedSpan, selectionIssue, createRequester, lexicalPrediction, sourceCandidateGroups, rankingCandidateLabel, dedupeCandidates, groupCandidateDisplays, renderPartialCandidateEvidence, machineSubentryMeanings, renderMachineSubentryMeanings, englishTranslation, interlinearSegments, renderInterlinear, shortGlossText, headlineFromRow, renderWordHeadline, renderPublishedCommentary, renderTranslationComparisons, verifiedEditorialRows, renderEditorialAnalysis, renderEditorialWordActions };
+  window.MelosPassageAnalysis = { mount, holdInView, sourceMap, selectedSpan, selectionIssue, createRequester, lexicalPrediction, sourceCandidateGroups, rankingCandidateLabel, dedupeCandidates, groupCandidateDisplays, renderPartialCandidateEvidence, machineSubentryMeanings, renderMachineSubentryMeanings, englishTranslation, interlinearSegments, renderInterlinear, shortGlossText, headlineFromRow, renderWordHeadline, renderPublishedCommentary, renderTranslationComparisons, renderLiteralTranslation, verifiedEditorialRows, renderEditorialAnalysis, renderEditorialWordActions };
 })();
