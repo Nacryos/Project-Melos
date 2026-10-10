@@ -28,16 +28,24 @@ Lint:
 Agent service (MELOS_COMPOSER_AGENT_URL, header X-Composer-Token); unreachable → 503 {"agent": "unavailable"}:
   POST /api/composer/poems/{id}/chat                {message, caret?}: agent /chat {poem, thread, message}; SSE relayed unchanged; the final assistant
                                                     message and the tool trace are stored when the stream ends
-  POST /api/composer/poems/{id}/pool                {line_id?, caret, prefix, remaining_template, n ≤ 40}: agent
-                                                    /pool {poem, slot, n}; SSE relayed; each `candidate` stored
+  POST /api/composer/poems/{id}/pool                {line_id?, caret, prefix, remaining_template, n ≤ 40, ahead_lines?}:
+                                                    agent /pool {poem, slot, ahead, n}: the slot plus the empty lines
+                                                    after it (the rest of the stanza); SSE relayed; every `candidate`
+                                                    stored under its own slot_key, read to the end even if the page
+                                                    stops listening
+  POST /api/composer/poems/{id}/warm                {line_position?, n?}: 202; agent /warm read in the background
+                                                    (research once + a stanza batch), candidates stored per slot
+  GET  /api/composer/poems/{id}/slot-key            ?line_position=&prefix= → the slot key (formula: slot_key())
   POST /api/composer/backtranslate                  {greek, dialect}: JSON
 """
 from __future__ import annotations
 
+import asyncio
 import hashlib
 import json
 import logging
 import os
+import unicodedata
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query
@@ -298,11 +306,16 @@ class SSEParser:
         return out
 
 
-def _relay(client, response, on_event, on_end):
-    """Pass the agent's bytes through unchanged; parse a copy for storage. ``on_end(completed)`` always runs."""
+_background: set = set()   # detached relays (pool, warm): kept referenced until they finish
+
+
+def _relay(client, response, on_event, on_end, detach: bool = False):
+    """Pass the agent's bytes through unchanged; parse a copy for storage. ``on_end(completed)`` always runs.
+    ``detach``: a background task reads the agent stream to its end even after the page stops listening (caret
+    moved, page closed), so every candidate the agent sends is stored; the page gets the bytes while it listens."""
     parser = SSEParser()
 
-    async def body():
+    async def chunks():
         completed = False
         try:
             async for chunk in response.aiter_raw():
@@ -323,8 +336,33 @@ def _relay(client, response, on_event, on_end):
             except Exception:  # noqa: BLE001
                 log.exception("composer: could not store the end of an agent stream")
 
-    return StreamingResponse(body(), media_type="text/event-stream",
-                             headers={"Cache-Control": "no-store", "X-Accel-Buffering": "no"})
+    headers = {"Cache-Control": "no-store", "X-Accel-Buffering": "no"}
+    if not detach:
+        return StreamingResponse(chunks(), media_type="text/event-stream", headers=headers)
+    queue: asyncio.Queue = asyncio.Queue()
+    listening = [True]
+
+    async def pump():
+        try:
+            async for chunk in chunks():
+                if listening[0]:
+                    queue.put_nowait(chunk)
+        except Exception:  # noqa: BLE001 - nobody may be listening: log it
+            log.exception("composer: detached agent stream failed")
+        finally:
+            queue.put_nowait(None)
+
+    task = asyncio.create_task(pump())
+    _background.add(task)
+    task.add_done_callback(_background.discard)
+
+    async def forward():
+        try:
+            while (chunk := await queue.get()) is not None:
+                yield chunk
+        finally:
+            listening[0] = False
+    return StreamingResponse(forward(), media_type="text/event-stream", headers=headers)
 
 
 class Caret(BaseModel):
@@ -394,12 +432,49 @@ class PoolIn(BaseModel):
     prefix: str = Field("", max_length=MAX_LINE)
     remaining_template: str | None = Field(None, max_length=40)
     n: int = Field(8, ge=1, le=40)
+    ahead_lines: int | None = Field(None, ge=0, le=8)
 
 
-def slot_key(poem: dict, line_id, caret: dict, prefix: str) -> str:
-    """Pool key: (poem, line, caret context, settings), PRD §4."""
-    raw = json.dumps([poem["poem_id"], line_id, caret, prefix, poem["settings"]], ensure_ascii=False, sort_keys=True)
-    return hashlib.sha256(raw.encode()).hexdigest()[:32]
+def slot_key(line_position, prefix: str, settings: dict | None) -> str:
+    """The pool's slot key, computed the same way by js/composer-core.js ``slotKey`` (docs/composer/ui.md):
+    sha256 of "v1|<line position>|<prefix>|<author>|<metre>|<dialect>" (UTF-8), first 32 hex digits. The prefix
+    is the line before the slot, NFC, whitespace runs collapsed to one space, trimmed; a missing setting is ""."""
+    s = settings or {}
+    text = " ".join(unicodedata.normalize("NFC", prefix or "").split())
+    raw = "|".join(["v1", str(int(line_position or 0)), text, *(str(s.get(k) or "") for k in ("author", "metre", "dialect"))])
+    return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:32]
+
+
+def _templates(settings: dict | None) -> list[str]:
+    from .scansion import metre
+    return list(metre.TEMPLATES.get((settings or {}).get("metre") or "", []))
+
+
+def ahead_slots(context: dict, line_position: int, limit: int | None = None) -> list[dict]:
+    """The empty lines after ``line_position`` to fill in the same batch: the rest of the stanza, at least two lines,
+    at most MELOS_COMPOSER_AHEAD_LINES (default 3). Lines that already hold Greek are skipped."""
+    templates = _templates(context["settings"])
+    if not templates:
+        return []
+    cap = int(os.environ.get("MELOS_COMPOSER_AHEAD_LINES", "3")) if limit is None else limit
+    count = min(cap, max(len(templates) - 1 - line_position % len(templates), 2))
+    written = {l["position"]: l for l in context.get("lines") or []}
+    out = []
+    for p in range(line_position + 1, line_position + 1 + count):
+        line = written.get(p)
+        if line and (line.get("greek") or "").strip():
+            continue
+        out.append({"line_position": p, "caret": 0, "prefix": "", "remaining_template": templates[p % len(templates)],
+                    "line_id": line["line_id"] if line else None, "slot_key": slot_key(p, "", context["settings"])})
+    return out
+
+
+def _pool_store(poem_id: int, keys: set, primary: str):
+    def on_event(event, data):
+        if event == "candidate" and isinstance(data, dict) and not data.get("replay"):
+            key = data.get("slot_key") if data.get("slot_key") in keys else primary
+            store.add_pool(poem_id, key, data, data.get("checks"))
+    return on_event
 
 
 @router.post("/api/composer/poems/{poem_id}/pool", dependencies=owner)
@@ -412,19 +487,63 @@ async def fill_pool(poem_id: int, body: PoolIn):
                                              "reject a candidate"})
     caret = body.caret.model_dump()
     context = _store_call(store.agent_context, poem_id, caret)
-    key = slot_key(context, body.line_id, caret, body.prefix + "|" + (body.remaining_template or ""))
+    position = caret.get("line_position") or 0
+    key = slot_key(position, body.prefix, context["settings"])
     slot = {"line_position": caret.get("line_position"), "caret": caret.get("char_offset"), "prefix": body.prefix,
             "remaining_template": body.remaining_template, "line_id": body.line_id, "slot_key": key}
-    opened = await _open_stream("/pool", {"poem": context, "slot": slot, "n": body.n})
+    ahead = ahead_slots(context, position, body.ahead_lines)
+    opened = await _open_stream("/pool", {"poem": context, "slot": slot, "ahead": ahead, "n": body.n})
     if isinstance(opened, JSONResponse):
         return opened
+    # Detached: the agent's candidates for every slot are stored even if the page stops listening (caret moved).
+    return _relay(*opened, _pool_store(poem_id, {key, *(a["slot_key"] for a in ahead)}, key), lambda completed: None,
+                  detach=True)
 
-    def on_event(event, data):
-        if event == "candidate":
-            checks = data.get("checks") if isinstance(data, dict) else None
-            store.add_pool(poem_id, key, data, checks)
 
-    return _relay(*opened, on_event, lambda completed: None)
+@router.get("/api/composer/poems/{poem_id}/slot-key", dependencies=owner)
+def pool_slot_key(poem_id: int, line_position: int = Query(0, ge=0), prefix: str = Query("", max_length=MAX_LINE)):
+    """The server's slot key for (line, prefix) with the poem's current settings (for checking the page's own)."""
+    poem = _store_call(store.get_poem, poem_id)
+    return {"slot_key": slot_key(line_position, prefix, poem["settings"])}
+
+
+class WarmIn(BaseModel):
+    model_config = {"extra": "forbid"}
+    line_position: int | None = Field(None, ge=0, le=100_000)
+    n: int = Field(8, ge=1, le=40)
+
+
+@router.post("/api/composer/poems/{poem_id}/warm", dependencies=owner)
+async def warm(poem_id: int, body: WarmIn | None = None):
+    """Prefetch: start the agent's research for this poem and a stanza batch from the start of ``line_position``
+    (default: the first line without Greek) in the background. Answers at once (202); the candidates land in the
+    pool table as they pass the lint (GET .../pool?slot_key=). Nothing is started when every slot already has
+    MELOS_COMPOSER_WARM_MIN (default 4) stored candidates."""
+    body = body or WarmIn()
+    context = _store_call(store.agent_context, poem_id, None)
+    templates = _templates(context["settings"])
+    if not templates:
+        raise HTTPException(422, {"code": "template_required", "message": "warming needs a named metre"})
+    written = sorted(l["position"] for l in context["lines"] if (l.get("greek") or "").strip())
+    if body.line_position is not None:
+        position = body.line_position
+    else:
+        position = next((p for p in range(len(written) + 1) if p not in set(written)), 0)
+    line = next((l for l in context["lines"] if l["position"] == position), None)
+    key = slot_key(position, "", context["settings"])
+    slot = {"line_position": position, "caret": 0, "prefix": "", "remaining_template": templates[position % len(templates)],
+            "line_id": line["line_id"] if line else None, "slot_key": key}
+    ahead = ahead_slots(context, position)
+    keys = [key, *(a["slot_key"] for a in ahead)]
+    least = int(os.environ.get("MELOS_COMPOSER_WARM_MIN", "4"))
+    if all(len(store.pool_for(poem_id, k, limit=least)) >= least for k in keys):
+        return JSONResponse(status_code=200, content={"started": False, "reason": "filled", "slot_keys": keys})
+    context["caret"] = {"line_position": position, "char_offset": 0, "prefix": ""}
+    opened = await _open_stream("/warm", {"poem": context, "slot": slot, "ahead": ahead, "n": body.n})
+    if isinstance(opened, JSONResponse):
+        return opened
+    _relay(*opened, _pool_store(poem_id, set(keys), key), lambda completed: None, detach=True)
+    return JSONResponse(status_code=202, content={"started": True, "slot_keys": keys})
 
 
 class BacktranslateIn(BaseModel):

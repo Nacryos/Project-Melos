@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import time
 import unicodedata
 from collections import Counter
 from dataclasses import dataclass, field
@@ -84,7 +85,9 @@ HTTP_TOOLS: dict[str, tuple[str, str, str, dict]] = {
 }
 
 CANDIDATE = {"type": "object", "required": ["greek", "english_span"], "properties": {
-    "greek": _s("string", "The continuation, Greek, accented, in the target dialect"),
+    "slot": _s("string", "The key of the slot this continues (from the task); required when there are several"),
+    "greek": _s("string", "The continuation, Greek, accented, in the target dialect; a newline where it runs on "
+                "into the next line"),
     "english_span": _s("string", "The words of the English source it carries"),
     "slots": _s("string", "Metrical slots it fills, e.g. '–⏑–– (positions 1-4 of line 2)'"),
     "evidence": _s("array", "Short evidence notes, e.g. 'σελάννα: Sappho 96, 154'; 'not in Sappho; Alcaeus 34a has πήλοθεν'",
@@ -92,7 +95,9 @@ CANDIDATE = {"type": "object", "required": ["greek", "english_span"], "propertie
 
 
 def norm(greek: str) -> str:
-    return " ".join(unicodedata.normalize("NFC", greek or "").split())
+    """NFC, spaces collapsed within a line; a line break (newline or ' / ') is kept as one newline (spill-over)."""
+    text = unicodedata.normalize("NFC", greek or "").replace(" / ", "\n")
+    return "\n".join(" ".join(line.split()) for line in text.split("\n") if line.strip())
 
 
 def text(payload: Any, limit: int = 0, error: bool = False) -> dict:
@@ -104,25 +109,47 @@ def text(payload: Any, limit: int = 0, error: bool = False) -> dict:
 
 @dataclass
 class Ctx:
-    """Per-request state shared by the tool handlers."""
+    """State of one turn (one /pool, /warm or /chat request), shared by the tool handlers.
+
+    ``slots``: slot_key -> {line_position, prefix, remaining_template, want}; empty for chat. ``seen``: slot_key ->
+    every continuation already proposed for that slot in this session (kept across turns, so repeats are skipped)."""
     http: httpx.AsyncClient
     emit: Emit
     settings: Any
     poem: dict
-    slot: dict | None = None
-    target: int = 0                    # pool: stop after this many passing candidates (0 = chat, no target)
+    slots: dict = field(default_factory=dict)
+    primary: str | None = None
     max_rounds: int = 4
     rounds: int = 0
-    passed: int = 0
+    passed: Counter = field(default_factory=Counter)
     rejected: Counter = field(default_factory=Counter)
     rejected_count: int = 0
-    seen: set = field(default_factory=set)
+    seen: dict = field(default_factory=dict)
     stop: asyncio.Event = field(default_factory=asyncio.Event)
+    stop_reason: str | None = None
+    started: float = field(default_factory=time.monotonic)
+    first_ms: dict = field(default_factory=dict)       # slot_key -> ms from the request to its first passing candidate
     lint_limit: asyncio.Semaphore = field(default_factory=lambda: asyncio.Semaphore(8))
 
     @property
     def poem_settings(self) -> dict:
         return self.poem.get("settings") or {}
+
+    @property
+    def first_candidate_ms(self) -> int | None:
+        return min(self.first_ms.values()) if self.first_ms else None
+
+    @property
+    def total_passed(self) -> int:
+        return sum(self.passed.values())
+
+    def satisfied(self) -> bool:
+        return bool(self.slots) and all(self.passed[k] >= int(s.get("want") or 0) for k, s in self.slots.items())
+
+    def halt(self, reason: str) -> None:
+        if not self.stop.is_set():
+            self.stop_reason = reason
+            self.stop.set()
 
     async def call(self, method: str, path: str, args: dict) -> httpx.Response:
         args = {k: v for k, v in args.items() if v not in (None, "")}
@@ -132,11 +159,13 @@ class Ctx:
             return await self.http.get(url, params=args, headers=headers, timeout=self.settings.http_timeout)
         return await self.http.post(url, json=args, headers=headers, timeout=self.settings.http_timeout)
 
-    async def lint(self, greek: str) -> dict:
-        """POST /api/composer/check. Any transport or HTTP failure counts as a blocking failure."""
-        s, slot = self.poem_settings, self.slot or {}
+    async def lint(self, greek: str, slot: dict | None = None) -> dict:
+        """POST /api/composer/check against the slot's own open slots. Any transport or HTTP failure counts as a
+        blocking failure."""
+        s, slot = self.poem_settings, slot or {}
         body = {"greek": greek, "metre": s.get("metre"), "dialect": s.get("dialect"), "author": s.get("author"),
-                "remaining_template": slot.get("remaining_template")}
+                "remaining_template": slot.get("remaining_template"), "prefix": slot.get("prefix") or None,
+                "line_index": slot.get("line_position") or 0}
         async with self.lint_limit:
             try:
                 r = await self.call("POST", "/api/composer/check", body)
@@ -150,9 +179,15 @@ class Ctx:
         return {**result, "pass": ok, "checks": checks}
 
 
-def _http_tool(ctx: Ctx, name: str, method: str, path: str, desc: str, schema: dict):
+class Bound:
+    """The session's tools are built once; each turn points them at its own Ctx."""
+    ctx: Ctx | None = None
+
+
+def _http_tool(bound: Bound, name: str, method: str, path: str, desc: str, schema: dict):
     @tool(name, desc, schema, annotations=None)
     async def handler(args: dict) -> dict:
+        ctx = bound.ctx
         await ctx.emit({"type": "tool", "name": name, "summary": _summary(args)})
         try:
             r = await ctx.call(method, path, args)
@@ -176,60 +211,87 @@ def _failures(checks: list) -> list:
     return [c for c in checks if c.get("blocking") and not c.get("ok")]
 
 
-def build_tools(ctx: Ctx) -> list:
-    tools = [_http_tool(ctx, n, *spec) for n, spec in HTTP_TOOLS.items()]
+async def _propose(ctx: Ctx, args: dict) -> dict:
+    if ctx.stop.is_set():
+        return text("Stop: this request is complete. Reply with the single word: done.")
+    ctx.rounds += 1
+    batch, dupes, unknown = [], 0, []
+    for c in (args.get("candidates") or [])[:16]:
+        if not isinstance(c, dict):
+            continue
+        g = norm(c.get("greek", ""))
+        key = c.get("slot") or (ctx.primary if ctx.slots else None)
+        if ctx.slots and key not in ctx.slots:
+            unknown.append(f"- {g}: unknown slot {key!r}; use one of {', '.join(ctx.slots)}")
+            continue
+        seen = ctx.seen.setdefault(key, set())
+        if not g or g in seen:
+            dupes += 1
+            continue
+        seen.add(g)
+        batch.append((key, {**c, "greek": g}))
+    await ctx.emit({"type": "tool", "name": "propose_candidates", "summary": f"round {ctx.rounds}: {len(batch)} candidates"})
+
+    async def one(key, cand):
+        return key, cand, await ctx.lint(cand["greek"], ctx.slots.get(key))
+
+    lines, accepted = list(unknown), 0
+    for job in asyncio.as_completed([one(k, c) for k, c in batch]):    # each passing candidate goes out at once
+        key, cand, res = await job
+        if res["pass"]:
+            accepted += 1
+            ctx.passed[key] += 1
+            ctx.first_ms.setdefault(key, round((time.monotonic() - ctx.started) * 1000))
+            slot = ctx.slots.get(key) or {}
+            await ctx.emit({"type": "candidate", "greek": cand["greek"], "english_span": cand.get("english_span", ""),
+                            "slots": cand.get("slots", ""), "evidence": list(cand.get("evidence") or []),
+                            "checks": res["checks"], "scansion": res.get("scansion"),
+                            **({"slot_key": key, "line_position": slot.get("line_position"),
+                                "prefix": slot.get("prefix", "")} if key else {})})
+        else:
+            ctx.rejected_count += 1
+            fails = _failures(res["checks"]) or [{"id": "fail", "detail": "lint did not pass"}]
+            ctx.rejected.update(f["id"] for f in fails)
+            lines.append(f"- [{key}] {cand['greek']}: " if key else f"- {cand['greek']}: ")
+            lines[-1] += "; ".join(f"{f['id']} {f.get('detail', '')}".strip() for f in fails)
+    msg = [f"Round {ctx.rounds}: {accepted} passed, {len(lines)} rejected" + (f", {dupes} duplicates skipped" if dupes else "") + "."]
+    if ctx.slots:
+        msg.append("Passed so far: " + ", ".join(f"{k} {ctx.passed[k]}/{s.get('want')}" for k, s in ctx.slots.items()) + ".")
+    if lines:
+        msg += ["Rejected (do not repeat these mistakes):", *lines]
+    if ctx.slots and (ctx.satisfied() or ctx.rounds >= ctx.max_rounds):
+        ctx.halt("enough" if ctx.satisfied() else "rounds")
+        msg.append("Stop now: " + ("enough candidates." if ctx.stop_reason == "enough" else "round limit reached.")
+                   + " Reply with the single word: done.")
+    elif ctx.slots:
+        msg.append("Continue: research briefly if needed, then propose again for the slots still short.")
+    return text("\n".join(msg))
+
+
+def build_tools(bound: Bound) -> list:
+    tools = [_http_tool(bound, n, *spec) for n, spec in HTTP_TOOLS.items()]
 
     @tool("check_candidate", "Run the whole lint bank (metre, form exists, dialect, attestation) on one Greek phrase "
-          "for this poem's settings, without proposing it.", _schema(("greek",), greek=GREEK))
+          "for this poem's settings, without proposing it. slot: the slot key to check against (default: the first).",
+          _schema(("greek",), greek=GREEK, slot=_s("string", "Slot key")))
     async def check_candidate(args: dict) -> dict:
+        ctx = bound.ctx
         await ctx.emit({"type": "tool", "name": "check_candidate", "summary": args.get("greek", "")[:200]})
-        return text(await ctx.lint(norm(args.get("greek", ""))), ctx.settings.tool_result_chars)
+        slot = ctx.slots.get(args.get("slot") or ctx.primary or "")
+        return text(await ctx.lint(norm(args.get("greek", "")), slot), ctx.settings.tool_result_chars)
 
-    @tool("propose_candidates", "Offer candidates to the owner. Each is linted at once; those that pass are shown, the "
-          "failures come back to you with reasons so the next batch avoids them. Batches of 6-12.",
+    @tool("propose_candidates", "Offer candidates to the owner. Each is linted at once against its own slot; those "
+          "that pass are shown immediately, the failures come back to you with reasons. Call it early and often, "
+          "in small batches (4-8), rather than once at the end.",
           _schema(("candidates",), candidates={"type": "array", "items": CANDIDATE, "maxItems": 16}))
     async def propose_candidates(args: dict) -> dict:
-        if ctx.stop.is_set():
-            return text("Stop: the request is complete. Reply with the single word: done.")
-        ctx.rounds += 1
-        batch, dupes = [], 0
-        for c in (args.get("candidates") or [])[:16]:
-            g = norm(c.get("greek", "") if isinstance(c, dict) else "")
-            if not g or g in ctx.seen:
-                dupes += 1
-                continue
-            ctx.seen.add(g)
-            batch.append({**c, "greek": g})
-        await ctx.emit({"type": "tool", "name": "propose_candidates", "summary": f"round {ctx.rounds}: {len(batch)} candidates"})
-        results = await asyncio.gather(*(ctx.lint(c["greek"]) for c in batch))
-        lines = []
-        for cand, res in zip(batch, results):
-            if res["pass"] and not (ctx.target and ctx.passed >= ctx.target):
-                ctx.passed += 1
-                await ctx.emit({"type": "candidate", "greek": cand["greek"], "english_span": cand.get("english_span", ""),
-                                "slots": cand.get("slots", ""), "evidence": list(cand.get("evidence") or []),
-                                "checks": res["checks"], "scansion": res.get("scansion")})
-            elif not res["pass"]:
-                ctx.rejected_count += 1
-                fails = _failures(res["checks"]) or [{"id": "fail", "detail": "lint did not pass"}]
-                ctx.rejected.update(f["id"] for f in fails)
-                lines.append(f"- {cand['greek']}: " + "; ".join(f"{f['id']} {f.get('detail', '')}".strip() for f in fails))
-        accepted = sum(r["pass"] for r in results)
-        msg = [f"Round {ctx.rounds}: {accepted} passed, {len(lines)} rejected" + (f", {dupes} duplicates skipped" if dupes else "")
-               + (f"; {ctx.passed}/{ctx.target} wanted." if ctx.target else ".")]
-        if lines:
-            msg += ["Rejected (do not repeat these mistakes):", *lines]
-        if ctx.target and (ctx.passed >= ctx.target or ctx.rounds >= ctx.max_rounds):
-            ctx.stop.set()
-            msg.append("Stop now: " + ("enough candidates." if ctx.passed >= ctx.target else "round limit reached.")
-                       + " Reply with the single word: done.")
-        return text("\n".join(msg))
+        return await _propose(bound.ctx, args)
 
     return [*tools, check_candidate, propose_candidates]
 
 
-def server_for(ctx: Ctx):
-    tools = build_tools(ctx)
+def server_for(bound: Bound):
+    tools = build_tools(bound)
     return create_sdk_mcp_server(SERVER, "1.0.0", tools), tools
 
 

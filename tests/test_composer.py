@@ -273,17 +273,27 @@ def fake_agent(seen: list):
             yield _data({"type": "done", "usage": {"input_tokens": 10, "output_tokens": 5}, "cost_usd": 0.01})
         return StreamingResponse(stream(), media_type="text/event-stream")
 
+    async def pool_stream(payload: dict):
+        for i in range(3):
+            yield _data({"type": "candidate", "greek": f"λόγος {i}", "english_span": "word",
+                         "checks": [{"id": "L7", "ok": True, "blocking": True}]})
+        for a in payload.get("ahead") or []:      # the stanza batch: candidates for later slots carry their key
+            yield _data({"type": "candidate", "greek": f"ἔπειτα {a['line_position']}", "slot_key": a["slot_key"],
+                         "line_position": a["line_position"], "prefix": "", "checks": []})
+            yield _data({"type": "candidate", "greek": "replayed", "slot_key": a["slot_key"], "replay": True})
+        yield _data({"type": "candidate", "greek": "foreign", "slot_key": "not-a-requested-key", "checks": []})
+        yield _data({"type": "rejected", "count": 1, "reasons": {"L7": 1}})
+        yield _data({"type": "done", "usage": {}, "cost_usd": 0})
+
     @app.post("/pool")
     async def pool(payload: dict):
         seen.append(("pool", payload))
+        return StreamingResponse(pool_stream(payload), media_type="text/event-stream")
 
-        async def stream():
-            for i in range(3):
-                yield _data({"type": "candidate", "greek": f"λόγος {i}", "english_span": "word",
-                             "checks": [{"id": "L7", "ok": True, "blocking": True}]})
-            yield _data({"type": "rejected", "count": 1, "reasons": {"L7": 1}})
-            yield _data({"type": "done", "usage": {}, "cost_usd": 0})
-        return StreamingResponse(stream(), media_type="text/event-stream")
+    @app.post("/warm")
+    async def warm(payload: dict):
+        seen.append(("warm", payload))
+        return StreamingResponse(pool_stream(payload), media_type="text/event-stream")
 
     @app.post("/backtranslate")
     async def back(payload: dict):
@@ -333,16 +343,76 @@ def test_pool_relays_and_stores_candidates(env, agent):
     pid = c.post("/api/composer/poems", json={"settings": {"metre": "sapphic"}}, headers={"Origin": ORIGIN}).json()["id"]
     r = c.post(f"/api/composer/poems/{pid}/pool", json={"caret": {"line_position": 0, "char_offset": 4}, "prefix": "ποι",
                                                        "remaining_template": "-u-x-uu-u-F", "n": 3}, headers={"Origin": ORIGIN})
-    assert r.status_code == 200 and r.content.count(b'"type": "candidate"') == 3
-    stored = c.get(f"/api/composer/poems/{pid}/pool").json()["pool"]
-    assert [p["candidate"]["greek"] for p in stored] == ["λόγος 0", "λόγος 1", "λόγος 2"]
+    assert r.status_code == 200 and r.content.count(b'"type": "candidate"') == 3 + 3 * 2 + 1
+    key = composer_routes.slot_key(0, "ποι", {"metre": "sapphic"})
+    stored = c.get(f"/api/composer/poems/{pid}/pool", params={"slot_key": key}).json()["pool"]
+    # the current slot's candidates, plus one whose key was not asked for (filed under the current slot)
+    assert [p["candidate"]["greek"] for p in stored] == ["λόγος 0", "λόγος 1", "λόγος 2", "foreign"]
     payload = next(p for k, p in agent if k == "pool")
-    assert payload["n"] == 3 and set(payload) == {"poem", "slot", "n"}
+    assert payload["n"] == 3 and set(payload) == {"poem", "slot", "ahead", "n"}
     assert payload["slot"] | {} == {"line_position": 0, "caret": 4, "prefix": "ποι", "remaining_template": "-u-x-uu-u-F",
-                                   "line_id": None, "slot_key": stored[0]["slot_key"]}
+                                   "line_id": None, "slot_key": key}
+    # the rest of the Sapphic stanza: lines 1-3, the last an adonean
+    assert [(a["line_position"], a["remaining_template"], a["prefix"]) for a in payload["ahead"]] == [
+        (1, "-u-x-uu-u-F", ""), (2, "-u-x-uu-u-F", ""), (3, "-uu-F", "")]
+    for a in payload["ahead"]:
+        assert a["slot_key"] == composer_routes.slot_key(a["line_position"], "", {"metre": "sapphic"})
+        later = c.get(f"/api/composer/poems/{pid}/pool", params={"slot_key": a["slot_key"]}).json()["pool"]
+        assert [p["candidate"]["greek"] for p in later] == [f"ἔπειτα {a['line_position']}"]    # replays not stored twice
     assert stored[0]["checks"] == [{"id": "L7", "ok": True, "blocking": True}] and stored[0]["candidate"]["type"] == "candidate"
-    assert c.get(f"/api/composer/poems/{pid}/pool", params={"slot_key": stored[0]["slot_key"]}).json()["pool"] == stored
     assert c.get(f"/api/composer/poems/{pid}/pool", params={"slot_key": "other"}).json()["pool"] == []
+
+
+def test_slot_key_formula_is_shared_with_the_page():
+    # The same vectors are asserted in tests/composer-core.test.mjs (ComposerCore.slotKey).
+    assert composer_routes.slot_key(0, "", {"author": "Sappho", "metre": "sapphic", "dialect": "aeolic"}) == "3e5d5780d5992aabffe8ed380744d64a"
+    assert composer_routes.slot_key(2, "  ἄστερες  μὲν ", {"metre": "sapphic"}) == "ea66ae8e0ea3c660a5e7c0ef8dd45ecd"
+    assert composer_routes.slot_key(2, "ἄστερες μὲν", {"metre": "sapphic", "author": None}) == "ea66ae8e0ea3c660a5e7c0ef8dd45ecd"
+
+
+def test_ahead_slots_skip_written_lines_and_reach_into_the_next_stanza(env):
+    ctx = {"settings": {"metre": "sapphic"}, "lines": [{"position": 2, "line_id": 7, "greek": "γέγραπται"},
+                                                      {"position": 1, "line_id": 6, "greek": ""}]}
+    assert [(a["line_position"], a["line_id"]) for a in composer_routes.ahead_slots(ctx, 0)] == [(1, 6), (3, None)]
+    assert [a["line_position"] for a in composer_routes.ahead_slots(ctx, 3)] == [4, 5]      # stanza end: two more
+    assert composer_routes.ahead_slots({"settings": {"metre": "auto"}, "lines": []}, 0) == []
+    assert composer_routes.ahead_slots(ctx, 0, limit=0) == []
+
+
+def test_warm_starts_in_the_background_and_stores_every_slot(env, agent):
+    with signed_in(env) as c:
+        pid = c.post("/api/composer/poems", json={"settings": {"metre": "sapphic", "author": "Sappho"}, "english": "Moon"},
+                     headers={"Origin": ORIGIN}).json()["id"]
+        c.post(f"/api/composer/poems/{pid}/lines", json={"greek": SAPPHIC}, headers={"Origin": ORIGIN})
+        r = c.post(f"/api/composer/poems/{pid}/warm", json={}, headers={"Origin": ORIGIN})
+        assert r.status_code == 202 and r.json()["started"] is True
+        keys = r.json()["slot_keys"]
+        payload = next(p for k, p in agent if k == "warm")
+        assert payload["slot"]["line_position"] == 1 and payload["slot"]["remaining_template"] == "-u-x-uu-u-F"
+        assert payload["slot"]["slot_key"] == keys[0] == composer_routes.slot_key(1, "", {"metre": "sapphic", "author": "Sappho"})
+        assert [a["line_position"] for a in payload["ahead"]] == [2, 3] and payload["poem"]["english"] == "Moon"
+        deadline = time.time() + 3
+        while len(c.get(f"/api/composer/poems/{pid}/pool", params={"slot_key": keys[-1]}).json()["pool"]) < 1:
+            assert time.time() < deadline
+            time.sleep(0.02)
+        assert len(c.get(f"/api/composer/poems/{pid}/pool", params={"slot_key": keys[0]}).json()["pool"]) == 4
+        # already filled enough: nothing new is started
+        for k in keys[1:]:
+            for i in range(4):
+                store.add_pool(pid, k, {"greek": f"x{i}"}, [])
+        again = c.post(f"/api/composer/poems/{pid}/warm", json={}, headers={"Origin": ORIGIN})
+        assert again.status_code == 200 and again.json() == {"started": False, "reason": "filled", "slot_keys": keys}
+        assert len([k for k, _ in agent if k == "warm"]) == 1
+
+
+def test_warm_needs_a_metre_and_the_owner(env, agent):
+    c = signed_in(env)
+    pid = c.post("/api/composer/poems", json={"settings": {"metre": "auto"}}, headers={"Origin": ORIGIN}).json()["id"]
+    r = c.post(f"/api/composer/poems/{pid}/warm", json={}, headers={"Origin": ORIGIN})
+    assert r.status_code == 422 and r.json()["detail"]["code"] == "template_required"
+    assert client().post(f"/api/composer/poems/{pid}/warm", json={}, headers={"Origin": ORIGIN}).status_code == 404
+    assert client().get(f"/api/composer/poems/{pid}/slot-key").status_code == 404
+    assert not [k for k, _ in agent if k == "warm"]
 
 
 def test_backtranslate_returns_agent_json(env, agent):
@@ -354,9 +424,10 @@ def test_backtranslate_returns_agent_json(env, agent):
 def test_agent_down_is_503_with_no_fallback(env, monkeypatch):
     monkeypatch.setenv("MELOS_COMPOSER_AGENT_URL", "http://127.0.0.1:9")   # nothing listens on the discard port
     c = signed_in(env)
-    pid = c.post("/api/composer/poems", json={}, headers={"Origin": ORIGIN}).json()["id"]
+    pid = c.post("/api/composer/poems", json={"settings": {"metre": "sapphic"}}, headers={"Origin": ORIGIN}).json()["id"]
     for url, body in ((f"/api/composer/poems/{pid}/chat", {"message": "hi"}),
                       (f"/api/composer/poems/{pid}/pool", {"prefix": "", "n": 2, "remaining_template": "-uu-F"}),
+                      (f"/api/composer/poems/{pid}/warm", {}),
                       ("/api/composer/backtranslate", {"greek": "λόγος"})):
         r = c.post(url, json=body, headers={"Origin": ORIGIN})
         assert r.status_code == 503 and r.json()["agent"] == "unavailable", (url, r.text)

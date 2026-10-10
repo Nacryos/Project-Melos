@@ -15,7 +15,7 @@
   const ANALYSIS_DIALECT = { aeolic: 'lesbian', doric: 'doric', ionic: 'ionic', attic: 'attic' };
   const METRES = ['hexameter', 'pentameter', 'elegiac', 'iambic_trimeter', 'trochaic_tetrameter', 'sapphic', 'sapphic_hendecasyllable',
     'adonean', 'alcaic', 'glyconic', 'pherecratean', 'hipponactean', 'telesillean', 'reizianum', 'aristophanean', 'lesser_asclepiad', 'greater_asclepiad'];
-  const PREFS = 'melos-composer-prefs', POOL_N = 12, IDLE_MS = 600, AGENT_DOWN_MS = 60_000;
+  const PREFS = 'melos-composer-prefs', POOL_N = 12, IDLE_MS = 600, AGENT_DOWN_MS = 60_000, STORED_MS = 3000, WARM_POLL_MS = 6 * 60_000;
   const esc = s => String(s ?? '').replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
   const store = (() => { try { return window.localStorage; } catch (e) { return null; } })();
   const local = { getItem: k => { try { return store && store.getItem(k); } catch (e) { return null; } },
@@ -197,6 +197,7 @@
     scan();
     const target = S.rows.find(r => !r.draft.trim()) || S.rows.at(-1);
     focusRow(target, target.draft.length);
+    warm(rowIndex(target));
   }
 
   // ---- rows ----------------------------------------------------------------------------------------------------------
@@ -365,6 +366,7 @@
     renderBoard();
     const next = S.rows[rowIndex(row) + 1];
     focusRow(next, next.draft.length);
+    if (!next.draft.trim()) warm(rowIndex(next));
     prefetch(next, C.slotAt(next.draft, next.draft.length).base);
   }
 
@@ -620,6 +622,57 @@
     const left = C.remainingTemplate(labels, tpl);
     return left === null ? undefined : left;
   }
+  /* Candidates the server already holds for this slot (stored by earlier stanza batches and by warm-ups), as a pool
+     entry next to the live one. Reloaded at most every STORED_MS unless forced. */
+  async function loadStored(row, base, { force = false } = {}) {
+    if (!S.poem || !realMetre() || !row) return null;
+    const pkey = C.poolKey(S.poem.id, row.uid, base, settings()) + '|stored';
+    let entry = S.pools.get(pkey);
+    if (entry && (entry.loading || (!force && Date.now() - entry.loadedAt < STORED_MS))) return entry;
+    if (!entry) {
+      entry = { key: pkey, lineKey: row.uid, sig: sig(), base, source: 'agent', template: null, candidates: [], status: 'stored', tools: [], rejected: 0, error: '', loadedAt: 0 };
+      S.pools.set(pkey, entry);
+    }
+    entry.loading = true;
+    try {
+      const slotKey = await C.slotKey(rowIndex(row), base, settings());
+      const res = await call('GET', `/api/composer/poems/${S.poem.id}/pool?slot_key=${slotKey}`);
+      for (const p of res.pool || []) if (p.candidate?.greek && !entry.candidates.some(c => c.greek === p.candidate.greek)) entry.candidates.push(p.candidate);
+      entry.loadedAt = Date.now();
+    } catch (e) { entry.loadedAt = Date.now(); if (e.status !== 404) status(`Stored suggestions: ${e.message}`, true); }
+    finally { entry.loading = false; }
+    if (S.popup.open && S.popup.row === row) renderPopup();
+    return entry;
+  }
+  /* Candidates the agent streams for a later slot of the stanza batch go to that line's stored entry at once. */
+  function routeToSlot(data) {
+    const row = S.rows[data.line_position];
+    if (!row) return;                                              // that line is not on the board yet: stored on the server
+    const base = data.prefix ? data.prefix + ' ' : '';
+    const pkey = C.poolKey(S.poem.id, row.uid, base, settings()) + '|stored';
+    if (!S.pools.has(pkey)) S.pools.set(pkey, { key: pkey, lineKey: row.uid, sig: sig(), base, source: 'agent', template: null, candidates: [], status: 'stored', tools: [], rejected: 0, error: '', loadedAt: 0 });
+    const entry = S.pools.get(pkey);
+    if (!entry.candidates.some(c => c.greek === data.greek)) entry.candidates.push(data);
+    if (S.popup.open && S.popup.row === row) renderPopup();
+  }
+  /* Prefetch (POST .../warm): the agent researches the poem once and fills the stanza from line `position` in the
+     background; while it works, the active line's stored candidates are re-read every STORED_MS. */
+  let warmTimer = 0, warmUntil = 0;
+  async function warm(position) {
+    if (!S.poem || !$('auto-ask').checked || !realMetre() || Date.now() < agentDownUntil) return;
+    const id = S.poem.id;
+    try {
+      const r = await call('POST', `/api/composer/poems/${id}/warm`, { line_position: position, n: POOL_N });
+      if (!r.started || S.poem?.id !== id) return;
+    } catch (e) { if (e.status !== 503 && e.status !== 422) failed('pool', e); return; }
+    warmUntil = Date.now() + WARM_POLL_MS;
+    if (warmTimer) return;
+    warmTimer = setInterval(() => {
+      const row = S.active;
+      if (Date.now() > warmUntil || !S.poem) { clearInterval(warmTimer); warmTimer = 0; return; }
+      if (row?.el && document.hasFocus()) loadStored(row, C.slotAt(row.draft, row.el.ta.selectionStart).base);
+    }, STORED_MS);
+  }
   function prefetch(row, base) {
     if (!$('auto-ask').checked || !row) return;
     ensureCorpus(row);
@@ -631,7 +684,11 @@
     const old = S.pools.get(key);
     if (old && (old.status === 'filling' || old.status === 'done' || old.status === 'full' || old.status === 'nofit' || (auto && old.status === 'error'))) return;
     const before = S.active === row ? row.draft.slice(0, row.el.ta.selectionStart) : base;
-    if (auto && C.reusable(entriesFor(row), before) >= 3) return;      // earlier pools on this line still cover it
+    const poemId = S.poem.id;
+    await loadStored(row, base);                                         // what earlier stanza batches left for this slot
+    if (S.poem?.id !== poemId || S.pools.get(key)?.status === 'filling') return;
+    // Earlier pools on this line, or stored candidates, still cover it: no model request (Tab too; typing filters).
+    if (C.reusable(entriesFor(row), before) >= 3) { if (S.popup.open && S.popup.row === row) renderPopup(); return; }
     if (S.fill && S.fill.key !== key) abortFill();
     const controller = new AbortController();
     const entry = { key, lineKey: row.uid, sig: sig(), base, source: 'agent', template: null, candidates: old?.candidates || [],
@@ -648,9 +705,11 @@
       if (controller.signal.aborted) throw new DOMException('aborted', 'AbortError');
       const at = rowIndex(row);
       const body = { line_id: row.line?.id ?? null, caret: { line_position: at, char_offset: base.length, prefix: base }, prefix: base.trimEnd(), remaining_template: template, n: POOL_N };
+      const mine = await C.slotKey(at, body.prefix, settings());
       const r = await request('POST', `/api/composer/poems/${S.poem.id}/pool`, body, controller.signal);
       await C.readSSE(r, ({ event, data }) => {
-        if (event === 'candidate' && data?.greek) {
+        if (event === 'candidate' && data?.greek && data.slot_key && data.slot_key !== mine) routeToSlot(data);
+        else if (event === 'candidate' && data?.greek) {
           if (!entry.candidates.some(c => c.greek === data.greek)) entry.candidates.push(data);
         } else if (event === 'tool') entry.tools.push(data?.name || 'tool');
         else if (event === 'rejected') entry.rejected = data?.count || 0;

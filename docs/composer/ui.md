@@ -66,9 +66,30 @@ sign-in marker cookie (`melos_owner_ui=1`) is present. Signed out, `/composer` i
 - **Corpus fillers**: `POST /api/compose/suggest` (the release V proposer) for the line, from the lines above. These
   are whole lines labelled "corpus", shown at once, and filtered the same way. Lines that failed the lint are dropped.
 - **Abort**: only one pool request runs at a time. It is aborted when the caret moves to another slot (typing a space,
-  another line), when settings change, or when another poem opens. Its streamed candidates are kept.
+  another line), when settings change, or when another poem opens. Its streamed candidates are kept. Aborting only
+  stops the page listening: melos-api reads the agent's stream to its end and stores the rest; the agent stops the
+  turn when the next request names another slot.
 - **Prefetch**: right after a commit, a pool request for the next line's first slot starts. After an accepted
   candidate, the request is for the slot after it, or for the next line when the candidate's fit says the line is full.
+- **Warm-up** (`POST /api/composer/poems/{id}/warm {line_position, n}`, owner-only): sent when a poem opens (for the
+  line the caret lands on) and after each commit (for the next line, when it is empty), if "ask the model when I
+  pause" is on and a metre is named. melos-api answers at once (202; 200 `started: false` when every slot already
+  has 4 stored candidates) and reads the agent's stream in the background, storing each candidate under its slot.
+  The agent does the poem's research once (its session stays open) and fills the stanza: the line and the rest of
+  the stanza (at least two lines, at most `MELOS_COMPOSER_AHEAD_LINES` = 3). While a warm-up runs (up to 6 min),
+  the page re-reads the active slot's stored candidates every 3 s.
+- **Stanza batches**: every pool request also carries the empty lines after it (`ahead`, computed by melos-api from
+  the metre's templates; written lines are skipped). Candidates for those lines stream back with their `slot_key`;
+  the page files them under that line (when the line exists on the board) and melos-api stores them.
+- **Stored candidates**: before asking the model, the page reads `GET /api/composer/poems/{id}/pool?slot_key=…` for
+  the slot (at most every 3 s). When this pool, earlier pools on the line and the stored candidates together offer 3
+  or more model continuations matching what is typed, no model request is made (on Tab too).
+- **Slot key** (both sides; `backend/composer_routes.py` `slot_key`, `js/composer-core.js` `slotKey`, same test
+  vectors in both test suites): the first 32 hex digits of sha256 over the UTF-8 of
+  `v1|<line position>|<prefix>|<author>|<metre>|<dialect>`. Line position = the line's index on the board (0-based);
+  prefix = the line's text before the slot, NFC, whitespace runs collapsed to one space, trimmed (a line start is
+  ""); a missing setting is "". `GET /api/composer/poems/{id}/slot-key?line_position=&prefix=` returns the server's
+  key for checking.
 - **Spill-over** (`ComposerCore.spillInsert`): a continuation containing a newline or ` / ` continues on the next
   line(s). An empty next line is filled; a written one is kept and the spill-over is inserted before it. Lines the
   continuation completes are saved.
@@ -92,12 +113,9 @@ the composer API in memory, with streamed pool and chat replies, a rough scanner
 
 ## Known gaps
 
-- The agent cannot yet propose spill-over: `agent/composer_agent/melos.py` `norm()` collapses all whitespace,
-  newlines included, so a candidate is always one line, and over-long ones fail L7. Keep newlines per line in `norm()`
-  and say so in the pool prompt. The page already handles `\n` and ` / `.
 - The daily cost is counted in this browser (from `done` events and back-translation replies), not read from the
   agent's `usage.jsonl`. A small `GET /api/composer/usage` would make it exact.
-- Pools are not reloaded from the server's stored pool (`GET /pool?slot_key=`), because the server's slot key is a
-  hash of context the client does not have. Pools rebuild after a reload.
+- Stored candidates are keyed by line index and prefix: after lines are inserted above (positions shift), stored
+  candidates for later lines no longer match their keys and are simply not shown.
 - Unsaved drafts (typed, Enter not pressed) are kept in this browser's localStorage only.
 - The English span of an option is shown as text; it is not highlighted inside the English panel.

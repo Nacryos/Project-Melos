@@ -33,10 +33,17 @@ class Settings:
     melos_api_url: str = field(default_factory=lambda: os.environ.get("MELOS_API_URL", "http://melos-api:8791").rstrip("/"))
     state_dir: Path = field(default_factory=lambda: Path(os.environ.get("COMPOSER_AGENT_STATE", "/state")))
     token: str = field(default_factory=lambda: read_secret("COMPOSER_AGENT_TOKEN_FILE"))
-    pool_rounds: int = field(default_factory=lambda: int(os.environ.get("COMPOSER_POOL_ROUNDS", "4")))
-    pool_seconds: float = field(default_factory=lambda: float(os.environ.get("COMPOSER_POOL_SECONDS", "120")))
+    pool_rounds: int = field(default_factory=lambda: int(os.environ.get("COMPOSER_POOL_ROUNDS", "8")))
+    pool_seconds: float = field(default_factory=lambda: float(os.environ.get("COMPOSER_POOL_SECONDS", "240")))
+    # The first turn of a poem's session does the research and the first stanza batch.
+    warm_seconds: float = field(default_factory=lambda: float(os.environ.get("COMPOSER_WARM_SECONDS", "600")))
+    pool_ahead_n: int = field(default_factory=lambda: int(os.environ.get("COMPOSER_POOL_AHEAD_N", "6")))
+    stop_grace_seconds: float = field(default_factory=lambda: float(os.environ.get("COMPOSER_STOP_GRACE_SECONDS", "8")))
+    # Persistent sessions: one SDK client per (poem, kind, settings); closed after this idle time; at most this many.
+    session_idle_seconds: float = field(default_factory=lambda: 60 * float(os.environ.get("COMPOSER_SESSION_IDLE_MINUTES", "30")))
+    max_sessions: int = field(default_factory=lambda: int(os.environ.get("COMPOSER_MAX_SESSIONS", "4")))
     chat_seconds: float = field(default_factory=lambda: float(os.environ.get("COMPOSER_CHAT_SECONDS", "600")))
-    tool_result_chars: int = field(default_factory=lambda: int(os.environ.get("COMPOSER_TOOL_RESULT_CHARS", "20000")))
+    tool_result_chars: int = field(default_factory=lambda: int(os.environ.get("COMPOSER_TOOL_RESULT_CHARS", "10000")))
     http_timeout: float = field(default_factory=lambda: float(os.environ.get("COMPOSER_HTTP_TIMEOUT", "30")))
 
     def anthropic_key(self) -> str:

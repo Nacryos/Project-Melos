@@ -208,3 +208,20 @@ test('site menu lists the composer only while the owner sign-in marker is presen
   assert.match(menu, /const OWNER_ONLY = new Set\(\['\/composer'\]\);/);
   assert.match(read('js/owner-loader.js'), /melos_owner_ui=1/, 'the same marker the owner loader reads');
 });
+
+test('slotKey: the same key the server computes (backend/composer_routes.py slot_key, same vectors)', async () => {
+  assert.equal(C.slotKeyText(2, '  ἄστερες  μὲν ', { metre: 'sapphic' }), 'v1|2|ἄστερες μὲν||sapphic|');
+  assert.equal(await C.slotKey(0, '', { author: 'Sappho', metre: 'sapphic', dialect: 'aeolic' }), '3e5d5780d5992aabffe8ed380744d64a');
+  assert.equal(await C.slotKey(2, '  ἄστερες  μὲν ', { metre: 'sapphic' }), 'ea66ae8e0ea3c660a5e7c0ef8dd45ecd');
+  assert.equal(await C.slotKey(2, 'ἄστερες μὲν'.normalize('NFD'), { metre: 'sapphic', author: null }), 'ea66ae8e0ea3c660a5e7c0ef8dd45ecd');
+});
+
+test('page wiring: warm-up on open and after a commit, stored candidates per slot, stanza candidates routed', () => {
+  const js = read('js/composer.js');
+  assert.match(js, /\/warm`/);
+  assert.match(js, /\/pool\?slot_key=\$\{slotKey\}/);
+  assert.match(js, /warm\(rowIndex\(target\)\);/);
+  assert.match(js, /if \(!next\.draft\.trim\(\)\) warm\(rowIndex\(next\)\);/);
+  assert.match(js, /data\.slot_key && data\.slot_key !== mine\) routeToSlot\(data\)/);
+  assert.match(js, /await loadStored\(row, base\);/);
+});

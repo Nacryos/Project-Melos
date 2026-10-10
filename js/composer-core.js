@@ -102,6 +102,17 @@
   };
   const fitsPrefix = (pattern, template) => !template || !pattern || remainders(pattern, template).length > 0;
 
+  // ---- slot keys (shared with the server) -------------------------------------------------------------------------
+  /* The server's pool slot key (backend/composer_routes.py slot_key; docs/composer/ui.md): sha256 of
+     "v1|<line position>|<prefix>|<author>|<metre>|<dialect>" (UTF-8), first 32 hex digits. The prefix is the line
+     before the slot, NFC, whitespace runs collapsed to one space, trimmed; a missing setting is "". */
+  const slotKeyText = (linePosition, prefix, s) => ['v1', String(Math.trunc(Number(linePosition) || 0)),
+    squash(String(prefix || '').normalize('NFC')), ...['author', 'metre', 'dialect'].map(k => String((s && s[k]) || ''))].join('|');
+  async function slotKey(linePosition, prefix, s) {
+    const digest = await globalThis.crypto.subtle.digest('SHA-256', new TextEncoder().encode(slotKeyText(linePosition, prefix, s)));
+    return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, '0')).join('').slice(0, 32);
+  }
+
   // ---- pool → pop-up options -----------------------------------------------------------------------------------
   const poolKey = (poemId, lineKey, base, settings) => [poemId, lineKey, squash(base), settingsSig(settings)].join('|');
   const settingsSig = s => s ? [s.author || '', s.metre || '', s.dialect || ''].join('/') : '';
@@ -267,6 +278,6 @@
   const money = usd => (usd >= 10 ? `$${usd.toFixed(1)}` : `$${(Number(usd) || 0).toFixed(2)}`);
 
   return { fold, matchPrefix, slotAt, squash, TEMPLATES, templateFor, labels, remainders, remainingTemplate, fitsPrefix,
-    poolKey, settingsSig, patternOf, optionsFor, reusable, splitSpill, spillInsert, SSEParser, readSSE, checkBadges,
+    slotKeyText, slotKey, poolKey, settingsSig, patternOf, optionsFor, reusable, splitSpill, spillInsert, SSEParser, readSSE, checkBadges,
     versionsRow, archiveVersion, pacificDay, addCost, todayCost, money };
 });

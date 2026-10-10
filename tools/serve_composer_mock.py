@@ -123,6 +123,8 @@ class Handler(SimpleHTTPRequestHandler):
         m = re.fullmatch(r"/api/composer/poems/(\d+)/full", path)
         if m:
             return self.send_json(full(int(m[1])))
+        if re.fullmatch(r"/api/composer/poems/(\d+)/pool", path):      # stored candidates: none in the mock
+            return self.send_json({"pool": []})
         if path in ("/composer", "/"):
             self.path = "/composer.html"
         return super().do_GET()
@@ -184,9 +186,11 @@ class Handler(SimpleHTTPRequestHandler):
         m = re.fullmatch(r"/api/composer/lines/(\d+)/versions", path)
         if m:
             return self.send_json(version(int(m[1]), b["greek"], b.get("source", "owner"), b.get("make_current", True)))
-        agent = re.fullmatch(r"/api/composer/(?:poems/(\d+)/(pool|chat)|backtranslate)", path)
+        agent = re.fullmatch(r"/api/composer/(?:poems/(\d+)/(pool|chat|warm)|backtranslate)", path)
         if agent and ARGS.agent_down:
             return self.send_json({"agent": "unavailable", "detail": "the agent service is not reachable (ConnectError)"}, 503)
+        if agent and agent[2] == "warm":
+            return self.send_json({"started": False, "reason": "mock"}, 200)
         if path == "/api/composer/backtranslate":
             time.sleep(0.8)
             return self.send_json({"english": f"(mock) {len(b['greek'].split())} Greek words, rendered literally", "cost_usd": 0.021})
