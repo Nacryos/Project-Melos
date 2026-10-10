@@ -7,10 +7,10 @@ NET="${NET:-melos-net}"
 SECRETS="${SECRETS:-/home/alvin/services/melos/secrets}"
 KEY="${KEY:-/home/alvin/.config/basecamp/keys/anthropic-api.key}"
 STATE="${STATE:-/home/alvin/services/melos/composer-agent-state}"
-TOKEN_FILE="$SECRETS/composer_agent_token"     # shared with melos-api (it sends X-Composer-Token)
+TOKEN_FILE="$SECRETS/composer-agent/token"     # shared with melos-api; created by deploy/release_w.sh token
 
 mkdir -p "$STATE"
-[ -s "$TOKEN_FILE" ] || { umask 077; head -c 32 /dev/urandom | od -An -tx1 | tr -d ' \n' > "$TOKEN_FILE"; }
+[ -s "$TOKEN_FILE" ] || { echo "no token: run deploy/release_w.sh token first" >&2; exit 1; }
 docker network inspect "$NET" >/dev/null 2>&1 || docker network create "$NET" >/dev/null
 docker rm -f melos-composer-agent >/dev/null 2>&1 || true
 docker run -d --name melos-composer-agent --restart unless-stopped --network "$NET" \
