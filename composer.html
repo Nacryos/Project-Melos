@@ -4,7 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Composer · Melos</title>
-  <meta name="description" content="Write Greek verse with TypeGreek typing on any keyboard, live scansion, word analysis and suggested next lines from the poets, each checked and cited.">
+  <meta name="description" content="Write Greek verse with TypeGreek typing, live scansion, an autocomplete pool of checked continuations, back-translation, versions per line and an agent to ask.">
+  <meta name="robots" content="noindex">
   <link rel="icon" type="image/svg+xml" href="assets/branding/melos-favicon-white.svg?v=white-1">
   <meta name="theme-color" content="#14223a">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,23 +14,32 @@
   <link rel="stylesheet" href="css/lemma-page.css?v=release-p-20261009">
   <link rel="stylesheet" href="css/site-menu.css?v=site-menu-20261009">
   <link rel="stylesheet" href="css/scansion.css?v=release-v">
-  <link rel="stylesheet" href="css/composer.css?v=release-v">
+  <link rel="stylesheet" href="css/composer.css?v=release-w">
   <script>try { const t = localStorage.getItem('melos-composer-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}</script>
   <script src="js/site-menu.js?v=site-menu-20261009" defer></script>
   <script src="js/config.js" defer></script>
   <script src="js/api.js" defer></script>
   <script src="js/typegreek.js?v=release-v" defer></script>
-  <script src="js/composer.js?v=release-v" defer></script>
+  <script src="js/composer-core.js?v=release-w" defer></script>
+  <script src="js/composer.js?v=release-w" defer></script>
 </head>
 <body>
-  <a class="skip-link" href="#canvas-input">Skip to the canvas</a>
+  <a class="skip-link" href="#board">Skip to the board</a>
   <header class="site-bar">
     <a class="site-mark" href="/" aria-label="Melos, home"><span lang="grc">Μέλος</span><small>A Greek Lyric Lexicon</small></a>
     <button class="site-menu-button" id="site-menu-button" type="button" aria-label="Menu" aria-expanded="false" aria-controls="site-menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </header>
   <main id="main" class="page composer">
-    <h1>Composer</h1>
-    <p class="lede">Type Greek with TypeGreek keys on any keyboard, phone included. Each syllable is coloured by how likely it is to be long, every word is read as you write, and Melos can offer a next line from the poets.</p>
+    <div class="composer-head">
+      <h1>Composer</h1>
+      <div class="poem-bar" role="group" aria-label="Poem">
+        <label>Poem <select id="poem-select" aria-label="Open a poem"></select></label>
+        <button type="button" class="quiet" id="new-poem">New poem</button>
+        <input type="text" id="poem-title" maxlength="300" placeholder="Title" aria-label="Title">
+        <span class="save-state" id="save-state" role="status"></span>
+      </div>
+    </div>
+    <div class="banner" id="banner" role="alert" hidden></div>
 
     <div class="toolbar" role="group" aria-label="Composer settings">
       <button type="button" id="mode" class="mode-toggle" aria-pressed="true">Αα Greek</button>
@@ -46,36 +56,52 @@
       </select></label>
       <label class="check"><input type="checkbox" id="bars" checked> syllable bars</label>
       <label class="check"><input type="checkbox" id="pct"> %</label>
+      <label class="check" title="Off: the model is asked only when you press Tab"><input type="checkbox" id="auto-ask" checked> ask the model when I pause</label>
       <label>Theme <select id="theme"><option value="">system</option><option value="light">light</option><option value="dark">dark</option></select></label>
     </div>
 
-    <div class="canvas bars" id="canvas">
-      <div class="backdrop" id="backdrop" aria-hidden="true"></div>
-      <textarea id="canvas-input" rows="6" aria-label="Greek verse (TypeGreek keys; Ctrl+` switches Greek and English)" placeholder="Type here: fai/netai/ moi kh=nos …"></textarea>
+    <div class="workspace" id="workspace">
+      <div class="work-main">
+        <section class="english" id="english-panel">
+          <button type="button" class="panel-toggle" id="english-toggle" aria-expanded="true" aria-controls="english">English</button>
+          <textarea id="english" rows="4" lang="en" spellcheck="true" placeholder="The English you are working from, as free text. The agent reads all of it and works out where the poem is." aria-label="English source"></textarea>
+        </section>
+        <div class="board bars" id="board" role="group" aria-label="Lines (Enter saves a line, Tab asks for continuations)"></div>
+        <div class="statusline" id="status" aria-live="polite"></div>
+        <div class="inspector" id="inspector" hidden aria-live="polite"></div>
+        <div class="suggest-row"><span class="legend"><span>short</span><span class="bar"></span><span>long</span></span>
+          <span class="hint">Enter saves the line · Tab opens continuations · ↑ ↓ move between lines</span></div>
+      </div>
+      <aside class="chat" id="chat" aria-label="Ask the agent">
+        <div class="chat-head">
+          <button type="button" class="panel-toggle" id="chat-toggle" aria-expanded="true" aria-controls="chat-body">Agent</button>
+          <span class="cost" id="cost" title="Agent spend today (Pacific), counted in this browser from chat, pool and back-translation replies"></span>
+        </div>
+        <div class="chat-body" id="chat-body">
+          <ol class="thread" id="thread" aria-live="polite"></ol>
+          <form class="chat-form" id="chat-form">
+            <textarea id="chat-input" rows="3" lang="en" placeholder="Ask about a word, a form, the metre… (Enter sends, Shift+Enter new line)" aria-label="Message to the agent"></textarea>
+            <div class="chat-actions"><button type="submit" class="primary" id="chat-send">Ask</button><button type="button" class="quiet" id="chat-stop" hidden>Stop</button></div>
+          </form>
+        </div>
+      </aside>
     </div>
-    <div class="statusline" id="status" aria-live="polite"></div>
-    <ul class="lines" id="lines" aria-label="Lines"></ul>
-    <div class="inspector" id="inspector" hidden aria-live="polite"></div>
-
-    <div class="suggest-row">
-      <button type="button" class="primary" id="suggest">Suggest next line</button>
-      <span class="legend"><span>short</span><span class="bar"></span><span>long</span></span>
-    </div>
-    <p class="notice" id="suggest-note" hidden></p>
-    <div class="tray" id="tray" aria-live="polite"></div>
 
     <details class="keys">
-      <summary>TypeGreek keys</summary>
+      <summary>Keys</summary>
       <table>
+        <tr><th>Board</th><td><kbd>Enter</kbd> saves the line as a new version and moves on · <kbd>Tab</kbd> opens continuations (they also open after a pause) · <kbd>↑</kbd> <kbd>↓</kbd> move between lines</td></tr>
+        <tr><th>Pop-up</th><td><kbd>↑</kbd> <kbd>↓</kbd> choose · <kbd>Enter</kbd> or <kbd>Tab</kbd> accept · <kbd>Esc</kbd> close</td></tr>
         <tr><th>Letters</th><td><code>a b g d e z h q i k l m n c o p r s t u f x y w</code> → α β γ δ ε ζ η θ ι κ λ μ ν ξ ο π ρ σ τ υ φ χ ψ ω; <code>v</code> ϝ; <code>j</code> ς; Shift for capitals; final ς is automatic</td></tr>
         <tr><th>After a letter</th><td><code>/</code> acute, <code>\</code> grave, <code>=</code> circumflex, <code>)</code> smooth, <code>(</code> rough, <code>|</code> iota subscript, <code>+</code> diaeresis, in any order: <code>a)/|</code> → ᾄ</td></tr>
         <tr><th>Punctuation</th><td><code>;</code> or <code>:</code> → ·, <code>?</code> → ; (question mark)</td></tr>
         <tr><th>Switch</th><td>the Greek / English button, or Ctrl+`</td></tr>
       </table>
-      <p>Rules from typegreek.com, matched exactly. On phones a word converts when the keyboard commits it.</p>
+      <p>TypeGreek rules from typegreek.com, matched exactly. More in docs/composer/ui.md.</p>
     </details>
-    <p class="credits">Scansion: Melos scanner (rules with vowel lengths from Wiktionary, CC BY-SA; Morpheus, CC BY-SA 3.0 US; LSJ, CC BY-SA 4.0; digamma list from Monro via DCC, CC BY-SA). Suggested lines are quoted from the corpus with their citation.</p>
+    <p class="credits">Scansion: Melos scanner (rules with vowel lengths from Wiktionary, CC BY-SA; Morpheus, CC BY-SA 3.0 US; LSJ, CC BY-SA 4.0; digamma list from Monro via DCC, CC BY-SA). Corpus suggestions are quoted from the poets with their citation; model suggestions pass the metre, form and dialect checks before they are shown.</p>
   </main>
+  <div class="popup" id="popup" hidden></div>
   <div class="tip" id="tip" hidden></div>
 </body>
 </html>

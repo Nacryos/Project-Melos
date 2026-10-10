@@ -183,3 +183,28 @@ test('daily cost: summed per Pacific day in storage', () => {
   const blocked = { getItem() { throw new Error('blocked'); }, setItem() { throw new Error('blocked'); } };
   assert.equal(C.addCost(blocked, 1), 1);
 });
+
+test('page wiring: the composer loads the core before the page, calls the composer API, aborts stale pools', () => {
+  const html = read('composer.html'), js = read('js/composer.js');
+  assert.ok(html.indexOf('js/composer-core.js') > 0 && html.indexOf('js/composer-core.js') < html.indexOf('js/composer.js?'));
+  for (const id of ['poem-select', 'new-poem', 'poem-title', 'english', 'board', 'chat-form', 'chat-input', 'cost', 'banner', 'popup', 'auto-ask']) {
+    assert.match(html, new RegExp(`id="${id}"`), id);
+  }
+  for (const route of ['/api/composer/poems', '/full', '/lines', '/versions', '/pool', '/chat', '/api/composer/backtranslate', '/api/compose/suggest', '/api/scan']) {
+    assert.ok(js.includes(route), route);
+  }
+  assert.match(js, /if \(S\.fill && S\.fill\.row === row && S\.fill\.key !== slotKeyOf\(row\)\) abortFill\(\);/);
+  assert.match(js, /back_translation: res\.english/);
+  assert.match(js, /make_current: false/);
+  assert.match(read('scripts/build_frontend.mjs'), /'composer-core\.js', 'composer\.js'/);
+  // Release V rule: the composer never reaches the reader's metre lock.
+  assert.doesNotMatch(js, /scansion\.lock|lock_line|recorded_metre|\/api\/scan\/passage|reader_scan/);
+});
+
+test('site menu lists the composer only while the owner sign-in marker is present', () => {
+  const menu = read('js/site-menu.js');
+  assert.match(menu, /const OWNER_SIGNED_IN = \/\(\?:\^\|;\\s\*\)melos_owner_ui=1\(\?:;\|\$\)\/\.test\(document\.cookie\);/);
+  assert.match(menu, /FEATURES\.filter\(\(\[, href\]\) => OWNER_SIGNED_IN \|\| !OWNER_ONLY\.has\(href\)\)/);
+  assert.match(menu, /const OWNER_ONLY = new Set\(\['\/composer'\]\);/);
+  assert.match(read('js/owner-loader.js'), /melos_owner_ui=1/, 'the same marker the owner loader reads');
+});

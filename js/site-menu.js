@@ -16,6 +16,10 @@
     ['Scansion', '/', 'Turn on Scansion above any poem in the Reader'],
     ['Composer', '/composer', 'Write Greek verse with live scansion'],
   ];
+  // The composer is owner-only (the API answers 404 to anyone else): list it only while the owner's sign-in marker
+  // cookie (release T, set beside the session cookie; js/owner-loader.js reads the same one) is present.
+  const OWNER_SIGNED_IN = /(?:^|;\s*)melos_owner_ui=1(?:;|$)/.test(document.cookie);
+  const OWNER_ONLY = new Set(['/composer']);
   const ALIASES = { '/index': '/', '/reader': '/', '/lemma': '/lexicon', '/concept': '/concepts', '/design-studio': '/legacy' };
   const path = location.pathname.replace(/\.html$/, '').replace(/\/$/, '') || '/';
   const here = ALIASES[path] || path;
@@ -44,7 +48,7 @@
   const visuals = el('div', { className: 'site-menu-visuals' });
   const loginStatus = el('p', { className: 'site-menu-status', role: 'status' });
   const login = el('a', { className: 'site-menu-login', href: '/owner', textContent: 'Log in' });
-  const features = el('ul', { className: 'site-menu-list' }, ...FEATURES.map(([label, href, note]) => el('li', {},
+  const features = el('ul', { className: 'site-menu-list' }, ...FEATURES.filter(([, href]) => OWNER_SIGNED_IN || !OWNER_ONLY.has(href)).map(([label, href, note]) => el('li', {},
     href ? item(label, href, note)
       : el('span', { className: 'site-menu-item is-soon', ariaDisabled: 'true' }, el('span', { textContent: label }), el('small', { textContent: note })))));
   const panel = el('div', { className: 'site-menu-panel', role: 'dialog', ariaModal: 'true', ariaLabel: 'Site menu' },

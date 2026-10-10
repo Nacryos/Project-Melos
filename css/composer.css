@@ -1,4 +1,4 @@
-/* Composer canvas (composer.html, js/composer.js): one textarea over a rendered copy that carries the scansion.
+/* Composer (composer.html, js/composer.js): each line is a textarea over a rendered copy that carries the scansion.
    Light by default like the tool pages; dark follows the system (or the page's theme switch) using the site's
    navy surfaces (the header, menu and footers). */
 :root {
@@ -22,7 +22,7 @@
 }
 body { background: var(--paper); color: var(--ink); }
 html, body { overflow-x: hidden; }
-.composer { max-width: 980px; padding-bottom: 60px; }
+.composer { max-width: 1320px; padding-bottom: 60px; }
 .composer h1 { font-weight: 400; font-size: 2rem; margin: 18px 0 4px; }
 .composer .lede { color: var(--ink-2); margin: 0 0 14px; max-width: 46rem; }
 
@@ -45,29 +45,27 @@ html, body { overflow-x: hidden; }
   white-space: pre-wrap; overflow-wrap: break-word; word-break: normal; tab-size: 4;
 }
 .canvas .backdrop { color: var(--ink); min-height: 9.5em; pointer-events: none; }
-.canvas .backdrop .u, .canvas .backdrop .ghost { pointer-events: auto; }
+.canvas .backdrop .u { pointer-events: auto; }
 .canvas textarea {
   position: absolute; inset: 0; height: 100%; resize: none; overflow: hidden; background: transparent;
   color: transparent; caret-color: var(--ink); outline: none; -webkit-text-fill-color: transparent;
 }
 .canvas textarea::selection { background: rgb(43 90 135 / .28); color: transparent; }
 .canvas textarea::placeholder { color: var(--ghost); -webkit-text-fill-color: var(--ghost); }
-.canvas.pct textarea, .canvas.pct .backdrop { line-height: 2.9; }
+.board.pct .line-canvas textarea, .board.pct .line-canvas .backdrop { line-height: 2.9; }
 
 .u { position: relative; border-radius: 3px; }
-.bars .u.b::before {
+.board.bars .u.b::before {
   content: ""; position: absolute; left: -1.5px; top: .12em; bottom: .02em; width: 2.5px;
   background: var(--ink); border-radius: 1px;
 }
 .u.violation { text-decoration: underline wavy var(--fail); text-underline-offset: .32em; text-decoration-thickness: 2px; }
 .u.sel { outline: 2px solid var(--sea); outline-offset: 1px; }
 .u .pct { display: none; }
-.canvas.pct .u .pct {
+.board.pct .u .pct {
   display: block; position: absolute; left: 50%; top: 100%; transform: translate(-50%, -.35em);
   font: 600 10px/1 system-ui, sans-serif; color: var(--muted); white-space: nowrap; pointer-events: none;
 }
-.ghost { color: var(--ghost); font-style: italic; }
-.ghost-hint { font: 12px/1 system-ui, sans-serif; color: var(--ghost); font-style: normal; margin-left: 8px; }
 
 .legend { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); }
 .legend .bar { width: 90px; height: 9px; background: linear-gradient(90deg, rgb(var(--scan-short)), rgb(var(--scan-mid)), rgb(var(--scan-long))); }
@@ -128,7 +126,8 @@ html, body { overflow-x: hidden; }
   .toolbar label.check { flex: 0 1 auto; }
   .toolbar select { max-width: 60%; }
   .mode-toggle { flex: 1 1 100%; min-height: 52px; font-size: 1.15rem; }
-  .canvas textarea, .canvas .backdrop { padding: 12px 12px 16px; }
+  .composer-head { display: block; }
+  .poem-bar input { flex: 1 1 100%; }
 }
 
 /* Dark: the site bar keeps the site's navy; filled buttons take dark text on the lighter sea. */
@@ -137,3 +136,122 @@ html, body { overflow-x: hidden; }
   :root:not([data-theme="light"]) .primary, :root:not([data-theme="light"]) .mode-toggle[aria-pressed="true"] { color: #0f1b2e; }
 }
 :root[data-theme="dark"] .primary, :root[data-theme="dark"] .mode-toggle[aria-pressed="true"] { color: #0f1b2e; }
+
+/* ---- release W: poem bar, workspace, board, versions, pop-up, chat ---------------------------------------------- */
+.composer-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 24px; }
+.poem-bar { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; font-size: .92rem; flex: 1 1 420px; }
+.poem-bar label { display: inline-flex; gap: 6px; align-items: center; color: var(--muted); }
+.poem-bar select, .poem-bar input { padding: 6px 8px; border: 1px solid var(--line); background: var(--canvas-bg); color: var(--ink); font: inherit; }
+.poem-bar select { max-width: 220px; }
+.poem-bar input { flex: 1 1 200px; min-width: 0; font-family: var(--greek, "Gentium Book Plus", Georgia, serif); font-size: 1rem; }
+.save-state { color: var(--muted); font-size: .82rem; min-width: 5em; }
+.banner { margin: 6px 0 10px; display: grid; gap: 6px; }
+.banner-item { margin: 0; padding: 8px 12px; border-left: 3px solid var(--fail); background: var(--wash); color: var(--ink); font-size: .9rem;
+  display: flex; gap: 12px; align-items: baseline; justify-content: space-between; }
+.banner-item.warn { border-left-color: var(--warn); }
+.banner-close, .link { background: none; border: 0; padding: 0; color: var(--sea); font: inherit; font-size: .85rem; cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.statusline.bad, .bad { color: var(--fail); }
+
+.workspace { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 18px; align-items: start; }
+.workspace.chat-collapsed { grid-template-columns: minmax(0, 1fr) 120px; }
+.work-main { min-width: 0; }
+.panel-toggle { background: none; border: 0; padding: 4px 0; color: var(--muted); font: 600 .78rem/1.4 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .06em; cursor: pointer; }
+.panel-toggle::before { content: "▾"; display: inline-block; width: 1.1em; transition: transform .15s ease; }
+.panel-toggle[aria-expanded="false"]::before { transform: rotate(-90deg); }
+
+.english { margin: 0 0 10px; }
+.english textarea { display: block; width: 100%; box-sizing: border-box; resize: vertical; min-height: 4.5em; padding: 10px 12px; border: 1px solid var(--line);
+  background: var(--canvas-bg); color: var(--ink-2); font: 1rem/1.55 "Gentium Book Plus", Georgia, serif; }
+.english textarea:focus { outline: none; border-color: var(--sea); }
+.english.collapsed textarea { display: none; }
+
+.board { border: 1px solid var(--line); background: var(--canvas-bg); padding: 6px 0; }
+.line { padding: 0 12px 2px 0; border-left: 2px solid transparent; transition: border-color .15s ease; }
+.line.active { border-left-color: var(--sea); }
+.line-main { display: flex; align-items: flex-start; gap: 6px; }
+.line .n { flex: 0 0 2.2em; text-align: right; padding-top: .95em; color: var(--muted); font: .78rem/1 system-ui, sans-serif; user-select: none; }
+.line-canvas { flex: 1 1 auto; min-width: 0; border: 0; background: transparent; }
+.line-canvas textarea, .line-canvas .backdrop { padding: 2px 6px 4px; white-space: pre; overflow: hidden; overflow-wrap: normal; }
+.line-canvas .backdrop { min-height: 0; }
+.line-info, .line .bt { margin: 0 0 0 calc(2.2em + 12px); font-size: .82rem; color: var(--muted); display: flex; flex-wrap: wrap; gap: 2px 10px; align-items: baseline; }
+.line-info:empty { display: none; }
+.line-info .pattern { font-size: 13px; letter-spacing: 1.5px; }
+.line .bt { font: italic .95rem/1.45 "Gentium Book Plus", Georgia, serif; color: var(--ink-2); padding: 1px 0 3px; }
+.line .bt.pending { color: var(--ghost); }
+.badges { display: inline-flex; gap: 4px; }
+.badge { display: inline-block; padding: 0 5px; font: 600 .68rem/1.5 ui-monospace, monospace; border: 1px solid currentColor; border-radius: 2px; }
+.badge.pass { color: var(--pass); } .badge.fail { color: var(--fail); } .badge.warn { color: var(--warn); } .badge.info { color: var(--muted); }
+
+.versions { display: flex; gap: 8px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity;
+  margin: 4px 0 8px calc(2.2em + 12px); padding: 2px 2px 8px; scrollbar-width: thin; }
+.vcard { flex: 0 0 auto; max-width: 340px; scroll-snap-align: start; border: 1px solid var(--line); background: var(--paper);
+  display: flex; flex-direction: column; transition: border-color .15s ease, box-shadow .15s ease; }
+.vcard:hover { box-shadow: 0 2px 8px rgb(0 0 0 / .14); }
+.vcard.current { border-color: var(--sea); box-shadow: inset 0 2px 0 var(--sea); }
+.vcard.archived { opacity: .6; }
+.vpick { display: grid; gap: 3px; text-align: left; padding: 7px 10px 4px; background: none; border: 0; color: var(--ink); cursor: pointer; font: inherit; }
+.vcard.current .vpick { cursor: default; }
+.vgreek { font: 1.05rem/1.4 "GFS Didot", "Gentium Book Plus", Georgia, serif; white-space: nowrap; }
+.vmeta { display: flex; flex-wrap: wrap; gap: 4px 8px; align-items: center; }
+.vmeta .pattern { font-size: 11px; letter-spacing: 1px; color: var(--muted); }
+.vbt { font: italic .82rem/1.35 "Gentium Book Plus", Georgia, serif; color: var(--ink-2); white-space: normal; }
+.vfoot { font-size: .72rem; color: var(--muted); }
+.vact { align-self: flex-end; margin: 0 10px 6px; font-size: .74rem; }
+.vtoggle { flex: 0 0 auto; align-self: center; white-space: nowrap; }
+
+.popup { position: fixed; z-index: 60; width: min(460px, calc(100vw - 16px)); background: var(--canvas-bg); color: var(--ink);
+  border: 1px solid var(--line); box-shadow: 0 10px 28px rgb(0 0 0 / .22); }
+.popup ul { list-style: none; margin: 0; padding: 4px 0; max-height: 320px; overflow-y: auto; }
+.opt { padding: 5px 12px 6px; cursor: pointer; border-left: 2px solid transparent; }
+.opt[aria-selected="true"] { background: var(--sea-wash, rgb(43 90 135 / .08)); border-left-color: var(--sea); }
+.opt-greek { font: 1.15rem/1.35 "GFS Didot", "Gentium Book Plus", Georgia, serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.opt-greek .typed { color: var(--ghost); }
+.opt-meta { display: flex; flex-wrap: wrap; gap: 2px 10px; font-size: .78rem; color: var(--muted); }
+.opt-meta .pattern { font-size: 12px; letter-spacing: 1px; color: var(--ink-2); }
+.opt-meta .span { font-style: italic; color: var(--ink-2); }
+.opt.corpus .src { color: var(--warn); }
+.popup-foot { display: flex; flex-wrap: wrap; gap: 4px 12px; padding: 5px 12px; border-top: 1px solid var(--line); font-size: .76rem; color: var(--muted); }
+.popup-foot .keys-hint { margin-left: auto; }
+.thinking { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); }
+.thinking .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sea); animation: composer-pulse 1.2s ease-in-out infinite; }
+@keyframes composer-pulse { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .thinking .dot { animation: none; } }
+.tip ul { margin: 2px 0; padding-left: 16px; }
+.tip .ev-head { font-weight: 600; font-size: .8rem; color: var(--muted); }
+.tip .ev-checks { list-style: none; padding: 0; font-size: .8rem; }
+
+.chat { position: sticky; top: 12px; border: 1px solid var(--line); background: var(--canvas-bg); display: flex; flex-direction: column;
+  max-height: calc(100vh - 24px); min-width: 0; }
+.chat-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 4px 12px; border-bottom: 1px solid var(--line); }
+.cost { font: .78rem ui-monospace, monospace; color: var(--muted); }
+.chat-body { display: flex; flex-direction: column; min-height: 0; flex: 1 1 auto; }
+.chat-collapsed .chat-body { display: none; }
+.chat-collapsed .chat-head { flex-direction: column; align-items: flex-start; }
+.thread { list-style: none; margin: 0; padding: 8px 12px; overflow-y: auto; flex: 1 1 auto; min-height: 220px; max-height: 62vh; font-size: .9rem; }
+.thread .empty { color: var(--muted); font-style: italic; }
+.msg { padding: 6px 0 8px; border-bottom: 1px solid var(--line); }
+.msg:last-child { border-bottom: 0; }
+.msg .who { font: 600 .7rem/1.6 system-ui, sans-serif; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.msg .content { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+.msg.user .content { color: var(--ink-2); }
+.msg.streaming .who::after { content: " · writing"; font-weight: 400; text-transform: none; letter-spacing: 0; }
+.msg .tools, .msg .cands { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.msg .tools:empty, .msg .cands:empty, .msg .meta:empty { display: none; }
+.tool { font: .72rem/1.6 ui-monospace, monospace; color: var(--muted); border: 1px solid var(--line); padding: 0 6px; }
+.cand { display: inline-flex; border: 1px solid var(--sea); }
+.cand button { background: none; border: 0; color: var(--ink); cursor: pointer; padding: 2px 8px; font: inherit; }
+.cand-insert { font: 1rem/1.4 "GFS Didot", "Gentium Book Plus", Georgia, serif !important; }
+.cand-add { border-left: 1px solid var(--line) !important; color: var(--sea) !important; font-size: .74rem !important; }
+.cand button:hover { background: var(--sea-wash, rgb(43 90 135 / .08)); }
+.msg .meta { margin-top: 4px; font: .74rem ui-monospace, monospace; color: var(--muted); }
+.chat-form { border-top: 1px solid var(--line); padding: 8px 12px 10px; display: grid; gap: 6px; }
+.chat-form textarea { width: 100%; box-sizing: border-box; resize: vertical; padding: 8px 10px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); font: .95rem/1.45 "Gentium Book Plus", Georgia, serif; }
+.chat-form textarea:focus { outline: none; border-color: var(--sea); }
+.chat-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.suggest-row .hint { color: var(--muted); font-size: .82rem; }
+
+@media (max-width: 1000px) {
+  .workspace, .workspace.chat-collapsed { grid-template-columns: minmax(0, 1fr); }
+  .chat { position: static; max-height: none; }
+  .thread { max-height: 50vh; }
+}
