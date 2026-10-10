@@ -25,10 +25,12 @@ sign-in marker cookie (`melos_owner_ui=1`) is present. Signed out, `/composer` i
   scroll sideways. Each card shows the Greek, the pattern, the check badges, the back-translation, the source and the
   time (Pacific). Click a card to make it current; the editor takes its text. **archive** hides a version (it is never
   deleted). **archived (n)** shows the archived ones, each with **restore**.
-- **Autocomplete pop-up.** Press **Tab**, or pause for 600 ms, to open it under the caret. It holds up to 8
-  continuations. Each shows the Greek (the part you have typed is greyed), its metrical pattern, the English it
-  carries, and its source (agent, or corpus with citation). Evidence and checks for the highlighted option appear
-  beside it. Model candidates stream in as they pass the lint bank. The footer shows "thinking" with the last tool
+- **Autocomplete pop-up.** Press **Tab**, or pause for 600 ms, to open it under the caret. It has two tiers:
+  **next words** (up to 6 short continuations of one to three words, the fast tier) and **whole lines** (up to 8:
+  model continuations and corpus lines). Each shows the Greek (the part you have typed is greyed), its metrical
+  pattern, the English it carries, and its source (agent, or corpus with citation). Evidence and checks for the
+  highlighted option appear beside it. ↑/↓ run through both tiers. Candidates stream in as they pass the lint bank;
+  next words arrive first, whole lines as they come. The footer shows "thinking · words + lines" with the last tool
   calls, how many candidates the checks rejected, and any error.
 - **Chat** (right, collapsible). Ask anything; the answer streams. Tool calls show as compact chips (`lemma_search ×2`).
   Candidates show as chips: click the Greek to insert it at the caret, or **+ version** to add it as a version of the
@@ -51,33 +53,38 @@ sign-in marker cookie (`melos_owner_ui=1`) is present. Signed out, `/composer` i
 
 ## How the pool works (PRD §4)
 
-- **Slot** = (poem, line, the line up to the word being typed, settings). The client keeps one pool per slot
-  (`ComposerCore.poolKey`). Filling it posts `POST /api/composer/poems/{id}/pool` with the caret, the prefix, `n=12`
-  and `remaining_template`. That is the metre's template for the line (stanza position = line index) minus the
+- **Slot** = (poem, line, the line up to the word being typed, settings). The client keeps one pool per slot and
+  mode (`ComposerCore.poolKey`, `|words` for the next-words pool). Tab or a pause asks for both at once: `mode:
+  "words"` (`n=8`, `ahead_lines: 0`, short continuations) and `mode: "line"` (`n=12`, the rest of the stanza). The
+  background prefetch after a commit or an accepted suggestion asks for whole lines only. Each request posts
+  `POST /api/composer/poems/{id}/pool` with the caret, the prefix, `n`, `mode` and `remaining_template`. That is the metre's template for the line (stanza position = line index) minus the
   syllables already typed. If the line already fits the whole template, no request is made ("the line is complete");
   if the text so far does not fit, no request is made and the pop-up says so. The pool route requires a template
   (422 `template_required`), so without a named metre (none / detect) the model is not asked; the pop-up says so,
   and corpus fillers still come.
-- **Filtering is local** (`ComposerCore.optionsFor`). A pool applies while the line still begins with its base. Its
-  candidates are matched against what you typed since (accents, breathings, iota subscript, case and final sigma
-  ignored), and a candidate with a pattern must fit the slots open at its base. Pools from earlier slots on the same
-  line keep matching as you type into a candidate, so a pause starts a new model request only when fewer than 3 model
-  continuations still match.
+- **Filtering is local** (`ComposerCore.optionsFor`, `tiered`). A pool applies while the line still begins with its
+  base. Its candidates are matched against what you typed since (accents, breathings, iota subscript, case and final
+  sigma ignored), and a candidate with a pattern must fit the slots open at its base. `tiered` puts next words
+  (candidates with `mode: "words"`) first, then whole lines, in one list for the keyboard. Pools from earlier slots on
+  the same line keep matching as you type into a candidate, so a pause starts a new model request for a tier only when
+  fewer than 3 model continuations of that tier still match (`reusable(entries, before, mode)`).
 - **Corpus fillers**: `POST /api/compose/suggest` (the release V proposer) for the line, from the lines above. These
   are whole lines labelled "corpus", shown at once, and filtered the same way. Lines that failed the lint are dropped.
-- **Abort**: only one pool request runs at a time. It is aborted when the caret moves to another slot (typing a space,
-  another line), when settings change, or when another poem opens. Its streamed candidates are kept. Aborting only
-  stops the page listening: melos-api reads the agent's stream to its end and stores the rest; the agent stops the
-  turn when the next request names another slot.
+- **Abort**: the page keeps one request per (slot, mode) (`S.fills`). Requests for a slot the caret left (typing a
+  space, another line) are aborted, as are all of them when settings change or another poem opens. Streamed
+  candidates are kept. Aborting only stops the page listening: melos-api reads the agent's stream to its end and
+  stores the rest; the agent's fills for other slots run on (bounded) unless an urgent request needs their place.
 - **Prefetch**: right after a commit, a pool request for the next line's first slot starts. After an accepted
   candidate, the request is for the slot after it, or for the next line when the candidate's fit says the line is full.
 - **Warm-up** (`POST /api/composer/poems/{id}/warm {line_position, n}`, owner-only): sent when a poem opens (for the
   line the caret lands on) and after each commit (for the next line, when it is empty), if "ask the model when I
   pause" is on and a metre is named. melos-api answers at once (202; 200 `started: false` when every slot already
   has 4 stored candidates) and reads the agent's stream in the background, storing each candidate under its slot.
-  The agent does the poem's research once (its session stays open) and fills the stanza: the line and the rest of
-  the stanza (at least two lines, at most `MELOS_COMPOSER_AHEAD_LINES` = 3). While a warm-up runs (up to 6 min),
-  the page re-reads the active slot's stored candidates every 3 s.
+  The agent does the poem's research once (its session stays open), then fills the stanza in parallel forked
+  sessions: whole lines for the line and the rest of the stanza (at least two lines, at most
+  `MELOS_COMPOSER_AHEAD_LINES` = 3) and next words for the line. While a warm-up runs (up to 6 min), the page
+  re-reads the active slot's stored candidates every 3 s. A Tab during the research gets a *cold* next-words fill at
+  once (docs/composer/agent.md, "Cold fills").
 - **Stanza batches**: every pool request also carries the empty lines after it (`ahead`, computed by melos-api from
   the metre's templates; written lines are skipped). Candidates for those lines stream back with their `slot_key`;
   the page files them under that line (when the line exists on the board) and melos-api stores them.
@@ -110,6 +117,12 @@ line or the chat:
 `python3 tools/serve_composer_mock.py` (standard library), then open http://127.0.0.1:8796/composer.html. It fakes
 the composer API in memory, with streamed pool and chat replies, a rough scanner and back-translation.
 `--agent-down` makes the agent routes answer 503.
+
+## Speed (measured 2026-10-10, docs/composer/agent.md "Live measurement 2")
+
+Next words reach the pop-up 9-11 s after Tab (medium effort, 16-19 passing per minute, about $0.25 per slot), whole
+lines 9-143 s; a warm-up fills a Sapphic stanza (≥ 3 per line) in about 2.5 minutes. Defaults: pool effort
+`medium`, four fills in parallel, cold next-words fills while the research runs.
 
 ## Known gaps
 
