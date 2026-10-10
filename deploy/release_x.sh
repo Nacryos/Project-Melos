@@ -7,7 +7,7 @@
 #   $X/data/embeddings-s       -> /s-embeddings:ro             (S: bge-m3 manifest rebound, shlm rows/vectors + 59)
 #
 #   sh /home/alvin/melos-x/src/deploy/release_x.sh build        # melos-api:20261011x atop the live image
-#   sh /home/alvin/melos-x/src/deploy/release_x.sh canary       # melos-api-canary-x on 127.0.0.1:8792
+#   sh /home/alvin/melos-x/src/deploy/release_x.sh canary       # melos-api-canary-x on 127.0.0.1:8793 (8792 is held by an older canary)
 #   sh /home/alvin/melos-x/src/deploy/release_x.sh stop-canary
 #   sh /home/alvin/melos-x/src/deploy/release_x.sh promote      # stop+keep live as melos-api-before-x, start X on 8791
 #   sh /home/alvin/melos-x/src/deploy/release_x.sh rollback     # stop X, restart the kept container
@@ -18,6 +18,7 @@ IMAGE=${MELOS_X_IMAGE:-melos-api:20261011x}
 LIVE=melos-api
 KEPT=melos-api-before-x
 CANARY=melos-api-canary-x
+CANARY_PORT=${MELOS_X_CANARY_PORT:-8793}
 NETWORK=${MELOS_X_NETWORK:-melos-net}
 step=${1:-}
 
@@ -45,9 +46,9 @@ case "$step" in
   canary)
     docker container inspect "$CANARY" >/dev/null 2>&1 && { echo "$CANARY exists; remove it first" >&2; exit 1; }
     # shellcheck disable=SC2046
-    python3 "$SRC/deploy/clone_run.py" --from "$LIVE" --name "$CANARY" --port 8792 --image "$IMAGE" $(x_mounts)
+    python3 "$SRC/deploy/clone_run.py" --from "$LIVE" --name "$CANARY" --port "$CANARY_PORT" --image "$IMAGE" $(x_mounts)
     join_network "$CANARY"
-    sleep 25; curl -fsS http://127.0.0.1:8792/api/status | head -c 300; echo
+    sleep 25; curl -fsS "http://127.0.0.1:$CANARY_PORT/api/status" | head -c 300; echo
     ;;
   stop-canary)
     docker stop "$CANARY" >/dev/null && echo "stopped $CANARY (kept)"

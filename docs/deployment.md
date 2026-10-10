@@ -1,5 +1,28 @@
 # Deployment handoff
 
+## Current: release X — literal translation fallback and search rows (2026-10-10, ~3:30 PM PDT)
+
+Owner decision 2026-10-10 (`docs/decisions.md`): Claude's literal line-by-line English for the 59 Sappho, Alcaeus and
+Anacreon poems of Campbell's selection enters the site as search rows and as a last-resort reader fallback.
+Public backend: image `melos-api:20261011x` (code layer `deploy/Dockerfile.x` atop `melos-api:20261010w`, built from
+`fallback-translations` 238c738+recipe in `/home/alvin/melos-x/src`), promoted with
+`sh /home/alvin/melos-x/src/deploy/release_x.sh promote`; W kept stopped as `melos-api-before-x`; the canary
+`melos-api-canary-x` (127.0.0.1:8796; 8792/8793 were taken) is kept stopped. Data mounts replaced (all under
+`/home/alvin/melos-x/data`): `corpus.sqlite` = O's corpus + 59 rows `<poem id>:literal` (kind translation, eng, quality
+`machine_translation`, parent_id the poem; `scripts/import_literal_translations.py`, 288,821 → 288,880 passages);
+`embeddings/` = O's BGE-M3 rows and vectors + 59 (encoded on the Mac in float32 on CPU with
+`scripts/embed_release_o.py encode --device cpu`, assembled on the box; 116,428 → 116,487); `embeddings-s/` = shlm rows
+and vectors + 59 (`scripts/append_release_s_rows.py`, transformers 4.49 to load the pinned tokenizer) and the bge-m3 S
+manifest rebound to O's new files. Frontend: `vercel deploy --prod --yes --build-env MELOS_READER_ONLY=1` from the Mac
+worktree `~/Projects/melos-t` (branch `fallback-translations`) → `project-melos-mi7eoc6tb`; cache tags
+`literal-x-20261010`. Checks: `deploy/canary_checks_x.sh` 16/16 on the canary and on production (Alcaeus 45 shows the
+fallback; Sappho 31 keeps its Edmonds comparison; no `machine_translation` row in `related`; English phrase searches
+reach the poems through the BM25 bridge, the O index and the S dense English list, folded under another edition's entry
+where one exists). Python suite: identical failure set to `composer-w` (86 failed / 88 errors, all needing untracked
+runtime files) plus 6 new passing tests; frontend suite: the 3 pre-existing failures only.
+**Rollback:** `sh /home/alvin/melos-x/src/deploy/release_x.sh rollback` (restarts the kept W container with W's mounts),
+then `vercel promote https://project-melos-3x7dy1p8g-nacryos-projects.vercel.app --yes`. Never push to `main`.
+
 ## Current: release W — owner-only composer with the Fable 5.1 agent (2026-10-10, ~1:25 AM PDT)
 
 Public backend: image `melos-api:20261010w` (code layer atop `melos-api:20261009u`, built from `composer-w` 0300f1e on
