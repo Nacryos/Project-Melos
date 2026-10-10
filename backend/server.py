@@ -31,6 +31,7 @@ from .textutils import text_key as passage_text_key
 from .translation_languages import is_english_language
 from .large_json_gzip import LargeJSONGZipMiddleware
 from . import rate_limit as _rate_limit
+from . import composer_access as _composer_access
 
 ROOT = Path(__file__).resolve().parents[1]
 DB = ROOT / 'data/corpus.sqlite'
@@ -139,8 +140,10 @@ async def request_policy(request,call_next):
     from .jev_gateway import public_enabled
     visitor_cookie = None
     machine_cookie = None
-    if request.method == 'POST' and request.url.path in _rate_limit.LIMITED_PATHS:
+    if (request.method == 'POST' and request.url.path in _rate_limit.LIMITED_PATHS
+            and not (_composer_access.internal_tool_path(request.url.path) and _composer_access.internal_request(request, direct=False))):
         # Release U: per-client rate limit on the routes that drive the unmetered local parser.
+        # Release W: the composer agent service (internal token, backend/composer_access.py) is exempt.
         wait = _rate_limit.limiter().check(request.headers, request.client.host if request.client else '')
         if wait:
             return JSONResponse(status_code=429, headers={'Retry-After': str(wait)},
@@ -1949,6 +1952,8 @@ from .compose_routes import router as compose_router  # release V: composer next
 app.include_router(compose_router)
 from .reader_scan_routes import router as reader_scan_router  # release V: reader scansion overlay (metre lock)
 app.include_router(reader_scan_router)
+from .composer_routes import router as composer_router  # release W: owner-only composer store + agent proxy
+app.include_router(composer_router)
 
 
 def _startup_warm():

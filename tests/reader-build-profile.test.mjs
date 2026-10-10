@@ -45,7 +45,9 @@ test('reader-only release excludes discovery without changing the full local bui
     assert.ok(!paths.some(name => name === 'assets/authors' || name.startsWith('assets/authors/')));
     assert.ok(!paths.includes('css/discovery-nav.css'));
     // The Lexicon (headword) and Concepts pages ship in the reader-only release.
-    for (const name of ['lemma.html', 'concept.html', 'js/lemma-common.js', 'js/lemma-page.js', 'js/concept-page.js', 'css/lemma-page.css', 'owner.html', 'js/owner.js', 'js/owner-loader.js', 'composer.html', 'js/typegreek.js', 'js/composer.js', 'js/reader-scansion.js', 'css/scansion.css', 'css/composer.css']) assert.ok(paths.includes(name), name);
+    for (const name of ['lemma.html', 'concept.html', 'js/lemma-common.js', 'js/lemma-page.js', 'js/concept-page.js', 'css/lemma-page.css', 'owner.html', 'js/owner.js', 'js/owner-loader.js', 'js/typegreek.js', 'js/composer.js', 'js/reader-scansion.js', 'css/scansion.css', 'css/composer.css']) assert.ok(paths.includes(name), name);
+    // Release W: the composer page is owner-only and served by the API, never by the static site.
+    assert.ok(!paths.includes('composer.html'));
     assert.equal(await readFile(path.join(fixture, 'reader.html'), 'utf8'), originalReader);
   };
 

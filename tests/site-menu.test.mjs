@@ -30,9 +30,11 @@ test('panel lists the sections in order and ends with Log in', () => {
   for (const feature of ["['Reader', '/'", "['Poets & works', '/#collection'", "['Lexicon', '/lexicon'", "['Concepts', '/concepts'", "['Search', '/#search'", "['Scansion', '/'", "['Composer', '/composer'"]) {
     assert.ok(menu.includes(feature), feature);
   }
-  // Release V: the composer page is a real route and ships in the build.
-  assert.match(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'), /"source": "\/composer", "destination": "\/composer\.html"/);
-  assert.match(readFileSync(new URL('../scripts/build_frontend.mjs', import.meta.url), 'utf8'), /'composer\.html'/);
+  // Release W: the composer page is owner-only: Vercel proxies /composer to the API, which serves it to the signed-in
+  // owner (404 otherwise); the static build no longer ships composer.html.
+  assert.match(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'), /"source": "\/composer", "destination": "https:\/\/[^"]+\/composer"/);
+  assert.match(readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'), /"source": "\/composer\.html", "destination": "https:\/\/[^"]+\/composer"/);
+  assert.doesNotMatch(readFileSync(new URL('../scripts/build_frontend.mjs', import.meta.url), 'utf8'), /toolPages = \[[^\]]*'composer\.html'/);
   // Modules not yet released are shown but cannot be followed.
   assert.match(menu, /className: 'site-menu-item is-soon', ariaDisabled: 'true'/);
 });

@@ -6,7 +6,9 @@
 1. ``/api/private/*`` answers 404 to any request without a verified owner session, before
    routing (unknown sub-paths included); 503 "not configured" when the box has no owner secrets;
 2. every owner route also checks the session itself (``_owner_or_404``);
-3. for signed-out requests the guard scans every ``/api`` response body for the private marker
+3. release W: the composer (``/composer``, ``/api/compose/*``, ``/api/composer/*``) answers 404 likewise, before
+   routing (backend/composer_access.py);
+4. for signed-out requests the guard scans every ``/api`` response body for the private marker
    that tags all owner payloads; a match is replaced by 404 (or the stream is cut) and logged.
 """
 from __future__ import annotations
@@ -19,6 +21,7 @@ from fastapi.responses import FileResponse, Response
 from starlette.requests import Request as StarletteRequest
 
 from . import private_store
+from .composer_access import internal_may_call, internal_request, owner_only_path
 from .private_auth import load_config, not_configured, not_found, owner_from_request, router as auth_router
 
 log = logging.getLogger("melos.private")
@@ -33,12 +36,18 @@ class PrivateGuard:
         self.app = app
 
     async def __call__(self, scope, receive, send):
-        if scope["type"] != "http" or not scope.get("path", "").startswith("/api/"):
+        path = scope.get("path", "") if scope["type"] == "http" else ""
+        if not path.startswith("/api/") and not owner_only_path(path):
             return await self.app(scope, receive, send)
         request = StarletteRequest(scope)
         owner = owner_from_request(request)
         if owner is not None:
             return await self.app(scope, receive, send)
+        if owner_only_path(path):
+            # Release W: the composer and its API are the owner's alone; the agent service's internal token opens
+            # only the lint route (backend/composer_access.py).
+            if not (internal_may_call(scope.get("method", ""), path) and internal_request(request)):
+                return await not_found()(scope, receive, send)
         if scope["path"].startswith("/api/private/") or scope["path"] == "/api/private":
             if load_config() is None:
                 return await not_configured(request)(scope, receive, send)

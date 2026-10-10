@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from backend import compose_routes as cr
+from backend.composer_access import require_owner
 from backend.scansion import api as scan_api
 
 FR168B = {"id": "dcc-sappho:frag-118-168:168B", "kind": "text", "language": "grc", "author": "Sappho",
@@ -45,6 +46,7 @@ def client(monkeypatch):
     monkeypatch.setattr(cr, "_limit", cr.RateLimiter(client_minute=2, client_day=10, connection_minute=10))
     app = FastAPI()
     app.include_router(cr.router)
+    app.dependency_overrides[require_owner] = lambda: "owner"   # release W: the routes are owner-only
     c = TestClient(app)
     c.calls = calls
     return c

@@ -321,6 +321,8 @@ def test_every_endpoint_signed_out_returns_no_private_text(env):
             elif method == "POST":
                 response = c.post(path, json={**GUESSES, "words": ["μοῦσα", "licensed"], "tokens": ["μοῦσα"],
                                               "passage": {"id": "p1", "text": "μοῦσα"}}, headers={"Origin": ORIGIN})
+            elif method == "PATCH":  # release W: composer edits (owner-only, 404 signed out)
+                response = c.patch(path, json=GUESSES, headers={"Origin": ORIGIN})
             else:
                 continue
             checked += 1

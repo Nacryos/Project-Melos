@@ -38,3 +38,4 @@ output/imagegen/nature-gallery/
 data/commentary_inbox/*.pdf
 data/commentary_inbox/*.json
 data/embeddings-s/
+.venv-w/

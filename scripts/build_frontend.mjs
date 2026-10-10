@@ -9,7 +9,8 @@ const localPreview = process.argv.includes('--local-preview');
 const frontendOnly = process.env.MELOS_FRONTEND_ONLY === '1';
 const readerOnly = process.argv.includes('--reader-only') || process.env.MELOS_READER_ONLY === '1';
 const discoveryPages = ['lexicon', 'authors', 'themes'];
-const toolPages = ['lemma.html', 'concept.html', 'about.html', 'owner.html', 'composer.html'];
+// Release W: composer.html is not in the static site; /composer is served by the API to the signed-in owner only.
+const toolPages = ['lemma.html', 'concept.html', 'about.html', 'owner.html'];
 const pages = ['index.html', 'design-studio.html', ...toolPages, ...(readerOnly ? [] : discoveryPages.map(page => `${page}.html`))];
 const excerptPages = ['34a', '129', '130b', '326', '350'].map(id => `sources/campbell-alcaeus/${id}.html`);
 const includeExcerpts = existsSync(path.join(root, 'sources/campbell-alcaeus'));

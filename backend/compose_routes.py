@@ -22,17 +22,18 @@ from __future__ import annotations
 import os
 import time
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
+from .composer_access import require_owner
+from .composer_lint import FROM_PASSAGE_DIALECT as _FROM_PASSAGE_DIALECT, SCAN_DIALECTS
 from .rate_limit import RateLimiter
 
-router = APIRouter()
+# Release W: owner-only (docs/prd/composer-agent.md §6); signed out, every /api/compose/* path is 404.
+router = APIRouter(dependencies=[Depends(require_owner)])
 _limit = RateLimiter(client_minute=int(os.environ.get("MELOS_COMPOSE_CLIENT_MINUTE", 12)),
                      client_day=int(os.environ.get("MELOS_COMPOSE_CLIENT_DAY", 600)),
                      connection_minute=int(os.environ.get("MELOS_COMPOSE_CONNECTION_MINUTE", 120)))
-SCAN_DIALECTS = ("none", "aeolic", "doric", "ionic", "attic")
-_FROM_PASSAGE_DIALECT = {"lesbian": "aeolic", "boeotian": "aeolic", "doric": "doric"}
 ROUNDS = 3
 PER_PASSAGE = 4
 VERSION = "compose-suggest-v1"
@@ -65,12 +66,8 @@ def status():
 
 
 def _target_dialect(dialect: str | None, author: str | None) -> str:
-    if dialect:
-        if dialect not in SCAN_DIALECTS:
-            raise HTTPException(422, {"code": "unknown_dialect", "message": f"dialect must be one of {', '.join(SCAN_DIALECTS)}"})
-        return dialect
-    from .passage_dialect import passage_dialect
-    return _FROM_PASSAGE_DIALECT.get(passage_dialect({"author": author or ""}) or "", "none")
+    from .composer_lint import target_dialect
+    return target_dialect(dialect, author)
 
 
 def _clean_lines(result: dict, seen: set[str]) -> list[dict]:
@@ -119,33 +116,25 @@ def _propose(query: str, author: str, seen: set[str], limit: int) -> list[dict]:
 def _lint(cand: dict, *, scanner, metre_name: str | None, template: str | None, target_dialect: str,
           author: str) -> dict:
     from .passage_dialect import passage_dialect
-    from .scansion import metre
-    from .textutils import tokenize
-    from .word_headlines import headlines
+    from . import composer_lint as lint
     checks = []
     units = [u for line in scanner.scan_lines(cand["greek"]) for u in line]
-    pattern = "".join({"L": "–", "S": "⏑", "A": "?"}[u.label] for u in units)
+    pattern = lint.pattern_of(units)
     if metre_name and template:
-        f = metre.fit_line(units, metre_name, template)
-        cand["fit"] = {"metre": metre_name, "template": template, "ok": f.ok, "pattern": f.pattern or pattern,
-                       "message": f.message, "violations": f.violations}
-        checks.append({"id": "L7", "name": "metre", "verdict": "pass" if f.ok else "fail",
-                       "message": (f"fits {metre_name.replace('_', ' ')}: {f.pattern}" if f.ok else
-                                   f"{metre_name.replace('_', ' ')}: {f.message}" +
-                                   "".join(f"; {v['text']} needs {v['needs']} ({v['reason']})" for v in f.violations)),
-                       "evidence": [{"rule": v.get("rule"), "syllable": v["text"], "needs": v["needs"],
-                                     "p_long": v["p_long"]} for v in f.violations]})
+        shared, fit = lint.metre_check(units, metre_name, template)
+        cand["fit"] = {**fit, "pattern": fit["pattern"] or pattern}
+        checks.append({"id": "L7", "name": "metre", "verdict": "pass" if shared["ok"] else "fail",
+                       "message": shared["detail"], "evidence": shared["evidence"]})
     else:
         checks.append({"id": "L7", "name": "metre", "verdict": "info",
                        "message": f"no metre chosen; scansion {pattern}", "evidence": []})
-    words = [w for w in tokenize(cand["greek"]) if any(ch.isalpha() for ch in w)]
+    words = lint.greek_words(cand["greek"])
     unread = []
     if words:
         try:
-            rows = headlines(forms=words, author=author or "").get("tokens") or []
-            unread = [r.get("printed") for r in rows if not r.get("lemma")]
+            _rows, unread = lint.unread_forms(words, author)
         except HTTPException:
-            rows = []
+            unread = []
         verdict = "pass" if not unread else "warn" if len(unread) == 1 else "fail"
         checks.append({"id": "L1", "name": "forms", "verdict": verdict,
                        "message": "every word has a reading" if not unread else f"no reading for {', '.join(unread)}",
