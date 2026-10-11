@@ -183,6 +183,11 @@ html, body { overflow-x: hidden; }
 .board { border: 1px solid var(--line); background: var(--canvas-bg); padding: 6px 0; }
 .line { padding: 0 12px 2px 0; border-left: 2px solid transparent; transition: border-color .15s ease; }
 .line.active { border-left-color: var(--sea); }
+.line .n { cursor: grab; }
+.line .n:active { cursor: grabbing; }
+.line.dragging { opacity: .45; }
+.line.drop-before { box-shadow: inset 0 2px 0 var(--sea); }
+.line.drop-after { box-shadow: inset 0 -2px 0 var(--sea); }
 .board.select-all .line-canvas { background: rgb(43 90 135 / .18); }   /* ⌘A: the whole poem is selected */
 .line-main { display: flex; align-items: flex-start; gap: 6px; }
 .line .n { flex: 0 0 2.2em; text-align: right; padding-top: .95em; color: var(--muted); font: .78rem/1 system-ui, sans-serif; user-select: none; }

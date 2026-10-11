@@ -84,7 +84,7 @@
     pools: new Map(), fills: new Map(), prefixScans: new Map(),
     popup: { open: false, row: null, index: 0, options: [], auto: false, dismissed: null },
     analysis: new Map(), pending: new Set(), selected: null, chatStream: null, showArchived: new Set(), selectAll: false,
-    attest: new Map(), attestPending: new Set(),
+    attest: new Map(), attestPending: new Set(), drag: null,
   };
   const settings = () => ({ author: $('author').value, metre: $('metre').value, dialect: $('dialect').value });
   const scanDialect = () => { const d = $('dialect').value; return d && d !== 'none' ? d : d === 'none' ? 'none' : (POET_DIALECT[$('author').value] || 'none'); };
@@ -248,6 +248,9 @@
     row.ime = window.TypeGreek.attach(el.ta, { storageKey: 'melos-typegreek-mode', onChange: value => edited(row, value), onModeChange: m => setMode(m) });
     if (row.ime.mode !== mode) row.ime.setMode(mode);
     el.ta.addEventListener('keydown', e => keydown(row, e));
+    el.n.draggable = true; el.n.title = 'Drag to move this line (or ⌥↑ / ⌥↓ in the line)';
+    el.n.addEventListener('dragstart', e => { S.drag = row; root.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', row.draft); });
+    el.n.addEventListener('dragend', () => { S.drag = null; root.classList.remove('dragging'); clearDropMarks(); });
     el.ta.addEventListener('focus', () => { if (S.popup.row !== row) closePopup(); S.active = row; root.classList.add('active'); });
     el.ta.addEventListener('blur', () => { root.classList.remove('active'); setTimeout(() => { if (!popup.contains(document.activeElement) && document.activeElement !== S.popup.row?.el.ta) closePopup(); }, 0); });
     el.ta.addEventListener('scroll', () => { el.backdrop.scrollLeft = el.ta.scrollLeft; positionPopup(); });
@@ -328,10 +331,53 @@
     }
     if (e.key === 'Tab' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) { e.preventDefault(); openPopup({ auto: false }); return; }
     if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) { e.preventDefault(); commit(row); return; }
+    if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && e.altKey && !e.shiftKey && !e.metaKey && !e.ctrlKey) {   // ⌥↑ / ⌥↓: move the line
+      e.preventDefault(); closePopup(); moveRow(row, rowIndex(row) + (e.key === 'ArrowUp' ? -1 : 1), row.el.ta.selectionStart); return;
+    }
     if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && !e.shiftKey && !e.altKey) {
       const next = S.rows[rowIndex(row) + (e.key === 'ArrowUp' ? -1 : 1)];
       if (next) { e.preventDefault(); closePopup(); focusRow(next, row.el.ta.selectionStart); }
     }
+  }
+  // ---- moving lines (X.8): drag the line number, or ⌥↑ / ⌥↓ in the line; the other lines close up -----------------------
+  const clearDropMarks = () => board.querySelectorAll('.drop-before, .drop-after').forEach(el => el.classList.remove('drop-before', 'drop-after'));
+  /* Where a drop at page y lands: the index of the first row whose middle is below y (so the row list length = after the last). */
+  function dropIndex(y) {
+    const i = S.rows.findIndex(r => r.el && y < r.el.root.getBoundingClientRect().top + r.el.root.getBoundingClientRect().height / 2);
+    return i < 0 ? S.rows.length : i;
+  }
+  board.addEventListener('dragover', e => {
+    if (!S.drag) return;
+    e.preventDefault(); e.dataTransfer.dropEffect = 'move';
+    clearDropMarks();
+    const i = dropIndex(e.clientY), at = Math.min(i, S.rows.length - 1);
+    S.rows[at]?.el.root.classList.add(i < S.rows.length ? 'drop-before' : 'drop-after');
+  });
+  board.addEventListener('dragleave', e => { if (!board.contains(e.relatedTarget)) clearDropMarks(); });
+  board.addEventListener('drop', e => {
+    if (!S.drag) return;
+    e.preventDefault();
+    const row = S.drag, from = rowIndex(row), i = dropIndex(e.clientY);
+    S.drag = null; clearDropMarks(); row.el.root.classList.remove('dragging');
+    moveRow(row, i > from ? i - 1 : i);
+  });
+  /* Move `row` to index `to`. The board, scan and drafts follow at once; saved lines are re-positioned on the server in
+     ascending order of their new place (each PATCH pulls one line into place and the server closes the others up). */
+  async function moveRow(row, to, caret) {
+    const from = rowIndex(row);
+    to = Math.max(0, Math.min(to, S.rows.length - 1));
+    if (from < 0 || from === to) return;
+    closePopup();
+    S.rows.splice(from, 1); S.rows.splice(to, 0, row);
+    ensureTrailingRow();
+    renderBoard(); scan(); saveDrafts();
+    if (caret != null) focusRow(row, caret);
+    const saved = S.rows.filter(r => r.line), moves = [];
+    saved.forEach((r, i) => { if (r.line.position !== i) { r.line.position = i; moves.push(r); } });
+    try {
+      for (const r of moves) await call('PATCH', `/api/composer/lines/${r.line.id}`, { position: r.line.position });
+      if (moves.length) status(`Moved line ${from + 1} to ${to + 1}; the metre marks follow the new place (saved checks keep the old one until the line is saved again).`);
+    } catch (e) { failed('move', e); }
   }
   // ---- alternatives (W4): select Greek in a line and press ⌘/ (or the chip) → {selection/} with the caret before the
   // brace; type the alternative. Both readings are scanned and linted; the alternative shows dimmed after the slash.
