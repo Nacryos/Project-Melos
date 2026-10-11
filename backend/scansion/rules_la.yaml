@@ -44,6 +44,7 @@ params:
   mcl_boundary: 0.05          # stop + liquid opening the next word: no position in classical verse
   s_impura: 0.15              # short final vowel before initial s + stop (pote stolidum 17.24): usually stays short
   pos_initial: 0.9            # next word begins with another two consonants (gn-, ps-, mn-, Greek clusters)
+  pos_initial_greek: 0.15     # ... a Greek initial cluster (cn-, pn-, ps-, mn-, pt-, ct-, tm-, bd-): seldom makes position
   final_s_drop: 0.02          # final -s after a short vowel before a consonant dropped (dabi' supplicium, 116.8)
   semi_hiatus_long: 0.5       # a long monosyllable kept in hiatus may shorten (dī ament, 97.1)
   elision: 0.98               # final vowel (or vowel + m) before a vowel or h-: elided
@@ -58,7 +59,8 @@ params:
 lists:
   vav_long: [fio, fiam, fias, fiat, fiamus, fiatis, fiant, fiebam, fiebas, fiebat, fiebant, fiet, fies, fient, fiemus,
              fietis, diei, faciei, speciei, aer, aeris, aeri, aera, aere, eheu, ohe, io, dius, aenea, aeneae, aeneas,
-             aeneam, aenean]
+             aeneam, aenean, aerias, aerius, aeria, aerii, aerio, aerium, aeriae, aeriis, chorea, choreae, choream,
+             choreas, chorearum, choreis]   # āerius (Odes 1.28.5), chorēa (1.9.16): Greek vowels keep their length
   vav_genitives: [illius, ipsius, unius, totius, solius, utrius, nullius, ullius, istius, neutrius, alius, alterius]
   final_e_long: [die, re, fide, spe, facie, specie, acie, hodie, pridie, postridie, quare, fere, ferme, ohe, docte,
                  pulchre, pulcre, misere, uere, tute, longe, late, plane, recte, sane, assidue, mirifice, belle,
@@ -333,10 +335,15 @@ unit:
             p: 1
             reason: the next word begins with x or z
             cite: A&G §603f
+          - id: INIT-GREEK
+            when: next_cluster == "greek"
+            p: p_vowel + (1 - p_vowel) * pos_initial_greek
+            reason: a Greek initial cluster (cn-, pn-, ps-, mn-, pt-, ct-, tm-, bd-) seldom makes position
+            cite: Raven §12; Catullus 36.13 Cnidumque, Horace Odes 1.15.17 Cnosii (both short in the gold)
           - id: INIT-OTHER
             when: true
             p: p_vowel + (1 - p_vowel) * pos_initial
-            reason: the next word begins with another consonant cluster (gn-, ps-, mn-)
+            reason: the next word begins with another consonant cluster (gn-, Latin clusters)
             cite: A&G §603f
       - id: POS-WORD
         when: true

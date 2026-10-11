@@ -1,0 +1,401 @@
+{
+ "lines": 289,
+ "misaligned": 4,
+ "units_scored": 2848,
+ "decided": 2531,
+ "decided_share": 0.8887,
+ "accuracy_on_decided": 1.0,
+ "ambiguous_share": 0.1113,
+ "brier": 0.0299,
+ "elision": {
+  "candidates": 148,
+  "right": 147,
+  "accuracy": 0.9932,
+  "confusions": {
+   "gold hiatus, predicted elision": 1
+  }
+ },
+ "fit": {
+  "lines": 285,
+  "parsed": 285,
+  "ok": 284,
+  "pattern_match": 275,
+  "ok_but_wrong_pattern": 9
+ },
+ "negative_control": {
+  "swap_total": 284,
+  "swap_accepted": 58,
+  "replace_total": 284,
+  "replace_accepted": 55
+ },
+ "decided_by": {
+  "lexicon": {
+   "units": 1242,
+   "share_of_scored": 0.4361
+  },
+  "position": {
+   "units": 948,
+   "share_of_scored": 0.3329
+  },
+  "finals_and_lists": {
+   "units": 201,
+   "share_of_scored": 0.0706
+  },
+  "diphthong_or_monosyllable": {
+   "units": 140,
+   "share_of_scored": 0.0492
+  }
+ },
+ "rule_shares": {
+  "NATURE / LEX-S": {
+   "n": 501,
+   "long": 0.0
+  },
+  "NATURE / LEX-L": {
+   "n": 438,
+   "long": 1.0
+  },
+  "POS-WORD / LEX-S-CONV": {
+   "n": 408,
+   "long": 1.0
+  },
+  "NATURE / LEX-CONFLICT": {
+   "n": 207,
+   "long": 0.29
+  },
+  "POS-ACROSS / LEX-S-CONV": {
+   "n": 206,
+   "long": 1.0
+  },
+  "NATURE / VAV-SHORT": {
+   "n": 187,
+   "long": 0.0
+  },
+  "NATURE / LEX-S-CONV": {
+   "n": 152,
+   "long": 0.0
+  },
+  "CONS-VOW / LEX-S-CONV": {
+   "n": 74,
+   "long": 0.0
+  },
+  "NATURE / DIPH": {
+   "n": 62,
+   "long": 1.0
+  },
+  "NATURE / MONO-LONG": {
+   "n": 59,
+   "long": 1.0
+  },
+  "POS-ACROSS / LEX-S": {
+   "n": 51,
+   "long": 1.0
+  },
+  "POS-ACROSS-S / LEX-L": {
+   "n": 49,
+   "long": 1.0
+  },
+  "CONS-VOW / LEX-L": {
+   "n": 48,
+   "long": 1.0
+  },
+  "POS-ACROSS / LEX-CONFLICT": {
+   "n": 45,
+   "long": 1.0
+  },
+  "POS-WORD / LEX-L": {
+   "n": 43,
+   "long": 1.0
+  },
+  "POS-ACROSS / LEX-L": {
+   "n": 31,
+   "long": 1.0
+  },
+  "POS-WORD / LEX-CONFLICT": {
+   "n": 31,
+   "long": 1.0
+  },
+  "POS-ACROSS-S / LEX-S-CONV": {
+   "n": 26,
+   "long": 1.0
+  },
+  "NATURE / VAV-GREEK": {
+   "n": 25,
+   "long": 0.08
+  },
+  "CONS-VOW / LEX-S": {
+   "n": 24,
+   "long": 0.0
+  },
+  "CONS-VOW / LEX-CONFLICT": {
+   "n": 21,
+   "long": 0.429
+  },
+  "POS-ACROSS-S / LEX-CONFLICT": {
+   "n": 20,
+   "long": 1.0
+  },
+  "NATURE / UNK": {
+   "n": 18,
+   "long": 0.389
+  },
+  "NATURE / FIN-O-SHORT": {
+   "n": 13,
+   "long": 0.077
+  },
+  "NATURE / ENCL-E": {
+   "n": 12,
+   "long": 0.0
+  },
+  "POS-DOUBLE / LEX-S-CONV": {
+   "n": 10,
+   "long": 1.0
+  },
+  "NATURE / MONO-INTERJ": {
+   "n": 8,
+   "long": 1.0
+  },
+  "NATURE / FIN-O-IAMB": {
+   "n": 7,
+   "long": 1.0
+  },
+  "MCL-WORD / LEX-CONFLICT": {
+   "n": 5,
+   "long": 0.4
+  },
+  "MCL-WORD / LEX-S-CONV": {
+   "n": 5,
+   "long": 0.6
+  },
+  "POS-ACROSS / DIPH": {
+   "n": 5,
+   "long": 1.0
+  },
+  "MCL-WORD / LEX-S": {
+   "n": 5,
+   "long": 0.4
+  },
+  "POS-WORD / UNK": {
+   "n": 5,
+   "long": 1.0
+  }
+ },
+ "flag_shares": {
+  "SYN-CAND": {
+   "n": 204,
+   "happened": 0.0
+  },
+  "ELI-CAND": {
+   "n": 123,
+   "happened": 0.992
+  },
+  "IAMB-SHORT": {
+   "n": 109,
+   "happened": 0.284
+  },
+  "ELI-MONO": {
+   "n": 12,
+   "happened": 1.0
+  },
+  "PROD-CAND": {
+   "n": 8,
+   "happened": 1.0
+  },
+  "PROD-CAND-M": {
+   "n": 4,
+   "happened": 1.0
+  },
+  "ELI-PUNCT": {
+   "n": 1,
+   "happened": 1.0
+  }
+ },
+ "calibration": {
+  "0.0-0.1": {
+   "n": 539,
+   "observed_long": 0.0
+  },
+  "0.1-0.2": {
+   "n": 416,
+   "observed_long": 0.0
+  },
+  "0.2-0.3": {
+   "n": 23,
+   "observed_long": 0.261
+  },
+  "0.4-0.5": {
+   "n": 25,
+   "observed_long": 0.08
+  },
+  "0.5-0.6": {
+   "n": 253,
+   "observed_long": 0.308
+  },
+  "0.6-0.7": {
+   "n": 13,
+   "observed_long": 0.769
+  },
+  "0.9-1.0": {
+   "n": 1579,
+   "observed_long": 1.0
+  }
+ },
+ "ambiguous_by_rule": [
+  [
+   "NATURE / LEX-CONFLICT",
+   207
+  ],
+  [
+   "NATURE / VAV-GREEK",
+   25
+  ],
+  [
+   "CONS-VOW / LEX-CONFLICT",
+   21
+  ],
+  [
+   "NATURE / UNK",
+   18
+  ],
+  [
+   "NATURE / FIN-O-SHORT",
+   13
+  ],
+  [
+   "NATURE / FIN-O-IAMB",
+   7
+  ],
+  [
+   "MCL-WORD / LEX-CONFLICT",
+   5
+  ],
+  [
+   "MCL-WORD / LEX-S-CONV",
+   5
+  ],
+  [
+   "MCL-WORD / LEX-S",
+   5
+  ],
+  [
+   "INIT-MCL / LEX-CONFLICT",
+   4
+  ],
+  [
+   "INIT-MCL / LEX-S-CONV",
+   3
+  ],
+  [
+   "NATURE / VAV-GEN",
+   1
+  ]
+ ],
+ "errors_by_rule": [],
+ "misaligned_lines": [
+  {
+   "id": "hypotactic-la:catullus:10:8",
+   "units": 12,
+   "gold": 11,
+   "text": "et quonam mihi profuisset aere.",
+   "gold_q": "LLLSSLSLSLL"
+  },
+  {
+   "id": "hypotactic-la:catullus:46:3",
+   "units": 12,
+   "gold": 11,
+   "text": "jucundis Zephyri silescit aureis.",
+   "gold_q": "LLLSSLSLSLL"
+  },
+  {
+   "id": "hypotactic-la:catullus:46:9",
+   "units": 12,
+   "gold": 11,
+   "text": "o dulces comitum valete coetus,",
+   "gold_q": "LLLSSLSLSLL"
+  },
+  {
+   "id": "hypotactic-la:catullus:50:21",
+   "units": 13,
+   "gold": 12,
+   "text": "est vehemens dea: laedere hanc caveto.",
+   "gold_q": "LLLSSLSELSLL"
+  }
+ ],
+ "errors": [
+  {
+   "id": "hypotactic-la:catullus:38:2",
+   "text": "malest, me hercule, et laboriose,",
+   "unit": "e",
+   "p": 0.98,
+   "gold": "kept",
+   "rule": "ELISION",
+   "vowel_rule": "",
+   "flags": [
+    "hiatus"
+   ]
+  },
+  {
+   "id": "hypotactic-la:catullus:38:2",
+   "text": "malest, me hercule, et laboriose,",
+   "unit": "",
+   "p": null,
+   "gold": "⏑––⏑⏑–⏑–⏑––",
+   "rule": "LINE-REJECTED",
+   "vowel_rule": "1 position(s) against the scanner",
+   "flags": [
+    "e:elision"
+   ]
+  }
+ ],
+ "ms_per_line": 3.18,
+ "setting": {
+  "split": "held_out",
+  "work": "catullus",
+  "metre": "hendecasyllables",
+  "template": "phalaecian",
+  "fold_v": false,
+  "lexicon": true,
+  "params": {
+   "vowel_default": 0.5,
+   "vocal_before_vowel": 0.1,
+   "vocal_before_vowel_greek": 0.4,
+   "vav_long_list": 0.9,
+   "vav_genitive": 0.5,
+   "final_o_iambic": 0.6,
+   "final_e_greek": 0.7,
+   "final_a": 0.5,
+   "final_e_short": 0.05,
+   "final_e_long_list": 0.85,
+   "final_i_long": 0.95,
+   "final_i_either": 0.5,
+   "final_i_short_list": 0.1,
+   "final_o_long": 0.9,
+   "final_o_short_list": 0.2,
+   "final_u_long": 0.95,
+   "final_as": 0.9,
+   "final_os": 0.9,
+   "final_es": 0.7,
+   "final_is": 0.25,
+   "final_us": 0.15,
+   "lex_long": 0.9,
+   "lex_short": 0.05,
+   "lex_short_convention": 0.1,
+   "lex_unmarked": 0.3,
+   "mcl_word": 0.2,
+   "mcl_boundary": 0.05,
+   "s_impura": 0.15,
+   "pos_initial": 0.9,
+   "pos_initial_greek": 0.15,
+   "final_s_drop": 0.02,
+   "semi_hiatus_long": 0.5,
+   "elision": 0.98,
+   "elision_before_interjection": 0.6,
+   "elision_after_strong_punct": 0.9,
+   "elision_monosyllable_long": 0.75,
+   "prodelision": 0.98,
+   "synizesis": 0.05,
+   "synizesis_list": 0.85,
+   "iambic_shortening": 0.3
+  }
+ }
+}

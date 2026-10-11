@@ -132,9 +132,11 @@ def attestation_check(words: list[str], author: str = "") -> dict:
     unattested = [r["form"] for r in rows if not r["tokens"]]
     in_poet = [r["form"] for r in rows if r["author_tokens"]]
     lemma_in_poet, lemma_unknown = [], []
-    for r in rows:
-        reads = latin_lemma.readings(r["form"])
+    ctx = latin_lemma.context_lemmas(words)        # the whole draft read in context by LatinCy (empty without the sidecar)
+    for i, r in enumerate(rows):
+        reads, how = latin_lemma.choose_reading(latin_lemma.readings(r["form"]), ctx.get(i))
         r["readings"] = reads[:3]
+        r["lemma_source"] = how
         if reads:
             att = latin_lemma.lemma_attestation(reads[0]["lemma"], author or "")
             r["lemma"] = reads[0]["lemma"]

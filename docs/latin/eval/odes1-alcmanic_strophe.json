@@ -1,0 +1,329 @@
+{
+ "lines": 68,
+ "misaligned": 0,
+ "units_scored": 783,
+ "decided": 693,
+ "decided_share": 0.8851,
+ "accuracy_on_decided": 0.9971,
+ "ambiguous_share": 0.1149,
+ "brier": 0.0336,
+ "elision": {
+  "candidates": 8,
+  "right": 8,
+  "accuracy": 1.0,
+  "confusions": {}
+ },
+ "fit": {
+  "lines": 68,
+  "parsed": 68,
+  "ok": 66,
+  "pattern_match": 61,
+  "ok_but_wrong_pattern": 5
+ },
+ "negative_control": {
+  "swap_total": 68,
+  "swap_accepted": 22,
+  "replace_total": 68,
+  "replace_accepted": 25
+ },
+ "decided_by": {
+  "lexicon": {
+   "units": 355,
+   "share_of_scored": 0.4534
+  },
+  "position": {
+   "units": 253,
+   "share_of_scored": 0.3231
+  },
+  "diphthong_or_monosyllable": {
+   "units": 46,
+   "share_of_scored": 0.0587
+  },
+  "finals_and_lists": {
+   "units": 39,
+   "share_of_scored": 0.0498
+  }
+ },
+ "rule_shares": {
+  "NATURE / LEX-S": {
+   "n": 139,
+   "long": 0.0
+  },
+  "POS-WORD / LEX-S-CONV": {
+   "n": 130,
+   "long": 1.0
+  },
+  "NATURE / LEX-L": {
+   "n": 110,
+   "long": 1.0
+  },
+  "NATURE / LEX-CONFLICT": {
+   "n": 63,
+   "long": 0.111
+  },
+  "NATURE / LEX-S-CONV": {
+   "n": 55,
+   "long": 0.018
+  },
+  "POS-ACROSS / LEX-S-CONV": {
+   "n": 41,
+   "long": 1.0
+  },
+  "CONS-VOW / LEX-S-CONV": {
+   "n": 33,
+   "long": 0.0
+  },
+  "NATURE / DIPH": {
+   "n": 29,
+   "long": 1.0
+  },
+  "NATURE / VAV-SHORT": {
+   "n": 26,
+   "long": 0.0
+  },
+  "POS-WORD / LEX-L": {
+   "n": 16,
+   "long": 1.0
+  },
+  "POS-ACROSS / LEX-S": {
+   "n": 14,
+   "long": 1.0
+  },
+  "CONS-VOW / LEX-CONFLICT": {
+   "n": 13,
+   "long": 0.385
+  },
+  "NATURE / MONO-LONG": {
+   "n": 12,
+   "long": 1.0
+  },
+  "POS-ACROSS-S / LEX-L": {
+   "n": 11,
+   "long": 1.0
+  },
+  "NATURE / ENCL-E": {
+   "n": 11,
+   "long": 0.0
+  },
+  "POS-ACROSS / LEX-L": {
+   "n": 8,
+   "long": 1.0
+  },
+  "NATURE / VAV-GREEK": {
+   "n": 7,
+   "long": 0.143
+  },
+  "POS-WORD / LEX-CONFLICT": {
+   "n": 6,
+   "long": 1.0
+  },
+  "CONS-VOW / LEX-L": {
+   "n": 6,
+   "long": 1.0
+  },
+  "INIT-MCL / LEX-L": {
+   "n": 5,
+   "long": 1.0
+  },
+  "POS-ACROSS-S / LEX-S-CONV": {
+   "n": 5,
+   "long": 1.0
+  },
+  "POS-DOUBLE / LEX-S-CONV": {
+   "n": 5,
+   "long": 1.0
+  }
+ },
+ "flag_shares": {
+  "SYN-CAND": {
+   "n": 31,
+   "happened": 0.0
+  },
+  "IAMB-SHORT": {
+   "n": 23,
+   "happened": 0.522
+  },
+  "ELI-CAND": {
+   "n": 7,
+   "happened": 1.0
+  },
+  "PROD-CAND": {
+   "n": 1,
+   "happened": 1.0
+  }
+ },
+ "calibration": {
+  "0.0-0.1": {
+   "n": 154,
+   "observed_long": 0.0
+  },
+  "0.1-0.2": {
+   "n": 114,
+   "observed_long": 0.009
+  },
+  "0.2-0.3": {
+   "n": 3,
+   "observed_long": 0.333
+  },
+  "0.4-0.5": {
+   "n": 7,
+   "observed_long": 0.143
+  },
+  "0.5-0.6": {
+   "n": 77,
+   "observed_long": 0.156
+  },
+  "0.6-0.7": {
+   "n": 3,
+   "observed_long": 0.667
+  },
+  "0.9-1.0": {
+   "n": 425,
+   "observed_long": 0.998
+  }
+ },
+ "ambiguous_by_rule": [
+  [
+   "NATURE / LEX-CONFLICT",
+   63
+  ],
+  [
+   "CONS-VOW / LEX-CONFLICT",
+   13
+  ],
+  [
+   "NATURE / VAV-GREEK",
+   7
+  ],
+  [
+   "MCL-WORD / LEX-S",
+   2
+  ],
+  [
+   "NATURE / FIN-O-IAMB",
+   2
+  ],
+  [
+   "INIT-MCL / LEX-CONFLICT",
+   1
+  ],
+  [
+   "MCL-WORD / LEX-CONFLICT",
+   1
+  ],
+  [
+   "MCL-WORD / LEX-S-CONV",
+   1
+  ]
+ ],
+ "errors_by_rule": [
+  [
+   "NATURE / VAV-LIST",
+   1
+  ],
+  [
+   "NATURE / LEX-S-CONV",
+   1
+  ]
+ ],
+ "misaligned_lines": [],
+ "errors": [
+  {
+   "id": "hypotactic-la:odes1:7:7",
+   "text": "undique decerptam fronti praeponere olivam;",
+   "unit": "",
+   "p": null,
+   "gold": "–⏑⏑–––––––⏑⏑––",
+   "rule": "LINE-REJECTED",
+   "vowel_rule": "2 position(s) against the scanner",
+   "flags": [
+    "aep:short",
+    "e:elision"
+   ]
+  },
+  {
+   "id": "hypotactic-la:odes1:7:27",
+   "text": "Nil desperandum Teucro duce et auspice Teucro:",
+   "unit": "",
+   "p": null,
+   "gold": "–––––––⏑⏑–⏑⏑––",
+   "rule": "LINE-REJECTED",
+   "vowel_rule": "2 position(s) against the scanner",
+   "flags": [
+    "eucr:short",
+    "et:long"
+   ]
+  },
+  {
+   "id": "hypotactic-la:odes1:28:5",
+   "text": "aerias temptasse domos animoque rotundum",
+   "unit": "i",
+   "p": 0.9,
+   "gold": "S",
+   "rule": "NATURE",
+   "vowel_rule": "VAV-LIST",
+   "flags": []
+  },
+  {
+   "id": "hypotactic-la:odes1:28:24",
+   "text": "ossibus et capiti nec humato",
+   "unit": "um",
+   "p": 0.1,
+   "gold": "L",
+   "rule": "NATURE",
+   "vowel_rule": "LEX-S-CONV",
+   "flags": []
+  }
+ ],
+ "ms_per_line": 5.23,
+ "setting": {
+  "split": "all",
+  "work": "odes1",
+  "metre": "alcmanic_strophe",
+  "template": "alcmanic_horace",
+  "fold_v": false,
+  "lexicon": true,
+  "params": {
+   "vowel_default": 0.5,
+   "vocal_before_vowel": 0.1,
+   "vocal_before_vowel_greek": 0.4,
+   "vav_long_list": 0.9,
+   "vav_genitive": 0.5,
+   "final_o_iambic": 0.6,
+   "final_e_greek": 0.7,
+   "final_a": 0.5,
+   "final_e_short": 0.05,
+   "final_e_long_list": 0.85,
+   "final_i_long": 0.95,
+   "final_i_either": 0.5,
+   "final_i_short_list": 0.1,
+   "final_o_long": 0.9,
+   "final_o_short_list": 0.2,
+   "final_u_long": 0.95,
+   "final_as": 0.9,
+   "final_os": 0.9,
+   "final_es": 0.7,
+   "final_is": 0.25,
+   "final_us": 0.15,
+   "lex_long": 0.9,
+   "lex_short": 0.05,
+   "lex_short_convention": 0.1,
+   "lex_unmarked": 0.3,
+   "mcl_word": 0.2,
+   "mcl_boundary": 0.05,
+   "s_impura": 0.15,
+   "pos_initial": 0.9,
+   "pos_initial_greek": 0.15,
+   "final_s_drop": 0.02,
+   "semi_hiatus_long": 0.5,
+   "elision": 0.98,
+   "elision_before_interjection": 0.6,
+   "elision_after_strong_punct": 0.9,
+   "elision_monosyllable_long": 0.75,
+   "prodelision": 0.98,
+   "synizesis": 0.05,
+   "synizesis_list": 0.85,
+   "iambic_shortening": 0.3
+  }
+ }
+}

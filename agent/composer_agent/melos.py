@@ -67,8 +67,10 @@ HTTP_TOOLS: dict[str, tuple[str, str, str, dict]] = {
                  "paradigm lexicon, its tokens overall and in the poet, its lemma readings, and one citation.",
                  _schema(("forms",), forms=_s("string", "Latin forms, comma or space separated"), author=AUTHOR)),
     "la_lemma": ("GET", "/api/la/lemma", "Latin: a headword's tokens in Catullus and Horace (human lemmas) and the forms each "
-                 "poet prints (forms_found with one line each); q may be a lemma or a spelling.",
-                 _schema(("q",), q=_s("string", "Lemma or Latin form"), author=AUTHOR, limit=LIMIT)),
+                 "poet prints (forms_found with one line each); q may be a lemma or a spelling; pass the draft line as "
+                 "context so an ambiguous spelling is read in context.",
+                 _schema(("q",), q=_s("string", "Lemma or Latin form"), author=AUTHOR, limit=LIMIT,
+                         context=_s("string", "The draft line holding the form (optional)"))),
     "lemma_resolve": ("GET", "/api/lemma/resolve", "English or Greek word -> headword candidates.", _schema(("q",), q=Q)),
     "lemma_search": ("GET", "/api/lemma/search", "Passages with any form of a headword; forms_found is the author's form "
                      "inventory (the best attestation evidence).",

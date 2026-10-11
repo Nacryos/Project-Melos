@@ -25,16 +25,22 @@ sys.path.insert(0, str(ROOT))
 from backend.scansion import gold_la, metre  # noqa: E402
 from backend.scansion.quantity_la import LatinScanner  # noqa: E402
 
-TEMPLATE_FOR = {"hendecasyllables": "phalaecian", "hexameter": "hexameter", "sapadon": "sapphic", "scazon": "choliambic",
-                "ia6g": "iambic_trimeter_pure", "elegy": "elegiac", "glycpher": None, "alcaic": "alcaic_horace",
-                "sapphic2": "sapphic_horace"}
+TEMPLATE_FOR = {"hendecasyllables": "phalaecian", "hexameter": "hexameter", "scazon": "choliambic", "ia6g": "iambic_trimeter_pure",
+                "elegy": "elegiac", "glycpher": None,
+                # Hypotactic's labels for Horace's Odes 1 (stanza templates: the line's template follows its position)
+                "sapadon": "sapphic_horace", "alcaic": "alcaic_horace", "asc1": "asclepiad_lesser_horace",
+                "asc2": "asclepiad_second_horace", "asc3": "asclepiad_third_horace", "asc4": "asclepiad_fourth_horace",
+                "asc5": "asclepiad_greater_horace", "arch4": "archilochian_fourth_horace", "alcmanic_strophe": "alcmanic_horace",
+                "sapphic2": "sapphic_greater_horace"}
 # Poems where the decasyllabic variant is allowed beside the hendecasyllable (PRD §4.5: a per-line alternative)
 DECASYLLABLE_POEMS = {("catullus", "55"), ("catullus", "58b")}
 
 
 def best_fit(units, template: str, g):
-    """The line's fit; for 55 and 58b the better of the two Phalaecian templates (both are allowed there)."""
-    f = metre.fit_line(units, template)
+    """The line's fit; stanza metres take the template of the line's position; for 55 and 58b the better of the two
+    Phalaecian templates (both are allowed there)."""
+    temps = metre.TEMPLATES.get(template) or [None]
+    f = metre.fit_line(units, template, temps[(g.line_no - 1) % len(temps)] if len(temps) > 1 else None)
     if template == "phalaecian" and (g.work, g.poem) in DECASYLLABLE_POEMS:
         alt = metre.fit_line(units, "phalaecian_decasyllable")
         if (alt.ok and not f.ok) or (alt.ok == f.ok and alt.log_likelihood > f.log_likelihood):

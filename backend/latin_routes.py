@@ -66,11 +66,17 @@ def forms(forms: str = Query(..., min_length=1, max_length=2000), author: str = 
 
 @router.get("/api/la/lemma")
 def lemma(q: str = Query(..., min_length=1, max_length=80), author: str = Query("", max_length=80),
-          limit: int = Query(40, ge=1, le=200), _=Depends(require_owner_or_agent)):
-    """A headword (or a spelling, resolved to its first reading): counts by author and the forms each poet prints."""
+          limit: int = Query(40, ge=1, le=200), context: str = Query("", max_length=400), _=Depends(require_owner_or_agent)):
+    """A headword (or a spelling, resolved to its first reading, or to LatinCy's reading in `context`, the draft line
+    holding it): counts by author and the forms each poet prints."""
     if not latin_lemma.available():
         raise HTTPException(503, {"code": "lemma_index_missing", "message": "the Latin lemma index is not built"})
     readings = latin_lemma.readings(q)
+    if context:
+        words = latin_backend.latin_words(context)
+        idx = next((i for i, w in enumerate(words) if normalize_la(w) == normalize_la(q)), None)
+        if idx is not None:
+            readings, _how = latin_lemma.choose_reading(readings, latin_lemma.context_lemmas(words).get(idx))
     lem = normalize_la(q)
     att = latin_lemma.lemma_attestation(lem, author)
     if not att["total"] and readings:
@@ -80,5 +86,15 @@ def lemma(q: str = Query(..., min_length=1, max_length=80), author: str = Query(
 
 
 @router.get("/api/la/lemma/resolve")
-def lemma_resolve(form: str = Query(..., min_length=1, max_length=80), _=Depends(require_owner_or_agent)):
-    return {"form": form, "readings": latin_lemma.readings(form)}
+def lemma_resolve(form: str = Query(..., min_length=1, max_length=80), context: str = Query("", max_length=400),
+                  _=Depends(require_owner_or_agent)):
+    """Readings of one spelling; with `context` (the draft line holding it) LatinCy's reading in context goes first."""
+    reads = latin_lemma.readings(form)
+    how = reads[0]["source"] if reads else "none"
+    if context:
+        words = latin_backend.latin_words(context)
+        n = normalize_la(form)
+        idx = next((i for i, w in enumerate(words) if normalize_la(w) == n), None)
+        if idx is not None:
+            reads, how = latin_lemma.choose_reading(reads, latin_lemma.context_lemmas(words).get(idx))
+    return {"form": form, "readings": reads, "chosen_by": how}

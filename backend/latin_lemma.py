@@ -97,6 +97,53 @@ def latincy_tokens(text: str) -> list[dict]:
         return []
 
 
+
+def context_lemmas(words: list[str]) -> dict[int, dict]:
+    """LatinCy's reading of each word in the context of the whole draft (one sidecar call): {word index: {lemma, upos,
+    morph}}. Tokens are aligned to the words by their normalised spelling (an enclitic split by the tokeniser is
+    rejoined to its word, whose lemma is the host's); {} when the sidecar is unavailable or the alignment fails."""
+    if not words:
+        return {}
+    toks = latincy_tokens(" ".join(words))
+    if not toks:
+        return {}
+    out: dict[int, dict] = {}
+    k = 0
+    for i, w in enumerate(words):
+        target = normalize_la(w)
+        acc, first = "", None
+        while k < len(toks) and len(acc) < len(target):
+            t = toks[k]
+            k += 1
+            piece = normalize_la(t.get("text", ""))
+            if not piece:
+                continue
+            acc += piece
+            if first is None:
+                first = t
+        if acc != target or first is None:
+            break
+        lem = normalize_la(first.get("lemma", "")).rstrip("0123456789")
+        if lem:
+            out[i] = {"lemma": lem, "upos": first.get("pos", ""), "morph": first.get("morph", "")}
+    return out
+
+
+def choose_reading(reads: list[dict], ctx: dict | None) -> tuple[list[dict], str]:
+    """Order a form's readings by the contextual lemma: the reading whose lemma LatinCy chose in context goes first
+    (source tagged '+context'); with no readings the contextual lemma becomes the reading. Returns (readings, how)."""
+    if not ctx:
+        return reads, (reads[0]["source"] if reads else "none")
+    lem = ctx["lemma"]
+    for j, r in enumerate(reads):
+        if r["lemma"].rstrip("0123456789") == lem:
+            if j:
+                reads = [r] + reads[:j] + reads[j + 1:]
+            return reads, r["source"] + "+context"
+    if reads:
+        return reads, reads[0]["source"] + " (context differs: " + lem + ")"
+    return [{"lemma": lem, "upos": ctx.get("upos", ""), "count": 0, "source": "latincy", "morph": ctx.get("morph", "")}], "latincy context"
+
 @lru_cache(maxsize=4096)
 def lemma_attestation(lemma: str, author: str = "") -> dict:
     """Counts of a headword across LASLA's Catullus and Horace, by author and work, with whether a text is held."""

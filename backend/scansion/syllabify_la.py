@@ -11,8 +11,8 @@ import re
 import unicodedata
 
 from .latin import (
-    ALWAYS_DIPHTHONG, CONSONANTS, DIAERESIS, DIPHTHONGS, EI_WORDS, ELISION_MARKS, EO_FORMS, EU_WORDS, LIGATURES,
-    SPLIT_AE, SPLIT_OE, UI_WORDS, VOWELS, classify_iu, consonant_value, is_latin_letter,
+    ALWAYS_DIPHTHONG, CONSONANTS, DIAERESIS, DIPHTHONGS, EI_WORDS, ELISION_MARKS, EO_FORMS, EU_STEMS, EU_WORDS, LIGATURES,
+    SPLIT_AE, SPLIT_AE_LOWER, SPLIT_OE, UI_WORDS, VOWELS, classify_iu, consonant_value, is_latin_letter,
 )
 from .syllabify import Letter, Nucleus, Syllable, Word, _assign_spans, _is_combining, line_spans
 
@@ -119,11 +119,11 @@ def _diphthong(a: Letter, b: Letter, key: str, i: int, capitalised: bool = False
     if pair in ALWAYS_DIPHTHONG:
         if pair == "oe" and key.startswith(SPLIT_OE):
             return False, "SYL-LA-3"                               # poēta, coēgī, coerceō
-        if pair == "ae" and key.startswith(SPLIT_AE):
-            return False, "SYL-LA-3"                               # āēr, Danaē
+        if pair == "ae" and (key.startswith(SPLIT_AE) or (key.startswith(SPLIT_AE_LOWER) and not capitalised)):
+            return False, "SYL-LA-3"                               # āēr, Danaē, aēna (bronze)
         return True, "SYL-LA-1"
     if pair == "eu":
-        if key in EU_WORDS or key in {w + "que" for w in EU_WORDS}:
+        if key in EU_WORDS or key in {w + "que" for w in EU_WORDS} or key.startswith(EU_STEMS):
             return True, "SYL-LA-4"
         if i == 0 and key not in EO_FORMS and not key.startswith("eo"):
             return True, "SYL-LA-4"                                # Eurōpa, Eurus, Eumenides

@@ -44,6 +44,30 @@ templates:
     lines: ["---uu-F"]
     label: pherecratean (Horace, spondaic base)
     cite: "A&G §625b; Raven §132"
+  asclepiad_second_horace:
+    lines: ["---uu-uF", "---uu--uu-uF"]
+    label: "second Asclepiad (Horace: glyconic + lesser Asclepiad couplets, Odes 1.3, 1.13, 1.19, 1.36)"
+    cite: "A&G §625a; Raven §133 (the numbering of the Asclepiad systems follows Hypotactic: asc2)"
+  asclepiad_third_horace:
+    lines: ["---uu--uu-uF", "---uu--uu-uF", "---uu--uu-uF", "---uu-uF"]
+    label: "third Asclepiad (Horace: three lesser Asclepiads + glyconic, Odes 1.6, 1.15, 1.24, 1.33)"
+    cite: "A&G §625a; Raven §133 (Hypotactic asc3)"
+  asclepiad_fourth_horace:
+    lines: ["---uu--uu-uF", "---uu--uu-uF", "---uu-F", "---uu-uF"]
+    label: "fourth Asclepiad (Horace: two lesser Asclepiads + pherecratean + glyconic, Odes 1.5, 1.14, 1.21, 1.23)"
+    cite: "A&G §625a; Raven §133 (Hypotactic asc4)"
+  archilochian_fourth_horace:
+    lines: ["-D-D-D-uu-u-u-F", "x-u-x-u-u-F"]
+    label: "fourth Archilochian (Horace: greater Archilochian + iambic trimeter catalectic, Odes 1.4)"
+    cite: "A&G §626; Raven §139: dactylic tetrameter (feet 1-3 may be spondees, foot 4 a dactyl) + ithyphallic; then x-u-x-u-u-x"
+  alcmanic_horace:
+    lines: ["-D-D-D-D-D-F", "-D-D-D-F"]
+    label: "Alcmanic strophe (Horace: hexameter + dactylic tetrameter, Odes 1.7, 1.28)"
+    cite: "A&G §626; Raven §138: the tetrameter's fourth foot is a spondee or trochee (1.7.2 aut Epheson bimarisve Corinthi)"
+  sapphic_greater_horace:
+    lines: ["-uu-u-F", "-u---uu--uu-u-F"]
+    label: "greater Sapphic (Horace: aristophanean + greater Sapphic, Odes 1.8)"
+    cite: "A&G §625d; Raven §126"
   choliambic:
     lines: ["x-u-x-u-u--F"]
     label: choliambic (scazon)

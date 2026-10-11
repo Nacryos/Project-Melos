@@ -29,13 +29,15 @@ FOLD = {"v": "u", "j": "i", "V": "u", "J": "i"}
 
 # eu is a diphthong in these words and in word-initial position (Europa, Eurus) except the forms of eo
 EU_WORDS = frozenset({"heu", "seu", "neu", "ceu", "heus", "eheu", "neuter", "neutra", "neutrum", "neutiquam"})
+EU_STEMS = ("teuc",)          # Teucer, Teucri, Teucro: Greek eu inside the word (Horace Odes 1.7.21, 1.15.24)
 EO_FORMS = frozenset({"eum", "eunt", "euntem", "euntis", "eunti", "euntes", "euntibus", "euntium", "eundo", "eundum",
                       "eundi", "eunto"})
 UI_WORDS = frozenset({"cui", "huic", "hui"})
-EI_WORDS = frozenset({"hei", "ei", "dein", "deinde", "deinceps", "deinde"})
+EI_WORDS = frozenset({"hei", "ei", "dein", "deinde", "deinceps", "anteit"})   # anteit: synizesis (Horace Odes 1.35.17)
 # oe / ae / au split (two syllables) in these stems: poeta, poema, coego, coerceo, aer, Danae …
-SPLIT_OE = ("poet", "poem", "poes", "coeg", "coer", "coet", "coeo", "coeu", "coea", "coiu", "oen")  # oen-: Oenone? no: oe
-SPLIT_AE = ("aer", "aeri", "aere", "dana", "israe")
+SPLIT_OE = ("poet", "poem", "poes", "coeg", "coer", "coet", "coeo", "coeu", "coea", "coiu", "coempt", "pholo")  # coēmptōs, Pholoē
+SPLIT_AE = ("aer", "aeri", "aere", "dana", "israe", "laert")      # āēr, Danaē, Lāērtēs
+SPLIT_AE_LOWER = ("aen",)     # aēnum, aēna, aēneus (bronze) when not capitalised; Aenēās keeps the diphthong
 INTERJECTIONS = frozenset({"o", "heu", "ah", "eheu", "io", "hem", "uae", "uah", "en", "ecce", "hei"})   # not a (ā = the preposition)
 PREFIXES = ("ab", "ad", "circum", "con", "de", "dis", "e", "ex", "in", "inter", "ob", "per", "prae", "pro", "re", "sub",
             "super", "tra", "trans", "quam", "quem", "quas", "quos")

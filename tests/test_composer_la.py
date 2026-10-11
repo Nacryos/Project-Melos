@@ -58,3 +58,34 @@ def test_greek_default_is_untouched():
     assert r["scansion"]["language"] == "grc" and r["scansion"]["dialect"] == "none"
     with pytest.raises(Exception):
         composer_lint.check("x", language="xx")
+
+
+def test_context_lemmas_align_tokens_and_rerank_readings(monkeypatch):
+    """LatinCy's reading of the whole draft (one call) re-ranks a form's LASLA readings: quod as the conjunction when
+    the context says so; an enclitic split by the tokeniser is rejoined to its host word."""
+    from backend import latin_lemma
+    fake = [{"text": "quod", "lemma": "quod", "pos": "SCONJ", "morph": ""},
+            {"text": "uirum", "lemma": "uir", "pos": "NOUN", "morph": "Case=Acc"},
+            {"text": "que", "lemma": "que", "pos": "CCONJ", "morph": ""}]
+    monkeypatch.setattr(latin_lemma, "latincy_tokens", lambda text: fake)
+    ctx = latin_lemma.context_lemmas(["quod", "virumque"])
+    assert ctx == {0: {"lemma": "quod", "upos": "SCONJ", "morph": ""}, 1: {"lemma": "uir", "upos": "NOUN", "morph": "Case=Acc"}}
+    reads = [{"lemma": "qui", "upos": "PRON", "count": 163, "source": "lasla"}, {"lemma": "quod", "upos": "SCONJ", "count": 119, "source": "lasla"}]
+    chosen, how = latin_lemma.choose_reading(reads, ctx[0])
+    assert chosen[0]["lemma"] == "quod" and how == "lasla+context"
+    assert latin_lemma.choose_reading(reads, None)[0][0]["lemma"] == "qui"
+    assert latin_lemma.choose_reading([], ctx[1]) == ([{"lemma": "uir", "upos": "NOUN", "count": 0, "source": "latincy", "morph": "Case=Acc"}], "latincy context")
+    # a tokenisation that does not add up to the words stops the alignment instead of mislabelling
+    monkeypatch.setattr(latin_lemma, "latincy_tokens", lambda text: [{"text": "quo", "lemma": "quo", "pos": "ADV", "morph": ""}])
+    assert latin_lemma.context_lemmas(["quod"]) == {}
+    monkeypatch.setattr(latin_lemma, "latincy_tokens", lambda text: [])
+    assert latin_lemma.context_lemmas(["quod"]) == {}
+
+
+@needs_data
+def test_l4_uses_the_contextual_reading(monkeypatch):
+    from backend import latin_lemma
+    monkeypatch.setattr(latin_lemma, "latincy_tokens", lambda text: [{"text": "quod", "lemma": "quod", "pos": "SCONJ", "morph": ""}])
+    r = latin_backend.attestation_check(["quod"], "Catullus")
+    e = r["evidence"][0]
+    assert e["lemma"] == "quod" and e["lemma_source"] == "lasla+context" and e["readings"][0]["lemma"] == "quod"

@@ -32,7 +32,7 @@ FEATURES_LA: dict[str, str] = {
     "mcl_prefix": "that cluster stands at a prefix boundary (ab-rumpo, ob-ruo, sub-latus): it makes position",
     "boundary_inside_interval": "a word boundary falls between the interval's consonants",
     "interval_opens_next_word": "all the interval's consonants belong to the next word",
-    "next_cluster": 'the next word\'s initial cluster when it opens the interval: "s_stop", "mcl", "double", "other", ""',
+    "next_cluster": 'the next word\'s initial cluster when it opens the interval: "s_stop", "greek", "mcl", "double", "other", ""',
     "final_consonant_before_vowel": "one consonant ends this word and the next word begins with a vowel (or h)",
     "final_s_short": "the word ends in -s right after this nucleus and the next word begins with a consonant",
     "elidable": "word-final vowel, or vowel + m, before a word beginning with a vowel or h (elision environment)",
@@ -63,6 +63,7 @@ FEATURES_LA: dict[str, str] = {
 }
 
 ENCLITICS = ("que", "ue", "ne")
+GREEK_INITIAL = frozenset({"cn", "mn", "pn", "ps", "pt", "ct", "tm", "bd"})   # Greek initial clusters (Cnidus, Ptolemaeus)
 
 
 class LatinScanner:
@@ -263,6 +264,7 @@ def _ending(w: Word, n: Nucleus) -> str:
 
 
 NOT_ENCLITIC_QUE = frozenset({"atque", "neque", "quoque", "itaque", "denique", "undique", "utique", "ubique", "usque",
+                              "aeque", "oblique", "antique", "inique", "quinque", "utrimque",     # adverbs in -ē, numerals
                               "absque", "plerumque", "utroque", "quisque", "quaeque", "quodque", "quemque", "quamque",
                               "cumque", "quandoque", "quicumque", "quaecumque", "quodcumque"})
 
@@ -293,6 +295,8 @@ def _next_cluster(real: list[str], bounds: list[bool]) -> str:
         return "double"
     if nxt[0] == "s" and nxt[1] in STOPS:
         return "s_stop"
+    if nxt[0] + nxt[1] in GREEK_INITIAL:
+        return "greek"
     if nxt[0] in MCL_FIRST and nxt[1] in LIQUIDS:
         return "mcl"
     return "other"
