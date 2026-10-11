@@ -1,0 +1,24 @@
+{
+ "batch": "H10",
+ "work": "odes",
+ "poems": [
+  "3.14",
+  "3.15",
+  "3.16",
+  "3.17",
+  "3.18",
+  "3.19",
+  "3.20",
+  "3.21",
+  "3.22",
+  "3.23"
+ ],
+ "lines": 216,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "written_by": "the coordinator session inline (the subagent launch was refused by the harness)",
+ "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+ "convention": "literal line-by-line, as in the Horace batch briefs (rules 1-7)",
+ "reasoning_summary": "Written inline by the coordinator session. Hyperbata left split with notes naming the agreeing word (3.14 Hispana/ora, decorae/matres, atras/curas; 3.16 paucorum/iugerum; 3.18 larga/vina; 3.23 quae/victima). Negatives kept in place (3.14.27 non ego hoc ferrem; 3.15.7 non si quid; 3.16.33-38 nec ... nec; 3.23.5-6). Metaphors literal with notes (verticem 'head', cornua 'horns', marino rore 'sea-dew', saliente mica). Supplied possessives noted (her, your, his, its). Names as in the Latin (Lyaeus, Africus, Algidus). 3.16.32 fallit sorte beatior kept literal with the sense in the note."
+}
