@@ -1,0 +1,19 @@
+{
+ "batch": "H13",
+ "work": "odes",
+ "poems": [
+  "4.4",
+  "4.5",
+  "4.6",
+  "4.7",
+  "4.8"
+ ],
+ "lines": 222,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "written_by": "the coordinator session inline (the subagent launch was refused by the harness)",
+ "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+ "convention": "literal line-by-line, as in the Horace batch briefs (rules 1-7)",
+ "reasoning_summary": "Written inline by the coordinator session. 4.4: the long simile (qualem ... alitem / qualem ... leonem) resolves at videre on line 17; subjects noted (Vindelici, venti, aestas). Hyperbata left as fragments with the agreeing word in the note (verni/venti, fugatis/tenebris, inpio/tumultu, opimus/triumphus, multa/laude; 4.6 magnae/linguae, tremenda/cuspide, Minervae/sacra, tuis/vocibus, ductos/muros; 4.7 decrescentia/flumina, almum/diem, amico/animo, Lethaea/vincula; 4.8 grata/aera, talium/deliciarum, Iovis/epulis). Negatives kept in place (4.4.22 nec, 4.4.61 non, 4.4.73 nil ... non; 4.7.23-27 non ... non ... non, neque ... nec; 4.8.9 non ... nec, 4.8.13-20 non ... non ... non ... neque). Moods kept: merses/luctere (4.4.65-66), falleret/ureret/adnuisset as a past contrary-to-fact (4.6.16-22), paveat/curet (4.5), utinam praestes (4.5.37), sileant/tuleris (4.8.21-22), foret/obstaret (4.8.22-24). Supplied words noted (him 4.4.10 and 12; it 4.4.65). Names as in the Latin (Mavors, Tyndaridae, Noctiluca, Agyieus, Camena, Faustitas); Iuppiter/Iovis rendered Jupiter/Jove as in the other batches. 4.8.13-20 keep the source's quotation marks."
+}
