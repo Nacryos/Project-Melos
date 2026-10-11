@@ -6,7 +6,7 @@ Store (backend/composer_store.py):
   GET  /api/composer/poems                          poems (?archived=true to include archived)
   POST /api/composer/poems                          {title?, settings?, english?}
   GET  /api/composer/poems/{id}                     one poem
-  PATCH /api/composer/poems/{id}                    {title?, settings?, english?, archived?}
+  PATCH /api/composer/poems/{id}                    {title?, settings?, english?, archived?, drafts?: [{id?, at, draft}]}
   GET  /api/composer/poems/{id}/full                poem + lines + every version + last 200 chat rows
   POST /api/composer/poems/{id}/lines               {position?, greek?, source?, note?}: a line at position
   PATCH /api/composer/lines/{id}                    {position?, current_version_id?}
@@ -26,7 +26,8 @@ Lint:
       Budget: MELOS_COMPOSER_CHECK_BUDGET_MS (default 1500); per-word lookups run concurrently, cached per
       (form, dialect); a word not resolved in time fails L1/L2 ("unresolved ... (timeout)"), never passes.
 Agent service (MELOS_COMPOSER_AGENT_URL, header X-Composer-Token); unreachable → 503 {"agent": "unavailable"}:
-  POST /api/composer/poems/{id}/chat                {message, caret?}: agent /chat {poem, thread, message}; SSE relayed unchanged; the final assistant
+  POST /api/composer/poems/{id}/chat                {message, caret?}: agent /chat {poem, thread, message}; SSE relayed unchanged (detached, with
+                                                    keep-alive comments every 15 s); the final assistant
                                                     message and the tool trace are stored when the stream ends
   POST /api/composer/poems/{id}/pool                {line_id?, caret, prefix, remaining_template, n ≤ 40, ahead_lines?,
                                                     mode? line|words}: agent /pool {poem, slot, ahead, n, mode}: the slot
@@ -90,12 +91,21 @@ class PoemIn(BaseModel):
     english: str = Field("", max_length=50_000)
 
 
+class Draft(BaseModel):
+    """A line being typed but not yet saved with Enter (release X.1): kept on the poem so it survives the browser."""
+    model_config = {"extra": "forbid"}
+    id: int | None = None
+    at: int = Field(0, ge=0, le=10_000)
+    draft: str = Field(..., max_length=4_000)
+
+
 class PoemPatch(BaseModel):
     model_config = {"extra": "forbid"}
     title: str | None = Field(None, max_length=300)
     settings: dict | None = None
     english: str | None = Field(None, max_length=50_000)
     archived: bool | None = None
+    drafts: list[Draft] | None = Field(None, max_length=400)
 
 
 class LineIn(BaseModel):
@@ -145,7 +155,7 @@ def poem(poem_id: int):
 @router.patch("/api/composer/poems/{poem_id}", dependencies=owner)
 def patch_poem(poem_id: int, body: PoemPatch):
     return _store_call(store.update_poem, poem_id, title=body.title, settings=body.settings, english=body.english,
-                       archived=body.archived)
+                       archived=body.archived, drafts=[d.model_dump() for d in body.drafts] if body.drafts is not None else None)
 
 
 @router.get("/api/composer/poems/{poem_id}/full", dependencies=owner)
@@ -358,12 +368,23 @@ def _relay(client, response, on_event, on_end, detach: bool = False):
     task.add_done_callback(_background.discard)
 
     async def forward():
+        # A comment line every 15 s while the agent is silent (long thinking) keeps proxies from closing the stream.
         try:
-            while (chunk := await queue.get()) is not None:
+            while True:
+                try:
+                    chunk = await asyncio.wait_for(queue.get(), HEARTBEAT_SECONDS)
+                except asyncio.TimeoutError:
+                    yield b": keep-alive\n\n"
+                    continue
+                if chunk is None:
+                    return
                 yield chunk
         finally:
             listening[0] = False
     return StreamingResponse(forward(), media_type="text/event-stream", headers=headers)
+
+
+HEARTBEAT_SECONDS = float(os.environ.get("MELOS_COMPOSER_HEARTBEAT_SECONDS", 15))
 
 
 class Caret(BaseModel):
@@ -423,7 +444,9 @@ async def chat(poem_id: int, body: ChatIn):
         if content or trace:
             store.add_chat(poem_id, "assistant", content, trace)
 
-    return _relay(*opened, on_event, on_end)
+    # Detached (release X.2): the reply is read to its end and stored even if the page's connection drops; the page
+    # then fetches the stored reply (js/composer.js awaitStoredReply).
+    return _relay(*opened, on_event, on_end, detach=True)
 
 
 class PoolIn(BaseModel):

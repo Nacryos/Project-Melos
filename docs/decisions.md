@@ -171,3 +171,15 @@ no available English author translations for that poem".
   and from reference-query listings, are never `translation_previews` or `translation_comparisons`, and never reach
   the analysis context, the Jev ranker or the sense ranker.
 - The other-edition comparison sidecars (pre-1930 published English) are untouched and keep display priority.
+
+## 2026-10-10 (evening) — owner requests from the first composing session
+
+- Owner: "retain the fact that if I'm on the composer then I stay logged in and things are saving." Built (release
+  X.2): sessions on disk with a sliding idle window; drafts, English and title autosave with retry and flush.
+- Owner: the | syllable bars should be switchable and lighter. The toolbar switch existed; bars are now 1.5 px at 40 %.
+- Owner, on the lexicon: an English word ("breath") should lead to the headword family (πνεῦμα, πνέω, πνοή, ἄημι …) and
+  then to **every attested form in the poems, per author and dialect** (e.g. all of Sappho). Today the English step
+  reads dictionary head meanings only, so "breath" resolves to ψυχή, ἀυτμή, πέπνυμαι, ἔμπνοος — none attested in
+  Sappho — while the attested breath words (πνέοισιν, ἄηται in fr. 2; ἄημι in fr. 71) are reached only by "blow" or
+  "wind". Not built yet. Design to follow: resolve through gloss terms and dictionary cross-references into a root
+  family, then list attested forms with author, fragment, dialect rule and line for each headword in the family.

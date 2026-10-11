@@ -1,5 +1,28 @@
 # Deployment handoff
 
+## Current: release X.2 — composer saves, sessions, chat replies (2026-10-10, ~6:15 PM PDT)
+
+Two point releases atop X, code layers only (`deploy/Dockerfile.x`, `deploy/release_x.sh` with `MELOS_X_IMAGE`,
+`MELOS_X_KEPT`, `MELOS_X_CANARY`, `MELOS_X_CANARY_RUNTIME` = a copy of `/home/alvin/services/melos/runtime` so the canary
+migrates a copy, never the live composer store). X.1 `melos-api:20261011x1` (kept W/X mounts; previous container
+`melos-api-before-x1`): composer store migration 2 adds `poems.drafts_json` (lines being typed, not yet saved with Enter,
+`PATCH /api/composer/poems/{id} {drafts}`), the page saves them with the English (0.7 s debounce, keepalive PATCH,
+retry every 5 s after a failure, flush on blur/hide/unload and before every chat or pool request), and the agent
+context substitutes an unsaved draft for its saved line (`unsaved: true`). Syllable bars thinner and translucent
+(`css/composer.css`), toolbar checkbox "| syllable bars" unchanged. X.2 `melos-api:20261011x2` (previous
+`melos-api-before-x2`, live now): owner sessions persist in `/app/runtime/owner_sessions.json` (`MELOS_OWNER_SESSIONS`)
+and slide (12 h idle window, cookie 30 days) — before this every release restart signed the owner out; the chat relay is
+detached with `: keep-alive` comments every 15 s, so a dropped page connection no longer loses the agent's reply (the
+page polls `/full` and shows the stored reply). Frontend: `vercel deploy --prod` from `~/Projects/melos-t` (the composer
+page comes from the box, but its `js/composer.js` and `css/composer.css` are served by Vercel: both must ship).
+Cache tags `release-x1` (css), `release-x2` (js). Checks: `deploy/canary_checks_x.sh` 16/16 on each canary and on
+production; `tests/test_composer.py` + `tests/test_private_mode.py` 47 passed, the two route-enumeration tests fail
+identically on the untouched tree. Observed 2026-10-10 evening: pool fills complete with 7–13 passing candidates but take
+30 s–6.4 min each (medium effort, 3–7 rounds), so the pop-up has moved on by the time they arrive; the stored
+candidates reappear when the caret returns to the same slot. **Rollback:** `MELOS_X_KEPT=melos-api-before-x2
+sh /home/alvin/melos-x/src/deploy/release_x.sh rollback` (sessions file is ignored by older code), then
+`vercel promote https://project-melos-mi7eoc6tb-nacryos-projects.vercel.app --yes`. Never push to `main`.
+
 ## Current: release X — literal translation fallback and search rows (2026-10-10, ~3:30 PM PDT)
 
 Owner decision 2026-10-10 (`docs/decisions.md`): Claude's literal line-by-line English for the 59 Sappho, Alcaeus and

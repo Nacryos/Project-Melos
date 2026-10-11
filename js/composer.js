@@ -36,10 +36,10 @@
     if (status === 422) return `The server refused the request: ${detail || 'invalid input'}.`;
     return `Server error ${status}${detail ? `: ${String(detail).slice(0, 300)}` : ''}.`;
   }
-  async function request(method, path, body, signal) {
+  async function request(method, path, body, signal, extra = {}) {
     let r;
     try {
-      r = await fetchApi(path, { method, signal, headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined });
+      r = await fetchApi(path, { method, signal, headers: body ? { 'Content-Type': 'application/json' } : undefined, body: body ? JSON.stringify(body) : undefined, ...extra });
     } catch (e) {
       if (e.name === 'AbortError') throw e;
       throw new ApiError(0, null, describe(0) + (e.message ? ` (${e.message})` : ''));
@@ -51,7 +51,7 @@
     }
     return r;
   }
-  const call = async (method, path, body, signal) => (await request(method, path, body, signal)).json();
+  const call = async (method, path, body, signal, extra) => (await request(method, path, body, signal, extra)).json();
 
   // ---- banner (every error is shown; nothing is swallowed) ------------------------------------------------------
   const banners = new Map();
@@ -141,7 +141,9 @@
     pendingPatch = {};
     $('save-state').textContent = 'Saving…';
     try {
-      const poem = await call('PATCH', `/api/composer/poems/${id}`, patch);
+      // keepalive lets the save finish when the tab is closed; browsers cap keepalive bodies at 64 KB.
+      const payload = JSON.stringify(patch);
+      const poem = await call('PATCH', `/api/composer/poems/${id}`, patch, undefined, payload.length < 60000 ? { keepalive: true } : {});
       if (S.poem?.id === id) Object.assign(S.poem, poem);
       const listed = S.poems.find(p => p.id === id);
       if (listed) Object.assign(listed, poem);
@@ -150,8 +152,10 @@
       banner('save', null);
     } catch (e) {
       Object.assign(pendingPatch, patch, pendingPatch);
-      $('save-state').textContent = 'Not saved';
+      $('save-state').textContent = 'Not saved · retrying';
       failed('save', e);
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(flushSave, 5000);                            // keep trying until it lands
     }
   }
   function renderPoemSelect() {
@@ -212,10 +216,12 @@
     if (!S.poem) return;
     const list = S.rows.filter(r => r.draft.trim() && r.draft.trim() !== (current(r)?.greek || '')).map(r => ({ id: r.line?.id ?? null, at: rowIndex(r), draft: r.draft }));
     local.setItem(draftsKey(), JSON.stringify(list));
+    if (JSON.stringify(list) !== JSON.stringify(S.poem.drafts || [])) savePoem({ drafts: list });   // and on the server (release X.1)
   }
   function restoreDrafts() {
-    let list = [];
-    try { list = JSON.parse(local.getItem(draftsKey()) || '[]'); } catch (e) { list = []; }
+    // The server copy wins (it is what another browser or the agent sees); this browser's copy covers a save that failed.
+    let list = Array.isArray(S.poem?.drafts) && S.poem.drafts.length ? S.poem.drafts : [];
+    if (!list.length) try { list = JSON.parse(local.getItem(draftsKey()) || '[]'); } catch (e) { list = []; }
     for (const d of list) {
       if (typeof d?.draft !== 'string') continue;
       const row = d.id != null ? S.rows.find(r => r.line?.id === d.id) : null;
@@ -715,6 +721,7 @@
       const body = { line_id: row.line?.id ?? null, caret: { line_position: at, char_offset: base.length, prefix: base }, prefix: base.trimEnd(),
         remaining_template: template, n: mode === 'words' ? WORDS_N : POOL_N, mode, ...(mode === 'words' ? { ahead_lines: 0 } : {}) };
       const mine = await C.slotKey(at, body.prefix, settings());
+      await flushSave();                                                  // the agent reads the English and drafts from the server
       const r = await request('POST', `/api/composer/poems/${S.poem.id}/pool`, body, controller.signal);
       await C.readSSE(r, ({ event, data }) => {
         if (event === 'candidate' && data?.greek && data.slot_key && data.slot_key !== mine) routeToSlot(data);
@@ -910,6 +917,7 @@
     else if (event === 'error') { const e = document.createElement('div'); e.className = 'bad'; e.textContent = `Error: ${data?.message || data}`; m.li.insertBefore(e, m.meta); }
     else if (event === 'interrupted') m.meta.append('Interrupted. ');
     else if (event === 'done') {
+      m.done = true;
       const u = data?.usage || {};
       if (data?.cost_usd != null) m.meta.append(`${C.money(data.cost_usd)} · ${Math.round((u.input_tokens || 0) / 100) / 10}k in / ${Math.round((u.output_tokens || 0) / 100) / 10}k out`);
       if (live && data?.cost_usd) cost(data.cost_usd);
@@ -936,22 +944,48 @@
     $('chat-stop').hidden = false; $('chat-send').disabled = true;
     const row = S.active, ta = row?.el?.ta;
     const caret = row ? { line_position: rowIndex(row), char_offset: ta ? ta.selectionStart : 0, prefix: row.draft.slice(0, ta ? ta.selectionStart : 0) } : undefined;
+    const sentAt = Date.now() / 1000 - 5;
+    let streamed = false;
     try {
+      await flushSave();                                                  // the agent reads the English and drafts from the server
       const r = await request('POST', `/api/composer/poems/${S.poem.id}/chat`, { message: text, caret }, controller.signal);
+      streamed = true;
       await C.readSSE(r, ({ event, data }) => { applyEvent(m, event, data, true); thread.scrollTop = thread.scrollHeight; });
       banner('chat', null);
+      if (!m.done) await awaitStoredReply(m, sentAt);                    // the stream ended early; the server keeps reading the agent
     } catch (e) {
       const err = document.createElement('div');
       err.className = 'bad';
       err.textContent = e.name === 'AbortError' ? 'Stopped.' : e.message;
       m.li.insertBefore(err, m.meta);
       if (e.name !== 'AbortError' && e.status !== 503) failed('chat', e);
+      if (streamed && e.name !== 'AbortError') await awaitStoredReply(m, sentAt);
     } finally {
       m.li.classList.remove('streaming');
       S.chatStream = null;
       $('chat-stop').hidden = true; $('chat-send').disabled = false;
       thread.scrollTop = thread.scrollHeight;
     }
+  }
+  // After a dropped connection the agent keeps working and the server stores its reply when it ends (release X.2):
+  // poll the thread until a reply newer than the question is there, then show the stored thread.
+  async function awaitStoredReply(m, sentAt) {
+    const id = S.poem?.id;
+    if (!id) return;
+    m.meta.append('Connection dropped; the agent is still working and its reply will appear here when it is stored… ');
+    const until = Date.now() + 15 * 60000;
+    while (Date.now() < until && S.poem?.id === id) {
+      await new Promise(resolve => setTimeout(resolve, 8000));
+      try {
+        const full = await call('GET', `/api/composer/poems/${id}/full`);
+        const last = (full.chat || []).at(-1);
+        if (last?.role === 'assistant' && last.created_at >= sentAt && !(Array.isArray(last.trace) && last.trace.some(t => t?.event === 'interrupted'))) {
+          renderThread(full.chat);
+          return;
+        }
+      } catch (e) { /* keep waiting */ }
+    }
+    m.meta.append('No stored reply after 15 minutes; reload the page to check the thread. ');
   }
   function insertCandidate(cand) {
     const row = S.active || S.rows.at(-1);
@@ -1020,6 +1054,17 @@
   function applyView() { board.classList.toggle('bars', $('bars').checked); board.classList.toggle('pct', $('pct').checked); }
   $('poem-title').addEventListener('input', () => savePoem({ title: $('poem-title').value }));
   $('english').addEventListener('input', () => savePoem({ english: $('english').value }));
+  // Text put in by other means (dictation, a paste manager, a browser extension) may fire only `change`; save on blur too.
+  for (const type of ['change', 'blur']) $('english').addEventListener(type, () => {
+    if (S.poem && $('english').value !== (pendingPatch.english ?? S.poem.english ?? '')) savePoem({ english: $('english').value });
+    flushSave();
+  });
+  for (const type of ['change', 'blur']) $('poem-title').addEventListener(type, () => {
+    if (S.poem && $('poem-title').value !== (pendingPatch.title ?? S.poem.title ?? '')) savePoem({ title: $('poem-title').value });
+    flushSave();
+  });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flushSave(); });
+  addEventListener('pagehide', () => flushSave());
   $('poem-select').addEventListener('change', async () => { await flushSave(); openPoem(Number($('poem-select').value)); });
   $('new-poem').addEventListener('click', newPoem);
   $('english-toggle').addEventListener('click', () => { collapse('english', !$('english-panel').classList.contains('collapsed')); savePrefs(); });

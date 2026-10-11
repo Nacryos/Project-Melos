@@ -123,7 +123,7 @@ def test_login_flow_cookie_attributes_and_logout(env):
     assert response.status_code == 200, response.text
     cookies = "\n".join(response.headers.get_list("set-cookie"))
     session_cookie = next(line for line in response.headers.get_list("set-cookie") if line.startswith(private_auth.SESSION_COOKIE))
-    for attribute in ("HttpOnly", "Secure", "SameSite=strict", "Path=/", "Max-Age=43200"):
+    for attribute in ("HttpOnly", "Secure", "SameSite=strict", "Path=/", f"Max-Age={private_auth.COOKIE_MAX_AGE}"):
         assert attribute.lower() in session_cookie.lower()
     assert "Domain" not in session_cookie
     assert env["password"] not in cookies
@@ -247,6 +247,28 @@ def test_session_expiry(env, monkeypatch):
     now = private_auth._now()
     monkeypatch.setattr(private_auth, "_now", lambda: now + private_auth.SESSION_TTL + 1)
     assert c.get("/api/private/status").status_code == 404
+
+
+def test_session_slides_while_active_and_survives_a_restart(env, monkeypatch, tmp_path):
+    """Release X.2: the owner stays signed in while using the site (idle window, not a fixed 12 h), and a release
+    restart (new process: empty memory) finds the sessions on disk."""
+    sessions = tmp_path / "runtime" / "owner_sessions.json"
+    monkeypatch.setenv("MELOS_OWNER_SESSIONS", str(sessions))
+    c = signed_in(env)
+    assert sessions.exists() and "expires_at" in sessions.read_text()
+    start = private_auth._now()
+    for hours in (11, 22, 33):                       # active every 11 h: never expires
+        monkeypatch.setattr(private_auth, "_now", lambda h=hours: start + h * 3600)
+        assert c.get("/api/private/status").status_code == 200, hours
+    # Restart: memory is empty, the file is not.
+    private_auth._sessions.clear()
+    private_auth._sessions_loaded = False
+    assert c.get("/api/private/status").status_code == 200
+    assert c.get("/api/owner/session").json()["signed_in"] is True
+    # Idle past the window: gone, and gone from the file.
+    monkeypatch.setattr(private_auth, "_now", lambda: start + 33 * 3600 + private_auth.SESSION_TTL + 1)
+    assert c.get("/api/private/status").status_code == 404
+    assert sessions.read_text().strip() == "{}"
 
 
 def test_https_only_on_public_deployment(env, monkeypatch):

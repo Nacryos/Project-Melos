@@ -53,6 +53,9 @@ MIGRATIONS: list[tuple[int, str]] = [
     CREATE TRIGGER chat_no_delete BEFORE DELETE ON chat BEGIN SELECT RAISE(ABORT, 'chat is append-only'); END;
     CREATE TRIGGER chat_no_update BEFORE UPDATE ON chat BEGIN SELECT RAISE(ABORT, 'chat is append-only'); END;
     """),
+    # Release X.1 (2026-10-10): the lines being typed but not yet saved with Enter, as the page keeps them
+    # ([{id: line id or null, at: row index, draft}]), so they survive a browser change and the agent sees them.
+    (2, "ALTER TABLE poems ADD COLUMN drafts_json TEXT NOT NULL DEFAULT '[]';"),
 ]
 
 _ready: set[str] = set()
@@ -169,7 +172,8 @@ class _Closing:
 def _poem(row) -> dict:
     return {"id": row["id"], "title": row["title"], "settings": _loads(row["settings_json"]) or {},
             "english": row["english"], "created_at": row["created_at"], "updated_at": row["updated_at"],
-            "archived": bool(row["archived"])}
+            "archived": bool(row["archived"]),
+            "drafts": (_loads(row["drafts_json"]) if "drafts_json" in row.keys() else None) or []}
 
 
 def _line(row) -> dict:
@@ -223,11 +227,12 @@ def get_poem(poem_id: int) -> dict:
 
 
 def update_poem(poem_id: int, *, title: str | None = None, settings: dict | None = None, english: str | None = None,
-                archived: bool | None = None) -> dict:
+                archived: bool | None = None, drafts: list | None = None) -> dict:
     with _Tx() as con:
         _need(con, "poems", poem_id)
         for column, value in (("title", title), ("settings_json", _dumps(settings) if settings is not None else None),
-                              ("english", english), ("archived", int(archived) if archived is not None else None)):
+                              ("english", english), ("archived", int(archived) if archived is not None else None),
+                              ("drafts_json", _dumps(drafts) if drafts is not None else None)):
             if value is not None:
                 con.execute(f"UPDATE poems SET {column}=? WHERE id=?", (value, poem_id))
         con.execute("UPDATE poems SET updated_at=? WHERE id=?", (_now(), poem_id))
@@ -381,11 +386,21 @@ def full(poem_id: int, chat_limit: int = CHAT_WINDOW) -> dict:
 
 
 def agent_context(poem_id: int, caret: dict | None = None) -> dict:
-    """What the agent service is told about the poem (PRD §7): settings, English, current Greek of every line."""
+    """What the agent service is told about the poem (PRD §7): settings, English, current Greek of every line.
+    A line being typed but not yet saved (``poem.drafts``, release X.1) stands in for its saved text, marked
+    ``unsaved``; drafts of rows that have no saved line yet follow as further positions."""
     data = full(poem_id, chat_limit=0)
     poem = data["poem"]
+    drafts = [d for d in poem["drafts"] if isinstance(d, dict) and isinstance(d.get("draft"), str) and d["draft"].strip()]
+    by_line = {d["id"]: d["draft"] for d in drafts if d.get("id") is not None}
+    lines = []
+    for line in data["lines"]:
+        current = line["current"] or {}
+        unsaved = line["id"] in by_line
+        lines.append({"position": line["position"], "line_id": line["id"],
+                      "greek": by_line[line["id"]] if unsaved else current.get("greek", ""),
+                      "back_translation": None if unsaved else current.get("back_translation"), "unsaved": unsaved})
+    for d in sorted((d for d in drafts if d.get("id") is None), key=lambda d: d.get("at", 0)):
+        lines.append({"position": len(lines), "line_id": None, "greek": d["draft"], "back_translation": None, "unsaved": True})
     return {"poem_id": poem["id"], "title": poem["title"], "settings": poem["settings"], "english": poem["english"],
-            "lines": [{"position": line["position"], "line_id": line["id"],
-                       "greek": (line["current"] or {}).get("greek", ""),
-                       "back_translation": (line["current"] or {}).get("back_translation")} for line in data["lines"]],
-            "caret": caret or {}}
+            "lines": lines, "caret": caret or {}}

@@ -85,11 +85,11 @@ def owner_routes():
 def test_store_schema_is_versioned_and_versions_chat_append_only(env):
     poem = store.create_poem("Ode", {"metre": "sapphic"}, "Deathless Aphrodite")
     with store._read() as con:
-        assert [r[0] for r in con.execute("SELECT version FROM schema_migrations")] == [1]
+        assert [r[0] for r in con.execute("SELECT version FROM schema_migrations")] == [1, 2]
     store._ready.clear()
     store.connect().close()                                      # migrating again is a no-op
     with store._read() as con:
-        assert con.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 1
+        assert con.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 2
     line = store.insert_line(poem["id"])
     v1 = store.add_version(line["id"], "πρῶτον", source="owner")
     store.add_chat(poem["id"], "user", "hello")
@@ -133,7 +133,7 @@ def test_store_lines_positions_versions_and_full(env):
     assert line_a["current"]["greek"] == "δύο"
     assert len(full["chat"]) == 200 and full["chat"][-1]["content"] == "m204" and full["chat"][0]["content"] == "m5"
     ctx = store.agent_context(pid, {"line_position": 1, "char_offset": 2, "prefix": "δ"})
-    assert ctx["lines"][1] == {"position": 1, "line_id": a["id"], "greek": "δύο", "back_translation": None}
+    assert ctx["lines"][1] == {"position": 1, "line_id": a["id"], "greek": "δύο", "back_translation": None, "unsaved": False}
     assert ctx["caret"]["prefix"] == "δ" and ctx["poem_id"] == pid
 
 
@@ -603,3 +603,27 @@ def test_verbatim_flags_a_short_whole_colon(monkeypatch):
     assert composer_lint._qualifies("παῖ Δίος ἄγε".split()) is False                 # 3 short words
     assert composer_lint._qualifies("παῖ Δίος δολόπλοκε".split()) is True
     composer_lint._phrase_in_corpus.cache_clear()
+
+
+def test_unsaved_drafts_persist_on_the_poem_and_reach_the_agent_context(env):
+    """Release X.1: lines being typed (not yet saved with Enter) are kept on the poem and stand in for the saved text
+    in what the agent is told; the English travels the same PATCH."""
+    c = signed_in(env)
+    pid = c.post("/api/composer/poems", json={"title": "Hymn"}, headers={"Origin": ORIGIN}).json()["id"]
+    line = store.insert_line(pid)
+    store.add_version(line["id"], "ποικιλόθρον", source="owner")
+    drafts = [{"id": line["id"], "at": 0, "draft": "ποικιλόθρον ἀθανάτ"}, {"id": None, "at": 1, "draft": "παῖ Δίος"}]
+    saved = c.patch(f"/api/composer/poems/{pid}", json={"drafts": drafts, "english": "Pure one"}, headers={"Origin": ORIGIN})
+    assert saved.status_code == 200 and saved.json()["drafts"] == drafts and saved.json()["english"] == "Pure one"
+    assert c.get(f"/api/composer/poems/{pid}/full").json()["poem"]["drafts"] == drafts
+    context = store.agent_context(pid)
+    assert context["english"] == "Pure one"
+    assert [(l["line_id"], l["greek"], l["unsaved"]) for l in context["lines"]] == [
+        (line["id"], "ποικιλόθρον ἀθανάτ", True), (None, "παῖ Δίος", True)]
+    assert context["lines"][1]["position"] == 1
+    # Clearing the drafts restores the saved text, and the saved line is then not marked unsaved.
+    c.patch(f"/api/composer/poems/{pid}", json={"drafts": []}, headers={"Origin": ORIGIN})
+    assert [(l["greek"], l["unsaved"]) for l in store.agent_context(pid)["lines"]] == [("ποικιλόθρον", False)]
+    # Shape is enforced: unknown keys, over-long drafts and too many rows are refused.
+    for bad in ([{"draft": "x", "extra": 1}], [{"draft": "x" * 4001}], [{"draft": "x"}] * 401):
+        assert c.patch(f"/api/composer/poems/{pid}", json={"drafts": bad}, headers={"Origin": ORIGIN}).status_code == 422

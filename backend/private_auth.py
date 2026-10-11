@@ -32,7 +32,9 @@ LOGIN_COOKIE = "__Host-melos_login"
 # so public visitors never make that request.
 UI_COOKIE = "melos_owner_ui"
 CSRF_HEADER = "x-melos-csrf"
-SESSION_TTL = 12 * 3600
+SESSION_TTL = 12 * 3600               # idle window: every owner request slides the expiry forward (release X.2)
+REFRESH_AFTER = 600                   # slide at most once per ten minutes (one disk write)
+COOKIE_MAX_AGE = 30 * 24 * 3600       # the cookie outlives the record; the record (12 h idle, on disk) decides
 LOGIN_TOKEN_TTL = 600
 CLIENT_MAX_FAILURES, CLIENT_LOCK_SECONDS = 5, 15 * 60
 GLOBAL_MAX_FAILURES, GLOBAL_WINDOW, GLOBAL_LOCK_SECONDS = 20, 3600, 3600
@@ -58,6 +60,7 @@ class OwnerContext:
 _config_cache: tuple = (None, None)
 _lock = threading.Lock()
 _sessions: dict[str, dict] = {}
+_sessions_loaded = False
 _used_login_nonces: dict[str, float] = {}
 _client_failures: dict[str, list[float]] = {}
 _client_locked_until: dict[str, float] = {}
@@ -181,8 +184,44 @@ def origin_ok(request: Request) -> bool:
     return False
 
 
+def _sessions_file() -> Path:
+    """Where sessions live between restarts (release X.2): MELOS_OWNER_SESSIONS, else next to the composer store
+    (the API container's writable mount). Before this, every release restart signed the owner out."""
+    named = os.environ.get("MELOS_OWNER_SESSIONS")
+    return Path(named) if named else Path(os.environ.get("MELOS_COMPOSER_DB", "/app/runtime/composer.sqlite")).parent / "owner_sessions.json"
+
+
+def _load_sessions_locked() -> None:
+    global _sessions_loaded
+    if _sessions_loaded:
+        return
+    _sessions_loaded = True
+    try:
+        stored = json.loads(_sessions_file().read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return
+    now = _now()
+    for sid, record in (stored.items() if isinstance(stored, dict) else []):
+        if (isinstance(record, dict) and isinstance(record.get("expires_at"), (int, float)) and record["expires_at"] > now
+                and isinstance(record.get("csrf"), str) and sid not in _sessions):
+            _sessions[sid] = {"expires_at": float(record["expires_at"]), "csrf": record["csrf"]}
+
+
+def _save_sessions_locked() -> None:
+    path = _sessions_file()
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_suffix(".tmp")
+        tmp.write_text(json.dumps(_sessions), encoding="utf-8")
+        os.chmod(tmp, 0o600)
+        os.replace(tmp, path)
+    except OSError:
+        pass  # memory still holds the sessions; the next restart signs the owner out, as before release X.2
+
+
 def owner_from_request(request: Request) -> OwnerContext | None:
-    """The verified owner session of this request, else None. Never raises."""
+    """The verified owner session of this request, else None. Never raises. A valid session slides its expiry
+    forward (idle window SESSION_TTL), so the owner stays signed in while using the site."""
     cached = getattr(request.state, "melos_owner", False)
     if cached is not False:
         return cached
@@ -193,11 +232,17 @@ def owner_from_request(request: Request) -> OwnerContext | None:
         sid, _, signature = raw.partition(".")
         if sid and signature and hmac.compare_digest(signature, _sign(config.key, "session", sid)):
             with _lock:
+                _load_sessions_locked()
                 record = _sessions.get(sid)
-                if record and record["expires_at"] > _now():
+                now = _now()
+                if record and record["expires_at"] > now:
+                    if record["expires_at"] < now + SESSION_TTL - REFRESH_AFTER:
+                        record["expires_at"] = now + SESSION_TTL
+                        _save_sessions_locked()
                     owner = OwnerContext(sid, config.username, record["expires_at"], record["csrf"])
                 elif record:
                     _sessions.pop(sid, None)
+                    _save_sessions_locked()
     request.state.melos_owner = owner
     return owner
 
@@ -238,9 +283,14 @@ def _record_success(client: str) -> None:
 
 def reset_state() -> None:
     """Tests only: forget sessions and failure counters."""
-    global _global_locked_until, _config_cache
+    global _global_locked_until, _config_cache, _sessions_loaded
     with _lock:
         _sessions.clear()
+        _sessions_loaded = False
+        try:
+            _sessions_file().unlink()
+        except OSError:
+            pass
         _used_login_nonces.clear()
         _client_failures.clear()
         _client_locked_until.clear()
@@ -378,12 +428,14 @@ async def login(request: Request):
     sid = secrets.token_urlsafe(32)
     expires_at = _now() + SESSION_TTL
     with _lock:
+        _load_sessions_locked()
         if old:
             _sessions.pop(old, None)
         _sessions[sid] = {"expires_at": expires_at, "csrf": secrets.token_urlsafe(24)}
+        _save_sessions_locked()
     response = JSONResponse({"signed_in": True, "username": config.username, "expires_at": int(expires_at)})
-    _cookie(response, SESSION_COOKIE, sid + "." + _sign(config.key, "session", sid), SESSION_TTL)
-    _cookie(response, UI_COOKIE, "1", SESSION_TTL, httponly=False)
+    _cookie(response, SESSION_COOKIE, sid + "." + _sign(config.key, "session", sid), COOKIE_MAX_AGE)
+    _cookie(response, UI_COOKIE, "1", COOKIE_MAX_AGE, httponly=False)
     _clear(response, LOGIN_COOKIE)
     return response
 
@@ -402,6 +454,7 @@ def logout(request: Request):
         return JSONResponse(status_code=403, content={"detail": "Sign-out must come from the site itself."})
     with _lock:
         _sessions.pop(owner.session_id, None)
+        _save_sessions_locked()
     response = JSONResponse({"signed_in": False})
     _clear(response, SESSION_COOKIE)
     _clear(response, UI_COOKIE, httponly=False)

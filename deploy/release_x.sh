@@ -16,9 +16,13 @@ X=${MELOS_X_DIR:-/home/alvin/melos-x}
 SRC=$X/src
 IMAGE=${MELOS_X_IMAGE:-melos-api:20261011x}
 LIVE=melos-api
-KEPT=melos-api-before-x
-CANARY=melos-api-canary-x
+KEPT=${MELOS_X_KEPT:-melos-api-before-x}
+CANARY=${MELOS_X_CANARY:-melos-api-canary-x}
 CANARY_PORT=${MELOS_X_CANARY_PORT:-8793}
+# Point releases (X.1 ...): MELOS_X_IMAGE=melos-api:20261011x1 MELOS_X_KEPT=melos-api-before-x1 MELOS_X_CANARY=melos-api-canary-x1.
+# MELOS_X_CANARY_RUNTIME=<dir>: the canary gets that directory as /app/runtime (a copy of the live one), so a schema
+# migration or a stray write cannot touch the live composer store.
+CANARY_RUNTIME=${MELOS_X_CANARY_RUNTIME:-}
 NETWORK=${MELOS_X_NETWORK:-melos-net}
 step=${1:-}
 
@@ -46,7 +50,8 @@ case "$step" in
   canary)
     docker container inspect "$CANARY" >/dev/null 2>&1 && { echo "$CANARY exists; remove it first" >&2; exit 1; }
     # shellcheck disable=SC2046
-    python3 "$SRC/deploy/clone_run.py" --from "$LIVE" --name "$CANARY" --port "$CANARY_PORT" --image "$IMAGE" $(x_mounts)
+    python3 "$SRC/deploy/clone_run.py" --from "$LIVE" --name "$CANARY" --port "$CANARY_PORT" --image "$IMAGE" $(x_mounts) \
+      ${CANARY_RUNTIME:+--mount "$CANARY_RUNTIME:/app/runtime"}
     join_network "$CANARY"
     sleep 25; curl -fsS "http://127.0.0.1:$CANARY_PORT/api/status" | head -c 300; echo
     ;;

@@ -557,3 +557,13 @@ it is false and nothing published was rendered. Rows of quality `machine_transla
 Corpus rows `<poem id>:literal` (kind `translation`, language `eng`, quality `machine_translation`, `parent_id` the
 poem) take part in the English BM25 bridge and the dense `eng` retrievers; hits credit the Greek poem through
 `parent_id` as for any linked translation. They are excluded from reference-query record listings.
+
+## Release X.1 / X.2 additions (2026-10-10)
+
+- `PATCH /api/composer/poems/{id}` accepts `drafts: [{id: line id | null, at: row index, draft: text ≤ 4000}]` (≤ 400
+  rows); poems return `drafts`. The agent context marks a line whose draft stands in for its saved text `unsaved: true`
+  and appends drafts of unsaved rows as further positions.
+- `POST /api/composer/poems/{id}/chat` streams as before but is read to its end server-side and stored even if the
+  client disconnects; the stream carries `: keep-alive` comment lines every 15 s while the agent is silent.
+- Owner sessions: a valid session slides its expiry (12 h idle window); the cookie lives 30 days; sessions survive
+  restarts via `MELOS_OWNER_SESSIONS` (default next to the composer store).

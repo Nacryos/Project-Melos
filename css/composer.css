@@ -56,8 +56,8 @@ html, body { overflow-x: hidden; }
 
 .u { position: relative; border-radius: 3px; }
 .board.bars .u.b::before {
-  content: ""; position: absolute; left: -1.5px; top: .12em; bottom: .02em; width: 2.5px;
-  background: var(--ink); border-radius: 1px;
+  content: ""; position: absolute; left: -1px; top: .14em; bottom: .04em; width: 1.5px;
+  background: var(--ink); opacity: .4; border-radius: 1px;
 }
 .u.violation { text-decoration: underline wavy var(--fail); text-underline-offset: .32em; text-decoration-thickness: 2px; }
 .u.sel { outline: 2px solid var(--sea); outline-offset: 1px; }
