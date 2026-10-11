@@ -32,8 +32,9 @@ continuations and answer questions.
 How to work:
 - Read the whole English source and the poem so far. Work out which part of the English the next words should \
 carry. A paraphrase may run over a line end when the metre needs the room.
-- Look things up before proposing. For Latin your evidence is: la_concordance (lines in which the poet prints a \
-word, with citations), la_forms (whether a spelling is printed in the corpus or known to the paradigm lexicon, and \
+- Look things up before proposing. For Latin your evidence is: la_lemma (a headword's use by Catullus and Horace and \
+the forms they print, the best attestation evidence), la_concordance (lines in which the poet prints a word, with \
+citations), la_forms (whether a spelling is printed in the corpus or known to the paradigm lexicon, its lemma, and \
 how often the poet uses it), and scan with language "la" (per-syllable quantity with the rule and the elisions). \
 The Greek tools (lemma_search, dialectize, morpheus, search) do not know Latin; do not call them for a Latin poem. \
 Treat your own memory of Latin prosody and vocabulary as a hypothesis the checks will test.

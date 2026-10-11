@@ -1,0 +1,155 @@
+{
+ "test": "LASLA Catullus (13,129 tokens, enclitics split)",
+ "baseline": {
+  "name": "form lookup, most frequent LASLA lemma, trained on LASLA Horace (45,007 tokens)",
+  "coverage": 0.7131,
+  "accuracy_on_covered": 0.951,
+  "accuracy_overall_unknown_counted_wrong": 0.6781,
+  "oov_tokens": 3767
+ },
+ "latincy": {
+  "model": "la_core_web_lg 3.9.8",
+  "load_s": 1.3,
+  "tokens_matched": 13128,
+  "of": 13129,
+  "accuracy": 0.9279,
+  "accuracy_on_baseline_oov": 0.8494,
+  "oov_matched": 3766,
+  "seconds": 20.2,
+  "by_upos": {
+   "NOUN": {
+    "n": 2995,
+    "acc": 0.94
+   },
+   "VERB": {
+    "n": 2524,
+    "acc": 0.959
+   },
+   "ADJ": {
+    "n": 1670,
+    "acc": 0.872
+   },
+   "PRON": {
+    "n": 982,
+    "acc": 0.98
+   },
+   "DET": {
+    "n": 941,
+    "acc": 0.99
+   },
+   "ADV": {
+    "n": 886,
+    "acc": 0.964
+   },
+   "CCONJ": {
+    "n": 809,
+    "acc": 0.844
+   },
+   "PROPN": {
+    "n": 652,
+    "acc": 0.618
+   },
+   "ADP": {
+    "n": 440,
+    "acc": 1.0
+   },
+   "SCONJ": {
+    "n": 417,
+    "acc": 0.99
+   }
+  },
+  "top_errors": [
+   {
+    "form": "nec",
+    "gold": "nec",
+    "pred": "neque",
+    "n": 93
+   },
+   {
+    "form": "ac",
+    "gold": "ac",
+    "pred": "atque",
+    "n": 33
+   },
+   {
+    "form": "lesbia",
+    "gold": "lesbia",
+    "pred": "lesbius",
+    "n": 16
+   },
+   {
+    "form": "moecha",
+    "gold": "moecha",
+    "pred": "moechus",
+    "n": 6
+   },
+   {
+    "form": "catulle",
+    "gold": "catullus",
+    "pred": "catullis",
+    "n": 6
+   },
+   {
+    "form": "inquit",
+    "gold": "inquio",
+    "pred": "inquam",
+    "n": 5
+   },
+   {
+    "form": "furi",
+    "gold": "furius",
+    "pred": "fur",
+    "n": 5
+   },
+   {
+    "form": "iouis",
+    "gold": "iuppiter",
+    "pred": "iouus",
+    "n": 4
+   },
+   {
+    "form": "irrita",
+    "gold": "irritus",
+    "pred": "hirritus",
+    "n": 4
+   },
+   {
+    "form": "attis",
+    "gold": "attis",
+    "pred": "atta",
+    "n": 4
+   },
+   {
+    "form": "uago",
+    "gold": "uagus",
+    "pred": "uago",
+    "n": 4
+   },
+   {
+    "form": "alli",
+    "gold": "allius",
+    "pred": "allium",
+    "n": 4
+   },
+   {
+    "form": "deliciae",
+    "gold": "delicia",
+    "pred": "deliciae",
+    "n": 3
+   },
+   {
+    "form": "soles",
+    "gold": "sol",
+    "pred": "soleo",
+    "n": 3
+   },
+   {
+    "form": "basia",
+    "gold": "basium",
+    "pred": "basio",
+    "n": 3
+   }
+  ],
+  "caveat": "LatinCy's training data include LASLA, so this is not a held-out score; the baseline's is."
+ }
+}

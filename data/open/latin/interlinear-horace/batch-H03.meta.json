@@ -1,0 +1,25 @@
+{
+  "batch": "H03",
+  "work": "odes",
+  "poems": [
+    "1.17",
+    "1.18",
+    "1.19",
+    "1.20",
+    "1.21",
+    "1.22",
+    "1.23",
+    "1.24",
+    "1.25",
+    "1.26",
+    "1.27",
+    "1.28"
+  ],
+  "lines": 236,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, rules 1-7 of batch H03's brief",
+  "reasoning_summary": "1.17.9 haediliae is doubtful (kids vs a place-name); taken as nom. pl. 'kids', noted.\n1.18.1 severis read as perf. subj. of sero 'plant', not severus; prius + abl. vite = in preference to the vine.\n1.20.10 tu bibes kept over the variant tum bibes; mea ... pocula spans lines 10-12, kept split.\n1.23.5-7 transmitted veris inhorruit / adventus foliis kept against the emendation vepris ... ad ventum; noted.\n1.25.11-12 inter-/lunia split across the line break as in the Latin; moechos rendered plainly as 'adulterers'; dry leaves / Eurus metaphor kept literal and glossed.\n1.27 metaphors (wound, arrow, Charybdis, Chimaera) kept literal with notes; tmesis quae te cumque noted.\n1.28 long hyperbata (morituro tibi, fraudem nocituram, vagae harenae particulam) kept on their own lines with agreement notes; source milestone says Alcaic but the ode is Alcmanian couplets (flagged in note on 1.28.1).\nThroughout, hyperbaton left in place so each English line carries only its Latin line's words; 'non sine' and 'nec ... nihil' kept unresolved; supplied possessives noted."
+}

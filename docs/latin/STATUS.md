@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 21:24 PDT
+Last updated: 2026-10-10 21:37 PDT
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a second language backend behind the release W code, not a fork. First the PRD (`docs/prd/latin-composer.md`,
@@ -56,17 +56,24 @@ metre-locking is never applied in the composer.
 - **Pool measurement 1** (`docs/latin/pool.md`): next words in 8-9 s cold and mid-line; a stanza of four whole
   Phalaecians from 36 s (11 whole lines in 77 s); 13 of 62 proposals rejected, all on the metre; $1.306 in all.
 
+- **Latin lemma index** (`docs/latin/lemma-index.md`): LASLA's human lemmas aligned to the Perseus lines (98 % of the
+  held texts), Morpheus lemmas as fallback; bake-off on LASLA's Catullus: a Horace-trained lookup 95 % on the 71 % it
+  covers, LatinCy 92.8 % overall and 85 % on unseen words; routes `/api/la/lemma`, `/api/la/lemma/resolve`; L4 now
+  reports headword attestation per poet; agent tool `la_lemma`.
+
 ## Running
 
-- Horace Odes interlinear (14 batches of about 230 lines, Opus writers; audits and revisions follow): H01-H04 in flight.
+- Horace Odes interlinear: batches H01, H02, H03, H04, H05, H06, H07, H09 written (8 of 14). **Blocked:** the harness's permission
+  classifier now refuses every new subagent launch (writers and auditors alike, prompts identical to ones that ran);
+  the remaining six batches, all Horace audits and revisions wait for the owner to approve the launches or run them.
 - The dev stack (API :8797, agent :8801) stays up for the owner to try the Latin page by remote control; stop it with
   `scripts/latin_dev_stack.sh stop`.
 
 ## Next
 
-1. Horace Odes interlinear: finish the 14 batches, audit, revise, assemble, load (then Epodes and the Carmen Saeculare).
-2. Latin lemma index: LASLA alignment to the Perseus texts, LatinCy bake-off, `forms_found` / concordance routes.
-3. Page polish: macron overlay for Latin lines, human metre labels per language.
+1. Page polish: macron overlay for Latin lines, human metre labels per language (in progress).
+2. Horace Odes interlinear: the six remaining batches, audits, revisions, assembly and load (blocked, see Running).
+3. Wire LatinCy into the API for drafts and non-LASLA texts; Horace templates evaluated on the Odes 1 gold.
 3. Lemma index for Latin: lemmatiser bake-off against LASLA (held-out), recorded lemmas, `forms_found` and
    collocations for the agent's research tools; Horace templates evaluated on Odes 1 gold.
 4. Page polish for Latin (macron overlay, metre list labels) and the Horace translations (Smart's prose parser).

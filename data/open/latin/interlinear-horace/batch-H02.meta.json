@@ -1,0 +1,21 @@
+{
+  "batch": "H02",
+  "work": "odes",
+  "poems": [
+    "1.9",
+    "1.10",
+    "1.11",
+    "1.12",
+    "1.13",
+    "1.14",
+    "1.15",
+    "1.16"
+  ],
+  "lines": 216,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, as in batch H02's brief",
+  "reasoning_summary": "Sapphic and Alcaic enjambment (e.g. 1.9.3-4 gelu...acuto, 1.10.7-8 iocoso...furto, 1.12.59-60 parum castis...lucis) left as split fragments with agreement explained in notes, never words moved across lines.\nTmesis (1.9.14 quem...cumque, 1.16.2 quem...cumque) rendered 'whatever/whichever' in place and noted.\nNegatives kept where they stand: 1.9.15 nec (governing sperne in 1.9.16), 1.13.13 non (governing speres), 1.13.18 nec (governing solvet), 1.16.5-7 anaphoric non.\nMetaphors literal with meaning noted: carpe diem 'pluck the day', reseces 'cut back' (pruning), macerer 'I am steeped', mala avi 'with evil bird' (omen), the ship-allegory of 1.14.\n1.12.3-4 recinet...nomen imago kept as 'whose will re-echo, playful, / name the image', imago = echo noted.\nTextual doubts noted: 1.12.46 Marcelli (vs emended Marcellis), 1.12.21 punctuation of proeliis audax (source's stop followed).\n1.15 Nereus' prophecy: source's opening quotation mark kept with a note; no closing mark in source, noted at 1.15.36.\nSupplied possessives ('his', 'your') marked in notes; Greek-form names kept as persons (Atridae, Laertiades as 'son of Laertes', Tydides as 'son of Tydeus') with notes."
+}

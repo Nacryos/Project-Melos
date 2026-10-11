@@ -43,3 +43,5 @@ secrets/
 .venv-agent/
 .venv-w/
 .vercel/
+.venv-nlp/
+data/lemma_index_la.sqlite

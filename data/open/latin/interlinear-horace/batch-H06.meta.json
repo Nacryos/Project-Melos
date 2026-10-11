@@ -1,0 +1,12 @@
+{
+  "batch": "H06",
+  "work": "odes",
+  "poems": ["2.11", "2.12", "2.13", "2.14", "2.15", "2.16", "2.17"],
+  "lines": 212,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, as in batch H06's brief",
+  "reasoning_summary": "2.11.11-12 aeternis ... consiliis read as ablative of means, also felt with minorem (comparison), and noted; 2.11.15 and 24 have accusatives of respect (canos odorati capillos, comam religata), kept as 'as to' with notes.\n2.12.21 num rendered 'surely you would not', with a note that nothing is added to the negative; 2.12.27 quae = the kisses, poscente as ablative of comparison, eripi passive; Licymnia's possible identity noted.\n2.13.19 robur kept as 'oak' (strength, perhaps the Tullianum) with a note; 2.13.29-32 utrumque/digna/volgus construction kept on its lines with agreement notes, volgus kept as subject of bibit.\n2.14.5-9 trecenis = three hundred each day; unda (Styx) as the subject of enaviganda; 2.14.22-24 neque ... ulla kept split across lines, not resolved.\n2.15.4 caelebs platanus kept as 'unwedded plane-tree' (the vine metaphor) with a note; 2.15.16 arcton as 'the North' (the Bear), noted.\n2.16.7-8 ve-/nale divided across the line end as in the Latin, the English divided the same way ('pur-/chasable'); 2.16.10 submovet lictor kept with its crowd-clearing sense noted.\n2.17.4 mearum ... rerum hyperbaton kept, so line 4 reads 'pillar, affairs'; 2.17.14 Gyas kept as in the source (also Gyges), noted; 2.17.28 sustulerat pluperfect indicative in an unreal condition, noted.\nSupplied possessives (her, his, my, its) are flagged in notes throughout; verb-before-subject lines rephrased so no subject and object flip in English."
+}

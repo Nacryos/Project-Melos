@@ -1,0 +1,22 @@
+{
+  "batch": "H05",
+  "work": "odes",
+  "poems": [
+    "2.2",
+    "2.3",
+    "2.4",
+    "2.5",
+    "2.6",
+    "2.7",
+    "2.8",
+    "2.9",
+    "2.10"
+  ],
+  "lines": 224,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, as in batch H05's brief",
+  "reasoning_summary": "2.2.1-2 avaris taken with terris (greedy earth); lamnae glossed as bullion; 2.2.9-12 regnes/iungas/serviat kept as potential subjunctives; 2.2.23-24 ingentis ... acervos left split.\n2.3.9 quo kept (variant qua noted); 2.3.18 flavos read as old nominative of flavus with Tiberis; 2.3.19-20 potior + ablative left in Latin order with note.\n2.4.17-19 crede non ... potuisse: non left where it stands, noted as negating potuisse; 2.4.23-24 eighth lustrum = fortieth year.\n2.5 extended heifer/grape metaphors kept literal and glossed; long hyperbata (virentis ... campos, proterva ... fronte, pura ... luna) left split with agreement notes; 2.5.17 quantum non kept as 'as much as not'.\n2.6.11-12 regnata ... Laconi ... Phalantho split as in the Latin; 2.6.19-20 minimum invidet glossed as 'hardly inferior'.\n2.7.25 Venus = the dice-throw choosing the master of drinking; 2.7.27-28 recepto ... amico ablative absolute split over the line break.\n2.8.9-12 oath by mother's ashes, night sky and gods kept as accusatives of fallere with notes; aura and iuvencis metaphors glossed.\n2.9.17 desine + genitive noted; 2.9.19-20 Augusti ... Caesaris split; 2.10.11-12 subject fulgura after verb, noted to prevent subject/object misreading."
+}

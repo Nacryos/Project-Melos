@@ -1,0 +1,12 @@
+{
+  "batch": "H01",
+  "work": "odes",
+  "poems": ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8"],
+  "lines": 232,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, rules 1-7 of batch H01's brief",
+  "reasoning_summary": "Run-over clauses (1.1.13-14, 1.2.25-28, 1.2.39-40, 1.3.9-11, 1.5.13-16, 1.8.5-7, 1.8.13-16) are kept as fragments with the adjective-noun pairs noted rather than moved across lines. 1.2.19-20: uxorius is split across the lines in the source, and the English splits 'wife-/doting' the same way. 1.2.39: Marsi kept, with the variant Mauri noted; 1.5.16: deo kept, with the conjecture deae noted. 1.1.6: terrarum dominos is ambiguous (the victors or the gods) and the note says so. 1.4.16: fabulae taken as nominative in apposition to Manes ('fabled', i.e. mere tales). 1.2 and 1.3: optative and jussive subjunctives (redeas, intersis, venias, reddas, serves) are rendered with 'may'; deliberative (vocet, fatigent) and potential (demoveas, scripserit) subjunctives are marked. 1.7.17: memento noted as a future imperative. 1.8: indirect-question subjunctives are rendered with the English present, with a note. Latin forms are kept for proper names (Vergilius, Volcanus, Ulixes, Iuno, Rhodos, Pelides, Tydides). Quotation marks in 1.7.25-32 follow the source, with a note."
+}

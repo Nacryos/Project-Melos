@@ -1,0 +1,12 @@
+{
+  "batch": "H07",
+  "work": "odes",
+  "poems": ["2.18", "2.19", "2.20", "3.1", "3.2"],
+  "lines": 176,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, as in batch H07's brief",
+  "reasoning_summary": "2.18.4-5 ultima ... Africa split over two lines and kept so; 2.18.8 trahunt kept as 'draw' (spin) with clientae feminine; 2.18.10 vena kept literal ('vein' of ore) with a note; 2.18.30 fine read as ablative of comparison with certior, destinata agreeing with aula; 2.18.36 revexit (Shorey) kept, variant revinxit noted; 2.18.38-39 functum ... laboribus split across lines and noted.\n2.19.1-2 carmina is object of docentem, kept on its line; 2.19.8 metuende as vocative gerundive; 2.19.28 medius ... pacis/belli kept as 'the middle' with a note; 2.19.29 te/Cerberus order set so Cerberus stays subject; 2.19.31-32 recedentis as genitive with pedes, possessives supplied and noted.\n2.20.6 Shorey's full stop after quem vocas kept, with a note that sense runs into the vocative of line 7; 2.20.13 notior (Shorey) kept, ocior noted.\n3.1.5-6 the verbless line 5 left as a fragment ('Of kings to be feared over their own flocks'), est in line 6; 3.1.22-24 non ... fastidit kept with each non where it stands (non humilis domos, non ... Tempe), noted as 'does not disdain'; 3.1.29-32 the list of disasters kept as subjects of sollicitat (line 26), arbore ... culpante as ablative absolute, torrentia agreeing with sidera.\n3.2.1 amice (Shorey) as adverb, amici noted; 3.2.9-12 quotation marks only where the Latin source has them, noted; 3.2.17 repulsae ... sordidae as electoral defeat; 3.2.26-29 vetabo ... sit / solvat rendered 'I shall forbid that he who ... be ... unmoor', arcanae noted as agreeing with Cereris; phaselon kept as 'bean-boat' (light boat) with a note."
+}

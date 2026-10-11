@@ -126,14 +126,31 @@ def attestation(word: str, author: str = "") -> dict:
 
 
 def attestation_check(words: list[str], author: str = "") -> dict:
+    """L4: each spelling's tokens in the corpus and in the poet, and its headword's tokens in the poet (lemma index)."""
+    from . import latin_lemma
     rows = [attestation(w, author or "") for w in words]
     unattested = [r["form"] for r in rows if not r["tokens"]]
     in_poet = [r["form"] for r in rows if r["author_tokens"]]
+    lemma_in_poet, lemma_unknown = [], []
+    for r in rows:
+        reads = latin_lemma.readings(r["form"])
+        r["readings"] = reads[:3]
+        if reads:
+            att = latin_lemma.lemma_attestation(reads[0]["lemma"], author or "")
+            r["lemma"] = reads[0]["lemma"]
+            r["lemma_tokens"] = att["total"]
+            r["lemma_author_tokens"] = att.get("author_tokens")
+            if author and att.get("author_tokens"):
+                lemma_in_poet.append(r["form"])
+        else:
+            lemma_unknown.append(r["form"])
     parts = [f"{len(rows) - len(unattested)}/{len(rows)} spellings printed in the Latin corpus"]
     if author:
-        parts.append(f"{len(in_poet)} printed by {author}")
+        parts.append(f"{len(in_poet)} printed by {author}; headwords used by {author}: {len(lemma_in_poet)}/{len(rows) - len(lemma_unknown)}")
     if unattested:
         parts.append("not printed: " + ", ".join(unattested))
+    if lemma_unknown:
+        parts.append("no headword reading: " + ", ".join(lemma_unknown))
     return {"id": "L4", "name": "attestation", "ok": True, "blocking": False, "detail": "; ".join(parts), "evidence": rows}
 
 

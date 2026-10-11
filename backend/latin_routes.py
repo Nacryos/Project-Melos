@@ -2,8 +2,10 @@
 for a Latin poem (docs/prd/latin-composer.md §6). Owner session or the agent token, like the composer routes.
 
 GET /api/la/concordance?q=&author=&limit=    lines printing a word (u/v, i/j folded), with poem citations
-GET /api/la/forms?forms=a,b,c&author=        L1/L4 status of spellings: corpus tokens, author tokens, lexicon reading
-GET /api/la/status                            counts of the partition
+GET /api/la/forms?forms=a,b,c&author=        L1/L4 status of spellings: corpus tokens, author tokens, lexicon reading, lemma readings
+GET /api/la/lemma?q=&author=                  a headword's counts by author (LASLA) and the forms the poet prints (forms_found)
+GET /api/la/lemma/resolve?form=               lemma readings of one spelling
+GET /api/la/status                            counts of the partition and of the lemma index
 """
 from __future__ import annotations
 
@@ -11,7 +13,7 @@ import json
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from . import latin_backend
+from . import latin_backend, latin_lemma
 from .composer_routes import require_owner_or_agent
 from .latin_text import normalize_la
 
@@ -27,7 +29,7 @@ def _need():
 def status(_=Depends(require_owner_or_agent)):
     _need()
     row = latin_backend._db().execute("SELECT value FROM metadata WHERE key='build'").fetchone()
-    return json.loads(row["value"]) if row else {}
+    return {**(json.loads(row["value"]) if row else {}), "lemma_index": latin_lemma.status()}
 
 
 @router.get("/api/la/concordance")
@@ -58,5 +60,25 @@ def forms(forms: str = Query(..., min_length=1, max_length=2000), author: str = 
         status, detail = latin_backend.form_status(w)
         att = latin_backend.attestation(w, author)
         out.append({"form": w, "status": status, "detail": detail, "tokens": att["tokens"], "author_tokens": att["author_tokens"],
-                    "example": att["example"]})
+                    "example": att["example"], "readings": latin_lemma.readings(w)[:4]})
     return {"author": author, "forms": out}
+
+
+@router.get("/api/la/lemma")
+def lemma(q: str = Query(..., min_length=1, max_length=80), author: str = Query("", max_length=80),
+          limit: int = Query(40, ge=1, le=200), _=Depends(require_owner_or_agent)):
+    """A headword (or a spelling, resolved to its first reading): counts by author and the forms each poet prints."""
+    if not latin_lemma.available():
+        raise HTTPException(503, {"code": "lemma_index_missing", "message": "the Latin lemma index is not built"})
+    readings = latin_lemma.readings(q)
+    lem = normalize_la(q)
+    att = latin_lemma.lemma_attestation(lem, author)
+    if not att["total"] and readings:
+        lem = readings[0]["lemma"]
+        att = latin_lemma.lemma_attestation(lem, author)
+    return {"q": q, "lemma": lem, "readings_of_q": readings[:4], **att, "forms_found": latin_lemma.forms_found(lem, author, limit)}
+
+
+@router.get("/api/la/lemma/resolve")
+def lemma_resolve(form: str = Query(..., min_length=1, max_length=80), _=Depends(require_owner_or_agent)):
+    return {"form": form, "readings": latin_lemma.readings(form)}

@@ -35,6 +35,7 @@ INTERNAL_OWNER_ROUTES = frozenset({
     ("POST", "/api/composer/check"),
     # Latin research routes (branch latin-composer): read-only, owner or agent
     ("GET", "/api/la/status"), ("GET", "/api/la/concordance"), ("GET", "/api/la/forms"),
+    ("GET", "/api/la/lemma"), ("GET", "/api/la/lemma/resolve"),
 })
 # Read-only tool routes the agent calls; the token lifts only their per-visitor rate limits.
 INTERNAL_TOOL_PREFIXES = ("/api/search", "/api/word", "/api/words/headlines", "/api/analyze-text", "/api/dialectize",
