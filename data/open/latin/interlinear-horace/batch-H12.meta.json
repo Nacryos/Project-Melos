@@ -1,0 +1,18 @@
+{
+  "batch": "H12",
+  "work": "odes",
+  "poems": [
+    "3.29",
+    "3.30",
+    "4.1",
+    "4.2",
+    "4.3"
+  ],
+  "lines": 204,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, as in batch H12's brief",
+  "reasoning_summary": "3.29.2: non ante verso cado = a jar not tilted before (not yet broached); negative kept. 3.29.17-24: constellations (Cepheus, Procyon, Leo) mark midsummer; occultum/ignem and horidi/Silvani split across lines and noted. 3.29.33: aequus is masculine, of the addressee (calm), not of quod adest. 3.29.43-48: the quotation marks are the editors'; occupato is a future imperative.\n3.30.2: situs rendered 'site' with the alternative 'decay' noted; 3.30.10-14: dicar governs deduxisse four lines later, regnavit + genitive noted as a Greek construction.\n4.1.6-7: lustra decem = about fifty years; mollibus...imperiis split across lines. 4.1.20: marmoream agrees with te (a marble statue). 4.1.22-24: the cases of lyrae/tibiae are disputed and noted. 4.1.35-36: facunda/lingua and parum decoro/silentio are split across lines and kept as fragments. 4.1.40: volubilis is accusative plural with aquas.\n4.2.3-4: nomina ponto alludes to Icarus. 4.2.18: caelestis is taken as accusative plural with quos, the nominative noted. 4.2.29-31: carpentis agrees with apis and plurimum with laborem. 4.2.49: teque vs tuque noted. 4.2.54-55: the ablative absolute relicta matre spans the line break.\n4.3.2: videris may be perfect subjunctive or future perfect. 4.3.15-16: amabilis/choros and dente/invido are split across lines and kept."
+}

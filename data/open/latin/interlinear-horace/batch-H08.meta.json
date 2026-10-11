@@ -1,0 +1,16 @@
+{
+  "batch": "H08",
+  "work": "odes",
+  "poems": [
+    "3.3",
+    "3.4",
+    "3.5"
+  ],
+  "lines": 208,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, as in batch H08's brief",
+  "reasoning_summary": "3.3.7 inlabatur kept as subjunctive 'should slip down upon him', orbis as 'the round world' with a note; 3.3.12 bibet (Shorey) future, bibit noted; 3.3.13-15 the yoke (iugum) left on line 14 as object of trahentes on line 15.\n3.3.17-18 gratum elocuta ... Iunone kept as ablative absolute; Juno's speech keeps the source's quotation marks (lines 18-68), noted; 3.3.25-27 nec ... nec kept in place, Lacaenae adulterae as dative, periura agreeing with domus.\n3.3.37-39 dum ... saeviat and exsules kept on their own lines; 3.3.43-44 possit on line 43, Medis dative on 44; 3.3.58 ne rendered 'lest' where it stands; 3.3.64 coniuge me ... sorore as ablative absolute.\n3.4.5 'does there mock me' keeps me as object without moving insania; 3.4.10 Pulliae (Shorey's conjecture) kept, manuscript Apuliae noted; 3.4.20 litotes 'not without the gods' kept; 3.4.26-27 non me ... non extinxit kept with each non in place.\n3.4.49-50 illa ... iuventus split and noted; 3.4.61 lavit as present (lavere); 3.4.66-67 vim temperatam object set after its subject in-line, idem as nominative plural, viris = 'forces'; 3.4.75-76 ignis subject and Aetnen object made explicit; 3.4.77 postponed nec noted; 3.4.79-80 trecentae ... catenae subject, Pirithoum object, noted.\n3.5.6-8 hostium ... socerorum kept across lines; 3.5.15-16 trahentis (Shorey) genitive with Reguli, trahenti noted, veniens taken with aevum; 3.5.24 and 34 Mars as war, noted; 3.5.42 capitis minor as loss of civil status; 3.5.45-46 consilio ... numquam alias dato kept split, noted."
+}
