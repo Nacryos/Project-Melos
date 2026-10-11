@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 19:08 PDT
+Last updated: 2026-10-10 19:21 PDT
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a `language=la` switch, not a fork. First the PRD (`docs/prd/latin-composer.md`, pushed) and an adversarial
@@ -16,19 +16,21 @@ applied in the composer.
 ## Done
 
 - Worktree reset to `origin/composer-w` (9888c7e); Greek PRD, composer docs, scanner, lint bank and agent code read.
-- PRD written: `docs/prd/latin-composer.md` (255 lines; critique log in §11 pending).
+- PRD written and pushed; adversarial critique (Opus critic, 32 items) folded into PRD v2: 29 accepted, 3 rejected,
+  logged in §11. Main corrections: elision is a drop branch in the metre layer with hiatus as a violation; Pedecerto
+  is dactylic-only so Hypotactic plus a hand-scanned adjudicated set is the gold; three template strings fixed;
+  negative control (false-accept rate) added to the evaluation; honest "language backend" naming with the call-site list.
 
 ## Running
 
-- Adversarial critique of the PRD (Claude critic subagent, Opus).
 - Prior-art survey in three parallel passes (scansion tools and quantity resources; corpora and translations;
   lemmatisers), licences quoted from the fetched pages.
 
 ## Next
 
-1. Fold the critique into the PRD; log what was rejected.
-2. Survey table to `docs/research/latin-scansion-prior-art.md` (under 8 pages).
-3. Scanner POC: letters, syllabifier, `rules_la.yaml`, Phalaecian template, Hypotactic Latin gold, eval on Catullus.
+1. Survey table to `docs/research/latin-scansion-prior-art.md` (under 8 pages).
+2. Scanner POC (in progress: `backend/scansion/latin.py` written; syllabifier, features, `rules_la.yaml`,
+   `metres_la.yaml`, elision branch in `metre.py`, Hypotactic Latin gold loader, eval on Catullus next).
 
 ## Notes for the coordinator
 
