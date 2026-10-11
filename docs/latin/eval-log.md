@@ -93,6 +93,52 @@ elision happened on 1.0 of ELI-CAND units (n=103), 0.9 of long monosyllables
 (n=10), 0.667 before interjections (n=3); synizesis happened on 0.0 of
 232 candidates.
 
+
+## LA5: Horace's Odes 1 on the Hypotactic gold (every metre, all 876 lines; core + lexicon, as typed)
+
+The first look at Horace. No split was held out: Odes 1 is one book, the templates were written from the handbooks
+before the run, and the only tuning after the first pass was six word-list entries and one new hypothesis read off the
+misaligned and mis-scored lines below (then re-scored; the Catullus held-out numbers did not move). The eval picks the
+template of a stanza line by its position (`scripts/scansion_eval_la.py`, `TEMPLATE_FOR` maps Hypotactic's labels).
+
+| Hypotactic metre | Template | Lines | Misaligned | Decided | Accuracy on decided | Brier | Lines fitting | Best pattern = gold | Perturbed accepted (swap / replace) |
+|---|---|---|---|---|---|---|---|---|---|
+| alcaic | alcaic_horace | 240 | 3 | 88.8 % | 99.79 % | 0.032 | 237/237 | 233 | 16 % / 17 % |
+| sapadon | sapphic_horace | 220 | 0 | 87.4 % | 99.88 % | 0.035 | 220/220 | 220 | 7 % / 21 % |
+| asc1 | asclepiad_lesser_horace | 36 | 0 | 87.1 % | 100 % | 0.032 | 36/36 | 36 | 19 % / 17 % |
+| asc2 | asclepiad_second_horace | 96 | 1 | 86.9 % | 99.73 % | 0.038 | 95/95 | 95 | 10 % / 23 % |
+| asc3 | asclepiad_third_horace | 92 | 0 | 84.6 % | 99.61 % | 0.042 | 92/92 | 91 | 9 % / 17 % |
+| asc4 | asclepiad_fourth_horace | 64 | 1 | 86.0 % | 100 % | 0.036 | 63/63 | 63 | 20 % / 23 % |
+| asc5 | asclepiad_greater_horace | 24 | 1 | 85.2 % | 100 % | 0.038 | 23/23 | 23 | 13 % / 39 % |
+| arch4 | archilochian_fourth_horace | 20 | 0 | 86.3 % | 100 % | 0.036 | 20/20 | 19 | 15 % / 25 % |
+| alcmanic_strophe | alcmanic_horace | 68 | 0 | 88.5 % | 99.71 % | 0.034 | 66/68 | 61 | 32 % / 37 % |
+| sapphic2 | sapphic_greater_horace | 16 | 0 | 85.0 % | 100 % | 0.038 | 16/16 | 16 | 13 % / 20 % |
+| **all** | | **876** | **6** | **87.5 %** | **99.8 %** | | **868/870** | **857 (98.5 %)** | |
+
+Reading: Horace scans as well as Catullus did on the held-out hendecasyllables (decided 88.9 % at 99.96 %, 284/285
+fitting, 96.5 % pattern): the quantity lexicon and the position rules carry over without a Horace-specific rule. The
+Alcaic and the Alcmanic strophe accept more perturbed lines than the Phalaecian (the Alcaic's two ancipitia and the
+hexameter's bicepses give a swapped line more room), so the negative control is weaker there; the Sapphic rejects
+93 % of swaps. Elision is right on 94-100 % of candidates per metre; the misses are interjection hiatus (heu, heu)
+and two gold hiatuses before a vowel.
+
+What the first pass taught (16 misaligned lines, now 6): Greek names and bronze. `aena`, `aenea` (bronze) are
+trisyllabic (ă-ē-na) while `Aenēās` keeps its diphthong, so the ae split applies to `aen-` only when the word is not
+capitalised; `Lāertēs`, `Pholoē`, `coēmptōs` split; `Teucer` has a Greek eu; `anteit` is one syllable by synizesis;
+`āerius` and `chorēa` keep their Greek long vowels before a vowel; `aeque` is an adverb in -ē, not ae + -que. One
+new hypothesis, INIT-GREEK: a short final vowel before a Greek initial cluster (cn-, pn-, ps-, pt-, ct-, tm-, bd-)
+seldom makes position (Catullus 36.13 `Cnidumque`, Horace 1.15.17 `Cnosii`, both short in the gold; p 0.15 like
+s impura). The six lines still misaligned are genuine ambiguities the scanner cannot see from the spelling:
+`aera` (bronzes, ae-ra) against `āera` (air), `antehac` as one syllable, and three where the gold reads a diphthong
+in a Greek name the lists do not know.
+
+Decided-unit errors worth a note, not fixed: Alcaic and Asclepiad line-initial ancipitia where the gold marks a
+short syllable as long by position in the metre (`olentis` 1.17.7, `magus` 1.27.22: brevis in longo, the same gold
+convention the pattern metric already ignores at line end); `Tyndari` (Greek vocative in short -ĭ, the lexicon's -ī).
+
+Reports: `docs/latin/eval/odes1-<metre>.json`; the Catullus regression run `catullus-hendecasyllables-held_out-lexicon-v3.json`
+(decided 88.9 %, accuracy on decided 100 %, 284/285 fitting, 275/285 pattern: unchanged except the `Cnidumque` unit now right).
+
 ## Looks at the held-out half
 
 | Date | Setting | Reason |
@@ -100,3 +146,4 @@ elision happened on 1.0 of ELI-CAND units (n=103), 0.9 of long monosyllables
 | 2026-10-10 19:45 PDT | core, as typed and folded | LA1 milestone score (first and only look) |
 | 2026-10-10 19:59 PDT | core + lexicon, as typed and folded | LA2 milestone score (second look; the pattern metric now ignores the line-final anceps, so the core rows were re-read too) |
 | 2026-10-10 20:21 PDT | core + lexicon, after the lexicon audit's fixes (Lewis & Short "either" marks, Cyrillic y, Wiktionary page titles without marks dropped; Winge rows deduped to 325,380) | LA2 rebuild (third look). Held-out, lexicon: decided 88.9 %, accuracy on decided 99.96 %, Brier 0.030, lines fitting 284/285, best pattern = gold 275/285, perturbed rejected 80 % / 81 %. The LA2 tables above are from the first build; these are the current numbers |
+| 2026-10-11 (LA5) | core + lexicon, as typed, after the Horace list fixes and INIT-GREEK | regression check only (fourth look): decided 88.9 %, accuracy on decided 100 %, 284/285 fitting, 275/285 pattern, perturbed accepted 20 % / 19 %: no movement |

@@ -13,6 +13,7 @@ calibration pass of LA2 lands) and a Goodhart check. Measured column: developmen
 | `mcl_word` | 0.2: muta cum liquida mostly short in neoteric and Augustan verse | 0.5 (Greek default) | long 0.20 (n=5) after a lexical short; 0.33 (n=6) after a conflict | Horace vs Catullus separately |
 | `mcl_boundary` | 0.05 | 0.5 | pending | — |
 | `s_impura` | 0.15 | 0.9 (Greek POS-INIT) | pending (few cases: reported, not tuned) | — |
+| `pos_initial_greek` | 0.15 | 0.9 (INIT-OTHER) | 2/2 short in the gold (Catullus 36.13 Cnidumque, Horace 1.15.17 Cnosii); tiny sample, reported | LA5 |
 | `pos_initial` | 0.9 (gn-, ps-, mn-) | 0.5 | pending (Cnidum 36.13 is short) | — |
 | `final_s_drop` | 0.02 | 0 | pending | — |
 | `vowel_default` | 0.5 (honest) | measured share of unknown open vowels | UNK long 0.40 (n=10); LEX-CONFLICT long 0.30 (n=212) | Brier on held-out |
@@ -31,3 +32,7 @@ calibration pass of LA2 lands) and a Goodhart check. Measured column: developmen
 | L11 verbatim run | 4 words (or 3 with 15 letters), as Greek | 5 words | — | — |
 
 Rules (nodes) are hypotheses too; the error list in `docs/latin/eval-log.md` names the ones that failed and why.
+
+### LA5 word-list changes (Horace Odes 1)
+
+From the misaligned lines of the first Odes 1 pass, each cited in the code: `aen-` ae split when not capitalised (aēna, aēnea bronze; Aenēās keeps the diphthong), `laert-` and `pholo-`/`coempt-` splits, `teuc-` eu diphthong, `anteit` synizesis, `aerius`/`chorea` forms in `vav_long`, `aeque`/`oblique`/`antique`/`inique`/`quinque`/`utrimque` not enclitic -que. Rival: a per-word override table from the lexicon's syllable counts (not built; the lists are the hypothesis that these are closed classes).
