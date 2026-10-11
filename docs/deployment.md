@@ -1,6 +1,25 @@
 # Deployment handoff
 
-## Current: release X.7 frontend (X.5 backend) — New draft (2026-10-11), alternatives, keyboard shortcuts, thin bars, Full export
+## Current: release X.8 — the composer board edits like a document; lines soft-deleted and restored (2026-10-11, ~2:50 PM PDT)
+
+Tree = `fallback-translations` 167516f. Backend image `melos-api:20261011x8` atop `20261011x5`, built from the tarball
+`/home/alvin/melos-x/x8.tgz` extracted into `/home/alvin/melos-x/src` with
+`MELOS_X_IMAGE=melos-api:20261011x8 MELOS_X_KEPT=melos-api-before-x8 MELOS_X_CANARY=melos-api-canary-x8
+MELOS_X_CANARY_PORT=8798 MELOS_X_CANARY_RUNTIME=/home/alvin/melos-x/canary-runtime sh src/deploy/release_x.sh build|canary|promote`
+(8797 is held by a host Python process, the Latin dev stack). `canary_checks_x.sh`: 3 failures on the canary AND the same
+3 on production before the promote ("semantic index reported — absent" and two semantic searches), so not X.8's; worth
+a look. Schema migration 3 (`lines.deleted`) verified on a copy of the live store; it runs on the first composer request.
+Frontend from `~/Projects/melos-t` (`vercel deploy --prod --yes --build-env MELOS_READER_ONLY=1`); page cache keys `release-x8`.
+What changed: X.7 New draft (a draft = a poem with `settings.parent_id`/`draft_no`, own English, earlier drafts read-only
+under the board); X.8 move lines (drag the number or the highlighted whole line, ⌥↑/⌥↓; `PATCH lines/{id} position`),
+document-style editing (Enter splits/adds rows, Backspace/Delete join rows, ⌘A+Delete clears, ⌘Z restores),
+`DELETE /api/composer/lines/{id}` (soft) and `POST /api/composer/lines/{id}/restore`, blank rows and the row layout kept
+in `poem.drafts` and in `agent_context` (positions = the page's row numbers). Docs: `docs/composer/ui.md`.
+Rollback: `MELOS_X_KEPT=melos-api-before-x8 sh /home/alvin/melos-x/src/deploy/release_x.sh rollback` (the X.5 container,
+`--limit-concurrency 32`) and `vercel promote <the X.7 deployment project-melos-ha5n011b4> --yes`. The X.8 store is
+backward compatible with X.5 (one extra column), so rolling the backend back loses only soft-deletes.
+
+## Previous: release X.7 frontend (X.5 backend) — New draft (2026-10-11), alternatives, keyboard shortcuts, thin bars, Full export
 
 Tree = `fallback-translations` 0c9757f (merge of `composer-w` 92fdec2 into X.4). Backend image `melos-api:20261011x5`
 atop `20261011x3`, built from the tarball `/home/alvin/melos-x/x5.tgz` extracted into `/home/alvin/melos-x/src` with
