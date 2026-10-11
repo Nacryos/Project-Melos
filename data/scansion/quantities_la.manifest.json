@@ -1,0 +1,36 @@
+{
+ "built": "2026-10-11 02:56 UTC",
+ "sources": {
+  "winge": {
+   "path": "data/raw/latin/winge/macrons.txt",
+   "sha256": "b22950c26ad203f03fafc07e94db6f24d70843f025f2572f0b2e141da0957e63",
+   "rows": 812588
+  },
+  "wiktionary": {
+   "path": "data/raw/latin/wiktionary/kaikki.org-dictionary-Latin.jsonl",
+   "sha256": "96b36294bfd604407cc0202032d96e7bb401b238ed6c9a33668d8d12baa7493a",
+   "rows": 1988775,
+   "entries": 892320
+  },
+  "lewis_short": {
+   "path": "data/raw/latin/lewis-short/lat.ls.perseus-eng2.xml",
+   "sha256": "a21c3799f42d33931b463c19a036b0e5c4a6504ccbd81ee55a262421a9e1836c",
+   "rows": 58160
+  }
+ },
+ "counts": {
+  "winge_rows": 812588,
+  "wiktionary_rows": 1988775,
+  "wiktionary_entries": 892320,
+  "lewis_short_rows": 58160
+ },
+ "distinct_keys": 1069819,
+ "codes": "L long, S short, A either (Winge _^, Wiktionary macron+breve), s short by the source's convention (unmarked in Winge and Wiktionary), u unmarked (Lewis & Short), . consonant",
+ "licences": {
+  "winge": "code GPL-3.0; data from Perseus Morpheus Latin (CC BY-SA 3.0 US): server-side use; ask the author before redistribution",
+  "wiktionary": "CC BY-SA 4.0 + GFDL",
+  "lewis_short": "CC BY-SA 4.0 (Perseus)"
+ },
+ "sqlite_sha256": "9ebeace20f652c7b0777d646bf0567b86885d2506d8dc33eba4f05addd0a9d95",
+ "sqlite_bytes": 226426880
+}

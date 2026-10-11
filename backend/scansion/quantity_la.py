@@ -308,4 +308,7 @@ def _iambic_word(w: Word, nuc: list[Nucleus]) -> bool:
 
 @lru_cache(maxsize=1)
 def default_scanner() -> LatinScanner:
-    return LatinScanner()
+    """The rules file with the quantity lexicon when data/scansion/quantities_la.sqlite exists."""
+    from .lexicon_la import LatinQuantityLexicon
+    lex = LatinQuantityLexicon()
+    return LatinScanner(lexicon=lex if lex.available else None)

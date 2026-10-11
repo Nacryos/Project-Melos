@@ -38,6 +38,7 @@ params:
   final_us: 0.15              # -us short except 4th-decl. gen. sg. / nom. pl. and -ūs stems (uirtūs, tellūs)
   lex_long: 0.9               # the macronised lexicon marks the vowel long
   lex_short: 0.05             # ... short
+  lex_short_convention: 0.1   # the sources leave the vowel unmarked (short by convention; a macron is sometimes missing)
   lex_unmarked: 0.3           # the lexicon knows the word but gives this vowel no mark
   mcl_word: 0.2               # muta cum liquida inside the word after a short vowel: position is optional, mostly not taken
   mcl_boundary: 0.05          # stop + liquid opening the next word: no position in classical verse
@@ -135,6 +136,21 @@ vowel:
         p: vocal_before_vowel
         reason: a vowel before a vowel in the same word is short (vocalis ante vocalem corripitur)
         cite: A&G §603a
+  - id: POETIC-O
+    when: is_ultima and not elided and ending == "o" and (word in final_o_short_words or iambic_word)
+    reason: a final -o the poets shorten, whatever the lexicon says of its nature
+    cite: A&G §604 (exceptions), §603f note 2
+    then:
+      - id: FIN-O-SHORT
+        when: word in final_o_short_words
+        p: final_o_short_list
+        reason: this word usually has a short final -o (ego, modo, cito; nesciŏ Catullus 85.2)
+        cite: A&G §604 (exceptions); Catullus 85.2
+      - id: FIN-O-IAMB
+        when: true
+        p: final_o_iambic
+        reason: final -o of an iambic disyllable is often shortened (dabŏ 13.11, uolŏ 6.16)
+        cite: A&G §603f note 2 (iambic shortening); Catullus 13.11
   - id: LEX
     when: lex in ("L", "S", "conflict", "unmarked")
     reason: vowel length from the lexical sources (optional layer)
@@ -145,6 +161,11 @@ vowel:
         p: lex_long
         reason: the lexical sources mark it long
         cite: macronised lexicon
+      - id: LEX-S-CONV
+        when: lex == "S" and lex_sources == "convention"
+        p: lex_short_convention
+        reason: the sources write the vowel without a mark, short by their convention (Winge, Wiktionary)
+        cite: Winge, latin-macronizer; Wiktionary Latin (Kaikki extraction)
       - id: LEX-S
         when: lex == "S"
         p: lex_short
@@ -200,16 +221,6 @@ vowel:
         p: final_i_long
         reason: final -i is long
         cite: A&G §604
-      - id: FIN-O-SHORT
-        when: ending == "o" and word in final_o_short_words
-        p: final_o_short_list
-        reason: this word usually has a short final -o (ego, modo, cito; nesciŏ Catullus 85.2)
-        cite: A&G §604 (exceptions); Catullus 85.2
-      - id: FIN-O-IAMB
-        when: ending == "o" and iambic_word
-        p: final_o_iambic
-        reason: final -o of an iambic disyllable is often shortened (dabŏ 13.11, uolŏ 6.16)
-        cite: A&G §603f note 2 (iambic shortening); Catullus 13.11
       - id: FIN-O
         when: ending == "o"
         p: final_o_long

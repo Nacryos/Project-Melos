@@ -19,14 +19,200 @@
   "lines": 262,
   "parsed": 261,
   "ok": 260,
-  "pattern_match": 159,
-  "ok_but_wrong_pattern": 101
+  "pattern_match": 229,
+  "ok_but_wrong_pattern": 31
  },
  "negative_control": {
   "swap_total": 262,
   "swap_accepted": 58,
   "replace_total": 262,
   "replace_accepted": 60
+ },
+ "decided_by": {
+  "position": {
+   "units": 876,
+   "share_of_scored": 0.3363
+  },
+  "finals_and_lists": {
+   "units": 373,
+   "share_of_scored": 0.1432
+  },
+  "diphthong_or_monosyllable": {
+   "units": 117,
+   "share_of_scored": 0.0449
+  }
+ },
+ "rule_shares": {
+  "NATURE / UNK": {
+   "n": 932,
+   "long": 0.412
+  },
+  "POS-WORD / UNK": {
+   "n": 441,
+   "long": 1.0
+  },
+  "POS-ACROSS / FIN-OTHER": {
+   "n": 272,
+   "long": 1.0
+  },
+  "NATURE / VAV-SHORT": {
+   "n": 211,
+   "long": 0.0
+  },
+  "NATURE / FIN-A": {
+   "n": 69,
+   "long": 0.159
+  },
+  "CONS-VOW / FIN-OTHER": {
+   "n": 67,
+   "long": 0.179
+  },
+  "NATURE / FIN-E": {
+   "n": 56,
+   "long": 0.018
+  },
+  "NATURE / DIPH": {
+   "n": 48,
+   "long": 1.0
+  },
+  "NATURE / MONO-LONG": {
+   "n": 48,
+   "long": 1.0
+  },
+  "POS-ACROSS-S / FIN-IS": {
+   "n": 40,
+   "long": 1.0
+  },
+  "NATURE / FIN-I": {
+   "n": 31,
+   "long": 1.0
+  },
+  "CONS-VOW / FIN-US": {
+   "n": 31,
+   "long": 0.032
+  },
+  "NATURE / FIN-O": {
+   "n": 29,
+   "long": 1.0
+  },
+  "POS-WORD / FIN-OTHER": {
+   "n": 27,
+   "long": 1.0
+  },
+  "NATURE / VAV-GREEK": {
+   "n": 26,
+   "long": 0.0
+  },
+  "MCL-WORD / UNK": {
+   "n": 22,
+   "long": 0.545
+  },
+  "NATURE / ENCL-E": {
+   "n": 20,
+   "long": 0.0
+  },
+  "POS-ACROSS-S / FIN-US": {
+   "n": 20,
+   "long": 1.0
+  },
+  "NATURE / FIN-I-EITHER": {
+   "n": 19,
+   "long": 0.053
+  },
+  "CONS-VOW / FIN-IS": {
+   "n": 19,
+   "long": 0.421
+  },
+  "POS-DOUBLE / UNK": {
+   "n": 16,
+   "long": 1.0
+  },
+  "POS-ACROSS-S / FIN-ES": {
+   "n": 16,
+   "long": 1.0
+  },
+  "NATURE / FIN-E-LIST": {
+   "n": 13,
+   "long": 1.0
+  },
+  "NATURE / MONO-INTERJ": {
+   "n": 12,
+   "long": 1.0
+  },
+  "CONS-VOW / FIN-ES": {
+   "n": 12,
+   "long": 0.917
+  },
+  "POS-ACROSS / DIPH": {
+   "n": 11,
+   "long": 1.0
+  },
+  "CONS-VOW / FIN-OS": {
+   "n": 11,
+   "long": 1.0
+  },
+  "NATURE / FIN-O-IAMB": {
+   "n": 10,
+   "long": 0.9
+  },
+  "POS-ACROSS-S / FIN-OS": {
+   "n": 9,
+   "long": 1.0
+  },
+  "POS-ACROSS-S / FIN-AS": {
+   "n": 8,
+   "long": 1.0
+  },
+  "POS-WORD / DIPH": {
+   "n": 7,
+   "long": 1.0
+  },
+  "NATURE / FIN-O-SHORT": {
+   "n": 5,
+   "long": 0.2
+  },
+  "CONS-VOW / FIN-AS": {
+   "n": 5,
+   "long": 1.0
+  },
+  "POS-DOUBLE / FIN-OTHER": {
+   "n": 5,
+   "long": 1.0
+  }
+ },
+ "flag_shares": {
+  "SYN-CAND": {
+   "n": 231,
+   "happened": 0.0
+  },
+  "IAMB-SHORT": {
+   "n": 161,
+   "happened": 0.298
+  },
+  "ELI-CAND": {
+   "n": 103,
+   "happened": 1.0
+  },
+  "ELI-MONO": {
+   "n": 10,
+   "happened": 0.9
+  },
+  "PROD-CAND-M": {
+   "n": 5,
+   "happened": 1.0
+  },
+  "ELI-INTERJ": {
+   "n": 3,
+   "happened": 0.667
+  },
+  "PROD-CAND": {
+   "n": 3,
+   "happened": 1.0
+  },
+  "ELI-PUNCT": {
+   "n": 1,
+   "happened": 1.0
+  }
  },
  "calibration": {
   "0.0-0.1": {
@@ -189,7 +375,7 @@
    "flags": []
   }
  ],
- "ms_per_line": 3.03,
+ "ms_per_line": 5.01,
  "setting": {
   "split": "dev",
   "work": "catullus",
@@ -221,6 +407,7 @@
    "final_us": 0.15,
    "lex_long": 0.9,
    "lex_short": 0.05,
+   "lex_short_convention": 0.1,
    "lex_unmarked": 0.3,
    "mcl_word": 0.2,
    "mcl_boundary": 0.05,

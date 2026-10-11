@@ -39,3 +39,4 @@ data/commentary_inbox/*.pdf
 data/commentary_inbox/*.json
 data/embeddings-s/
 .venv-w/
+data/scansion/*.sqlite

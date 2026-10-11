@@ -2,11 +2,11 @@
  "lines": 289,
  "misaligned": 10,
  "units_scored": 2788,
- "decided": 1437,
- "decided_share": 0.5154,
- "accuracy_on_decided": 0.9958,
- "ambiguous_share": 0.4846,
- "brier": 0.1203,
+ "decided": 2452,
+ "decided_share": 0.8795,
+ "accuracy_on_decided": 0.9996,
+ "ambiguous_share": 0.1205,
+ "brier": 0.0323,
  "elision": {
   "candidates": 143,
   "right": 142,
@@ -18,24 +18,28 @@
  "fit": {
   "lines": 279,
   "parsed": 279,
-  "ok": 275,
-  "pattern_match": 248,
-  "ok_but_wrong_pattern": 29
+  "ok": 278,
+  "pattern_match": 269,
+  "ok_but_wrong_pattern": 9
  },
  "negative_control": {
   "swap_total": 278,
-  "swap_accepted": 69,
+  "swap_accepted": 51,
   "replace_total": 278,
-  "replace_accepted": 61
+  "replace_accepted": 59
  },
  "decided_by": {
+  "lexicon": {
+   "units": 1193,
+   "share_of_scored": 0.4279
+  },
   "position": {
    "units": 929,
    "share_of_scored": 0.3332
   },
   "finals_and_lists": {
-   "units": 370,
-   "share_of_scored": 0.1327
+   "units": 192,
+   "share_of_scored": 0.0689
   },
   "diphthong_or_monosyllable": {
    "units": 138,
@@ -43,33 +47,41 @@
   }
  },
  "rule_shares": {
-  "NATURE / UNK": {
-   "n": 1046,
-   "long": 0.386
+  "NATURE / LEX-S": {
+   "n": 491,
+   "long": 0.0
   },
-  "POS-WORD / UNK": {
-   "n": 469,
+  "NATURE / LEX-L": {
+   "n": 423,
    "long": 1.0
   },
-  "POS-ACROSS / FIN-OTHER": {
-   "n": 329,
+  "POS-WORD / LEX-S-CONV": {
+   "n": 402,
+   "long": 1.0
+  },
+  "NATURE / LEX-CONFLICT": {
+   "n": 212,
+   "long": 0.302
+  },
+  "POS-ACROSS / LEX-S-CONV": {
+   "n": 192,
    "long": 1.0
   },
   "NATURE / VAV-SHORT": {
    "n": 179,
    "long": 0.0
   },
-  "CONS-VOW / FIN-OTHER": {
-   "n": 89,
-   "long": 0.202
+  "NATURE / LEX-S-CONV": {
+   "n": 148,
+   "long": 0.0
   },
-  "NATURE / FIN-E": {
-   "n": 78,
-   "long": 0.064
+  "CONS-VOW / LEX-S-CONV": {
+   "n": 70,
+   "long": 0.0
   },
-  "NATURE / FIN-A": {
+  "POS-ACROSS / LEX-CONFLICT": {
    "n": 69,
-   "long": 0.072
+   "long": 1.0
   },
   "NATURE / DIPH": {
    "n": 60,
@@ -79,43 +91,51 @@
    "n": 59,
    "long": 1.0
   },
-  "NATURE / FIN-I": {
-   "n": 49,
+  "POS-ACROSS / LEX-S": {
+   "n": 51,
    "long": 1.0
   },
-  "POS-ACROSS-S / FIN-IS": {
-   "n": 36,
+  "POS-ACROSS-S / LEX-L": {
+   "n": 47,
    "long": 1.0
   },
-  "CONS-VOW / FIN-US": {
+  "POS-WORD / LEX-L": {
+   "n": 41,
+   "long": 1.0
+  },
+  "CONS-VOW / LEX-CONFLICT": {
+   "n": 39,
+   "long": 0.615
+  },
+  "CONS-VOW / LEX-L": {
+   "n": 31,
+   "long": 1.0
+  },
+  "POS-WORD / LEX-CONFLICT": {
+   "n": 31,
+   "long": 1.0
+  },
+  "POS-ACROSS-S / LEX-S-CONV": {
+   "n": 26,
+   "long": 1.0
+  },
+  "CONS-VOW / LEX-S": {
    "n": 24,
-   "long": 0.042
+   "long": 0.0
   },
   "NATURE / VAV-GREEK": {
    "n": 23,
    "long": 0.043
   },
-  "POS-ACROSS-S / FIN-US": {
-   "n": 21,
-   "long": 1.0
-  },
-  "NATURE / FIN-O": {
+  "POS-ACROSS-S / LEX-CONFLICT": {
    "n": 20,
    "long": 1.0
   },
-  "CONS-VOW / FIN-IS": {
-   "n": 20,
-   "long": 0.35
+  "NATURE / UNK": {
+   "n": 18,
+   "long": 0.389
   },
-  "NATURE / FIN-I-EITHER": {
-   "n": 19,
-   "long": 0.211
-  },
-  "MCL-WORD / UNK": {
-   "n": 16,
-   "long": 0.562
-  },
-  "POS-WORD / FIN-OTHER": {
+  "POS-ACROSS / LEX-L": {
    "n": 14,
    "long": 1.0
   },
@@ -127,28 +147,8 @@
    "n": 12,
    "long": 0.0
   },
-  "CONS-VOW / FIN-OS": {
-   "n": 12,
-   "long": 1.0
-  },
-  "POS-ACROSS-S / FIN-OS": {
-   "n": 12,
-   "long": 1.0
-  },
-  "POS-ACROSS-S / FIN-ES": {
-   "n": 11,
-   "long": 1.0
-  },
-  "POS-ACROSS-S / FIN-AS": {
+  "POS-DOUBLE / LEX-S-CONV": {
    "n": 10,
-   "long": 1.0
-  },
-  "POS-DOUBLE / UNK": {
-   "n": 10,
-   "long": 1.0
-  },
-  "CONS-VOW / FIN-ES": {
-   "n": 9,
    "long": 1.0
   },
   "NATURE / MONO-INTERJ": {
@@ -159,15 +159,19 @@
    "n": 7,
    "long": 1.0
   },
-  "CONS-VOW / FIN-AS": {
-   "n": 6,
-   "long": 1.0
-  },
-  "NATURE / FIN-E-LIST": {
+  "MCL-WORD / LEX-S-CONV": {
    "n": 5,
    "long": 0.6
   },
   "POS-ACROSS / DIPH": {
+   "n": 5,
+   "long": 1.0
+  },
+  "MCL-WORD / LEX-S": {
+   "n": 5,
+   "long": 0.4
+  },
+  "POS-WORD / UNK": {
    "n": 5,
    "long": 1.0
   }
@@ -177,13 +181,13 @@
    "n": 195,
    "happened": 0.0
   },
-  "IAMB-SHORT": {
-   "n": 167,
-   "happened": 0.281
-  },
   "ELI-CAND": {
    "n": 119,
    "happened": 0.992
+  },
+  "IAMB-SHORT": {
+   "n": 106,
+   "happened": 0.311
   },
   "ELI-MONO": {
    "n": 12,
@@ -204,99 +208,87 @@
  },
  "calibration": {
   "0.0-0.1": {
-   "n": 94,
-   "observed_long": 0.053
+   "n": 528,
+   "observed_long": 0.0
   },
   "0.1-0.2": {
-   "n": 205,
-   "observed_long": 0.005
+   "n": 400,
+   "observed_long": 0.0
   },
   "0.2-0.3": {
-   "n": 33,
-   "observed_long": 0.242
+   "n": 23,
+   "observed_long": 0.261
   },
   "0.4-0.5": {
    "n": 23,
    "observed_long": 0.043
   },
   "0.5-0.6": {
-   "n": 1229,
+   "n": 275,
    "observed_long": 0.353
   },
   "0.6-0.7": {
-   "n": 24,
-   "observed_long": 0.708
-  },
-  "0.7-0.8": {
    "n": 12,
-   "observed_long": 0.75
-  },
-  "0.8-0.9": {
-   "n": 6,
-   "observed_long": 0.667
+   "observed_long": 0.833
   },
   "0.9-1.0": {
-   "n": 1162,
+   "n": 1527,
    "observed_long": 0.999
   }
  },
  "ambiguous_by_rule": [
   [
-   "NATURE / UNK",
-   1046
+   "NATURE / LEX-CONFLICT",
+   212
   ],
   [
-   "CONS-VOW / FIN-OTHER",
-   89
-  ],
-  [
-   "NATURE / FIN-A",
-   69
-  ],
-  [
-   "CONS-VOW / FIN-US",
-   24
+   "CONS-VOW / LEX-CONFLICT",
+   39
   ],
   [
    "NATURE / VAV-GREEK",
    23
   ],
   [
-   "CONS-VOW / FIN-IS",
-   20
-  ],
-  [
-   "NATURE / FIN-I-EITHER",
-   19
-  ],
-  [
-   "MCL-WORD / UNK",
-   16
+   "NATURE / UNK",
+   18
   ],
   [
    "NATURE / FIN-O-SHORT",
    13
   ],
   [
-   "CONS-VOW / FIN-ES",
-   9
-  ],
-  [
    "NATURE / FIN-O-IAMB",
    7
   ],
   [
-   "NATURE / FIN-E-LIST",
+   "MCL-WORD / LEX-S-CONV",
    5
+  ],
+  [
+   "MCL-WORD / LEX-S",
+   5
+  ],
+  [
+   "MCL-WORD / LEX-CONFLICT",
+   4
+  ],
+  [
+   "INIT-MCL / LEX-CONFLICT",
+   4
+  ],
+  [
+   "INIT-MCL / LEX-S-CONV",
+   3
+  ],
+  [
+   "NATURE / VAV-GEN",
+   1
   ]
  ],
  "errors_by_rule": [
   [
-   "NATURE / FIN-E",
-   5
-  ],
-  [
-   "INIT-OTHER / FIN-A",
+   "INIT-OTHER / LEX-CONFLICT",
    1
   ]
  ],
@@ -374,68 +366,13 @@
  ],
  "errors": [
   {
-   "id": "hypotactic-la:catullus:10:14",
-   "text": "‘at certe tamen,' inquiunt ‘quod illic",
-   "unit": "e t",
-   "p": 0.05,
-   "gold": "L",
-   "rule": "NATURE",
-   "vowel_rule": "FIN-E",
-   "flags": []
-  },
-  {
-   "id": "hypotactic-la:catullus:10:14",
-   "text": "‘at certe tamen,' inquiunt ‘quod illic",
-   "unit": "",
-   "p": null,
-   "gold": "–––⏑⏑–⏑–⏑––",
-   "rule": "LINE-REJECTED",
-   "vowel_rule": "1 position(s) against the scanner",
-   "flags": [
-    "e t:long"
-   ]
-  },
-  {
-   "id": "hypotactic-la:catullus:36:10",
-   "text": "jocose lepide vovere divis.",
-   "unit": "e l",
-   "p": 0.05,
-   "gold": "L",
-   "rule": "NATURE",
-   "vowel_rule": "FIN-E",
-   "flags": []
-  },
-  {
-   "id": "hypotactic-la:catullus:36:10",
-   "text": "jocose lepide vovere divis.",
-   "unit": "e u",
-   "p": 0.05,
-   "gold": "L",
-   "rule": "NATURE",
-   "vowel_rule": "FIN-E",
-   "flags": []
-  },
-  {
-   "id": "hypotactic-la:catullus:36:10",
-   "text": "jocose lepide vovere divis.",
-   "unit": "",
-   "p": null,
-   "gold": "⏑––⏑⏑–⏑–⏑––",
-   "rule": "LINE-REJECTED",
-   "vowel_rule": "2 position(s) against the scanner",
-   "flags": [
-    "e l:long",
-    "e u:long"
-   ]
-  },
-  {
    "id": "hypotactic-la:catullus:36:13",
    "text": "quaeque Ancona Cnidumque harundinosam",
    "unit": "a Cn",
    "p": 0.95,
    "gold": "S",
    "rule": "INIT-OTHER",
-   "vowel_rule": "FIN-A",
+   "vowel_rule": "LEX-CONFLICT",
    "flags": []
   },
   {
@@ -461,48 +398,16 @@
    "flags": [
     "e:elision"
    ]
-  },
-  {
-   "id": "hypotactic-la:catullus:46:11",
-   "text": "diversae varie viae reportant.",
-   "unit": "e u",
-   "p": 0.05,
-   "gold": "L",
-   "rule": "NATURE",
-   "vowel_rule": "FIN-E",
-   "flags": []
-  },
-  {
-   "id": "hypotactic-la:catullus:46:11",
-   "text": "diversae varie viae reportant.",
-   "unit": "",
-   "p": null,
-   "gold": "–––⏑⏑–⏑–⏑––",
-   "rule": "LINE-REJECTED",
-   "vowel_rule": "1 position(s) against the scanner",
-   "flags": [
-    "e u:long"
-   ]
-  },
-  {
-   "id": "hypotactic-la:catullus:56:3",
-   "text": "ride quidquid amas, Cato, Catullum:",
-   "unit": "e qu",
-   "p": 0.05,
-   "gold": "L",
-   "rule": "NATURE",
-   "vowel_rule": "FIN-E",
-   "flags": []
   }
  ],
- "ms_per_line": 4.8,
+ "ms_per_line": 3.26,
  "setting": {
   "split": "held_out",
   "work": "catullus",
   "metre": "hendecasyllables",
   "template": "phalaecian",
   "fold_v": true,
-  "lexicon": false,
+  "lexicon": true,
   "params": {
    "vowel_default": 0.5,
    "vocal_before_vowel": 0.1,

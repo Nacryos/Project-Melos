@@ -58,6 +58,11 @@ def score(lines, sc: LatinScanner, template: str | None, fold: bool, perturb_see
     misaligned = []
     bands = Counter()
     band_long = Counter()
+    decided_by = Counter()      # what decided the unit: position | finals_and_lists | lexicon | diphthong_mono | other
+    rule_n = Counter()          # per (unit rule, vowel rule): units and gold-long units, for the measured shares
+    rule_long = Counter()
+    flag_n = Counter()          # per flag id: candidates and how often the flagged phenomenon happened in the gold
+    flag_yes = Counter()
     rng = random.Random(perturb_seed)
     neg = Counter()
     for g in lines:
@@ -70,6 +75,11 @@ def score(lines, sc: LatinScanner, template: str | None, fold: bool, perturb_see
             # Hypotactic writes prodelision as elision of the syllable before est / es: count it as the same
             prod = (u.prodelision or {}).get("p", 0) >= 0.5
             if q == "E" or u.elision >= 0.5 or u.elision > 0 or prod:
+                for fl in u.flags:
+                    if fl["id"].startswith(("ELI-", "PROD")) and fl["id"] != "ELI-1":
+                        flag_n[fl["id"]] += 1
+                        flag_yes[fl["id"]] += 1 if q == "E" else 0
+                        break
                 if q == "E" or u.elision > 0 or prod:
                     eli_total += 1
                     pred_e = u.elision >= 0.5 or prod
@@ -88,12 +98,24 @@ def score(lines, sc: LatinScanner, template: str | None, fold: bool, perturb_see
             n_units += 1
             p = u.p_long
             y = 1.0 if q == "L" else 0.0
+            rk = f"{u.rule} / {u.vowel['rule']}"
+            rule_n[rk] += 1
+            rule_long[rk] += y
+            for fl in u.flags:
+                if fl["id"].startswith(("SYN", "IAMB", "DIAER")):
+                    flag_n[fl["id"]] += 1
+                    flag_yes[fl["id"]] += 1 if ("synizesis" in f or ("IAMB" in fl["id"] and q == "S")) else 0
             brier += (p - y) ** 2
             band = min(int(p * 10), 9)
             bands[band] += 1
             band_long[band] += y
             if p <= 0.1 or p >= 0.9:
                 decided += 1
+                vr = u.vowel["rule"]
+                decided_by["position" if u.rule.startswith(("POS", "INIT-DOUBLE")) else
+                           "lexicon" if vr.startswith("LEX") else
+                           "diphthong_or_monosyllable" if vr.startswith(("DIPH", "MONO", "TYPED")) else
+                           "finals_and_lists" if vr.startswith(("FIN", "ENCL", "VAV")) else "other"] += 1
                 ok = (p >= 0.9) == (q == "L")
                 if ok:
                     right += 1
@@ -108,8 +130,9 @@ def score(lines, sc: LatinScanner, template: str | None, fold: bool, perturb_see
             fits["lines"] += 1
             fits["parsed"] += fit.log_likelihood > float("-inf")
             fits["ok"] += fit.ok
-            fits["pattern_match"] += fit.pattern == g.pattern
-            if fit.ok and fit.pattern != g.pattern:
+            same = fit.pattern[:-1] == g.pattern[:-1]            # the line-final unit is anceps: not compared
+            fits["pattern_match"] += same
+            if fit.ok and not same:
                 fits["ok_but_wrong_pattern"] += 1
             if not fit.ok:
                 errors.append({"id": g.id, "text": g.plain, "unit": "", "p": None, "gold": g.pattern, "rule": "LINE-REJECTED",
@@ -142,6 +165,9 @@ def score(lines, sc: LatinScanner, template: str | None, fold: bool, perturb_see
         "elision": {"candidates": eli_total, "right": eli_right, "accuracy": round(eli_right / max(eli_total, 1), 4),
                     "confusions": dict(hiatus_gold)},
         "fit": dict(fits), "negative_control": dict(neg),
+        "decided_by": {k: {"units": v, "share_of_scored": round(v / max(n_units, 1), 4)} for k, v in decided_by.most_common()},
+        "rule_shares": {k: {"n": v, "long": round(rule_long[k] / v, 3)} for k, v in rule_n.most_common() if v >= 5},
+        "flag_shares": {k: {"n": v, "happened": round(flag_yes[k] / v, 3)} for k, v in flag_n.most_common()},
         "calibration": {f"{b/10:.1f}-{(b+1)/10:.1f}": {"n": bands[b], "observed_long": round(band_long[b] / bands[b], 3)}
                         for b in sorted(bands)},
         "ambiguous_by_rule": [[f"{k[0]} / {k[1]}", v] for k, v in amb_rules.most_common(12)],

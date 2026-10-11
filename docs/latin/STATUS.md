@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 19:46 PDT
+Last updated: 2026-10-10 19:59 PDT
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a second language backend behind the release W code, not a fork. First the PRD (`docs/prd/latin-composer.md`,
@@ -26,20 +26,28 @@ metre-locking is never applied in the composer.
   other half of the syllables are open vowels inside words that only a lexicon can settle (LA2).
 - Elision is a parse branch in the metre layer (drop the unit; prodelision keeps the unit long and drops *est*);
   hiatus where elision is normal is a reported violation. Greek scanner, lock and composer tests unchanged.
+- **LA2, quantity lexicon** (`docs/latin/lexicon.md`, 1.07 M distinct forms from Winge, Wiktionary, Lewis & Short):
+  held-out half, one look: 87.9 % of syllables decided at 99.96 %, 284 of 285 genuine lines accepted, best pattern
+  equal to the gold on 96.5 %, perturbed lines rejected 4 in 5. **The owner's doubt is answered**: Latin quantity is
+  lexical plus positional in practice, the open resources cover Catullus, and what stays open is real ambiguity
+  (nom./abl. -a, homographs) that the metre settles (`docs/latin/eval-log.md`).
+- Survey report written: `docs/research/latin-scansion-prior-art.md` (354 lines; 11 owner decisions in §8).
+- Catullus text ingested from Perseus (Merrill 1893, CC BY-SA 4.0) with Smithers's prose and Burton's verse aligned
+  per poem (`data/open/latin/perseus-catullus/`, 115 Latin poems, 2,308 lines); an independent auditor is checking it.
+  Horace Odes, Epodes, Carmen Saeculare TEI and Conington's Odes fetched; Smart's prose Horace from Gutenberg.
 
 ## Running
 
-- Survey report assembly (subagent) → `docs/research/latin-scansion-prior-art.md`.
-- Raw fetch for the lexicon phase (subagent): Winge's macron table (33 MB), Lewis & Short TEI (77 MB), Collatinus data,
-  Wiktionary Latin extraction (about 1.2 GB, streamed), Perseus Catullus TEI with Smithers's prose, LASLA Catullus and
-  Horace (CC BY-NC-SA: owner decision needed before use).
+- Adversarial audit of the Perseus Catullus ingest (subagent, data-extraction discipline).
 
 ## Next
 
-1. LA2: `quantities_la.sqlite` from the admitted sources (per-source rows, upstream recorded), LEX nodes, calibration
-   pass (measured shares into `docs/latin/hypotheses.md`), coverage report on the held-out half.
-2. LA3: Catullus text from Perseus (Merrill 1893, CC BY-SA) with source records; L1 analyser choice; Latin partition.
-3. LA4: `language=la` through lint, routes, store, agent, page; one hendecasyllable end to end.
+1. LA3: Horace ingest (Odes, Epodes, Carmen Saeculare + Conington, Smart) with audit; Latin partition for L1/L4/L11
+   (form attested in the corpus or in the Morpheus-derived form list; FTS over Latin lines); Opus interlinear for
+   Catullus with an auditor, stored `machine_translation`.
+2. LA4: `language=la` through lint (joint prefix + candidate fit), routes, store, agent prompt, page; one
+   hendecasyllable end to end.
+3. Lexicon audit (100 rows per source) and the Collatinus paradigm expansion if coverage needs it.
 
 ## Decisions wanted from the owner
 

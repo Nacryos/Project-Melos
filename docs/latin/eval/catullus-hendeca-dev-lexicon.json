@@ -2,11 +2,11 @@
  "lines": 263,
  "misaligned": 0,
  "units_scored": 2615,
- "decided": 1372,
- "decided_share": 0.5247,
- "accuracy_on_decided": 0.9993,
- "ambiguous_share": 0.4753,
- "brier": 0.115,
+ "decided": 2287,
+ "decided_share": 0.8746,
+ "accuracy_on_decided": 0.9987,
+ "ambiguous_share": 0.1254,
+ "brier": 0.0342,
  "elision": {
   "candidates": 125,
   "right": 123,
@@ -18,24 +18,28 @@
  "fit": {
   "lines": 263,
   "parsed": 262,
-  "ok": 261,
-  "pattern_match": 230,
-  "ok_but_wrong_pattern": 31
+  "ok": 259,
+  "pattern_match": 242,
+  "ok_but_wrong_pattern": 18
  },
  "negative_control": {
   "swap_total": 263,
-  "swap_accepted": 58,
+  "swap_accepted": 43,
   "replace_total": 263,
-  "replace_accepted": 60
+  "replace_accepted": 56
  },
  "decided_by": {
+  "lexicon": {
+   "units": 1054,
+   "share_of_scored": 0.4031
+  },
   "position": {
    "units": 880,
    "share_of_scored": 0.3365
   },
   "finals_and_lists": {
-   "units": 374,
-   "share_of_scored": 0.143
+   "units": 235,
+   "share_of_scored": 0.0899
   },
   "diphthong_or_monosyllable": {
    "units": 118,
@@ -43,33 +47,45 @@
   }
  },
  "rule_shares": {
-  "NATURE / UNK": {
-   "n": 935,
-   "long": 0.412
+  "NATURE / LEX-S": {
+   "n": 418,
+   "long": 0.002
   },
-  "POS-WORD / UNK": {
-   "n": 444,
+  "NATURE / LEX-L": {
+   "n": 404,
+   "long": 0.998
+  },
+  "POS-WORD / LEX-S-CONV": {
+   "n": 388,
    "long": 1.0
   },
-  "POS-ACROSS / FIN-OTHER": {
-   "n": 273,
-   "long": 1.0
+  "NATURE / LEX-CONFLICT": {
+   "n": 212,
+   "long": 0.302
   },
   "NATURE / VAV-SHORT": {
    "n": 212,
    "long": 0.0
   },
-  "NATURE / FIN-A": {
-   "n": 69,
-   "long": 0.159
+  "POS-ACROSS / LEX-S-CONV": {
+   "n": 156,
+   "long": 1.0
   },
-  "CONS-VOW / FIN-OTHER": {
-   "n": 68,
-   "long": 0.176
+  "NATURE / LEX-S-CONV": {
+   "n": 111,
+   "long": 0.0
   },
-  "NATURE / FIN-E": {
+  "CONS-VOW / LEX-S-CONV": {
+   "n": 61,
+   "long": 0.0
+  },
+  "POS-ACROSS / LEX-CONFLICT": {
    "n": 56,
-   "long": 0.018
+   "long": 1.0
+  },
+  "POS-ACROSS / LEX-S": {
+   "n": 50,
+   "long": 1.0
   },
   "NATURE / DIPH": {
    "n": 49,
@@ -79,75 +95,55 @@
    "n": 48,
    "long": 1.0
   },
-  "POS-ACROSS-S / FIN-IS": {
-   "n": 40,
+  "POS-WORD / LEX-L": {
+   "n": 47,
    "long": 1.0
   },
-  "NATURE / FIN-I": {
-   "n": 31,
+  "POS-ACROSS-S / LEX-L": {
+   "n": 44,
    "long": 1.0
   },
-  "CONS-VOW / FIN-US": {
-   "n": 31,
-   "long": 0.032
+  "CONS-VOW / LEX-CONFLICT": {
+   "n": 41,
+   "long": 0.463
   },
-  "NATURE / FIN-O": {
-   "n": 29,
+  "CONS-VOW / LEX-L": {
+   "n": 33,
    "long": 1.0
   },
-  "POS-WORD / FIN-OTHER": {
+  "POS-ACROSS-S / LEX-CONFLICT": {
    "n": 27,
+   "long": 1.0
+  },
+  "POS-ACROSS-S / LEX-S-CONV": {
+   "n": 26,
    "long": 1.0
   },
   "NATURE / VAV-GREEK": {
    "n": 26,
    "long": 0.0
   },
-  "MCL-WORD / UNK": {
+  "POS-WORD / LEX-CONFLICT": {
    "n": 22,
-   "long": 0.545
+   "long": 1.0
   },
   "NATURE / ENCL-E": {
    "n": 20,
    "long": 0.0
   },
-  "POS-ACROSS-S / FIN-US": {
-   "n": 20,
-   "long": 1.0
-  },
-  "NATURE / FIN-I-EITHER": {
-   "n": 19,
-   "long": 0.053
-  },
-  "CONS-VOW / FIN-IS": {
-   "n": 19,
-   "long": 0.421
-  },
-  "POS-DOUBLE / UNK": {
+  "CONS-VOW / LEX-S": {
    "n": 16,
-   "long": 1.0
+   "long": 0.0
   },
-  "POS-ACROSS-S / FIN-ES": {
-   "n": 16,
-   "long": 1.0
-  },
-  "NATURE / FIN-E-LIST": {
-   "n": 13,
+  "POS-DOUBLE / LEX-S-CONV": {
+   "n": 15,
    "long": 1.0
   },
   "NATURE / MONO-INTERJ": {
    "n": 12,
    "long": 1.0
   },
-  "CONS-VOW / FIN-ES": {
-   "n": 12,
-   "long": 0.917
-  },
   "POS-ACROSS / DIPH": {
-   "n": 11,
-   "long": 1.0
-  },
-  "CONS-VOW / FIN-OS": {
    "n": 11,
    "long": 1.0
   },
@@ -155,27 +151,43 @@
    "n": 10,
    "long": 0.9
   },
-  "POS-ACROSS-S / FIN-OS": {
+  "POS-ACROSS / LEX-L": {
+   "n": 10,
+   "long": 1.0
+  },
+  "NATURE / UNK": {
+   "n": 10,
+   "long": 0.4
+  },
+  "POS-WORD / LEX-S": {
    "n": 9,
    "long": 1.0
   },
-  "POS-ACROSS-S / FIN-AS": {
-   "n": 8,
+  "MCL-WORD / LEX-L": {
+   "n": 9,
    "long": 1.0
   },
   "POS-WORD / DIPH": {
    "n": 7,
    "long": 1.0
   },
+  "MCL-WORD / LEX-CONFLICT": {
+   "n": 6,
+   "long": 0.333
+  },
   "NATURE / FIN-O-SHORT": {
    "n": 5,
    "long": 0.2
   },
-  "CONS-VOW / FIN-AS": {
+  "MCL-WORD / LEX-S": {
+   "n": 5,
+   "long": 0.2
+  },
+  "POS-DOUBLE / LEX-L": {
    "n": 5,
    "long": 1.0
   },
-  "POS-DOUBLE / FIN-OTHER": {
+  "POS-WORD / UNK": {
    "n": 5,
    "long": 1.0
   }
@@ -186,8 +198,8 @@
    "happened": 0.0
   },
   "IAMB-SHORT": {
-   "n": 161,
-   "happened": 0.298
+   "n": 116,
+   "happened": 0.353
   },
   "ELI-CAND": {
    "n": 103,
@@ -216,93 +228,93 @@
  },
  "calibration": {
   "0.0-0.1": {
-   "n": 81,
-   "observed_long": 0.012
-  },
-  "0.1-0.2": {
-   "n": 244,
+   "n": 456,
    "observed_long": 0.004
   },
+  "0.1-0.2": {
+   "n": 386,
+   "observed_long": 0.0
+  },
   "0.2-0.3": {
-   "n": 24,
-   "observed_long": 0.375
+   "n": 12,
+   "observed_long": 0.167
   },
   "0.4-0.5": {
    "n": 26,
    "observed_long": 0.0
   },
   "0.5-0.6": {
-   "n": 1098,
-   "observed_long": 0.376
+   "n": 271,
+   "observed_long": 0.328
   },
   "0.6-0.7": {
-   "n": 33,
-   "observed_long": 0.667
-  },
-  "0.7-0.8": {
-   "n": 16,
-   "observed_long": 0.75
-  },
-  "0.8-0.9": {
-   "n": 15,
-   "observed_long": 1.0
+   "n": 17,
+   "observed_long": 0.706
   },
   "0.9-1.0": {
-   "n": 1078,
-   "observed_long": 1.0
+   "n": 1447,
+   "observed_long": 0.999
   }
  },
  "ambiguous_by_rule": [
   [
-   "NATURE / UNK",
-   935
+   "NATURE / LEX-CONFLICT",
+   212
   ],
   [
-   "NATURE / FIN-A",
-   69
-  ],
-  [
-   "CONS-VOW / FIN-OTHER",
-   68
-  ],
-  [
-   "CONS-VOW / FIN-US",
-   31
+   "CONS-VOW / LEX-CONFLICT",
+   41
   ],
   [
    "NATURE / VAV-GREEK",
    26
   ],
   [
-   "MCL-WORD / UNK",
-   22
-  ],
-  [
-   "NATURE / FIN-I-EITHER",
-   19
-  ],
-  [
-   "CONS-VOW / FIN-IS",
-   19
-  ],
-  [
-   "NATURE / FIN-E-LIST",
-   13
-  ],
-  [
-   "CONS-VOW / FIN-ES",
-   12
-  ],
-  [
    "NATURE / FIN-O-IAMB",
    10
   ],
   [
+   "NATURE / UNK",
+   10
+  ],
+  [
+   "MCL-WORD / LEX-CONFLICT",
+   6
+  ],
+  [
    "NATURE / FIN-O-SHORT",
    5
+  ],
+  [
+   "MCL-WORD / LEX-S",
+   5
+  ],
+  [
+   "NATURE / VAV-GEN",
+   2
+  ],
+  [
+   "INIT-MCL / LEX-CONFLICT",
+   2
+  ],
+  [
+   "S-IMPURA / LEX-CONFLICT",
+   2
+  ],
+  [
+   "INIT-MCL / LEX-S-CONV",
+   2
   ]
  ],
  "errors_by_rule": [
+  [
+   "NATURE / LEX-S",
+   1
+  ],
+  [
+   "NATURE / LEX-L",
+   1
+  ],
   [
    "NATURE / FIN-E",
    1
@@ -310,6 +322,28 @@
  ],
  "misaligned_lines": [],
  "errors": [
+  {
+   "id": "hypotactic-la:catullus:1:5",
+   "text": "Jam tum, cum ausus es unus Italorum",
+   "unit": "It",
+   "p": 0.05,
+   "gold": "L",
+   "rule": "NATURE",
+   "vowel_rule": "LEX-S",
+   "flags": []
+  },
+  {
+   "id": "hypotactic-la:catullus:1:5",
+   "text": "Jam tum, cum ausus es unus Italorum",
+   "unit": "",
+   "p": null,
+   "gold": "–––⏑⏑–⏑–⏑––",
+   "rule": "LINE-REJECTED",
+   "vowel_rule": "1 position(s) against the scanner",
+   "flags": [
+    "It:long"
+   ]
+  },
   {
    "id": "hypotactic-la:catullus:3:16",
    "text": "o factum male! o miselle passer!",
@@ -321,6 +355,16 @@
    "flags": [
     "hiatus"
    ]
+  },
+  {
+   "id": "hypotactic-la:catullus:7:4",
+   "text": "lasarpiciferis jacet Cyrenis",
+   "unit": "yr",
+   "p": 0.9,
+   "gold": "S",
+   "rule": "NATURE",
+   "vowel_rule": "LEX-L",
+   "flags": []
   },
   {
    "id": "hypotactic-la:catullus:55:4",
@@ -357,6 +401,18 @@
    ]
   },
   {
+   "id": "hypotactic-la:catullus:55:10",
+   "text": "Camerium mihi pessimae puellae.",
+   "unit": "",
+   "p": null,
+   "gold": "⏑⏑⏑–⏑⏑–⏑–⏑––",
+   "rule": "LINE-REJECTED",
+   "vowel_rule": "1 position(s) against the scanner",
+   "flags": [
+    "Cam:long"
+   ]
+  },
+  {
    "id": "hypotactic-la:catullus:55:11",
    "text": "quaedam inquit, nudum reduc...",
    "unit": "",
@@ -367,14 +423,14 @@
    "flags": []
   }
  ],
- "ms_per_line": 2.95,
+ "ms_per_line": 3.35,
  "setting": {
   "split": "dev",
   "work": "catullus",
   "metre": "hendecasyllables",
   "template": "phalaecian",
   "fold_v": false,
-  "lexicon": false,
+  "lexicon": true,
   "params": {
    "vowel_default": 0.5,
    "vocal_before_vowel": 0.1,
