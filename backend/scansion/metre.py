@@ -197,10 +197,23 @@ def _length_range(template: str) -> tuple[int, int]:
     return lo, hi
 
 
-def fit(lines: list[list[SyllableResult]], metre: str) -> list[Fit]:
-    """Fit each line to the metre; stanza metres cycle through their line templates."""
+def fit(lines: list[list[SyllableResult]], metre: str, positions: list[int] | None = None) -> list[Fit]:
+    """Fit each line to the metre; stanza metres cycle through their line templates. ``positions`` (release X.3)
+    gives each line's place in its stanza explicitly (the scan route resets the count after a blank line, so
+    every fourth line of a Sapphic stanza is the adonic even when stanzas are separated by blank lines)."""
     temps = TEMPLATES[metre]
-    return [fit_line(sylls, metre, temps[k % len(temps)]) for k, sylls in enumerate(lines)]
+    positions = positions if positions is not None else list(range(len(lines)))
+    return [fit_line(sylls, metre, temps[k % len(temps)]) for k, sylls in zip(positions, lines)]
+
+
+def stanza_positions(line_numbers: list[int]) -> list[int]:
+    """Place of each non-blank line in its stanza, from the text line numbers of the non-blank lines: the count
+    restarts after a gap (a blank line). [0, 1, 2, 3, 5, 6, 7, 8] -> [0, 1, 2, 3, 0, 1, 2, 3]."""
+    out, prev = [], None
+    for k in line_numbers:
+        out.append(0 if prev is None or k != prev + 1 else out[-1] + 1)
+        prev = k
+    return out
 
 
 def auto(lines: list[list[SyllableResult]], top: int = 5) -> list[dict]:

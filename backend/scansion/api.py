@@ -104,7 +104,7 @@ def scan(req: ScanRequest):
             segs = metre.segment(line_units[0], req.metre)
             out["fit"] = [{"units": [s, e], **f.as_dict()} for s, e, f in segs]
         else:
-            out["fit"] = [f.as_dict() for f in metre.fit(line_units, req.metre)]
+            out["fit"] = [f.as_dict() for f in metre.fit(line_units, req.metre, metre.stanza_positions(sorted(lines)))]
     if req.responsion_with:
         other = sc.scan_lines(req.responsion_with)
         out["responsion"] = {"antistrophe_units": [u.as_dict() for line in other for u in line],

@@ -90,9 +90,11 @@
   const scanDialect = () => { const d = $('dialect').value; return d && d !== 'none' ? d : d === 'none' ? 'none' : (POET_DIALECT[$('author').value] || 'none'); };
   const realMetre = () => { const m = $('metre').value; return m && m !== 'auto' && m !== 'none' ? m : null; };
   const rowIndex = row => S.rows.indexOf(row);
+  const stanzaPos = row => C.stanzaIndex(S.rows.map(r => r.draft), rowIndex(row));   // blank rows separate stanzas
   const current = row => row.line?.versions?.find(v => v.id === row.line.current_version_id) || null;
 
-  for (const m of METRES) $('metre').append(new Option(m.replace(/_/g, ' '), m));
+  const METRE_LABEL = { sapphic: 'sapphic stanza (3 + adonic)', sapphic_hendecasyllable: 'sapphic hendecasyllable (every line)', alcaic: 'alcaic stanza', elegiac: 'elegiac couplet' };
+  for (const m of METRES) $('metre').append(new Option(METRE_LABEL[m] || m.replace(/_/g, ' '), m));
   try {
     const saved = JSON.parse(local.getItem(PREFS) || '{}');
     if (typeof saved.theme === 'string') $('theme').value = saved.theme;
@@ -345,13 +347,13 @@
         let version;
         if (!row.line) {
           const position = S.rows.slice(0, at).filter(r => r.line).length;
-          const line = await call('POST', `/api/composer/poems/${S.poem.id}/lines`, { position, greek: text, source });
+          const line = await call('POST', `/api/composer/poems/${S.poem.id}/lines`, { position, greek: text, source, stanza_position: stanzaPos(row) });
           version = line.version;
           row.line = { id: line.id, poem_id: line.poem_id, position: line.position, current_version_id: line.current_version_id, versions: [version] };
           // Lines saved after this one moved down one on the server.
           for (const r of S.rows) if (r !== row && r.line && r.line.position >= line.position) r.line.position += 1;
         } else {
-          version = await call('POST', `/api/composer/lines/${row.line.id}/versions`, { greek: text, source });
+          version = await call('POST', `/api/composer/lines/${row.line.id}/versions`, { greek: text, source, stanza_position: stanzaPos(row) });
           row.line.versions.push(version);
           row.line.current_version_id = version.id;
         }
@@ -668,7 +670,7 @@
   async function templateAt(row, base) {
     const metre = realMetre();
     if (!metre) return null;
-    const tpl = C.templateFor(metre, rowIndex(row));
+    const tpl = C.templateFor(metre, stanzaPos(row));
     const head = base.trim();
     if (!head) return tpl;
     let labels = null;
@@ -771,7 +773,7 @@
       if (controller.signal.aborted) throw new DOMException('aborted', 'AbortError');
       const at = rowIndex(row);
       const body = { line_id: row.line?.id ?? null, caret: { line_position: at, char_offset: base.length, prefix: base }, prefix: base.trimEnd(),
-        remaining_template: template, n: mode === 'words' ? WORDS_N : POOL_N, mode, ...(mode === 'words' ? { ahead_lines: 0 } : {}) };
+        remaining_template: template, stanza_position: stanzaPos(row), n: mode === 'words' ? WORDS_N : POOL_N, mode, ...(mode === 'words' ? { ahead_lines: 0 } : {}) };
       const mine = await C.slotKey(at, body.prefix, settings());
       await flushSave();                                                  // the agent reads the English and drafts from the server
       const r = await request('POST', `/api/composer/poems/${S.poem.id}/pool`, body, controller.signal);

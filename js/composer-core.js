@@ -69,6 +69,13 @@
     reizianum: ['x-uu-F'], aristophanean: ['-uu-u-F'], lesser_asclepiad: ['xx-uu--uu-uF'],
     greater_asclepiad: ['xx-uu--uu--uu-uF'],
   };
+  /* Place of row i in its stanza: rows since the last blank row before it (a blank row separates stanzas, so the
+     fourth line after a blank row is a Sapphic stanza's adonic). Same rule as the server's scan route. */
+  const stanzaIndex = (drafts, i) => {
+    let n = 0;
+    for (let k = i - 1; k >= 0 && String(drafts[k] || '').trim(); k--) n++;
+    return n;
+  };
   const templateFor = (metre, lineIndex) => {
     const list = TEMPLATES[metre];
     return list ? list[((lineIndex % list.length) + list.length) % list.length] : null;
@@ -340,5 +347,5 @@
 
   return { fold, matchPrefix, slotAt, squash, TEMPLATES, templateFor, labels, remainders, remainingTemplate, fitsPrefix,
     slotKeyText, slotKey, poolKey, settingsSig, patternOf, optionsFor, reusable, tiered, splitSpill, spillInsert, SSEParser, readSSE, checkBadges,
-    versionsRow, archiveVersion, pacificDay, addCost, todayCost, money, attestWords };
+    versionsRow, archiveVersion, pacificDay, addCost, todayCost, money, attestWords, stanzaIndex };
 });

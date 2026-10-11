@@ -114,6 +114,7 @@ class LineIn(BaseModel):
     greek: str | None = Field(None, max_length=MAX_LINE)
     source: str = "owner"
     note: str = Field("", max_length=2000)
+    stanza_position: int | None = Field(None, ge=0, le=100_000)   # place in the stanza (blank rows reset it)
 
 
 class LinePatch(BaseModel):
@@ -128,6 +129,7 @@ class VersionIn(BaseModel):
     source: str = "owner"
     note: str = Field("", max_length=2000)
     make_current: bool = True
+    stanza_position: int | None = Field(None, ge=0, le=100_000)
 
 
 class VersionPatch(BaseModel):
@@ -163,8 +165,9 @@ def poem_full(poem_id: int):
     return _store_call(store.full, poem_id)
 
 
-def _lint_line(line_id: int, greek: str) -> tuple[dict | None, list | None]:
-    """Scansion and checks for a saved line, with the poem's settings and the line's place in the metre."""
+def _lint_line(line_id: int, greek: str, stanza_position: int | None = None) -> tuple[dict | None, list | None]:
+    """Scansion and checks for a saved line, with the poem's settings and the line's place in the metre: the page's
+    ``stanza_position`` (rows since the last blank row) when given, else the line's position among saved lines."""
     from . import composer_lint
     line = store.get_line(line_id)
     settings = store.get_poem(line["poem_id"])["settings"] or {}
@@ -173,17 +176,18 @@ def _lint_line(line_id: int, greek: str) -> tuple[dict | None, list | None]:
         metre = None
     try:
         result = composer_lint.check(greek, metre_name=metre, dialect=settings.get("dialect") or None,
-                                     author=settings.get("author") or None, line_index=line["position"])
+                                     author=settings.get("author") or None,
+                                     line_index=line["position"] if stanza_position is None else stanza_position)
     except HTTPException as exc:
         return None, [{"id": "settings", "ok": None, "blocking": False, "detail": f"not checked: {exc.detail}"}]
     return {**result["scansion"], "pass": result["pass"], "ms": result["ms"]}, result["checks"]
 
 
-def _new_version(line_id: int, greek: str, source: str, note: str, make_current: bool) -> dict:
+def _new_version(line_id: int, greek: str, source: str, note: str, make_current: bool, stanza_position: int | None = None) -> dict:
     if source not in store.SOURCES:
         raise HTTPException(422, f"source must be one of {', '.join(store.SOURCES)}")
     _store_call(store.get_line, line_id)
-    scansion, checks = _lint_line(line_id, greek)
+    scansion, checks = _lint_line(line_id, greek, stanza_position)
     return _store_call(store.add_version, line_id, greek, source=source, note=note, scansion=scansion, checks=checks,
                        make_current=make_current)
 
@@ -192,7 +196,7 @@ def _new_version(line_id: int, greek: str, source: str, note: str, make_current:
 def add_line(poem_id: int, body: LineIn):
     line = _store_call(store.insert_line, poem_id, body.position)
     if body.greek and body.greek.strip():
-        line["version"] = _new_version(line["id"], body.greek, body.source, body.note, True)
+        line["version"] = _new_version(line["id"], body.greek, body.source, body.note, True, body.stanza_position)
         line["current_version_id"] = line["version"]["id"]
     return line
 
@@ -204,7 +208,7 @@ def patch_line(line_id: int, body: LinePatch):
 
 @router.post("/api/composer/lines/{line_id}/versions", dependencies=owner)
 def add_version(line_id: int, body: VersionIn):
-    return _new_version(line_id, body.greek, body.source, body.note, body.make_current)
+    return _new_version(line_id, body.greek, body.source, body.note, body.make_current, body.stanza_position)
 
 
 @router.patch("/api/composer/versions/{version_id}", dependencies=owner)
@@ -458,6 +462,7 @@ class PoolIn(BaseModel):
     n: int = Field(8, ge=1, le=40)
     ahead_lines: int | None = Field(None, ge=0, le=8)
     mode: str = Field("line", pattern="^(line|words)$")     # whole-line continuations | next words (1-3 words)
+    stanza_position: int | None = Field(None, ge=0, le=100_000)   # the slot's place in its stanza (page: rows since a blank row)
 
 
 def slot_key(line_position, prefix: str, settings: dict | None) -> str:
@@ -475,21 +480,24 @@ def _templates(settings: dict | None) -> list[str]:
     return list(metre.TEMPLATES.get((settings or {}).get("metre") or "", []))
 
 
-def ahead_slots(context: dict, line_position: int, limit: int | None = None) -> list[dict]:
+def ahead_slots(context: dict, line_position: int, limit: int | None = None, stanza_position: int | None = None) -> list[dict]:
     """The empty lines after ``line_position`` to fill in the same batch: the rest of the stanza, at least two lines,
-    at most MELOS_COMPOSER_AHEAD_LINES (default 3). Lines that already hold Greek are skipped."""
+    at most MELOS_COMPOSER_AHEAD_LINES (default 3). Lines that already hold Greek are skipped. ``stanza_position``
+    (release X.3) is the slot's place in its stanza when it differs from the row index (blank rows between stanzas)."""
     templates = _templates(context["settings"])
     if not templates:
         return []
     cap = int(os.environ.get("MELOS_COMPOSER_AHEAD_LINES", "3")) if limit is None else limit
-    count = min(cap, max(len(templates) - 1 - line_position % len(templates), 2))
+    place = line_position if stanza_position is None else stanza_position
+    shift = place - line_position
+    count = min(cap, max(len(templates) - 1 - place % len(templates), 2))
     written = {l["position"]: l for l in context.get("lines") or []}
     out = []
     for p in range(line_position + 1, line_position + 1 + count):
         line = written.get(p)
         if line and (line.get("greek") or "").strip():
             continue
-        out.append({"line_position": p, "caret": 0, "prefix": "", "remaining_template": templates[p % len(templates)],
+        out.append({"line_position": p, "caret": 0, "prefix": "", "remaining_template": templates[(p + shift) % len(templates)],
                     "line_id": line["line_id"] if line else None, "slot_key": slot_key(p, "", context["settings"])})
     return out
 
@@ -516,7 +524,7 @@ async def fill_pool(poem_id: int, body: PoolIn):
     key = slot_key(position, body.prefix, context["settings"])
     slot = {"line_position": caret.get("line_position"), "caret": caret.get("char_offset"), "prefix": body.prefix,
             "remaining_template": body.remaining_template, "line_id": body.line_id, "slot_key": key}
-    ahead = ahead_slots(context, position, body.ahead_lines)
+    ahead = ahead_slots(context, position, body.ahead_lines, body.stanza_position)
     opened = await _open_stream("/pool", {"poem": context, "slot": slot, "ahead": ahead, "n": body.n, "mode": body.mode})
     if isinstance(opened, JSONResponse):
         return opened

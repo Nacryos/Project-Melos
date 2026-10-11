@@ -377,6 +377,18 @@ def test_ahead_slots_skip_written_lines_and_reach_into_the_next_stanza(env):
     assert [a["line_position"] for a in composer_routes.ahead_slots(ctx, 3)] == [4, 5]      # stanza end: two more
     assert composer_routes.ahead_slots({"settings": {"metre": "auto"}, "lines": []}, 0) == []
     assert composer_routes.ahead_slots(ctx, 0, limit=0) == []
+    # Release X.3: row 5 is the first line of a stanza after a blank row (stanza_position 0): the batch covers the
+    # rest of that stanza with the stanza's templates, the adonic at the fourth line.
+    empty = {"settings": {"metre": "sapphic"}, "lines": []}
+    ahead = composer_routes.ahead_slots(empty, 5, stanza_position=0)
+    assert [(a["line_position"], a["remaining_template"]) for a in ahead] == [(6, "-u-x-uu-u-F"), (7, "-u-x-uu-u-F"), (8, "-uu-F")]
+
+
+def test_stanza_positions_restart_after_a_blank_line():
+    from backend.scansion import metre
+    assert metre.stanza_positions([0, 1, 2, 3, 5, 6, 7, 8]) == [0, 1, 2, 3, 0, 1, 2, 3]
+    assert metre.stanza_positions([2, 3, 4, 6]) == [0, 1, 2, 0]
+    assert metre.stanza_positions([]) == []
 
 
 def test_warm_starts_in_the_background_and_stores_every_slot(env, agent):
