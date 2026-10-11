@@ -415,7 +415,42 @@
     return { text: text.slice(0, from) + '{' + text.slice(from, to) + '/}' + text.slice(to), caret: to + 2 };
   }
 
-  return { fold, matchPrefix, slotAt, squash, TEMPLATES, templateFor, labels, remainders, remainingTemplate, fitsPrefix, slots, variants, plain, makeSlot,
+  /* Full export (X.6): one Markdown report of everything the page shows — Greek with alternatives, scansion
+     pattern and syllable probabilities, metre fit, the saved version's checks, per-word attestation verdicts,
+     back-translations and every version. Pure: the page gathers `report`, this renders it. */
+  const fitText = fit => !fit ? '' : fit.ok ? `fits ${String(fit.metre || '').replace(/_/g, ' ')}`
+    : `${String(fit.metre || '').replace(/_/g, ' ')}: ${fit.message || 'does not fit'}${(fit.violations || []).map(x => ` · ${x.text} needs ${x.needs}`).join('')}`;
+  const mark = level => level === 'bad' ? '✗' : level === 'warn' ? '△' : level === 'unknown' ? '?' : '✓';
+  function exportReport(r) {
+    const out = [];
+    out.push(`# ${r.title || 'Untitled poem'}`, '');
+    out.push(`Poet: ${r.settings?.author || '—'} · Metre: ${r.metreLabel || r.settings?.metre || 'none'} · Dialect: ${r.dialectLabel || r.settings?.dialect || 'from the poet'} · Exported ${r.exportedAt || ''}`, '');
+    if (r.english && r.english.trim()) out.push('## English source', '', r.english.trim(), '');
+    out.push('## Poem', '');
+    for (const l of r.lines) out.push(l.greek.trim() ? l.greek : '');
+    out.push('', '## Lines', '');
+    for (const l of r.lines) {
+      if (!l.greek.trim()) { out.push('*(stanza break)*', ''); continue; }
+      out.push(`### ${l.n}. ${l.greek}`, '');
+      if (l.pattern) out.push(`- Scansion: ${l.pattern}${l.stanzaPosition != null ? ` (line ${l.stanzaPosition + 1} of the stanza)` : ''}`);
+      if (l.syllables?.length) out.push(`- Syllables: ${l.syllables.map(x => `${x.text} ${Math.round(x.p_long * 100)}%${x.violation ? '!' : ''}`).join(' | ')}`);
+      if (l.fit) out.push(`- Metre: ${fitText(l.fit)}`);
+      for (const a of l.alternatives || []) out.push(`- Alternative “${a.text}”: ${a.pattern || ''}${a.fit ? ` — ${fitText(a.fit)}` : ''}`);
+      if (l.checks?.length) out.push(`- Checks (saved version): ${l.checks.map(c => `${c.state === 'pass' ? '✓' : c.state === 'fail' ? '✗' : c.state === 'warn' ? '△' : '·'} ${c.title || c.id}`).join('; ')}`);
+      if (l.attestation?.length) { out.push('- Attestation:'); for (const a of l.attestation) out.push(`  - ${mark(a.level)} ${a.form} — ${a.note}`); }
+      if (l.backTranslation) out.push(`- Back-translation: “${l.backTranslation}”`);
+      if (l.state) out.push(`- State: ${l.state}`);
+      if (l.versions?.length > 1 || (l.versions?.length === 1 && l.versions[0].greek !== l.greek)) {
+        out.push('- Versions:');
+        for (const v of l.versions) out.push(`  - ${v.current ? '**current** ' : ''}${v.archived ? '(archived) ' : ''}${v.greek}${v.pattern ? ` · ${v.pattern}` : ''}${v.checks ? ` · ${v.checks}` : ''}${v.backTranslation ? ` · “${v.backTranslation}”` : ''} · ${v.source}${v.when ? ` · ${v.when}` : ''}${v.note ? ` · ${v.note}` : ''}`);
+      }
+      out.push('');
+    }
+    out.push('---', 'Marks: – long, ⏑ short, × anceps, ? undecided; a percentage is the scanner\'s probability that the syllable is long, ! a metre violation. Checks: L7 metre, L1 forms, L2 dialect, L4 attestation, L11 verbatim. Attestation: ✓ printed by the poet or dialect, △ unattested or outside the dialect, ✗ no reading or another dialect spelling. {A/B} marks an alternative reading.', '');
+    return out.join('\n');
+  }
+
+  return { fold, matchPrefix, slotAt, squash, TEMPLATES, templateFor, labels, remainders, remainingTemplate, fitsPrefix, slots, variants, plain, makeSlot, exportReport, fitText,
     slotKeyText, slotKey, poolKey, settingsSig, patternOf, optionsFor, reusable, tiered, splitSpill, spillInsert, SSEParser, readSSE, checkBadges,
     versionsRow, archiveVersion, pacificDay, addCost, todayCost, money, attestWords, stanzaIndex, plainGreek };
 });

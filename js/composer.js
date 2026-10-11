@@ -1221,6 +1221,47 @@
       status(`Copied ${n} line${n === 1 ? '' : 's'} of Greek as plain Unicode text (NFC).`);
     } catch (e) { failed('copy', e); }
   });
+  // ---- full export (X.6): a Markdown report of everything the page shows, downloaded as a file ----------------------------
+  const pacific = t => t ? new Date((t < 1e12 ? t * 1000 : t)).toLocaleString('en-US', { timeZone: 'America/Los_Angeles', month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
+  function fullReport() {
+    const s = settings();
+    const lines = S.rows.map((row, i) => {
+      const live = liveScan(row), v = current(row), saved = v && v.greek === row.draft.trim();
+      const att = attestOf(row), seen = new Set();
+      const attestation = (att?.spans || []).filter(a => !seen.has(a.form) && seen.add(a.form)).map(a => ({ form: a.form, level: a.level, note: a.note }));
+      const versions = (row.line?.versions || []).slice().sort((a, b) => (a.created_at || 0) - (b.created_at || 0) || a.id - b.id).map(x => ({
+        greek: x.greek, source: x.source || 'owner', note: x.note || '', when: pacific(x.created_at), archived: !!x.archived, current: x.id === row.line.current_version_id,
+        pattern: (x.scansion?.lines || []).map(l => l.pattern).join(' | ') + ((x.scansion?.variants || []).slice(1).map(a => ` / ${a.pattern}`).join('')),
+        checks: x.checks ? C.checkBadges(x.checks).map(c => `${c.state === 'pass' ? '✓' : c.state === 'fail' ? '✗' : c.state === 'warn' ? '△' : '·'}${c.id}`).join(' ') : '',
+        backTranslation: x.back_translation || '' }));
+      return { n: i + 1, greek: row.draft, stanzaPosition: row.draft.trim() ? stanzaPos(row) : null, pattern: live?.pattern || '', fit: live?.fit || null,
+        syllables: (live?.units || []).map(u => ({ text: row.draft.slice(u.rs, u.re), p_long: u.p_long, violation: u.violation })),
+        alternatives: (live?.alternatives || []).map(a => ({ text: a.text, pattern: a.pattern, fit: a.fit })),
+        checks: saved && v.checks ? C.checkBadges(v.checks) : [], attestation, backTranslation: v?.back_translation || '',
+        state: row.draft.trim() ? (saved ? `saved · ${v.source}` : v ? 'edited, not saved' : 'not saved') : '', versions };
+    });
+    while (lines.length && !lines.at(-1).greek.trim()) lines.pop();
+    const metre = $('metre'), dialect = $('dialect');
+    return C.exportReport({ title: $('poem-title').value || S.poem?.title || '', settings: s, english: $('english').value,
+      metreLabel: metre.selectedOptions[0]?.textContent || s.metre, dialectLabel: dialect.selectedOptions[0]?.textContent || s.dialect, exportedAt: pacific(Date.now()) + ' PT', lines });
+  }
+  if (!$('full-export')) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'quiet'; b.id = 'full-export'; b.textContent = 'Full export';
+    b.title = 'Download a Markdown report: Greek with alternatives, scansion and syllable probabilities, metre fit, checks, per-word attestation, back-translations, every version';
+    ($('copy-greek') || $('new-poem')).insertAdjacentElement('afterend', b);
+  }
+  $('full-export').addEventListener('click', () => {
+    if (!S.rows.some(r => r.draft.trim())) { status('Nothing to export: the poem has no Greek yet.', true); return; }
+    try {
+      const text = fullReport();
+      const name = (($('poem-title').value || 'poem').trim().replace(/[^\p{L}\p{N}]+/gu, '-').replace(/^-|-$/g, '') || 'poem') + '.md';
+      const url = URL.createObjectURL(new Blob([text], { type: 'text/markdown;charset=utf-8' }));
+      const a = document.createElement('a'); a.href = url; a.download = name; document.body.append(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      status(`Exported ${name} (${text.split('\n').length} lines of Markdown).`);
+    } catch (e) { failed('export', e); }
+  });
   $('english-toggle').addEventListener('click', () => { collapse('english', !$('english-panel').classList.contains('collapsed')); savePrefs(); });
   $('chat-toggle').addEventListener('click', () => { collapse('chat', !$('workspace').classList.contains('chat-collapsed')); savePrefs(); });
   matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => S.rows.forEach(renderBackdrop));

@@ -292,3 +292,22 @@ test('makeSlot: wraps the selection, or the word at the caret, with the caret be
   assert.deepEqual(C.makeSlot('ἄνθεσιν ἶπας.', 10, 10), { text: 'ἄνθεσιν {ἶπας/}.', caret: 14 });
   assert.equal(C.makeSlot('ἄνθεσιν ἶπας.', 13, 13), null);
 });
+
+// X.6: the Full export report.
+test('exportReport: renders Greek, scansion, fit, alternatives, checks, attestation, back-translation and versions', () => {
+  const md = C.exportReport({ title: 'Hymn', settings: { author: 'Sappho', metre: 'sapphic', dialect: 'aeolic' }, metreLabel: 'sapphic stanza (3 + adonic)', dialectLabel: 'Aeolic', exportedAt: 'Oct 10, 2026, 10:00 PM PT', english: 'Pure one',
+    lines: [{ n: 1, greek: 'αἴσιμα {φύλλῳ/ἄνθεσιν}', stanzaPosition: 3, pattern: '–?⏑–?', syllables: [{ text: 'αἴ', p_long: 1, violation: false }, { text: 'σι', p_long: 0.5, violation: true }],
+      fit: { ok: false, metre: 'sapphic', message: '5 syllables', violations: [{ text: 'σι', needs: 'long' }] }, alternatives: [{ text: 'αἴσιμα ἄνθεσιν', pattern: '–⏑⏑–⏑⏑', fit: { ok: true, metre: 'sapphic' } }],
+      checks: [{ id: 'L7', state: 'fail', title: 'metre: 5 syllables' }, { id: 'L1', state: 'pass', title: 'forms: every word has a reading' }],
+      attestation: [{ form: 'φύλλῳ', level: 'ok', note: 'printed 2× by Sappho' }, { form: 'αἴσιμα', level: 'warn', note: 'printed nowhere in the corpus' }],
+      backTranslation: 'fitting things with a leaf', state: 'saved · owner',
+      versions: [{ greek: 'αἴσιμα φύλλῳ', source: 'owner', when: 'Oct 10, 2026, 9:30 PM', archived: false, current: false, pattern: '–?⏑––', checks: '✗L7 ✓L1', backTranslation: 'fated things for a leaf', note: '' },
+        { greek: 'αἴσιμα {φύλλῳ/ἄνθεσιν}', source: 'owner', when: 'Oct 10, 2026, 9:31 PM', archived: false, current: true, pattern: '–?⏑–? / –⏑⏑–⏑⏑', checks: '✗L7 ✓L1', backTranslation: '', note: '' }] },
+      { n: 2, greek: '' }] });
+  for (const needle of ['# Hymn', 'Poet: Sappho · Metre: sapphic stanza (3 + adonic) · Dialect: Aeolic', '## English source', 'Pure one', '### 1. αἴσιμα {φύλλῳ/ἄνθεσιν}',
+    'Scansion: –?⏑–? (line 4 of the stanza)', 'Syllables: αἴ 100% | σι 50%!', 'Metre: sapphic: 5 syllables · σι needs long', 'Alternative “αἴσιμα ἄνθεσιν”: –⏑⏑–⏑⏑ — fits sapphic',
+    'Checks (saved version): ✗ metre: 5 syllables; ✓ forms: every word has a reading', '  - ✓ φύλλῳ — printed 2× by Sappho', '  - △ αἴσιμα — printed nowhere in the corpus',
+    'Back-translation: “fitting things with a leaf”', '**current** αἴσιμα {φύλλῳ/ἄνθεσιν} · –?⏑–? / –⏑⏑–⏑⏑ · ✗L7 ✓L1 · owner · Oct 10, 2026, 9:31 PM', '*(stanza break)*']) {
+    assert.ok(md.includes(needle), `missing: ${needle}`);
+  }
+});

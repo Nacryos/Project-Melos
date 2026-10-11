@@ -54,6 +54,16 @@ sign-in marker cookie (`melos_owner_ui=1`) is present. Signed out, `/composer` i
 | Pop-up | Esc | close (no auto-reopen until the slot changes) |
 | Chat | Enter / Shift+Enter | send / new line |
 
+## Full export (X.6)
+
+The **Full export** button (next to Copy Greek) downloads `<title>.md`, a Markdown report of everything the page shows:
+the poem as typed (alternatives included), then per line the scansion pattern and stanza position, each syllable with
+the scanner's probability of length (and `!` on a metre violation), the metre fit, each alternative's pattern and fit,
+the saved version's check badges with their details, the per-word attestation verdicts (✓ △ ✗ with the note), the
+back-translation, the save state, and every version (current, archived, pattern, checks, back-translation, source,
+Pacific time). Built client-side from the page's own state (`ComposerCore.exportReport`), so it is exactly what is on
+screen; a line's attestation is included once its check has returned.
+
 ## Alternatives in a line (W4)
 
 `{A/B}` marks a slot: A is the line's reading, B (and C…) alternatives; a bare `word/word` with no spaces is a one-word
