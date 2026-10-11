@@ -567,10 +567,10 @@
        the rest of the poem as it is, so the line is still fitted at its place in the stanza). */
     const extra = [];
     parsed.forEach((v, k) => v.variants.slice(1).forEach((variant, j) => extra.push({ k, j, variant, text: lines.map((l, i) => i === k ? variant.text : l).join('\n') })));
-    const unitsOf = (res, lineText, k, map) => {
+    const unitsOf = (res, lineText, k, map, fitIndex) => {   // k = text line number; fit is indexed by non-blank line
       const starts = [0];
       for (let i = 0; i < lineText.length; i++) if (lineText[i] === '\n') starts.push(i + 1);
-      const bad = new Set((res.fit?.[k]?.violations || []).map(v => v.syllable));
+      const bad = new Set((res.fit?.[fitIndex]?.violations || []).map(v => v.syllable));
       return (res.units || []).filter(u => u.line === k).map(u => {
         const s = starts[k], rs = u.start - s, re = u.end - s, ns = u.nucleus[0] - s;
         return { ...u, rs: map[rs] ?? rs, re: (map[re - 1] ?? (re - 1)) + 1, ns: map[ns] ?? ns, violation: bad.has(u.i) };
@@ -584,7 +584,7 @@
       (res.lines || []).forEach((l, k) => {
         const p = parsed[l.line];
         byIndex.set(l.line, { text: raw[l.line], roles: p.roles, slots: p.slots, pattern: l.pattern, fit: res.fit?.[k],
-          units: unitsOf(res, text, l.line, p.variants[0].map), alternatives: [] });
+          units: unitsOf(res, text, l.line, p.variants[0].map, k), alternatives: [] });
       });
       extra.forEach((x, n) => {
         const r = more[n], entry = byIndex.get(x.k);
@@ -594,7 +594,7 @@
         const own = new Set();
         x.variant.choice.forEach((c, i) => { if (c) { const a = entry.slots[i].alts[c]; for (let q = a.start; q < a.end; q++) own.add(q); } });
         entry.alternatives.push({ text: x.variant.text, pattern: l?.pattern, fit: r.fit?.[fitIndex],
-          units: unitsOf(r, x.text, x.k, x.variant.map).filter(u => own.has(u.rs)) });
+          units: unitsOf(r, x.text, x.k, x.variant.map, fitIndex).filter(u => own.has(u.rs)) });
       });
       S.scan = { seq, text, res, byIndex };
       scheduleAttest();
