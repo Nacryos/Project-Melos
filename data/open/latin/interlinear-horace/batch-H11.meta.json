@@ -1,0 +1,19 @@
+{
+ "batch": "H11",
+ "work": "odes",
+ "poems": [
+  "3.24",
+  "3.25",
+  "3.26",
+  "3.27",
+  "3.28"
+ ],
+ "lines": 188,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "written_by": "the coordinator session inline (the subagent launch was refused by the harness)",
+ "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+ "convention": "literal line-by-line, as in the Horace batch briefs (rules 1-7)",
+ "reasoning_summary": "Written inline by the coordinator session. Hyperbata left as fragments with notes naming the agreeing word (3.24 tuis/caementis, adamantinos/clavos, liberas/fruges, dotata/coniunx, metuens/castitas, horrida/aequora; 3.27 ater/sinus, caecos/motus, niveum/latus, decentis/malas, erile/pensum, tua/nomina). Negatives kept in place (3.24.7-8 non ... non, 3.24.19-20 nec ... nec, 3.24.36-38 neque ... nec, 3.27.15-16 nec ... nec). Moods kept: licet occupes, sis licet, iubeas/malis, dedat, utinam errem, abstineto. Supplied words noted (him 3.24.57, me 3.27.40, her 3.27.66). 3.27.15 laevos read as the old spelling of laevus. 3.27.76 sectus orbis tua nomina ducet kept literal with the sense in the note. Names as in the Latin (Euhias, Lenaeus, Auster, Hadria, Iapyx, Orcus); Iovis rendered Jove as in the other batches."
+}
