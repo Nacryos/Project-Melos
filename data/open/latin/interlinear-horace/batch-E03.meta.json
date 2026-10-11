@@ -1,0 +1,12 @@
+{
+  "batch": "E03",
+  "work": "epodes+carmen-saeculare",
+  "poems": ["13", "14", "15", "16", "17", "carmen-saeculare"],
+  "lines": 281,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-horace/poems.jsonl (Epodes: Vollmer 1912; Carmen Saeculare: Shorey & Laing 1919; via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line (rules 1-6)",
+  "reasoning_summary": "Hyperbata that run across lines are kept as fragments with the agreeing word and line noted rather than moved: Ep. 13.7-8 benigna ... vice, 13.13-14 frigida/parvi ... flumina/Scamandri, 14.1-2 tantam/imis ... oblivionem/sensibus, 15.17-18 meo ... malo, 16.23-24 secunda ... alite (rendered 'favourable ... bird' with the omen explained), 16.25-26 imis ... vadis, 16.53-54 largis ... imbribus, 17.11-12 feris ... alitibus, 17.15-17 saetosa ... membra, 17.31-33 atro ... cruore and Sicana fervida ... flamma, 17.50-51 tuo ... cruore, 17.68-69 supremo ... monte; CS 11-12 nihil ... maius, 17-19 iugandis ... feminis, 21-22 certus ... orbis, 23-24 grata ... nocte, 26-27 stabilis ... terminus, 37-38 Iliae ... turmae, 51-52 iacentem ... hostem, 59-60 pleno ... cornu, 71-72 amicas ... aures. Ep. 16.9 inpia ... aetas is apposition to 'we', with 'her' (Rome) supplied and noted. Moods and tenses kept: the reported oath of Ep. 15.7-10 as 'should trouble ... would be', future perfects (15.16 intrarit, 15.24 risero, 16.28-30, 17.38 poposceris) as 'shall have', the deliberative plorem governing the relative possim of Ep. 17.76-81 ('Or should I, who could ... lament'), the indignant perfect subjunctives of 17.56-59, future imperative levato at 13.17. Idioms rendered literally and glossed: dare manus (surrender), ad umbilicum adducere (finish the scroll), in verba iurare, est + infinitive (it is possible), Ep. 17.50 'your belly is Pactumeius' (her supposed child), cererem (grain, lower case as in source). Ambiguities noted, not resolved silently: CS 66 felix (with Latium or lustrum), Ep. 16.52 alta (high or deep). Names kept in Latin form (Ulixes, Aquilo, Notus, Africus, Eurus, Camenae, Luna); Circa explained as the ablative of Circe. The taunts in Ep. 17 (amata nautis multum et institoribus, the feigned childbirth) are rendered plainly with their sense in the note. Source quotation marks and parentheses kept; the source's odd capitals (Subtemine, Sollicitudinibus, Saepe) are noted where meaningful."
+}
