@@ -17,6 +17,7 @@ n-gram data is missing on this deployment) and never blocks then. A candidate pa
 from __future__ import annotations
 
 import os
+import re
 import threading
 import time
 from concurrent.futures import Future, ThreadPoolExecutor, TimeoutError as FutureTimeout
@@ -445,9 +446,81 @@ def _unavailable(check_id: str, name: str, exc: Exception) -> dict:
     return {"id": check_id, "name": name, "ok": None, "blocking": False, "detail": f"not run: {reason}", "evidence": []}
 
 
+# ----------------------------------------------------------------------------------------------- alternatives (W4)
+# {A/B} marks a slot whose first reading A is the line and B (C, …) are alternatives; a bare word/word with no spaces
+# is a one-word slot. Mirrors ComposerCore.variants in js/composer-core.js: every variant is checked, and a check
+# passes only when it passes for every variant, so the line and each alternative scan.
+SLOT_RE = re.compile(r"\{([^{}]*)\}|(?<![^\s])([^\s{}/.,·;:!?]+(?:/[^\s{}/.,·;:!?]+)+)")
+MAX_VARIANTS = 4
+
+
+def expand_variants(text: str) -> list[str]:
+    slots = []
+    for m in SLOT_RE.finditer(text):
+        inner, braced = (m.group(1), True) if m.group(1) is not None else (m.group(2), False)
+        alts = inner.split("/")
+        if len(alts) > 1 or braced:
+            slots.append((m.start(), m.end(), alts))
+    if not slots:
+        return [text]
+    choices = [()]
+    for _, _, alts in slots:
+        choices = sorted((c + (k,) for c in choices for k in range(len(alts))), key=sum)[:MAX_VARIANTS]
+    out = []
+    for choice in choices:
+        parts, pos = [], 0
+        for (start, end, alts), k in zip(slots, choice):
+            parts.append(text[pos:start] + alts[k])
+            pos = end
+        parts.append(text[pos:])
+        out.append("".join(parts))
+    return out
+
+
+def plain_text(text: str) -> str:
+    """The first reading, also for a prefix cut inside a slot ("…{ἶπας/ἰοι" → "…ἶπας")."""
+    open_at = text.rfind("{")
+    if open_at >= 0 and text.find("}", open_at) < 0:
+        head, rest = expand_variants(text[:open_at])[0], text[open_at + 1:]
+        return head + rest.split("/", 1)[0]
+    return expand_variants(text)[0]
+
+
+def _merge_variant_results(results: list[dict], texts: list[str]) -> dict:
+    label = lambda i: "line" if i == 0 else f"alt {i}"
+    checks = []
+    for c in results[0]["checks"]:
+        peers = [(i, next((x for x in r["checks"] if x["id"] == c["id"]), None)) for i, r in enumerate(results)]
+        peers = [(i, x) for i, x in peers if x is not None]
+        oks = [x["ok"] for _, x in peers]
+        ok = False if any(o is False for o in oks) else (None if any(o is None for o in oks) else True)
+        details = [x["detail"] for _, x in peers]
+        detail = details[0] if len(set(details)) == 1 else "; ".join(f"{label(i)}: {x['detail']}" for i, x in peers)
+        checks.append({**c, "ok": ok, "detail": detail,
+                       "evidence": [e for _, x in peers for e in (x.get("evidence") or [])]})
+    scansion = dict(results[0]["scansion"])
+    scansion["variants"] = [{"text": t, "pass": r["pass"], "pattern": " | ".join(x["pattern"] for x in r["scansion"]["lines"])}
+                            for t, r in zip(texts, results)]
+    ms = {"total": round(sum(r["ms"]["total"] for r in results), 1)}
+    return {"pass": all(r["pass"] for r in results), "scansion": scansion, "checks": checks,
+            "budget_ms": results[0]["budget_ms"], "ms": ms, "variants": len(results)}
+
+
 def check(greek: str, *, metre_name: str | None = None, dialect: str | None = None, author: str | None = None,
           remaining_template: str | None = None, prefix: str | None = None, line_index: int = 0,
           require_template: bool = False) -> dict:
+    """The bank over every variant of ``greek`` (alternatives in {A/B} slots): one result, each check passing only
+    when it passes for every variant. ``prefix`` is reduced to its first reading."""
+    texts = expand_variants(greek)
+    lead = plain_text(prefix) if prefix else prefix
+    results = [_check_one(t, metre_name=metre_name, dialect=dialect, author=author, remaining_template=remaining_template,
+                          prefix=lead, line_index=line_index, require_template=require_template) for t in texts]
+    return results[0] if len(results) == 1 else _merge_variant_results(results, texts)
+
+
+def _check_one(greek: str, *, metre_name: str | None = None, dialect: str | None = None, author: str | None = None,
+               remaining_template: str | None = None, prefix: str | None = None, line_index: int = 0,
+               require_template: bool = False) -> dict:
     """Run the bank on one candidate within the latency budget. ``prefix`` is the current line before the caret
     (scanned with the candidate so word-boundary quantities are right; only the candidate's syllables are
     fitted). ``require_template`` (the agent's candidates): without remaining_template or a concrete metre the

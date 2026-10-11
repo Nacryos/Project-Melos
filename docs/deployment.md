@@ -62,6 +62,13 @@ runtime files) plus 6 new passing tests; frontend suite: the 3 pre-existing fail
 **Rollback:** `sh /home/alvin/melos-x/src/deploy/release_x.sh rollback` (restarts the kept W container with W's mounts),
 then `vercel promote https://project-melos-3x7dy1p8g-nacryos-projects.vercel.app --yes`. Never push to `main`.
 
+## Frontend-only redeploy: composer keyboard shortcuts (2026-10-10, ~8:30 PM PDT)
+
+Commit 94a9fac on `composer-w`: ⌘S / Ctrl+S toggles Greek/English typing from a line; ⌘A selects every line of the poem
+(board tinted) and ⌘C / Edit → Copy copies all lines newline-joined; cache keys bumped to `release-w2`. Deployed from
+`~/Projects/melos-v` with `vercel deploy --prod --yes --build-env MELOS_READER_ONLY=1` → `project-melos-hzy9cv3gh`
+(aliased greeklyric.com). Backend unchanged. Rollback: `vercel promote https://project-melos-3x7dy1p8g-nacryos-projects.vercel.app --yes`.
+
 ## Current: release W — owner-only composer with the Fable 5.1 agent (2026-10-10, ~1:25 AM PDT)
 
 Public backend: image `melos-api:20261010w` (code layer atop `melos-api:20261009u`, built from `composer-w` 0300f1e on

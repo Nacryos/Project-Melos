@@ -354,7 +354,68 @@
     return out;
   }
 
-  return { fold, matchPrefix, slotAt, squash, TEMPLATES, templateFor, labels, remainders, remainingTemplate, fitsPrefix,
+  // ---- alternatives (W4): {A/B} marks a slot whose first reading A is the line and B (C, …) are alternatives; a bare
+  // word/word with no spaces is a one-word slot. Every variant is scanned and linted; the page shows A, with B dimmed.
+  const SLOT_RE = /\{([^{}]*)\}|(?<![^\s])([^\s{}\/.,·;:!?]+(?:\/[^\s{}\/.,·;:!?]+)+)/gu;
+  const MAX_VARIANTS = 4;
+  function slots(text) {
+    const out = [];
+    for (const m of text.matchAll(SLOT_RE)) {
+      const inner = m[1] !== undefined ? m[1] : m[2], braced = m[1] !== undefined;
+      const start = m.index, end = start + m[0].length;
+      const alts = [];
+      let at = start + (braced ? 1 : 0);
+      for (const part of inner.split('/')) { alts.push({ text: part, start: at, end: at + part.length }); at += part.length + 1; }
+      if (alts.length > 1 || braced) out.push({ start, end, alts });
+    }
+    return out;
+  }
+  /* Variants of a line: [{text, map, choice}] with map[i] = index in the raw text of the variant's i-th character;
+     variant 0 takes the first reading of every slot. roles[i] for the raw text: 'b' base, 'a' alternative, 'm' markup. */
+  function variants(text) {
+    const sl = slots(text);
+    const roles = new Array(text.length).fill('b');
+    for (const s of sl) {
+      for (let i = s.start; i < s.end; i++) roles[i] = 'm';
+      s.alts.forEach((a, k) => { for (let i = a.start; i < a.end; i++) roles[i] = k ? 'a' : 'b'; });
+    }
+    const choices = [[]];
+    for (const s of sl) {
+      const next = [];
+      for (const c of choices) for (let k = 0; k < s.alts.length; k++) next.push([...c, k]);
+      choices.splice(0, choices.length, ...next.sort((x, y) => x.reduce((n, v) => n + v, 0) - y.reduce((n, v) => n + v, 0)).slice(0, MAX_VARIANTS));
+    }
+    const out = choices.map(choice => {
+      let t = '', map = [], pos = 0;
+      sl.forEach((s, j) => {
+        for (let i = pos; i < s.start; i++) { t += text[i]; map.push(i); }
+        const a = s.alts[choice[j]];
+        for (let i = a.start; i < a.end; i++) { t += text[i]; map.push(i); }
+        pos = s.end;
+      });
+      for (let i = pos; i < text.length; i++) { t += text[i]; map.push(i); }
+      return { text: t, map, choice };
+    });
+    return { slots: sl, roles, variants: out };
+  }
+  /* The first reading of a text, also for a prefix cut inside a slot ("…{ἶπας/ἰοι" → "…ἶπας"). */
+  function plain(text) {
+    const open = text.lastIndexOf('{');
+    if (open >= 0 && text.indexOf('}', open) < 0) {
+      const head = variants(text.slice(0, open)).variants[0].text, rest = text.slice(open + 1);
+      const cut = rest.indexOf('/');
+      return head + (cut < 0 ? rest : rest.slice(0, cut));
+    }
+    return variants(text).variants[0].text;
+  }
+  /* Wrap [from, to) of a line as a slot with an empty alternative; the caret goes before the closing brace. */
+  function makeSlot(text, from, to) {
+    if (from === to) { while (from > 0 && !/[\s{}\/.,·;:!?]/.test(text[from - 1])) from--; while (to < text.length && !/[\s{}\/.,·;:!?]/.test(text[to])) to++; }
+    if (from === to) return null;
+    return { text: text.slice(0, from) + '{' + text.slice(from, to) + '/}' + text.slice(to), caret: to + 2 };
+  }
+
+  return { fold, matchPrefix, slotAt, squash, TEMPLATES, templateFor, labels, remainders, remainingTemplate, fitsPrefix, slots, variants, plain, makeSlot,
     slotKeyText, slotKey, poolKey, settingsSig, patternOf, optionsFor, reusable, tiered, splitSpill, spillInsert, SSEParser, readSSE, checkBadges,
     versionsRow, archiveVersion, pacificDay, addCost, todayCost, money, attestWords, stanzaIndex, plainGreek };
 });

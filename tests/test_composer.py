@@ -639,3 +639,28 @@ def test_unsaved_drafts_persist_on_the_poem_and_reach_the_agent_context(env):
     # Shape is enforced: unknown keys, over-long drafts and too many rows are refused.
     for bad in ([{"draft": "x", "extra": 1}], [{"draft": "x" * 4001}], [{"draft": "x"}] * 401):
         assert c.patch(f"/api/composer/poems/{pid}", json={"drafts": bad}, headers={"Origin": ORIGIN}).status_code == 422
+
+
+# ---- W4: alternatives in a line ({A/B} slots), mirrored in js/composer-core.js --------------------------------------
+
+def test_expand_variants_mirrors_the_page():
+    assert composer_lint.expand_variants("ἄνθεσιν {ἶπας/ἰοισιν}. καὶ ὄρος/ὄρη") == [
+        "ἄνθεσιν ἶπας. καὶ ὄρος", "ἄνθεσιν ἶπας. καὶ ὄρη", "ἄνθεσιν ἰοισιν. καὶ ὄρος", "ἄνθεσιν ἰοισιν. καὶ ὄρη"]
+    assert composer_lint.expand_variants("ἄνθεσιν ἶπας") == ["ἄνθεσιν ἶπας"]
+    assert composer_lint.expand_variants("http://x") == ["http://x"]
+    assert len(composer_lint.expand_variants("{a/b} {c/d/e}")) == composer_lint.MAX_VARIANTS
+    assert composer_lint.plain_text("ἄνθεσιν {ἶπας/ἰοι") == "ἄνθεσιν ἶπας"
+    assert composer_lint.plain_text("{a/b} {c/d}") == "a c"
+
+
+def test_check_lints_every_variant_and_passes_only_when_all_do():
+    ok = composer_lint.check("ποικιλόθρον’ ἀθανάτ’ {Ἀφρόδιτα/Ἀφροδίτα}", metre_name="sapphic")
+    assert ok["variants"] == 2 and len(ok["scansion"]["variants"]) == 2
+    assert ok["scansion"]["variants"][0]["text"] == "ποικιλόθρον’ ἀθανάτ’ Ἀφρόδιτα"
+    l7 = next(c for c in ok["checks"] if c["id"] == "L7")
+    assert l7["ok"] is True
+    short = composer_lint.check("ποικιλόθρον’ ἀθανάτ’ {Ἀφρόδιτα/Κύπρι}", metre_name="sapphic")
+    l7 = next(c for c in short["checks"] if c["id"] == "L7")
+    assert l7["ok"] is False and "alt 1:" in l7["detail"] and short["pass"] is False
+    one = composer_lint.check("ποικιλόθρον’ ἀθανάτ’ Ἀφρόδιτα", metre_name="sapphic")
+    assert "variants" not in one

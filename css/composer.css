@@ -56,8 +56,8 @@ html, body { overflow-x: hidden; }
 
 .u { position: relative; border-radius: 3px; }
 .board.bars .u.b::before {
-  content: ""; position: absolute; left: -1px; top: .14em; bottom: .04em; width: 1.5px;
-  background: var(--ink); opacity: .4; border-radius: 1px;
+  content: ""; position: absolute; left: -0.5px; top: .14em; bottom: .04em; width: 1px;
+  background: var(--ink); opacity: .35;   /* a thin marking, not a wall (owner, 2026-10-10) */
 }
 .u.violation { text-decoration: underline wavy var(--fail); text-underline-offset: .32em; text-decoration-thickness: 2px; }
 /* Release X.3: attestation of the typed spelling against the corpus (independent of the metre wave). */
@@ -69,6 +69,13 @@ html, body { overflow-x: hidden; }
 .line-info .attest .note { color: var(--muted); }
 .att-note { margin-top: 4px; font-size: .86em; }
 .u.sel { outline: 2px solid var(--sea); outline-offset: 1px; }
+/* Alternatives (W4): {A/B} markup dimmed, the alternative reading at 80 % */
+.backdrop .mark { opacity: .35; }
+.backdrop .alt, .backdrop .u.alt { opacity: .8; }
+.line-info .altfit { opacity: .8; }
+.altchip { position: absolute; z-index: 30; padding: 3px 9px; border: 1px solid var(--sea); border-radius: 4px; background: var(--canvas-bg); color: var(--sea);
+  font: .78rem/1.4 system-ui, sans-serif; cursor: pointer; box-shadow: 0 4px 14px rgb(0 0 0 / .18); }
+.altchip:hover { background: var(--sea); color: #fff; }
 .u .pct { display: none; }
 .board.pct .u .pct {
   display: block; position: absolute; left: 50%; top: 100%; transform: translate(-50%, -.35em);
@@ -176,6 +183,7 @@ html, body { overflow-x: hidden; }
 .board { border: 1px solid var(--line); background: var(--canvas-bg); padding: 6px 0; }
 .line { padding: 0 12px 2px 0; border-left: 2px solid transparent; transition: border-color .15s ease; }
 .line.active { border-left-color: var(--sea); }
+.board.select-all .line-canvas { background: rgb(43 90 135 / .18); }   /* ⌘A: the whole poem is selected */
 .line-main { display: flex; align-items: flex-start; gap: 6px; }
 .line .n { flex: 0 0 2.2em; text-align: right; padding-top: .95em; color: var(--muted); font: .78rem/1 system-ui, sans-serif; user-select: none; }
 .line-canvas { flex: 1 1 auto; min-width: 0; border: 0; background: transparent; }

@@ -83,7 +83,7 @@
     scan: { seq: 0, text: null, res: null, byIndex: new Map() },
     pools: new Map(), fills: new Map(), prefixScans: new Map(),
     popup: { open: false, row: null, index: 0, options: [], auto: false, dismissed: null },
-    analysis: new Map(), pending: new Set(), selected: null, chatStream: null, showArchived: new Set(),
+    analysis: new Map(), pending: new Set(), selected: null, chatStream: null, showArchived: new Set(), selectAll: false,
     attest: new Map(), attestPending: new Set(),
   };
   const settings = () => ({ author: $('author').value, metre: $('metre').value, dialect: $('dialect').value });
@@ -122,7 +122,7 @@
     const b = $('mode');
     b.setAttribute('aria-pressed', String(mode === 'greek'));
     b.textContent = mode === 'greek' ? 'Αα Greek' : 'Aa English';
-    b.title = `Typing ${mode === 'greek' ? 'Greek (TypeGreek rules)' : 'English'} — Ctrl+\` to switch`;
+    b.title = `Typing ${mode === 'greek' ? 'Greek (TypeGreek rules)' : 'English'} — ⌘S / Ctrl+S (or Ctrl+\`) to switch`;
     syncingMode = false;
   }
   $('mode').addEventListener('mousedown', e => e.preventDefault());
@@ -305,6 +305,12 @@
   }
   function keydown(row, e) {
     if (e.isComposing) return;
+    const cmd = (e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey, k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (cmd && k === 's') { e.preventDefault(); setMode(mode === 'greek' ? 'english' : 'greek'); return; }   // ⌘S / Ctrl+S: Greek ↔ English typing
+    if (cmd && k === 'a') { e.preventDefault(); selectAllLines(row); return; }                               // ⌘A: every line of the poem
+    if (cmd && k === 'c' && S.selectAll) { e.preventDefault(); copyAllLines(); return; }                   // ⌘C with the poem selected
+    if (cmd && (k === '/' || e.code === 'Slash')) { e.preventDefault(); makeAlternative(row); return; }   // ⌘/: an alternative for the selection
+    if (S.selectAll && !['Meta', 'Control', 'Shift', 'Alt'].includes(e.key)) clearSelectAll();
     const pop = S.popup;
     if (pop.open && pop.row === row) {
       if (e.key === 'Escape') { e.preventDefault(); pop.dismissed = slotKeyOf(row); closePopup(); return; }
@@ -325,6 +331,50 @@
       if (next) { e.preventDefault(); closePopup(); focusRow(next, row.el.ta.selectionStart); }
     }
   }
+  // ---- alternatives (W4): select Greek in a line and press ⌘/ (or the chip) → {selection/} with the caret before the
+  // brace; type the alternative. Both readings are scanned and linted; the alternative shows dimmed after the slash.
+  const altchip = $('altchip');
+  function makeAlternative(row) {
+    const ta = row.el.ta, r = C.makeSlot(row.draft, ta.selectionStart, ta.selectionEnd);
+    altchip.hidden = true;
+    if (!r) return;
+    ta.value = r.text;
+    ta.setSelectionRange(r.caret, r.caret);
+    row.ime?.sync?.();
+    edited(row, r.text);
+  }
+  function showAltChip(row) {
+    const ta = row.el.ta;
+    if (S.selectAll || ta.selectionStart === ta.selectionEnd || !ta.value.slice(ta.selectionStart, ta.selectionEnd).trim()) { altchip.hidden = true; return; }
+    const box = row.el.canvas.getBoundingClientRect();
+    altchip.hidden = false;
+    altchip.style.left = `${box.left + Math.min(box.width - 150, 40 + (ta.selectionEnd / Math.max(1, ta.value.length)) * box.width * 0.6)}px`;
+    altchip.style.top = `${box.bottom + 2 + scrollY}px`;
+    altchip.onclick = () => { makeAlternative(row); ta.focus({ preventScroll: true }); };
+  }
+  document.addEventListener('selectionchange', () => { const row = S.active; if (row?.el && document.activeElement === row.el.ta) showAltChip(row); else altchip.hidden = true; });
+  altchip.addEventListener('mousedown', e => e.preventDefault());
+
+  // ---- whole-poem selection: ⌘A in a line selects every Greek line, ⌘C (or Edit → Copy) copies them joined by newlines
+  function poemText() { const lines = S.rows.map(r => r.draft); while (lines.length && !lines.at(-1).trim()) lines.pop(); return lines.join('\n'); }
+  function selectAllLines(row) {
+    S.selectAll = true;
+    board.classList.add('select-all');
+    for (const r of S.rows) if (r.el) r.el.ta.setSelectionRange(0, r.el.ta.value.length);
+    closePopup();
+  }
+  function clearSelectAll() { if (!S.selectAll) return; S.selectAll = false; board.classList.remove('select-all'); }
+  async function copyAllLines() {
+    const text = poemText();
+    try { await navigator.clipboard.writeText(text); }
+    catch (e) {
+      const t = document.createElement('textarea'); t.value = text; t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e2) { /* nothing more to try */ } t.remove();
+      S.active?.el.ta.focus({ preventScroll: true });
+    }
+  }
+  document.addEventListener('copy', e => { if (!S.selectAll || !e.clipboardData) return; e.preventDefault(); e.clipboardData.setData('text/plain', poemText()); });
+  document.addEventListener('pointerdown', () => clearSelectAll());
   function caretMoved(row) {
     const here = slotKeyOf(row);
     for (const f of S.fills.values()) if (f.row === row && f.slot !== here) abortFill(f.key);   // the owner left that slot
@@ -480,9 +530,11 @@
     const v = current(row);
     const saved = v && v.greek === row.draft.trim();
     const parts = [];
+    const fitHtml = fit => fit.ok ? `<span class="ok">fits ${esc(fit.metre.replace(/_/g, ' '))}</span>`
+      : `<span class="bad">${esc(fit.metre.replace(/_/g, ' '))}: ${esc(fit.message)}${(fit.violations || []).map(x => ` · ${esc(x.text)} needs ${esc(x.needs)}`).join('')}</span>`;
     if (live?.pattern) parts.push(`<span class="pattern">${esc(live.pattern)}</span>`);
-    if (live?.fit) parts.push(live.fit.ok ? `<span class="ok">fits ${esc(live.fit.metre.replace(/_/g, ' '))}</span>`
-      : `<span class="bad">${esc(live.fit.metre.replace(/_/g, ' '))}: ${esc(live.fit.message)}${(live.fit.violations || []).map(x => ` · ${esc(x.text)} needs ${esc(x.needs)}`).join('')}</span>`);
+    if (live?.fit) parts.push(fitHtml(live.fit));
+    for (const a of live?.alternatives || []) parts.push(`<span class="altfit" title="${esc(a.text)}">/ ${a.pattern ? `<span class="pattern">${esc(a.pattern)}</span> ` : ''}${a.fit ? fitHtml(a.fit) : ''}</span>`);
     const att = attestOf(row);
     if (att && att.spans.length) {
       const flagged = att.spans.filter(s => s.level === 'warn' || s.level === 'bad');
@@ -506,27 +558,44 @@
   }
   async function scan() {
     clearTimeout(scanTimer);
-    const lines = S.rows.map(r => r.draft), text = lines.join('\n'), seq = ++S.scan.seq;
+    const raw = S.rows.map(r => r.draft), parsed = raw.map(t => C.variants(t)), lines = parsed.map(v => v.variants[0].text);
+    const text = lines.join('\n'), seq = ++S.scan.seq;
     if (!text.trim()) { S.scan = { seq, text, res: null, byIndex: new Map() }; S.rows.forEach(r => { renderBackdrop(r); renderInfo(r); }); return; }
     const m = $('metre').value || null;
-    try {
-      const r = await request('POST', '/api/scan', { text, lexicon: true, dialect: scanDialect(), metre: m === 'none' ? null : m });
-      const res = await r.json();
-      if (seq !== S.scan.seq) return;
+    const body = t => ({ text: t, lexicon: true, dialect: scanDialect(), metre: m === 'none' ? null : m });
+    /* One scan of the poem in its first readings, plus one per alternative variant of a line (that line swapped in,
+       the rest of the poem as it is, so the line is still fitted at its place in the stanza). */
+    const extra = [];
+    parsed.forEach((v, k) => v.variants.slice(1).forEach((variant, j) => extra.push({ k, j, variant, text: lines.map((l, i) => i === k ? variant.text : l).join('\n') })));
+    const unitsOf = (res, lineText, k, map) => {
       const starts = [0];
-      for (let i = 0; i < text.length; i++) if (text[i] === '\n') starts.push(i + 1);
-      const byIndex = new Map(), bad = new Set();
-      (res.lines || []).forEach((l, k) => {
-        const fit = res.fit?.[k];
-        (fit?.violations || []).forEach(v => bad.add(v.syllable));
-        byIndex.set(l.line, { text: lines[l.line], pattern: l.pattern, fit, units: [] });
+      for (let i = 0; i < lineText.length; i++) if (lineText[i] === '\n') starts.push(i + 1);
+      const bad = new Set((res.fit?.[k]?.violations || []).map(v => v.syllable));
+      return (res.units || []).filter(u => u.line === k).map(u => {
+        const s = starts[k], rs = u.start - s, re = u.end - s, ns = u.nucleus[0] - s;
+        return { ...u, rs: map[rs] ?? rs, re: (map[re - 1] ?? (re - 1)) + 1, ns: map[ns] ?? ns, violation: bad.has(u.i) };
       });
-      for (const u of res.units || []) {
-        const entry = byIndex.get(u.line);
-        if (!entry) continue;
-        const s = starts[u.line];
-        entry.units.push({ ...u, rs: u.start - s, re: u.end - s, ns: u.nucleus[0] - s, violation: bad.has(u.i) });
-      }
+    };
+    try {
+      const [res, ...more] = await Promise.all([request('POST', '/api/scan', body(text)).then(r => r.json()),
+        ...extra.map(x => request('POST', '/api/scan', body(x.text)).then(r => r.json()).catch(() => null))]);
+      if (seq !== S.scan.seq) return;
+      const byIndex = new Map();
+      (res.lines || []).forEach((l, k) => {
+        const p = parsed[l.line];
+        byIndex.set(l.line, { text: raw[l.line], roles: p.roles, slots: p.slots, pattern: l.pattern, fit: res.fit?.[k],
+          units: unitsOf(res, text, l.line, p.variants[0].map), alternatives: [] });
+      });
+      extra.forEach((x, n) => {
+        const r = more[n], entry = byIndex.get(x.k);
+        if (!r || !entry) return;
+        const l = (r.lines || []).find(y => y.line === x.k), fitIndex = (r.lines || []).indexOf(l);
+        /* Units of the alternative's own words only (those whose raw start sits in a reading this variant chose). */
+        const own = new Set();
+        x.variant.choice.forEach((c, i) => { if (c) { const a = entry.slots[i].alts[c]; for (let q = a.start; q < a.end; q++) own.add(q); } });
+        entry.alternatives.push({ text: x.variant.text, pattern: l?.pattern, fit: r.fit?.[fitIndex],
+          units: unitsOf(r, x.text, x.k, x.variant.map).filter(u => own.has(u.rs)) });
+      });
       S.scan = { seq, text, res, byIndex };
       scheduleAttest();
       status(`${(res.units || []).length} syllables · ${res.ms} ms${res.lexicon ? '' : ' · without the vowel-length lexicon'}${res.auto?.length ? ' · detected: ' + res.auto.slice(0, 3).map(a => `${a.metre.replace(/_/g, ' ')} (${a.lines_fitting}/${a.lines})`).join(', ') : ''}`);
@@ -538,16 +607,24 @@
   const liveScan = row => { const e = S.scan.byIndex.get(rowIndex(row)); return e && e.text === row.draft ? e : null; };
   function renderBackdrop(row) {
     if (!row.el) return;
-    const line = row.draft, units = liveScan(row)?.units || [], li = rowIndex(row);
+    const line = row.draft, live = liveScan(row), li = rowIndex(row);
+    const roles = live?.roles || C.variants(line).roles;
+    const units = [...(live?.units || []), ...(live?.alternatives || []).flatMap(a => a.units)].sort((a, b) => a.rs - b.rs);
+    /* Plain text between syllables, with markup braces and slashes dimmed and alternative readings at 80 %. */
+    const plainHtml = (from, to) => {
+      let out = '';
+      for (let i = from; i < to;) { let j = i; while (j < to && roles[j] === roles[i]) j++; const t = esc(line.slice(i, j)); out += roles[i] === 'b' ? t : `<span class="${roles[i] === 'm' ? 'mark' : 'alt'}">${t}</span>`; i = j; }
+      return out;
+    };
     let html = '', pos = 0, first = true;
     for (const u of units) {
       if (u.rs < pos || u.re > line.length) continue;
-      if (u.rs > pos) html += esc(line.slice(pos, u.rs));
-      const p = u.p_long, c = rgb(p);
-      html += `<span class="u${first ? '' : ' b'}${u.violation ? ' violation' : ''}${attClass(row, u.rs)}${S.selected === `${li}:${u.rs}` ? ' sel' : ''}" data-line="${li}" data-rs="${u.rs}" data-ns="${u.ns}" data-i="${u.i}" style="color:rgb(${c});background:rgba(${c},.06)">${esc(line.slice(u.rs, u.re))}<span class="pct">${Math.round(p * 100)}%</span></span>`;
+      if (u.rs > pos) html += plainHtml(pos, u.rs);
+      const p = u.p_long, c = rgb(p), alt = roles[u.rs] === 'a';
+      html += `<span class="u${first ? '' : ' b'}${alt ? ' alt' : ''}${u.violation ? ' violation' : ''}${attClass(row, u.rs)}${S.selected === `${li}:${u.rs}` ? ' sel' : ''}" data-line="${li}" data-rs="${u.rs}" data-ns="${u.ns}" data-i="${u.i}" style="color:rgb(${c});background:rgba(${c},.06)">${esc(line.slice(u.rs, u.re))}<span class="pct">${Math.round(p * 100)}%</span></span>`;
       pos = u.re; first = false;
     }
-    row.el.backdrop.innerHTML = html + esc(line.slice(pos)) + '​';
+    row.el.backdrop.innerHTML = html + plainHtml(pos, line.length) + '​';
     row.el.backdrop.scrollLeft = row.el.ta.scrollLeft;
   }
   function status(message, bad = false) {
@@ -752,6 +829,7 @@
     const old = S.pools.get(key);
     if (old && (old.status === 'filling' || old.status === 'done' || old.status === 'full' || old.status === 'nofit' || (auto && old.status === 'error'))) return;
     const before = S.active === row ? row.draft.slice(0, row.el.ta.selectionStart) : base;
+    base = C.plain(base);                                                // the agent sees first readings, never {A/B} markup
     const poemId = S.poem.id;
     await loadStored(row, base);                                         // what earlier stanza batches left for this slot
     if (S.poem?.id !== poemId || S.pools.get(key)?.status === 'filling') return;
@@ -800,7 +878,7 @@
     if (!S.poem) return;
     const key = C.poolKey(S.poem.id, row.uid, '', settings()) + '|corpus';
     if (S.pools.has(key)) return;
-    const above = S.rows.slice(0, rowIndex(row)).map(r => r.draft.trim()).filter(Boolean);
+    const above = S.rows.slice(0, rowIndex(row)).map(r => C.plain(r.draft).trim()).filter(Boolean);
     if (!above.length) return;                                          // the corpus proposer continues a draft
     const entry = { key, lineKey: row.uid, sig: sig(), base: '', source: 'corpus', template: null, candidates: [], status: 'filling', tools: [], rejected: 0, error: '' };
     S.pools.set(key, entry);
@@ -997,7 +1075,7 @@
     S.chatStream = controller;
     $('chat-stop').hidden = false; $('chat-send').disabled = true;
     const row = S.active, ta = row?.el?.ta;
-    const caret = row ? { line_position: rowIndex(row), char_offset: ta ? ta.selectionStart : 0, prefix: row.draft.slice(0, ta ? ta.selectionStart : 0) } : undefined;
+    const caret = row ? { line_position: rowIndex(row), char_offset: ta ? ta.selectionStart : 0, prefix: C.plain(row.draft.slice(0, ta ? ta.selectionStart : 0)) } : undefined;
     const sentAt = Date.now() / 1000 - 5;
     let streamed = false;
     try {
