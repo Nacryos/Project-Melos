@@ -580,3 +580,11 @@ poem) take part in the English BM25 bridge and the dense `eng` retrievers; hits 
 - Composer page: every distinct draft line is sent once to `POST /api/composer/check` (no metre) and the L1 / L2 / L4
   evidence is rendered per word (`ComposerCore.attestWords`): △ a spelling printed nowhere in the corpus or only
   outside the dialect, ✗ the dialect's poets print another spelling, or no reading exists. No model call.
+
+## Release X.4 (2026-10-10, late evening, page only)
+
+- Composer: "Copy Greek" (poem bar, after "New poem") copies every row as plain polytonic Unicode text
+  (`ComposerCore.plainGreek`: NFC, U+1FBD / U+02BC / ASCII apostrophes written as U+2019, inner blank rows kept as
+  stanza breaks, edges trimmed, no markup) through the clipboard API with an execCommand fallback. The button is in
+  `composer.html` (served by the API container from the next backend build) and is created by `js/composer.js` on a
+  page served by an older backend.
