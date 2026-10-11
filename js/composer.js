@@ -163,7 +163,7 @@
   }
   function renderPoemSelect() {
     const sel = $('poem-select');
-    sel.replaceChildren(...S.poems.map(p => new Option(p.title || `Untitled ${p.id}`, p.id)));
+    sel.replaceChildren(...S.poems.map(p => new Option(draftLabel(p), p.id)));
     if (S.poem) sel.value = String(S.poem.id);
   }
   async function newPoem() {
@@ -197,6 +197,7 @@
     renderBoard();
     renderThread(full.chat || []);
     renderPoemSelect();
+    renderOldDrafts();
     local.setItem('melos-composer-poem', String(id));
     const url = new URL(location.href);
     url.searchParams.set('poem', id);
@@ -1261,6 +1262,87 @@
       setTimeout(() => URL.revokeObjectURL(url), 2000);
       status(`Exported ${name} (${text.split('\n').length} lines of Markdown).`);
     } catch (e) { failed('export', e); }
+  });
+  // ---- new draft (X.7): a fresh board for the same poem; the earlier drafts stay readable under it ----------------------------
+  // A draft is a poem of its own (own lines, versions, chat and pool) whose settings carry `parent_id` and `draft_no`,
+  // so everything per poem keeps working; the page renders the chain of parents read-only below the board.
+  const draftNo = p => Number(p?.settings?.draft_no) || 1;
+  const draftLabel = p => (p.title || `Untitled ${p.id}`) + (p.settings?.parent_id ? ` · draft ${draftNo(p)}` : '');
+  const oldDrafts = document.createElement('section');
+  oldDrafts.className = 'old-drafts'; oldDrafts.id = 'old-drafts'; oldDrafts.hidden = true; oldDrafts.setAttribute('aria-label', 'Earlier drafts');
+  document.querySelector('.work-main').append(oldDrafts);
+  const newerNote = document.createElement('p');
+  newerNote.className = 'newer-draft'; newerNote.id = 'newer-draft'; newerNote.hidden = true;
+  board.insertAdjacentElement('beforebegin', newerNote);
+  if (!$('new-draft')) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'quiet'; b.id = 'new-draft'; b.textContent = 'New draft';
+    b.title = 'Open a fresh board for this poem (same title, English and settings); this draft stays below it, read-only';
+    $('new-poem').insertAdjacentElement('afterend', b);
+  }
+  async function newDraft() {
+    if (!S.poem) return;
+    await flushSave();
+    const parent = S.poem;
+    try {
+      const poem = await call('POST', '/api/composer/poems', { title: parent.title || '', english: parent.english || '',
+        settings: { ...settings(), parent_id: parent.id, draft_no: draftNo(parent) + 1 } });
+      S.poems.unshift(poem);
+      await openPoem(poem.id);
+      status(`Draft ${draftNo(poem)}: a fresh board. Draft ${draftNo(parent)} is below it to read; "Open" there goes back to editing it.`);
+    } catch (e) { failed('poem', e); }
+  }
+  $('new-draft').addEventListener('click', newDraft);
+  /* The lines a draft shows, as the agent sees them (store.poem_view): the current Greek of every saved line, an
+     unsaved draft standing in for its line, unsaved rows without a line after them. */
+  function draftLines(full) {
+    const lines = full.lines.map(l => { const v = l.versions?.find(x => x.id === l.current_version_id) || null;
+      return { id: l.id, greek: v?.greek || '', bt: v?.back_translation || '', checks: v?.checks ? C.checkBadges(v.checks) : [], unsaved: false }; });
+    for (const d of full.poem.drafts || []) {
+      if (typeof d?.draft !== 'string') continue;
+      const l = d.id != null ? lines.find(x => x.id === d.id) : null;
+      if (l) { if (d.draft.trim() !== l.greek.trim()) Object.assign(l, { greek: d.draft, unsaved: true, bt: '', checks: [] }); }
+      else if (d.id == null && d.draft.trim()) lines.push({ id: null, greek: d.draft, bt: '', checks: [], unsaved: true });
+    }
+    while (lines.length && !lines.at(-1).greek.trim()) lines.pop();
+    return lines;
+  }
+  const markupHtml = text => {   // `{A/B}` with the braces and slash dimmed and the alternative at 80 %, as on the board
+    const roles = C.variants(text).roles; let out = '';
+    for (let i = 0; i < text.length;) { let j = i; while (j < text.length && roles[j] === roles[i]) j++; const t = esc(text.slice(i, j)); out += roles[i] === 'b' ? t : `<span class="${roles[i] === 'm' ? 'mark' : 'alt'}">${t}</span>`; i = j; }
+    return out;
+  };
+  let oldSeq = 0;
+  async function renderOldDrafts() {
+    const seq = ++oldSeq, chain = [];
+    oldDrafts.hidden = true; oldDrafts.replaceChildren();
+    const newer = S.poems.filter(p => p.settings?.parent_id === S.poem?.id && !p.archived);
+    newerNote.hidden = !newer.length;
+    newerNote.innerHTML = newer.length ? `Newer: ${newer.map(p => `<button type="button" class="link" data-open="${p.id}">${esc(draftLabel(p))}</button>`).join(', ')}` : '';
+    let id = S.poem?.settings?.parent_id;
+    for (let guard = 0; id && guard < 30; guard++) {
+      let full;
+      try { full = await call('GET', `/api/composer/poems/${id}/full`); } catch (e) { break; }
+      if (seq !== oldSeq) return;
+      chain.push(full);
+      id = full.poem.settings?.parent_id;
+    }
+    if (!chain.length) return;
+    oldDrafts.innerHTML = chain.map(full => {
+      const p = full.poem, lines = draftLines(full);
+      const mark = c => c.state === 'pass' ? '✓' : c.state === 'fail' ? '✗' : c.state === 'warn' ? '△' : '·';
+      const body = lines.map((l, i) => !l.greek.trim() ? '<li class="gap" aria-hidden="true"></li>'
+        : `<li><span class="n">${i + 1}</span><span class="greek" lang="grc">${markupHtml(l.greek)}</span>` +
+          (l.checks.length ? `<span class="checks" title="${esc(l.checks.map(c => `${c.id} ${c.state}: ${c.detail || ''}`).join('\n'))}">${l.checks.map(c => `<span class="${c.state}">${mark(c)}${esc(c.id)}</span>`).join(' ')}</span>` : '') +
+          (l.unsaved ? '<span class="unsaved">not saved</span>' : '') + (l.bt ? `<span class="bt">${esc(l.bt)}</span>` : '') + '</li>').join('');
+      return `<section class="old-draft"><h2>Draft ${draftNo(p)} <span class="meta">· ${esc(p.title || `Untitled ${p.id}`)}${p.updated_at ? ` · ${esc(pacific(p.updated_at))}` : ''}</span>
+        <button type="button" class="quiet" data-open="${p.id}">Open</button></h2>${lines.length ? `<ol class="old-lines">${body}</ol>` : '<p class="empty">No Greek in this draft.</p>'}</section>`;
+    }).join('');
+    oldDrafts.hidden = false;
+  }
+  for (const el of [oldDrafts, newerNote]) el.addEventListener('click', async e => {
+    const b = e.target.closest('[data-open]'); if (!b) return;
+    await flushSave(); await openPoem(Number(b.dataset.open)); scrollTo({ top: 0, behavior: 'smooth' });
   });
   $('english-toggle').addEventListener('click', () => { collapse('english', !$('english-panel').classList.contains('collapsed')); savePrefs(); });
   $('chat-toggle').addEventListener('click', () => { collapse('chat', !$('workspace').classList.contains('chat-collapsed')); savePrefs(); });

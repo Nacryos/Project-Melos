@@ -14,14 +14,14 @@
   <link rel="stylesheet" href="css/lemma-page.css?v=release-p-20261009">
   <link rel="stylesheet" href="css/site-menu.css?v=site-menu-20261009">
   <link rel="stylesheet" href="css/scansion.css?v=release-v">
-  <link rel="stylesheet" href="css/composer.css?v=release-x3">
+  <link rel="stylesheet" href="css/composer.css?v=release-x7">
   <script>try { const t = localStorage.getItem('melos-composer-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}</script>
   <script src="js/site-menu.js?v=site-menu-20261009" defer></script>
   <script src="js/config.js" defer></script>
   <script src="js/api.js" defer></script>
   <script src="js/typegreek.js?v=release-v" defer></script>
-  <script src="js/composer-core.js?v=release-x3" defer></script>
-  <script src="js/composer.js?v=release-x3" defer></script>
+  <script src="js/composer-core.js?v=release-x7" defer></script>
+  <script src="js/composer.js?v=release-x7" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#board">Skip to the board</a>
@@ -35,6 +35,7 @@
       <div class="poem-bar" role="group" aria-label="Poem">
         <label>Poem <select id="poem-select" aria-label="Open a poem"></select></label>
         <button type="button" class="quiet" id="new-poem">New poem</button>
+        <button type="button" class="quiet" id="new-draft" title="Open a fresh board for this poem (same title, English and settings); this draft stays below it, read-only">New draft</button>
         <button type="button" class="quiet" id="copy-greek" title="Copy every line as plain polytonic Unicode text (NFC), blank rows kept as stanza breaks">Copy Greek</button>
         <input type="text" id="poem-title" maxlength="300" placeholder="Title" aria-label="Title">
         <span class="save-state" id="save-state" role="status"></span>

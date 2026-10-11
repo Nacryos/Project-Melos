@@ -273,3 +273,24 @@ html, body { overflow-x: hidden; }
   .chat { position: static; max-height: none; }
   .thread { max-height: 50vh; }
 }
+
+/* Earlier drafts of the poem (X.7), read-only under the board; `New draft` opens a fresh board above them. */
+.newer-draft { margin: 0 0 6px; font-size: .85rem; color: var(--muted); }
+.newer-draft .link { background: none; border: 0; padding: 0; color: var(--sea); font: inherit; cursor: pointer; text-decoration: underline; }
+.old-drafts { margin-top: 28px; display: grid; gap: 18px; }
+.old-draft { border: 1px solid var(--line); background: var(--canvas-bg); padding: 8px 14px 10px; opacity: .92; }
+.old-draft h2 { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; margin: 0 0 6px; font: 600 .95rem/1.4 inherit; color: var(--ink-2); }
+.old-draft h2 .meta { font-weight: 400; color: var(--muted); font-size: .85rem; }
+.old-draft h2 button { margin-left: auto; }
+.old-lines { list-style: none; margin: 0; padding: 0; }
+.old-lines li { display: grid; grid-template-columns: 2.2em 1fr; column-gap: 12px; align-items: baseline; padding: 3px 0; }
+.old-lines li.gap { height: .9em; padding: 0; }
+.old-lines .n { color: var(--muted); font-size: .8rem; text-align: right; }
+.old-lines .greek { font-family: var(--greek, "Gentium Book Plus", Georgia, serif); font-size: 1.15rem; line-height: 1.5; color: var(--ink); }
+.old-lines .greek .mark { opacity: .35; }
+.old-lines .greek .alt { opacity: .8; }
+.old-lines .checks, .old-lines .unsaved, .old-lines .bt { grid-column: 2; font-size: .8rem; color: var(--muted); }
+.old-lines .checks { display: flex; flex-wrap: wrap; gap: 2px 8px; }
+.old-lines .checks .pass { color: var(--pass); } .old-lines .checks .fail { color: var(--fail); } .old-lines .checks .warn { color: var(--warn); }
+.old-lines .bt { font: italic .92rem/1.45 "Gentium Book Plus", Georgia, serif; color: var(--ink-2); }
+.old-draft .empty { margin: 0; color: var(--muted); font-size: .85rem; }

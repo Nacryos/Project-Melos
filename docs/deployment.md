@@ -1,6 +1,6 @@
 # Deployment handoff
 
-## Current: release X.5 — composer alternatives, keyboard shortcuts, thin bars (2026-10-10, ~10:05 PM PDT)
+## Current: release X.7 frontend (X.5 backend) — New draft (2026-10-11), alternatives, keyboard shortcuts, thin bars, Full export
 
 Tree = `fallback-translations` 0c9757f (merge of `composer-w` 92fdec2 into X.4). Backend image `melos-api:20261011x5`
 atop `20261011x3`, built from the tarball `/home/alvin/melos-x/x5.tgz` extracted into `/home/alvin/melos-x/src` with
