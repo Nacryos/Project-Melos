@@ -49,10 +49,17 @@ SOURCES = {
 INTERLINEARS = [
     {"folder": "interlinear-catullus", "file": "catullus-interlinear.jsonl", "author": "Catullus", "work": "Carmina",
      "work_id": "la:perseus-catullus:Carmina", "translator": "Claude Opus (machine_translation; audited and revised)",
-     "key": lambda r: r["poem"], "latin_id": lambda k: f"la:perseus-catullus:lat2:{k}"},
-    {"folder": "interlinear-horace", "file": "odes-interlinear.jsonl", "author": "Horace", "work": "Odes",
+     "key": lambda r: r["poem"], "latin_id": lambda k: f"la:perseus-catullus:lat2:{k}", "citation": lambda k: f"Carmina {k}"},
+    {"folder": "interlinear-horace", "file": "odes-interlinear.jsonl", "manifest_work": "odes", "author": "Horace", "work": "Odes",
      "work_id": "la:perseus-horace:Odes", "translator": "Claude (machine_translation; Opus writers and the session inline, audited and revised)",
-     "key": lambda r: f"{r['book']}.{r['poem']}", "latin_id": lambda k: f"la:perseus-horace:odes:lat2:{k}"},
+     "key": lambda r: f"{r['book']}.{r['poem']}", "latin_id": lambda k: f"la:perseus-horace:odes:lat2:{k}", "citation": lambda k: f"Odes {k}"},
+    {"folder": "interlinear-horace", "file": "epodes-interlinear.jsonl", "manifest_work": "epodes", "author": "Horace", "work": "Epodes",
+     "work_id": "la:perseus-horace:Epodes", "translator": "Claude Opus (machine_translation; audited and revised)",
+     "key": lambda r: f"epodes:{r['poem']}", "latin_id": lambda k: f"la:perseus-horace:epodes:lat2:{k.split(':')[1]}",
+     "citation": lambda k: f"Epodes {k.split(':')[1]}"},
+    {"folder": "interlinear-horace", "file": "carmen-saeculare-interlinear.jsonl", "manifest_work": "carmen-saeculare", "author": "Horace",
+     "work": "Carmen Saeculare", "work_id": "la:perseus-horace:Carmen Saeculare", "translator": "Claude Opus (machine_translation; audited and revised)",
+     "key": lambda r: "carmen-saeculare:1", "latin_id": lambda k: "la:perseus-horace:carmen-saeculare:lat2:1", "citation": lambda k: "Carmen Saeculare"},
 ]
 WORK_OF_URN = {"phi0893.phi001": "Odes", "phi0893.phi002": "Carmen Saeculare", "phi0893.phi003": "Epodes",
                "phi0472.phi001": "Carmina"}
@@ -140,6 +147,8 @@ def main():
         if not inter.exists():
             continue
         imeta = json.loads((inter.parent / "manifest.json").read_text(encoding="utf-8"))
+        if spec.get("manifest_work"):
+            imeta = imeta.get("works", {}).get(spec["manifest_work"], {})
         by_poem: dict[str, list[dict]] = {}
         for raw in inter.read_text(encoding="utf-8").splitlines():
             if raw.strip():
@@ -152,7 +161,7 @@ def main():
                 continue
             text = "\n".join(l["english"] for l in lines)
             pid = f"la:{spec['folder']}:{poem}"
-            cit = f"{spec['work']} {poem}"
+            cit = spec["citation"](poem)
             data = {"translation_of": latin_id, "translator": spec["translator"],
                     "line_numbers": [l["n"] for l in lines], "notes": [l["note"] for l in lines],
                     "audit": [l["audit"]["verdict"] for l in lines], "revised": [l["revised"] for l in lines],
@@ -165,8 +174,8 @@ def main():
             con.execute("INSERT INTO passage_authors VALUES (?,?)", (pid, spec["author"].lower()))
             con.execute("INSERT INTO passage_fts VALUES (?,?,?,?,?)", (pid, text.lower(), cit, spec["author"], spec["work"]))
             counts["interlinear"] += 1
-        sources_seen[spec["folder"]] = {"manifest": str(inter.parent.relative_to(ROOT) / "manifest.json"),
-                                        "licence": "Claude-written, quality machine_translation", "lines": imeta.get("counts", {}).get("lines")}
+        sources_seen[f"{spec['folder']}:{spec['file']}"] = {"manifest": str(inter.parent.relative_to(ROOT) / "manifest.json"),
+                                                            "licence": "Claude-written, quality machine_translation", "lines": imeta.get("counts", {}).get("lines")}
     for n, (f, c) in vocab.items():
         con.execute("INSERT INTO vocabulary VALUES (?,?,?)", (n, f, c))
     for wid, w in works.items():
