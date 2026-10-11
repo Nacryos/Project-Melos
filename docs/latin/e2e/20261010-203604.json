@@ -1,0 +1,405 @@
+{
+ "started": "2026-10-11T03:35:01Z",
+ "english": "Come, friends, tonight we drink the dark Falernian; tomorrow the rain can keep the whole city to itself.",
+ "events": [
+  {
+   "t": 24.4,
+   "type": "tool",
+   "name": "propose_candidates",
+   "summary": "round 1: 4 candidates"
+  },
+  {
+   "t": 24.5,
+   "type": "candidate",
+   "greek": "nigrum nocte bibamus hac Falernum",
+   "english_span": "tonight we drink the dark Falernian",
+   "checks": [
+    [
+     "L7",
+     true
+    ],
+    [
+     "L1",
+     true
+    ],
+    [
+     "L2",
+     true
+    ],
+    [
+     "L4",
+     true
+    ],
+    [
+     "L11",
+     true
+    ]
+   ],
+   "pattern": "–––⏑⏑–⏑–⏑–⏑"
+  },
+  {
+   "t": 60.4,
+   "type": "tool",
+   "name": "propose_candidates",
+   "summary": "round 2: 4 candidates"
+  },
+  {
+   "t": 60.5,
+   "type": "candidate",
+   "greek": "nigrum nunc,",
+   "english_span": "the dark (Falernian) now",
+   "checks": [
+    [
+     "L7",
+     true
+    ],
+    [
+     "L1",
+     true
+    ],
+    [
+     "L2",
+     true
+    ],
+    [
+     "L4",
+     true
+    ],
+    [
+     "L11",
+     true
+    ]
+   ],
+   "pattern": "⏑––"
+  },
+  {
+   "t": 60.5,
+   "type": "candidate",
+   "greek": "nigrum nunc hodie bibamus una",
+   "english_span": "tonight we drink the dark Falernian (together)",
+   "checks": [
+    [
+     "L7",
+     true
+    ],
+    [
+     "L1",
+     true
+    ],
+    [
+     "L2",
+     true
+    ],
+    [
+     "L4",
+     true
+    ],
+    [
+     "L11",
+     true
+    ]
+   ],
+   "pattern": "–––⏑⏑–⏑–⏑––"
+  },
+  {
+   "t": 60.5,
+   "type": "candidate",
+   "greek": "nunc nos, cari, hodie Falernum atrum",
+   "english_span": "Come, friends, tonight we (drink) the dark Falernian",
+   "checks": [
+    [
+     "L7",
+     true
+    ],
+    [
+     "L1",
+     true
+    ],
+    [
+     "L2",
+     true
+    ],
+    [
+     "L4",
+     true
+    ],
+    [
+     "L11",
+     true
+    ]
+   ],
+   "pattern": "–––⏑⏑–⏑–⏑–"
+  },
+  {
+   "t": 62.7,
+   "type": "rejected",
+   "count": 4,
+   "reasons": {
+    "L7": 4
+   }
+  },
+  {
+   "t": 62.7,
+   "type": "fill",
+   "usage": {
+    "input_tokens": 66,
+    "output_tokens": 3916,
+    "cache_read_input_tokens": 19913,
+    "cache_creation_input_tokens": 5763
+   },
+   "cost_usd": 0.273476,
+   "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+   "mode": "line",
+   "cold": true
+  },
+  {
+   "t": 62.7,
+   "type": "done",
+   "usage": {
+    "input_tokens": 66,
+    "output_tokens": 3916,
+    "cache_read_input_tokens": 19913,
+    "cache_creation_input_tokens": 5763
+   },
+   "cost_usd": 0.273476,
+   "fills": 1,
+   "skipped": [],
+   "ms": 62516
+  }
+ ],
+ "settings": {
+  "language": "la",
+  "author": "Catullus",
+  "metre": "phalaecian",
+  "dialect": ""
+ },
+ "poem_id": 2,
+ "seconds": 62.7,
+ "first_candidate_seconds": 24.5,
+ "candidates": 4,
+ "whole_line_candidates": 3,
+ "rejected": 4,
+ "tools": [
+  "propose_candidates",
+  "propose_candidates"
+ ],
+ "cost_usd": 0.273476,
+ "accepted": {
+  "line_id": 2,
+  "greek": "nigrum nocte bibamus hac Falernum",
+  "english_span": "tonight we drink the dark Falernian",
+  "version": {
+   "id": 2,
+   "line_id": 2,
+   "greek": "nigrum nocte bibamus hac Falernum",
+   "back_translation": null,
+   "scansion": {
+    "language": "la",
+    "dialect": "none",
+    "metre": "phalaecian",
+    "remaining_template": null,
+    "template": "given",
+    "lines": [
+     {
+      "pattern": "?––⏑⏑–⏑–⏑–⏑",
+      "syllables": [
+       {
+        "text": "nigr",
+        "p_long": 0.24,
+        "label": "A"
+       },
+       {
+        "text": "um n",
+        "p_long": 1.0,
+        "label": "L"
+       },
+       {
+        "text": "oct",
+        "p_long": 1.0,
+        "label": "L"
+       },
+       {
+        "text": "e b",
+        "p_long": 0.1,
+        "label": "S"
+       },
+       {
+        "text": "ib",
+        "p_long": 0.05,
+        "label": "S"
+       },
+       {
+        "text": "am",
+        "p_long": 0.9,
+        "label": "L"
+       },
+       {
+        "text": "us h",
+        "p_long": 0.1,
+        "label": "S"
+       },
+       {
+        "text": "ac F",
+        "p_long": 1.0,
+        "label": "L"
+       },
+       {
+        "text": "al",
+        "p_long": 0.05,
+        "label": "S"
+       },
+       {
+        "text": "ern",
+        "p_long": 1.0,
+        "label": "L"
+       },
+       {
+        "text": "um",
+        "p_long": 0.1,
+        "label": "S"
+       }
+      ]
+     }
+    ],
+    "fit": [
+     {
+      "metre": "phalaecian",
+      "template": "xx-uu-u-u-F",
+      "ok": true,
+      "pattern": "–––⏑⏑–⏑–⏑–⏑",
+      "message": "fits",
+      "violations": []
+     }
+    ],
+    "pass": true,
+    "ms": {
+     "L7": 1.8,
+     "L1": 2.1,
+     "L2+L4": 2.1,
+     "L11": 2.1,
+     "total": 2.1
+    }
+   },
+   "checks": [
+    {
+     "id": "L7",
+     "name": "metre",
+     "ok": true,
+     "blocking": true,
+     "detail": "fits phalaecian: –––⏑⏑–⏑–⏑–⏑",
+     "evidence": []
+    },
+    {
+     "id": "L1",
+     "name": "forms",
+     "ok": true,
+     "blocking": true,
+     "detail": "known to the lexicon but not printed in the corpus: bibamus, Falernum",
+     "evidence": [
+      {
+       "form": "nigrum",
+       "reading": "corpus",
+       "detail": "1 token(s)"
+      },
+      {
+       "form": "nocte",
+       "reading": "corpus",
+       "detail": "13 token(s)"
+      },
+      {
+       "form": "bibamus",
+       "reading": "lexicon",
+       "detail": "a paradigm form (Morpheus / Wiktionary), not printed in the corpus"
+      },
+      {
+       "form": "hac",
+       "reading": "corpus",
+       "detail": "11 token(s)"
+      },
+      {
+       "form": "Falernum",
+       "reading": "lexicon",
+       "detail": "a paradigm form (Morpheus / Wiktionary), not printed in the corpus"
+      }
+     ]
+    },
+    {
+     "id": "L2",
+     "name": "dialect",
+     "ok": true,
+     "blocking": false,
+     "detail": "not applicable to Latin",
+     "evidence": []
+    },
+    {
+     "id": "L4",
+     "name": "attestation",
+     "ok": true,
+     "blocking": false,
+     "detail": "3/5 spellings printed in the Latin corpus; 2 printed by Catullus; not printed: bibamus, Falernum",
+     "evidence": [
+      {
+       "form": "nigrum",
+       "tokens": 1,
+       "author_tokens": 0,
+       "dialect_tokens": null,
+       "example": {
+        "author": "Horace",
+        "citation": "Odes 1.6",
+        "line": "nigrum Merionen aut ope Palladis"
+       }
+      },
+      {
+       "form": "nocte",
+       "tokens": 13,
+       "author_tokens": 6,
+       "dialect_tokens": null,
+       "example": {
+        "author": "Catullus",
+        "citation": "Carmina 51",
+        "line": "lumina nocte."
+       }
+      },
+      {
+       "form": "bibamus",
+       "tokens": 0,
+       "author_tokens": 0,
+       "dialect_tokens": null,
+       "example": null
+      },
+      {
+       "form": "hac",
+       "tokens": 11,
+       "author_tokens": 2,
+       "dialect_tokens": null,
+       "example": {
+        "author": "Catullus",
+        "citation": "Carmina 22",
+        "line": "aut si quid hac re tritius videbatur,"
+       }
+      },
+      {
+       "form": "Falernum",
+       "tokens": 0,
+       "author_tokens": 0,
+       "dialect_tokens": null,
+       "example": null
+      }
+     ]
+    },
+    {
+     "id": "L11",
+     "name": "verbatim",
+     "ok": true,
+     "blocking": false,
+     "detail": "no run of 4+ words (or 3 long words) is copied from the Latin corpus",
+     "evidence": []
+    }
+   ],
+   "source": "agent",
+   "note": "e2e: first passing candidate of the pool",
+   "created_at": 1791689764.6139936,
+   "archived": false
+  }
+ }
+}

@@ -1,0 +1,11 @@
+{
+  "batch": "09",
+  "revised_from": "batch-09.jsonl",
+  "audit": "batch-09.audit.jsonl",
+  "changed": 34,
+  "disputed": 0,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "reasoning_summary": "The one WRONG verdict (76.18) was accepted: iam restored and the paraphrase replaced with 'now in death itself'.\nSupplied possessives (25 flags) were removed wherever English stands without them, with the referent (Laodamia, Protesilaus, Juno, the poet) moved into the note; 'his' kept in 73.6 with a note because 'held me as one and only friend' does not parse.\nInterpretive words made literal: sublimis 'aloft' (68a.9), duplex 'twofold' (68a.11), delicias 'love-play' rather than 'naughty things' (74.2); lumina rendered 'lights' (68a.15) for consistency with batch 07.\nOther fixes: intensive ipsa rendered ('has itself ruined itself', 75.2), quin tu given its 'you' (76.11), the added 'they' before clamant removed (80.7)."
+}

@@ -1,0 +1,11 @@
+{
+  "batch": "08",
+  "revised_from": "batch-08.jsonl",
+  "audit": "batch-08.audit.jsonl",
+  "changed": 8,
+  "disputed": 0,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "reasoning_summary": "All eight DOUBTFUL flags adopted; no WRONG verdicts.\nTenses and moods fixed: placabis future (66.90), fulgeret 'would shine' (66.94), quin evoluam as a finite clause (66.74).\nCases fixed: casto cubili ablative 'in a chaste bed' (66.83), miserae oblitae dative 'for the girl' (65.21); caesariem singular 'the hair' (66.8).\nAdded words removed: 'my' and 'like a wave' (65.4, sense moved to note), 'bird' (65.14), 'her' (65.21)."
+}

@@ -31,11 +31,15 @@ MIN_TOKEN = 32
 OWNER_ONLY_PREFIXES = ("/api/compose/", "/api/composer/")
 OWNER_ONLY_EXACT = frozenset({"/api/compose", "/api/composer", "/composer", "/composer.html", "/composer/"})
 # Owner-only routes the agent service may call with the internal token.
-INTERNAL_OWNER_ROUTES = frozenset({("POST", "/api/composer/check")})
+INTERNAL_OWNER_ROUTES = frozenset({
+    ("POST", "/api/composer/check"),
+    # Latin research routes (branch latin-composer): read-only, owner or agent
+    ("GET", "/api/la/status"), ("GET", "/api/la/concordance"), ("GET", "/api/la/forms"),
+})
 # Read-only tool routes the agent calls; the token lifts only their per-visitor rate limits.
 INTERNAL_TOOL_PREFIXES = ("/api/search", "/api/word", "/api/words/headlines", "/api/analyze-text", "/api/dialectize",
                           "/api/scan", "/api/lemma/", "/api/concept/diachrony", "/api/cite", "/api/commentary/",
-                          "/api/machine-analysis")
+                          "/api/machine-analysis", "/api/la/")
 
 _token_cache: tuple = (None, None)
 

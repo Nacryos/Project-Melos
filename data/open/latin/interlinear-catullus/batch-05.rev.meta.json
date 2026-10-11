@@ -1,0 +1,11 @@
+{
+  "batch": "05",
+  "revised_from": "batch-05.jsonl",
+  "audit": "batch-05.audit.jsonl",
+  "changed": 22,
+  "disputed": 0,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "reasoning_summary": "Removed unnoted supplied possessives where English does not need them (61.6, 14, 32, 33, 53, 55, 73, 78, 99, 167, 183, 219, 225, 234); kept and noted 'your/his approach' at 61.26 and 61.43, where aditum ferre needs it.\nAccepted the WRONG verdict at 61.227: illius on 226 already gives 'his', so genus is now 'the lineage'.\n61.148 now keeps non with eadem ('those things, not the same, are permitted'); 61.97 drops the added 'good'; 61.25 now reads 'nourish, with moisture' so umore is not taken as the object.\n61.206/208: the jussive 'let' moved from 206 back to subducat on 208 (both revised)."
+}

@@ -1,0 +1,11 @@
+{
+  "batch": "06",
+  "revised_from": "batch-06.jsonl",
+  "audit": "batch-06.audit.jsonl",
+  "changed": 36,
+  "disputed": 0,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "reasoning_summary": "Removed unnoted supplied possessives throughout 62-63 (about 25 lines); kept 'her' where it renders suus/sua (63.11, 63.45) and noted it; at 62.60 kept the supplied 'him' and 'you' with a note.\nAccepted the WRONG verdict at 63.73: iamque now 'now and now'.\n62.34/35: 'you' moved from idem's line back to comprendis on 35 (both revised); 63.57 restored to Latin order ('lacking wild madness, while for a brief time the mind is').\n63.84 now 'says these things ... the yokes' (haec and plural iuga); added colon (63.11) and colon for full stop (63.77) removed; 63.51 drops 'from their'."
+}

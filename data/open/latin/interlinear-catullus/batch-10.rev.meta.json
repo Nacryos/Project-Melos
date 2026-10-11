@@ -1,0 +1,11 @@
+{
+  "batch": "10",
+  "revised_from": "batch-10.jsonl",
+  "audit": "batch-10.audit.jsonl",
+  "changed": 16,
+  "disputed": 0,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "reasoning_summary": "Both WRONG verdicts were accepted: qui ... in se refers to the estate ('which has in itself', 114.2), and contra is adverbial with nos as subject ('In turn we avoid', 116.7).\nThe auditor's bracketed possessives were not used, since earlier batches never use brackets; possessives were removed and noted, except 'his eyes' (82.1), which is kept with a note.\nMood restored in 114.5 (sit, desint as subjunctives); 'one' dropped from viro solo (111.1); quacumque given as 'whichever' (91.10); quod ... quod read as parallel causal clauses with the relative reading noted (110.3); the commas that made Arrius look like a vocative were removed (84.2).\n99.13: the source prints fores, but the subject is illud saviolum, so the note now flags it as a probable misprint for foret instead of glossing it as esses."
+}

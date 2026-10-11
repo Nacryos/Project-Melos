@@ -1,0 +1,11 @@
+{
+  "batch": "04",
+  "revised_from": "batch-04.jsonl",
+  "audit": "batch-04.audit.jsonl",
+  "changed": 14,
+  "disputed": 0,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "reasoning_summary": "Eight supplied possessives (45.2, 45.24, 50.10, 53.4, 55.21, 55.30, 59.3, 60.4) kept and noted rather than removed; 55.26 'if' noted as carried from the non si series.\nReworded 45.15 ('as by far greater', ut and multo kept apart), 50.11 ('untamed with frenzy', ablative of cause) and 54.2 (eri as genitive of erus, 'of the master', since Merrill prints it lower case).\nDeclined the auditor's 'cocksuckers / fairies' at 57.1 and 57.10: catamite is the corpus-wide plain rendering of cinaedus (batch-01 and batch-03 revisions included) and 'cocksucker' names a different act; reasons put in the notes, no WRONG verdict in this batch."
+}

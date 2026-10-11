@@ -1,0 +1,339 @@
+{
+ "started": "2026-10-11T03:33:00Z",
+ "english": "Come, friends, tonight we drink the dark Falernian; tomorrow the rain can keep the whole city to itself.",
+ "events": [
+  {
+   "t": 36.3,
+   "type": "tool",
+   "name": "propose_candidates",
+   "summary": "round 1: 5 candidates"
+  },
+  {
+   "t": 36.5,
+   "type": "candidate",
+   "greek": "nunc, o",
+   "english_span": "Come,",
+   "checks": [
+    [
+     "L7",
+     true
+    ],
+    [
+     "L1",
+     true
+    ],
+    [
+     "L2",
+     true
+    ],
+    [
+     "L4",
+     true
+    ],
+    [
+     "L11",
+     true
+    ]
+   ],
+   "pattern": "––"
+  },
+  {
+   "t": 36.6,
+   "type": "candidate",
+   "greek": "nox haec pocula nigra det Falerni",
+   "english_span": "tonight we drink the dark Falernian",
+   "checks": [
+    [
+     "L7",
+     true
+    ],
+    [
+     "L1",
+     true
+    ],
+    [
+     "L2",
+     true
+    ],
+    [
+     "L4",
+     true
+    ],
+    [
+     "L11",
+     true
+    ]
+   ],
+   "pattern": "–––⏑⏑–⏑–⏑––"
+  },
+  {
+   "t": 36.6,
+   "type": "candidate",
+   "greek": "nunc, cari, bibimus Falerna nigra",
+   "english_span": "friends, tonight we drink the dark Falernian",
+   "checks": [
+    [
+     "L7",
+     true
+    ],
+    [
+     "L1",
+     true
+    ],
+    [
+     "L2",
+     true
+    ],
+    [
+     "L4",
+     true
+    ],
+    [
+     "L11",
+     true
+    ]
+   ],
+   "pattern": "–––⏑⏑–⏑–⏑––"
+  },
+  {
+   "t": 36.6,
+   "type": "candidate",
+   "greek": "nunc atrum bibimus, mei sodales,",
+   "english_span": "Come, friends, tonight we drink the dark",
+   "checks": [
+    [
+     "L7",
+     true
+    ],
+    [
+     "L1",
+     true
+    ],
+    [
+     "L2",
+     true
+    ],
+    [
+     "L4",
+     true
+    ],
+    [
+     "L11",
+     true
+    ]
+   ],
+   "pattern": "–––⏑⏑–⏑–⏑––"
+  },
+  {
+   "t": 36.6,
+   "type": "candidate",
+   "greek": "huc, o nunc, comites, Falerna nocte",
+   "english_span": "Come, friends, tonight ... Falernian",
+   "checks": [
+    [
+     "L7",
+     true
+    ],
+    [
+     "L1",
+     true
+    ],
+    [
+     "L2",
+     true
+    ],
+    [
+     "L4",
+     true
+    ],
+    [
+     "L11",
+     true
+    ]
+   ],
+   "pattern": "–––⏑⏑–⏑–⏑–⏑"
+  },
+  {
+   "t": 37.6,
+   "type": "rejected",
+   "count": 0,
+   "reasons": {}
+  },
+  {
+   "t": 37.6,
+   "type": "fill",
+   "usage": {
+    "input_tokens": 34,
+    "output_tokens": 2292,
+    "cache_read_input_tokens": 6412,
+    "cache_creation_input_tokens": 8838
+   },
+   "cost_usd": 0.227018,
+   "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+   "mode": "line",
+   "cold": true
+  },
+  {
+   "t": 37.6,
+   "type": "done",
+   "usage": {
+    "input_tokens": 34,
+    "output_tokens": 2292,
+    "cache_read_input_tokens": 6412,
+    "cache_creation_input_tokens": 8838
+   },
+   "cost_usd": 0.227018,
+   "fills": 1,
+   "skipped": [],
+   "ms": 37315
+  }
+ ],
+ "settings": {
+  "language": "la",
+  "author": "Catullus",
+  "metre": "phalaecian",
+  "dialect": ""
+ },
+ "poem_id": 1,
+ "seconds": 37.6,
+ "first_candidate_seconds": 36.5,
+ "candidates": 5,
+ "rejected": 0,
+ "tools": [
+  "propose_candidates"
+ ],
+ "cost_usd": 0.227018,
+ "accepted": {
+  "line_id": 1,
+  "greek": "nunc, o",
+  "english_span": "Come,",
+  "version": {
+   "id": 1,
+   "line_id": 1,
+   "greek": "nunc, o",
+   "back_translation": null,
+   "scansion": {
+    "language": "la",
+    "dialect": "none",
+    "metre": "phalaecian",
+    "remaining_template": null,
+    "template": "given",
+    "lines": [
+     {
+      "pattern": "––",
+      "syllables": [
+       {
+        "text": "nunc",
+        "p_long": 1.0,
+        "label": "L"
+       },
+       {
+        "text": "o",
+        "p_long": 0.97,
+        "label": "L"
+       }
+      ]
+     }
+    ],
+    "fit": [
+     {
+      "metre": "phalaecian",
+      "template": "xx-uu-u-u-F",
+      "ok": false,
+      "pattern": "",
+      "message": "2 syllables; phalaecian needs 11 (after possible synizesis)",
+      "violations": []
+     }
+    ],
+    "pass": false,
+    "ms": {
+     "L7": 0.7,
+     "L1": 0.7,
+     "L2+L4": 0.9,
+     "L11": 0.9,
+     "total": 0.9
+    }
+   },
+   "checks": [
+    {
+     "id": "L7",
+     "name": "metre",
+     "ok": false,
+     "blocking": true,
+     "detail": "phalaecian: 2 syllables; phalaecian needs 11 (after possible synizesis)",
+     "evidence": []
+    },
+    {
+     "id": "L1",
+     "name": "forms",
+     "ok": true,
+     "blocking": true,
+     "detail": "every word is printed in the Latin corpus",
+     "evidence": [
+      {
+       "form": "nunc",
+       "reading": "corpus",
+       "detail": "83 token(s)"
+      },
+      {
+       "form": "o",
+       "reading": "corpus",
+       "detail": "131 token(s)"
+      }
+     ]
+    },
+    {
+     "id": "L2",
+     "name": "dialect",
+     "ok": true,
+     "blocking": false,
+     "detail": "not applicable to Latin",
+     "evidence": []
+    },
+    {
+     "id": "L4",
+     "name": "attestation",
+     "ok": true,
+     "blocking": false,
+     "detail": "2/2 spellings printed in the Latin corpus; 2 printed by Catullus",
+     "evidence": [
+      {
+       "form": "nunc",
+       "tokens": 83,
+       "author_tokens": 34,
+       "dialect_tokens": null,
+       "example": {
+        "author": "Catullus",
+        "citation": "Carmina 3",
+        "line": "qui nunc it per iter tenebricosum"
+       }
+      },
+      {
+       "form": "o",
+       "tokens": 131,
+       "author_tokens": 84,
+       "dialect_tokens": null,
+       "example": {
+        "author": "Catullus",
+        "citation": "Carmina 1",
+        "line": "Cui dono lepidum novum libellum"
+       }
+      }
+     ]
+    },
+    {
+     "id": "L11",
+     "name": "verbatim",
+     "ok": true,
+     "blocking": false,
+     "detail": "no run of 4+ words (or 3 long words) is copied from the Latin corpus",
+     "evidence": []
+    }
+   ],
+   "source": "agent",
+   "note": "e2e: first passing candidate of the pool",
+   "created_at": 1791689617.7394588,
+   "archived": false
+  }
+ }
+}

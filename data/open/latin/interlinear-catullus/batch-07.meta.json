@@ -1,0 +1,13 @@
+{
+  "batch": "07",
+  "poems": [
+    "64"
+  ],
+  "lines": 410,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-catullus/poems.jsonl (Merrill 1893 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, rules 1-7 of batch 07's brief",
+  "reasoning_summary": "Merrill's numbering kept, including 23b (the scholia half-line, dots kept with note) and the lacuna 253a (dots kept; quae in 254 noted as lacking an antecedent). Line 109 is obelized in the source; the obelus is kept and the corrupt 'lateque cum eius obvia frangens' rendered word for word, with the usual emendation given in the note. Source misprints pulcherrirma (28), immernor (135), constemens (163), arnore (253) are kept verbatim in latin and noted. Hexameter enjambments are left as broken fragments line by line (e.g. 14-15 emersere ... vultus, 68-70 vicem curans, 86-87 virgo / regia, 238-240 haec mandata ... liquere, 246-248 qualem ... luctu (old dative), 318-319). 83 funera ... nec funera is rendered 'funerals ..., and not funerals' without resolving. Body-part metaphors and metonymies (lumina 'lights' = eyes, pinus = Argo, robora 'oak-strengths', puppis = ship, alga = shore) are kept literal with notes. Doubtful readings flagged: 227 decet (vs dicet), 287 Doris, 300 Idri, 402 Liber (adjective 'free'). The Parcae's refrain is rendered identically ('run, drawing the weft-threads, run, spindles.') at all 13 occurrences, in parentheses at 378 as in the Latin."
+}

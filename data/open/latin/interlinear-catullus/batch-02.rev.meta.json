@@ -1,0 +1,11 @@
+{
+  "batch": "02",
+  "revised_from": "batch-02.jsonl",
+  "audit": "batch-02.audit.jsonl",
+  "changed": 7,
+  "disputed": 0,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "reasoning_summary": "Accepted the WRONG verdict at 17.10: ut is local 'where' (the place of the deepest pit), so 'so that' was dropped; no dispute.\nAdopted the auditor's lines at 16.6 (versiculos as accusative subject, noted), 25.7 (meum of line 6 not carried over), 27.2 ('pour for me', mi dative) and 29.8 (Adoneus kept as printed).\nPunctuation flags at 28.8 (question mark) and 28.13 (exclamation mark) handled by notes, not rewording, as the convention allows."
+}

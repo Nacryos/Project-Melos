@@ -1,0 +1,11 @@
+{
+  "batch": "09",
+  "poems": ["68a", "69", "70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", "81"],
+  "lines": 228,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-catullus/poems.jsonl (Merrill 1893 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, rules 1-7 of batch 09's brief",
+  "reasoning_summary": "68a: the gap markers (7, 101a, 101aa) are kept with notes. The crux in 117 († terram dedit aufert) is translated word for word and noted as corrupt. Merrill's readings kept and noted: Allius, quaene (51), prone (19), eros = eri (36), hei mihi (76.21).\n68a run-overs are split strictly by line: neque ... cessarent (15-16), ante ... quam (41-42), fertur ... deseruisse (61-62, 'is said' left in 61), libera ... otia (63-64), is ... quem diem (107-108), and the subject of tangat held over to 112. qui/indomitam (78) are noted as masculine amor and feminine Laodamia. Metaphors are kept literal and noted (cobweb on the name, furta, concoquit iram, white stone, rust, vulture).\n74: perdepsuit is rendered 'thoroughly kneaded' (noted: fucked) and irrumet as 'mouth-fuck'. 71.5 futuit is 'fucks', 78.8 comminxit is 'pissed on', and 80.6-8 grandia tenta and emulso sero are literal, with notes.\n73.3 and 76.16 keep the negatives where they stand ('nothing to have done kindly'; 'whether it is not possible or possible').\n78: Merrill's lacuna (7a, 7aa) is kept, with a note that 7-10 are usually printed as 78b. 80.3-4 splits octava quiete / e molli ... hora across its lines, leaving fragments with a note."
+}
