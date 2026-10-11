@@ -17,6 +17,17 @@ briefly reverted X's frontend — Copy Greek, literal panel — until the merged
 Rollback: `MELOS_X_KEPT=melos-api-before-x5 sh /home/alvin/melos-x/src/deploy/release_x.sh rollback` and
 `vercel promote https://project-melos-mi7eoc6tb-nacryos-projects.vercel.app --yes` (X.4 frontend).
 
+### Incident 2026-10-10 ~10:00–10:30 PM PDT: production 503 after the X.5 promote
+
+Uvicorn logged `Exceeded concurrency limit` from 26 s after the X.5 container started and answered 503 to every
+request (the composer page lost its scansion and badges; the status line read "The server could not be reached").
+`--limit-concurrency 8` counts in-flight handler tasks: the owner's open composer page (pool streams up to 900 s read
+timeout, attestation checks, scans per alternative) exhausted eight slots and they stayed exhausted. Not a code fault
+of X.5 as far as the logs show, but X.5's extra scans per alternative add load. Fix: `docker restart` cleared it, 503s
+returned within minutes, so the container was recreated (same image, mounts and env from `clone_run.py --dry-run`)
+with `--limit-concurrency 32`; the old one is kept stopped as `melos-api-x5-lc8`. Future `clone_run.py` promotes copy
+the new command forward. Rollback of the limit alone: stop `melos-api`, rename, start `melos-api-x5-lc8` as `melos-api`.
+
 ## Current: release X.3 — stanza-aware metre and live attestation in the composer (2026-10-10, ~7:40 PM PDT)
 
 Backend `melos-api:20261011x3` (code layer atop X.2; previous container kept as `melos-api-before-x3`; canary
