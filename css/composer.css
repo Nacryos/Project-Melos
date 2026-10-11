@@ -282,6 +282,7 @@ html, body { overflow-x: hidden; }
 .old-draft h2 { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; margin: 0 0 6px; font: 600 .95rem/1.4 inherit; color: var(--ink-2); }
 .old-draft h2 .meta { font-weight: 400; color: var(--muted); font-size: .85rem; }
 .old-draft h2 button { margin-left: auto; }
+.old-draft .english { margin: 0 0 8px; white-space: pre-wrap; font-size: .9rem; line-height: 1.45; color: var(--ink-2); }
 .old-lines { list-style: none; margin: 0; padding: 0; }
 .old-lines li { display: grid; grid-template-columns: 2.2em 1fr; column-gap: 12px; align-items: baseline; padding: 3px 0; }
 .old-lines li.gap { height: .9em; padding: 0; }

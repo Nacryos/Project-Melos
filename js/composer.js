@@ -1277,7 +1277,7 @@
   if (!$('new-draft')) {
     const b = document.createElement('button');
     b.type = 'button'; b.className = 'quiet'; b.id = 'new-draft'; b.textContent = 'New draft';
-    b.title = 'Open a fresh board for this poem (same title, English and settings); this draft stays below it, read-only';
+    b.title = 'Open a fresh Greek board and a blank English box for this poem (same title and settings); this draft stays below it, read-only';
     $('new-poem').insertAdjacentElement('afterend', b);
   }
   async function newDraft() {
@@ -1285,7 +1285,7 @@
     await flushSave();
     const parent = S.poem;
     try {
-      const poem = await call('POST', '/api/composer/poems', { title: parent.title || '', english: parent.english || '',
+      const poem = await call('POST', '/api/composer/poems', { title: parent.title || '', english: '',
         settings: { ...settings(), parent_id: parent.id, draft_no: draftNo(parent) + 1 } });
       S.poems.unshift(poem);
       await openPoem(poem.id);
@@ -1336,7 +1336,7 @@
           (l.checks.length ? `<span class="checks" title="${esc(l.checks.map(c => `${c.id} ${c.state}: ${c.detail || ''}`).join('\n'))}">${l.checks.map(c => `<span class="${c.state}">${mark(c)}${esc(c.id)}</span>`).join(' ')}</span>` : '') +
           (l.unsaved ? '<span class="unsaved">not saved</span>' : '') + (l.bt ? `<span class="bt">${esc(l.bt)}</span>` : '') + '</li>').join('');
       return `<section class="old-draft"><h2>Draft ${draftNo(p)} <span class="meta">· ${esc(p.title || `Untitled ${p.id}`)}${p.updated_at ? ` · ${esc(pacific(p.updated_at))}` : ''}</span>
-        <button type="button" class="quiet" data-open="${p.id}">Open</button></h2>${lines.length ? `<ol class="old-lines">${body}</ol>` : '<p class="empty">No Greek in this draft.</p>'}</section>`;
+        <button type="button" class="quiet" data-open="${p.id}">Open</button></h2>${p.english?.trim() ? `<p class="english" lang="en">${esc(p.english.trim())}</p>` : ''}${lines.length ? `<ol class="old-lines">${body}</ol>` : '<p class="empty">No Greek in this draft.</p>'}</section>`;
     }).join('');
     oldDrafts.hidden = false;
   }
