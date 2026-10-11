@@ -60,6 +60,14 @@ html, body { overflow-x: hidden; }
   background: var(--ink); opacity: .4; border-radius: 1px;
 }
 .u.violation { text-decoration: underline wavy var(--fail); text-underline-offset: .32em; text-decoration-thickness: 2px; }
+/* Release X.3: attestation of the typed spelling against the corpus (independent of the metre wave). */
+.u.att-warn { box-shadow: inset 0 -2px 0 var(--warn); }
+.u.att-bad { box-shadow: inset 0 -2px 0 var(--fail); }
+.line-info .attest .warn, .att-note.warn { color: var(--warn); }
+.line-info .attest .bad, .att-note.bad { color: var(--fail); }
+.line-info .attest .ok, .att-note.ok { color: var(--pass); }
+.line-info .attest .note { color: var(--muted); }
+.att-note { margin-top: 4px; font-size: .86em; }
 .u.sel { outline: 2px solid var(--sea); outline-offset: 1px; }
 .u .pct { display: none; }
 .board.pct .u .pct {

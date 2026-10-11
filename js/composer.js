@@ -84,6 +84,7 @@
     pools: new Map(), fills: new Map(), prefixScans: new Map(),
     popup: { open: false, row: null, index: 0, options: [], auto: false, dismissed: null },
     analysis: new Map(), pending: new Set(), selected: null, chatStream: null, showArchived: new Set(),
+    attest: new Map(), attestPending: new Set(),
   };
   const settings = () => ({ author: $('author').value, metre: $('metre').value, dialect: $('dialect').value });
   const scanDialect = () => { const d = $('dialect').value; return d && d !== 'none' ? d : d === 'none' ? 'none' : (POET_DIALECT[$('author').value] || 'none'); };
@@ -480,6 +481,13 @@
     if (live?.pattern) parts.push(`<span class="pattern">${esc(live.pattern)}</span>`);
     if (live?.fit) parts.push(live.fit.ok ? `<span class="ok">fits ${esc(live.fit.metre.replace(/_/g, ' '))}</span>`
       : `<span class="bad">${esc(live.fit.metre.replace(/_/g, ' '))}: ${esc(live.fit.message)}${(live.fit.violations || []).map(x => ` · ${esc(x.text)} needs ${esc(x.needs)}`).join('')}</span>`);
+    const att = attestOf(row);
+    if (att && att.spans.length) {
+      const flagged = att.spans.filter(s => s.level === 'warn' || s.level === 'bad');
+      const unknown = att.spans.filter(s => s.level === 'unknown').length;
+      parts.push(`<span class="attest">${flagged.map(s => `<span class="${s.level}" lang="grc">${s.level === 'bad' ? '✗' : '△'} ${esc(s.form)}</span> <span class="note">${esc(s.note)}</span>`).join(' · ')
+        }${flagged.length ? '' : unknown ? 'attestation: checking…' : '<span class="ok">every spelling attested</span>'}</span>`);
+    } else if (row.draft.trim() && S.attestPending.has(attestKey(row.draft.trim()))) parts.push('<span class="attest">attestation: checking…</span>');
     if (saved && v.checks) parts.push(`<span class="badges">${badgesHtml(C.checkBadges(v.checks))}</span>`);
     const state = row.state === 'saving' ? 'saving…' : row.state === 'failed' ? 'not saved' : saved ? `saved · ${esc(v.source)}`
       : row.draft.trim() ? (v ? 'edited · Enter saves a new version' : 'Enter saves') : '';
@@ -518,6 +526,7 @@
         entry.units.push({ ...u, rs: u.start - s, re: u.end - s, ns: u.nucleus[0] - s, violation: bad.has(u.i) });
       }
       S.scan = { seq, text, res, byIndex };
+      scheduleAttest();
       status(`${(res.units || []).length} syllables · ${res.ms} ms${res.lexicon ? '' : ' · without the vowel-length lexicon'}${res.auto?.length ? ' · detected: ' + res.auto.slice(0, 3).map(a => `${a.metre.replace(/_/g, ' ')} (${a.lines_fitting}/${a.lines})`).join(', ') : ''}`);
     } catch (e) {
       if (seq === S.scan.seq) status(`Scansion: ${e.message}`, true);
@@ -533,7 +542,7 @@
       if (u.rs < pos || u.re > line.length) continue;
       if (u.rs > pos) html += esc(line.slice(pos, u.rs));
       const p = u.p_long, c = rgb(p);
-      html += `<span class="u${first ? '' : ' b'}${u.violation ? ' violation' : ''}${S.selected === `${li}:${u.rs}` ? ' sel' : ''}" data-line="${li}" data-rs="${u.rs}" data-ns="${u.ns}" data-i="${u.i}" style="color:rgb(${c});background:rgba(${c},.06)">${esc(line.slice(u.rs, u.re))}<span class="pct">${Math.round(p * 100)}%</span></span>`;
+      html += `<span class="u${first ? '' : ' b'}${u.violation ? ' violation' : ''}${attClass(row, u.rs)}${S.selected === `${li}:${u.rs}` ? ' sel' : ''}" data-line="${li}" data-rs="${u.rs}" data-ns="${u.ns}" data-i="${u.i}" style="color:rgb(${c});background:rgba(${c},.06)">${esc(line.slice(u.rs, u.re))}<span class="pct">${Math.round(p * 100)}%</span></span>`;
       pos = u.re; first = false;
     }
     row.el.backdrop.innerHTML = html + esc(line.slice(pos)) + '​';
@@ -544,6 +553,48 @@
     s.textContent = message;
     s.classList.toggle('bad', bad);
   }
+
+  // ---- attestation of every typed word against the corpus (release X.3) -------------------------------------------------
+  // Each distinct line goes once through the lint bank (POST /api/composer/check, no metre: L1 forms, L2 dialect, L4
+  // attestation; a few ms per line on a warm server). Words are marked in the backdrop and summarised in the line info:
+  // △ a spelling printed nowhere in the corpus (or only outside the dialect), ✗ the dialect's poets print another
+  // spelling or no reading exists. Nothing here asks the model.
+  const DIALECT_LABEL = { aeolic: 'Lesbian', doric: 'Doric', ionic: 'Ionic', attic: 'Attic' };
+  const attestKey = line => `${$('author').value}|${scanDialect()}|${line}`;
+  const WORD_RE = /[\u0370-\u03FF\u1F00-\u1FFF\u0300-\u036F\u1FBD\u1FBF’'ʼ]+/g;
+  const normForm = s => s.normalize('NFC').replace(/[’'ʼ\u1FBD]/g, '’');
+  let attestTimer = null;
+  function scheduleAttest() { clearTimeout(attestTimer); attestTimer = setTimeout(attest, 350); }
+  async function attest() {
+    for (const line of [...new Set(S.rows.map(r => r.draft.trim()).filter(Boolean))]) {
+      const key = attestKey(line);
+      if (S.attest.has(key) || S.attestPending.has(key)) continue;
+      if (S.attestPending.size >= 2) { scheduleAttest(); return; }
+      S.attestPending.add(key);
+      const d = scanDialect();
+      const body = { greek: line, author: $('author').value || undefined, ...(d && d !== 'none' ? { dialect: d } : {}) };
+      call('POST', '/api/composer/check', body).then(res => {
+        const verdicts = C.attestWords(res.checks, { author: $('author').value, dialect: DIALECT_LABEL[d] || d });
+        const byNorm = new Map([...verdicts.values()].map(v => [normForm(v.form), v]));
+        const spans = [];
+        for (const m of line.matchAll(WORD_RE)) {
+          if (!/[\u0370-\u03FF\u1F00-\u1FFF]/.test(m[0])) continue;
+          const v = verdicts.get(m[0]) || byNorm.get(normForm(m[0]));
+          if (v) spans.push({ start: m.index, end: m.index + m[0].length, ...v });
+        }
+        S.attest.set(key, { spans });
+        if (S.attest.size > 300) S.attest.delete(S.attest.keys().next().value);
+      }).catch(e => status(`Attestation: ${e.message}`, true))
+        .finally(() => { S.attestPending.delete(key); S.rows.forEach(r => { if (r.draft.trim() === line) { renderBackdrop(r); renderInfo(r); } }); });
+    }
+  }
+  const attestOf = row => S.attest.get(attestKey(row.draft.trim())) || null;
+  function attestAt(row, offset) {
+    const lead = row.draft.length - row.draft.trimStart().length;
+    return attestOf(row)?.spans.find(s => s.start <= offset - lead && offset - lead < s.end) || null;
+  }
+  const attClass = (row, offset) => { const a = attestAt(row, offset); return a && (a.level === 'warn' || a.level === 'bad') ? ` att-${a.level}` : ''; };
+  const attestHtml = a => a ? `<div class="att-note ${a.level}">${a.level === 'bad' ? '✗' : a.level === 'warn' ? '△' : '✓'} ${esc(a.note)}</div>` : '';
 
   // ---- word analysis on hover, syllable reasons on click (release V) -----------------------------------------------------
   const analysisKey = line => `${$('author').value}|${$('dialect').value}|${line}`;
@@ -574,8 +625,9 @@
     if (e.pointerType === 'touch' || e.target.tagName !== 'TEXTAREA') return;
     const u = under(e).find(el => el.classList?.contains('u'));
     const w = u && wordAt(+u.dataset.line, +u.dataset.ns);
-    if (!w) { tip.hidden = true; return; }
-    showTip(wordHtml(w), e.clientX, e.clientY);
+    const a = u && S.rows[+u.dataset.line] ? attestAt(S.rows[+u.dataset.line], +u.dataset.rs) : null;
+    if (!w && !a) { tip.hidden = true; return; }
+    showTip((w ? wordHtml(w) : `<strong lang="grc">${esc(a.form)}</strong>`) + attestHtml(a), e.clientX, e.clientY);
   });
   board.addEventListener('pointerleave', () => { tip.hidden = true; });
   board.addEventListener('pointerup', e => {

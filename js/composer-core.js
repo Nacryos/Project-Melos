@@ -291,7 +291,54 @@
   };
   const money = usd => (usd >= 10 ? `$${usd.toFixed(1)}` : `$${(Number(usd) || 0).toFixed(2)}`);
 
+  /* Release X.3: per-word attestation verdicts from the lint bank (POST /api/composer/check: L1 forms, L2 dialect,
+     L4 attestation). Map form -> {form, level: ok | warn | bad | unknown, note}.
+       ok      the spelling is printed by the poet, or by poets of the dialect (or anywhere, when no dialect is set)
+       warn    printed nowhere in the corpus (a reading exists: a plausible but unattested form), or printed only
+               outside the dialect with no dialect spelling known
+       bad     no reading at all, or the dialect's poets print another spelling of the word (σελήνη -> σελάννα)
+       unknown the lookup missed the budget */
+  const ATT_RANK = { unknown: 0, ok: 1, warn: 2, bad: 3 };
+  function attestWords(checks, { author = '', dialect = '' } = {}) {
+    const by = id => (Array.isArray(checks) ? checks : []).find(c => c && c.id === id) || {};
+    const out = new Map();
+    const put = (form, level, note) => {
+      if (typeof form !== 'string' || !form) return;
+      const cur = out.get(form);
+      if (!cur || ATT_RANK[level] > ATT_RANK[cur.level]) out.set(form, { form, level, note });
+      else if (ATT_RANK[level] === ATT_RANK[cur.level] && note && !cur.note.includes(note)) cur.note += ' · ' + note;
+    };
+    const l1 = by('L1'), l2 = by('L2'), l4 = by('L4');
+    const morph = new Map();
+    for (const e of l1.evidence || []) {
+      if (!e || typeof e.form !== 'string') continue;
+      if (e.reading === 'morpheus') morph.set(e.form, Array.isArray(e.lemmas) ? e.lemmas : []);
+      else if (e.reading === 'timeout') put(e.form, 'unknown', 'not checked in time');
+      else if (e.reading == null) put(e.form, 'bad', 'no reading in the corpus index or Morpheus');
+    }
+    const cite = ex => ex && typeof ex === 'object' ? [ex.author, ex.citation].filter(Boolean).join(' ') : '';
+    for (const e of l4.evidence || []) {
+      if (!e || typeof e.form !== 'string') continue;
+      const ex = cite(e.example) ? ` (${cite(e.example)})` : '';
+      if (!e.tokens) {
+        const lemmas = morph.get(e.form) || [];
+        put(e.form, 'warn', `this spelling is printed nowhere in the corpus${lemmas.length ? `; reads as ${lemmas.join(' / ')}` : ''}`);
+      } else if (e.author_tokens) put(e.form, 'ok', `printed ${e.author_tokens}× by ${author || 'the poet'}${ex}`);
+      else if (e.dialect_tokens) put(e.form, 'ok', `printed ${e.dialect_tokens}× by ${dialect || 'dialect'} poets${ex}`);
+      else if (e.dialect_tokens === 0) put(e.form, 'warn', `printed ${e.tokens}× in the corpus, never by a ${dialect || 'dialect'} poet${ex}`);
+      else put(e.form, 'ok', `printed ${e.tokens}× in the corpus${ex}`);
+    }
+    for (const e of l2.evidence || []) {
+      if (!e || typeof e.form !== 'string') continue;
+      if (e.reading === 'timeout') put(e.form, 'unknown', 'not checked in time');
+      else if (Array.isArray(e.dialect_spellings) && e.dialect_spellings.length) {
+        put(e.form, 'bad', `${dialect || 'the dialect\'s'} poets print ${e.dialect_spellings.map(s => s.form + (s.example ? ` (${s.example})` : '')).join(', ')}`);
+      } else if (e.dialects && typeof e.dialects === 'object') put(e.form, 'warn', `printed only by ${Object.keys(e.dialects).join(' / ')} poets`);
+    }
+    return out;
+  }
+
   return { fold, matchPrefix, slotAt, squash, TEMPLATES, templateFor, labels, remainders, remainingTemplate, fitsPrefix,
     slotKeyText, slotKey, poolKey, settingsSig, patternOf, optionsFor, reusable, tiered, splitSpill, spillInsert, SSEParser, readSSE, checkBadges,
-    versionsRow, archiveVersion, pacificDay, addCost, todayCost, money };
+    versionsRow, archiveVersion, pacificDay, addCost, todayCost, money, attestWords };
 });
