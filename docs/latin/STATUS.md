@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 20:37 PDT
+Last updated: 2026-10-10 20:38 PDT
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a second language backend behind the release W code, not a fork. First the PRD (`docs/prd/latin-composer.md`,
@@ -46,18 +46,22 @@ metre-locking is never applied in the composer.
   containers) a Latin poem with Catullus / phalaecian got "nigrum nocte bibamus hac Falernum" proposed at 24 s, linted
   (metre –––⏑⏑–⏑–⏑–⏑, forms, attestation, no verbatim run) and saved as the line's version; 4 candidates rejected on the
   metre; $0.27 for the fill (`docs/latin/e2e.md`, records in `docs/latin/e2e/`).
-- Interlinear: all 10 batches written (2,308 lines, every Latin line checked against the source by script); audits
-  01-10 done (wrong lines: 13, 1, 5, 0, 1, 1, 9, 0, 1, 2 of 2,308); revisions 01-06, 08-10 done, 07 running.
+- **Catullus interlinear complete**: all 116 poems, 2,308 lines, written by Opus subagents in 10 batches, every
+  line audited by an independent Opus auditor (verdicts: 2,047 OK, 228 doubtful, 33 wrong), every
+  flagged line revised (265 revised, 0 disputed); assembled by `scripts/assemble_interlinear_catullus.py`
+  into `data/open/latin/interlinear-catullus/catullus-interlinear.jsonl` (every Latin line re-checked against the
+  Perseus text; manifest with per-batch models, audits and revisions) and loaded into the corpus partition as 115
+  `machine_translation` passages linked to their Latin poems, shown only where no human translation exists.
 
 ## Running
 
-- Revision of batch 07 (poem 64); then the assembled `catullus-interlinear.jsonl` goes into the corpus partition.
+- Nothing. The dev stack (API :8797, agent :8801) is left running for the coordinator to try the page; stop it with
+  `scripts/latin_dev_stack.sh stop`.
 
 ## Next
 
-1. Load the assembled interlinear into the corpus partition as `machine_translation` (shown only where no human
-   translation exists); measure the pool with a longer English source and the next-words mode; try the page itself.
-2. Horace interlinear (Odes first) the same way, after Smart's prose is parsed.
+1. Measure the pool with a longer English source and the next-words mode; try the page itself (Language: Latin).
+2. Horace interlinear (Odes first) the same way, after Smart's prose is parsed; Horace templates evaluated on Odes 1 gold.
 3. Lemma index for Latin: lemmatiser bake-off against LASLA (held-out), recorded lemmas, `forms_found` and
    collocations for the agent's research tools; Horace templates evaluated on Odes 1 gold.
 4. Page polish for Latin (macron overlay, metre list labels) and the Horace translations (Smart's prose parser).

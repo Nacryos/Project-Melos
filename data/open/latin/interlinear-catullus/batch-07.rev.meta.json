@@ -1,0 +1,11 @@
+{
+  "batch": "07",
+  "revised_from": "batch-07.jsonl",
+  "audit": "batch-07.audit.jsonl",
+  "changed": 91,
+  "disputed": 0,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "reasoning_summary": "Removed unnoted supplied possessives in about 70 lines (mostly 'the' for her/his/its/their); added notes where the referent matters (72, 213, 323, 332, 376-377).\nAccepted all 9 WRONG verdicts: 86/87 'looked upon' back on conspexit's line; 205/206 'trembled' back on 205; 376/377 'Not' stands on 376; 145 quis = 'for whom'; 300 drops supplied 'your sister' (now 'the one-born', noted); 326 quae as neuter 'which things', note corrected.\nKept luce/luces literal ('light') at 16, 31, 325; 400 'extinguished', 401 plural 'funerals', 338 drops 'two'; 29 drops 'home'.\n139: auditor's 'coaxing promises' rejected (blanda is ablative with voce, line 140); kept 'coaxing' as a fragment and fixed the note. 100 re-ordered so magis goes with expalluit."
+}
