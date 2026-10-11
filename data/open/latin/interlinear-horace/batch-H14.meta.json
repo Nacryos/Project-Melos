@@ -1,0 +1,21 @@
+{
+ "batch": "H14",
+ "work": "odes",
+ "poems": [
+  "4.9",
+  "4.10",
+  "4.11",
+  "4.12",
+  "4.13",
+  "4.14",
+  "4.15"
+ ],
+ "lines": 236,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "written_by": "the coordinator session inline (the subagent launch was refused by the harness)",
+ "source_record": "data/open/latin/perseus-horace/poems.jsonl (Shorey & Laing 1919 via Perseus, CC BY-SA 4.0)",
+ "convention": "literal line-by-line, as in the Horace batch briefs (rules 1-7)",
+ "reasoning_summary": "Written inline by the coordinator session. Hyperbata left as fragments with the agreeing word in the note (4.9 interitura/verba, priores/sedes, Pindaricae/Camenae, comptos/crinis, lividas/obliviones, alto/voltu; 4.11 superantis/Albani, castis/verbenis, amanda/voce, atrae/curae; 4.13 decens/motus, nota/facies, brevis/annos, parem/Lycen; 4.14 tuas/virtutes, habitabilis/oras, horrendam/diluviem, optatum/decus; 4.15 parva/vela, superbis/postibus, vacuum/Ianum, Italae/vires, almae/Veneris). Subjects placed late are named in the notes (4.9.13-16 Helene; 4.11.21-22 puella; 4.14.45-46 Nilus). Negatives kept in place (4.9.5-9 non ... nec; 4.9.13-24 non sola ... non semel ... non ... non; 4.9.45 and 51; 4.12.3 nec ... nec; 4.12.22 non ego; 4.13.13-14 nec ... nec; 4.15.17-24 non ... non ... non ... non ... non ... non). Moods kept: ne credas (4.9.1), vocaveris potential (4.9.45), the future perfects of 4.10, ut noris / sequare / vites (4.11), reddas (4.11.35), ne darem (4.15.3). Supplied words noted (it 4.9.10 and 4.11.30, him 4.11.23). Names as in the Latin (Camenae, Ilios, Hister, Hiberia, Tanais, Liber, Quirinus); Iovi rendered Jove as in the other batches. 4.10.6-8 and 4.9 keep the source's quotation marks."
+}
