@@ -1,0 +1,11 @@
+{
+ "batch": "E01",
+ "revised_from": "batch-E01.jsonl",
+ "audit": "batch-E01.audit.jsonl",
+ "changed": 5,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 5 DOUBTFUL verdicts (no WRONG): agreement made visible (2.9 adulta/propagine, 3.13 ablative absolute), tense of intonata, the unnoted possessives at 4.5 and 5.101 removed. Revised inline by the coordinator session."
+}

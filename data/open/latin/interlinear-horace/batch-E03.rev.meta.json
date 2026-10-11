@@ -1,0 +1,11 @@
+{
+ "batch": "E03",
+ "revised_from": "batch-E03.jsonl",
+ "audit": "batch-E03.audit.jsonl",
+ "changed": 5,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 5 audit verdicts (2 WRONG, 3 DOUBTFUL): 14.13 ureris passive with ipse nominative; 17.35 venenis ablative with cales; 16.25 imis set off for vadis; 17.73 aegrimonia as grief; Carmen Saeculare 18 the gerundive. Revised inline by the coordinator session."
+}

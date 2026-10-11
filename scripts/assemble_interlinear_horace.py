@@ -82,7 +82,7 @@ def main():
                 counts[work]["latin_mismatch"] += 1
                 print("LATIN MISMATCH", key, file=sys.stderr)
             pk = f"{book}.{r['poem']}" if book else str(r["poem"])
-            a = audit.get((pk, str(r["n"])))
+            a = audit.get((pk, str(r["n"]))) or (audit.get((work, str(r["n"]))) if work == "carmen-saeculare" else None)
             out[work].append({"work": work, "book": book, "poem": str(r["poem"]), "n": str(r["n"]), "latin": r["latin"],
                               "english": r["english"], "note": r.get("note", ""), "quality": "machine_translation", "batch": nn,
                               "revised": bool(r.get("revised")), "disputed": bool(r.get("disputed")),

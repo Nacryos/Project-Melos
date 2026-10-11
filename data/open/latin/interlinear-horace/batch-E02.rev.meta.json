@@ -1,0 +1,11 @@
+{
+ "batch": "E02",
+ "revised_from": "batch-E02.jsonl",
+ "audit": "batch-E02.audit.jsonl",
+ "changed": 7,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 7 audit verdicts (4 WRONG, 3 DOUBTFUL): 7.13 caecos as the object; 8.5-6 hiet restored as the subjunctive verb and the invented 'is' removed; 10.22 third person with praeda its subject; 7.11 the single fuit; enervet and nervos literal with the meaning in the note (nothing softened). Revised inline by the coordinator session."
+}
