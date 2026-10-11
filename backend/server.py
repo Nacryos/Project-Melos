@@ -1954,6 +1954,8 @@ from .reader_scan_routes import router as reader_scan_router  # release V: reade
 app.include_router(reader_scan_router)
 from .composer_routes import router as composer_router  # release W: owner-only composer store + agent proxy
 app.include_router(composer_router)
+from .latin_routes import router as latin_router  # noqa: E402  Latin research routes (branch latin-composer)
+app.include_router(latin_router)
 
 
 def _startup_warm():

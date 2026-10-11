@@ -55,10 +55,17 @@ HTTP_TOOLS: dict[str, tuple[str, str, str, dict]] = {
     "dialectize": ("POST", "/api/dialectize", "Attic -> Lesbian/Doric/Ionic spellings, kept only when attested or parsed, "
                    "each labelled with its rules.",
                    _schema(("forms",), forms=_s("array", "Attic forms", items={"type": "string"}), dialect=DIALECT, author=AUTHOR)),
-    "scan": ("POST", "/api/scan", "Scan Greek verse: per-syllable quantity with rule and reason; metre= a template name "
-             "(sapphic, alcaic, ...) or auto to fit.",
+    "scan": ("POST", "/api/scan", "Scan verse: per-syllable quantity with rule and reason; metre= a template name "
+             "(sapphic, alcaic, phalaecian, ...) or auto to fit; language grc (default) or la (Latin: elision candidates marked).",
              _schema(("text",), text=GREEK, metre=_s("string", "Template name or auto"),
-                     dialect=_s("string", "none | aeolic | doric | ionic | attic"))),
+                     dialect=_s("string", "none | aeolic | doric | ionic | attic"),
+                     language=_s("string", "grc | la"))),
+    "la_concordance": ("GET", "/api/la/concordance", "Latin: lines in which the corpus (Catullus, Horace, ...) prints a word, "
+                       "u/v and i/j folded, with citations; author= to limit to the poet.",
+                       _schema(("q",), q=_s("string", "A Latin word form"), author=AUTHOR, limit=LIMIT)),
+    "la_forms": ("GET", "/api/la/forms", "Latin: for each spelling, whether it is printed in the corpus or known to the "
+                 "paradigm lexicon, its tokens overall and in the poet, and one citation.",
+                 _schema(("forms",), forms=_s("string", "Latin forms, comma or space separated"), author=AUTHOR)),
     "lemma_resolve": ("GET", "/api/lemma/resolve", "English or Greek word -> headword candidates.", _schema(("q",), q=Q)),
     "lemma_search": ("GET", "/api/lemma/search", "Passages with any form of a headword; forms_found is the author's form "
                      "inventory (the best attestation evidence).",
@@ -167,7 +174,7 @@ class Ctx:
         s, slot = self.poem_settings, slot or {}
         body = {"greek": greek, "metre": s.get("metre"), "dialect": s.get("dialect"), "author": s.get("author"),
                 "remaining_template": slot.get("remaining_template"), "prefix": slot.get("prefix") or None,
-                "line_index": slot.get("line_position") or 0}
+                "line_index": slot.get("line_position") or 0, "language": s.get("language") or "grc"}
         async with self.lint_limit:
             try:
                 r = await self.call("POST", "/api/composer/check", body)

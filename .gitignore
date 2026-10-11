@@ -41,3 +41,4 @@ data/embeddings-s/
 .venv-w/
 data/scansion/*.sqlite
 data/corpus_la.sqlite
+.venv-agent/

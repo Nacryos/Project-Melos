@@ -65,6 +65,7 @@ class WarmRequest(BaseModel):
 class BacktranslateRequest(BaseModel):
     greek: str = Field(min_length=1, max_length=5_000)
     dialect: str | None = None
+    language: str | None = None          # grc (default) | la
 
 
 def sse(event: dict) -> str:
@@ -83,7 +84,7 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
     factory = client_factory or default_factory
     sessions = Sessions(settings, factory)
     http: dict = {}
-    fills = Fills(settings, factory, prompts.SYSTEM, lambda: http["client"])
+    fills = Fills(settings, factory, prompts.system_for, lambda: http["client"])
 
     async def reaper():
         while True:
@@ -244,7 +245,7 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
     def pool_turn(endpoint: str, poem: Poem, slot: Slot | None, ahead: list[Slot], n: int, mode: str = "line"):
         t0 = time.monotonic()
         try:
-            s = sessions.get(session_key(poem, "pool"), "pool", prompts.SYSTEM)
+            s = sessions.get(session_key(poem, "pool"), "pool", prompts.system_for(poem))
         except Busy:
             raise HTTPException(503, "agent busy: too many open sessions")
         slots, primary = slot_map(slot, ahead, n)
@@ -278,7 +279,7 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
     async def chat(req: ChatRequest):
         t0 = time.monotonic()
         try:
-            s = sessions.get(session_key(req.poem, "chat"), "chat", prompts.SYSTEM)
+            s = sessions.get(session_key(req.poem, "chat"), "chat", prompts.system_for(req.poem))
         except Busy:
             raise HTTPException(503, "agent busy: too many open sessions")
         holder: list = []
@@ -304,8 +305,9 @@ def create_app(settings: Settings | None = None, runner=None, transport: httpx.A
         async def ignore(_event: dict) -> None:
             return None
         t0 = time.monotonic()
-        prompt = f"Dialect: {req.dialect or 'unspecified'}\nGreek:\n{req.greek}"
-        outcome = await safe_run(Job(system=prompts.BACKTRANSLATE_SYSTEM, prompt=prompt, emit=ignore,
+        language = getattr(req, "language", None) or "grc"
+        prompt = (f"Latin:\n{req.greek}" if language == "la" else f"Dialect: {req.dialect or 'unspecified'}\nGreek:\n{req.greek}")
+        outcome = await safe_run(Job(system=prompts.backtranslate_system(language), prompt=prompt, emit=ignore,
                                      seconds=settings.chat_seconds, max_turns=1))
         done = finish_record("backtranslate", outcome, round((time.monotonic() - t0) * 1000), effort=settings.chat_effort)
         if outcome.error or not outcome.text.strip():

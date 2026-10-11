@@ -42,12 +42,15 @@
     <div class="banner" id="banner" role="alert" hidden></div>
 
     <div class="toolbar" role="group" aria-label="Composer settings">
+      <label>Language <select id="language"><option value="grc">Greek</option><option value="la">Latin</option></select></label>
       <button type="button" id="mode" class="mode-toggle" aria-pressed="true">Αα Greek</button>
       <label>Poet <select id="author">
         <option value="Sappho">Sappho</option><option value="Alcaeus">Alcaeus</option><option value="Anacreon">Anacreon</option>
         <option value="Alcman">Alcman</option><option value="Pindar">Pindar</option><option value="Bacchylides">Bacchylides</option>
         <option value="Simonides">Simonides</option><option value="Ibycus">Ibycus</option><option value="Theognis">Theognis</option>
-        <option value="Archilochus">Archilochus</option><option value="Homer">Homer</option><option value="">Any poet</option>
+        <option value="Archilochus">Archilochus</option><option value="Homer">Homer</option>
+        <option value="Catullus" data-language="la">Catullus</option><option value="Horace" data-language="la">Horace</option>
+        <option value="">Any poet</option>
       </select></label>
       <label>Metre <select id="metre"><option value="">none</option><option value="auto">detect</option></select></label>
       <label>Dialect <select id="dialect">

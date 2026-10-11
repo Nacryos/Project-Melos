@@ -85,7 +85,9 @@
     popup: { open: false, row: null, index: 0, options: [], auto: false, dismissed: null },
     analysis: new Map(), pending: new Set(), selected: null, chatStream: null, showArchived: new Set(),
   };
-  const settings = () => ({ author: $('author').value, metre: $('metre').value, dialect: $('dialect').value });
+  const language = () => ($('language') && $('language').value) || 'grc';
+  const isLatin = () => language() === 'la';
+  const settings = () => ({ author: $('author').value, metre: $('metre').value, dialect: $('dialect').value, language: language() });
   const scanDialect = () => { const d = $('dialect').value; return d && d !== 'none' ? d : d === 'none' ? 'none' : (POET_DIALECT[$('author').value] || 'none'); };
   const realMetre = () => { const m = $('metre').value; return m && m !== 'auto' && m !== 'none' ? m : null; };
   const rowIndex = row => S.rows.indexOf(row);
@@ -107,6 +109,19 @@
     if (which === 'english') { $('english-panel').classList.toggle('collapsed', value); $('english-toggle').setAttribute('aria-expanded', String(!value)); }
     else { $('workspace').classList.toggle('chat-collapsed', value); $('chat-toggle').setAttribute('aria-expanded', String(!value)); }
   }
+
+  // ---- Language: Latin turns TypeGreek off (plain typing), hides the dialect, and keeps the poet list to Latin poets
+  function applyLanguage() {
+    const latin = isLatin();
+    document.body.classList.toggle('latin', latin);
+    const dl = $('dialect').closest('label'); if (dl) dl.hidden = latin;
+    Array.from($('author').options).forEach(o => { const la = o.dataset.language === 'la'; o.hidden = o.value ? (latin ? !la : la) : false; });
+    const cur = $('author').selectedOptions[0];
+    if (cur && cur.hidden) $('author').value = latin ? 'Catullus' : 'Sappho';
+    if (latin && typeof setMode === 'function') setMode('english');
+    const mb = $('mode'); if (mb) mb.hidden = latin;
+  }
+  if ($('language')) $('language').addEventListener('change', () => { applyLanguage(); });
 
   // ---- TypeGreek mode, shared by every line editor --------------------------------------------------------------
   let mode = 'greek', syncingMode = false;
@@ -180,6 +195,7 @@
     if (typeof s.author === 'string') $('author').value = s.author;
     if (typeof s.metre === 'string') $('metre').value = s.metre;
     if (typeof s.dialect === 'string') $('dialect').value = s.dialect;
+    if ($('language')) { $('language').value = s.language === 'la' ? 'la' : 'grc'; applyLanguage(); }
     $('poem-title').value = S.poem.title || '';
     $('english').value = S.poem.english || '';
     for (const r of S.rows) r.ime?.detach();
@@ -378,7 +394,7 @@
     renderBT(row);
     try {
       const dialect = scanDialect();
-      const res = await call('POST', '/api/composer/backtranslate', { greek: version.greek, dialect: dialect === 'none' ? null : dialect });
+      const res = await call('POST', '/api/composer/backtranslate', { greek: version.greek, dialect: dialect === 'none' ? null : dialect, language: language() });
       if (res.cost_usd) cost(res.cost_usd);
       version.back_translation = res.english;
       delete row.bt[version.id];
@@ -494,7 +510,7 @@
     if (!text.trim()) { S.scan = { seq, text, res: null, byIndex: new Map() }; S.rows.forEach(r => { renderBackdrop(r); renderInfo(r); }); return; }
     const m = $('metre').value || null;
     try {
-      const r = await request('POST', '/api/scan', { text, lexicon: true, dialect: scanDialect(), metre: m === 'none' ? null : m });
+      const r = await request('POST', '/api/scan', { text, lexicon: true, dialect: isLatin() ? 'none' : scanDialect(), metre: m === 'none' ? null : m, language: language() });
       const res = await r.json();
       if (seq !== S.scan.seq) return;
       const starts = [0];

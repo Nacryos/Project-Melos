@@ -255,6 +255,9 @@ test('slotKey: the same key the server computes (backend/composer_routes.py slot
   assert.equal(await C.slotKey(0, '', { author: 'Sappho', metre: 'sapphic', dialect: 'aeolic' }), '3e5d5780d5992aabffe8ed380744d64a');
   assert.equal(await C.slotKey(2, '  ἄστερες  μὲν ', { metre: 'sapphic' }), 'ea66ae8e0ea3c660a5e7c0ef8dd45ecd');
   assert.equal(await C.slotKey(2, 'ἄστερες μὲν'.normalize('NFD'), { metre: 'sapphic', author: null }), 'ea66ae8e0ea3c660a5e7c0ef8dd45ecd');
+  assert.equal(await C.slotKey(0, '', { author: 'Catullus', metre: 'phalaecian', language: 'la' }), 'a166f1f06b7bacf8df55e733ad04d6a8');
+  assert.equal(await C.slotKey(1, ' Vivamus  mea Lesbia ', { author: 'Catullus', metre: 'phalaecian', language: 'grc' }), 'fd41870705014d8c6ca5144c48909501');
+  assert.equal(await C.slotKey(0, '', { author: 'Sappho', metre: 'sapphic', dialect: 'aeolic', language: 'grc' }), '3e5d5780d5992aabffe8ed380744d64a');
 });
 
 test('page wiring: warm-up on open and after a commit, stored candidates per slot, stanza candidates routed', () => {

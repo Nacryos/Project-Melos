@@ -368,6 +368,10 @@ def test_slot_key_formula_is_shared_with_the_page():
     assert composer_routes.slot_key(0, "", {"author": "Sappho", "metre": "sapphic", "dialect": "aeolic"}) == "3e5d5780d5992aabffe8ed380744d64a"
     assert composer_routes.slot_key(2, "  ἄστερες  μὲν ", {"metre": "sapphic"}) == "ea66ae8e0ea3c660a5e7c0ef8dd45ecd"
     assert composer_routes.slot_key(2, "ἄστερες μὲν", {"metre": "sapphic", "author": None}) == "ea66ae8e0ea3c660a5e7c0ef8dd45ecd"
+    # Latin poems append "|la"; a Greek poem with language grc or none keeps the v1 key byte for byte
+    assert composer_routes.slot_key(0, "", {"author": "Catullus", "metre": "phalaecian", "language": "la"}) == "a166f1f06b7bacf8df55e733ad04d6a8"
+    assert composer_routes.slot_key(1, " Vivamus  mea Lesbia ", {"author": "Catullus", "metre": "phalaecian", "language": "grc"}) == "fd41870705014d8c6ca5144c48909501"
+    assert composer_routes.slot_key(0, "", {"author": "Sappho", "metre": "sapphic", "dialect": "aeolic", "language": "grc"}) == "3e5d5780d5992aabffe8ed380744d64a"
 
 
 def test_ahead_slots_skip_written_lines_and_reach_into_the_next_stanza(env):

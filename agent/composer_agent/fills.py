@@ -157,7 +157,7 @@ class Fills:
                         bound.ctx = ctx
                         server, tools = server_for(bound)
                         resume = None if fill.cold else session.session_id
-                        client = self.factory(sdk_options(settings, self.system, server, effort=settings.pool_effort,
+                        client = self.factory(sdk_options(settings, self.system(poem) if callable(self.system) else self.system, server, effort=settings.pool_effort,
                                                           resume=resume), tools)
                         await client.connect()
                         try:

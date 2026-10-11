@@ -106,8 +106,10 @@
   /* The server's pool slot key (backend/composer_routes.py slot_key; docs/composer/ui.md): sha256 of
      "v1|<line position>|<prefix>|<author>|<metre>|<dialect>" (UTF-8), first 32 hex digits. The prefix is the line
      before the slot, NFC, whitespace runs collapsed to one space, trimmed; a missing setting is "". */
+  // "|<language>" is appended only for a poem whose language is set and not grc, so every Greek key is unchanged.
   const slotKeyText = (linePosition, prefix, s) => ['v1', String(Math.trunc(Number(linePosition) || 0)),
-    squash(String(prefix || '').normalize('NFC')), ...['author', 'metre', 'dialect'].map(k => String((s && s[k]) || ''))].join('|');
+    squash(String(prefix || '').normalize('NFC')), ...['author', 'metre', 'dialect'].map(k => String((s && s[k]) || ''))].join('|')
+    + (s && s.language && s.language !== 'grc' ? '|' + String(s.language) : '');
   async function slotKey(linePosition, prefix, s) {
     const digest = await globalThis.crypto.subtle.digest('SHA-256', new TextEncoder().encode(slotKeyText(linePosition, prefix, s)));
     return Array.from(new Uint8Array(digest), b => b.toString(16).padStart(2, '0')).join('').slice(0, 32);

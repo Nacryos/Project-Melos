@@ -163,7 +163,8 @@ def _lint_line(line_id: int, greek: str) -> tuple[dict | None, list | None]:
         metre = None
     try:
         result = composer_lint.check(greek, metre_name=metre, dialect=settings.get("dialect") or None,
-                                     author=settings.get("author") or None, line_index=line["position"])
+                                     author=settings.get("author") or None, line_index=line["position"],
+                                     language=settings.get("language") or "grc")
     except HTTPException as exc:
         return None, [{"id": "settings", "ok": None, "blocking": False, "detail": f"not checked: {exc.detail}"}]
     return {**result["scansion"], "pass": result["pass"], "ms": result["ms"]}, result["checks"]
@@ -219,6 +220,7 @@ class CheckIn(BaseModel):
     remaining_template: str | None = Field(None, max_length=40)
     prefix: str | None = Field(None, max_length=MAX_LINE)
     line_index: int = Field(0, ge=0, le=10_000)
+    language: str | None = Field(None, max_length=8)        # grc (default) | la: the poem's language
 
 
 @router.post("/api/composer/check")
@@ -229,7 +231,8 @@ def check(body: CheckIn, caller=Depends(require_owner_or_agent)):
     # no remaining_template L7 fails for them (the owner's own lines are only scanned).
     return composer_lint.check(body.greek, metre_name=metre, dialect=body.dialect or None,
                                author=body.author, remaining_template=body.remaining_template, prefix=body.prefix,
-                               line_index=body.line_index, require_template=caller == "agent")
+                               line_index=body.line_index, require_template=caller == "agent",
+                               language=body.language or "grc")
 
 
 # ------------------------------------------------------------------------------------------------ agent proxy
@@ -439,11 +442,15 @@ class PoolIn(BaseModel):
 
 def slot_key(line_position, prefix: str, settings: dict | None) -> str:
     """The pool's slot key, computed the same way by js/composer-core.js ``slotKey`` (docs/composer/ui.md):
-    sha256 of "v1|<line position>|<prefix>|<author>|<metre>|<dialect>" (UTF-8), first 32 hex digits. The prefix
-    is the line before the slot, NFC, whitespace runs collapsed to one space, trimmed; a missing setting is ""."""
+    sha256 of "v1|<line position>|<prefix>|<author>|<metre>|<dialect>" (UTF-8), first 32 hex digits, with "|<language>"
+    appended only when the poem's language is set and not grc. The prefix is the line before the slot, NFC,
+    whitespace runs collapsed to one space, trimmed; a missing setting is ""."""
     s = settings or {}
     text = " ".join(unicodedata.normalize("NFC", prefix or "").split())
     raw = "|".join(["v1", str(int(line_position or 0)), text, *(str(s.get(k) or "") for k in ("author", "metre", "dialect"))])
+    language = str(s.get("language") or "")
+    if language and language != "grc":
+        raw += "|" + language                    # Latin poems only: every Greek key stays byte-identical
     return hashlib.sha256(raw.encode("utf-8")).hexdigest()[:32]
 
 
@@ -552,6 +559,7 @@ class BacktranslateIn(BaseModel):
     model_config = {"extra": "forbid"}
     greek: str = Field(..., min_length=1, max_length=MAX_LINE * 4)
     dialect: str | None = Field(None, max_length=20)
+    language: str | None = Field(None, max_length=8)        # grc (default) | la
 
 
 @router.post("/api/composer/backtranslate", dependencies=owner)
