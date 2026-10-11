@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 20:38 PDT
+Last updated: 2026-10-10 21:24 PDT
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a second language backend behind the release W code, not a fork. First the PRD (`docs/prd/latin-composer.md`,
@@ -53,15 +53,20 @@ metre-locking is never applied in the composer.
   Perseus text; manifest with per-batch models, audits and revisions) and loaded into the corpus partition as 115
   `machine_translation` passages linked to their Latin poems, shown only where no human translation exists.
 
+- **Pool measurement 1** (`docs/latin/pool.md`): next words in 8-9 s cold and mid-line; a stanza of four whole
+  Phalaecians from 36 s (11 whole lines in 77 s); 13 of 62 proposals rejected, all on the metre; $1.306 in all.
+
 ## Running
 
-- Nothing. The dev stack (API :8797, agent :8801) is left running for the coordinator to try the page; stop it with
+- Horace Odes interlinear (14 batches of about 230 lines, Opus writers; audits and revisions follow): H01-H04 in flight.
+- The dev stack (API :8797, agent :8801) stays up for the owner to try the Latin page by remote control; stop it with
   `scripts/latin_dev_stack.sh stop`.
 
 ## Next
 
-1. Measure the pool with a longer English source and the next-words mode; try the page itself (Language: Latin).
-2. Horace interlinear (Odes first) the same way, after Smart's prose is parsed; Horace templates evaluated on Odes 1 gold.
+1. Horace Odes interlinear: finish the 14 batches, audit, revise, assemble, load (then Epodes and the Carmen Saeculare).
+2. Latin lemma index: LASLA alignment to the Perseus texts, LatinCy bake-off, `forms_found` / concordance routes.
+3. Page polish: macron overlay for Latin lines, human metre labels per language.
 3. Lemma index for Latin: lemmatiser bake-off against LASLA (held-out), recorded lemmas, `forms_found` and
    collocations for the agent's research tools; Horace templates evaluated on Odes 1 gold.
 4. Page polish for Latin (macron overlay, metre list labels) and the Horace translations (Smart's prose parser).

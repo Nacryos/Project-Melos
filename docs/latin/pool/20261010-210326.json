@@ -1,0 +1,682 @@
+{
+ "started": "2026-10-11T04:00:30Z",
+ "english": "Come, friends, tonight we drink the dark Falernian; tomorrow the rain can keep the whole city to itself. Pour it unmixed, boy, the way old Postumia orders when she has had her share, and send the water away to the sober men. Let the lamps burn down; whoever counts the cups tonight is no friend of mine.",
+ "runs": [
+  {
+   "label": "A words L1 (cold, research starting)",
+   "body": {
+    "caret": {
+     "line_position": 0,
+     "char_offset": 0,
+     "prefix": ""
+    },
+    "prefix": "",
+    "remaining_template": "xx-uu-u-u-F",
+    "n": 8,
+    "ahead_lines": 0,
+    "mode": "words"
+   },
+   "candidates": [
+    {
+     "t": 9.3,
+     "greek": "Hac nocte",
+     "english_span": "tonight",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–––"
+    },
+    {
+     "t": 9.4,
+     "greek": "Potemus, amici,",
+     "english_span": "we drink, friends",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–––⏑⏑–"
+    },
+    {
+     "t": 9.4,
+     "greek": "Nunc, amici,",
+     "english_span": "Come, friends,",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑"
+    },
+    {
+     "t": 9.4,
+     "greek": "Huc, sodales,",
+     "english_span": "Come, friends,",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑"
+    },
+    {
+     "t": 31.8,
+     "greek": "Falerni",
+     "english_span": "Falernian",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑––"
+    },
+    {
+     "t": 31.9,
+     "greek": "Nos hac nocte",
+     "english_span": "we tonight",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–––⏑"
+    },
+    {
+     "t": 32.0,
+     "greek": "Hodie bibemus",
+     "english_span": "tonight we drink",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑⏑–"
+    },
+    {
+     "t": 32.0,
+     "greek": "Ergo, amici,",
+     "english_span": "Come, friends,",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑"
+    },
+    {
+     "t": 32.0,
+     "greek": "O amici,",
+     "english_span": "Come, friends,",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑"
+    },
+    {
+     "t": 32.0,
+     "greek": "Bibamus,",
+     "english_span": "we drink",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑––"
+    },
+    {
+     "t": 32.0,
+     "greek": "Ite, pueri,",
+     "english_span": "Come (boys)",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑⏑"
+    },
+    {
+     "t": 32.0,
+     "greek": "Dum licet,",
+     "english_span": "tonight (while we may)",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–"
+    }
+   ],
+   "rejected": 4,
+   "rejected_by": {
+    "L7": 4
+   },
+   "tools": [
+    "propose_candidates",
+    "propose_candidates"
+   ],
+   "first_s": 9.3,
+   "cost_usd": 0.249818,
+   "fills": [
+    {
+     "t": 33.0,
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "mode": "words",
+     "cold": true,
+     "cost_usd": 0.249818,
+     "terminal_reason": null,
+     "shared": null
+    }
+   ],
+   "seconds": 33.0,
+   "whole_lines": 0
+  },
+  {
+   "label": "B lines L1 + 3 ahead",
+   "body": {
+    "caret": {
+     "line_position": 0,
+     "char_offset": 0,
+     "prefix": ""
+    },
+    "prefix": "",
+    "remaining_template": "xx-uu-u-u-F",
+    "n": 6,
+    "ahead_lines": 3,
+    "mode": "line"
+   },
+   "candidates": [
+    {
+     "t": 36.0,
+     "greek": "hac nocte, o socii, bibamus atrum",
+     "english_span": "Come, friends, tonight we drink the dark",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 36.0,
+     "greek": "adeste, o comites",
+     "english_span": "Come, friends",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": false,
+     "pattern": "⏑––⏑⏑–"
+    },
+    {
+     "t": 36.0,
+     "greek": "venite, hac bibimus nigrum Falernum",
+     "english_span": "Come, friends, tonight we drink the dark Falernian",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 41.9,
+     "greek": "venite, o socii",
+     "english_span": "Come, friends",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": false,
+     "pattern": "–––⏑⏑–"
+    },
+    {
+     "t": 41.9,
+     "greek": "hac nocte, o comites, bibemus atrum\nFalernum",
+     "english_span": "Come, friends, tonight we drink the dark Falernian",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": false,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 41.9,
+     "greek": "nunc, o cari, mei bibamus una\nnocte hac",
+     "english_span": "Come, friends, tonight we drink",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": false,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 53.1,
+     "greek": "lymphae ad sobrios abite longe",
+     "english_span": "send the water away to the sober men",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": false,
+     "pattern": "–––⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 53.1,
+     "greek": "cras imber sibi totam habeto Romam",
+     "english_span": "tomorrow the rain can keep the whole city to itself",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 53.1,
+     "greek": "ardescant, pereant licet lucernae",
+     "english_span": "Let the lamps burn down",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 61.4,
+     "greek": "Nunc nigrum, pueri,",
+     "english_span": "the dark (Falernian), boy",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑⏑–"
+    },
+    {
+     "t": 61.5,
+     "greek": "Vos, o cari mihi,",
+     "english_span": "Come, friends,",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–––⏑⏑–"
+    },
+    {
+     "t": 61.5,
+     "greek": "Nunc nigrum, pueri, date huc Falernum",
+     "english_span": "tonight we drink the dark Falernian (boys, bring the dark Falernian here now)",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 61.5,
+     "greek": "Nox haec, o pueri, Falerno nigro",
+     "english_span": "tonight ... the dark Falernian",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 69.9,
+     "greek": "Nunc, o cari mihi, bibamus atrum",
+     "english_span": "Come, friends, tonight we drink the dark",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 70.0,
+     "greek": "Nox haec, o pueri, Falerno nigro\ndetur; cras pluat, urbs sit imbris una",
+     "english_span": "tonight ... the dark Falernian; tomorrow the rain can keep the whole city",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 75.5,
+     "greek": "cras imber sibi totam habeto Romam,\nnunc merum, puer",
+     "english_span": "tomorrow the rain can keep the whole city; now unmixed, boy",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": false,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 75.5,
+     "greek": "ardeant pereantque iam lucernae",
+     "english_span": "Let the lamps burn down",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": true,
+     "pattern": "–⏑–⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 75.6,
+     "greek": "inger vina, puer, mera, ut iubet lex",
+     "english_span": "Pour it unmixed, boy, the way (Postumia's) law orders",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 75.6,
+     "greek": "nullus, qui calices notat, sodalis",
+     "english_span": "whoever counts the cups is no friend of mine",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    }
+   ],
+   "rejected": 7,
+   "rejected_by": {
+    "L7": 7
+   },
+   "tools": [
+    "propose_candidates",
+    "propose_candidates",
+    "propose_candidates",
+    "propose_candidates",
+    "propose_candidates",
+    "propose_candidates"
+   ],
+   "first_s": 36.0,
+   "cost_usd": 0.668254,
+   "fills": [
+    {
+     "t": 42.9,
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "mode": "line",
+     "cold": false,
+     "cost_usd": 0.104563,
+     "terminal_reason": null,
+     "shared": null
+    },
+    {
+     "t": 71.3,
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "mode": "line",
+     "cold": true,
+     "cost_usd": 0.31757,
+     "terminal_reason": null,
+     "shared": null
+    },
+    {
+     "t": 76.5,
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "mode": "line",
+     "cold": false,
+     "cost_usd": 0.246121,
+     "terminal_reason": null,
+     "shared": null
+    }
+   ],
+   "seconds": 76.5,
+   "whole_lines": 11
+  },
+  {
+   "label": "C words mid-L1 after 'Nunc nigrum,' (3 syllables used)",
+   "body": {
+    "line_id": 3,
+    "caret": {
+     "line_position": 0,
+     "char_offset": 12,
+     "prefix": "Nunc nigrum,"
+    },
+    "prefix": "Nunc nigrum,",
+    "remaining_template": "uu-u-u-F",
+    "n": 8,
+    "ahead_lines": 0,
+    "mode": "words"
+   },
+   "candidates": [
+    {
+     "t": 8.4,
+     "greek": "pueri, date",
+     "english_span": "(boys, give)",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–"
+    },
+    {
+     "t": 8.4,
+     "greek": "comites, bibamus",
+     "english_span": "friends, we drink",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 8.5,
+     "greek": "socii,",
+     "english_span": "friends",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–"
+    },
+    {
+     "t": 8.5,
+     "greek": "comites, Falernum",
+     "english_span": "friends, Falernian",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 8.5,
+     "greek": "bibimus, sodales,",
+     "english_span": "we drink, friends",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 8.5,
+     "greek": "bibimus Falernum",
+     "english_span": "we drink Falernian",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 8.5,
+     "greek": "socii, bibamus",
+     "english_span": "friends, we drink",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 16.5,
+     "greek": "socii, bibemus",
+     "english_span": "friends, we (shall) drink",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 16.5,
+     "greek": "pueri, Falernum",
+     "english_span": "(boy) Falernian",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 16.5,
+     "greek": "bibimus Falerni",
+     "english_span": "we drink (of) Falernian",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 16.5,
+     "greek": "bibimus, Catulli",
+     "english_span": "we drink (friends of Catullus)",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 16.5,
+     "greek": "capite hoc Falernum",
+     "english_span": "take this Falernian",
+     "mode": "words",
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    }
+   ],
+   "rejected": 1,
+   "rejected_by": {
+    "L7": 1
+   },
+   "tools": [
+    "propose_candidates",
+    "propose_candidates"
+   ],
+   "first_s": 8.4,
+   "cost_usd": 0.124365,
+   "fills": [
+    {
+     "t": 17.7,
+     "slot_key": "6fa8717698bea539eff72b7dc8430544",
+     "mode": "words",
+     "cold": false,
+     "cost_usd": 0.124365,
+     "terminal_reason": null,
+     "shared": null
+    }
+   ],
+   "seconds": 17.7,
+   "whole_lines": 0
+  },
+  {
+   "label": "D lines L2 after an accepted L1",
+   "body": {
+    "caret": {
+     "line_position": 1,
+     "char_offset": 0,
+     "prefix": ""
+    },
+    "prefix": "",
+    "remaining_template": "xx-uu-u-u-F",
+    "n": 6,
+    "ahead_lines": 0,
+    "mode": "line"
+   },
+   "candidates": [
+    {
+     "t": 20.4,
+     "greek": "nos hac nocte bibemus, o sodales",
+     "english_span": "friends, tonight we drink",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 20.5,
+     "greek": "cras totam sibi servet imber urbem",
+     "english_span": "tomorrow the rain can keep the whole city to itself",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 20.5,
+     "greek": "hac nocte, o socii, bibamus; imber\ncras urbem sibi servet ille totam",
+     "english_span": "tonight we drink; tomorrow the rain can keep the whole city to itself",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 20.5,
+     "greek": "hac nocte, o comites, bibamus una",
+     "english_span": "Come, friends, tonight we drink (together)",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 47.8,
+     "greek": "cras imber sibi",
+     "english_span": "tomorrow the rain ... to itself",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": false,
+     "pattern": "–––⏑⏑"
+    },
+    {
+     "t": 47.9,
+     "greek": "nos nunc, o comites, bibamus; imber\ncras urbem sibi servet usque totam",
+     "english_span": "friends, tonight we drink; tomorrow the rain can keep the whole city to itself",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    }
+   ],
+   "rejected": 1,
+   "rejected_by": {
+    "L7": 1
+   },
+   "tools": [
+    "propose_candidates",
+    "propose_candidates"
+   ],
+   "first_s": 20.4,
+   "cost_usd": 0.263435,
+   "fills": [
+    {
+     "t": 48.9,
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "mode": "line",
+     "cold": false,
+     "cost_usd": 0.263435,
+     "terminal_reason": null,
+     "shared": null
+    }
+   ],
+   "seconds": 48.9,
+   "whole_lines": 5
+  }
+ ],
+ "poem_id": 3,
+ "accepted_line_1": "Nunc nigrum, pueri, date huc Falernum",
+ "total_cost_usd": 1.306
+}
