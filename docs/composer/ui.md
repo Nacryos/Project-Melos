@@ -47,11 +47,23 @@ sign-in marker cookie (`melos_owner_ui=1`) is present. Signed out, `/composer` i
 | Line | ↑ / ↓ | previous / next line (pop-up closed) |
 | Line | ⌘S / Ctrl+S (or Ctrl+`) | Greek / English typing (all lines) |
 | Line | ⌘A / Ctrl+A | select every Greek line of the poem (tinted); any other key or click clears it |
-| Line | ⌘C / Ctrl+C with the poem selected | copy all lines, one per line |
+| Line | ⌘C / Ctrl+C with the poem selected | copy all lines, one per line, exactly as typed (alternatives included) |
+| Line | ⌘/ / Ctrl+/ (or the “alternative” chip on a selection) | make the selection (or the word at the caret) a slot: `{selection/}`, caret before the brace, type the alternative |
 | Pop-up | ↑ / ↓ | choose |
 | Pop-up | Enter or Tab, or click | accept |
 | Pop-up | Esc | close (no auto-reopen until the slot changes) |
 | Chat | Enter / Shift+Enter | send / new line |
+
+## Alternatives in a line (W4)
+
+`{A/B}` marks a slot: A is the line's reading, B (and C…) alternatives; a bare `word/word` with no spaces is a one-word
+slot. Select Greek and press ⌘/ (or click the chip) to get `{selection/}` with the caret before the brace. The page
+scans every variant (the line in its first readings, then each alternative swapped in at its place in the stanza) and
+shows the pattern and fit of each: the alternative's syllables are coloured at 80 % after the slash, the braces and
+slash dimmed; the line info lists `/ pattern fit` per alternative. Saving lints every variant on the server
+(`composer_lint.check` expands the slots; a check passes only when it passes for every variant; `scansion.variants`
+records each variant's pattern and pass). The agent, the pool and the chat caret see first readings only
+(`ComposerCore.plain`), never the markup. Up to 4 variants per line. ⌘A/⌘C copies the raw text, markup included.
 
 ## How the pool works (PRD §4)
 

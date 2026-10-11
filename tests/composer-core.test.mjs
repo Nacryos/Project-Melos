@@ -266,3 +266,29 @@ test('page wiring: warm-up on open and after a commit, stored candidates per slo
   assert.match(js, /data\.slot_key && data\.slot_key !== mine\) routeToSlot\(data\)/);
   assert.match(js, /await loadStored\(row, base\);/);
 });
+
+// W4: alternatives in a line ({A/B} slots and bare word/word), shared with backend/composer_lint.py.
+test('variants: {A/B} slots and bare word/word expand to every reading, first readings first, capped at 4', () => {
+  const v = C.variants('ἄνθεσιν {ἶπας/ἰοισιν}. καὶ ὄρος/ὄρη');
+  assert.deepEqual(v.variants.map(x => x.text), ['ἄνθεσιν ἶπας. καὶ ὄρος', 'ἄνθεσιν ἶπας. καὶ ὄρη', 'ἄνθεσιν ἰοισιν. καὶ ὄρος', 'ἄνθεσιν ἰοισιν. καὶ ὄρη']);
+  assert.equal(v.roles.join(''), 'bbbbbbbbmbbbbmaaaaaambbbbbbbbbbmaaa');
+  assert.equal(C.variants('{a/b} {c/d/e}').variants.length, 4);
+  assert.deepEqual(C.variants('ἄνθεσιν ἶπας').variants.map(x => x.text), ['ἄνθεσιν ἶπας']);
+  assert.deepEqual(C.variants('http://x').variants.map(x => x.text), ['http://x']);
+});
+test('variants: map carries each character of a variant back to the raw text', () => {
+  const v = C.variants('ab {cd/efg} h').variants[2 - 1];
+  assert.equal(v.text, 'ab efg h');
+  assert.equal(v.map[3], 7);                                  // 'e' sits at raw index 7
+  assert.equal(v.map[v.map.length - 1], 12);                  // 'h'
+});
+test('plain: first readings, also for a prefix cut inside an open slot', () => {
+  assert.equal(C.plain('ἄνθεσιν {ἶπας/ἰοι'), 'ἄνθεσιν ἶπας');
+  assert.equal(C.plain('ἄνθεσιν {ἶπας'), 'ἄνθεσιν ἶπας');
+  assert.equal(C.plain('{a/b} {c/d}'), 'a c');
+});
+test('makeSlot: wraps the selection, or the word at the caret, with the caret before the brace', () => {
+  assert.deepEqual(C.makeSlot('ἄνθεσιν ἶπας.', 8, 12), { text: 'ἄνθεσιν {ἶπας/}.', caret: 14 });
+  assert.deepEqual(C.makeSlot('ἄνθεσιν ἶπας.', 10, 10), { text: 'ἄνθεσιν {ἶπας/}.', caret: 14 });
+  assert.equal(C.makeSlot('ἄνθεσιν ἶπας.', 13, 13), null);
+});

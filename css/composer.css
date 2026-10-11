@@ -61,6 +61,13 @@ html, body { overflow-x: hidden; }
 }
 .u.violation { text-decoration: underline wavy var(--fail); text-underline-offset: .32em; text-decoration-thickness: 2px; }
 .u.sel { outline: 2px solid var(--sea); outline-offset: 1px; }
+/* Alternatives (W4): {A/B} markup dimmed, the alternative reading at 80 % */
+.backdrop .mark { opacity: .35; }
+.backdrop .alt, .backdrop .u.alt { opacity: .8; }
+.line-info .altfit { opacity: .8; }
+.altchip { position: absolute; z-index: 30; padding: 3px 9px; border: 1px solid var(--sea); border-radius: 4px; background: var(--canvas-bg); color: var(--sea);
+  font: .78rem/1.4 system-ui, sans-serif; cursor: pointer; box-shadow: 0 4px 14px rgb(0 0 0 / .18); }
+.altchip:hover { background: var(--sea); color: #fff; }
 .u .pct { display: none; }
 .board.pct .u .pct {
   display: block; position: absolute; left: 50%; top: 100%; transform: translate(-50%, -.35em);
