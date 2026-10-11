@@ -83,7 +83,7 @@
     scan: { seq: 0, text: null, res: null, byIndex: new Map() },
     pools: new Map(), fills: new Map(), prefixScans: new Map(),
     popup: { open: false, row: null, index: 0, options: [], auto: false, dismissed: null },
-    analysis: new Map(), pending: new Set(), selected: null, chatStream: null, showArchived: new Set(),
+    analysis: new Map(), pending: new Set(), selected: null, chatStream: null, showArchived: new Set(), selectAll: false,
   };
   const settings = () => ({ author: $('author').value, metre: $('metre').value, dialect: $('dialect').value });
   const scanDialect = () => { const d = $('dialect').value; return d && d !== 'none' ? d : d === 'none' ? 'none' : (POET_DIALECT[$('author').value] || 'none'); };
@@ -119,7 +119,7 @@
     const b = $('mode');
     b.setAttribute('aria-pressed', String(mode === 'greek'));
     b.textContent = mode === 'greek' ? 'Αα Greek' : 'Aa English';
-    b.title = `Typing ${mode === 'greek' ? 'Greek (TypeGreek rules)' : 'English'} — Ctrl+\` to switch`;
+    b.title = `Typing ${mode === 'greek' ? 'Greek (TypeGreek rules)' : 'English'} — ⌘S / Ctrl+S (or Ctrl+\`) to switch`;
     syncingMode = false;
   }
   $('mode').addEventListener('mousedown', e => e.preventDefault());
@@ -296,6 +296,11 @@
   }
   function keydown(row, e) {
     if (e.isComposing) return;
+    const cmd = (e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey, k = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if (cmd && k === 's') { e.preventDefault(); setMode(mode === 'greek' ? 'english' : 'greek'); return; }   // ⌘S / Ctrl+S: Greek ↔ English typing
+    if (cmd && k === 'a') { e.preventDefault(); selectAllLines(row); return; }                               // ⌘A: every line of the poem
+    if (cmd && k === 'c' && S.selectAll) { e.preventDefault(); copyAllLines(); return; }                   // ⌘C with the poem selected
+    if (S.selectAll && !['Meta', 'Control', 'Shift', 'Alt'].includes(e.key)) clearSelectAll();
     const pop = S.popup;
     if (pop.open && pop.row === row) {
       if (e.key === 'Escape') { e.preventDefault(); pop.dismissed = slotKeyOf(row); closePopup(); return; }
@@ -316,6 +321,26 @@
       if (next) { e.preventDefault(); closePopup(); focusRow(next, row.el.ta.selectionStart); }
     }
   }
+  // ---- whole-poem selection: ⌘A in a line selects every Greek line, ⌘C (or Edit → Copy) copies them joined by newlines
+  function poemText() { const lines = S.rows.map(r => r.draft); while (lines.length && !lines.at(-1).trim()) lines.pop(); return lines.join('\n'); }
+  function selectAllLines(row) {
+    S.selectAll = true;
+    board.classList.add('select-all');
+    for (const r of S.rows) if (r.el) r.el.ta.setSelectionRange(0, r.el.ta.value.length);
+    closePopup();
+  }
+  function clearSelectAll() { if (!S.selectAll) return; S.selectAll = false; board.classList.remove('select-all'); }
+  async function copyAllLines() {
+    const text = poemText();
+    try { await navigator.clipboard.writeText(text); }
+    catch (e) {
+      const t = document.createElement('textarea'); t.value = text; t.style.position = 'fixed'; t.style.opacity = '0';
+      document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e2) { /* nothing more to try */ } t.remove();
+      S.active?.el.ta.focus({ preventScroll: true });
+    }
+  }
+  document.addEventListener('copy', e => { if (!S.selectAll || !e.clipboardData) return; e.preventDefault(); e.clipboardData.setData('text/plain', poemText()); });
+  document.addEventListener('pointerdown', () => clearSelectAll());
   function caretMoved(row) {
     const here = slotKeyOf(row);
     for (const f of S.fills.values()) if (f.row === row && f.slot !== here) abortFill(f.key);   // the owner left that slot

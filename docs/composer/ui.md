@@ -45,7 +45,9 @@ sign-in marker cookie (`melos_owner_ui=1`) is present. Signed out, `/composer` i
 | Line | Enter | save as a new version, go to the next line |
 | Line | Tab | open the pop-up (asks the model for this slot) |
 | Line | ↑ / ↓ | previous / next line (pop-up closed) |
-| Line | Ctrl+` | Greek / English typing (all lines) |
+| Line | ⌘S / Ctrl+S (or Ctrl+`) | Greek / English typing (all lines) |
+| Line | ⌘A / Ctrl+A | select every Greek line of the poem (tinted); any other key or click clears it |
+| Line | ⌘C / Ctrl+C with the poem selected | copy all lines, one per line |
 | Pop-up | ↑ / ↓ | choose |
 | Pop-up | Enter or Tab, or click | accept |
 | Pop-up | Esc | close (no auto-reopen until the slot changes) |
