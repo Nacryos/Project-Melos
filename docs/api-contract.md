@@ -567,3 +567,16 @@ poem) take part in the English BM25 bridge and the dense `eng` retrievers; hits 
   client disconnects; the stream carries `: keep-alive` comment lines every 15 s while the agent is silent.
 - Owner sessions: a valid session slides its expiry (12 h idle window); the cookie lives 30 days; sessions survive
   restarts via `MELOS_OWNER_SESSIONS` (default next to the composer store).
+
+## Release X.3 additions (2026-10-10, evening)
+
+- `POST /api/scan` with a stanzaic metre (`sapphic`, `alcaic`, `elegiac`): each non-blank line is fitted to its place
+  in the stanza, and the count restarts after a blank line (`backend/scansion/metre.py stanza_positions`), so every
+  fourth Sapphic line after a blank row is checked as the adonic. `sapphic_hendecasyllable` still checks every line
+  as a hendecasyllable.
+- Composer: `POST .../pool`, `POST .../lines` and `POST /api/composer/lines/{id}/versions` accept `stanza_position`
+  (the page's rows since the last blank row); the saved line's lint and the ahead slots use it in place of the row
+  index when given.
+- Composer page: every distinct draft line is sent once to `POST /api/composer/check` (no metre) and the L1 / L2 / L4
+  evidence is rendered per word (`ComposerCore.attestWords`): △ a spelling printed nowhere in the corpus or only
+  outside the dialect, ✗ the dialect's poets print another spelling, or no reading exists. No model call.

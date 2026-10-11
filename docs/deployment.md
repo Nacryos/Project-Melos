@@ -1,5 +1,21 @@
 # Deployment handoff
 
+## Current: release X.3 — stanza-aware metre and live attestation in the composer (2026-10-10, ~7:40 PM PDT)
+
+Backend `melos-api:20261011x3` (code layer atop X.2; previous container kept as `melos-api-before-x3`; canary
+`melos-api-canary-x3` on 8797 with a copied runtime, kept stopped): `/api/scan` fits stanzaic metres by stanza position
+with the count restarting after a blank line (fr. 1 on the canary: three hendecasyllables, the adonic, then after the
+blank line a hendecasyllable again); the composer's pool, line and version routes take `stanza_position` from the page.
+Page (Vercel `project-melos-mhn02wcim`, from `~/Projects/melos-t` 01800a4): a blank row separates stanzas
+(`ComposerCore.stanzaIndex`), the metre dropdown says "sapphic stanza (3 + adonic)" vs "sapphic hendecasyllable (every
+line)", and every typed word is checked against the corpus through `POST /api/composer/check` (△ unattested spelling,
+✗ non-dialect spelling or no reading; hover for the evidence). Checks: `deploy/canary_checks_x.sh` 16/16 on the canary
+and on production; `node --test tests/*.test.mjs` 542 passed (the 3 pre-existing about/timeline failures only);
+`tests/test_composer.py` + scansion + compose routes 58 passed (the pre-existing route-enumeration test only).
+Note for the owner's poem: its metre is still `sapphic_hendecasyllable`; choose "sapphic stanza" in the toolbar for
+the fourth line to be checked as the adonic. **Rollback:** `MELOS_X_KEPT=melos-api-before-x3
+sh /home/alvin/melos-x/src/deploy/release_x.sh rollback`, then `vercel promote <previous production URL> --yes`.
+
 ## Current: release X.2 — composer saves, sessions, chat replies (2026-10-10, ~6:15 PM PDT)
 
 Two point releases atop X, code layers only (`deploy/Dockerfile.x`, `deploy/release_x.sh` with `MELOS_X_IMAGE`,

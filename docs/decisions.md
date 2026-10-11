@@ -183,3 +183,8 @@ no available English author translations for that poem".
   Sappho — while the attested breath words (πνέοισιν, ἄηται in fr. 2; ἄημι in fr. 71) are reached only by "blow" or
   "wind". Not built yet. Design to follow: resolve through gloss terms and dictionary cross-references into a root
   family, then list attested forms with author, fragment, dialect rule and line for each headword in the family.
+- Owner (same evening): every typed Greek word must be checked at once against the corpus (attested in that form, or a
+  plausible dialect form of an attested word), and the metre checker must treat every fourth Sapphic line as the
+  adonic. Built (release X.3): the page sends each draft line to the lint bank and marks words; the scan route and the
+  composer count stanza places from the last blank row. The "plausible Aeolic form" case shows as △ with the Morpheus
+  reading and the headword, never as ✓: only a printed spelling earns ✓.
