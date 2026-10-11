@@ -119,7 +119,7 @@ def main():
                 manifest["licence"]["quote"] = h["licence"]
             urn = tree.getroot().xpath("string(//t:div[@type='edition']/@n)", namespaces={"t": "http://www.tei-c.org/ns/1.0"})
             # poem divs, plus a textpart div that itself holds lines (Smithers 67 is typed so in the eng4 file)
-            poems = tree.xpath("//t:div[@subtype='poem' or (@subtype='textpart' and t:l)]",
+            poems = tree.xpath("//t:div[@subtype='poem' or (@subtype='textpart' and .//t:l and not(.//t:div))]",
                                namespaces={"t": "http://www.tei-c.org/ns/1.0"})
             n_lines = 0
             for p in poems:

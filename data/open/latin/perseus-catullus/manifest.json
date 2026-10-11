@@ -50,8 +50,8 @@
     "licence_url": "https://creativecommons.org/licenses/by-sa/4.0/",
     "author": "Catullus"
    },
-   "poems": 117,
-   "lines": 527,
+   "poems": 118,
+   "lines": 545,
    "language": "en",
    "kind": "translation",
    "label": "Smithers 1894 prose"
@@ -80,11 +80,11 @@
    "label": "Burton 1894 verse"
   },
   "poems.jsonl": {
-   "sha256": "ac7237d390f80510209d6ba3ba9d3186f972989a419b6b12af9c8efea25e4a4c",
-   "bytes": 1538606
+   "sha256": "2045b1b0163ecef11a3399ac387729f55d50d48b242e9f73b5a20b48f8a1a037",
+   "bytes": 1547011
   }
  },
  "counts": {
-  "records": 350
+  "records": 351
  }
 }
