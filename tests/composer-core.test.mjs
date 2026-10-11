@@ -269,3 +269,14 @@ test('page wiring: warm-up on open and after a commit, stored candidates per slo
   assert.match(js, /data\.slot_key && data\.slot_key !== mine\) routeToSlot\(data\)/);
   assert.match(js, /await loadStored\(row, base\);/);
 });
+
+test('macronise puts macrons on certain long vowels and breves on certain short open ones', () => {
+  const units = [
+    { ns: 0, ne: 1, p_long: 0.9, vowel: { p_long: 0.9 } },            // ā
+    { ns: 3, ne: 4, p_long: 1.0, vowel: { p_long: 0.1 } },            // short vowel but long by position: no mark
+    { ns: 6, ne: 7, p_long: 0.05, vowel: { p_long: 0.05 } },          // ă (open and short)
+    { ns: 9, ne: 11, p_long: 1.0, vowel: { p_long: 1.0 } },           // diphthong: no mark
+  ];
+  assert.equal(C.macronise('arma virumque ae', units), 'ārma vĭrumque ae'.normalize('NFC'));
+  assert.equal(C.macronise('arma', [{ ns: 0, ne: 1, p_long: 0.5, vowel: { p_long: 0.5 } }]), 'arma');
+});

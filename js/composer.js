@@ -93,7 +93,20 @@
   const rowIndex = row => S.rows.indexOf(row);
   const current = row => row.line?.versions?.find(v => v.id === row.line.current_version_id) || null;
 
-  for (const m of METRES) $('metre').append(new Option(m.replace(/_/g, ' '), m));
+  let METRE_INFO = {};
+  function fillMetres() {
+    const sel = $('metre'), keep = sel.value, lang = language();
+    Array.from(sel.options).filter(o => o.value && o.value !== 'auto').forEach(o => o.remove());
+    const names = Object.keys(METRE_INFO).length ? Object.keys(METRE_INFO) : METRES;
+    for (const m of names) {
+      const info = METRE_INFO[m];
+      if (info && info.languages && info.languages.length && !info.languages.includes(lang)) continue;
+      sel.append(new Option(info ? info.label : m.replace(/_/g, ' '), m));
+    }
+    if (Array.from(sel.options).some(o => o.value === keep)) sel.value = keep;
+  }
+  fillMetres();
+  fetchApi('/api/compose/status').then(r => r.ok ? r.json() : null).then(st => { if (st && st.metre_info) { METRE_INFO = st.metre_info; fillMetres(); } }).catch(() => {});
   try {
     const saved = JSON.parse(local.getItem(PREFS) || '{}');
     if (typeof saved.theme === 'string') $('theme').value = saved.theme;
@@ -120,8 +133,11 @@
     if (cur && cur.hidden) $('author').value = latin ? 'Catullus' : 'Sappho';
     if (latin && typeof setMode === 'function') setMode('english');
     const mb = $('mode'); if (mb) mb.hidden = latin;
+    document.querySelectorAll('.latin-only').forEach(el => { el.hidden = !latin; });
+    if (typeof fillMetres === 'function') fillMetres();
   }
   if ($('language')) $('language').addEventListener('change', () => { applyLanguage(); });
+  if ($('macrons')) $('macrons').addEventListener('change', () => S.rows.forEach(renderInfo));
 
   // ---- TypeGreek mode, shared by every line editor --------------------------------------------------------------
   let mode = 'greek', syncingMode = false;
@@ -487,6 +503,7 @@
     const v = current(row);
     const saved = v && v.greek === row.draft.trim();
     const parts = [];
+    if (isLatin() && $('macrons')?.checked && live?.units?.length) parts.push(`<span class="macrons" lang="la">${esc(C.macronise(row.draft, live.units))}</span>`);
     if (live?.pattern) parts.push(`<span class="pattern">${esc(live.pattern)}</span>`);
     if (live?.fit) parts.push(live.fit.ok ? `<span class="ok">fits ${esc(live.fit.metre.replace(/_/g, ' '))}</span>`
       : `<span class="bad">${esc(live.fit.metre.replace(/_/g, ' '))}: ${esc(live.fit.message)}${(live.fit.violations || []).map(x => ` · ${esc(x.text)} needs ${esc(x.needs)}`).join('')}</span>`);
@@ -525,7 +542,7 @@
         const entry = byIndex.get(u.line);
         if (!entry) continue;
         const s = starts[u.line];
-        entry.units.push({ ...u, rs: u.start - s, re: u.end - s, ns: u.nucleus[0] - s, violation: bad.has(u.i) });
+        entry.units.push({ ...u, rs: u.start - s, re: u.end - s, ns: u.nucleus[0] - s, ne: u.nucleus[1] - s, violation: bad.has(u.i) });
       }
       S.scan = { seq, text, res, byIndex };
       status(`${(res.units || []).length} syllables · ${res.ms} ms${res.lexicon ? '' : ' · without the vowel-length lexicon'}${res.auto?.length ? ' · detected: ' + res.auto.slice(0, 3).map(a => `${a.metre.replace(/_/g, ' ')} (${a.lines_fitting}/${a.lines})`).join(', ') : ''}`);

@@ -118,6 +118,28 @@
   // ---- pool → pop-up options -----------------------------------------------------------------------------------
   const poolKey = (poemId, lineKey, base, settings) => [poemId, lineKey, squash(base), settingsSig(settings)].join('|');
   const settingsSig = s => s ? [s.author || '', s.metre || '', s.dialect || ''].join('/') : '';
+  /* Macron overlay (Latin): the line with a combining macron on every single-vowel nucleus whose vowel the scanner
+     holds long by nature with p ≥ 0.9 (lexicon, typed mark, monosyllable, diphthongs excluded since they are two letters)
+     and a breve where it holds it short with p ≤ 0.1 and the unit is open (not long by position). Offsets are the
+     scanner's `nucleus` [start, end] relative to the line (`ns`, `ne` as renderBackdrop prepares them). */
+  function macronise(line, units, opts = {}) {
+    const breves = opts.breves !== false;
+    const marks = [];
+    for (const u of units || []) {
+      const ns = u.ns, ne = u.ne ?? (u.nucleus ? u.nucleus[1] - (u.start - u.rs) : ns + 1);
+      if (ns == null || ne - ns !== 1) continue;
+      const pv = u.vowel && typeof u.vowel.p_long === 'number' ? u.vowel.p_long : null;
+      if (pv == null) continue;
+      if (pv >= 0.9) marks.push([ns, '\u0304']);
+      else if (breves && pv <= 0.1 && u.p_long <= 0.1) marks.push([ns, '\u0306']);
+    }
+    if (!marks.length) return line;
+    marks.sort((a, b) => a[0] - b[0]);
+    let out = '', pos = 0;
+    for (const [i, m] of marks) { out += line.slice(pos, i + 1) + m; pos = i + 1; }
+    return (out + line.slice(pos)).normalize('NFC');
+  }
+
   const patternOf = cand => {
     if (!cand) return '';
     if (cand.pattern) return cand.pattern;
@@ -294,6 +316,6 @@
   const money = usd => (usd >= 10 ? `$${usd.toFixed(1)}` : `$${(Number(usd) || 0).toFixed(2)}`);
 
   return { fold, matchPrefix, slotAt, squash, TEMPLATES, templateFor, labels, remainders, remainingTemplate, fitsPrefix,
-    slotKeyText, slotKey, poolKey, settingsSig, patternOf, optionsFor, reusable, tiered, splitSpill, spillInsert, SSEParser, readSSE, checkBadges,
+    slotKeyText, slotKey, poolKey, settingsSig, patternOf, macronise, optionsFor, reusable, tiered, splitSpill, spillInsert, SSEParser, readSSE, checkBadges,
     versionsRow, archiveVersion, pacificDay, addCost, todayCost, money };
 });

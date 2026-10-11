@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 21:37 PDT
+Last updated: 2026-10-10 21:39 PDT
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a second language backend behind the release W code, not a fork. First the PRD (`docs/prd/latin-composer.md`,
@@ -61,6 +61,12 @@ metre-locking is never applied in the composer.
   covers, LatinCy 92.8 % overall and 85 % on unseen words; routes `/api/la/lemma`, `/api/la/lemma/resolve`; L4 now
   reports headword attestation per poet; agent tool `la_lemma`.
 
+- **Page polish**: the metre list shows human labels and only the metres of the chosen language (from
+  `/api/compose/status` `metre_info`; Latin: Phalaecian hendecasyllable, Horace's Sapphic and Alcaic stanzas,
+  asclepiads, choliambic, pure trimeter, plus the shared hexameter, elegiac and Sapphic); a **macrons** toggle shows
+  the Latin line with macrons on vowels the scanner holds long by nature and breves on certain short open ones
+  (`ComposerCore.macronise`, tested).
+
 ## Running
 
 - Horace Odes interlinear: batches H01, H02, H03, H04, H05, H06, H07, H09 written (8 of 14). **Blocked:** the harness's permission
@@ -71,9 +77,9 @@ metre-locking is never applied in the composer.
 
 ## Next
 
-1. Page polish: macron overlay for Latin lines, human metre labels per language (in progress).
-2. Horace Odes interlinear: the six remaining batches, audits, revisions, assembly and load (blocked, see Running).
-3. Wire LatinCy into the API for drafts and non-LASLA texts; Horace templates evaluated on the Odes 1 gold.
+1. Horace Odes interlinear: the six remaining batches, audits, revisions, assembly and load (blocked, see Running).
+2. Wire LatinCy into the API for drafts and non-LASLA texts; Horace templates evaluated on the Odes 1 gold.
+3. Chat and a longer, more allusive source for the pool (the research tools were never called in measurement 1).
 3. Lemma index for Latin: lemmatiser bake-off against LASLA (held-out), recorded lemmas, `forms_found` and
    collocations for the agent's research tools; Horace templates evaluated on Odes 1 gold.
 4. Page polish for Latin (macron overlay, metre list labels) and the Horace translations (Smart's prose parser).

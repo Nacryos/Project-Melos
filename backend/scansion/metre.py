@@ -102,6 +102,22 @@ def load_latin_metres(path: Path | None = None) -> list[str]:
 
 _LATIN_ERRORS = load_latin_metres()
 
+GREEK_LABELS = {"hexameter": "dactylic hexameter", "pentameter": "elegiac pentameter", "elegiac": "elegiac couplet",
+                "iambic_trimeter": "iambic trimeter", "trochaic_tetrameter": "trochaic tetrameter catalectic",
+                "sapphic_hendecasyllable": "Sapphic hendecasyllable", "adonean": "adonean", "sapphic": "Sapphic stanza",
+                "alcaic_hendecasyllable": "Alcaic hendecasyllable", "alcaic_enneasyllable": "Alcaic enneasyllable",
+                "alcaic_decasyllable": "Alcaic decasyllable", "alcaic": "Alcaic stanza", "glyconic": "glyconic",
+                "pherecratean": "pherecratean", "hipponactean": "hipponactean", "telesillean": "telesillean", "reizianum": "reizianum",
+                "aristophanean": "aristophanean", "lesser_asclepiad": "lesser asclepiad", "greater_asclepiad": "greater asclepiad"}
+
+
+def info(name: str) -> dict:
+    """Label and languages of a template (for the composer's metre list)."""
+    langs = [lang for lang, names in LANGUAGE_OF.items() if name in names]
+    label = TEMPLATE_INFO.get(name, {}).get("label") or GREEK_LABELS.get(name) or name.replace("_", " ")
+    return {"label": label, "languages": sorted(langs), "lines": TEMPLATES.get(name, []),
+            "caesura": TEMPLATE_INFO.get(name, {}).get("caesura", "")}
+
 
 @dataclass
 class Unit:

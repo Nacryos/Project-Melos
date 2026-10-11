@@ -62,7 +62,9 @@ def llm_status() -> dict:
 def status():
     from .scansion import metre
     return {"version": VERSION, "llm": llm_status(), "proposers": ["corpus"],
-            "metres": sorted(metre.TEMPLATES), "dialects": list(SCAN_DIALECTS)}
+            "metres": sorted(metre.TEMPLATES), "dialects": list(SCAN_DIALECTS),
+            "metre_info": {name: metre.info(name) for name in sorted(metre.TEMPLATES)},   # label + languages (branch latin-composer)
+            "languages": ["grc", "la"]}
 
 
 def _target_dialect(dialect: str | None, author: str | None) -> str:

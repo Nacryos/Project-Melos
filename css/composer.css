@@ -257,3 +257,7 @@ html, body { overflow-x: hidden; }
   .chat { position: static; max-height: none; }
   .thread { max-height: 50vh; }
 }
+
+/* Latin macron overlay (branch latin-composer): the certain quantities of the line, read-only, under the editor */
+.line-info .macrons, .info .macrons { font-family: inherit; letter-spacing: .02em; margin-right: .75em; opacity: .9; }
+.latin-only[hidden] { display: none; }
