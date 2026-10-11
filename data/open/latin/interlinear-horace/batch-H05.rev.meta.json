@@ -1,0 +1,11 @@
+{
+ "batch": "H05",
+ "revised_from": "batch-H05.jsonl",
+ "audit": "batch-H05.audit.jsonl",
+ "changed": 7,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 7 audit verdicts (2 WRONG, 5 DOUBTFUL): 2.4.15 genus as the object of maeret; 2.8.1 tibi with nocuisset; agreement made visible within the line (2.7.5, 2.8.19, 2.9.15); 2.4.17 reordered so the negative is not read with 'believe'. Revised inline by the coordinator session."
+}

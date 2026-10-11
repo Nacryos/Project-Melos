@@ -1,0 +1,11 @@
+{
+ "batch": "H13",
+ "revised_from": "batch-H13.jsonl",
+ "audit": "batch-H13.audit.jsonl",
+ "changed": 5,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 4 audit verdicts (2 WRONG, 2 DOUBTFUL): 4.7.17-18 adiciant put back on its own line as a subjunctive; 4.5.3-4 the dative 'to the' moved to the line of concilio; 4.6.7 quateret marked as subjunctive. Revised inline by the coordinator session."
+}

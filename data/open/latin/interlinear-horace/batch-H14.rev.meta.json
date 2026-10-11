@@ -1,0 +1,11 @@
+{
+ "batch": "H14",
+ "revised_from": "batch-H14.jsonl",
+ "audit": "batch-H14.audit.jsonl",
+ "changed": 2,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted both audit verdicts (1 WRONG, 1 DOUBTFUL): 4.11.27 gravatus as the deponent with equitem its object; 4.10.6 videris as a future perfect. Revised inline by the coordinator session."
+}

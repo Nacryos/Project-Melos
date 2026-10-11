@@ -1,0 +1,11 @@
+{
+ "batch": "H07",
+ "revised_from": "batch-H07.jsonl",
+ "audit": "batch-H07.audit.jsonl",
+ "changed": 1,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted the single DOUBTFUL verdict (2.18.18 sub ipsum funus). Revised inline by the coordinator session."
+}

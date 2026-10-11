@@ -1,0 +1,11 @@
+{
+ "batch": "H10",
+ "revised_from": "batch-H10.jsonl",
+ "audit": "batch-H10.audit.jsonl",
+ "changed": 4,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 4 audit verdicts (2 WRONG, 2 DOUBTFUL): 3.16.29 rivos read as the old nominative singular and 3.16.32 fallit as singular with fulgentem its object; 3.14.21 Neaerae as the dative; 3.20.3 inaudax left with raptor. Revised inline by the coordinator session."
+}

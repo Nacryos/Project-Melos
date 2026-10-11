@@ -1,0 +1,11 @@
+{
+ "batch": "H01",
+ "revised_from": "batch-H01.jsonl",
+ "audit": "batch-H01.audit.jsonl",
+ "changed": 10,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 8 audit verdicts (5 WRONG, 3 DOUBTFUL). Words carried across line breaks put back on their own lines (his/sui 1.1.16-17, to the/rebus 1.2.25-26, may/regat 1.3.1-3); 1.1.23 tubae now left for sonitus on line 24; 1.3.33 Leti read as the genitive; 1.4.16 fabulae as the apposition the writer's own note gave. Revised inline by the coordinator session."
+}

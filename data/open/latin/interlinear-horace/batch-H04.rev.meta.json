@@ -1,0 +1,11 @@
+{
+ "batch": "H04",
+ "revised_from": "batch-H04.jsonl",
+ "audit": "batch-H04.audit.jsonl",
+ "changed": 5,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 5 audit verdicts (4 WRONG, 1 DOUBTFUL): 1.31.3-4 opimae with Sardiniae and feracis with segetes; cum restored to line 1.31.19; 1.29.13 note corrected (nobilis accusative plural with libros). Revised inline by the coordinator session."
+}

@@ -1,0 +1,11 @@
+{
+ "batch": "H11",
+ "revised_from": "batch-H11.jsonl",
+ "audit": "batch-H11.audit.jsonl",
+ "changed": 2,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted both audit verdicts (1 WRONG, 1 DOUBTFUL): 3.24.18 temperat with the dative rendered as 'is gentle to'; 3.27.66 restores the second closing quotation mark of the source. Revised inline by the coordinator session."
+}

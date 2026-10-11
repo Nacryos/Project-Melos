@@ -46,6 +46,14 @@ SOURCES = {
     "perseus-catullus": {"author": "Catullus", "work": "Carmina", "folder": "perseus-catullus"},
     "perseus-horace": {"author": "Horace", "work": None, "folder": "perseus-horace"},
 }
+INTERLINEARS = [
+    {"folder": "interlinear-catullus", "file": "catullus-interlinear.jsonl", "author": "Catullus", "work": "Carmina",
+     "work_id": "la:perseus-catullus:Carmina", "translator": "Claude Opus (machine_translation; audited and revised)",
+     "key": lambda r: r["poem"], "latin_id": lambda k: f"la:perseus-catullus:lat2:{k}"},
+    {"folder": "interlinear-horace", "file": "odes-interlinear.jsonl", "author": "Horace", "work": "Odes",
+     "work_id": "la:perseus-horace:Odes", "translator": "Claude (machine_translation; Opus writers and the session inline, audited and revised)",
+     "key": lambda r: f"{r['book']}.{r['poem']}", "latin_id": lambda k: f"la:perseus-horace:odes:lat2:{k}"},
+]
 WORK_OF_URN = {"phi0893.phi001": "Odes", "phi0893.phi002": "Carmen Saeculare", "phi0893.phi003": "Epodes",
                "phi0472.phi001": "Carmina"}
 
@@ -124,37 +132,41 @@ def main():
                     f0, c0 = vocab.get(n, (forms[n], 0))
                     vocab[n] = (f0, c0 + c)
                 counts["tokens"] += sum(tok.values())
-    # The Claude-written interlinear (data/open/latin/interlinear-catullus/catullus-interlinear.jsonl): one translation
-    # passage per poem, quality machine_translation, shown only where no human translation exists (release X rule).
-    inter = ROOT / "data" / "open" / "latin" / "interlinear-catullus" / "catullus-interlinear.jsonl"
-    if inter.exists():
+    # The Claude-written interlinears (Catullus: data/open/latin/interlinear-catullus/catullus-interlinear.jsonl; Horace Odes:
+    # data/open/latin/interlinear-horace/odes-interlinear.jsonl): one translation passage per poem, quality machine_translation,
+    # shown only where no human translation exists (release X rule).
+    for spec in INTERLINEARS:
+        inter = ROOT / "data" / "open" / "latin" / spec["folder"] / spec["file"]
+        if not inter.exists():
+            continue
         imeta = json.loads((inter.parent / "manifest.json").read_text(encoding="utf-8"))
         by_poem: dict[str, list[dict]] = {}
         for raw in inter.read_text(encoding="utf-8").splitlines():
             if raw.strip():
                 r = json.loads(raw)
-                by_poem.setdefault(r["poem"], []).append(r)
+                by_poem.setdefault(spec["key"](r), []).append(r)
         for poem, lines in by_poem.items():
-            latin_id = f"la:perseus-catullus:lat2:{poem}"
+            latin_id = spec["latin_id"](poem)
             if not con.execute("SELECT 1 FROM passages WHERE id=?", (latin_id,)).fetchone():
                 counts["interlinear_unmatched_poem"] += 1
                 continue
             text = "\n".join(l["english"] for l in lines)
-            pid = f"la:interlinear-catullus:{poem}"
-            data = {"translation_of": latin_id, "translator": "Claude Opus (machine_translation; audited and revised)",
+            pid = f"la:{spec['folder']}:{poem}"
+            cit = f"{spec['work']} {poem}"
+            data = {"translation_of": latin_id, "translator": spec["translator"],
                     "line_numbers": [l["n"] for l in lines], "notes": [l["note"] for l in lines],
                     "audit": [l["audit"]["verdict"] for l in lines], "revised": [l["revised"] for l in lines],
                     "source_record": {"file": inter.name, "sha256": imeta.get("sha256", ""), "manifest": str(inter.parent.relative_to(ROOT) / "manifest.json")}}
             seq += 1
             con.execute("INSERT INTO passages VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
-                        (pid, "la:perseus-catullus:Carmina", "interlinear-catullus", "Catullus", "Carmina", "Claude interlinear",
-                         f"Carmina {poem}", "en", "translation", "machine_translation", text, text.lower(),
-                         json.dumps(data, ensure_ascii=False), seq, "Catullus", None))
-            con.execute("INSERT INTO passage_authors VALUES (?,?)", (pid, "catullus"))
-            con.execute("INSERT INTO passage_fts VALUES (?,?,?,?,?)", (pid, text.lower(), f"Carmina {poem}", "Catullus", "Carmina"))
+                        (pid, spec["work_id"], spec["folder"], spec["author"], spec["work"], "Claude interlinear",
+                         cit, "en", "translation", "machine_translation", text, text.lower(),
+                         json.dumps(data, ensure_ascii=False), seq, spec["author"], None))
+            con.execute("INSERT INTO passage_authors VALUES (?,?)", (pid, spec["author"].lower()))
+            con.execute("INSERT INTO passage_fts VALUES (?,?,?,?,?)", (pid, text.lower(), cit, spec["author"], spec["work"]))
             counts["interlinear"] += 1
-        sources_seen["interlinear-catullus"] = {"manifest": str(inter.parent.relative_to(ROOT) / "manifest.json"),
-                                               "licence": "Claude-written, quality machine_translation", "lines": imeta.get("counts", {}).get("lines")}
+        sources_seen[spec["folder"]] = {"manifest": str(inter.parent.relative_to(ROOT) / "manifest.json"),
+                                        "licence": "Claude-written, quality machine_translation", "lines": imeta.get("counts", {}).get("lines")}
     for n, (f, c) in vocab.items():
         con.execute("INSERT INTO vocabulary VALUES (?,?,?)", (n, f, c))
     for wid, w in works.items():

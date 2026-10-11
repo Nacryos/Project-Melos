@@ -1,0 +1,11 @@
+{
+ "batch": "H09",
+ "revised_from": "batch-H09.jsonl",
+ "audit": "batch-H09.audit.jsonl",
+ "changed": 13,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 13 audit verdicts (1 WRONG, 12 DOUBTFUL): 3.6.41 montium with umbras; the source's quotation marks restored on the twelve dialogue lines of 3.9 (the writer had dropped them). Revised inline by the coordinator session."
+}

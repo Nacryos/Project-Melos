@@ -1,0 +1,11 @@
+{
+ "batch": "H08",
+ "revised_from": "batch-H08.jsonl",
+ "audit": "batch-H08.audit.jsonl",
+ "changed": 1,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted the single DOUBTFUL verdict (3.3.60 Troiae genitive). Revised inline by the coordinator session."
+}

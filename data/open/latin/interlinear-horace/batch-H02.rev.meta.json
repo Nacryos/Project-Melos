@@ -1,0 +1,11 @@
+{
+ "batch": "H02",
+ "revised_from": "batch-H02.jsonl",
+ "audit": "batch-H02.audit.jsonl",
+ "changed": 8,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 8 audit verdicts (1 WRONG, 7 DOUBTFUL). 1.9.2 drops the added 'can'; names put back in their Latin forms for consistency with H01 (Mercurius, Atridae, Aiax, Laertiades, Tydides) with the patronymic explained in the note; 1.16.2 criminosis as the adjective, 1.16.24 fervor as ardour. Revised inline by the coordinator session."
+}

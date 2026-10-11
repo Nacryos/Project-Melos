@@ -1,0 +1,11 @@
+{
+ "batch": "H06",
+ "revised_from": "batch-H06.jsonl",
+ "audit": "batch-H06.audit.jsonl",
+ "changed": 6,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 6 audit verdicts (1 WRONG, 5 DOUBTFUL): 2.16.23-24 agente nimbos read with Euro and 'than' put back on its line; subjunctives and the future marked (2.11.3-4, 2.16.31, 2.17.11). Revised inline by the coordinator session."
+}

@@ -1,0 +1,11 @@
+{
+ "batch": "H12",
+ "revised_from": "batch-H12.jsonl",
+ "audit": "batch-H12.audit.jsonl",
+ "changed": 7,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 7 audit verdicts (5 WRONG, 2 DOUBTFUL): words carried across line breaks restored (quem 4.2.5-6, munere 4.2.19-20); 3.30.3 impotens as 'unbridled'; 4.2.39 subjunctive marked; 4.3.7 ornatum set off with ducem. Revised inline by the coordinator session."
+}

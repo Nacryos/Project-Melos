@@ -1,0 +1,11 @@
+{
+ "batch": "H03",
+ "revised_from": "batch-H03.jsonl",
+ "audit": "batch-H03.audit.jsonl",
+ "changed": 13,
+ "disputed": 0,
+ "model": "claude-fable-5-1",
+ "date": "2026-10-11",
+ "quality": "machine_translation",
+ "reasoning_summary": "Accepted all 13 audit verdicts (7 WRONG, 6 DOUBTFUL). Words carried across line breaks restored to their own lines (cum 1.20.3-4, ab 1.28.28-29, 'can' of poterit 1.27.21-22); 1.25.18 magis atque read as 'more than'; 1.28.22 Illyricis with undis; 1.28.31 te as the subject of conmittere; 1.27.9 severi with Falerni; subjunctives and the future participle marked (1.25.18, 1.25.20, 1.28.30). Revised inline by the coordinator session."
+}
