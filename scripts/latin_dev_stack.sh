@@ -8,6 +8,7 @@ DEV="$ROOT/data/private/dev-stack"
 KEY="${KEY:-$HOME/.config/basecamp/keys/anthropic-api.key}"
 API_PORT="${API_PORT:-8797}"
 AGENT_PORT="${AGENT_PORT:-8801}"
+LATINCY_PORT="${LATINCY_PORT:-8802}"
 mkdir -p "$DEV/runtime" "$DEV/secrets" "$DEV/agent-state" "$DEV/logs"
 
 prepare() {
@@ -33,13 +34,16 @@ start() {
   [ -r "$KEY" ] || { echo "no Anthropic key at $KEY" >&2; exit 1; }
   (cd "$ROOT" && MELOS_OWNER_AUTH_FILE="$DEV/secrets/owner_auth.env" MELOS_COMPOSER_DB="$DEV/runtime/composer.sqlite" \
     MELOS_COMPOSER_AGENT_TOKEN_FILE="$DEV/secrets/composer_agent_token" MELOS_COMPOSER_AGENT_URL="http://127.0.0.1:$AGENT_PORT" \
-    MELOS_OWNER_ORIGINS="http://127.0.0.1:$API_PORT" MELOS_DATA_DIR="$ROOT/data" nohup "$ROOT/.venv/bin/python" -m uvicorn backend.server:app --host 127.0.0.1 --port "$API_PORT" \
+    MELOS_OWNER_ORIGINS="http://127.0.0.1:$API_PORT" MELOS_DATA_DIR="$ROOT/data" MELOS_LATINCY_URL="http://127.0.0.1:$LATINCY_PORT" nohup "$ROOT/.venv/bin/python" -m uvicorn backend.server:app --host 127.0.0.1 --port "$API_PORT" \
     > "$DEV/logs/api.log" 2>&1 & echo $! > "$DEV/api.pid")
   (cd "$ROOT/agent" && ANTHROPIC_API_KEY_FILE="$KEY" COMPOSER_AGENT_TOKEN_FILE="$DEV/secrets/composer_agent_token" \
     MELOS_API_URL="http://127.0.0.1:$API_PORT" COMPOSER_AGENT_STATE="$DEV/agent-state" COMPOSER_AGENT_HOST=127.0.0.1 \
     COMPOSER_AGENT_PORT="$AGENT_PORT" nohup "$ROOT/.venv-agent/bin/python" -m composer_agent.app \
     > "$DEV/logs/agent.log" 2>&1 & echo $! > "$DEV/agent.pid")
-  echo "api pid $(cat "$DEV/api.pid") on :$API_PORT; agent pid $(cat "$DEV/agent.pid") on :$AGENT_PORT; logs in $DEV/logs"
+  if [ -x "$ROOT/.venv-nlp/bin/python" ]; then
+    (cd "$ROOT" && LATINCY_PORT="$LATINCY_PORT" nohup "$ROOT/.venv-nlp/bin/python" scripts/latincy_service.py > "$DEV/logs/latincy.log" 2>&1 & echo $! > "$DEV/latincy.pid")
+  fi
+  echo "api on :$API_PORT; agent on :$AGENT_PORT; latincy on :$LATINCY_PORT; logs in $DEV/logs"
 }
 
 stop() {
@@ -47,14 +51,14 @@ stop() {
     if [ -f "$DEV/$n.pid" ]; then kill "$(cat "$DEV/$n.pid")" 2>/dev/null && echo "$n stopped" || true; rm -f "$DEV/$n.pid"; fi
   done
   # the dev ports only (the live containers use other ports): kill whatever still listens there
-  for port in "$API_PORT" "$AGENT_PORT"; do
+  for port in "$API_PORT" "$AGENT_PORT" "$LATINCY_PORT"; do
     for pid in $(ss -ltnp 2>/dev/null | awk -v p=":$port" '$4 ~ p"$" {print $NF}' | grep -o 'pid=[0-9]*' | cut -d= -f2); do kill "$pid" 2>/dev/null || true; done
   done
   sleep 1
 }
 
 status() {
-  for pair in "api:$API_PORT" "agent:$AGENT_PORT"; do
+  for pair in "api:$API_PORT" "agent:$AGENT_PORT" "latincy:$LATINCY_PORT"; do
     n="${pair%%:*}"; port="${pair##*:}"
     if ss -ltn 2>/dev/null | grep -q ":$port "; then echo "$n listening on :$port"; else echo "$n not running"; fi
   done

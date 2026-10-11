@@ -59,7 +59,42 @@ def readings(form: str) -> list[dict]:
                 lem = lem.lower().replace("v", "u").replace("j", "i").rstrip("0123456789")
                 if lem:
                     out.append({"lemma": lem, "upos": "", "count": 0, "source": "morpheus"})
+    if not out:
+        out = latincy_readings(form)
     return out
+
+
+def latincy_url() -> str:
+    return os.environ.get("MELOS_LATINCY_URL", "").rstrip("/")
+
+
+def latincy_readings(form: str) -> list[dict]:
+    """The LatinCy sidecar's reading of one form (scripts/latincy_service.py); [] when it is not configured or down."""
+    url = latincy_url()
+    if not url:
+        return []
+    try:
+        import httpx
+        r = httpx.post(url + "/lemmatize", json={"text": form}, timeout=3.0)
+        r.raise_for_status()
+        toks = r.json().get("tokens") or []
+    except Exception:  # noqa: BLE001 - the sidecar is optional
+        return []
+    return [{"lemma": t["lemma"], "upos": t.get("pos", ""), "count": 0, "source": "latincy", "morph": t.get("morph", "")} for t in toks[:3]]
+
+
+def latincy_tokens(text: str) -> list[dict]:
+    """Lemma, POS and morphology for a whole draft (one sidecar call); [] when unavailable."""
+    url = latincy_url()
+    if not url:
+        return []
+    try:
+        import httpx
+        r = httpx.post(url + "/lemmatize", json={"text": text}, timeout=5.0)
+        r.raise_for_status()
+        return r.json().get("tokens") or []
+    except Exception:  # noqa: BLE001
+        return []
 
 
 @lru_cache(maxsize=4096)
