@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 23:13 PDT
+Last updated: 2026-10-10 23:23 PDT
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a second language backend behind the release W code, not a fork. First the PRD (`docs/prd/latin-composer.md`,
@@ -89,6 +89,12 @@ metre-locking is never applied in the composer.
   reading in context first among a form's LASLA readings (quod the conjunction, not the pronoun, when the line says
   so); `/api/la/lemma` and the agent's `la_lemma` tool take the draft line as `context`. Tested.
 
+- **Horace Epodes and Carmen Saeculare interlinear complete**: 17 Epodes (625 lines) and the Carmen Saeculare (76) in
+  three Opus batches, every line audited by an independent Opus auditor (6 wrong, 11 doubtful; Epodes 8 and 12 rendered
+  in full and plainly, nothing softened), every flagged line revised inline (17), assembled per work by the generalised
+  `scripts/assemble_interlinear_horace.py` and loaded as 18 more `machine_translation` passages. **All of Horace's lyric
+  (3,735 lines) and all of Catullus (2,308) now carry an audited literal interlinear.**
+
 ## Running
 
 - Pool measurement 2 (allusive English source echoing Catullus 5, 8, 31, 46, 101; an opening chat turn asking for the
@@ -99,7 +105,7 @@ metre-locking is never applied in the composer.
 ## Next
 
 1. Pool measurement 2 written up (chat tool use, allusions found, seconds and dollars per accepted line).
-2. Horace Epodes and Carmen Saeculare interlinear (same pipeline); Smart's prose translation of the Odes.
+2. Smart's prose translation of Horace (public domain) aligned per poem, so the interlinear is the fallback it is meant to be.
 3. Horace in the composer: Odes 2-4 against the Hypotactic gold when ingested; a Horace e2e fill (Sapphic stanza).
 4. Minor poets (Martial, Statius Silvae for Phalaecians; Catullan circle fragments) per the brief's ranking.
 
