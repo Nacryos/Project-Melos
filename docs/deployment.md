@@ -1,5 +1,22 @@
 # Deployment handoff
 
+## Current: release X.5 — composer alternatives, keyboard shortcuts, thin bars (2026-10-10, ~10:05 PM PDT)
+
+Tree = `fallback-translations` 0c9757f (merge of `composer-w` 92fdec2 into X.4). Backend image `melos-api:20261011x5`
+atop `20261011x3`, built from the tarball `/home/alvin/melos-x/x5.tgz` extracted into `/home/alvin/melos-x/src` with
+`MELOS_X_IMAGE=melos-api:20261011x5 MELOS_X_KEPT=melos-api-before-x5 MELOS_X_CANARY=melos-api-canary-x5
+MELOS_X_CANARY_PORT=8796 MELOS_X_CANARY_RUNTIME=/home/alvin/melos-x/canary-runtime sh src/deploy/release_x.sh build|canary|promote`;
+`canary_checks_x.sh` 0 failures on the canary and on production; composer 404 signed out; a `{A/B}` line lints per
+variant (`POST /api/composer/check` → `variants: 2`). Frontend `project-melos-3gtgqbnwt` from `~/Projects/melos-t`
+(`vercel deploy --prod --yes --build-env MELOS_READER_ONLY=1`); page cache keys `release-x3`.
+What changed: `{A/B}` alternatives in a line (⌘/ or the chip), every variant scanned (client) and linted (server:
+`composer_lint.check` expands slots; a check passes only when every variant passes; `scansion.variants`); ⌘S Greek/English
+toggle; ⌘A selects the whole poem, ⌘C copies every line as typed; syllable bars thin (1 px, 35 %). Docs: `docs/composer/ui.md`.
+**Deploy the frontend from this branch from now on**: `composer-w` is behind X (the 9:40 PM deploy from `melos-v`
+briefly reverted X's frontend — Copy Greek, literal panel — until the merged redeploy at 9:55 PM).
+Rollback: `MELOS_X_KEPT=melos-api-before-x5 sh /home/alvin/melos-x/src/deploy/release_x.sh rollback` and
+`vercel promote https://project-melos-mi7eoc6tb-nacryos-projects.vercel.app --yes` (X.4 frontend).
+
 ## Current: release X.3 — stanza-aware metre and live attestation in the composer (2026-10-10, ~7:40 PM PDT)
 
 Backend `melos-api:20261011x3` (code layer atop X.2; previous container kept as `melos-api-before-x3`; canary
