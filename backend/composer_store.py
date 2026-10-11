@@ -56,6 +56,9 @@ MIGRATIONS: list[tuple[int, str]] = [
     # Release X.1 (2026-10-10): the lines being typed but not yet saved with Enter, as the page keeps them
     # ([{id: line id or null, at: row index, draft}]), so they survive a browser change and the agent sees them.
     (2, "ALTER TABLE poems ADD COLUMN drafts_json TEXT NOT NULL DEFAULT '[]';"),
+    # Release X.8 (2026-10-11): a line removed from the board (Backspace at its start, ⌘A + Delete) is kept with
+    # deleted=1 and position=-1 (its versions stay append-only), so version ids stay valid and ⌘Z can restore it.
+    (3, "ALTER TABLE lines ADD COLUMN deleted INTEGER NOT NULL DEFAULT 0;"),
 ]
 
 _ready: set[str] = set()
@@ -177,7 +180,7 @@ def _poem(row) -> dict:
 
 
 def _line(row) -> dict:
-    return {"id": row["id"], "poem_id": row["poem_id"], "position": row["position"],
+    return {"id": row["id"], "poem_id": row["poem_id"], "position": row["position"], "deleted": bool(row["deleted"]) if "deleted" in row.keys() else False,
             "current_version_id": row["current_version_id"]}
 
 
@@ -249,9 +252,9 @@ def insert_line(poem_id: int, position: int | None = None) -> dict:
     """A new empty line at ``position`` (0-based; default: the end); later lines move down one."""
     with _Tx() as con:
         _need(con, "poems", poem_id)
-        count = con.execute("SELECT COUNT(*) FROM lines WHERE poem_id=?", (poem_id,)).fetchone()[0]
+        count = con.execute("SELECT COUNT(*) FROM lines WHERE poem_id=? AND deleted=0", (poem_id,)).fetchone()[0]
         position = count if position is None else max(0, min(int(position), count))
-        con.execute("UPDATE lines SET position=position+1 WHERE poem_id=? AND position>=?", (poem_id, position))
+        con.execute("UPDATE lines SET position=position+1 WHERE poem_id=? AND deleted=0 AND position>=?", (poem_id, position))
         cur = con.execute("INSERT INTO lines(poem_id, position) VALUES (?,?)", (poem_id, position))
         _touch(con, poem_id)
         return _line(_need(con, "lines", cur.lastrowid))
@@ -267,14 +270,16 @@ def update_line(line_id: int, *, position: int | None = None, current_version_id
     with _Tx() as con:
         line = _need(con, "lines", line_id)
         poem_id = line["poem_id"]
+        if line["deleted"]:
+            raise StoreError(409, "that line was deleted; restore it first")
         if position is not None:
-            count = con.execute("SELECT COUNT(*) FROM lines WHERE poem_id=?", (poem_id,)).fetchone()[0]
+            count = con.execute("SELECT COUNT(*) FROM lines WHERE poem_id=? AND deleted=0", (poem_id,)).fetchone()[0]
             new, old = max(0, min(int(position), count - 1)), line["position"]
             if new < old:
-                con.execute("UPDATE lines SET position=position+1 WHERE poem_id=? AND position>=? AND position<?",
+                con.execute("UPDATE lines SET position=position+1 WHERE poem_id=? AND deleted=0 AND position>=? AND position<?",
                             (poem_id, new, old))
             elif new > old:
-                con.execute("UPDATE lines SET position=position-1 WHERE poem_id=? AND position>? AND position<=?",
+                con.execute("UPDATE lines SET position=position-1 WHERE poem_id=? AND deleted=0 AND position>? AND position<=?",
                             (poem_id, old, new))
             con.execute("UPDATE lines SET position=? WHERE id=?", (new, line_id))
         if current_version_id is not None:
@@ -282,6 +287,33 @@ def update_line(line_id: int, *, position: int | None = None, current_version_id
             if version["line_id"] != line_id:
                 raise StoreError(422, "that version belongs to another line")
             con.execute("UPDATE lines SET current_version_id=? WHERE id=?", (current_version_id, line_id))
+        _touch(con, poem_id)
+        return _line(_need(con, "lines", line_id))
+
+
+def delete_line(line_id: int) -> dict:
+    """Take a line off the board (soft: deleted=1, position=-1; versions untouched); later lines close up."""
+    with _Tx() as con:
+        line = _need(con, "lines", line_id)
+        if line["deleted"]:
+            return _line(line)
+        con.execute("UPDATE lines SET position=position-1 WHERE poem_id=? AND deleted=0 AND position>?", (line["poem_id"], line["position"]))
+        con.execute("UPDATE lines SET deleted=1, position=-1 WHERE id=?", (line_id,))
+        _touch(con, line["poem_id"])
+        return _line(_need(con, "lines", line_id))
+
+
+def restore_line(line_id: int, position: int | None = None) -> dict:
+    """Put a deleted line back at ``position`` (default: the end); later lines move down one."""
+    with _Tx() as con:
+        line = _need(con, "lines", line_id)
+        if not line["deleted"]:
+            return _line(line)
+        poem_id = line["poem_id"]
+        count = con.execute("SELECT COUNT(*) FROM lines WHERE poem_id=? AND deleted=0", (poem_id,)).fetchone()[0]
+        position = count if position is None else max(0, min(int(position), count))
+        con.execute("UPDATE lines SET position=position+1 WHERE poem_id=? AND deleted=0 AND position>=?", (poem_id, position))
+        con.execute("UPDATE lines SET deleted=0, position=? WHERE id=?", (position, line_id))
         _touch(con, poem_id)
         return _line(_need(con, "lines", line_id))
 
@@ -372,7 +404,7 @@ def full(poem_id: int, chat_limit: int = CHAT_WINDOW) -> dict:
     with _read() as con:
         con.execute("BEGIN")  # one consistent snapshot
         poem = _poem(_need(con, "poems", poem_id))
-        lines = [_line(r) for r in con.execute("SELECT * FROM lines WHERE poem_id=? ORDER BY position, id", (poem_id,))]
+        lines = [_line(r) for r in con.execute("SELECT * FROM lines WHERE poem_id=? AND deleted=0 ORDER BY position, id", (poem_id,))]
         versions: dict[int, list] = {}
         for r in con.execute("SELECT v.* FROM versions v JOIN lines l ON l.id=v.line_id WHERE l.poem_id=? ORDER BY v.id",
                              (poem_id,)):
@@ -388,19 +420,26 @@ def full(poem_id: int, chat_limit: int = CHAT_WINDOW) -> dict:
 def agent_context(poem_id: int, caret: dict | None = None) -> dict:
     """What the agent service is told about the poem (PRD §7): settings, English, current Greek of every line.
     A line being typed but not yet saved (``poem.drafts``, release X.1) stands in for its saved text, marked
-    ``unsaved``; drafts of rows that have no saved line yet follow as further positions."""
+    ``unsaved``; rows that have no saved line yet (blank rows between stanzas included, release X.8) sit at the row
+    index the page keeps for them (``at``), so positions here are the page's row numbers."""
     data = full(poem_id, chat_limit=0)
     poem = data["poem"]
-    drafts = [d for d in poem["drafts"] if isinstance(d, dict) and isinstance(d.get("draft"), str) and d["draft"].strip()]
-    by_line = {d["id"]: d["draft"] for d in drafts if d.get("id") is not None}
+    drafts = [d for d in poem["drafts"] if isinstance(d, dict) and isinstance(d.get("draft"), str)]
+    by_line = {d["id"]: d["draft"] for d in drafts if d.get("id") is not None and d["draft"].strip()}
     lines = []
     for line in data["lines"]:
         current = line["current"] or {}
         unsaved = line["id"] in by_line
-        lines.append({"position": line["position"], "line_id": line["id"],
-                      "greek": by_line[line["id"]] if unsaved else current.get("greek", ""),
+        lines.append({"line_id": line["id"], "greek": by_line[line["id"]] if unsaved else current.get("greek", ""),
                       "back_translation": None if unsaved else current.get("back_translation"), "unsaved": unsaved})
     for d in sorted((d for d in drafts if d.get("id") is None), key=lambda d: d.get("at", 0)):
-        lines.append({"position": len(lines), "line_id": None, "greek": d["draft"], "back_translation": None, "unsaved": True})
+        at = max(0, min(int(d.get("at", len(lines)) or 0), len(lines)))
+        lines.insert(at, {"line_id": None, "greek": d["draft"], "back_translation": None, "unsaved": True})
+    while lines and not lines[-1]["greek"].strip() and lines[-1]["line_id"] is None:
+        lines.pop()
+    for i, line in enumerate(lines):
+        line["position"] = i
     return {"poem_id": poem["id"], "title": poem["title"], "settings": poem["settings"], "english": poem["english"],
             "lines": lines, "caret": caret or {}}
+
+

@@ -10,6 +10,8 @@ Store (backend/composer_store.py):
   GET  /api/composer/poems/{id}/full                poem + lines + every version + last 200 chat rows
   POST /api/composer/poems/{id}/lines               {position?, greek?, source?, note?}: a line at position
   PATCH /api/composer/lines/{id}                    {position?, current_version_id?}
+  DELETE /api/composer/lines/{id}                   X.8: off the board (soft; versions kept; later lines close up)
+  POST /api/composer/lines/{id}/restore             {position?}: back on the board
   POST /api/composer/lines/{id}/versions            {greek, source?, note?, make_current?}: scanned and linted now
   PATCH /api/composer/versions/{id}                 {archived?, make_current?, back_translation?}
   GET  /api/composer/poems/{id}/pool                stored pool candidates (?slot_key=)
@@ -204,6 +206,22 @@ def add_line(poem_id: int, body: LineIn):
 @router.patch("/api/composer/lines/{line_id}", dependencies=owner)
 def patch_line(line_id: int, body: LinePatch):
     return _store_call(store.update_line, line_id, position=body.position, current_version_id=body.current_version_id)
+
+
+class RestoreIn(BaseModel):
+    model_config = {"extra": "forbid"}
+    position: int | None = Field(None, ge=0, le=100_000)
+
+
+@router.delete("/api/composer/lines/{line_id}", dependencies=owner)
+def delete_line(line_id: int):
+    """X.8: take the line off the board (soft delete; versions kept); POST .../restore puts it back."""
+    return _store_call(store.delete_line, line_id)
+
+
+@router.post("/api/composer/lines/{line_id}/restore", dependencies=owner)
+def restore_line(line_id: int, body: RestoreIn | None = None):
+    return _store_call(store.restore_line, line_id, body.position if body else None)
 
 
 @router.post("/api/composer/lines/{line_id}/versions", dependencies=owner)

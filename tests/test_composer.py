@@ -85,11 +85,11 @@ def owner_routes():
 def test_store_schema_is_versioned_and_versions_chat_append_only(env):
     poem = store.create_poem("Ode", {"metre": "sapphic"}, "Deathless Aphrodite")
     with store._read() as con:
-        assert [r[0] for r in con.execute("SELECT version FROM schema_migrations")] == [1, 2]
+        assert [r[0] for r in con.execute("SELECT version FROM schema_migrations")] == [1, 2, 3]
     store._ready.clear()
     store.connect().close()                                      # migrating again is a no-op
     with store._read() as con:
-        assert con.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 2
+        assert con.execute("SELECT COUNT(*) FROM schema_migrations").fetchone()[0] == 3
     line = store.insert_line(poem["id"])
     v1 = store.add_version(line["id"], "πρῶτον", source="owner")
     store.add_chat(poem["id"], "user", "hello")
@@ -639,6 +639,30 @@ def test_unsaved_drafts_persist_on_the_poem_and_reach_the_agent_context(env):
     # Shape is enforced: unknown keys, over-long drafts and too many rows are refused.
     for bad in ([{"draft": "x", "extra": 1}], [{"draft": "x" * 4001}], [{"draft": "x"}] * 401):
         assert c.patch(f"/api/composer/poems/{pid}", json={"drafts": bad}, headers={"Origin": ORIGIN}).status_code == 422
+
+
+def test_deleted_lines_leave_the_board_and_come_back_where_asked(env):
+    """X.8: Backspace at the start of a line / ⌘A + Delete soft-delete lines (versions kept, later lines close up);
+    ⌘Z restores them at the row they held; unsaved rows (blank ones too) sit at the page's row index in the agent view."""
+    c = signed_in(env)
+    pid = c.post("/api/composer/poems", json={"title": "Hymn"}, headers={"Origin": ORIGIN}).json()["id"]
+    ids = [store.insert_line(pid)["id"] for _ in range(3)]
+    for i, text in zip(ids, ("ἕν", "δύο", "τρία")):
+        store.add_version(i, text)
+    gone = c.delete(f"/api/composer/lines/{ids[1]}", headers={"Origin": ORIGIN})
+    assert gone.status_code == 200 and gone.json()["deleted"] and gone.json()["position"] == -1
+    assert [(l["id"], l["position"]) for l in store.full(pid)["lines"]] == [(ids[0], 0), (ids[2], 1)]
+    assert c.patch(f"/api/composer/lines/{ids[1]}", json={"position": 0}, headers={"Origin": ORIGIN}).status_code == 409
+    assert len(store.full(pid)["lines"][0]["versions"]) == 1                                  # versions untouched
+    back = c.post(f"/api/composer/lines/{ids[1]}/restore", json={"position": 1}, headers={"Origin": ORIGIN})
+    assert back.status_code == 200 and not back.json()["deleted"]
+    assert [l["id"] for l in store.full(pid)["lines"]] == ids
+    assert [l["position"] for l in store.full(pid)["lines"]] == [0, 1, 2]
+    # Blank rows and unsaved rows keep their place in the agent's view; trailing blanks are dropped.
+    drafts = [{"id": None, "at": 1, "draft": ""}, {"id": None, "at": 3, "draft": "τέτταρα"}, {"id": None, "at": 5, "draft": ""}]
+    c.patch(f"/api/composer/poems/{pid}", json={"drafts": drafts}, headers={"Origin": ORIGIN})
+    view = [(l["position"], l["line_id"], l["greek"], l["unsaved"]) for l in store.agent_context(pid)["lines"]]
+    assert view == [(0, ids[0], "ἕν", False), (1, None, "", True), (2, ids[1], "δύο", False), (3, None, "τέτταρα", True), (4, ids[2], "τρία", False)]
 
 
 # ---- W4: alternatives in a line ({A/B} slots), mirrored in js/composer-core.js --------------------------------------

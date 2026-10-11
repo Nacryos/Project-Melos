@@ -84,7 +84,7 @@
     pools: new Map(), fills: new Map(), prefixScans: new Map(),
     popup: { open: false, row: null, index: 0, options: [], auto: false, dismissed: null },
     analysis: new Map(), pending: new Set(), selected: null, chatStream: null, showArchived: new Set(), selectAll: false,
-    attest: new Map(), attestPending: new Set(), drag: null,
+    attest: new Map(), attestPending: new Set(), drag: null, undo: null,
   };
   const settings = () => ({ author: $('author').value, metre: $('metre').value, dialect: $('dialect').value });
   const scanDialect = () => { const d = $('dialect').value; return d && d !== 'none' ? d : d === 'none' ? 'none' : (POET_DIALECT[$('author').value] || 'none'); };
@@ -219,7 +219,12 @@
   const draftsKey = () => `melos-composer-drafts-${S.poem?.id}`;
   function saveDrafts() {
     if (!S.poem) return;
-    const list = S.rows.filter(r => r.draft.trim() && r.draft.trim() !== (current(r)?.greek || '')).map(r => ({ id: r.line?.id ?? null, at: rowIndex(r), draft: r.draft }));
+    // Every row that is not simply a saved line showing its saved text: edited lines (by id), unsaved rows and blank
+    // rows (id null) at their row index. Trailing blank rows are not kept.
+    const rows = S.rows.slice();
+    while (rows.length && !rows.at(-1).line && !rows.at(-1).draft.trim()) rows.pop();
+    const list = rows.filter(r => r.line ? r.draft.trim() !== (current(r)?.greek || '').trim() : true)
+      .map(r => ({ id: r.line?.id ?? null, at: rowIndex(r), draft: r.draft }));
     local.setItem(draftsKey(), JSON.stringify(list));
     if (JSON.stringify(list) !== JSON.stringify(S.poem.drafts || [])) savePoem({ drafts: list });   // and on the server (release X.1)
   }
@@ -227,12 +232,11 @@
     // The server copy wins (it is what another browser or the agent sees); this browser's copy covers a save that failed.
     let list = Array.isArray(S.poem?.drafts) && S.poem.drafts.length ? S.poem.drafts : [];
     if (!list.length) try { list = JSON.parse(local.getItem(draftsKey()) || '[]'); } catch (e) { list = []; }
-    for (const d of list) {
-      if (typeof d?.draft !== 'string') continue;
-      const row = d.id != null ? S.rows.find(r => r.line?.id === d.id) : null;
-      if (row) row.draft = d.draft;
-      else if (d.id == null) S.rows.push(makeRow(null, d.draft));
-    }
+    list = list.filter(d => typeof d?.draft === 'string');
+    for (const d of list) if (d.id != null) { const row = S.rows.find(r => r.line?.id === d.id); if (row) row.draft = d.draft; }
+    // Rows without a saved line (blank rows between stanzas included) go back to the row index they were saved at.
+    for (const d of list.filter(d => d.id == null).sort((a, b) => (a.at || 0) - (b.at || 0)))
+      S.rows.splice(Math.max(0, Math.min(Number.isFinite(d.at) ? d.at : S.rows.length, S.rows.length)), 0, makeRow(null, d.draft));
   }
 
   function buildRow(row) {
@@ -291,6 +295,7 @@
   let idleTimer = 0, scanTimer = 0, analysisTimer = 0;
   function edited(row, value) {
     if (value.includes('\n')) { pasteLines(row, value); return; }
+    S.undo = null;
     row.draft = value;
     renderBackdrop(row);
     renderInfo(row);
@@ -321,6 +326,10 @@
     if (cmd && k === 'a') { e.preventDefault(); selectAllLines(row); return; }                               // ⌘A: every line of the poem
     if (cmd && k === 'c' && S.selectAll) { e.preventDefault(); copyAllLines(); return; }                   // ⌘C with the poem selected
     if (cmd && (k === '/' || e.code === 'Slash')) { e.preventDefault(); makeAlternative(row); return; }   // ⌘/: an alternative for the selection
+    if (cmd && k === 'z' && S.undo) { e.preventDefault(); undoRemove(); return; }                           // ⌘Z after removing lines
+    if (S.selectAll && (e.key === 'Backspace' || e.key === 'Delete' || (cmd && k === 'd'))) {              // ⌘A then Delete: the whole poem
+      e.preventDefault(); clearSelectAll(); removeRows(S.rows.slice()); return;
+    }
     if (S.selectAll && !['Meta', 'Control', 'Shift', 'Alt'].includes(e.key)) clearSelectAll();
     const pop = S.popup;
     if (pop.open && pop.row === row) {
@@ -336,7 +345,24 @@
       }
     }
     if (e.key === 'Tab' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) { e.preventDefault(); openPopup({ auto: false }); return; }
-    if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) { e.preventDefault(); commit(row); return; }
+    if (e.key === 'Enter' && !e.shiftKey && !e.ctrlKey && !e.altKey && !e.metaKey) { e.preventDefault(); enterKey(row); return; }
+    const ta = row.el.ta, i = rowIndex(row), collapsed = ta.selectionStart === ta.selectionEnd, plain = !e.metaKey && !e.ctrlKey && !e.altKey;
+    if (e.key === 'Backspace' && plain && collapsed && ta.selectionStart === 0 && i > 0) {                 // start of a line: join it to the one above
+      e.preventDefault();
+      const prev = S.rows[i - 1];
+      if (!row.line && !row.draft.trim()) removeRows([row], { focus: prev, caret: prev.draft.length });    // a blank row goes
+      else if (!prev.line && !prev.draft.trim()) removeRows([prev], { focus: row, caret: 0 });              // the blank row above goes
+      else { const at = prev.draft.length; prev.draft += row.draft; removeRows([row], { focus: prev, caret: at }); }
+      return;
+    }
+    if (e.key === 'Delete' && plain && collapsed && ta.selectionStart === ta.value.length && S.rows[i + 1]) { // end of a line: pull the next one up
+      const next = S.rows[i + 1];
+      if (!next.line && !next.draft.trim() && i + 1 === S.rows.length - 1) return;                          // the trailing blank row stays
+      e.preventDefault();
+      if (!row.line && !row.draft.trim()) removeRows([row], { focus: next, caret: 0 });
+      else { const at = row.draft.length; row.draft += next.draft; removeRows([next], { focus: row, caret: at }); }
+      return;
+    }
     if ((e.key === 'ArrowUp' || e.key === 'ArrowDown') && e.altKey && !e.shiftKey && !e.metaKey && !e.ctrlKey) {   // ⌥↑ / ⌥↓: move the line
       e.preventDefault(); closePopup(); moveRow(row, rowIndex(row) + (e.key === 'ArrowUp' ? -1 : 1), row.el.ta.selectionStart); return;
     }
@@ -384,6 +410,53 @@
       for (const r of moves) await call('PATCH', `/api/composer/lines/${r.line.id}`, { position: r.line.position });
       if (moves.length) status(`Moved line ${from + 1} to ${to + 1}; the metre marks follow the new place (saved checks keep the old one until the line is saved again).`);
     } catch (e) { failed('move', e); }
+  }
+  // ---- editing like a document (X.8): Enter splits or adds a row, Backspace/Delete at a line edge join rows, ⌘A + Delete
+  // clears the poem, ⌘Z (before typing anything else) puts removed lines back. Saved lines are soft-deleted on the
+  // server (DELETE /api/composer/lines/{id}; versions kept) and restored with POST .../restore.
+  function enterKey(row) {
+    const ta = row.el.ta, i = rowIndex(row), head = row.draft.slice(0, ta.selectionStart), tail = row.draft.slice(ta.selectionEnd);
+    closePopup();
+    const next = S.rows[i + 1], trailing = !!next && !next.line && !next.draft.trim() && i + 1 === S.rows.length - 1;
+    if (head !== row.draft) { row.draft = head; ta.value = head; row.ime.sync(); }
+    if (!tail && trailing) { commit(row); return; }                 // the end of the last line: save it and step onto the blank row
+    const added = makeRow(null, tail);
+    S.rows.splice(i + 1, 0, added);
+    S.undo = null;
+    ensureTrailingRow(); renderBoard(); saveDrafts(); scan();
+    if (head.trim()) commit(row, { move: false });
+    focusRow(added, 0);
+    if (!tail) warm(rowIndex(added));
+  }
+  async function removeRows(rows, { focus = null, caret = 0 } = {}) {
+    const items = rows.map(r => ({ row: r, index: rowIndex(r) })).filter(x => x.index >= 0).sort((a, b) => a.index - b.index);
+    if (!items.length) return;
+    closePopup();
+    for (const { row } of items) { S.rows.splice(rowIndex(row), 1); row.ime?.detach(); row.el = null; row.ime = null; if (S.active === row) S.active = null; }
+    ensureTrailingRow();
+    S.undo = { poem: S.poem?.id, items };
+    renderBoard(); scan(); saveDrafts();
+    focusRow(focus && S.rows.includes(focus) ? focus : S.rows[Math.min(items[0].index, S.rows.length - 1)], focus ? caret : 0);
+    const saved = items.filter(x => x.row.line);
+    try {
+      for (const { row } of saved) await call('DELETE', `/api/composer/lines/${row.line.id}`);
+      S.rows.filter(r => r.line).forEach((r, i) => { r.line.position = i; });
+      if (saved.length) status(`Removed ${saved.length} saved line${saved.length === 1 ? '' : 's'} · ⌘Z puts ${saved.length === 1 ? 'it' : 'them'} back`);
+    } catch (e) { failed('delete', e); }
+  }
+  async function undoRemove() {
+    const u = S.undo;
+    if (!u || u.poem !== S.poem?.id) return;
+    S.undo = null;
+    for (const { row, index } of u.items) S.rows.splice(Math.min(index, S.rows.length), 0, row);
+    while (S.rows.length > 1 && [S.rows.at(-1), S.rows.at(-2)].every(r => !r.line && !r.draft.trim())) S.rows.pop();   // one trailing blank row
+    ensureTrailingRow(); renderBoard(); scan(); saveDrafts();
+    focusRow(u.items[0].row, u.items[0].row.draft.length);
+    try {
+      for (const { row } of u.items) if (row.line) await call('POST', `/api/composer/lines/${row.line.id}/restore`, { position: S.rows.slice(0, rowIndex(row)).filter(r => r.line).length });
+      S.rows.filter(r => r.line).forEach((r, i) => { r.line.position = i; });
+      status(`Put ${u.items.length} line${u.items.length === 1 ? '' : 's'} back.`);
+    } catch (e) { failed('restore', e); }
   }
   // ---- alternatives (W4): select Greek in a line and press ⌘/ (or the chip) → {selection/} with the caret before the
   // brace; type the alternative. Both readings are scanned and linted; the alternative shows dimmed after the slash.
@@ -1238,7 +1311,7 @@
     savePrefs(); S.rows.forEach(renderBackdrop);
   });
   const hint = document.querySelector('.suggest-row .hint');
-  if (hint) hint.textContent = 'Enter saves the line · Tab opens continuations · ↑ ↓ move between lines · ⌥↑ ⌥↓ move the line, or drag its number or the highlighted whole line';
+  if (hint) hint.textContent = 'Enter saves the line and opens the next · Backspace at the start of a line joins it to the one above · ⌘A then Delete clears the poem (⌘Z undoes) · Tab opens continuations · ⌥↑ ⌥↓ or dragging moves a line';
   function applyView() { board.classList.toggle('bars', $('bars').checked); board.classList.toggle('pct', $('pct').checked); }
   $('poem-title').addEventListener('input', () => savePoem({ title: $('poem-title').value }));
   $('english').addEventListener('input', () => savePoem({ english: $('english').value }));
@@ -1353,12 +1426,10 @@
   function draftLines(full) {
     const lines = full.lines.map(l => { const v = l.versions?.find(x => x.id === l.current_version_id) || null;
       return { id: l.id, greek: v?.greek || '', bt: v?.back_translation || '', checks: v?.checks ? C.checkBadges(v.checks) : [], unsaved: false }; });
-    for (const d of full.poem.drafts || []) {
-      if (typeof d?.draft !== 'string') continue;
-      const l = d.id != null ? lines.find(x => x.id === d.id) : null;
-      if (l) { if (d.draft.trim() !== l.greek.trim()) Object.assign(l, { greek: d.draft, unsaved: true, bt: '', checks: [] }); }
-      else if (d.id == null && d.draft.trim()) lines.push({ id: null, greek: d.draft, bt: '', checks: [], unsaved: true });
-    }
+    const drafts = (full.poem.drafts || []).filter(d => typeof d?.draft === 'string');
+    for (const d of drafts) if (d.id != null) { const l = lines.find(x => x.id === d.id); if (l && d.draft.trim() !== l.greek.trim()) Object.assign(l, { greek: d.draft, unsaved: true, bt: '', checks: [] }); }
+    for (const d of drafts.filter(d => d.id == null).sort((a, b) => (a.at || 0) - (b.at || 0)))
+      lines.splice(Math.max(0, Math.min(Number.isFinite(d.at) ? d.at : lines.length, lines.length)), 0, { id: null, greek: d.draft, bt: '', checks: [], unsaved: !!d.draft.trim() });
     while (lines.length && !lines.at(-1).greek.trim()) lines.pop();
     return lines;
   }

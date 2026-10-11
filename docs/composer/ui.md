@@ -54,6 +54,18 @@ sign-in marker cookie (`melos_owner_ui=1`) is present. Signed out, `/composer` i
 | Pop-up | Esc | close (no auto-reopen until the slot changes) |
 | Chat | Enter / Shift+Enter | send / new line |
 
+## Editing like a document (X.8)
+
+The board behaves like a page of text. `Enter` saves the line (as before) and opens a row below it: with the caret
+inside a line, the text after the caret moves to the new row; on a blank row it adds another blank row, so two
+Enters after a stanza leave the gap for the next one. `Backspace` at the start of a line joins it to the line above
+(a blank row, above or at the caret, is simply removed); `Delete` at the end pulls the next line up. `⌘A` then
+`Backspace` or `Delete` clears the poem. Removing a row that holds a saved line soft-deletes the line on the server
+(`DELETE /api/composer/lines/{id}`: it leaves the board and later lines close up; its versions stay). `⌘Z`, pressed
+before typing anything else, puts the removed rows back (`POST /api/composer/lines/{id}/restore`). Blank rows and
+unsaved rows keep their place across a reload: the poem's `drafts` carry every row that is not a saved line showing
+its saved text, with its row index, and the agent's view of the poem uses the same row numbers.
+
 ## Moving lines (X.8)
 
 Drag a line's number up or down the board, drag the line itself once the whole of it is highlighted (triple-click
