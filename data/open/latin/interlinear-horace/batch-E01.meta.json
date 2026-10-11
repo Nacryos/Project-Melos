@@ -1,0 +1,18 @@
+{
+  "batch": "E01",
+  "work": "epodes",
+  "poems": [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5"
+  ],
+  "lines": 248,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-horace/poems.jsonl (Epodes: Vollmer 1912 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line (rules 1-6)",
+  "reasoning_summary": "The iambic couplets run sense across almost every line pair, so many lines are fragments with the agreeing word noted rather than moved: 1.1-2 (alta ... propugnacula), 1.25-28 (inligata ... aratra, Calabris ... pascuis, with Lucana as the object of mutet), 2.7-8, 2.55-58 (pinguissimis ... ramis, gravi ... corpori), 3.1-2 and 3.6-11, 4.17-18 (gravi ... pondere, ora ... rostrata), 5.13-14, 5.33-34 (mutatae dapis ... spectaculo), 5.47-48 (inresectum ... pollicem), 5.61-66, 5.69-72 and 5.77-78. 1.9-10: mente qua decet ferre non mollis viros is kept as 'with a mind, such as it befits / with which to bear it men not soft'. Moods: 1.15 roges potential, 1.32 paravero and 3.2 fregerit, 3.19 concupiveris, 5.91 exspiravero and 5.102 effugerit future perfect; 3.3 edit read as the archaic jussive subjunctive ('let him eat'); 2.39-48 the future-less-vivid subjunctives ('should help ... should prepare') and 2.49 iuverint as perfect subjunctive ('would not please'); 5.57-58 latrent as a wish; 5.79 sidet as the future of sido. Textual: 5.87 the source reads venena maga non fas nefasque, non valent; maga is taken as vocative 'witch', with fas nefasque and humanam vicem both objects of convertere, and the common reading magnum fas is noted. 2.27 the variant fontes for frondes is noted. 2.66 renidentis may go with vernas or with Laris; the note gives both. The source's stray capitals (Sidus, Solibus, Silvis, Sub, Siderum, Sortito, Sanguine, Superbam, Sidet), apparently markup artefacts, are left in the Latin and noted where they could mislead. Coarse or harsh words are rendered plainly: masculae libidinis as 'masculine lust' with a note that it means a woman's lust for women, Suburanae canes as 'Suburan bitches', obscaenas anus as 'obscene old women'. Quotation marks follow the source: Alfius' speech 2.1-66, the crowd's words in 4.11-20, and the three speeches of Epode 5 (1-10, 49-82, 87-102)."
+}
