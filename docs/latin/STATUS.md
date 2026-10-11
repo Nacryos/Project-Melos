@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 23:23 PDT
+Last updated: 2026-10-10 23:28 PDT
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a second language backend behind the release W code, not a fork. First the PRD (`docs/prd/latin-composer.md`,
@@ -95,19 +95,25 @@ metre-locking is never applied in the composer.
   `scripts/assemble_interlinear_horace.py` and loaded as 18 more `machine_translation` passages. **All of Horace's lyric
   (3,735 lines) and all of Catullus (2,308) now carry an audited literal interlinear.**
 
+- **Pool measurement 2** (`docs/latin/pool.md`): with an allusive source and an opening chat turn the research tools
+  were used at once (33 calls in the first minute: concordance, headwords, citations) and the first whole line came at
+  10.5 s instead of 36 s because the fills forked from the chat's research; next words still 9-15 s. The allusive
+  source made the agent recast Catullus, so the metre check rejected more (26 of 74, against 13 of 62); verbatim
+  Catullan lines are flagged by L11 and shown, not blocked. $2.04 for the four fills. The driver's six-minute cap cut
+  the chat turn off before its written answer; a chat-only re-run with a ten-minute cap is in flight.
+
 ## Running
 
-- Pool measurement 2 (allusive English source echoing Catullus 5, 8, 31, 46, 101; an opening chat turn asking for the
-  echoes, then the same fills as measurement 1) on the dev stack; result goes to `docs/latin/pool.md`.
+- Chat-only measurement (allusive source, ten-minute cap) to time the chat's written answer; result to `docs/latin/pool.md`.
 - The dev stack (API :8797, agent :8801, LatinCy :8802) stays up for the owner to try the Latin page by remote control;
   stop it with `scripts/latin_dev_stack.sh stop`.
 
 ## Next
 
-1. Pool measurement 2 written up (chat tool use, allusions found, seconds and dollars per accepted line).
-2. Smart's prose translation of Horace (public domain) aligned per poem, so the interlinear is the fallback it is meant to be.
-3. Horace in the composer: Odes 2-4 against the Hypotactic gold when ingested; a Horace e2e fill (Sapphic stanza).
-4. Minor poets (Martial, Statius Silvae for Phalaecians; Catullan circle fragments) per the brief's ranking.
+1. Smart's prose translation of Horace (public domain) aligned per poem, so the interlinear is the fallback it is meant to be.
+2. Horace in the composer: Odes 2-4 against the Hypotactic gold when ingested; a Horace e2e fill (Sapphic stanza).
+3. Minor poets (Martial, Statius Silvae for Phalaecians; Catullan circle fragments) per the brief's ranking.
+4. A second sample of the slow line-2 cell of pool measurement 2 before reading anything into it.
 
 ## Notes for the coordinator
 
