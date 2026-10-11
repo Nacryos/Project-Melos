@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 22:59 PDT
+Last updated: 2026-10-10 23:13 PDT
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a second language backend behind the release W code, not a fork. First the PRD (`docs/prd/latin-composer.md`,
@@ -78,17 +78,30 @@ metre-locking is never applied in the composer.
 - **LatinCy sidecar** (`scripts/latincy_service.py`, `.venv-nlp`, port 8802; started by the dev stack): `la_core_web_lg`
   lemmas, POS and morphology for forms LASLA and Morpheus do not know, used as the lemma reader's third fallback.
 
+- **Horace metres on the Odes 1 gold (LA5)**: every metre Hypotactic labels in Odes 1 (Alcaic, Sapphic, the five
+  Asclepiad systems, the fourth Archilochian, the Alcmanic strophe, the greater Sapphic) has a stanza template; on all
+  876 lines the scanner decides 87.5 % of syllables at 99.8 %, 868 of 870 aligned lines fit and the best pattern equals
+  the gold on 98.5 %: Horace scans as well as Catullus did, with no Horace-specific rule. The first pass's misaligned
+  lines gave six word-list entries (bronze aēna against Aenēās, Lāertēs, Pholoē, Teucer, anteit, aeque) and one new
+  hypothesis (Greek initial clusters seldom make position); the Catullus held-out numbers did not move
+  (`docs/latin/eval-log.md` LA5, `docs/latin/hypotheses.md`).
+- **LatinCy in context**: L4 and the lemma routes now read the whole draft once through the sidecar and put LatinCy's
+  reading in context first among a form's LASLA readings (quod the conjunction, not the pronoun, when the line says
+  so); `/api/la/lemma` and the agent's `la_lemma` tool take the draft line as `context`. Tested.
+
 ## Running
 
-- Nothing in flight. The dev stack (API :8797, agent :8801, LatinCy :8802) stays up for the owner to try the Latin page
-  by remote control; stop it with `scripts/latin_dev_stack.sh stop`.
+- Pool measurement 2 (allusive English source echoing Catullus 5, 8, 31, 46, 101; an opening chat turn asking for the
+  echoes, then the same fills as measurement 1) on the dev stack; result goes to `docs/latin/pool.md`.
+- The dev stack (API :8797, agent :8801, LatinCy :8802) stays up for the owner to try the Latin page by remote control;
+  stop it with `scripts/latin_dev_stack.sh stop`.
 
 ## Next
 
-1. LatinCy for drafts: lemmatise the whole candidate line in context (not form by form) for L4 and the lemma tools.
-2. Horace templates evaluated on the Odes 1 gold (Alcaic, Sapphic, the asclepiads), reported per metre.
-3. Chat and a longer, more allusive source for the pool measurement (the research tools were never called in run 1).
-4. Horace Epodes and Carmen Saeculare interlinear (same pipeline); Smart's prose translation of the Odes.
+1. Pool measurement 2 written up (chat tool use, allusions found, seconds and dollars per accepted line).
+2. Horace Epodes and Carmen Saeculare interlinear (same pipeline); Smart's prose translation of the Odes.
+3. Horace in the composer: Odes 2-4 against the Hypotactic gold when ingested; a Horace e2e fill (Sapphic stanza).
+4. Minor poets (Martial, Statius Silvae for Phalaecians; Catullan circle fragments) per the brief's ranking.
 
 ## Notes for the coordinator
 
