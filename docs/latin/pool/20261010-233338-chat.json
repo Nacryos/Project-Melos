@@ -1,0 +1,78 @@
+{
+ "started": "2026-10-11T06:27:39Z",
+ "source": "allusive",
+ "english": "Sirmio, bright eye of every peninsula and island, I am home. The lake laughs under the wind the way it did when I was a boy, and I set down the pack of Bithynia on the doorstep. Let us live, old friend, and count the kisses again until the counting itself is lost; the short light goes down once and the night is one unbroken sleep. Be stubborn, heart, and do not run after what runs away; the girl who shone for me is shining for someone else. Now spring brings back the warm days and the sky is no longer hoarse with storms; the mind itches to travel and the feet grow glad. Through many nations and many seas I came to my brother's grave to say what the dust cannot answer: hail and farewell, for ever.",
+ "runs": [],
+ "kind": "chat-only",
+ "poem_id": 5,
+ "chat": {
+  "label": "chat: echoes (10-minute cap)",
+  "message": "Which poems of Catullus does this English echo? For each echo give the Latin phrase (checked with the tools: attested forms, the headword's use by Catullus, a concordance line) and say which phrases could be reused whole in a Phalaecian hendecasyllable.",
+  "tools": [
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_forms",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "scan",
+   "scan",
+   "check_candidate",
+   "check_candidate",
+   "check_candidate",
+   "check_candidate",
+   "check_candidate",
+   "check_candidate",
+   "check_candidate",
+   "propose_candidates",
+   "check_candidate",
+   "check_candidate"
+  ],
+  "candidates": [
+   {
+    "t": 281.2,
+    "greek": "Sirmio, mea lux, ocelle, salve",
+    "english_span": "Sirmio, bright eye ..., I am home"
+   },
+   {
+    "t": 281.2,
+    "greek": "Sirmio, redeo ad lares, ocelle",
+    "english_span": "Sirmio, bright eye ..., I am home"
+   },
+   {
+    "t": 281.2,
+    "greek": "salve, Sirmio, et insularum ocelle",
+    "english_span": "Sirmio, bright eye of every ... island, I am home"
+   },
+   {
+    "t": 281.2,
+    "greek": "salve, ocelle, venusta Sirmio, adsum",
+    "english_span": "Sirmio, bright eye ..., I am home"
+   }
+  ],
+  "text_chars": 4663,
+  "first_text_s": 181.2,
+  "cost_usd": 2.1679,
+  "final_chars": 0,
+  "seconds": 358.4
+ },
+ "answer": "I'll check each suspected echo against the corpus (concordance lines, headword use, forms) and scan the Catullan lines for the phalaecian.Next I need the headword evidence (la_lemma) and scansions: the Catullan lines in phalaecian, and the choliambic/elegiac lines tested against the same template.Two re-set fragments from 101 to check (the pentameter can't go in whole), then I'll answer.Five Catullan poems, in the order the English runs. Evidence is from la_forms / la_lemma / la_concordance; the metre verdicts are the lint bank's (template `xx-uu-u-u-F`).\n\n**1. Sirmio … bright eye … I am home → c. 31 (choliambic)**\n- *Paene insularum, Sirmio, insularumque / ocelle* (31.1–2). `Sirmio` 2 tokens, both in 31 and both elided; `ocelle` 2 tokens (31.2, 50.19), headword *ocellus* 7× in Catullus (*ocellis* 43, *ocellos* 45, *ocelli* 3).\n- \"the lake laughs\": *ridete, quidquid est domi cachinnorum* (31.14); *cachinnus* 4× (31, 13, 56, 64.273 of waves).\n- \"I am home / set down the pack\": 31.7–9 *cum mens onus reponit … venimus larem ad nostrum*; *salve, o venusta Sirmio* (31.12). \"Bithynia\": 31.5 *Thyniam atque Bithynos*; the word *Bithynia* itself is in a phalaecian, 10.7 *iam Bithynia, quo modo se haberet*.\n- Phalaecian reuse: the choliambic line will not go in whole (pos. 2 of *insularum* is short where the base wants a long; scanner confirms a mis-fit). Fragments that do sit: *ocelle* ⏑–⏑ (pos. 5–7 or 7–9), *insularum ocelle* at 6–11 with the -um elided, *venusta Sirmio* at 5–10, *Bithynia* ⏑–⏑⏑. Four re-settings passed and are on your screen (*salve, Sirmio, et insularum ocelle* etc.); note the two with unelided *Sirmiō* have no Catullan evidence for the quantity.\n\n**2. Let us live … count the kisses … short light … one unbroken sleep → c. 5 (phalaecian)**\n- *Vivamus, mea Lesbia, atque amemus* (5.1); *da mi basia mille, deinde centum* (5.7; *basia* 3×, *basiorum* 2×); *conturbabimus illa, ne sciamus* (5.11); *nobis cum semel occidit brevis lux, / nox est perpetua una dormienda* (5.5–6; *perpetua* only here, *perpetuum* 2× in 101).\n- Reusable whole: all five lines pass the metre and form checks as complete hendecasyllables (the lint flags them as verbatim \"homage\", non-blocking). *da mi basia mille* alone fills positions 1–7 exactly. \"old friend\" replaces *mea Lesbia* (⏑–⏑⏑–): you'll need a vocative of the same shape.\n\n**3. Be stubborn, heart … do not run after what runs away … the girl who shone → c. 8 (choliambic)**\n- *nec quae fugit sectare, nec miser vive, / sed obstinata mente perfer, obdura* (8.10–11); *at tu, Catulle, destinatus obdura* (8.19); *obduro* 3× in Catullus (*obdura* ×2, *obdurat* 8.12), once in Horace. *fulsere quondam candidi tibi soles* (8.3, repeated 8.8 with *vere*); *fulgeo* 6× in Catullus.\n- Phalaecian reuse: none of these lines fits whole, and *candidi tibi soles* (–⏑⏑⏑⏑––) fits nowhere in the line. Fragments: *obdura* ––⏑ at positions 2–4; *fulsere* ––⏑ likewise at 2–4; *soles candidi* ––-⏑⏑ at 1–5. (Secondary echo for \"shining for someone else\": 58 *Lesbia nostra … nunc in quadriviis*, which is phalaecian.)\n\n**4. Now spring brings back the warm days … sky no longer hoarse … mind itches … feet grow glad → c. 46 (phalaecian)**\n- *Iam ver egelidos refert tepores* (46.1), *iam caeli furor aequinoctialis* (46.2), *iam mens praetrepidans avet vagari* (46.7), *iam laeti studio pedes vigescunt* (46.8). *egelidos*, *tepores*, *praetrepidans*, *vigescunt* are each a single Catullan token (hapax-ish; *tepor* once more in Horace).\n- Reusable whole: 46.1, 46.7, 46.8 all pass as complete lines. Your \"no longer hoarse with storms\" is a paraphrase of 46.2–3 (*furor … silescit*), which would need its own line.\n\n**5. Through many nations and many seas … brother's grave … hail and farewell for ever → c. 101 (elegiac)**\n- *Multas per gentes et multa per aequora vectus / advenio has miseras, frater, ad inferias* (101.1–2; *aequora* 4× in Catullus, *inferias* 2×); *mutam nequiquam alloquerer cinerem* (101.4); *atque in perpetuum, frater, ave atque vale* (101.10; *ave* is the only token of that form).\n- Phalaecian reuse: hexameter and pentameter can't go in whole; *multa per aequora* fails at position 8 (short *-ra*). What does fit: *in perpetuum* ––⏑⏑– at 2–6, *atque vale* –⏑⏑– at 3–6, and *frater* as the line's cadence. Two re-settings pass the whole bank: *nunc in perpetuum valeque, frater* and *ave in perpetuum valeque, frater* (the latter with iambic base ⏑–, which Catullus allows, cf. 2.4, 3.17; *valeque* is enclitic-formed, not printed by him).\n\nNot Catullan: \"the dust cannot answer\" is your gloss on 101.4's *mutam … cinerem*; \"every peninsula\" condenses *paene insularum*.",
+ "answer_chars": 4663
+}

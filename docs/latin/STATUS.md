@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 23:28 PDT
+Last updated: 2026-10-10 23:34 PDT
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a second language backend behind the release W code, not a fork. First the PRD (`docs/prd/latin-composer.md`,
@@ -99,14 +99,14 @@ metre-locking is never applied in the composer.
   were used at once (33 calls in the first minute: concordance, headwords, citations) and the first whole line came at
   10.5 s instead of 36 s because the fills forked from the chat's research; next words still 9-15 s. The allusive
   source made the agent recast Catullus, so the metre check rejected more (26 of 74, against 13 of 62); verbatim
-  Catullan lines are flagged by L11 and shown, not blocked. $2.04 for the four fills. The driver's six-minute cap cut
-  the chat turn off before its written answer; a chat-only re-run with a ten-minute cap is in flight.
+  Catullan lines are flagged by L11 and shown, not blocked. $2.04 for the four fills. A chat-only re-run with a ten-minute cap:
+  a research-heavy question is answered well in about six minutes and two dollars (first text after three), naming the
+  five poems echoed with corpus evidence and the lines reusable whole.
 
 ## Running
 
-- Chat-only measurement (allusive source, ten-minute cap) to time the chat's written answer; result to `docs/latin/pool.md`.
-- The dev stack (API :8797, agent :8801, LatinCy :8802) stays up for the owner to try the Latin page by remote control;
-  stop it with `scripts/latin_dev_stack.sh stop`.
+- Nothing in flight. The dev stack (API :8797, agent :8801, LatinCy :8802) stays up for the owner to try the Latin page
+  by remote control; stop it with `scripts/latin_dev_stack.sh stop`.
 
 ## Next
 

@@ -63,3 +63,16 @@ where the agent bent choliambic phrases to the Phalaecian. Still none rejected o
 fill after the accepted line was the slow cell (74 s to the first line against 20 s), its proposals all variants of
 `decus omnium insularum`; worth a second sample before reading anything into it. The contextual lemma reading
 (LatinCy on the whole draft) ran inside every L4 check without a visible cost in time.
+
+**Chat-only re-run** (fresh poem, same source and question, ten-minute cap; record `docs/latin/pool/20261010-233338-chat.json`):
+35 tool calls (14 `la_concordance`, 8 `la_lemma`, 9 `check_candidate`, 2 `scan`, 1 `la_forms`, 1 `propose_candidates`),
+first text at 181 s, the answer complete at 358 s, $2.17 (the agent's own figure for the turn). The answer (4,663
+characters) names the five poems in the order the English runs (31, 5, 8, 46, 101), gives for each the Latin phrases
+with their corpus evidence (token counts, a concordance line, the headword's use), says which lines can be reused
+whole in the hendecasyllable (5.1, 5.5-7, 46.1, 46.7, 46.8 pass as complete lines; 31's choliambics and 101's
+pentameter cannot) and which fragments sit where (`ocelle` at positions 5-7 or 7-9, `venusta Sirmio` at 5-10,
+`obdura` at 2-4), and warns where the evidence runs out (an unelided `Sirmiō` has no Catullan warrant). Four
+re-settings were proposed and checked through the lint on the way. Reading: a research-heavy chat question takes
+about six minutes and two dollars to answer well; the owner should expect the first text after three minutes and
+the candidates before the prose. The chat's research is then shared by the fills (measurement 2 above: first whole
+line at 10.5 s).
