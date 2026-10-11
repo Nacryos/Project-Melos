@@ -1,0 +1,68 @@
+{
+ "name": "Hypotactic Latin hand scansion (David Chamberlain)",
+ "date": "2026-10-10",
+ "user_agent": "Melos/1.0 (+https://greeklyric.com)",
+ "origin": "https://hypotactic.com/latin/",
+ "licence": {
+  "name": "CC BY 4.0",
+  "url": "https://creativecommons.org/licenses/by/4.0/",
+  "stated_on": "https://hypotactic.com/latin/about.html",
+  "quote": "All the data on this site is/are licensed as CC-BY 4.0 ... While I have made minor corrections to most texts, the versions of Plautus and Terence found here have been substantially modified, and can be considered my own editions.  The CC-BY licence therefore applies to the full text."
+ },
+ "required_attribution": "David Chamberlain, hypotactic.com",
+ "use": "evaluation gold only; never a source for the quantity lexicon (docs/prd/latin-composer.md §4.4)",
+ "files": {
+  "about.html": {
+   "url": "https://hypotactic.com/latin/about.html",
+   "sha256": "f7bcb3f2271d7ad585f3e6ab2ee174b993ac55476c2a91a4f38a18b11c3d8d6e",
+   "bytes": 13768
+  },
+  "catullus.html": {
+   "url": "https://hypotactic.com/latin/catullus.html",
+   "sha256": "ff1ac5d6cc9eb963027acf440acaaa5aecc0d6bda25c44a5e1d063a8142814b8",
+   "bytes": 1458075,
+   "fetched_now": false,
+   "lines": 2287,
+   "poems": 118,
+   "lines_per_metre": {
+    "hendecasyllables": 552,
+    "ia6g": 55,
+    "scazon": 126,
+    "sapadon": 39,
+    "priapean": 26,
+    "iamtetcata": 13,
+    "asc5": 12,
+    "glycpher": 252,
+    "hexameter": 475,
+    "galliamb": 93,
+    "elegy": 644
+   }
+  },
+  "odes1.html": {
+   "url": "https://hypotactic.com/latin/odes1.html",
+   "sha256": "3ea6ee35b5335f30bd6c22c07d94aa17e49a422a84f8d27ae173fef672b76901",
+   "bytes": 464420,
+   "fetched_now": false,
+   "lines": 876,
+   "poems": 38,
+   "lines_per_metre": {
+    "asc1": 36,
+    "sapadon": 220,
+    "asc2": 96,
+    "arch4": 20,
+    "asc4": 64,
+    "asc3": 92,
+    "alcmanic_strophe": 68,
+    "sapphic2": 16,
+    "alcaic": 240,
+    "asc5": 24
+   }
+  },
+  "lines.jsonl.gz": {
+   "sha256": "1c19d714ef50bd4ff666229944030f48d3b5ea2a50931b5089217247ffb42572"
+  }
+ },
+ "counts": {
+  "lines": 3163
+ }
+}

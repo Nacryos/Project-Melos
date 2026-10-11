@@ -22,8 +22,11 @@ _PUNCT_STRONG = set(".!?;:")
 _PUNCT_WEAK = set(",")
 
 
-def words_of(text: str, start: int = 0, end: int | None = None) -> list[Word]:
+def words_of(text: str, start: int = 0, end: int | None = None, spelling: str = "auto") -> list[Word]:
+    """`spelling`: "auto" (the text writes v / j if it contains any), "uv" (it does), "u" (it writes u, i only)."""
     out: list[Word] = []
+    low = text.lower()
+    uses_v, uses_j = ("v" in low, "j" in low) if spelling == "auto" else (spelling == "uv", spelling == "uv")
     for m in _pieces(text, start, len(text) if end is None else end):
         raw = m.group(0)
         letters: list[Letter] = []
@@ -47,7 +50,7 @@ def words_of(text: str, start: int = 0, end: int | None = None) -> list[Word]:
         if not letters:
             continue
         bases = [l.base for l in letters]
-        rules = classify_iu(bases, typed)
+        rules = classify_iu(bases, typed, uses_v, uses_j)
         for l, b, r in zip(letters, bases, rules):
             l.base = b
             if r:
@@ -93,7 +96,7 @@ def nuclei_of(word: Word) -> list[Nucleus]:
             i += 1
             continue
         if i + 1 < len(L) and L[i + 1].base in VOWELS:
-            joined, rule = _diphthong(L[i], L[i + 1], key, i)
+            joined, rule = _diphthong(L[i], L[i + 1], key, i, word.text.lstrip("’'ʼ[⟨")[:1].isupper())
             if joined:
                 out.append(Nucleus(word.index, [i, i + 1], "diphthong", [rule]))
                 i += 2
@@ -107,7 +110,7 @@ def nuclei_of(word: Word) -> list[Nucleus]:
     return out
 
 
-def _diphthong(a: Letter, b: Letter, key: str, i: int) -> tuple[bool, str | None]:
+def _diphthong(a: Letter, b: Letter, key: str, i: int, capitalised: bool = False) -> tuple[bool, str | None]:
     pair = a.base + b.base
     if DIAERESIS in marks_of(b) or DIAERESIS in marks_of(a):
         return False, "SYL-LA-2"                                   # written diaeresis: aër, poëta
@@ -124,7 +127,7 @@ def _diphthong(a: Letter, b: Letter, key: str, i: int) -> tuple[bool, str | None
             return True, "SYL-LA-4"
         if i == 0 and key not in EO_FORMS and not key.startswith("eo"):
             return True, "SYL-LA-4"                                # Eurōpa, Eurus, Eumenides
-        if key.endswith("eus") and i == len(key) - 3 and i > 0 and key[i - 1] not in VOWELS and key[0].isalpha() and len(key) > 4 and key not in ("deus", "meus", "reus"):
+        if key.endswith("eus") and i == len(key) - 3 and i > 0 and key[i - 1] not in VOWELS and capitalised and key not in ("deus", "meus", "reus"):
             return True, "SYL-LA-4"                                # Orpheus, Pēleus, Tȳdeus (Greek names)
         return False, None
     if pair == "ui":
@@ -144,6 +147,8 @@ def syllabify_line(words: list[Word], line: int, first_index: int = 0) -> list[S
         covered = {i for n in nuc for i in n.letters}
         for i, letter in enumerate(w.letters):
             if i in starts:
+                if iu_rule(letter) == "IU-COMPOUND":
+                    seq.append(("C", w.index, -1, i))      # the glide of ab-icio / prō-icio: a double consonant (J)
                 seq.append(("N", w.index, starts[i], i))
             elif i not in covered and letter.base in CONSONANTS:
                 seq.append(("C", w.index, i, i))
@@ -157,8 +162,8 @@ def syllabify_line(words: list[Word], line: int, first_index: int = 0) -> list[S
         coda = []
         prev_word = wi
         for item in seq[k + 1:nxt]:
-            letter = word_by_index[item[1]].letters[item[2]]
-            coda.append((letter.base, item[1] != prev_word))
+            base = "J" if item[2] == -1 else word_by_index[item[1]].letters[item[2]].base
+            coda.append((base, item[1] != prev_word))
             prev_word = item[1]
         next_word = seq[nxt][1] if nxt < len(seq) else None
         real = [c for c, _ in coda if consonant_value(c) > 0]

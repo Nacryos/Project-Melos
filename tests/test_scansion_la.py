@@ -68,13 +68,14 @@ def test_final_vowel_rules():
     assert unit("die mihi", "e m").vowel["rule"] == "FIN-E-LIST"
     assert unit("nisi tu", "i t").vowel["rule"] == "FIN-I-SHORT"
     assert unit("ego sum", "o s").vowel["rule"] == "FIN-O-SHORT"
-    assert unit("amo te", "o t").vowel["rule"] == "FIN-O" and unit("amo te", "o t").p_long >= 0.9
-    assert unit("atque puellae", "e p").vowel["rule"] == "ENCL-E"
+    assert unit("amo te", "o t").vowel["rule"] == "FIN-O-IAMB"
+    assert unit("amabo te", "o t").vowel["rule"] == "FIN-O" and unit("amabo te", "o t").p_long >= 0.9
+    assert unit("puellaque mea", "e m").vowel["rule"] == "ENCL-E"
 
 
 def test_vowel_before_vowel_is_short_except_listed():
     assert unit("deus", "e").p_long <= 0.1
-    assert unit("illius", "i").p_long >= 0.9 or unit("illius", "i").vowel["rule"] == "VAV-LIST"
+    assert unit("illius", "i").vowel["rule"] == "VAV-GEN" and unit("fiat", "i").vowel["rule"] == "VAV-LIST"
 
 
 # --- elision, prodelision, hiatus -------------------------------------------------------------------
@@ -84,7 +85,7 @@ def test_elision_candidates_and_prodelision_flags():
     u = unit("dictum est", "um")
     assert u.prodelision and u.prodelision["p"] >= 0.9 and u.elision == 0.0
     u = unit("male o", "e")
-    assert 0 < u.elision < 0.5                                     # before an interjection: hiatus common
+    assert 0 < u.elision < 0.9                                     # before an interjection: hiatus is not a violation
 
 
 def test_catullus_hendecasyllables_fit_with_elision():

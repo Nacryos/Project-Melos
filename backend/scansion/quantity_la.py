@@ -71,7 +71,7 @@ class LatinScanner:
     language = "la"
 
     def __init__(self, lexicon=None, grammar: engine.Grammar | None = None, rules_path: str | Path | None = None,
-                 params: dict | None = None):
+                 params: dict | None = None, spelling: str = "auto"):
         if grammar is None:
             grammar, errors = engine.load(rules_path or DEFAULT_RULES, param_overrides=params, features=FEATURES_LA)
             if errors:
@@ -79,11 +79,12 @@ class LatinScanner:
         self.grammar = grammar
         self.lexicon = lexicon
         self.dialect = "none"
+        self.spelling = spelling      # "auto" | "uv" (the text writes v and j) | "u" (u and i only)
 
     def scan(self, text: str) -> list[SyllableResult]:
         out: list[SyllableResult] = []
         for line_no, (a, b) in enumerate(line_spans(text)):
-            words = words_of(text, a, b)
+            words = words_of(text, a, b, spelling=self.spelling)
             if not words:
                 continue
             units = syllabify_line(words, line_no, first_index=len(out))
@@ -272,9 +273,6 @@ def _split_enclitic(word: str, nsyl: int) -> tuple[str, str]:
         return word, ""
     if word.endswith("que") and len(word) > 4 and word not in NOT_ENCLITIC_QUE:
         return word[:-3], "que"
-    for e in ("ue", "ne"):
-        if word.endswith(e) and len(word) > 4 and word[-3] not in VOWELS:
-            return word[:-2], e
     return word, ""
 
 

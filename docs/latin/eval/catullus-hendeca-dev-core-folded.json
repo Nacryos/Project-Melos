@@ -1,0 +1,241 @@
+{
+ "lines": 263,
+ "misaligned": 1,
+ "units_scored": 2605,
+ "decided": 1366,
+ "decided_share": 0.5244,
+ "accuracy_on_decided": 0.9993,
+ "ambiguous_share": 0.4756,
+ "brier": 0.115,
+ "elision": {
+  "candidates": 125,
+  "right": 123,
+  "accuracy": 0.984,
+  "confusions": {
+   "gold hiatus, predicted elision": 2
+  }
+ },
+ "fit": {
+  "lines": 262,
+  "parsed": 261,
+  "ok": 260,
+  "pattern_match": 159,
+  "ok_but_wrong_pattern": 101
+ },
+ "negative_control": {
+  "swap_total": 262,
+  "swap_accepted": 58,
+  "replace_total": 262,
+  "replace_accepted": 60
+ },
+ "calibration": {
+  "0.0-0.1": {
+   "n": 81,
+   "observed_long": 0.012
+  },
+  "0.1-0.2": {
+   "n": 243,
+   "observed_long": 0.004
+  },
+  "0.2-0.3": {
+   "n": 24,
+   "observed_long": 0.375
+  },
+  "0.4-0.5": {
+   "n": 26,
+   "observed_long": 0.0
+  },
+  "0.5-0.6": {
+   "n": 1094,
+   "observed_long": 0.377
+  },
+  "0.6-0.7": {
+   "n": 33,
+   "observed_long": 0.667
+  },
+  "0.7-0.8": {
+   "n": 16,
+   "observed_long": 0.75
+  },
+  "0.8-0.9": {
+   "n": 15,
+   "observed_long": 1.0
+  },
+  "0.9-1.0": {
+   "n": 1073,
+   "observed_long": 1.0
+  }
+ },
+ "ambiguous_by_rule": [
+  [
+   "NATURE / UNK",
+   932
+  ],
+  [
+   "NATURE / FIN-A",
+   69
+  ],
+  [
+   "CONS-VOW / FIN-OTHER",
+   67
+  ],
+  [
+   "CONS-VOW / FIN-US",
+   31
+  ],
+  [
+   "NATURE / VAV-GREEK",
+   26
+  ],
+  [
+   "MCL-WORD / UNK",
+   22
+  ],
+  [
+   "NATURE / FIN-I-EITHER",
+   19
+  ],
+  [
+   "CONS-VOW / FIN-IS",
+   19
+  ],
+  [
+   "NATURE / FIN-E-LIST",
+   13
+  ],
+  [
+   "CONS-VOW / FIN-ES",
+   12
+  ],
+  [
+   "NATURE / FIN-O-IAMB",
+   10
+  ],
+  [
+   "NATURE / FIN-O-SHORT",
+   5
+  ]
+ ],
+ "errors_by_rule": [
+  [
+   "NATURE / FIN-E",
+   1
+  ]
+ ],
+ "misaligned_lines": [
+  {
+   "id": "hypotactic-la:catullus:57:5",
+   "units": 10,
+   "gold": 11,
+   "text": "impressae resident nec eluentur:",
+   "gold_q": "LLLSSLSLSLL"
+  }
+ ],
+ "errors": [
+  {
+   "id": "hypotactic-la:catullus:3:16",
+   "text": "o factum male! o miselle passer!",
+   "unit": "e",
+   "p": 0.6,
+   "gold": "kept",
+   "rule": "ELISION",
+   "vowel_rule": "",
+   "flags": [
+    "hiatus"
+   ]
+  },
+  {
+   "id": "hypotactic-la:catullus:55:4",
+   "text": "te in Circo, te in omnibus libellis,",
+   "unit": "e",
+   "p": 0.75,
+   "gold": "kept",
+   "rule": "ELISION",
+   "vowel_rule": "",
+   "flags": [
+    "semihiatus"
+   ]
+  },
+  {
+   "id": "hypotactic-la:catullus:55:9",
+   "text": "avelte, sic ipse flagitabam,",
+   "unit": "e, s",
+   "p": 0.05,
+   "gold": "L",
+   "rule": "NATURE",
+   "vowel_rule": "FIN-E",
+   "flags": []
+  },
+  {
+   "id": "hypotactic-la:catullus:55:9",
+   "text": "avelte, sic ipse flagitabam,",
+   "unit": "",
+   "p": null,
+   "gold": "⏑––––⏑–⏑––",
+   "rule": "LINE-REJECTED",
+   "vowel_rule": "1 position(s) against the scanner",
+   "flags": [
+    "e, s:long"
+   ]
+  },
+  {
+   "id": "hypotactic-la:catullus:55:11",
+   "text": "quaedam inquit, nudum reduc...",
+   "unit": "",
+   "p": null,
+   "gold": "–––––⏑–",
+   "rule": "LINE-REJECTED",
+   "vowel_rule": "8 syllables (1 elidable); phalaecian needs 11 (after possible synizesis and elision)",
+   "flags": []
+  }
+ ],
+ "ms_per_line": 3.03,
+ "setting": {
+  "split": "dev",
+  "work": "catullus",
+  "metre": "hendecasyllables",
+  "template": "phalaecian",
+  "fold_v": true,
+  "lexicon": false,
+  "params": {
+   "vowel_default": 0.5,
+   "vocal_before_vowel": 0.1,
+   "vocal_before_vowel_greek": 0.4,
+   "vav_long_list": 0.9,
+   "vav_genitive": 0.5,
+   "final_o_iambic": 0.6,
+   "final_e_greek": 0.7,
+   "final_a": 0.5,
+   "final_e_short": 0.05,
+   "final_e_long_list": 0.85,
+   "final_i_long": 0.95,
+   "final_i_either": 0.5,
+   "final_i_short_list": 0.1,
+   "final_o_long": 0.9,
+   "final_o_short_list": 0.2,
+   "final_u_long": 0.95,
+   "final_as": 0.9,
+   "final_os": 0.9,
+   "final_es": 0.7,
+   "final_is": 0.25,
+   "final_us": 0.15,
+   "lex_long": 0.9,
+   "lex_short": 0.05,
+   "lex_unmarked": 0.3,
+   "mcl_word": 0.2,
+   "mcl_boundary": 0.05,
+   "s_impura": 0.15,
+   "pos_initial": 0.9,
+   "final_s_drop": 0.02,
+   "semi_hiatus_long": 0.5,
+   "elision": 0.98,
+   "elision_before_interjection": 0.6,
+   "elision_after_strong_punct": 0.9,
+   "elision_monosyllable_long": 0.75,
+   "prodelision": 0.98,
+   "synizesis": 0.05,
+   "synizesis_list": 0.85,
+   "iambic_shortening": 0.3
+  }
+ }
+}

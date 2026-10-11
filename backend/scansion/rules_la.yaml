@@ -18,7 +18,10 @@ params:
   vowel_default: 0.5          # a vowel the rules and the lexicon leave open (owner's honest default; measured)
   vocal_before_vowel: 0.1     # vowel before a vowel inside the word (vocalis ante vocalem corripitur)
   vocal_before_vowel_greek: 0.4   # ... in a capitalised (Greek) word: Aenēās, Mēdēa
-  vav_long_list: 0.9          # ... in the listed exceptions (fīō, illīus, diēī)
+  vav_long_list: 0.9          # ... in the listed exceptions (fīō, diēī, āēr)
+  vav_genitive: 0.5           # genitives in -īus: long in prose, often short in Catullus (illĭus 3.8, unĭus 5.3)
+  final_o_iambic: 0.6         # final -o of an iambic disyllable (dabŏ 13.11, uolŏ): often shortened
+  final_e_greek: 0.7          # a capitalised word in -e (Acmē, Daphnē): Greek -ē
   final_a: 0.5                # final -a: nom./voc. sg., neut. pl. short; abl. sg., imperative, adverb long
   final_e_short: 0.05         # final -e is short (A&G §604)
   final_e_long_list: 0.85     # ... except 5th-decl. ablatives, 2nd-conj. imperatives, adverbs in -ē (listed)
@@ -43,7 +46,7 @@ params:
   final_s_drop: 0.02          # final -s after a short vowel before a consonant dropped (dabi' supplicium, 116.8)
   semi_hiatus_long: 0.5       # a long monosyllable kept in hiatus may shorten (dī ament, 97.1)
   elision: 0.98               # final vowel (or vowel + m) before a vowel or h-: elided
-  elision_before_interjection: 0.3    # ... before o, heu, a: hiatus common
+  elision_before_interjection: 0.6    # ... before o, heu: hiatus common (male! o 3.16), elision too (Luget' o 3.1)
   elision_after_strong_punct: 0.9     # ... across . ! ? ; :
   elision_monosyllable_long: 0.75     # a long monosyllable (o, me, te, qui) before a vowel: often kept (semi-hiatus)
   prodelision: 0.98           # est / es after a vowel or -m loses its e
@@ -53,17 +56,19 @@ params:
 
 lists:
   vav_long: [fio, fiam, fias, fiat, fiamus, fiatis, fiant, fiebam, fiebas, fiebat, fiebant, fiet, fies, fient, fiemus,
-             fietis, illius, ipsius, unius, totius, solius, utrius, nullius, ullius, istius, neutrius, diei, faciei,
-             speciei, aer, aeris, aeri, aera, aere, eheu, ohe, io, dius, aenea, aeneae, aeneas, aeneam, aenean]
+             fietis, diei, faciei, speciei, aer, aeris, aeri, aera, aere, eheu, ohe, io, dius, aenea, aeneae, aeneas,
+             aeneam, aenean]
+  vav_genitives: [illius, ipsius, unius, totius, solius, utrius, nullius, ullius, istius, neutrius, alius, alterius]
   final_e_long: [die, re, fide, spe, facie, specie, acie, hodie, pridie, postridie, quare, fere, ferme, ohe, docte,
-                 pulchre, misere, uere, tute, longe, late, plane, recte, uale, uide, mone, tene, habe, tace, iube,
-                 responde, caue, salue, doce, time, dele, me, te, se, de, ne, e, ue]
+                 pulchre, pulcre, misere, uere, tute, longe, late, plane, recte, sane, assidue, mirifice, belle,
+                 commode, perpetue, turpe, uale, uide, mone, tene, habe, tace, iube, responde, caue, salue, doce,
+                 time, dele, me, te, se, de, ne, e, ue]
   final_i_either_words: [mihi, tibi, sibi, ibi, ubi, uti, utei]
   final_i_short_words: [nisi, quasi]
   final_o_short_words: [ego, modo, cito, duo, homo, scio, nescio, puto, uolo, rogo, cedo, ilico, commodo, quomodo]
   final_es_short: [es, miles, hospes, seges, teges, comes, pedes, eques, dives, sospes, caespes, interpres, obses,
                    praeses, ales, cespes, limes, tudes, merges, pes, bes]
-  final_os_short: [compos, impos, os, exos]
+  final_os_short: [compos, impos, exos]
   final_is_long: [uis, glis, dis, uiris, bis]
   final_us_long: [sus, plus, mus, crus, ius, tus, rus, pus, grus, thus, uirtus, iuuentus, senectus, tellus, salus,
                   palus, seruitus, manus, fructus, metus, domus, gradus, cultus, uultus, cantus, fluctus, genus]
@@ -113,8 +118,13 @@ vowel:
       - id: VAV-LIST
         when: word in vav_long or stem in vav_long
         p: vav_long_list
-        reason: exception kept long (fīō, genitives in -īus, diēī, Greek words)
+        reason: exception kept long (fīō, diēī, āēr, Greek words)
         cite: A&G §603a (exceptions)
+      - id: VAV-GEN
+        when: word in vav_genitives or stem in vav_genitives
+        p: vav_genitive
+        reason: genitive in -īus, long in prose, often short in Catullus (illĭus 3.8, unĭus 5.3)
+        cite: A&G §603a; Catullus 3.8, 5.3
       - id: VAV-GREEK
         when: capitalised
         p: vocal_before_vowel_greek
@@ -165,6 +175,11 @@ vowel:
         p: final_e_long_list
         reason: final -e long in this word (5th-decl. abl., 2nd-conj. imperative, adverb in -ē)
         cite: A&G §604 (exceptions)
+      - id: FIN-E-GREEK
+        when: ending == "e" and capitalised and nsyl >= 2
+        p: final_e_greek
+        reason: a Greek name in -ē (Acmē, Daphnē)
+        cite: A&G §604
       - id: FIN-E
         when: ending == "e"
         p: final_e_short
@@ -190,6 +205,11 @@ vowel:
         p: final_o_short_list
         reason: this word usually has a short final -o (ego, modo, cito; nesciŏ Catullus 85.2)
         cite: A&G §604 (exceptions); Catullus 85.2
+      - id: FIN-O-IAMB
+        when: ending == "o" and iambic_word
+        p: final_o_iambic
+        reason: final -o of an iambic disyllable is often shortened (dabŏ 13.11, uolŏ 6.16)
+        cite: A&G §603f note 2 (iambic shortening); Catullus 13.11
       - id: FIN-O
         when: ending == "o"
         p: final_o_long
