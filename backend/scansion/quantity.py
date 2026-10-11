@@ -41,6 +41,8 @@ class SyllableResult:
     nstart: int = 0               # offsets of the nucleus
     nend: int = 0
     certain: bool = False
+    elision: float = 0.0          # Latin: probability the unit is elided (drops out of the metre); Greek: 0
+    prodelision: dict | None = None   # Latin: {"p", "p_long"} on the unit before est / es
 
     @property
     def leaf(self) -> str:
@@ -48,13 +50,20 @@ class SyllableResult:
 
     @property
     def label(self) -> str:
+        if self.elision >= 0.5:
+            return "E"
         return "L" if self.p_long >= 0.9 else "S" if self.p_long <= 0.1 else "A"
 
     def as_dict(self) -> dict:
-        return {"i": self.index, "line": self.line, "word": self.word, "start": self.start, "end": self.end,
-                "nucleus": [self.nstart, self.nend], "text": self.text, "p_long": round(self.p_long, 3),
-                "label": self.label, "certain": self.certain, "rule": self.rule, "path": self.path,
-                "vowel": self.vowel, "reasons": self.reasons, "flags": self.flags}
+        d = {"i": self.index, "line": self.line, "word": self.word, "start": self.start, "end": self.end,
+             "nucleus": [self.nstart, self.nend], "text": self.text, "p_long": round(self.p_long, 3),
+             "label": self.label, "certain": self.certain, "rule": self.rule, "path": self.path,
+             "vowel": self.vowel, "reasons": self.reasons, "flags": self.flags}
+        if self.elision:
+            d["elision"] = round(self.elision, 3)
+        if self.prodelision:
+            d["prodelision"] = self.prodelision
+        return d
 
 
 @lru_cache(maxsize=1)
@@ -109,7 +118,7 @@ class _Line:
     def result(self, k: int) -> SyllableResult:
         u = self.units[k]
         g = self.sc.grammar
-        env = dict(g.params)
+        env = g.env()
         env.update(self.features(u))
         p_vowel, vpath = g.decide(g.vowel, env)
         env["p_vowel"] = p_vowel

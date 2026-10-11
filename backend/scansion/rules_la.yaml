@@ -1,0 +1,414 @@
+# Latin scansion meta-grammar (metre-free).  Sibling of rules.yaml (Greek); interpreted by
+# backend/scansion/engine.py with the Latin features of backend/scansion/quantity_la.py.
+#
+# A scansion UNIT is one vowel nucleus (a vowel or a diphthong) plus the consonants after it up to the next
+# nucleus on the same line.  Two trees per unit, top to bottom, first match wins inside each list:
+#   vowel: how likely the nucleus itself is long        -> p_vowel
+#   unit:  how likely the whole unit counts long         -> p_long (the output)
+# flags: annotations.  ELI-* flags carry the probability that the unit is ELIDED (dropped from the metre);
+# PROD-* the probability of prodelision (the next word's est / es loses its e; this unit is long by position).
+#
+# Citations: A&G = Allen & Greenough, New Latin Grammar (1903; Perseus 1999.04.0001), sections; G&L = Gildersleeve &
+# Lodge, Latin Grammar (1895); Raven = D. S. Raven, Latin Metre (1965). Every parameter is a hypothesis
+# (docs/latin/hypotheses.md); measured shares from the development half go to rule_calibration_la.json.
+
+version: 1
+
+params:
+  vowel_default: 0.5          # a vowel the rules and the lexicon leave open (owner's honest default; measured)
+  vocal_before_vowel: 0.1     # vowel before a vowel inside the word (vocalis ante vocalem corripitur)
+  vocal_before_vowel_greek: 0.4   # ... in a capitalised (Greek) word: Aenēās, Mēdēa
+  vav_long_list: 0.9          # ... in the listed exceptions (fīō, illīus, diēī)
+  final_a: 0.5                # final -a: nom./voc. sg., neut. pl. short; abl. sg., imperative, adverb long
+  final_e_short: 0.05         # final -e is short (A&G §604)
+  final_e_long_list: 0.85     # ... except 5th-decl. ablatives, 2nd-conj. imperatives, adverbs in -ē (listed)
+  final_i_long: 0.95          # final -i is long (A&G §604)
+  final_i_either: 0.5         # mihi tibi sibi ibi ubi: either
+  final_i_short_list: 0.1     # nisi quasi: short
+  final_o_long: 0.9           # final -o is long (A&G §604)
+  final_o_short_list: 0.2     # ego modo cito duo homo scio nescio puto uolo: usually short
+  final_u_long: 0.95          # final -u is long (A&G §604)
+  final_as: 0.9               # -as long (acc. pl., 2nd sg.) except Greek nominatives
+  final_os: 0.9               # -os long except compos, impos, ŏs (bone)
+  final_es: 0.7               # -es long except es (sum), 3rd-decl. nominatives with short -ĭs genitive (miles, hospes)
+  final_is: 0.25              # -is short except dat./abl. pl., 2nd sg. 4th conj., uīs, glīs
+  final_us: 0.15              # -us short except 4th-decl. gen. sg. / nom. pl. and -ūs stems (uirtūs, tellūs)
+  lex_long: 0.9               # the macronised lexicon marks the vowel long
+  lex_short: 0.05             # ... short
+  lex_unmarked: 0.3           # the lexicon knows the word but gives this vowel no mark
+  mcl_word: 0.2               # muta cum liquida inside the word after a short vowel: position is optional, mostly not taken
+  mcl_boundary: 0.05          # stop + liquid opening the next word: no position in classical verse
+  s_impura: 0.15              # short final vowel before initial s + stop (pote stolidum 17.24): usually stays short
+  pos_initial: 0.9            # next word begins with another two consonants (gn-, ps-, mn-, Greek clusters)
+  final_s_drop: 0.02          # final -s after a short vowel before a consonant dropped (dabi' supplicium, 116.8)
+  semi_hiatus_long: 0.5       # a long monosyllable kept in hiatus may shorten (dī ament, 97.1)
+  elision: 0.98               # final vowel (or vowel + m) before a vowel or h-: elided
+  elision_before_interjection: 0.3    # ... before o, heu, a: hiatus common
+  elision_after_strong_punct: 0.9     # ... across . ! ? ; :
+  elision_monosyllable_long: 0.75     # a long monosyllable (o, me, te, qui) before a vowel: often kept (semi-hiatus)
+  prodelision: 0.98           # est / es after a vowel or -m loses its e
+  synizesis: 0.05             # two vowels inside a word read as one syllable (a flag; the metre may take it)
+  synizesis_list: 0.85        # dein, deinde, deinceps, eidem, eodem, antehac, dehinc: usually one syllable
+  iambic_shortening: 0.3      # a disyllable u- whose final may shorten (uolo, caue): flag only
+
+lists:
+  vav_long: [fio, fiam, fias, fiat, fiamus, fiatis, fiant, fiebam, fiebas, fiebat, fiebant, fiet, fies, fient, fiemus,
+             fietis, illius, ipsius, unius, totius, solius, utrius, nullius, ullius, istius, neutrius, diei, faciei,
+             speciei, aer, aeris, aeri, aera, aere, eheu, ohe, io, dius, aenea, aeneae, aeneas, aeneam, aenean]
+  final_e_long: [die, re, fide, spe, facie, specie, acie, hodie, pridie, postridie, quare, fere, ferme, ohe, docte,
+                 pulchre, misere, uere, tute, longe, late, plane, recte, uale, uide, mone, tene, habe, tace, iube,
+                 responde, caue, salue, doce, time, dele, me, te, se, de, ne, e, ue]
+  final_i_either_words: [mihi, tibi, sibi, ibi, ubi, uti, utei]
+  final_i_short_words: [nisi, quasi]
+  final_o_short_words: [ego, modo, cito, duo, homo, scio, nescio, puto, uolo, rogo, cedo, ilico, commodo, quomodo]
+  final_es_short: [es, miles, hospes, seges, teges, comes, pedes, eques, dives, sospes, caespes, interpres, obses,
+                   praeses, ales, cespes, limes, tudes, merges, pes, bes]
+  final_os_short: [compos, impos, os, exos]
+  final_is_long: [uis, glis, dis, uiris, bis]
+  final_us_long: [sus, plus, mus, crus, ius, tus, rus, pus, grus, thus, uirtus, iuuentus, senectus, tellus, salus,
+                  palus, seruitus, manus, fructus, metus, domus, gradus, cultus, uultus, cantus, fluctus, genus]
+  synizesis_words: [dein, deinde, deinceps, eidem, eisdem, eodem, eadem, antehac, dehinc, deest, deesse, deerat]
+
+vowel:
+  - id: TYPED-L
+    when: typed == "L"
+    p: 1
+    reason: a macron was typed on the vowel
+    cite: owner's mark
+  - id: TYPED-S
+    when: typed == "S"
+    p: 0
+    reason: a breve was typed on the vowel
+    cite: owner's mark
+  - id: DIPH
+    when: nucleus == "diphthong"
+    p: 1
+    reason: diphthong, long by nature
+    cite: A&G §10c, §603
+  - id: ENCL-E
+    when: enclitic and is_ultima and vowel == "e"
+    p: 0
+    reason: the e of an enclitic (-que, -ue, -ne) is short
+    cite: A&G §604
+  - id: MONO
+    when: monosyllable and not elided and ending == vowel
+    reason: a monosyllable ending in a vowel is long
+    cite: A&G §604
+    then:
+      - id: MONO-INTERJ
+        when: word in ("a", "o")
+        p: 0.97
+        reason: the interjection is long (ā, ō)
+        cite: A&G §604
+      - id: MONO-LONG
+        when: true
+        p: 0.97
+        reason: a monosyllable ending in a vowel is long (mē tē sē dē nē sī tū quī)
+        cite: A&G §604
+  - id: VAV
+    when: hiatus == "internal" and not line_final
+    reason: a vowel before another vowel in the same word
+    cite: A&G §603a
+    then:
+      - id: VAV-LIST
+        when: word in vav_long or stem in vav_long
+        p: vav_long_list
+        reason: exception kept long (fīō, genitives in -īus, diēī, Greek words)
+        cite: A&G §603a (exceptions)
+      - id: VAV-GREEK
+        when: capitalised
+        p: vocal_before_vowel_greek
+        reason: a vowel before a vowel in a (Greek) name may keep its length (Aenēās)
+        cite: A&G §603a
+      - id: VAV-SHORT
+        when: true
+        p: vocal_before_vowel
+        reason: a vowel before a vowel in the same word is short (vocalis ante vocalem corripitur)
+        cite: A&G §603a
+  - id: LEX
+    when: lex in ("L", "S", "conflict", "unmarked")
+    reason: vowel length from the lexical sources (optional layer)
+    cite: macronised lexicon (docs/latin/lexicon.md)
+    then:
+      - id: LEX-L
+        when: lex == "L"
+        p: lex_long
+        reason: the lexical sources mark it long
+        cite: macronised lexicon
+      - id: LEX-S
+        when: lex == "S"
+        p: lex_short
+        reason: the lexical sources mark it short
+        cite: macronised lexicon
+      - id: LEX-CONFLICT
+        when: lex == "conflict"
+        p: vowel_default
+        reason: the lexical sources disagree (homographs, or an ending of either length such as -a nom./abl.)
+        cite: macronised lexicon
+      - id: LEX-UNMARKED
+        when: true
+        p: lex_unmarked
+        reason: the lexicon knows the word but gives this vowel no mark
+        cite: macronised lexicon
+  - id: FINAL
+    when: is_ultima and not elided
+    reason: the quantity of a final syllable's vowel follows the ending
+    cite: A&G §604
+    then:
+      - id: FIN-A
+        when: ending == "a"
+        p: final_a
+        reason: final -a is short (nom./voc. sg., neut. pl.) or long (abl. sg., imperative, adverb)
+        cite: A&G §604
+      - id: FIN-E-LIST
+        when: ending == "e" and (word in final_e_long or stem in final_e_long)
+        p: final_e_long_list
+        reason: final -e long in this word (5th-decl. abl., 2nd-conj. imperative, adverb in -ē)
+        cite: A&G §604 (exceptions)
+      - id: FIN-E
+        when: ending == "e"
+        p: final_e_short
+        reason: final -e is short
+        cite: A&G §604
+      - id: FIN-I-EITHER
+        when: ending == "i" and word in final_i_either_words
+        p: final_i_either
+        reason: mihi tibi sibi ibi ubi have a final -i of either length
+        cite: A&G §604
+      - id: FIN-I-SHORT
+        when: ending == "i" and word in final_i_short_words
+        p: final_i_short_list
+        reason: nisi, quasi have a short final -i
+        cite: A&G §604
+      - id: FIN-I
+        when: ending == "i"
+        p: final_i_long
+        reason: final -i is long
+        cite: A&G §604
+      - id: FIN-O-SHORT
+        when: ending == "o" and word in final_o_short_words
+        p: final_o_short_list
+        reason: this word usually has a short final -o (ego, modo, cito; nesciŏ Catullus 85.2)
+        cite: A&G §604 (exceptions); Catullus 85.2
+      - id: FIN-O
+        when: ending == "o"
+        p: final_o_long
+        reason: final -o is long
+        cite: A&G §604
+      - id: FIN-U
+        when: ending == "u"
+        p: final_u_long
+        reason: final -u is long
+        cite: A&G §604
+      - id: FIN-AS
+        when: ending == "as"
+        p: final_as
+        reason: final -as is long (acc. pl., 2nd sg.), except some Greek nominatives
+        cite: A&G §604
+      - id: FIN-OS-SHORT
+        when: ending == "os" and word in final_os_short
+        p: 0.1
+        reason: compos, impos, ŏs (bone) have a short -os
+        cite: A&G §604
+      - id: FIN-OS
+        when: ending == "os"
+        p: final_os
+        reason: final -os is long
+        cite: A&G §604
+      - id: FIN-ES-SHORT
+        when: ending == "es" and word in final_es_short
+        p: 0.1
+        reason: es (sum) and 3rd-decl. nominatives with a short -ĭs genitive have a short -es (milĕs, hospĕs)
+        cite: A&G §604
+      - id: FIN-ES
+        when: ending == "es"
+        p: final_es
+        reason: final -es is usually long (3rd-decl. nom./acc. pl., 5th decl.)
+        cite: A&G §604
+      - id: FIN-IS-LONG
+        when: ending == "is" and word in final_is_long
+        p: 0.9
+        reason: uīs, glīs, dīs have a long -is
+        cite: A&G §604
+      - id: FIN-IS
+        when: ending == "is"
+        p: final_is
+        reason: final -is is short except in dat./abl. plurals and the 2nd sg. of the 4th conjugation
+        cite: A&G §604
+      - id: FIN-US-LONG
+        when: ending == "us" and word in final_us_long
+        p: 0.85
+        reason: 4th-decl. gen. sg. / nom.-acc. pl. and -ūs stems have a long -us (manūs, uirtūs)
+        cite: A&G §604
+      - id: FIN-US
+        when: ending == "us"
+        p: final_us
+        reason: final -us is short
+        cite: A&G §604
+      - id: FIN-OTHER
+        when: true
+        p: vowel_default
+        reason: final syllable with a closed ending; the vowel's own length is open
+        cite: A&G §604
+  - id: UNK
+    when: true
+    p: vowel_default
+    reason: vowel of unknown length (the lexicon or the metre may settle it)
+    cite: A&G §603
+
+unit:
+  - id: POS
+    when: (consonants >= 2 or double) and not (mcl and not mcl_prefix)
+    reason: long by position
+    cite: A&G §603f
+    then:
+      - id: POS-DOUBLE
+        when: double
+        p: 1
+        reason: x, z or an intervocalic i (counted double) follows
+        cite: A&G §603f, §11c
+      - id: POS-PREFIX
+        when: mcl and mcl_prefix
+        p: 1
+        reason: stop + liquid at a prefix boundary (ab-rumpō, ob-ruō, sub-lātus) makes position
+        cite: A&G §603f note; G&L §703
+      - id: POS-ACROSS-S
+        when: boundary_inside_interval and final_s_short
+        p: 1 - final_s_drop
+        reason: final -s after a short vowel before an initial consonant; archaic dropping of -s is rare (116.8)
+        cite: A&G §603f; Catullus 116.8
+      - id: POS-ACROSS
+        when: boundary_inside_interval
+        p: 1
+        reason: two consonants across a word boundary
+        cite: A&G §603f
+      - id: INIT
+        when: interval_opens_next_word
+        reason: the next word begins with two consonants
+        cite: A&G §603f
+        then:
+          - id: S-IMPURA
+            when: next_cluster == "s_stop"
+            p: p_vowel + (1 - p_vowel) * s_impura
+            reason: a short final vowel before initial s + stop usually stays short (pote stolidum, 17.24)
+            cite: Raven §12; Catullus 17.24, 64.357
+          - id: INIT-MCL
+            when: next_cluster == "mcl"
+            p: p_vowel + (1 - p_vowel) * mcl_boundary
+            reason: stop + liquid opening the next word makes no position in classical verse
+            cite: A&G §603f note
+          - id: INIT-DOUBLE
+            when: next_cluster == "double"
+            p: 1
+            reason: the next word begins with x or z
+            cite: A&G §603f
+          - id: INIT-OTHER
+            when: true
+            p: p_vowel + (1 - p_vowel) * pos_initial
+            reason: the next word begins with another consonant cluster (gn-, ps-, mn-)
+            cite: A&G §603f
+      - id: POS-WORD
+        when: true
+        p: 1
+        reason: two consonants inside the word
+        cite: A&G §603f
+  - id: MCL
+    when: mcl
+    reason: stop (or f) + l / r inside the word (muta cum liquida)
+    cite: A&G §603f note; §11b
+    then:
+      - id: MCL-LONGV
+        when: p_vowel >= 0.99
+        p: 1
+        reason: the vowel is long anyway
+        cite: A&G §603
+      - id: MCL-WORD
+        when: true
+        p: p_vowel + (1 - p_vowel) * mcl_word
+        reason: stop + liquid inside the word; position is optional and mostly not taken in Catullus and Horace
+        cite: A&G §603f note; Raven §12
+  - id: ELIDABLE
+    when: elidable
+    reason: final vowel (or vowel + m) before a word beginning with a vowel or h (elision environment)
+    cite: A&G §612; Raven §§16-19
+    then:
+      - id: SEMI-HIATUS
+        when: monosyllable and p_vowel >= 0.9 and not next_est
+        p: semi_hiatus_long
+        reason: if kept in hiatus, a long monosyllable may shorten (dī ament, Catullus 97.1)
+        cite: A&G §612e; Catullus 97.1
+      - id: ELID-KEEP
+        when: true
+        p: p_vowel
+        reason: if not elided (hiatus), the vowel's own length decides
+        cite: A&G §612
+  - id: CONS-VOW
+    when: final_consonant_before_vowel
+    p: p_vowel
+    reason: final consonant before the next word's vowel, it joins that vowel
+    cite: A&G §603f; Raven §10
+  - id: NATURE
+    when: true
+    p: p_vowel
+    reason: the vowel's own length decides
+    cite: A&G §603
+
+flags:
+  - id: PROD-CAND
+    when: elidable and next_est and consonants == 0
+    p: prodelision
+    reason: est / es after a vowel loses its e (prodelision, dictumst)
+    cite: A&G §612d
+  - id: PROD-CAND-M
+    when: elidable and next_est and final_m
+    p: prodelision
+    reason: est / es after -m loses its e (prodelision)
+    cite: A&G §612d
+  - id: ELI-INTERJ
+    when: elidable and not next_est and next_interjection
+    p: elision_before_interjection
+    reason: before an interjection (o, heu, a) hiatus is common
+    cite: A&G §612e
+  - id: ELI-MONO
+    when: elidable and not next_est and monosyllable and p_vowel >= 0.9 and not interjection
+    p: elision_monosyllable_long
+    reason: a long monosyllable before a vowel is often kept (semi-hiatus) rather than elided
+    cite: A&G §612e; Raven §18
+  - id: ELI-INTERJ-SELF
+    when: elidable and not next_est and interjection
+    p: elision_before_interjection
+    reason: an interjection (o, heu) before a vowel usually stands in hiatus
+    cite: A&G §612e
+  - id: ELI-PUNCT
+    when: elidable and not next_est and punct_between == "strong"
+    p: elision_after_strong_punct
+    reason: elision across strong punctuation still usual, hiatus somewhat likelier
+    cite: Raven §19
+  - id: ELI-CAND
+    when: elidable and not next_est
+    p: elision
+    reason: final vowel (or vowel + m) before a vowel or h- is elided
+    cite: A&G §612
+  - id: SYN-LIST
+    when: hiatus == "internal" and (word in synizesis_words)
+    p: synizesis_list
+    reason: usually read as one syllable (dein, deinde, eidem)
+    cite: A&G §603c note
+  - id: SYN-CAND
+    when: hiatus == "internal" and vowel in ("e", "i", "u")
+    p: synizesis
+    reason: may merge with the next vowel into one syllable (synizesis)
+    cite: A&G §603c note
+  - id: IAMB-SHORT
+    when: iambic_word and is_ultima and p_vowel >= 0.5
+    p: iambic_shortening
+    reason: iambic shortening of a disyllable (uolo, caue) is possible
+    cite: A&G §603f note 2
+  - id: ELI-1
+    when: elided and word_final
+    reason: elided by the editor; the lost vowel is not pronounced
+    cite: A&G §612
+  - id: FIN-ANC
+    when: line_final
+    reason: last unit of the line; its length is indifferent (brevis in longo)
+    cite: A&G §608

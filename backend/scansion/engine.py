@@ -158,6 +158,14 @@ class Grammar:
     unit: list[Node]
     flags: list[Node]
     source: str
+    features: dict[str, str] = field(default_factory=lambda: dict(FEATURES))
+    lists: dict[str, tuple[str, ...]] = field(default_factory=dict)   # named word lists usable in conditions
+
+    def env(self) -> dict:
+        """The constants every evaluation starts from: parameters and word lists."""
+        e = dict(self.params)
+        e.update(self.lists)
+        return e
 
     def all_nodes(self):
         def walk(nodes):
@@ -187,14 +195,18 @@ class Grammar:
     def as_dict(self) -> dict:
         return {"params": self.params, "vowel": [n.as_dict() for n in self.vowel],
                 "unit": [n.as_dict() for n in self.unit], "flags": [n.as_dict() for n in self.flags],
-                "features": FEATURES}
+                "features": self.features, "lists": {k: list(v) for k, v in self.lists.items()}}
 
 
 def load(path: Path | str | None = None, text: str | None = None,
-         param_overrides: dict | None = None) -> tuple[Grammar | None, list[str]]:
-    """Parse and validate a rules file. Returns (grammar or None, list of error messages)."""
+         param_overrides: dict | None = None, features: dict[str, str] | None = None) -> tuple[Grammar | None, list[str]]:
+    """Parse and validate a rules file. Returns (grammar or None, list of error messages).
+
+    `features` is the grammar's own feature set (name -> meaning); the Greek `FEATURES` by default. A `lists:`
+    block (name -> list of strings) defines word lists that conditions may use with `in`."""
     import yaml
     path = Path(path or DEFAULT_RULES)
+    FEATS = dict(features) if features is not None else FEATURES
     errors: list[str] = []
     try:
         doc = yaml.safe_load(text if text is not None else path.read_text(encoding="utf-8"))
@@ -207,11 +219,19 @@ def load(path: Path | str | None = None, text: str | None = None,
         if not isinstance(v, (int, float)) or not 0 <= v <= 1:
             errors.append(f"params.{k}: must be a number from 0 to 1 (got {v!r})")
     for k in params:
-        if k in FEATURES:
+        if k in FEATS:
             errors.append(f"params.{k}: this name is a feature; give the parameter another name")
     params.update(param_overrides or {})
-    known_vowel = set(FEATURES) - {"p_vowel"} | set(params)
-    known_unit = set(FEATURES) | set(params)
+    lists: dict[str, tuple[str, ...]] = {}
+    for k, v in (doc.get("lists") or {}).items():
+        if not isinstance(v, list) or not all(isinstance(x, str) for x in v):
+            errors.append(f"lists.{k}: must be a list of strings")
+        elif k in FEATS or k in params:
+            errors.append(f"lists.{k}: this name is a feature or parameter; give the list another name")
+        else:
+            lists[k] = tuple(v)
+    known_vowel = set(FEATS) - {"p_vowel"} | set(params) | set(lists)
+    known_unit = set(FEATS) | set(params) | set(lists)
     seen: set[str] = set()
 
     def build(items, where, known, need_p=True):
@@ -265,4 +285,4 @@ def load(path: Path | str | None = None, text: str | None = None,
     flags = build(doc.get("flags") or [], "flags", known_unit, need_p=False) if doc.get("flags") else []
     if errors:
         return None, errors
-    return Grammar(params, vowel, unit, flags, str(path)), []
+    return Grammar(params, vowel, unit, flags, str(path), dict(FEATS), lists), []

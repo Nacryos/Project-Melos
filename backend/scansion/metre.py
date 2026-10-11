@@ -18,8 +18,11 @@ from __future__ import annotations
 
 import math
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from .quantity import SyllableResult
+
+LATIN_METRES = Path(__file__).resolve().parent / "metres_la.yaml"
 
 P_FLOOR = 0.003            # a "certain" layer-1 value can still be overruled, at a visible cost
 VIOLATION = 0.05           # best parse uses a weight the scanner gave at most this probability
@@ -55,6 +58,49 @@ AUTO = ["hexameter", "pentameter", "iambic_trimeter", "trochaic_tetrameter", "sa
         "adonean", "alcaic_hendecasyllable", "alcaic_enneasyllable", "alcaic_decasyllable", "glyconic",
         "pherecratean", "hipponactean", "telesillean", "reizianum", "aristophanean", "lesser_asclepiad",
         "greater_asclepiad"]
+TEMPLATE_INFO: dict[str, dict] = {}          # Latin metres: label, caesura, cite (from metres_la.yaml)
+BASE_PRIORS: dict[str, dict[str, float]] = {}   # template string -> realisation of the first two positions -> prior
+AUTO_BY_LANGUAGE: dict[str, list[str]] = {"grc": AUTO}
+LANGUAGE_OF: dict[str, set[str]] = {"grc": set(TEMPLATES)}
+METRE_PARAMS = {"hiatus_violation_min": 0.9}
+
+
+def load_latin_metres(path: Path | None = None) -> list[str]:
+    """Add the Latin metres (metres_la.yaml) to the shared tables. Returns validation errors (empty when fine)."""
+    import yaml
+    doc = yaml.safe_load((path or LATIN_METRES).read_text(encoding="utf-8")) or {}
+    errors: list[str] = []
+    la: set[str] = set()
+    for name, spec in (doc.get("templates") or {}).items():
+        lines = spec.get("lines") if isinstance(spec, dict) else spec
+        if not isinstance(lines, list) or not lines or any(set(x) - set("-uxFDRX") for x in lines):
+            errors.append(f"templates.{name}: lines must use the symbols - u x F D R X")
+            continue
+        if any(not x.endswith("F") for x in lines):
+            errors.append(f"templates.{name}: every line template ends with F")
+            continue
+        TEMPLATES[name] = list(lines)
+        TEMPLATE_INFO[name] = {k: v for k, v in (spec.items() if isinstance(spec, dict) else []) if k != "lines"}
+        la.add(name)
+    for name in doc.get("shared") or []:
+        if name not in TEMPLATES:
+            errors.append(f"shared: unknown metre {name}")
+        else:
+            la.add(name)
+    for tpl, pri in (doc.get("base_priors") or {}).items():
+        if not isinstance(pri, dict) or any(k not in ("--", "-u", "u-", "uu") or not 0 <= float(v) <= 1 for k, v in pri.items()):
+            errors.append(f"base_priors[{tpl}]: keys --, -u, u-, uu with values 0..1")
+        else:
+            BASE_PRIORS[tpl] = {k: float(v) for k, v in pri.items()}
+    auto = [n for n in (doc.get("auto") or []) if n in TEMPLATES]
+    AUTO_BY_LANGUAGE["la"] = auto
+    LANGUAGE_OF["la"] = la
+    for k, v in (doc.get("params") or {}).items():
+        METRE_PARAMS[k] = float(v)
+    return errors
+
+
+_LATIN_ERRORS = load_latin_metres()
 
 
 @dataclass
@@ -78,15 +124,19 @@ class Fit:
     posterior: list[float] = field(default_factory=list)
     violations: list[dict] = field(default_factory=list)
     message: str = ""
+    elided: list[float] | None = None      # Latin: posterior probability that each unit is elided
 
     def as_dict(self) -> dict:
         finite = math.isfinite(self.log_likelihood)    # a line that does not parse has -inf: JSON null
-        return {"metre": self.metre, "template": self.template, "ok": self.ok,
-                "log_likelihood": round(self.log_likelihood, 3) if finite else None,
-                "per_syllable": round(self.per_syllable, 4) if finite else None,
-                "pattern": self.pattern, "assignment": self.assignment,
-                "posterior_p_long": [round(p, 3) for p in self.posterior], "violations": self.violations,
-                "message": self.message}
+        d = {"metre": self.metre, "template": self.template, "ok": self.ok,
+             "log_likelihood": round(self.log_likelihood, 3) if finite else None,
+             "per_syllable": round(self.per_syllable, 4) if finite else None,
+             "pattern": self.pattern, "assignment": self.assignment,
+             "posterior_p_long": [round(p, 3) for p in self.posterior], "violations": self.violations,
+             "message": self.message}
+        if self.elided is not None:
+            d["posterior_elided"] = self.elided
+        return d
 
 
 def _clamp(p: float) -> float:
@@ -101,9 +151,15 @@ def _merge_p(s: SyllableResult) -> float | None:
 
 
 def parses(sylls: list[SyllableResult], template: str, limit: int = 20000):
-    """Yield (probability, [(unit_first, unit_last, weight 'L'/'S', position index, symbol)])."""
+    """Yield (probability, [(unit_first, unit_last, weight 'L'/'S'/'E', position index, symbol)]).
+
+    Weight 'E' marks a unit the parse elides (Latin): it takes no template position (symbol 'E', position -1).
+    Prodelision (the unit before *est* / *es*) keeps that unit, long by position, and elides the next one."""
     n = len(sylls)
     merge = [_merge_p(s) for s in sylls]
+    elide = [min(max(getattr(s, "elision", 0.0) or 0.0, 0.0), 1.0) for s in sylls]
+    prod = [getattr(s, "prodelision", None) for s in sylls]
+    base = BASE_PRIORS.get(template)
     out = []
 
     def unit_choices(i):
@@ -115,6 +171,30 @@ def parses(sylls: list[SyllableResult], template: str, limit: int = 20000):
             yield i + 1, sylls[i].p_long, 1 - pm, i, i
             yield i + 2, 1.0, pm, i, i + 1
 
+    def assign(ni, j, prob, acc, pl, prior, a, b, tail=()):
+        """Place one unit (a..b, longness pl) at template position j, then recurse."""
+        sym = template[j]
+        pl = _clamp(pl)
+        tail = list(tail)
+
+        def go(w, p):
+            entry = [(a, b, w, j, sym)] + tail
+            if base is not None and j == 1:
+                first = next((e[2] for e in reversed(acc) if e[2] in "LS"), None)
+                if first is not None:
+                    p = p * base.get(("-" if first == "L" else "u") + ("-" if w == "L" else "u"), 1.0)
+            rec(ni, j + 1, p, acc + entry)
+
+        if sym in "-RD":
+            go("L", prob * prior * pl * (PRIOR["spondee5"] if sym == "D" and _foot(template, j) == 5 else 1.0))
+        if sym == "u":
+            go("S", prob * prior * (1 - pl))
+        if sym in "xX":
+            go("L", prob * prior * pl)
+            go("S", prob * prior * (1 - pl))
+        if sym == "F":
+            go("L" if pl >= 0.5 else "S", prob * prior)
+
     def rec(i, j, prob, acc):
         if len(out) >= limit or prob == 0.0:
             return
@@ -124,25 +204,27 @@ def parses(sylls: list[SyllableResult], template: str, limit: int = 20000):
             return
         if i >= n:
             return
-        sym = template[j]
+        keep = 1.0
+        e = elide[i]
+        if e > 0:
+            rec(i + 1, j, prob * e, acc + [(i, i, "E", -1, "E")])
+            keep *= 1 - e
+        pd = prod[i]
+        if pd and i + 1 < n and sylls[i + 1].line == sylls[i].line:
+            assign(i + 2, j, prob * keep * float(pd.get("p", 0)), acc, float(pd.get("p_long", 1.0)), 1.0, i, i,
+                   tail=[(i + 1, i + 1, "E", -1, "E")])
+            keep *= 1 - float(pd.get("p", 0))
+        if keep <= 0:
+            return
         for ni, pl, prior, a, b in unit_choices(i):
-            pl = _clamp(pl)
-            if sym in "-RD":
-                rec(ni, j + 1, prob * prior * pl * (PRIOR["spondee5"] if sym == "D" and _foot(template, j) == 5 else 1.0),
-                    acc + [(a, b, "L", j, sym)])
-            if sym == "u":
-                rec(ni, j + 1, prob * prior * (1 - pl), acc + [(a, b, "S", j, sym)])
-            if sym in "xX":
-                rec(ni, j + 1, prob * prior * pl, acc + [(a, b, "L", j, sym)])
-                rec(ni, j + 1, prob * prior * (1 - pl), acc + [(a, b, "S", j, sym)])
-            if sym == "F":
-                rec(ni, j + 1, prob * prior, acc + [(a, b, "L" if pl >= 0.5 else "S", j, sym)])
+            assign(ni, j, prob, acc, pl, prior * keep, a, b)
+        sym = template[j]
         if sym in "DRX" and i + 1 < n and sylls[i + 1].line == sylls[i].line:
             p1, p2 = _clamp(sylls[i].p_long), _clamp(sylls[i + 1].p_long)
             pri = 1.0 if sym == "D" else PRIOR["resolution"]
             if sym == "D" and _foot(template, j) == 5:
                 pri = 1 - PRIOR["spondee5"]
-            rec(i + 2, j + 1, prob * pri * (1 - p1) * (1 - p2),
+            rec(i + 2, j + 1, prob * keep * pri * (1 - p1) * (1 - p2),
                 acc + [(i, i, "S", j, sym), (i + 1, i + 1, "S", j, sym)])
 
     rec(0, 0, 1.0, [])
@@ -159,23 +241,32 @@ def fit_line(sylls: list[SyllableResult], metre: str, template: str | None = Non
     ps = parses(sylls, template)
     if not ps:
         lo, hi = _length_range(template)
-        msg = (f"{len(sylls)} syllables; {metre} needs {lo}" + (f"-{hi}" if hi != lo else "")
-               + " (after possible synizesis)")
+        elidable = sum(1 for s in sylls if (getattr(s, "elision", 0.0) or 0.0) >= 0.5)
+        msg = (f"{len(sylls)} syllables" + (f" ({elidable} elidable)" if elidable else "") + f"; {metre} needs {lo}"
+               + (f"-{hi}" if hi != lo else "") + " (after possible synizesis" + (" and elision" if elidable else "") + ")")
         return Fit(metre, template, False, float("-inf"), float("-inf"), "", message=msg)
     total = sum(p for p, _ in ps)
     best_p, best = max(ps, key=lambda t: t[0])
     post_long = [0.0] * len(sylls)
+    post_elided = [0.0] * len(sylls)
     for p, acc in ps:
         for a, b, w, _, _ in acc:
             if w == "L":
                 for k in range(a, b + 1):
                     post_long[k] += p
+            elif w == "E":
+                post_elided[a] += p
     posterior = [x / total for x in post_long]
     assignment, violations, pattern = [], [], []
+    hiatus_min = METRE_PARAMS.get("hiatus_violation_min", 0.9)
     for a, b, w, j, sym in best:
         s = sylls[a]
         entry = {"syllables": list(range(sylls[a].index, sylls[b].index + 1)), "weight": w, "position": j,
                  "symbol": sym}
+        if w == "E":
+            entry["elided"] = True
+            assignment.append(entry)
+            continue
         if b > a:
             entry["synizesis"] = True
         assignment.append(entry)
@@ -186,9 +277,17 @@ def fit_line(sylls: list[SyllableResult], metre: str, template: str | None = Non
                 violations.append({"syllable": s.index, "text": s.text, "needs": "long" if w == "L" else "short",
                                    "scanner": s.label, "p_long": round(s.p_long, 3), "rule": s.rule,
                                    "reason": (s.reasons[-1]["text"] if s.reasons else "")})
+        e = getattr(s, "elision", 0.0) or 0.0
+        if e >= hiatus_min and b == a:
+            violations.append({"syllable": s.index, "text": s.text, "needs": "elision", "scanner": s.label,
+                               "p_long": round(s.p_long, 3), "rule": "HIATUS", "kind": "hiatus",
+                               "reason": "hiatus: a final vowel (or vowel + m) before a vowel normally elides"})
     ll = math.log(total)
-    return Fit(metre, template, not violations, ll, ll / max(len(sylls), 1), "".join(pattern), assignment,
-               posterior, violations, "fits" if not violations else f"{len(violations)} position(s) against the scanner")
+    fit = Fit(metre, template, not violations, ll, ll / max(len(sylls), 1), "".join(pattern), assignment,
+              posterior, violations, "fits" if not violations else f"{len(violations)} position(s) against the scanner")
+    if any(post_elided):
+        fit.elided = [round(x / total, 3) for x in post_elided]
+    return fit
 
 
 def _length_range(template: str) -> tuple[int, int]:
@@ -203,10 +302,10 @@ def fit(lines: list[list[SyllableResult]], metre: str) -> list[Fit]:
     return [fit_line(sylls, metre, temps[k % len(temps)]) for k, sylls in enumerate(lines)]
 
 
-def auto(lines: list[list[SyllableResult]], top: int = 5) -> list[dict]:
+def auto(lines: list[list[SyllableResult]], top: int = 5, language: str = "grc") -> list[dict]:
     """Rank the stichic templates by mean log-likelihood per syllable over the lines that fit."""
     ranking = []
-    for name in AUTO:
+    for name in AUTO_BY_LANGUAGE.get(language, AUTO):
         fits = [fit_line(s, name) for s in lines if s]
         good = [f for f in fits if f.log_likelihood > float("-inf")]
         if not good:

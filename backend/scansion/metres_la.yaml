@@ -1,0 +1,70 @@
+# Latin metres for backend/scansion/metre.py: line templates, auto-detect list, base priors and the metre
+# layer's own priors. Symbols as for Greek: - long, u short, x anceps, F line end, D biceps, R resolvable long,
+# X resolvable anceps. Caesurae are metadata (`caesura`), never template symbols. Edit and reload.
+#
+# Citations: A&G = Allen & Greenough, New Latin Grammar (1903) §§615-626; Raven = D. S. Raven, Latin Metre (1965);
+# HOR = Halporn, Ostwald, Rosenmeyer, The Meters of Greek and Latin Poetry (1963). Base priors are hypotheses
+# (docs/latin/hypotheses.md); measured shares from the development half go to rule_calibration_la.json.
+
+version: 1
+
+templates:
+  phalaecian:
+    lines: ["xx-uu-u-u-F"]
+    label: Phalaecian hendecasyllable
+    cite: "A&G §625c; Raven §§145-147: Catullus's free base (spondee, trochee, iamb; never a pyrrhic)"
+  phalaecian_decasyllable:
+    lines: ["xx---u-u-F"]
+    label: Phalaecian decasyllable (Catullus 55, 58b)
+    cite: "Raven §147: the dactyl contracted to a spondee in some lines of 55 and 58b (58b.1 nōn custōs sī fingar ille Crētum)"
+  sapphic_horace:
+    lines: ["-u---uu-u-F", "-u---uu-u-F", "-u---uu-u-F", "-uu-F"]
+    label: Sapphic stanza (Horace)
+    caesura: "after 5 (Odes 1-3), often after 6 (Odes 4, Carmen Saeculare)"
+    cite: "A&G §625d; Raven §§124-125; HOR p. 100"
+  alcaic_horace:
+    lines: ["x-u---uu-uF", "x-u---uu-uF", "x-u---u-F", "-uu-uu-u-F"]
+    label: Alcaic stanza (Horace)
+    caesura: "after 5 in lines 1-2"
+    cite: "A&G §625e; Raven §§128-130"
+  asclepiad_lesser_horace:
+    lines: ["---uu--uu-uF"]
+    label: lesser Asclepiad (Horace, fixed spondaic base)
+    caesura: "after 6"
+    cite: "A&G §625a; Raven §§131-134"
+  asclepiad_greater_horace:
+    lines: ["---uu--uu--uu-uF"]
+    label: greater Asclepiad (Horace)
+    cite: "A&G §625a; Raven §131"
+  glyconic_horace:
+    lines: ["---uu-uF"]
+    label: glyconic (Horace, spondaic base)
+    cite: "A&G §625b; Raven §132"
+  pherecratean_horace:
+    lines: ["---uu-F"]
+    label: pherecratean (Horace, spondaic base)
+    cite: "A&G §625b; Raven §132"
+  choliambic:
+    lines: ["x-u-x-u-u--F"]
+    label: choliambic (scazon)
+    cite: "A&G §618c; Raven §64: Catullus 8, 22, 31, 37, 39, 44, 59, 60"
+  iambic_trimeter_pure:
+    lines: ["u-u-u-u-u-uF"]
+    label: pure iambic trimeter (Catullus 4, 29)
+    cite: "A&G §618; Raven §61"
+
+# Metres in the shared (Greek) table that Latin poets use with the same shape.
+shared: [hexameter, pentameter, elegiac, iambic_trimeter, sapphic, sapphic_hendecasyllable, adonean, glyconic,
+         pherecratean, lesser_asclepiad, greater_asclepiad]
+
+auto: [phalaecian, hexameter, pentameter, choliambic, iambic_trimeter_pure, iambic_trimeter, sapphic_hendecasyllable,
+       adonean, glyconic, pherecratean, lesser_asclepiad, greater_asclepiad, alcaic_hendecasyllable]
+
+# Priors on the realisation of the two base positions (first two template symbols), keyed by template string.
+# Hypothesis: spondee most frequent, trochee next, iamb rarest, pyrrhic never (reported as a violation).
+base_priors:
+  "xx-uu-u-u-F": {"--": 0.80, "-u": 0.14, "u-": 0.05, "uu": 0.001}
+  "xx---u-u-F":  {"--": 0.80, "-u": 0.14, "u-": 0.05, "uu": 0.001}
+
+params:
+  hiatus_violation_min: 0.9   # a kept elidable unit whose elision prior is at least this counts as a violation
