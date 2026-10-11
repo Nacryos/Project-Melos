@@ -174,7 +174,9 @@ class Ctx:
         s, slot = self.poem_settings, slot or {}
         body = {"greek": greek, "metre": s.get("metre"), "dialect": s.get("dialect"), "author": s.get("author"),
                 "remaining_template": slot.get("remaining_template"), "prefix": slot.get("prefix") or None,
-                "line_index": slot.get("line_position") or 0, "language": s.get("language") or "grc"}
+                "line_index": slot.get("line_position") or 0}
+        if s.get("language"):
+            body["language"] = s["language"]          # Latin poems; a Greek poem's body is unchanged
         async with self.lint_limit:
             try:
                 r = await self.call("POST", "/api/composer/check", body)
