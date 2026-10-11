@@ -1,0 +1,90 @@
+{
+ "name": "Catullus, Carmina: Perseus Digital Library TEI (PerseusDL/canonical-latinLit) with two public-domain translations",
+ "date": "2026-10-10",
+ "user_agent": "Melos/1.0 (+https://greeklyric.com)",
+ "repo": "https://github.com/PerseusDL/canonical-latinLit",
+ "licence": {
+  "name": "CC BY-SA 4.0",
+  "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "quote": "Available under a Creative Commons Attribution-ShareAlike 4.0 International License",
+  "repo_license_md_sha256": "ccf0e8ce183761bf82700126cc45a4e907b2cede024e65e3fef5c2338b9b7063"
+ },
+ "files": {
+  "phi0472.phi001.perseus-lat2.xml": {
+   "url": "https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0472/phi001/phi0472.phi001.perseus-lat2.xml",
+   "sha256": "2a52b461b1114b9a7e0a8166e0248044594890a50313b905b8c7d7639145baa1",
+   "bytes": 290379,
+   "fetched_at": "2026-10-11T02:45:15Z",
+   "fetch_log_sha256": "2a52b461b1114b9a7e0a8166e0248044594890a50313b905b8c7d7639145baa1",
+   "header": {
+    "title": "Carmina",
+    "editor": "Elmer Truesdell Merrill",
+    "source_editor": "Elmer Truesdell Merrill",
+    "source_publisher": "Ginn and Company",
+    "source_date": "1893",
+    "source_place": "Boston",
+    "licence": "Available under a Creative Commons Attribution-ShareAlike 4.0 International License",
+    "licence_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "author": "Catullus"
+   },
+   "poems": 115,
+   "lines": 2308,
+   "language": "la",
+   "kind": "text",
+   "label": "Merrill 1893 Latin"
+  },
+  "phi0472.phi001.perseus-eng4.xml": {
+   "url": "https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0472/phi001/phi0472.phi001.perseus-eng4.xml",
+   "sha256": "dac151949ace81ee4f85f53d7858106be6646781daa6e3870ce7aff7c46d1cf4",
+   "bytes": 177434,
+   "fetched_at": "2026-10-11T02:45:15Z",
+   "fetch_log_sha256": "dac151949ace81ee4f85f53d7858106be6646781daa6e3870ce7aff7c46d1cf4",
+   "header": {
+    "title": "Carmina",
+    "editor": "Leonard C. Smithers",
+    "source_editor": "Leonard C. Smithers",
+    "source_publisher": "For translator for private use",
+    "source_date": "1894",
+    "source_place": "London",
+    "licence": "Available under a Creative Commons Attribution-ShareAlike 4.0 International License",
+    "licence_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "author": "Catullus"
+   },
+   "poems": 117,
+   "lines": 527,
+   "language": "en",
+   "kind": "translation",
+   "label": "Smithers 1894 prose"
+  },
+  "phi0472.phi001.perseus-eng3.xml": {
+   "url": "https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0472/phi001/phi0472.phi001.perseus-eng3.xml",
+   "sha256": "6b99889817fa6eb9a06e4cacc471ce292898af2191eb9f97e4a035522eb71167",
+   "bytes": 325780,
+   "fetched_at": "2026-10-11T02:45:16Z",
+   "fetch_log_sha256": "6b99889817fa6eb9a06e4cacc471ce292898af2191eb9f97e4a035522eb71167",
+   "header": {
+    "title": "Carmina",
+    "editor": "Sir Richard Francis Burton",
+    "source_editor": "Leonard C. Smithers",
+    "source_publisher": "Printed for the translators",
+    "source_date": "1894",
+    "source_place": "London",
+    "licence": "Available under a Creative Commons Attribution-ShareAlike 4.0 International License",
+    "licence_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "author": "Catullus"
+   },
+   "poems": 118,
+   "lines": 2361,
+   "language": "en",
+   "kind": "translation",
+   "label": "Burton 1894 verse"
+  },
+  "poems.jsonl": {
+   "sha256": "ac7237d390f80510209d6ba3ba9d3186f972989a419b6b12af9c8efea25e4a4c",
+   "bytes": 1538606
+  }
+ },
+ "counts": {
+  "records": 350
+ }
+}

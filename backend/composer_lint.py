@@ -35,7 +35,8 @@ PATTERN_SIGN = {"L": "–", "S": "⏑", "A": "?"}
 
 
 def pattern_of(units) -> str:
-    return "".join(PATTERN_SIGN[u.label] for u in units)
+    """Layer-1 pattern; a Latin unit the scanner expects to be elided (label E) takes no slot and is left out."""
+    return "".join(PATTERN_SIGN[u.label] for u in units if u.label != "E")
 
 
 def target_dialect(dialect: str | None, author: str | None) -> str:
@@ -447,35 +448,59 @@ def _unavailable(check_id: str, name: str, exc: Exception) -> dict:
 
 def check(greek: str, *, metre_name: str | None = None, dialect: str | None = None, author: str | None = None,
           remaining_template: str | None = None, prefix: str | None = None, line_index: int = 0,
-          require_template: bool = False) -> dict:
+          require_template: bool = False, language: str = "grc") -> dict:
     """Run the bank on one candidate within the latency budget. ``prefix`` is the current line before the caret
     (scanned with the candidate so word-boundary quantities are right; only the candidate's syllables are
     fitted). ``require_template`` (the agent's candidates): without remaining_template or a concrete metre the
-    metre cannot reject anything, so L7 fails instead of passing."""
+    metre cannot reject anything, so L7 fails instead of passing. ``language`` "la" runs the Latin backend
+    (backend/latin_backend.py): L7 via the Latin scanner with the prefix's last syllable included when the
+    candidate elides it, L1/L4/L11 over the Latin corpus partition, L2 not applicable."""
     from .scansion import api as scan_api, metre
     t0 = time.perf_counter()
     budget = budget_seconds()
     deadline = t0 + budget
     author = (author or "").strip()
-    target = target_dialect(dialect, author)
+    if language not in ("grc", "la"):
+        raise HTTPException(422, {"code": "unknown_language", "message": "language must be grc or la"})
+    latin = language == "la"
+    target = "none" if latin else target_dialect(dialect, author)
     if metre_name and metre_name not in metre.TEMPLATES:
         raise HTTPException(422, {"code": "unknown_metre", "message": f"unknown metre {metre_name!r}"})
     if remaining_template is not None and (not remaining_template or set(remaining_template) - TEMPLATE_SYMBOLS):
         raise HTTPException(422, {"code": "bad_template", "message": "remaining_template uses the symbols - u x F D R X"})
     text = greek.strip("\n")
-    words = greek_words(text)
+    if latin:
+        from . import latin_backend
+        words = latin_backend.latin_words(text)
+    else:
+        words = greek_words(text)
     # Lookups start first so they overlap the scansion.
     pending = {}
-    if words:
+    if words and latin:
+        from . import latin_backend
+        pending["L1"] = _outer().submit(latin_backend.forms_check, words, author)
+        pending["L2+L4"] = _outer().submit(lambda: (latin_backend.dialect_check(), latin_backend.attestation_check(words, author)))
+        pending["L11"] = _outer().submit(latin_backend.verbatim_check, words)
+    elif words:
         pending["L1"] = _outer().submit(forms_check, words, author, deadline=deadline, budget=budget)
         pending["L2+L4"] = _outer().submit(dialect_and_attestation, words, target, author, deadline=deadline, budget=budget)
         pending["L11"] = _outer().submit(verbatim_check, words)
-    scanner = scan_api._scanner(None, True, target)
+    scanner = scan_api._scanner(None, True, target, language)
     lead = (prefix or "").rstrip()
     lines = scanner.scan_lines((lead + " " + text) if lead else text)
     if lead:
         skip = sum(len(line) for line in scanner.scan_lines(lead))
         first = lines[0][skip:] if lines else []
+        if latin and lines and 0 < skip <= len(lines[0]):
+            # Elision across the caret: the prefix's last syllable is dropped by a candidate beginning with a vowel,
+            # so it rejoins the fit and the slot it held is given back (the template's symbol before `remaining`).
+            last = lines[0][skip - 1]
+            if last.elision >= 0.5 or (last.prodelision and last.prodelision.get("p", 0) >= 0.5):
+                first = [last] + first
+                if remaining_template and metre_name in metre.TEMPLATES:
+                    full = metre.TEMPLATES[metre_name][line_index % len(metre.TEMPLATES[metre_name])]
+                    if full.endswith(remaining_template) and len(full) > len(remaining_template):
+                        remaining_template = full[len(full) - len(remaining_template) - 1:]
         lines = [first] + lines[1:]
     ms = {}
     checks = []
@@ -519,10 +544,11 @@ def check(greek: str, *, metre_name: str | None = None, dialect: str | None = No
                                "detail": _timeout_note(words, budget) if blocking else f"not run: timeout ({round(budget * 1000)} ms)",
                                "evidence": []})
     passed = all(ch["ok"] is not False for ch in checks if ch["blocking"])
-    scansion = {"dialect": target, "metre": metre_name, "remaining_template": remaining_template,
+    scansion = {"language": language, "dialect": target, "metre": metre_name, "remaining_template": remaining_template,
                 "template": "given" if (remaining_template or metre_name) else "missing",
                 "lines": [{"pattern": pattern_of(u),
-                           "syllables": [{"text": s.text, "p_long": round(s.p_long, 3), "label": s.label} for s in u]}
+                           "syllables": [{"text": s.text, "p_long": round(s.p_long, 3), "label": s.label,
+                                          **({"elision": round(s.elision, 2)} if s.elision else {})} for s in u]}
                           for u in lines],
                 "fit": fits}
     return {"pass": passed, "scansion": scansion, "checks": checks, "budget_ms": round(budget * 1000),
