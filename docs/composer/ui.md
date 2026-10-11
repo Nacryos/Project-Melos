@@ -59,7 +59,7 @@ sign-in marker cookie (`melos_owner_ui=1`) is present. Signed out, `/composer` i
 `New draft` (poem bar) opens a fresh, empty board and a blank English box for the same poem: same title and settings,
 its own English, lines, versions, chat and pool. It is a poem of its own on the server, whose settings carry `parent_id` (the draft it was
 opened from) and `draft_no`; the Poem list shows it as `Title · draft 2`. Under the board, the page renders the chain
-of earlier drafts read-only, newest first: that draft's English, then the Greek of every line as the agent sees it (saved text, or an unsaved
+of earlier drafts read-only, newest first: that draft's own English box (read-only), then the Greek of every line as the agent sees it (saved text, or an unsaved
 draft marked `not saved`, with `{A/B}` alternatives dimmed as on the board), the check marks of the saved version,
 and its back-translation. `Open` on an earlier draft goes back to editing it, and a `Newer:` line above the board then
 links to the later drafts. Nothing is copied into the new draft; paste the old Greek if you want to start from it

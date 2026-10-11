@@ -189,6 +189,7 @@
     if (typeof s.dialect === 'string') $('dialect').value = s.dialect;
     $('poem-title').value = S.poem.title || '';
     $('english').value = S.poem.english || '';
+    $('english-toggle').textContent = S.poem.settings?.parent_id || S.poems.some(q => q.settings?.parent_id === S.poem.id) ? `English · draft ${draftNo(S.poem)}` : 'English';
     for (const r of S.rows) r.ime?.detach();
     S.rows = full.lines.map(line => makeRow(line, current({ line })?.greek || ''));
     restoreDrafts();
@@ -1336,7 +1337,7 @@
           (l.checks.length ? `<span class="checks" title="${esc(l.checks.map(c => `${c.id} ${c.state}: ${c.detail || ''}`).join('\n'))}">${l.checks.map(c => `<span class="${c.state}">${mark(c)}${esc(c.id)}</span>`).join(' ')}</span>` : '') +
           (l.unsaved ? '<span class="unsaved">not saved</span>' : '') + (l.bt ? `<span class="bt">${esc(l.bt)}</span>` : '') + '</li>').join('');
       return `<section class="old-draft"><h2>Draft ${draftNo(p)} <span class="meta">· ${esc(p.title || `Untitled ${p.id}`)}${p.updated_at ? ` · ${esc(pacific(p.updated_at))}` : ''}</span>
-        <button type="button" class="quiet" data-open="${p.id}">Open</button></h2>${p.english?.trim() ? `<p class="english" lang="en">${esc(p.english.trim())}</p>` : ''}${lines.length ? `<ol class="old-lines">${body}</ol>` : '<p class="empty">No Greek in this draft.</p>'}</section>`;
+        <button type="button" class="quiet" data-open="${p.id}">Open</button></h2><section class="english old-english"><span class="panel-toggle" aria-hidden="true">English · draft ${draftNo(p)}</span><textarea readonly rows="${Math.min(12, Math.max(2, (p.english || '').split('\n').length))}" lang="en" aria-label="English of draft ${draftNo(p)}" placeholder="No English for this draft">${esc(p.english || '')}</textarea></section>${lines.length ? `<ol class="old-lines">${body}</ol>` : '<p class="empty">No Greek in this draft.</p>'}</section>`;
     }).join('');
     oldDrafts.hidden = false;
   }
