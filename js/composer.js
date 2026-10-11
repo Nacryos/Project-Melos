@@ -1121,6 +1121,28 @@
   addEventListener('pagehide', () => flushSave());
   $('poem-select').addEventListener('change', async () => { await flushSave(); openPoem(Number($('poem-select').value)); });
   $('new-poem').addEventListener('click', newPoem);
+  // Copy Greek (release X.4): the whole poem as plain polytonic Unicode. The button is in composer.html; pages served
+  // by an older backend get it made here, after "New poem".
+  if (!$('copy-greek')) {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'quiet'; b.id = 'copy-greek'; b.textContent = 'Copy Greek';
+    b.title = 'Copy every line as plain polytonic Unicode text (NFC), blank rows kept as stanza breaks';
+    $('new-poem').insertAdjacentElement('afterend', b);
+  }
+  $('copy-greek').addEventListener('click', async () => {
+    const text = C.plainGreek(S.rows.map(r => r.draft));
+    const n = text ? text.split('\n').filter(l => l.trim()).length : 0;
+    if (!n) { status('Nothing to copy: the poem has no Greek yet.', true); return; }
+    try {
+      if (navigator.clipboard?.writeText) await navigator.clipboard.writeText(text);
+      else {
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+        document.body.append(ta); ta.select(); document.execCommand('copy'); ta.remove();
+      }
+      status(`Copied ${n} line${n === 1 ? '' : 's'} of Greek as plain Unicode text (NFC).`);
+    } catch (e) { failed('copy', e); }
+  });
   $('english-toggle').addEventListener('click', () => { collapse('english', !$('english-panel').classList.contains('collapsed')); savePrefs(); });
   $('chat-toggle').addEventListener('click', () => { collapse('chat', !$('workspace').classList.contains('chat-collapsed')); savePrefs(); });
   matchMedia('(prefers-color-scheme: dark)').addEventListener?.('change', () => S.rows.forEach(renderBackdrop));

@@ -76,6 +76,15 @@
     for (let k = i - 1; k >= 0 && String(drafts[k] || '').trim(); k--) n++;
     return n;
   };
+  /* The poem as plain polytonic Unicode (release X.4): NFC, one line per row, the editing elision marks (koronis
+     U+1FBD, modifier apostrophe U+02BC, ASCII ') written as the typographic apostrophe U+2019, inner blank rows kept
+     as stanza breaks, no leading or trailing blank lines, no markup. */
+  function plainGreek(drafts) {
+    const lines = (Array.isArray(drafts) ? drafts : []).map(d => String(d || '').normalize('NFC').replace(/[\u1FBD\u02BC']/g, '\u2019').replace(/\s+$/g, '').replace(/^\s+/g, ''));
+    while (lines.length && !lines[0]) lines.shift();
+    while (lines.length && !lines[lines.length - 1]) lines.pop();
+    return lines.join('\n');
+  }
   const templateFor = (metre, lineIndex) => {
     const list = TEMPLATES[metre];
     return list ? list[((lineIndex % list.length) + list.length) % list.length] : null;
@@ -347,5 +356,5 @@
 
   return { fold, matchPrefix, slotAt, squash, TEMPLATES, templateFor, labels, remainders, remainingTemplate, fitsPrefix,
     slotKeyText, slotKey, poolKey, settingsSig, patternOf, optionsFor, reusable, tiered, splitSpill, spillInsert, SSEParser, readSSE, checkBadges,
-    versionsRow, archiveVersion, pacificDay, addCost, todayCost, money, attestWords, stanzaIndex };
+    versionsRow, archiveVersion, pacificDay, addCost, todayCost, money, attestWords, stanzaIndex, plainGreek };
 });
