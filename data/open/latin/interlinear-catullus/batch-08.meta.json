@@ -1,0 +1,11 @@
+{
+  "batch": "08",
+  "poems": ["65", "66", "67", "68"],
+  "lines": 206,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-catullus/poems.jsonl (Merrill 1893 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, rules 1-7 of batch 08's brief",
+  "reasoning_summary": "65: the lost line 9 keeps '. . . . . . .' with a note giving the usual supplement; fluctuat is kept as 'tosses like a wave' (turmoil noted); the long apple simile (19-24) is split strictly by line, miserae oblitae noted as dative.\n66: cruxes kept with notes in 54 (elocridicos, usually Locridos) and 59 (hi dii ven ibi); the source's 'inventus' (45) is read as iuventus and its 'temple' (63) as templa, both noted; 'tristi' (30) is taken as trivisti 'you rubbed', noted as ambiguous; 18 keeps non first ('Not, so may the gods help me, truly do they groan') with the order explained; 51 abiunctae comae is noted as genitive in apposition to mea; 75-76 keep the doubled afore across the line break; 93 notes Merrill's 'sidera cur retinent?' against corruerint.\n67: crux in 12 (qui masculine, noted) and 32 (chinea, usually Cycnea); 'voto' in 5 noted against nato; sicula rendered 'little dagger' (penis, noted), minxerit 'pissed' (ejaculated, noted), nervosius illud as 'that more sinewy thing' (potent penis, noted); direct speech in 14 and 37 left without quotation marks, with notes.\n68 (1-40): run-over clauses kept on their own lines (27-28 'shameful for Catullus / it is, because here ...'; 39 'not of either a supply'); quis = quibus (13), carpitur 'is plucked' (35) noted."
+}

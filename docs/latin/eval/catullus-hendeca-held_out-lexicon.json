@@ -2,11 +2,11 @@
  "lines": 289,
  "misaligned": 4,
  "units_scored": 2848,
- "decided": 2504,
- "decided_share": 0.8792,
+ "decided": 2532,
+ "decided_share": 0.889,
  "accuracy_on_decided": 0.9996,
- "ambiguous_share": 0.1208,
- "brier": 0.0323,
+ "ambiguous_share": 0.111,
+ "brier": 0.0301,
  "elision": {
   "candidates": 148,
   "right": 147,
@@ -24,14 +24,14 @@
  },
  "negative_control": {
   "swap_total": 284,
-  "swap_accepted": 59,
+  "swap_accepted": 58,
   "replace_total": 284,
   "replace_accepted": 55
  },
  "decided_by": {
   "lexicon": {
-   "units": 1215,
-   "share_of_scored": 0.4266
+   "units": 1243,
+   "share_of_scored": 0.4364
   },
   "position": {
    "units": 948,
@@ -48,23 +48,23 @@
  },
  "rule_shares": {
   "NATURE / LEX-S": {
-   "n": 499,
+   "n": 501,
    "long": 0.0
   },
   "NATURE / LEX-L": {
-   "n": 431,
+   "n": 438,
    "long": 1.0
   },
   "POS-WORD / LEX-S-CONV": {
-   "n": 409,
+   "n": 408,
    "long": 1.0
   },
   "NATURE / LEX-CONFLICT": {
-   "n": 216,
-   "long": 0.31
+   "n": 207,
+   "long": 0.29
   },
   "POS-ACROSS / LEX-S-CONV": {
-   "n": 196,
+   "n": 206,
    "long": 1.0
   },
   "NATURE / VAV-SHORT": {
@@ -75,12 +75,8 @@
    "n": 152,
    "long": 0.0
   },
-  "POS-ACROSS / LEX-CONFLICT": {
-   "n": 72,
-   "long": 1.0
-  },
   "CONS-VOW / LEX-S-CONV": {
-   "n": 71,
+   "n": 74,
    "long": 0.0
   },
   "NATURE / DIPH": {
@@ -96,19 +92,23 @@
    "long": 1.0
   },
   "POS-ACROSS-S / LEX-L": {
+   "n": 49,
+   "long": 1.0
+  },
+  "CONS-VOW / LEX-L": {
    "n": 48,
+   "long": 1.0
+  },
+  "POS-ACROSS / LEX-CONFLICT": {
+   "n": 45,
    "long": 1.0
   },
   "POS-WORD / LEX-L": {
    "n": 43,
    "long": 1.0
   },
-  "CONS-VOW / LEX-CONFLICT": {
-   "n": 40,
-   "long": 0.625
-  },
-  "CONS-VOW / LEX-L": {
-   "n": 32,
+  "POS-ACROSS / LEX-L": {
+   "n": 31,
    "long": 1.0
   },
   "POS-WORD / LEX-CONFLICT": {
@@ -127,17 +127,17 @@
    "n": 24,
    "long": 0.0
   },
-  "POS-ACROSS-S / LEX-CONFLICT": {
+  "CONS-VOW / LEX-CONFLICT": {
    "n": 21,
+   "long": 0.429
+  },
+  "POS-ACROSS-S / LEX-CONFLICT": {
+   "n": 20,
    "long": 1.0
   },
   "NATURE / UNK": {
    "n": 18,
    "long": 0.389
-  },
-  "POS-ACROSS / LEX-L": {
-   "n": 14,
-   "long": 1.0
   },
   "NATURE / FIN-O-SHORT": {
    "n": 13,
@@ -159,9 +159,9 @@
    "n": 7,
    "long": 1.0
   },
-  "MCL-WORD / LEX-S": {
-   "n": 6,
-   "long": 0.333
+  "MCL-WORD / LEX-CONFLICT": {
+   "n": 5,
+   "long": 0.4
   },
   "MCL-WORD / LEX-S-CONV": {
    "n": 5,
@@ -170,6 +170,10 @@
   "POS-ACROSS / DIPH": {
    "n": 5,
    "long": 1.0
+  },
+  "MCL-WORD / LEX-S": {
+   "n": 5,
+   "long": 0.4
   },
   "POS-WORD / UNK": {
    "n": 5,
@@ -186,8 +190,8 @@
    "happened": 0.992
   },
   "IAMB-SHORT": {
-   "n": 111,
-   "happened": 0.297
+   "n": 109,
+   "happened": 0.284
   },
   "ELI-MONO": {
    "n": 12,
@@ -208,46 +212,46 @@
  },
  "calibration": {
   "0.0-0.1": {
-   "n": 537,
+   "n": 539,
    "observed_long": 0.0
   },
   "0.1-0.2": {
-   "n": 413,
+   "n": 416,
    "observed_long": 0.0
   },
   "0.2-0.3": {
-   "n": 24,
-   "observed_long": 0.25
+   "n": 23,
+   "observed_long": 0.261
   },
   "0.4-0.5": {
    "n": 25,
    "observed_long": 0.08
   },
   "0.5-0.6": {
-   "n": 280,
-   "observed_long": 0.361
+   "n": 252,
+   "observed_long": 0.31
   },
   "0.6-0.7": {
-   "n": 12,
-   "observed_long": 0.833
+   "n": 13,
+   "observed_long": 0.769
   },
   "0.9-1.0": {
-   "n": 1557,
+   "n": 1580,
    "observed_long": 0.999
   }
  },
  "ambiguous_by_rule": [
   [
    "NATURE / LEX-CONFLICT",
-   216
-  ],
-  [
-   "CONS-VOW / LEX-CONFLICT",
-   40
+   207
   ],
   [
    "NATURE / VAV-GREEK",
    25
+  ],
+  [
+   "CONS-VOW / LEX-CONFLICT",
+   21
   ],
   [
    "NATURE / UNK",
@@ -262,16 +266,16 @@
    7
   ],
   [
-   "MCL-WORD / LEX-S",
-   6
+   "MCL-WORD / LEX-CONFLICT",
+   5
   ],
   [
    "MCL-WORD / LEX-S-CONV",
    5
   ],
   [
-   "MCL-WORD / LEX-CONFLICT",
-   4
+   "MCL-WORD / LEX-S",
+   5
   ],
   [
    "INIT-MCL / LEX-CONFLICT",
@@ -358,7 +362,7 @@
    ]
   }
  ],
- "ms_per_line": 3.3,
+ "ms_per_line": 4.79,
  "setting": {
   "split": "held_out",
   "work": "catullus",

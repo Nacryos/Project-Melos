@@ -2,11 +2,11 @@
  "lines": 289,
  "misaligned": 10,
  "units_scored": 2788,
- "decided": 2452,
- "decided_share": 0.8795,
+ "decided": 2480,
+ "decided_share": 0.8895,
  "accuracy_on_decided": 0.9996,
- "ambiguous_share": 0.1205,
- "brier": 0.0323,
+ "ambiguous_share": 0.1105,
+ "brier": 0.03,
  "elision": {
   "candidates": 143,
   "right": 142,
@@ -30,8 +30,8 @@
  },
  "decided_by": {
   "lexicon": {
-   "units": 1193,
-   "share_of_scored": 0.4279
+   "units": 1221,
+   "share_of_scored": 0.4379
   },
   "position": {
    "units": 929,
@@ -48,23 +48,23 @@
  },
  "rule_shares": {
   "NATURE / LEX-S": {
-   "n": 491,
+   "n": 493,
    "long": 0.0
   },
   "NATURE / LEX-L": {
-   "n": 423,
+   "n": 430,
    "long": 1.0
   },
   "POS-WORD / LEX-S-CONV": {
-   "n": 402,
+   "n": 401,
    "long": 1.0
   },
   "NATURE / LEX-CONFLICT": {
-   "n": 212,
-   "long": 0.302
+   "n": 203,
+   "long": 0.281
   },
   "POS-ACROSS / LEX-S-CONV": {
-   "n": 192,
+   "n": 201,
    "long": 1.0
   },
   "NATURE / VAV-SHORT": {
@@ -76,12 +76,8 @@
    "long": 0.0
   },
   "CONS-VOW / LEX-S-CONV": {
-   "n": 70,
+   "n": 73,
    "long": 0.0
-  },
-  "POS-ACROSS / LEX-CONFLICT": {
-   "n": 69,
-   "long": 1.0
   },
   "NATURE / DIPH": {
    "n": 60,
@@ -96,18 +92,22 @@
    "long": 1.0
   },
   "POS-ACROSS-S / LEX-L": {
+   "n": 48,
+   "long": 1.0
+  },
+  "CONS-VOW / LEX-L": {
    "n": 47,
+   "long": 1.0
+  },
+  "POS-ACROSS / LEX-CONFLICT": {
+   "n": 43,
    "long": 1.0
   },
   "POS-WORD / LEX-L": {
    "n": 41,
    "long": 1.0
   },
-  "CONS-VOW / LEX-CONFLICT": {
-   "n": 39,
-   "long": 0.615
-  },
-  "CONS-VOW / LEX-L": {
+  "POS-ACROSS / LEX-L": {
    "n": 31,
    "long": 1.0
   },
@@ -127,17 +127,17 @@
    "n": 23,
    "long": 0.043
   },
-  "POS-ACROSS-S / LEX-CONFLICT": {
+  "CONS-VOW / LEX-CONFLICT": {
    "n": 20,
+   "long": 0.4
+  },
+  "POS-ACROSS-S / LEX-CONFLICT": {
+   "n": 19,
    "long": 1.0
   },
   "NATURE / UNK": {
    "n": 18,
    "long": 0.389
-  },
-  "POS-ACROSS / LEX-L": {
-   "n": 14,
-   "long": 1.0
   },
   "NATURE / FIN-O-SHORT": {
    "n": 13,
@@ -159,6 +159,10 @@
    "n": 7,
    "long": 1.0
   },
+  "MCL-WORD / LEX-CONFLICT": {
+   "n": 5,
+   "long": 0.4
+  },
   "MCL-WORD / LEX-S-CONV": {
    "n": 5,
    "long": 0.6
@@ -166,10 +170,6 @@
   "POS-ACROSS / DIPH": {
    "n": 5,
    "long": 1.0
-  },
-  "MCL-WORD / LEX-S": {
-   "n": 5,
-   "long": 0.4
   },
   "POS-WORD / UNK": {
    "n": 5,
@@ -186,8 +186,8 @@
    "happened": 0.992
   },
   "IAMB-SHORT": {
-   "n": 106,
-   "happened": 0.311
+   "n": 104,
+   "happened": 0.298
   },
   "ELI-MONO": {
    "n": 12,
@@ -208,46 +208,46 @@
  },
  "calibration": {
   "0.0-0.1": {
-   "n": 528,
+   "n": 530,
    "observed_long": 0.0
   },
   "0.1-0.2": {
-   "n": 400,
+   "n": 403,
    "observed_long": 0.0
   },
   "0.2-0.3": {
-   "n": 23,
-   "observed_long": 0.261
+   "n": 22,
+   "observed_long": 0.273
   },
   "0.4-0.5": {
    "n": 23,
    "observed_long": 0.043
   },
   "0.5-0.6": {
-   "n": 275,
-   "observed_long": 0.353
+   "n": 247,
+   "observed_long": 0.3
   },
   "0.6-0.7": {
-   "n": 12,
-   "observed_long": 0.833
+   "n": 13,
+   "observed_long": 0.769
   },
   "0.9-1.0": {
-   "n": 1527,
+   "n": 1550,
    "observed_long": 0.999
   }
  },
  "ambiguous_by_rule": [
   [
    "NATURE / LEX-CONFLICT",
-   212
-  ],
-  [
-   "CONS-VOW / LEX-CONFLICT",
-   39
+   203
   ],
   [
    "NATURE / VAV-GREEK",
    23
+  ],
+  [
+   "CONS-VOW / LEX-CONFLICT",
+   20
   ],
   [
    "NATURE / UNK",
@@ -262,19 +262,19 @@
    7
   ],
   [
+   "MCL-WORD / LEX-CONFLICT",
+   5
+  ],
+  [
    "MCL-WORD / LEX-S-CONV",
    5
   ],
   [
-   "MCL-WORD / LEX-S",
-   5
-  ],
-  [
-   "MCL-WORD / LEX-CONFLICT",
+   "INIT-MCL / LEX-CONFLICT",
    4
   ],
   [
-   "INIT-MCL / LEX-CONFLICT",
+   "MCL-WORD / LEX-S",
    4
   ],
   [
@@ -400,7 +400,7 @@
    ]
   }
  ],
- "ms_per_line": 3.26,
+ "ms_per_line": 3.94,
  "setting": {
   "split": "held_out",
   "work": "catullus",

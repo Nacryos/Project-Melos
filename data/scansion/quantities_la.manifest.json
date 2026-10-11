@@ -1,36 +1,36 @@
 {
- "built": "2026-10-11 02:56 UTC",
+ "built": "2026-10-11 03:16 UTC",
  "sources": {
   "winge": {
    "path": "data/raw/latin/winge/macrons.txt",
    "sha256": "b22950c26ad203f03fafc07e94db6f24d70843f025f2572f0b2e141da0957e63",
-   "rows": 812588
+   "rows": 325380
   },
   "wiktionary": {
    "path": "data/raw/latin/wiktionary/kaikki.org-dictionary-Latin.jsonl",
    "sha256": "96b36294bfd604407cc0202032d96e7bb401b238ed6c9a33668d8d12baa7493a",
-   "rows": 1988775,
+   "rows": 1874130,
    "entries": 892320
   },
   "lewis_short": {
    "path": "data/raw/latin/lewis-short/lat.ls.perseus-eng2.xml",
    "sha256": "a21c3799f42d33931b463c19a036b0e5c4a6504ccbd81ee55a262421a9e1836c",
-   "rows": 58160
+   "rows": 57354
   }
  },
  "counts": {
-  "winge_rows": 812588,
-  "wiktionary_rows": 1988775,
+  "winge_rows": 325380,
+  "wiktionary_rows": 1874130,
   "wiktionary_entries": 892320,
-  "lewis_short_rows": 58160
+  "lewis_short_rows": 57354
  },
- "distinct_keys": 1069819,
- "codes": "L long, S short, A either (Winge _^, Wiktionary macron+breve), s short by the source's convention (unmarked in Winge and Wiktionary), u unmarked (Lewis & Short), . consonant",
+ "distinct_keys": 1066740,
+ "codes": "L long, S short, A either (Winge _^, Wiktionary macron+breve, Lewis & Short macron+^ or breve+_), s short by the source's convention (unmarked in Winge and Wiktionary), u unmarked (Lewis & Short), . consonant (v and j stand at their folded u/i position)",
  "licences": {
   "winge": "code GPL-3.0; data from Perseus Morpheus Latin (CC BY-SA 3.0 US): server-side use; ask the author before redistribution",
   "wiktionary": "CC BY-SA 4.0 + GFDL",
   "lewis_short": "CC BY-SA 4.0 (Perseus)"
  },
- "sqlite_sha256": "9ebeace20f652c7b0777d646bf0567b86885d2506d8dc33eba4f05addd0a9d95",
- "sqlite_bytes": 226426880
+ "sqlite_sha256": "ec8a1f6fe8cd91b63b70140dd4c722d35fda1860c0534af06455ee311880c736",
+ "sqlite_bytes": 182243328
 }

@@ -1,0 +1,174 @@
+{
+ "name": "Horace, Odes, Carmen Saeculare, Epodes: Perseus Digital Library TEI (PerseusDL/canonical-latinLit) with John Conington's public-domain verse translation of the Odes",
+ "date": "2026-10-10",
+ "user_agent": "Melos/1.0 (+https://greeklyric.com)",
+ "repo": "https://github.com/PerseusDL/canonical-latinLit",
+ "licence": {
+  "name": "CC BY-SA 4.0",
+  "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+  "quote": "Attribution-ShareAlike 4.0 International",
+  "quote_source": "data/raw/latin/perseus/license.md (repo licence file); none of the four TEI headers has an <availability><licence> element",
+  "repo_license_md_sha256": "ccf0e8ce183761bf82700126cc45a4e907b2cede024e65e3fef5c2338b9b7063"
+ },
+ "files": {
+  "phi0893.phi001.perseus-lat2.xml": {
+   "url": "https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0893/phi001/phi0893.phi001.perseus-lat2.xml",
+   "sha256": "ddac1805d6120b78db476ac94c4d88b066b1fcd7676cd520e6abd927360655dc",
+   "bytes": 245204,
+   "fetched_at": "2026-10-11T02:56:48.284332+00:00",
+   "fetch_log_sha256": "ddac1805d6120b78db476ac94c4d88b066b1fcd7676cd520e6abd927360655dc",
+   "header": {
+    "title": "Carmina",
+    "author": "Q. Horatius Flaccus",
+    "source_title": "Horace, Odes and Epodes",
+    "source_publisher": "Benj. H. Sanborn and Co.",
+    "source_date": "1919",
+    "source_place": "Chicago",
+    "source_author": "Horace",
+    "editors": [
+     "Paul Shorey",
+     "Gordon Laing"
+    ],
+    "source_editors": [
+     "Paul Shorey",
+     "Gordon J. Laing"
+    ]
+   },
+   "urn": "urn:cts:latinLit:phi0893.phi001.perseus-lat2",
+   "edition": "Paul Shorey, Gordon J. Laing; Benj. H. Sanborn and Co., Chicago 1919",
+   "poems": 103,
+   "lines": 3034,
+   "books": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "work": "odes",
+   "language": "la",
+   "kind": "text"
+  },
+  "phi0893.phi002.perseus-lat2.xml": {
+   "url": "https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0893/phi002/phi0893.phi002.perseus-lat2.xml",
+   "sha256": "70f8e13e5ef8d51a49b2a3f087e6a8c85eb961e6d78e8cd4b5e42001214c832f",
+   "bytes": 7857,
+   "fetched_at": "2026-10-11T02:56:54.423921+00:00",
+   "fetch_log_sha256": "70f8e13e5ef8d51a49b2a3f087e6a8c85eb961e6d78e8cd4b5e42001214c832f",
+   "header": {
+    "title": "Carmen Saeculare",
+    "author": "Q. Horatius Flaccus",
+    "source_title": "Horace, Odes and Epodes",
+    "source_publisher": "Benj. H. Sanborn and Co.",
+    "source_date": "1919",
+    "source_place": "Chicago",
+    "source_author": "Horace",
+    "editors": [
+     "Paul Shorey"
+    ],
+    "source_editors": [
+     "Paul Shorey",
+     "Gordon J. Laing"
+    ]
+   },
+   "urn": "urn:cts:latinLit:phi0893.phi002.perseus-lat2",
+   "edition": "Paul Shorey, Gordon J. Laing; Benj. H. Sanborn and Co., Chicago 1919",
+   "poems": 1,
+   "lines": 76,
+   "books": [],
+   "work": "carmen-saeculare",
+   "language": "la",
+   "kind": "text"
+  },
+  "phi0893.phi003.perseus-lat2.xml": {
+   "url": "https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0893/phi003/phi0893.phi003.perseus-lat2.xml",
+   "sha256": "e94d55384e838e8e0e5bf36a9636e155b924fb329f375d80edd53554a0193f4b",
+   "bytes": 43814,
+   "fetched_at": "2026-10-11T02:57:00.501724+00:00",
+   "fetch_log_sha256": "e94d55384e838e8e0e5bf36a9636e155b924fb329f375d80edd53554a0193f4b",
+   "header": {
+    "title": "Epodon",
+    "author": "Q. Horatius Flaccus",
+    "source_title": "Q. Horati Flacci Carmina",
+    "source_publisher": "Teubner",
+    "source_date": "1912",
+    "source_place": "Leipzig",
+    "source_author": "Horace",
+    "editors": [
+     "Friedrich Vollmer"
+    ],
+    "source_editors": [
+     "Friedrich Vollmer"
+    ]
+   },
+   "urn": "urn:cts:latinLit:phi0893.phi003.perseus-lat2",
+   "edition": "Friedrich Vollmer; Teubner, Leipzig 1912",
+   "poems": 17,
+   "lines": 625,
+   "books": [],
+   "work": "epodes",
+   "language": "la",
+   "kind": "text"
+  },
+  "phi0893.phi001.perseus-eng2.xml": {
+   "url": "https://raw.githubusercontent.com/PerseusDL/canonical-latinLit/master/data/phi0893/phi001/phi0893.phi001.perseus-eng2.xml",
+   "sha256": "1d8432d34c37568d2b75118a7cbee53d1b149c78db8d9532ed09049bb31a2e1c",
+   "bytes": 253142,
+   "fetched_at": "2026-10-11T02:56:50.765641+00:00",
+   "fetch_log_sha256": "1d8432d34c37568d2b75118a7cbee53d1b149c78db8d9532ed09049bb31a2e1c",
+   "header": {
+    "title": "Odes",
+    "author": "Q. Horatius Flaccus",
+    "source_title": "The Odes and Carmen Saeculare of Horace",
+    "source_publisher": "George Bell and Sons",
+    "source_date": "1882",
+    "source_place": "London",
+    "source_author": "Horace",
+    "editors": [
+     "John Conington"
+    ],
+    "source_editors": [
+     "John Conington"
+    ],
+    "editor_roles": [
+     "translator"
+    ]
+   },
+   "urn": "urn:cts:latinLit:phi0893.phi001.perseus-eng2",
+   "edition": "John Conington; George Bell and Sons, London 1882",
+   "poems": 99,
+   "lines": 2955,
+   "books": [
+    "1",
+    "2",
+    "3",
+    "4"
+   ],
+   "work": "odes",
+   "language": "en",
+   "kind": "translation"
+  },
+  "poems.jsonl": {
+   "sha256": "e33ae57342f5e26a41e959ed0cfeed375329e825fc17391b237f3fa80906b25f",
+   "bytes": 1195130
+  }
+ },
+ "counts": {
+  "records": 220,
+  "poems_without_metre_milestone": 18,
+  "problems": 0
+ },
+ "alignment": {
+  "odes_latin_poems": 103,
+  "odes_conington_poems": 99,
+  "shared": 99,
+  "latin_only": [
+   "1.25",
+   "2.5",
+   "3.20",
+   "4.10"
+  ],
+  "conington_only": [],
+  "conington_has_carmen_saeculare_div": false
+ },
+ "problems": []
+}

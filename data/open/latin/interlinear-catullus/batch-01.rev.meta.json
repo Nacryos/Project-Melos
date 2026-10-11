@@ -1,0 +1,11 @@
+{
+  "batch": "01",
+  "revised_from": "batch-01.jsonl",
+  "audit": "batch-01.audit.jsonl",
+  "changed": 26,
+  "disputed": 0,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "reasoning_summary": "Accepted the auditor's correction in substance on all 25 flagged lines (13 WRONG, 12 DOUBTFUL); no WRONG verdict disputed.\nLine-crossing fixes: 4.3/4.4 (neque/nequisse double negative restored, unresolved), 4.6/4.7 (negat 'denies' + negare), 4.20 (simul), 7.11/7.12 (possint), 10.9/10.10 (esse), 11.7/11.8 (colorat/aequora), 11.11 (-que).\nGrammar fixes: 8.10 quae is feminine singular ('her who flees'); 5.6 est...dormienda periphrastic; 6.12 stupra object of tacere; 11.13 voluntas subject; 6.7 nequiquam with tacitum; 11.23 ultimi genitive.\nOwn variants where the suggestion broke the mood rule: 4.4 'was unable' (not 'was it unable'), 4.7 'to deny' and 10.10 'to be' (infinitives kept), 6.2 'be' for present subjunctive sint, 6.12 adds the forced 'about'.\nMetaphor/vocabulary: comata/coma 'long-haired'/'hair' (4.11-12), cinaediorem 'rather catamite-like' (10.24), mutari 'to be exchanged' (12.8), meanings moved to notes; 11.12 now carries the 'and' of -que (fixed on coordinator request)."
+}

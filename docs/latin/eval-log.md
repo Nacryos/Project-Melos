@@ -99,3 +99,4 @@ elision happened on 1.0 of ELI-CAND units (n=103), 0.9 of long monosyllables
 |---|---|---|
 | 2026-10-10 19:45 PDT | core, as typed and folded | LA1 milestone score (first and only look) |
 | 2026-10-10 19:59 PDT | core + lexicon, as typed and folded | LA2 milestone score (second look; the pattern metric now ignores the line-final anceps, so the core rows were re-read too) |
+| 2026-10-10 20:21 PDT | core + lexicon, after the lexicon audit's fixes (Lewis & Short "either" marks, Cyrillic y, Wiktionary page titles without marks dropped; Winge rows deduped to 325,380) | LA2 rebuild (third look). Held-out, lexicon: decided 88.9 %, accuracy on decided 99.96 %, Brier 0.030, lines fitting 284/285, best pattern = gold 275/285, perturbed rejected 80 % / 81 %. The LA2 tables above are from the first build; these are the current numbers |

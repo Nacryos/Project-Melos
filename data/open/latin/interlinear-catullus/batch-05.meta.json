@@ -1,0 +1,11 @@
+{
+  "batch": "05",
+  "poems": ["61"],
+  "lines": 235,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-catullus/poems.jsonl (Merrill 1893 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, rules 1-7 of batch 05's brief",
+  "reasoning_summary": "Refrains fixed: 'O Hymenaeus Hymen, / O Hymen Hymenaeus' and 'O Hymen Hymenaeus io,' (io kept as the ritual cry); prodeas, nova nupta is always 'may you come forth, new bride'; the quis huic deo stanza tails are identical each time.\nNames as printed: Vinia and Manilus (16, noted against Iunia/Manlius); Au-/runculeia split across 86-87 as in the Latin; Talasius (134), Torquatus, Telemachus with Penelopeo noted as an adjective.\nGap markers at 79-82 and 112-114 kept as '. . . . .' with notes; 83 and 115 flagged as constructionally uncertain after the gaps. Source misprint 'quac' (117) kept in the Latin, rendered as quae with a note.\nHyperbaton left split by line rather than repaired: niveo/pede (9-10), tuus ... vir and in mala ... adultera (101-102), teneris ... papillis (104-105), tuum/os (138-139), te ... neglegit (198-199), vestri ... ludi (209-210).\nRelatives checked: quos = ramulis (23) and specus (29), quem = pudor (84), quod = cubile (111), quae neuter plural = gaudia (116), quae feminine = terra (71) and domus (158).\nMetaphors literal with notes: comas 'hair' of torch flames (78, 99), flammeum 'bridal veil' (122), lusisti nucibus (133), munere 'service' (234). Coarse/sexual content plain: concubinus 'concubine' (the groom's male bedmate), glabris 'smooth ones' (boys), papillis 'little breasts'.\nUncertain words noted: dedis (present of dedo), parthenice (a white flower), cinerarius (hair-curler), male abstinere (abstain reluctantly), iuverit (perfect subjunctive or future perfect)."
+}

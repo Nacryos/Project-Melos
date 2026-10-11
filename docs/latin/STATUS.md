@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 19:59 PDT
+Last updated: 2026-10-10 20:23 PDT
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a second language backend behind the release W code, not a fork. First the PRD (`docs/prd/latin-composer.md`,
@@ -15,50 +15,51 @@ metre-locking is never applied in the composer.
 ## Done
 
 - PRD v2 pushed (critique: 29 of 32 items folded in, 3 rejected, logged in §11).
-- Survey passes A (scansion tools, quantity resources), B (texts, translations), C (lemmatisers, dictionaries, lemma
-  gold): 124 rows with verbatim licences in `data/open/latin/survey-2026-10-10/`; the report
-  `docs/research/latin-scansion-prior-art.md` is being assembled.
-- Hypotactic Latin ingested as gold (CC BY 4.0 stated on its Latin about page): Catullus 2,287 lines, Horace Odes 1
-  876 lines (`data/open/latin/hypotactic/`).
-- **Scanner POC (LA1), core rules, no lexicon**, scored on Catullus's 552 hendecasyllables (`docs/latin/eval-log.md`):
-  held-out half (frozen, scored once) 99.6 % right on the 52 % of syllables it decides, elision right 99.3 %, 281 of
-  285 genuine lines accepted, exact pattern on 65 %, and the negative control rejects 77 % of perturbed lines. The
-  other half of the syllables are open vowels inside words that only a lexicon can settle (LA2).
-- Elision is a parse branch in the metre layer (drop the unit; prodelision keeps the unit long and drops *est*);
-  hiatus where elision is normal is a reported violation. Greek scanner, lock and composer tests unchanged.
-- **LA2, quantity lexicon** (`docs/latin/lexicon.md`, 1.07 M distinct forms from Winge, Wiktionary, Lewis & Short):
-  held-out half, one look: 87.9 % of syllables decided at 99.96 %, 284 of 285 genuine lines accepted, best pattern
-  equal to the gold on 96.5 %, perturbed lines rejected 4 in 5. **The owner's doubt is answered**: Latin quantity is
-  lexical plus positional in practice, the open resources cover Catullus, and what stays open is real ambiguity
-  (nom./abl. -a, homographs) that the metre settles (`docs/latin/eval-log.md`).
-- Survey report written: `docs/research/latin-scansion-prior-art.md` (354 lines; 11 owner decisions in §8).
-- Catullus text ingested from Perseus (Merrill 1893, CC BY-SA 4.0) with Smithers's prose and Burton's verse aligned
-  per poem (`data/open/latin/perseus-catullus/`, 115 Latin poems, 2,308 lines); an independent auditor is checking it.
-  Horace Odes, Epodes, Carmen Saeculare TEI and Conington's Odes fetched; Smart's prose Horace from Gutenberg.
+- Survey: 124 rows with verbatim licences (`data/open/latin/survey-2026-10-10/`); report
+  `docs/research/latin-scansion-prior-art.md` (11 owner decisions in §8; two now ruled, see below).
+- Gold: Hypotactic Latin ingested (CC BY 4.0 on its Latin about page): Catullus 2,287 lines, Odes 1 876 lines.
+- **Scanner (LA1 + LA2)**: Latin sibling of the Greek decision-tree scanner (same engine, `rules_la.yaml`,
+  `metres_la.yaml`, elision as a parse branch, prodelision, base priors) plus the quantity lexicon (Winge, Wiktionary,
+  Lewis & Short; 1.07 M forms; audited and rebuilt). Held-out Catullan hendecasyllables, scored three times and
+  logged (`docs/latin/eval-log.md`): 88.9 % of syllables decided at 99.96 %, 284 of 285 genuine lines accepted, best
+  pattern equal to Chamberlain's on 96.5 %, 4 in 5 perturbed lines rejected. **The owner's doubt is answered.**
+- **Texts (LA3)**: Perseus Catullus (Merrill 1893, CC BY-SA 4.0; 115 poems, 2,308 lines) with Smithers's prose and
+  Burton's verse aligned per poem, audited line for line; Perseus Horace (Odes 103 with their metre labels, Carmen
+  Saeculare, Epodes 17) with Conington's Odes, audited. Latin corpus partition `data/corpus_la.sqlite` (same tables as
+  the Greek corpus; u/v, i/j folded): 236 texts, 335 translations, 12,329 vocabulary forms.
+- **Lint bank and routes (LA4, backend)**: `composer_lint.check(language="la")`: L7 via the Latin scanner with the
+  prefix's elided syllable rejoining the fit; L1 forms (corpus, then paradigm forms), L4 attestation by author, L11
+  verbatim over the Latin partition; L2 not applicable. `/api/la/concordance`, `/api/la/forms`, `/api/la/status`.
+  Slot key appends `|la` only for Latin poems (Greek keys byte-identical). Agent: Latin system prompt, `la_concordance`
+  and `la_forms` tools, Latin back-translation. Page: Language switch, Catullus and Horace, TypeGreek off for Latin.
+  Tests: scanner 14, lint 5, routes and page suites green; agent suite 24 of 26 (the 2 failures are order-dependent and
+  fail on `origin/composer-w` too).
+- **Interlinear (Opus writers + independent Opus auditors + revisers)**: batches 01-06 written (1248 of 2,308
+  Catullus lines); audits so far: 01 (13 wrong, 12 doubtful of 230; revised, 26 lines changed), 02 (1 wrong, 6
+  doubtful of 221), 03 (5 wrong, 5 doubtful of 225; revising), 04 (0 wrong, 14 doubtful of 177). Stored under
+  `data/open/latin/interlinear-catullus/` as `machine_translation` with per-batch reasoning summaries.
+- Licensed data: the owner's addendum and the coordinator's rulings are logged in `docs/decisions.md`; register in
+  `docs/latin/licensed-data.md`; LASLA under `data/private/lasla/` with manifest; Winge email drafted, not sent
+  (`docs/latin/drafts/winge-email.md`).
 
 ## Running
 
-- Adversarial audit of the Perseus Catullus ingest (subagent, data-extraction discipline).
+- Interlinear writers for batches 07 (poem 64), 08 (65-68), 09 (68a-81), 10 (82-116); audits of 05-06; revision of 03.
 
 ## Next
 
-1. LA3: Horace ingest (Odes, Epodes, Carmen Saeculare + Conington, Smart) with audit; Latin partition for L1/L4/L11
-   (form attested in the corpus or in the Morpheus-derived form list; FTS over Latin lines); Opus interlinear for
-   Catullus with an auditor, stored `machine_translation`.
-2. LA4: `language=la` through lint (joint prefix + candidate fit), routes, store, agent prompt, page; one
-   hendecasyllable end to end.
-3. Lexicon audit (100 rows per source) and the Collatinus paradigm expansion if coverage needs it.
-
-## Decisions wanted from the owner
-
-- LASLA (human-verified lemmas for all of Catullus and Horace) is CC BY-NC-SA 4.0: use it as lemma gold and recorded
-  lemmas under the rights-recorded policy, or ask CIRCSE first?
-- Winge's macron table: the richest form-level source, but only the code is licensed (GPL-3); the data derives from
-  Perseus Morpheus (CC BY-SA). Use server-side now and ask the author before any redistribution (proposed)?
+1. End-to-end line: start a dev melos-api and the agent service locally (never the live containers), open a Latin poem
+   with Catullus / phalaecian, and have one hendecasyllable proposed, linted and accepted; measure seconds and dollars.
+2. Finish the interlinear (audits, revisions, the remaining batches), then load it into the corpus partition as
+   `machine_translation` translations shown only where no human translation exists.
+3. Lemma index for Latin: lemmatiser bake-off against LASLA (held-out), recorded lemmas, `forms_found` and
+   collocations for the agent's research tools; Horace templates evaluated on Odes 1 gold.
+4. Page polish for Latin (macron overlay, metre list labels) and the Horace translations (Smart's prose parser).
 
 ## Notes for the coordinator
 
-- Disk: 13 GB free (98 % used) before the Wiktionary download (1.2 GB); nothing over 2 GB is pulled without telling the owner.
+- Disk: 11 GB free. Raw data under `data/raw/latin/` (gitignored, fetch log with sha256), licensed data under
+  `data/private/`, open data under `data/open/latin/`.
 - Nothing on this branch touches the live `melos-api*` or `melos-composer-agent` containers.
-- `tests/test_composer.py::test_every_composer_route_and_the_page_are_404_signed_out` fails on `origin/composer-w` too in
-  this light venv (environmental); all scanner, lock and composer-route tests pass.
+- Four subagent launches were refused by the permission classifier (translation prompts naming the poet's obscene
+  vocabulary); re-worded prompts were accepted. No work-around beyond re-wording was attempted.

@@ -1,0 +1,11 @@
+{
+  "batch": "03",
+  "poems": ["30","31","32","33","34","35","36","37","38","39","40","41","42","43","44"],
+  "lines": 225,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-catullus/poems.jsonl (Merrill 1893 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, rules 1-7 of batch 03's brief",
+  "reasoning_summary": "Obscenity kept plain: 32 fututiones 'fuckings', pertundo 'poking through' (noted as erection); 33 cinaedus kept as 'cinaedus' with a sexual note, culo 'in the arse'; 37 mentulas 'cocks', confutuere 'to fuck', irrumare 'to mouth-fuck', moechi 'adulterers' (noted); 41 defututa 'fucked-out'; 42 moecha 'adulteress' (noted slut); 36 cacata charta 'shat-upon paper'; 39 minxit/loti 'pissed'/'piss'.\nRun-overs split by what stands on each line, leaving fragments: 34.7-8 and 19-20 (rustica ... tecta), 35.3-4 (Novi / Comi), 35.14-15 (misellae ... medullam), 36.9-10 (se ... vovere), 37.7-8 (ausurum / me), 39.2-3 (rei / subsellium), 44.8-9 (dedit inside the cenas clause), 44.18-19 (deprecor ... quin, negative kept).\nMetaphors literal with notes: 31 paene insularum 'almost-islands', ocelle 'little eye', larem 'Lar'; 34 notho lumine 'bastard light'; 35 viam vorabit 'devour the road'; 41 aes imaginosum 'image-making bronze' (mirror); 42 ferreo ore 'iron face'.\nTextual and lexical uncertainty noted: 31.14 (cachinnorum line), 32.1 name form, 36.12 Urii, 37.10 sopionibus (probably drawn phalluses), 44.21 (sense of tunc vocat), 44.17 feminine ulta with masculine fundus, 34.8 archaic deposivit, 44.19 archaic recepso.\nRun-together source punctuation (38.6 tibi.sic, 39.2/6/7) kept exactly in the Latin and noted; 42's shouted refrains carry no quotation marks (noted at 42.10)."
+}

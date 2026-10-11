@@ -1,0 +1,26 @@
+{
+  "batch": "02",
+  "poems": [
+    "14",
+    "14a",
+    "15",
+    "16",
+    "17",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29"
+  ],
+  "lines": 221,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-catullus/poems.jsonl (Merrill 1893 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, rules 1-7 of batch 02's brief",
+  "reasoning_summary": "14a: Merrill's fragment ends with a gap line '3ff' printed as '*'; the asterisk is kept in the English with a note.\n25.5 and 29.23: cruxed lines; the crux is kept and the words rendered as printed, with the common emendations noted.\nCoarse vocabulary rendered plainly: pedicare 'bugger', irrumare 'fuck the mouth / mouth-fuck', cinaedus 'catamite' (noted), pathicus 'pathic', verpa 'prick', mentula 'prick', culus 'arse', cacare 'shit'.\nRun-on clauses kept split at the line break even when fragmentary: 22.19-20 (quem non ... / possis), 25.12-13 (minuta magno / ... navis in mari), 26.1-2, 28.6-8, 17.12-13.\nNegatives left in place: 22.19 'whom not ... you could', 23.20 and 23.23 'not ever', 24.10 nec ... neque.\nMetaphors kept literal with notes: Memmius's 'beam' (28.10), the 'wooden' stepmother (23.6), 'opposita' as exposed/mortgaged (26), the 'knapsack' (22.21), the 'stupor' for blockhead (17.21).\nRelatives checked: 15.11 quem = the penis (masc.), 23.22 quod = the excrement (neut.), 27.4 ebriosioris = Postumia (gen. fem.).\nDoubtful: 14.14 continuo die (next day vs. that very day); 29.21 malum as interjection vs. 'evil man'; 17.20 nulla (the wife vs. 'nothing')."
+}

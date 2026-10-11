@@ -1,0 +1,14 @@
+{
+  "batch": "06",
+  "poems": [
+    "62",
+    "63"
+  ],
+  "lines": 160,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-catullus/poems.jsonl (Merrill 1893 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, rules 1-7 of batch 06's brief",
+  "reasoning_summary": "62: Merrill's speaker heads (Youths / Maidens / Youths and Maidens) are recorded in notes at each section start; the gap line 32a keeps its '*' with a note, and 32 is left as a broken fragment. Refrain 'Hymen O Hymenaeus, Hymen, be present, O Hymenaeus.' is identical at all 8 occurrences despite the source's O/o case change. Source typos 'flammma' (27) and 'est.noli' (64) are kept verbatim in latin and noted. The vine-and-elm marriage image (49-58) and flower = virginity (39-47) are kept literal ('widowed vine', 'elm as husband', 'chaste flower') with meanings in notes; hanc/illam rendered 'her'. Relative pronouns checked for gender/number (qui = Hesperus 21/27, quae neut. pl. 28, quem = flower 41, cui/quibus/qui 60-65). 63: castration (5) rendered literally as 'the weights of his groin' with a note; Attis is masculine in 1-5, 'he' kept through the genderless 6-7, and 'she' from citata (8, noted as the first shift); masculine forms where the Latin reverts are kept and noted (miser 51/61, hunc/qui 78-80, ille 89, vir sterilis 69). Speeches (12-26, 50-73, 78-83) carry no added quotation marks. Hard words: devolvit/ili (5), sine quis (46), religat (84, 'ties back', usually understood 'unfastens'), animam agens (31), marmora pelagi (88)."
+}

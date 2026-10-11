@@ -1,0 +1,28 @@
+{
+  "batch": "04",
+  "poems": [
+    "45",
+    "46",
+    "47",
+    "48",
+    "49",
+    "50",
+    "51",
+    "52",
+    "53",
+    "54",
+    "55",
+    "56",
+    "57",
+    "58",
+    "59",
+    "60"
+  ],
+  "lines": 177,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-catullus/poems.jsonl (Merrill 1893 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line, rules 1-7 of batch 04's brief",
+  "reasoning_summary": "55: Merrill prints lines 23-32 (the piece often numbered 58b) right after line 13, then 14-22; the records' order is kept and noted. The cruces in 9 ('A velte') and 11 ('reduc') are kept untranslated with notes; Merrill's 'vi vis' in 21 is rendered as 'if you wish' (si vis), with a note.\n51: the lost line 8 keeps '. . . .' with a note; quod in line 5 is neuter (the whole scene) and misero is split from mihi as the lines stand; lumina is kept as 'the lights' (eyes).\n54: fragmentary; the '*' gap lines are kept, 'eri' is noted as corrupt or a name, peditum is 'fart', recoctus 're-cooked' (rejuvenated).\n56-59: obscenity rendered plainly: trusantem 'thrusting', rigida mea ... cecidi 'with my stiff one I struck' (noted as fucking him), cinaedi 'catamites', pathico 'the buggered one' (noted as ambiguous between Mamurra and Caesar), glubit 'peels' (noted: skins back foreskins), fellat 'sucks off'; salaputium (53) as 'little prick', noted as uncertain.\n52.3: perierat read as peierat 'swears falsely', with the alternative 'had perished' noted. 45.17: source misprint 'Arnor' kept in the Latin and rendered 'Love'.\nMetaphors kept literal with notes: sinistrae 'left hands' (thieves, 47), ocelle 'little eye' (darling, 50), corona 'ring' (53), tenebrae 'darknesses' (55). Run-over clauses (45.3-4, 50.14-16, 51.3-6, 55.29-32) are split by what stands on each line."
+}

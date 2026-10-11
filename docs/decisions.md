@@ -140,3 +140,22 @@ python scripts/report_coverage.py
 Without the OGC re-run the build still promotes corrected OCR in files
 whose rows were already typed `text`, but the poet fragment collections
 stay `reference / unknown` because the earlier collector labelled them so.
+
+
+## 2026-10-11: licensed data for the Latin scanner and parser (owner addendum; coordinator rulings)
+
+The owner's addendum to the Latin brief (2026-10-10) allows licensed data where it improves the Latin scansion and
+parser elements (quantity lexica, annotated scansions, treebanks, lemmatiser training data), under the standing
+Melos licensed-data policy: behind-the-scenes use only (signals, training, calibration), stored under
+`data/private/`, licence and source recorded per item, at most 30-word cited excerpts in any UI, full display only
+with permission; no pirate or shadow-library sources. The Mac coordinator applied it to the two open decisions of
+`docs/latin/STATUS.md` (2026-10-10 20:21 PDT):
+
+1. **LASLA** (CIRCSE/LASLA v1.0.1, CC BY-NC-SA 4.0; hand-verified lemmas for all of Catullus and Horace): yes, as lemma
+   gold and recorded lemmas, server-side, no redistribution. Stored in `data/private/lasla/` with a manifest.
+2. **Johan Winge's macron table** (code GPL-3.0; data from Perseus Morpheus, no data licence stated): yes, server-side
+   now, as a source of `data/scansion/quantities_la.sqlite`; an email asking the author about a data licence is
+   prepared in `docs/latin/drafts/winge-email.md` and not sent (the owner decides).
+
+The register of licensed items is `docs/latin/licensed-data.md`. This does not change the rule for texts: poems and
+translations shown on the site come from open sources only (`docs/prd/latin-composer.md` §5).

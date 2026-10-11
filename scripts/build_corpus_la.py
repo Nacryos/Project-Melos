@@ -85,7 +85,7 @@ def main():
             if not text.strip():
                 counts["empty"] += 1
                 continue
-            pid = f"la:{name}:{r['source_file'].split('.perseus-')[1].split('.xml')[0]}:{book + ':' if book else ''}{r['poem']}"
+            pid = f"la:{name}:{r['id'].split('perseus:', 1)[1]}"          # the record's own id (unique per source)
             fm = manifest.get("files", {}).get(r["source_file"], {})
             data = {"line_numbers": [l["n"] for l in r["lines"]], "metre_milestone": r.get("metre_milestone", []),
                     "head": r.get("head", []), "notes": r.get("notes", []), "edition": r.get("edition", ""),
