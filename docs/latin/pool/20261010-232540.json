@@ -1,0 +1,759 @@
+{
+ "started": "2026-10-11T06:13:16Z",
+ "source": "allusive",
+ "english": "Sirmio, bright eye of every peninsula and island, I am home. The lake laughs under the wind the way it did when I was a boy, and I set down the pack of Bithynia on the doorstep. Let us live, old friend, and count the kisses again until the counting itself is lost; the short light goes down once and the night is one unbroken sleep. Be stubborn, heart, and do not run after what runs away; the girl who shone for me is shining for someone else. Now spring brings back the warm days and the sky is no longer hoarse with storms; the mind itches to travel and the feet grow glad. Through many nations and many seas I came to my brother's grave to say what the dust cannot answer: hail and farewell, for ever.",
+ "runs": [
+  {
+   "label": "A words L1 (cold, research starting)",
+   "body": {
+    "caret": {
+     "line_position": 0,
+     "char_offset": 0,
+     "prefix": ""
+    },
+    "prefix": "",
+    "remaining_template": "xx-uu-u-u-F",
+    "n": 8,
+    "ahead_lines": 0,
+    "mode": "words"
+   },
+   "candidates": [
+    {
+     "t": 8.8,
+     "greek": "Sirmio, o ocelle",
+     "english_span": "Sirmio, bright eye",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑⏑–⏑"
+    },
+    {
+     "t": 8.9,
+     "greek": "Sirmio, insularum",
+     "english_span": "Sirmio, ... of ... island(s)",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑⏑–"
+    },
+    {
+     "t": 8.9,
+     "greek": "Salve, Sirmio",
+     "english_span": "Sirmio, I am home",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–––⏑⏑"
+    },
+    {
+     "t": 40.9,
+     "greek": "Sirmio, venimus",
+     "english_span": "Sirmio, I am home (we have come)",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑⏑–"
+    },
+    {
+     "t": 41.1,
+     "greek": "Sirmio, redimus",
+     "english_span": "Sirmio, I am home (we return)",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑⏑–"
+    },
+    {
+     "t": 41.1,
+     "greek": "Sirmio, redeo",
+     "english_span": "Sirmio, I am home (I return)",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑⏑–"
+    },
+    {
+     "t": 41.1,
+     "greek": "Sirmio, insularumque",
+     "english_span": "Sirmio, and of islands",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑⏑–⏑"
+    },
+    {
+     "t": 41.1,
+     "greek": "Paeninsularum",
+     "english_span": "of every peninsula",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–––⏑⏑"
+    },
+    {
+     "t": 41.1,
+     "greek": "Sirmio, nitide",
+     "english_span": "Sirmio, bright",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑⏑–"
+    },
+    {
+     "t": 41.1,
+     "greek": "Sirmio, patria",
+     "english_span": "Sirmio, home",
+     "mode": "words",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "–⏑–⏑⏑–"
+    }
+   ],
+   "rejected": 5,
+   "rejected_by": {
+    "L7": 5
+   },
+   "tools": [
+    "propose_candidates",
+    "propose_candidates"
+   ],
+   "first_s": 8.8,
+   "cost_usd": 0.212215,
+   "fills": [
+    {
+     "t": 42.2,
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "mode": "words",
+     "cold": true,
+     "cost_usd": 0.212215,
+     "terminal_reason": null,
+     "shared": null
+    }
+   ],
+   "seconds": 42.2,
+   "whole_lines": 0
+  },
+  {
+   "label": "B lines L1 + 3 ahead",
+   "body": {
+    "caret": {
+     "line_position": 0,
+     "char_offset": 0,
+     "prefix": ""
+    },
+    "prefix": "",
+    "remaining_template": "xx-uu-u-u-F",
+    "n": 6,
+    "ahead_lines": 3,
+    "mode": "line"
+   },
+   "candidates": [
+    {
+     "t": 10.5,
+     "greek": "Sirmio, o clarum ocelle, te revisi",
+     "english_span": "Sirmio, bright eye, I am home",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 69.8,
+     "greek": "Sirmio, nitide insularum ocelle",
+     "english_span": "Sirmio, bright eye of islands",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 69.9,
+     "greek": "Sirmio, redeo, nitens ocelle",
+     "english_span": "Sirmio, bright eye, I am home",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 69.9,
+     "greek": "Sirmio, redimus domum beati",
+     "english_span": "Sirmio, I am home",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 69.9,
+     "greek": "Sirmio, venimus domum, beate",
+     "english_span": "Sirmio, I am home",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 82.1,
+     "greek": "Sirmio, venio, nitens ocelle",
+     "english_span": "Sirmio, bright eye, I am home",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 82.1,
+     "greek": "Sirmio, redeo, decus beatum",
+     "english_span": "Sirmio, bright eye, I am home",
+     "mode": "line",
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "line_position": 0,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 123.3,
+     "greek": "ridet nunc lacus, ut puer videbam",
+     "english_span": "The lake laughs ... the way it did when I was a boy",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 123.4,
+     "greek": "vivamus, vetus o sodalis, atque",
+     "english_span": "Let us live, old friend, and",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 138.8,
+     "greek": "ridet, ut puero, lacus sub aura",
+     "english_span": "The lake laughs under the wind the way it did when I was a boy",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": true,
+     "pattern": "–⏑–⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 138.8,
+     "greek": "nobis cum semel occidit brevis lux",
+     "english_span": "the short light goes down once",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 138.8,
+     "greek": "Bithynumque onus ad fores repono",
+     "english_span": "and I set down the pack of Bithynia on the doorstep",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 138.8,
+     "greek": "da mi basia mille, deinde centum",
+     "english_span": "count the kisses again",
+     "mode": "line",
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "line_position": 2,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 199.5,
+     "greek": "Sirmio, mea lux et insularum",
+     "english_span": "Sirmio, bright eye of every ... island",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 199.6,
+     "greek": "Sirmio, mea lux, ocelle, sumus",
+     "english_span": "Sirmio, bright eye, I am home",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 199.6,
+     "greek": "Sirmio, mea lux, ocelle, salve",
+     "english_span": "Sirmio, bright eye ... I am home",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 199.6,
+     "greek": "Sirmio, mea lux, venuste ocelle",
+     "english_span": "Sirmio, bright eye",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 199.6,
+     "greek": "Sirmio, mihi lux, venuste ocelle",
+     "english_span": "Sirmio, bright eye",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 214.5,
+     "greek": "Sirmio, mea lux, venusta, salve",
+     "english_span": "Sirmio, bright eye ... I am home",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    },
+    {
+     "t": 214.6,
+     "greek": "Sirmio, mea lux et insularum,\nsalve",
+     "english_span": "Sirmio, bright eye of every ... island, I am home",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": false,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 214.6,
+     "greek": "Sirmio, mea lux, ocelle, salve:\nvenimus",
+     "english_span": "Sirmio, bright eye, I am home",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": false,
+     "pattern": "–––⏑⏑–⏑–⏑––"
+    }
+   ],
+   "rejected": 18,
+   "rejected_by": {
+    "L7": 18
+   },
+   "tools": [
+    "propose_candidates",
+    "propose_candidates",
+    "propose_candidates",
+    "propose_candidates",
+    "propose_candidates",
+    "propose_candidates",
+    "propose_candidates",
+    "propose_candidates",
+    "propose_candidates"
+   ],
+   "first_s": 10.5,
+   "cost_usd": 1.254867,
+   "fills": [
+    {
+     "t": 84.1,
+     "slot_key": "a166f1f06b7bacf8df55e733ad04d6a8",
+     "mode": "line",
+     "cold": true,
+     "cost_usd": 0.384406,
+     "terminal_reason": null,
+     "shared": null
+    },
+    {
+     "t": 140.0,
+     "slot_key": "ece99a28a397a9e47f74a33944e2e46e",
+     "mode": "line",
+     "cold": false,
+     "cost_usd": 0.230175,
+     "terminal_reason": null,
+     "shared": null
+    },
+    {
+     "t": 215.6,
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "mode": "line",
+     "cold": false,
+     "cost_usd": 0.640286,
+     "terminal_reason": null,
+     "shared": null
+    }
+   ],
+   "seconds": 215.6,
+   "whole_lines": 19
+  },
+  {
+   "label": "C words mid-L1 after 'Sirmio, o' (4 syllables used)",
+   "body": {
+    "line_id": 4,
+    "caret": {
+     "line_position": 0,
+     "char_offset": 9,
+     "prefix": "Sirmio, o"
+    },
+    "prefix": "Sirmio, o",
+    "remaining_template": "u-u-u-F",
+    "n": 8,
+    "ahead_lines": 0,
+    "mode": "words"
+   },
+   "candidates": [
+    {
+     "t": 14.5,
+     "greek": "micans ocelle",
+     "english_span": "bright eye",
+     "mode": "words",
+     "slot_key": "c4611ac8774127339da79603bdd68e9a",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑–⏑–⏑"
+    },
+    {
+     "t": 14.5,
+     "greek": "nitens ocelle",
+     "english_span": "bright eye",
+     "mode": "words",
+     "slot_key": "c4611ac8774127339da79603bdd68e9a",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑–⏑–⏑"
+    },
+    {
+     "t": 14.7,
+     "greek": "venusta, salve",
+     "english_span": "I am home",
+     "mode": "words",
+     "slot_key": "c4611ac8774127339da79603bdd68e9a",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑–⏑–⏑"
+    },
+    {
+     "t": 14.7,
+     "greek": "ocelle, salve",
+     "english_span": "eye... I am home",
+     "mode": "words",
+     "slot_key": "c4611ac8774127339da79603bdd68e9a",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 14.7,
+     "greek": "ocelle clare",
+     "english_span": "bright eye",
+     "mode": "words",
+     "slot_key": "c4611ac8774127339da79603bdd68e9a",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 14.7,
+     "greek": "ocelle, lux et",
+     "english_span": "bright eye",
+     "mode": "words",
+     "slot_key": "c4611ac8774127339da79603bdd68e9a",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 14.7,
+     "greek": "decus lacusque",
+     "english_span": "bright eye (glory) of the lake",
+     "mode": "words",
+     "slot_key": "c4611ac8774127339da79603bdd68e9a",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑–⏑–⏑"
+    },
+    {
+     "t": 20.5,
+     "greek": "ocelle, laeta",
+     "english_span": "eye... (laughing lake)",
+     "mode": "words",
+     "slot_key": "c4611ac8774127339da79603bdd68e9a",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑⏑–⏑–⏑"
+    },
+    {
+     "t": 20.5,
+     "greek": "lacus ocelle",
+     "english_span": "eye of the lake",
+     "mode": "words",
+     "slot_key": "c4611ac8774127339da79603bdd68e9a",
+     "line_position": 0,
+     "whole_line": false,
+     "pattern": "⏑–⏑–⏑"
+    }
+   ],
+   "rejected": 3,
+   "rejected_by": {
+    "L7": 3
+   },
+   "tools": [
+    "propose_candidates",
+    "propose_candidates"
+   ],
+   "first_s": 14.5,
+   "cost_usd": 0.151466,
+   "fills": [
+    {
+     "t": 22.0,
+     "slot_key": "c4611ac8774127339da79603bdd68e9a",
+     "mode": "words",
+     "cold": false,
+     "cost_usd": 0.151466,
+     "terminal_reason": null,
+     "shared": null
+    }
+   ],
+   "seconds": 22.0,
+   "whole_lines": 0
+  },
+  {
+   "label": "D lines L2 after an accepted L1",
+   "body": {
+    "caret": {
+     "line_position": 1,
+     "char_offset": 0,
+     "prefix": ""
+    },
+    "prefix": "",
+    "remaining_template": "xx-uu-u-u-F",
+    "n": 6,
+    "ahead_lines": 0,
+    "mode": "line"
+   },
+   "candidates": [
+    {
+     "t": 74.4,
+     "greek": "salve, flos, decus omnium insularum",
+     "english_span": "bright eye of every ... island",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 74.5,
+     "greek": "lux et laus, decus omnium insularum",
+     "english_span": "bright eye of every ... island",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 74.5,
+     "greek": "salve, lux, decus omnium insularum",
+     "english_span": "bright eye of every ... island",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 74.5,
+     "greek": "lux, ocelle, decus, quot insularum",
+     "english_span": "bright eye of every ... island",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–⏑–⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 74.5,
+     "greek": "o paeninsula quaeque et insulae quot",
+     "english_span": "of every peninsula and island",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 88.4,
+     "greek": "et laus et decus omnium insularum",
+     "english_span": "bright eye of every ... island",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 88.4,
+     "greek": "o lux, o decus omnium insularum",
+     "english_span": "bright eye of every ... island",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    },
+    {
+     "t": 88.4,
+     "greek": "lux ac laus, decus omnium insularum\net paeninsula quaeque: te revisi",
+     "english_span": "bright eye of every peninsula and island, I am home",
+     "mode": "line",
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "line_position": 1,
+     "whole_line": true,
+     "pattern": "–––⏑⏑–⏑–⏑–⏑"
+    }
+   ],
+   "rejected": 0,
+   "rejected_by": {},
+   "tools": [
+    "propose_candidates",
+    "propose_candidates"
+   ],
+   "first_s": 74.4,
+   "cost_usd": 0.417677,
+   "fills": [
+    {
+     "t": 89.4,
+     "slot_key": "936daaec789be2815e39bb8a6d9edaa5",
+     "mode": "line",
+     "cold": false,
+     "cost_usd": 0.417677,
+     "terminal_reason": null,
+     "shared": null
+    }
+   ],
+   "seconds": 89.4,
+   "whole_lines": 8
+  }
+ ],
+ "poem_id": 4,
+ "chat": {
+  "label": "chat: echoes",
+  "message": "Which poems of Catullus does this English echo? For each echo give the Latin phrase (checked with the tools: attested forms, the headword's use by Catullus, a concordance line) and say which phrases could be reused whole in a Phalaecian hendecasyllable.",
+  "tools": [
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "cite",
+   "cite",
+   "cite",
+   "cite",
+   "cite",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "scan",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_lemma",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_concordance",
+   "la_forms",
+   "propose_candidates"
+  ],
+  "candidates": [
+   {
+    "t": 240.2,
+    "greek": "Sirmio, insularumque ocelle, salve",
+    "english_span": "Sirmio, bright eye of every peninsula and island, I am home"
+   },
+   {
+    "t": 240.2,
+    "greek": "iam mens praetrepidans avet vagari",
+    "english_span": "the mind itches to travel"
+   },
+   {
+    "t": 240.2,
+    "greek": "Iam ver egelidos refert tepores",
+    "english_span": "Now spring brings back the warm days"
+   },
+   {
+    "t": 240.3,
+    "greek": "iam laeti studio pedes vigescunt",
+    "english_span": "and the feet grow glad"
+   },
+   {
+    "t": 240.3,
+    "greek": "nox est perpetua una dormienda",
+    "english_span": "and the night is one unbroken sleep"
+   },
+   {
+    "t": 240.3,
+    "greek": "Vivamus, mea Lesbia, atque amemus",
+    "english_span": "Let us live, old friend"
+   },
+   {
+    "t": 240.3,
+    "greek": "ridete, o Lydiae lacus et undae",
+    "english_span": "The lake laughs under the wind"
+   },
+   {
+    "t": 240.3,
+    "greek": "nobis cum semel occidit brevis lux",
+    "english_span": "the short light goes down once"
+   }
+  ],
+  "text_chars": 57,
+  "first_text_s": 27.8,
+  "cost_usd": 0.0,
+  "seconds": 374.1
+ },
+ "accepted_line_1": "Sirmio, o clarum ocelle, te revisi",
+ "total_cost_usd": 2.036
+}
