@@ -56,7 +56,9 @@ sign-in marker cookie (`melos_owner_ui=1`) is present. Signed out, `/composer` i
 
 ## Moving lines (X.8)
 
-Drag a line's number up or down the board, or press ⌥↑ / ⌥↓ (Alt+arrow) in the line, to move the whole line; the
+Drag a line's number up or down the board, drag the line itself once the whole of it is highlighted (triple-click
+selects a line; a partial selection keeps the browser's own text drag), or press ⌥↑ / ⌥↓ (Alt+arrow) in the line, to move
+the whole line; the
 other lines close up. The board, the live scansion and the unsaved drafts follow at once; saved lines are re-positioned
 on the server (one `PATCH /api/composer/lines/{id}` per line whose place changed, in ascending order of the new place).
 A saved version's checks were made at its old place in the stanza; the live metre marks show the new place, and saving

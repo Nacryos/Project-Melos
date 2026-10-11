@@ -251,6 +251,12 @@
     el.n.draggable = true; el.n.title = 'Drag to move this line (or ⌥↑ / ⌥↓ in the line)';
     el.n.addEventListener('dragstart', e => { S.drag = row; root.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', row.draft); });
     el.n.addEventListener('dragend', () => { S.drag = null; root.classList.remove('dragging'); clearDropMarks(); });
+    // A whole line highlighted (⌘A in the line, or a triple-click) drags as the line; part of a line keeps the browser's own text drag.
+    el.ta.addEventListener('dragstart', e => {
+      if (!el.ta.value.trim() || el.ta.selectionStart !== 0 || el.ta.selectionEnd !== el.ta.value.length) return;
+      S.drag = row; root.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', row.draft);
+    });
+    el.ta.addEventListener('dragend', () => { if (S.drag !== row) return; S.drag = null; root.classList.remove('dragging'); clearDropMarks(); });
     el.ta.addEventListener('focus', () => { if (S.popup.row !== row) closePopup(); S.active = row; root.classList.add('active'); });
     el.ta.addEventListener('blur', () => { root.classList.remove('active'); setTimeout(() => { if (!popup.contains(document.activeElement) && document.activeElement !== S.popup.row?.el.ta) closePopup(); }, 0); });
     el.ta.addEventListener('scroll', () => { el.backdrop.scrollLeft = el.ta.scrollLeft; positionPopup(); });
@@ -1231,6 +1237,8 @@
     if (t) document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme;
     savePrefs(); S.rows.forEach(renderBackdrop);
   });
+  const hint = document.querySelector('.suggest-row .hint');
+  if (hint) hint.textContent = 'Enter saves the line · Tab opens continuations · ↑ ↓ move between lines · ⌥↑ ⌥↓ move the line, or drag its number or the highlighted whole line';
   function applyView() { board.classList.toggle('bars', $('bars').checked); board.classList.toggle('pct', $('pct').checked); }
   $('poem-title').addEventListener('input', () => savePoem({ title: $('poem-title').value }));
   $('english').addEventListener('input', () => savePoem({ english: $('english').value }));
