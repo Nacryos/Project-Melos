@@ -1,0 +1,20 @@
+{
+  "batch": "E02",
+  "work": "epodes",
+  "poems": [
+    "6",
+    "7",
+    "8",
+    "9",
+    "10",
+    "11",
+    "12"
+  ],
+  "lines": 172,
+  "model": "claude-opus-5-5",
+  "date": "2026-10-11",
+  "quality": "machine_translation",
+  "source_record": "data/open/latin/perseus-horace/poems.jsonl (Epodes: Vollmer 1912 via Perseus, CC BY-SA 4.0)",
+  "convention": "literal line-by-line (rules 1-6)",
+  "reasoning_summary": "Hyperbata run across lines are kept as fragments with the agreement noted rather than moved: 7.9-10 (sua ... dextera, 'by its own ... right hand'), 7.19-20 (Remi ... cruor), 8.9-10 (femur ... tumentibus suris additum, 'a thin thigh set on swollen calves'), 8.11-12 (funus ... tuom, with imagines as subject of ducant), 9.27-28 (Punico ... lugubre sagum: Antony trades the general's scarlet for a mourning cloak), 9.29-31 (Cretam the object of petit two lines on), 10.3-4 and 10.19-20 (horridis/udo with fluctibus/Noto), 11.11-12, 11.13-14 (calentis ... arcana), 11.16-17, 11.23-24 (gloriantis ... Lycisci), 11.25-26 (amicorum ... consilia, with 'me' supplied for expedire), 12.25-26 (acris ... lupos). Archaic spellings glossed in notes (ignavos, fulvos, tuom, viris = vires, natis, postis, ilics, rudentis, quis = quibus, nervos as nominative). Obscure places given a reading and flagged: 9.17 ad hunc (at this sight, or toward Caesar), 9.20 sinistrorsum citae, 11.28 renodantis (tying back or untying), 12.3 naris obesae, 12.17 Lesbia as a go-between. The coarse vocabulary of 8 and 12 is rendered plainly and literally, with the metaphorical words given their literal sense and the meaning in the note (nervi/nervos 'sinews' = penis, fascinum = phallus, podex = anus, natis = buttocks, pene soluto = with penis limp, subando = in heat, ore adlaborandum = labour with the mouth). Capitalized common words in the Vollmer/Perseus text (Secundum, Stupent, Sepulcrum, Scyphos, Soluto, Subando, Semper) are kept in the latin field and noted. Subjunctives of wish in Epode 10 rendered with 'let', futures and future perfects (petiverit, ruperit, iuverit) kept as 'shall have'."
+}
