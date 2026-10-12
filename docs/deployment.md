@@ -1,6 +1,12 @@
 # Deployment handoff
 
-## Current: release X.8 — the composer board edits like a document; lines soft-deleted and restored (2026-10-11, ~2:50 PM PDT)
+## Current: release X.9 frontend (X.8 backend) — white composer look, glass sign-in card, sign-in opens the menu (2026-10-11, ~5:45 PM PDT)
+
+Frontend only, from `~/Projects/melos-t`: `css/composer.css` rewritten (same selectors), `owner.html` + `js/owner.js`, one hook in
+`js/site-menu.js` (`/#menu` opens the menu). Page cache keys `release-x9`. Rollback: `vercel promote` the X.8 frontend
+(`project-melos-r95vv05i2`). Backend unchanged (X.8 below).
+
+## Previous: release X.8 — the composer board edits like a document; lines soft-deleted and restored (2026-10-11, ~2:50 PM PDT)
 
 Tree = `fallback-translations` 167516f. Backend image `melos-api:20261011x8` atop `20261011x5`, built from the tarball
 `/home/alvin/melos-x/x8.tgz` extracted into `/home/alvin/melos-x/src` with

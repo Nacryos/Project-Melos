@@ -54,6 +54,16 @@ sign-in marker cookie (`melos_owner_ui=1`) is present. Signed out, `/composer` i
 | Pop-up | Esc | close (no auto-reopen until the slot changes) |
 | Chat | Enter / Shift+Enter | send / new line |
 
+## The look (X.9)
+
+White like the Lexicon and Concepts pages, with the site's navy ink, sea blue, square corners and frosted-glass quiet
+buttons (css/theme.css): the board is a white sheet with a hairline edge and a soft shadow, the toolbar one mist strip,
+the agent a mist card, the continuation pop-up frosted glass. The page is light whatever the system prefers; Theme →
+dark still switches the whole page (html[data-theme="dark"]). Nothing in js/composer.js changed for this.
+The owner sign-in (/owner) is a frosted-glass card over the site's painting; a successful sign-in opens the site menu
+(/#menu, js/site-menu.js opens it when the hash is present), where the owner's entries (Composer) now show; the page
+itself, when already signed in, offers Composer, the site menu and Sign out.
+
 ## Editing like a document (X.8)
 
 The board behaves like a page of text. `Enter` saves the line (as before) and opens a row below it: with the caret

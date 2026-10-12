@@ -120,6 +120,8 @@
     if (returnFocus) button.focus({ preventScroll: true });
   }
   button.addEventListener('click', () => (menu.hidden ? show() : hide()));
+  // /#menu (the owner sign-in page lands here after a successful sign-in): open the menu at once, then drop the hash.
+  if (location.hash === '#menu') { show(); history.replaceState(null, '', location.pathname + location.search); }
   close.addEventListener('click', () => hide());
   scrim.addEventListener('click', () => hide());
   document.addEventListener('keydown', event => {

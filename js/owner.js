@@ -1,10 +1,12 @@
 // Owner sign-in page (release T). The API enforces everything; this page only collects the
 // name and password and sends them once over HTTPS with a one-use sign-in token.
+// Release X.9: a successful sign-in goes straight to the site menu (/#menu, where the owner's entries now show);
+// the page itself, when already signed in, offers the composer, the menu and sign-out.
 (() => {
   'use strict';
   const $ = id => document.getElementById(id);
   const call = (path, options = {}) => (window.melosApiFetch ? window.melosApiFetch(path, options) : fetch(path, options));
-  const status = text => { $('status').textContent = text; };
+  const status = (text, bad = false) => { $('status').textContent = text; $('status').classList.toggle('bad', bad); };
   let csrf = '';
 
   async function load() {
@@ -13,13 +15,14 @@
       const response = await call('/api/owner/session', { credentials: 'same-origin' });
       session = response.ok ? await response.json() : null;
     } catch { session = null; }
-    if (!session) { status('Sign-in is not available here.'); return; }
+    if (!session) { status('Sign-in is not available here.', true); return null; }
     $('login').hidden = session.signed_in;
     $('signed-in').hidden = !session.signed_in;
     if (session.signed_in) {
       csrf = session.csrf;
       $('who').textContent = `Signed in as ${session.username} until ${new Date(session.expires_at * 1000).toLocaleString()}.`;
-    }
+    } else setTimeout(() => $('username').focus(), 0);
+    return session;
   }
 
   $('login').addEventListener('submit', async event => {
@@ -37,10 +40,11 @@
       $('password').value = '';
       const body = await response.json().catch(() => ({}));
       if (!response.ok) throw new Error(body.detail || 'Sign-in failed.');
-      status('Signed in.');
-      await load();
+      status('Signed in · opening the menu…');
+      const session = await load();
+      if (session?.signed_in) location.assign('/#menu');
     } catch (error) {
-      status(error.message);
+      status(error.message, true);
     }
   });
 
@@ -48,7 +52,7 @@
     const response = await call('/api/owner/logout', {
       method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json', 'X-Melos-CSRF': csrf }, body: '{}'
     }).catch(() => null);
-    status(response && response.ok ? 'Signed out.' : 'Sign-out failed; reload and try again.');
+    status(response && response.ok ? 'Signed out.' : 'Sign-out failed; reload and try again.', !(response && response.ok));
     await load();
   });
 

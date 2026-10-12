@@ -6,40 +6,84 @@
   <meta name="robots" content="noindex, nofollow">
   <meta name="referrer" content="same-origin">
   <title>Melos — sign in</title>
+  <link rel="icon" type="image/svg+xml" href="assets/branding/melos-favicon-white.svg?v=white-1">
+  <meta name="theme-color" content="#14223a">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Gentium+Book+Plus:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style>
-    :root { color-scheme: light dark; --ink: #222; --paper: #faf8f3; --line: #c9c2b4; --accent: #8a4b14; }
-    @media (prefers-color-scheme: dark) { :root { --ink: #e8e4dc; --paper: #1c1b19; --line: #4a463f; --accent: #e09a5a; } }
-    body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 Georgia, serif; }
-    main { max-width: 22rem; margin: 12vh auto; padding: 0 16px; }
-    h1 { font-size: 1.3rem; font-weight: normal; }
-    label { display: block; margin: 0.8rem 0 0.2rem; font-size: 0.9rem; }
-    input { width: 100%; box-sizing: border-box; padding: 0.5rem; border: 1px solid var(--line); border-radius: 4px;
-      background: transparent; color: inherit; font: inherit; }
-    button { margin-top: 1rem; padding: 0.5rem 1rem; border: 1px solid var(--accent); border-radius: 4px;
-      background: transparent; color: var(--accent); font: inherit; cursor: pointer; }
-    #status { min-height: 1.5em; margin-top: 1rem; }
-    a { color: inherit; }
+    /* The sign-in card: frosted glass over the site's painting, the site's navy and sea blue, square corners (theme.css). */
+    :root { --ink: #14223a; --ink-2: #33475e; --muted: #5c6b7d; --sea: #2b5a87; --line: #d7e1e9; --fail: #b3261e;
+      --glass: rgb(255 255 255 / .78); --glass-edge: rgb(255 255 255 / .55); --greek: "GFS Didot", "Gentium Book Plus", serif; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body { margin: 0; color: var(--ink); font: 17px/1.5 "Gentium Book Plus", Georgia, serif; -webkit-font-smoothing: antialiased; background: #0d1522; }
+    .stage { position: fixed; inset: 0; background: #0d1522 url("assets/paintings/alma-tadema-1024.a9b79584.webp") center / cover no-repeat; }
+    .stage::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to bottom, rgb(10 18 32 / .55), rgb(10 18 32 / .25) 40%, rgb(10 18 32 / .6)); }
+    .site-bar { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; padding: 16px clamp(16px, 4vw, 56px); color: #fff; }
+    .site-mark { display: flex; flex-direction: column; color: #fff; text-decoration: none; line-height: 1.1; }
+    .site-mark span { font: 1.7rem/1 var(--greek); }
+    .site-mark small { font-style: italic; font-size: .82rem; opacity: .8; margin-top: 4px; }
+    main { position: relative; z-index: 2; min-height: calc(100% - 84px); display: grid; place-items: center; padding: 24px 16px 48px; }
+    .card {
+      width: min(400px, 100%); padding: 28px 28px 24px; color: var(--ink);
+      background: var(--glass); border: 1px solid var(--glass-edge);
+      backdrop-filter: blur(28px) saturate(140%); -webkit-backdrop-filter: blur(28px) saturate(140%);
+      box-shadow: inset 0 1px 0 rgb(255 255 255 / .6), 0 24px 64px rgb(0 0 0 / .35);
+    }
+    h1 { margin: 0 0 2px; font: 400 1.6rem/1.2 var(--greek); }
+    .sub { margin: 0 0 18px; color: var(--muted); font-size: .92rem; }
+    label { display: block; margin: 12px 0 4px; font-size: .86rem; color: var(--muted); }
+    input { width: 100%; min-height: 44px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 0; background: #fff; color: var(--ink); font: inherit; }
+    input:focus { outline: none; border-color: var(--sea); box-shadow: 0 0 0 3px rgb(43 90 135 / .12); }
+    button, .button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 16px; padding: 8px 18px; border: 1px solid var(--sea); border-radius: 0;
+      background: var(--sea); color: #fff; font: inherit; cursor: pointer; text-decoration: none; transition: background-color .15s ease, border-color .15s ease; }
+    button:hover, .button:hover { background: var(--ink); border-color: var(--ink); }
+    .quiet { background: rgb(255 255 255 / .6); color: var(--sea); border-color: rgb(43 90 135 / .3); }
+    .quiet:hover { background: var(--sea); color: #fff; border-color: var(--sea); }
+    form button { width: 100%; }
+    .menu { display: grid; gap: 8px; margin-top: 10px; }
+    .menu .button, .menu button { margin-top: 0; width: 100%; }
+    .menu .button small { margin-left: 8px; font-size: .8rem; opacity: .8; }
+    #who { margin: 0 0 6px; color: var(--ink-2); font-size: .92rem; }
+    #status { min-height: 1.5em; margin: 12px 0 0; font-size: .9rem; color: var(--ink-2); }
+    #status.bad { color: var(--fail); }
+    .back { margin: 14px 0 0; font-size: .88rem; }
+    a { color: var(--sea); text-underline-offset: .2em; }
+    a:hover { color: var(--ink); }
+    :focus-visible { outline: 2px solid var(--sea); outline-offset: 2px; }
   </style>
 </head>
 <body>
+  <div class="stage" aria-hidden="true"></div>
+  <header class="site-bar">
+    <a class="site-mark" href="/" aria-label="Melos, home"><span lang="grc">Μέλος</span><small>A Greek Lyric Lexicon</small></a>
+  </header>
   <main>
-    <h1>Owner sign-in</h1>
-    <form id="login" autocomplete="on" hidden>
-      <label for="username">Name</label>
-      <input id="username" name="username" autocomplete="username" required maxlength="64">
-      <label for="password">Password</label>
-      <input id="password" name="password" type="password" autocomplete="current-password" required maxlength="256">
-      <button type="submit">Sign in</button>
-    </form>
-    <div id="signed-in" hidden>
-      <p id="who"></p>
-      <button id="logout" type="button">Sign out</button>
-    </div>
-    <p id="status" role="status"></p>
-    <p><a href="./">Back to the reader</a></p>
+    <section class="card" aria-labelledby="title">
+      <h1 id="title">Owner sign-in</h1>
+      <p class="sub">Private tools: the composer and the owner panels.</p>
+      <form id="login" autocomplete="on" hidden>
+        <label for="username">Name</label>
+        <input id="username" name="username" autocomplete="username" required maxlength="64">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required maxlength="256">
+        <button type="submit">Sign in</button>
+      </form>
+      <div id="signed-in" hidden>
+        <p id="who"></p>
+        <nav class="menu" aria-label="Owner">
+          <a class="button" href="/composer">Composer<small>write Greek verse with live scansion</small></a>
+          <a class="button quiet" href="/#menu">Site menu<small>every page, owner entries included</small></a>
+          <button id="logout" type="button" class="quiet">Sign out</button>
+        </nav>
+      </div>
+      <p id="status" role="status"></p>
+      <p class="back"><a href="./">Back to the reader</a></p>
+    </section>
   </main>
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
-  <script src="js/owner.js"></script>
+  <script src="js/owner.js?v=release-x9"></script>
 </body>
 </html>
