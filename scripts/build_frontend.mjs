@@ -75,7 +75,7 @@ async function verifyLocalAssets() {
     for (const [, ref] of html.matchAll(/(?:src|href)="([^"]+)"/g)) {
       if (/^(?:https?:|#|mailto:|data:)/i.test(ref)) continue;
       if (ref === 'legacy' || ref === './' || ref.startsWith('#')) continue;
-      if (/^\/(?:reader\.html)?(?:[?#].*)?$/.test(ref)) continue;
+      if (/^\/(?:reader\.html|composer)?(?:[?#].*)?$/.test(ref)) continue;   // /composer is rewritten to the backend (vercel.json)
       if (!readerOnly && /^\/(?:lexicon|authors|themes)(?:[?#].*)?$/.test(ref)) continue;
       const file = path.join(output, ref.split(/[?#]/, 1)[0]);
       if (!file.startsWith(output + path.sep)) throw new Error(`Unsafe asset reference in ${page}: ${ref}`);
