@@ -45,19 +45,24 @@ def test_recorded_metres_are_sourced_and_narrow():
     assert recorded_metre({"author": "Homer", "work": "Iliad", "citation": "1.1"})["metre"] == "hexameter"
 
 
-def test_reader_scan_locks_a_recorded_poem_and_skips_editorial_lines():
+def test_reader_scan_locks_a_recorded_poem_and_skips_gapped_lines():
+    # Line 5 is a supplement (brackets read through, scanned and locked like any line); line 6 has a gap
+    # and line 7 is cut at the end: no lock, and the unit whose coda is lost gets no mark.
     passage = {"id": "campbell-glp:sappho:1", "author": "Sappho", "citation": "1", "language": "grc",
-               "text": SAPPHO_1 + "\nτυίδ’ ἔλθ’, αἴ ποτα [κἀτέρωτα"}
+               "text": SAPPHO_1 + "\nἀλλὰ τυίδ’ ἔλθ’, αἴ ποτα [κἀτέρωτα\nτὰς ἔμας αὔδ[ . . ]ἀίοισα πήλοι\nἔκλυες, πάτρος δὲ δόμον λίπ["}
     out = scan_passage(passage)
     assert out["metre"]["metre"] == "sapphic" and out["dialect"] == "aeolic"
     assert out["text"] == passage["text"]
-    locked = [line for line in out["lines"] if line["locked"]]
-    assert len(locked) >= 3
-    assert out["lines"][-1]["editorial"] and not out["lines"][-1]["locked"]
-    gap = passage["text"].index("[")
-    bracketed = [u for u in out["units"] if u["nucleus"][0] > gap]
-    assert bracketed and all(u["editorial"] for u in bracketed)
-    assert not any(u["editorial"] for u in out["units"] if u["line"] < 4)
+    assert [line["locked"] for line in out["lines"][:5]] == [True] * 5
+    assert not out["lines"][4]["editorial"] and not any(u["editorial"] for u in out["units"] if u["line"] < 5)
+    assert out["lines"][5]["editorial"] and not out["lines"][5]["locked"]
+    assert out["lines"][6]["editorial"] and not out["lines"][6]["locked"]
+    gap = passage["text"].index("[ . . ]")
+    before_gap = [u for u in out["units"] if u["line"] == 5 and u["end"] <= gap][-1]
+    assert before_gap["text"] == "αὔδ" and before_gap["editorial"]
+    assert sum(u["editorial"] for u in out["units"] if u["line"] == 5) == 1
+    last = [u for u in out["units"] if u["line"] == 6]
+    assert last[-1]["editorial"] and not any(u["editorial"] for u in last[:-1])
     assert any("metre" in u for u in out["units"])
 
 

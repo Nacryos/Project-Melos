@@ -1,9 +1,12 @@
 /* Reader scansion overlay (release V): "Scansion" puts – ⏑ × above each syllable of a Greek poem, "Syllable
    breaks" shows bold | between syllables. Scanned on demand (GET /api/scan/passage, once per passage, cached).
    Marks and bars are generated content inside each word's button: clicks still select the whole word, and
-   selection and copy never include them. Words with editorial signs (brackets, lacunae, dotted letters) get no
-   marks. A poem whose metre is recorded has its uncertain syllables settled by the metre (the server's metre
-   lock; the composer never does this). Turning both toggles off restores the reader's DOM exactly. */
+   selection and copy never include them. Brackets round a supplement are read through (the server scans the
+   editor's text like any other); only a syllable at a gap, letters lost or illegible, gets no mark. Each mark
+   is centred over its vowel or diphthong. The bars divide syllables as the marks scan them: one consonant
+   opens the next syllable, of a cluster the first consonant closes the syllable before. A poem whose metre is
+   recorded has its uncertain syllables settled by the metre (the server's metre lock; the composer never does
+   this). Turning both toggles off restores the reader's DOM exactly. */
 (() => {
   'use strict';
   const text = document.getElementById('passage-text');
@@ -53,6 +56,23 @@
     return a.map((x, i) => Math.round(x + (b[i] - x) * t)).join(',');
   };
   const combining = ch => /\p{M}/u.test(ch);
+  const CONSONANT = /[βγδζθκλμνξπρστφχψϝ]/;
+  const consonant = ch => CONSONANT.test(String(ch ?? '').normalize('NFD')[0]?.toLowerCase() ?? '');
+  // Syllable breaks inside one word button [start, end): between two nuclei, a single consonant opens the
+  // next syllable; of a cluster the first consonant closes the syllable before (what the marks scan: the
+  // syllable before two consonants is long); no consonant, the break falls before the vowel. Brackets and
+  // apostrophes are transparent, and a break never falls inside a bracket pair.
+  function breaks(text, nuclei, start, end) {
+    const cuts = [];
+    for (let k = 1; k < nuclei.length; k++) {
+      const cluster = [];
+      for (let i = nuclei[k - 1].nucleus[1]; i < nuclei[k].nucleus[0]; i++) if (consonant(text[i])) cluster.push(i);
+      let cut = cluster.length ? cluster[Math.min(1, cluster.length - 1)] : nuclei[k].nucleus[0];
+      while (cut > start && /[\[⟨〈]/.test(text[cut - 1])) cut--;
+      if (cut > start && cut < end) cuts.push(cut);
+    }
+    return cuts;
+  }
 
   function undecorate() {
     applying = true;
@@ -67,14 +87,11 @@
       const start = Number(word.dataset.sourceStart), end = Number(word.dataset.sourceEnd);
       const original = word.textContent;
       if (!Number.isFinite(start) || scan.text.slice(start, end) !== original) continue;
-      const inside = units.filter(u => u.start < end && u.end > start);
-      const cuts = [...new Set(inside.map(u => u.start).filter(s => s > start && s < end))].sort((a, b) => a - b);
+      const nuclei = units.filter(u => u.nucleus[0] >= start && u.nucleus[0] < end).sort((a, b) => a.nucleus[0] - b.nucleus[0]);
+      const cuts = breaks(scan.text, nuclei, start, end);
+      // The mark sits over the whole nucleus (vowel or diphthong), anchored at its first letter.
       const anchors = new Map();
-      for (const u of inside) {
-        let a = u.nucleus[1] - 1;
-        while (a > u.nucleus[0] && combining(scan.text[a])) a--;
-        if (a >= start && a < end && !u.editorial) anchors.set(a, u);
-      }
+      for (const u of nuclei) if (!u.editorial) anchors.set(u.nucleus[0], u);
       if (!anchors.size && !cuts.length) continue;
       originals.set(word, original);
       word.textContent = '';
@@ -85,7 +102,7 @@
         syl.className = k ? 'sy b' : 'sy';
         let pos = s;
         for (const [a, u] of [...anchors].filter(([a]) => a >= s && a < e)) {
-          let z = a + 1;
+          let z = Math.min(Math.max(u.nucleus[1], a + 1), e);
           while (z < e && combining(scan.text[z])) z++;
           if (a > pos) syl.append(scan.text.slice(pos, a));
           const n = document.createElement('span');

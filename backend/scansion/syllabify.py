@@ -14,7 +14,7 @@ from .greek import (
     ROUGH, SMOOTH, VOWELS, decompose, is_greek_letter,
 )
 
-_WORD = re.compile(r"[Ͱ-Ͽἀ-῿̀-ͯ\[\]⟨⟩’'ʼϝϜ]+")
+_WORD = re.compile(r"[Ͱ-Ͽἀ-῿̀-ͯ\[\]⟨⟩〈〉’'ʼϝϜ]+")
 
 
 @dataclass
@@ -70,7 +70,7 @@ def words_of(text: str, start: int = 0, end: int | None = None) -> list[Word]:
         raw = m.group(0)
         letters = []
         for i, ch in enumerate(raw):
-            if ch in ELISION_MARKS or ch in "[]⟨⟩":
+            if ch in ELISION_MARKS or ch in "[]⟨⟩〈〉":
                 continue
             base, marks = decompose(ch)
             if is_greek_letter(ch):
@@ -80,7 +80,7 @@ def words_of(text: str, start: int = 0, end: int | None = None) -> list[Word]:
                 letters[-1].end = m.start() + i + 1
         if not letters:
             continue
-        stripped = raw.rstrip("[]⟨⟩")
+        stripped = raw.rstrip("[]⟨⟩〈〉")
         elided = stripped[-1:] in ELISION_MARKS
         prodelided = raw[:1] in ELISION_MARKS
         out.append(Word(len(out), raw, m.start(), m.end(), letters, bool(elided), prodelided))

@@ -1,9 +1,11 @@
 """Release V: the reader's scansion overlay for a stored poem (GET /api/scan/passage?id=...).
 
 The server scans the stored text itself (the lines the reader prints, joined by newlines, so offsets match the
-reader's word buttons), marks units inside words with editorial signs (brackets, lacunae, dotted letters) so the
-reader shows no mark there, and applies the metre lock (backend/scansion/lock.py) only when the poem's metre is
-recorded (backend/scansion/recorded_metres.py). Results are cached per passage.
+reader's word buttons). Brackets round a supplement and dots under uncertain letters are read through: the
+supplement is the editor's text and scans like any other (the syllabifier skips the brackets). Only a gap, letters
+lost or illegible, leaves a unit without a mark, and only a line with a gap or cut at either edge goes without
+the metre lock (backend/scansion/lock.py), which applies when the poem's metre is recorded
+(backend/scansion/recorded_metres.py). Results are cached per passage.
 """
 from __future__ import annotations
 
@@ -17,7 +19,12 @@ router = APIRouter()
 _cache: OrderedDict = OrderedDict()
 _lock = threading.Lock()
 CACHE = 512
-EDITORIAL = re.compile(r"[\[\]⟨⟩⟦⟧{}<>〈〉†‡…̣]|\.\s*\.")
+# A gap: empty or dotted brackets, the editors' dots for illegible letters, an ellipsis, "***", an obelus, or a
+# bracket opening on nothing at the end of the line.
+GAP = re.compile(r"\[[\s.·]*\]|\.[\s.·]*\.|(?<![^\s\[\]])\.(?![^\s\[\]])|…|\*\*\*|[†‡]|\[[\s.·]*$")
+# A line cut at its start, opening at a bracket ("]δώσην"): syllables may be missing, so the metre lock does not
+# apply (a cut at the end, "ἔχη[", is a GAP). "λί]μενος" and "μέγ[αν" are read as restored whole.
+EDGE = re.compile(r"^[\s.·]*\]")
 DIALECT = {"lesbian": "aeolic", "boeotian": "aeolic", "doric": "doric"}
 
 
@@ -28,8 +35,8 @@ def _reader_text(passage: dict) -> str:
     return str(passage.get("text") or "")
 
 
-def _token_spans(text: str):
-    return [(m.start(), m.end()) for m in re.finditer(r"\S+", text)]
+def gapped_line(line: str) -> bool:
+    return bool(GAP.search(line) or EDGE.search(line))
 
 
 def scan_passage(passage: dict) -> dict:
@@ -41,23 +48,25 @@ def scan_passage(passage: dict) -> dict:
     dialect = DIALECT.get(passage_dialect(passage) or "", "none")
     scanner = scan_api._scanner(None, True, dialect)
     lines = scanner.scan_lines(text)
-    spans = _token_spans(text)
     record = recorded_metre(passage)
     raw_lines = text.split("\n")
     units, line_info = [], []
     for sylls in lines:
         line_no = sylls[0].line
-        editorial_line = bool(EDITORIAL.search(raw_lines[line_no])) if line_no < len(raw_lines) else True
+        editorial_line = gapped_line(raw_lines[line_no]) if line_no < len(raw_lines) else True
         locked = lock_line(sylls, record["metre"]) if record and not editorial_line else None
         line_info.append({"line": line_no, "editorial": editorial_line,
                           "template": locked["template"] if locked else None,
                           "fits": locked["ok"] if locked else None,
                           "locked": bool(locked and locked["template"])})
-        for s in sylls:
+        line_end = text.find("\n", sylls[0].start)
+        line_end = len(text) if line_end < 0 else line_end
+        for k, s in enumerate(sylls):
             d = s.as_dict()
-            anchor = s.nend - 1
-            token = next((text[a:b] for a, b in spans if a <= anchor < b), "")
-            d["editorial"] = bool(EDITORIAL.search(token))
+            # A gap between this nucleus and the next (or the line's end) leaves the unit's coda unknown.
+            stop = sylls[k + 1].start if k + 1 < len(sylls) else line_end
+            gap = GAP.search(text, s.start, line_end)
+            d["editorial"] = bool(gap and gap.start() < stop)
             if locked and s.index in locked["units"]:
                 d["metre"] = locked["units"][s.index]
             units.append(d)
