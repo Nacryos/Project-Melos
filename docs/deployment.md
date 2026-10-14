@@ -1,6 +1,25 @@
 # Deployment handoff
 
-## Current: reader stanza layout, second cut (frontend only, 2026-10-14, ~2:30 PM PDT)
+## Current: release X.10 — reader scansion reads through brackets; syllable breaks at onsets (2026-10-14, ~2:45 PM PDT)
+
+Tree = `fallback-translations` e929b60. Backend image `melos-api:20261014x10` atop `20261011x8`, built from the tarball
+`/home/alvin/melos-x/x10.tgz` (`git archive HEAD`) extracted into `/home/alvin/melos-x/src` with
+`MELOS_X_IMAGE=melos-api:20261014x10 MELOS_X_KEPT=melos-api-before-x10 MELOS_X_CANARY=melos-api-canary-x10
+MELOS_X_CANARY_PORT=8798 MELOS_X_CANARY_RUNTIME=/home/alvin/melos-x/canary-runtime sh src/deploy/release_x.sh build|canary|promote`.
+`canary_checks_x.sh`: 0 failures on the canary and on production, before and after the promote. Canary stopped and kept.
+Frontend `project-melos-iinn8qfax` from `~/Projects/melos-t`; cache tags `scan-20261014` on `reader-scansion.js` and
+`scansion.css`. What changed: `GET /api/scan/passage` no longer blanks every syllable in a word with a bracket or a
+dotted letter (`backend/reader_scan_routes.py`): a supplement scans like any text, only a syllable before a gap
+(empty or dotted brackets, dots, ellipsis, obelus, a bracket opening on nothing at the line end) is left unmarked,
+and the metre lock skips only lines with a gap or opening at a bracket (Sappho 16: 58 → 3 unmarked, 3 → 15 locked
+lines). `backend/scansion/syllabify.py` reads through 〈〉 as it does ⟨⟩. The reader overlay (`js/reader-scansion.js`)
+puts syllable bars at onsets (one consonant opens the next syllable, of a cluster the first closes the one before,
+never inside a bracket pair) and centres each mark over its vowel or diphthong. Tests: `tests/test_scansion_lock.py`
+6 passed; composer + scansion suites 61 passed, the pre-existing route-enumeration failure only.
+Rollback: `MELOS_X_KEPT=melos-api-before-x10 sh /home/alvin/melos-x/src/deploy/release_x.sh rollback` (X.8) and
+`vercel promote https://project-melos-cs1g2jr1o-nacryos-projects.vercel.app --yes`.
+
+## Previous: reader stanza layout, second cut (frontend only, 2026-10-14, ~2:30 PM PDT)
 
 Frontend only, from `~/Projects/melos-t` caf7e06: `js/verse-layout.js` now treats a truncated line's syllable count as a
 lower bound (a hit only once it reaches its slot, a miss when it overshoots, half a hit for a short adonic), searches the

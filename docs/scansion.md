@@ -402,12 +402,16 @@ wavy underline in the error colour (shape, not hue, carries it).
   Uncertain syllables (30–70 %) are drawn lighter. The mark is anchored over the syllable's vowel; for a
   diphthong over its second vowel (the nucleus's last letter, skipping combining marks). It sits above the line
   box's top, clear of breathings, accents and circumflexes (checked on ἆ ᾄ ῗ Ἄ Ὦ ᾯ ΐ at 34 px).
-- **Bars** sit between the letters at the scanner's unit boundaries (vowel + following consonants, the owner's
-  units), inside words only. Marks and bars are CSS generated content inside the word's `<button>`: a click
-  anywhere on the word, bars included, still inspects the whole word, and selection/copy never include them.
-  Turning both toggles off restores the reader's original DOM.
-- **Gaps:** a word containing an editorial sign (`[ ] ⟨ ⟩ { } < > † …`, a dotted letter U+0323, or a dotted lacuna)
-  gets no marks, so nothing is invented across a lacuna; its bars still show where letters survive.
+- **Bars** divide syllables as the marks scan them (2026-10-14, release X.10): one consonant between two nuclei
+  opens the next syllable, of a cluster the first consonant closes the syllable before (the long syllable the
+  mark shows), no consonant puts the bar before the vowel; inside words only, never inside a bracket pair. Each
+  mark is centred over its vowel or diphthong. Marks and bars are CSS generated content inside the word's
+  `<button>`: a click anywhere on the word, bars included, still inspects the whole word, and selection/copy
+  never include them. Turning both toggles off restores the reader's original DOM.
+- **Brackets and gaps** (release X.10, `backend/reader_scan_routes.py`): brackets round a supplement and the dot
+  under an uncertain letter are read through, so a restored word is marked like any other. Only a syllable before
+  a real gap, letters lost or illegible (empty or dotted brackets, the editors' dots, `…`, `***`, an obelus, a
+  bracket opening on nothing at the line end), gets no mark, so nothing is invented across a lacuna.
 - Clicking a word shows its syllables with % long and the deciding reason under the poem (beside the usual word
   panel), including any metre adjustment.
 
@@ -417,8 +421,8 @@ Only for stored poems whose metre is **recorded** (`backend/scansion/recorded_me
 field): Sappho frr. 1–42 (Book 1 of the Alexandrian edition, Sapphic stanzas; L–P/Voigt numbering), Homer's Iliad
 and Odyssey and Hesiod's Theogony and Works and Days (hexameter). Nothing is guessed from a scan.
 
-Per line, the scanner fits each of the metre's line templates and keeps the best one that parses; lines with
-editorial signs, and lines that parse in no template, are left alone. Then, for each syllable at a position whose
+Per line, the scanner fits each of the metre's line templates and keeps the best one that parses; lines with a
+gap or opening at a bracket (syllables may be missing), and lines that parse in no template, are left alone. Then, for each syllable at a position whose
 quantity the parse fixes (long or short; `x`, `X` and the line end `F` are anceps and never adjusted):
 
 - p_long in [0.30, 0.70] → moved 0.50 toward the required quantity, clamped to 0..1 (70 % where short is required →
