@@ -1,6 +1,16 @@
 # Deployment handoff
 
-## Current: reader stanza layout (frontend only, 2026-10-14, ~12:20 PM PDT)
+## Current: reader stanza layout, second cut (frontend only, 2026-10-14, ~2:30 PM PDT)
+
+Frontend only, from `~/Projects/melos-t` caf7e06: `js/verse-layout.js` now treats a truncated line's syllable count as a
+lower bound (a hit only once it reaches its slot, a miss when it overshoots, half a hit for a short adonic), searches the
+stanza phase for numbered fragments too (papyrus numbering need not start a stanza), requires the Alcaic decasyllable as
+well as the enneasyllable, and breaks ties by poet; the reader passes the author. Cache tags on `reader.js`, `reader.css`
+and `verse-layout.js` bumped to `stanza2-20261014` because the previous deploy reused the old tags and browsers kept the
+old script. Vercel deployment `project-melos-cs1g2jr1o`; rollback: `vercel promote project-melos-7402arc1q` (first cut,
+below) or the X.9 frontend. Backend unchanged (X.8). Verified live: Sappho 1, 31, 20, Alcaeus 338, anthology 285 (Sappho 23).
+
+## Previous: reader stanza layout, first cut (frontend only, 2026-10-14, ~12:20 PM PDT)
 
 Frontend only, from `~/Projects/melos-t` 1a6bc80: new `js/verse-layout.js` (Sapphic/Alcaic stanza recognised from syllable
 counts + line labels, Campbell layout metadata as fallback), one hook in `js/reader.js`, four rules in `css/reader.css`,

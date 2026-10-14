@@ -84,9 +84,15 @@ is not a blanket license to redistribute all source material.
   a space before each stanza, the Sapphic adonic stepped in, the Alcaic third and
   fourth lines stepped in. The form is recognised from the syllable counts of the
   complete lines, with the position in the stanza taken from the numeric line labels
-  where the source has them (bracketed lacuna rows keep their place as lost lines);
-  a fragment that fits neither form keeps the Campbell transcription's own layout
-  metadata, if any, and otherwise nothing changes. A line number printed inside
+  where the source has them (bracketed lacuna rows keep their place as lost lines;
+  the stanza phase is searched, since papyrus numbering need not start a stanza).
+  A truncated line counts only once its surviving syllables reach its slot, and
+  against the form when they overshoot it; lines with illegible letters cannot
+  vouch for a long slot. On a tie the poet decides. A fragment that fits neither
+  form keeps the Campbell transcription's own layout metadata, if any, and
+  otherwise nothing changes. Line-end fragments whose stanzas the editions show
+  only by alignment (The Digital Sappho's per-line padding, dropped at ingest)
+  may stay flush. A line number printed inside
   the source text (The Digital Sappho) is moved into the number gutter without
   altering the text or the word offsets.
 
