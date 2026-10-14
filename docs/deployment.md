@@ -1,6 +1,14 @@
 # Deployment handoff
 
-## Current: release X.9 frontend (X.8 backend) — white composer look, glass sign-in card, sign-in opens the menu (2026-10-11, ~5:45 PM PDT)
+## Current: reader stanza layout (frontend only, 2026-10-14, ~12:20 PM PDT)
+
+Frontend only, from `~/Projects/melos-t` 1a6bc80: new `js/verse-layout.js` (Sapphic/Alcaic stanza recognised from syllable
+counts + line labels, Campbell layout metadata as fallback), one hook in `js/reader.js`, four rules in `css/reader.css`,
+script tag in `reader.html`, `scripts/build_frontend.mjs` copies the module. Vercel deployment `project-melos-7402arc1q`;
+rollback: `vercel promote` the X.9 frontend (`project-melos-r95vv05i2` was X.8; X.9 is the deployment before this one).
+Backend unchanged (X.8). First `vercel deploy` attempt returned "Not authorized" and the retry went through, as on 2026-10-11.
+
+## Previous: release X.9 frontend (X.8 backend) — white composer look, glass sign-in card, sign-in opens the menu (2026-10-11, ~5:45 PM PDT)
 
 Frontend only, from `~/Projects/melos-t`: `css/composer.css` rewritten (same selectors), `owner.html` + `js/owner.js`, one hook in
 `js/site-menu.js` (`/#menu` opens the menu). Page cache keys `release-x9`. Rollback: `vercel promote` the X.8 frontend
