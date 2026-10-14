@@ -17,7 +17,7 @@ const includeExcerpts = existsSync(path.join(root, 'sources/campbell-alcaeus'));
 if (includeExcerpts) pages.push(...excerptPages);
 const jsFiles = [
   'api.js', 'app.js', 'dither.js', 'images.js', 'reader-hero.js', 'reader-fullscreen.js',
-  'reader.js', 'word-panel.js', 'word-context.js', 'studio-live.js', 'usage-space.js', 'ui-icons.js', 'verse-fit.js', 'dictionary-preview.js', 'machine-morphology.js', 'passage-analysis.js', 'nature-preset-data.js', 'nature-presets.js',
+  'reader.js', 'word-panel.js', 'word-context.js', 'studio-live.js', 'usage-space.js', 'ui-icons.js', 'verse-fit.js', 'verse-layout.js', 'dictionary-preview.js', 'machine-morphology.js', 'passage-analysis.js', 'nature-preset-data.js', 'nature-presets.js',
   'lemma-common.js', 'lemma-page.js', 'concept-page.js', 'citation-lookup.js', 'phrases.js', 'site-menu.js', 'owner-loader.js', 'owner.js', 'typegreek.js', 'composer-core.js', 'composer.js', 'reader-scansion.js'
 ];
 if (!readerOnly) jsFiles.push('lexicon-page.js', 'authors-page.js', 'themes-page.js');

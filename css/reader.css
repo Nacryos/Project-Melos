@@ -130,6 +130,11 @@ body{background:var(--marble);color:var(--ink);font:400 var(--step-0)/1.6 var(--
 .greek-text.verse-fit .line-content{display:inline}
 .greek-text.verse-fit .line.blank{height:.7em}
 .greek-text.verse-fit .line-label{font-size:11px}
+/* Stanza layout (2026-10-14, js/verse-layout.js): a space before each stanza; the Sapphic adonic and the Alcaic third and fourth lines stepped in, as the editions print them. A line number printed inside the source text sits in the number gutter. */
+.greek-text .line.stanza-start{margin-top:.55em}
+.greek-text .line.indent-1 .line-content{padding-left:1.6em}
+.greek-text .line.indent-2 .line-content{padding-left:3.2em}
+.greek-text .line-label.printed{width:34px;min-width:0;margin-left:-34px;white-space:nowrap;overflow:visible}
 .dictionary-glimpse{margin:0 0 24px;padding:18px 20px;border:1px solid var(--line);background:#f5f7f4;color:var(--ink)}
 .dictionary-glimpse-entry+.dictionary-glimpse-entry{margin-top:17px;padding-top:14px;border-top:1px solid var(--line)}
 .dictionary-glimpse-group+.dictionary-glimpse-group{margin-top:20px;padding-top:12px;border-top:1px solid var(--line)}

@@ -511,6 +511,18 @@
     }
     if (cursor < text.length) host.append(document.createTextNode(text.slice(cursor)));
   }
+  // A line number printed inside the source text (The Digital Sappho: "4. σας ὐπακούει") is shown in
+  // the number gutter like every other label. The text node keeps the characters, so selection,
+  // copying and the word offsets are unchanged; only the span moves them.
+  function markPrintedNumber(content) {
+    const first = content.firstChild;
+    if (!first || first.nodeType !== Node.TEXT_NODE) return;
+    const printed = first.data.match(/^[ \t ]*\d+[ \t ]*\.[ \t ]*/u);
+    if (!printed) return;
+    const span = node('span', 'line-label printed', printed[0]);
+    first.data = first.data.slice(printed[0].length);
+    content.insertBefore(span, first);
+  }
   function separateLineLabel(line) {
     const label = String(line.label ?? '');
     if (!/^\d+$/.test(label)) return label;
@@ -548,15 +560,23 @@
       // Modern Greek translations are searchable evidence, not Ancient Greek
       // morphology attestations. Preserve their text without ancient-form buttons.
       const words = passage.language === 'ell' ? [] : readingWords(lines.map(line => line.text).join('\n'));
+      // Stanza layout (js/verse-layout.js): a space before each stanza, the Sapphic adonic and the
+      // Alcaic third and fourth lines stepped in. Classes only; the source text is untouched.
+      const layout = passage.language === 'grc' && window.MelosVerseLayout ? window.MelosVerseLayout.plan(lines, passage.metadata) : null;
       let offset = 0;
-      for (const line of lines) {
+      lines.forEach((line, index) => {
         const row = node('div', line.text ? 'line' : 'line blank');
-        row.append(node('span', 'line-label', separateLineLabel(line)));
+        const mark = layout?.[index];
+        if (mark?.stanzaStart) row.classList.add('stanza-start');
+        if (mark?.indent) row.classList.add(`indent-${mark.indent}`);
+        const label = separateLineLabel(line);
+        row.append(node('span', 'line-label', label));
         const content = node('span', 'line-content');
         appendTextWithWords(content, line.text, words, offset);
+        if (!label && /^\d+$/.test(String(line.label ?? ''))) markPrintedNumber(content);
         offset += line.text.length + 1;
         row.append(content); ui.text.append(row);
-      }
+      });
       window.MelosVerseFit?.watch(ui.text, '.line');
     } else if (passage.text) {
       window.MelosVerseFit?.unwatch(ui.text);

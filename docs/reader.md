@@ -80,6 +80,15 @@ is not a blanket license to redistribute all source material.
   wrapped onto an indented continuation line. The type scales down until the
   widest line fits the box (`js/verse-fit.js`) and grows back on wider screens.
   Prose records without line breaks wrap normally.
+- Stanzas are printed as the editions print them (2026-10-14, `js/verse-layout.js`):
+  a space before each stanza, the Sapphic adonic stepped in, the Alcaic third and
+  fourth lines stepped in. The form is recognised from the syllable counts of the
+  complete lines, with the position in the stanza taken from the numeric line labels
+  where the source has them (bracketed lacuna rows keep their place as lost lines);
+  a fragment that fits neither form keeps the Campbell transcription's own layout
+  metadata, if any, and otherwise nothing changes. A line number printed inside
+  the source text (The Digital Sappho) is moved into the number gutter without
+  altering the text or the word offsets.
 
 ## Current coverage and limits
 
