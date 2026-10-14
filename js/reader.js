@@ -562,7 +562,7 @@
       const words = passage.language === 'ell' ? [] : readingWords(lines.map(line => line.text).join('\n'));
       // Stanza layout (js/verse-layout.js): a space before each stanza, the Sapphic adonic and the
       // Alcaic third and fourth lines stepped in. Classes only; the source text is untouched.
-      const layout = passage.language === 'grc' && window.MelosVerseLayout ? window.MelosVerseLayout.plan(lines, passage.metadata) : null;
+      const layout = passage.language === 'grc' && window.MelosVerseLayout ? window.MelosVerseLayout.plan(lines, passage.metadata, { author: passage.author_canonical || passage.author }) : null;
       let offset = 0;
       lines.forEach((line, index) => {
         const row = node('div', line.text ? 'line' : 'line blank');
