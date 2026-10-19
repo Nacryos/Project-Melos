@@ -27,12 +27,16 @@ NETWORK=${MELOS_X_NETWORK:-melos-net}
 step=${1:-}
 
 x_mounts() {
-  for f in "$X/data/corpus.sqlite" "$X/data/embeddings/manifest.json" "$X/data/embeddings-s/bge-m3/manifest.json" "$X/data/embeddings-s/shlm/manifest.json"; do
+  for f in "$X/data/corpus.sqlite" "$X/data/embeddings/manifest.json" "$X/data/embeddings-s/bge-m3/manifest.json" "$X/data/embeddings-s/shlm/manifest.json" \
+           "$X/data/scansion/quantities.sqlite" "$X/data/scansion/quantities_la.sqlite"; do
     test -s "$f" || { echo "missing $f" >&2; exit 1; }
   done
+  # X.11: the vowel-length lexicons (Greek, release V's; Latin, built on the latin-composer branch) at the scanners'
+  # default path /app/data/scansion (backend/scansion/lexicon.py, lexicon_la.py). The Greek one had been lost since W.
   echo --mount "$X/data/corpus.sqlite:/app/data/corpus.sqlite:ro" \
        --mount "$X/data/embeddings:/app/data/embeddings:ro" \
-       --mount "$X/data/embeddings-s:/s-embeddings:ro"
+       --mount "$X/data/embeddings-s:/s-embeddings:ro" \
+       --mount "$X/data/scansion:/app/data/scansion:ro"
 }
 
 join_network() {

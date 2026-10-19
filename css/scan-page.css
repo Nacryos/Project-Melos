@@ -1,0 +1,45 @@
+/* Scansion page (scan.html, js/scan-page.js): paste Greek or Latin verse, see every syllable marked.
+   Marks and bars come from css/scansion.css (.scan-marks .sy-n::before, .scan-bars .sy.b::before). */
+.scan { max-width: 60rem; }
+.scan h1 { font: 400 2.4rem/1.15 var(--greek); margin: 8px 0 10px; }
+.scan .lede { font-size: 1.08rem; color: var(--ink-2); max-width: 46rem; margin: 0 0 18px; }
+.scan-input { width: 100%; min-height: 7.5em; padding: 12px 14px; border: 1px solid var(--sea); background: #fff; color: var(--ink);
+  font: 1.25rem/1.6 var(--greek); resize: vertical; }
+.scan-input[lang="la"] { font-family: var(--text); }
+.scan-controls { display: flex; flex-wrap: wrap; gap: 10px 22px; align-items: center; margin: 12px 0 6px; font-size: .92rem; color: var(--muted); }
+.scan-controls label { display: inline-flex; align-items: center; gap: 6px; }
+.scan-controls select { padding: 4px 6px; border: 1px solid var(--line); background: #fff; color: var(--ink); max-width: 18rem; }
+.scan-controls button { min-height: 34px; padding: 4px 12px; border: 1px solid var(--line); background: transparent; color: var(--ink); font: inherit; cursor: pointer; }
+.scan-controls button[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
+.scan-legend { display: inline-flex; align-items: center; gap: 6px; }
+.scan-legend .legend-bar { display: inline-block; width: 64px; height: 7px; vertical-align: middle;
+  background: linear-gradient(90deg, rgb(var(--scan-short)), rgb(var(--scan-mid)), rgb(var(--scan-long))); }
+.scan-status { min-height: 1.4em; margin: 4px 0 14px; font-size: .92rem; color: var(--muted); }
+.scan-status.error { color: #b3261e; }
+.scan-out { border-top: 1px solid var(--line); padding-top: 10px; }
+.scan-out:empty { display: none; }
+.scan-line { padding: 4px 0 12px; }
+.scan-verse { margin: 0; padding-top: .7em; font: 1.45rem/2.2 var(--greek); white-space: pre-wrap; overflow-wrap: anywhere; }
+.scan-verse[lang="la"] { font-family: var(--text); }
+.scan-verse .sy { cursor: pointer; }
+.scan-verse .sy:hover .sy-n, .scan-verse .sy.sel .sy-n { background: var(--mark); }
+.scan-marks .sy-n.elided::before { content: "·"; }
+.scan-marks .sy-n.elided { opacity: .55; }
+.scan-marks .sy-n.tie::before { content: "‿"; }
+.scan-pattern { margin: 2px 0 0; font: .95rem/1.5 ui-monospace, "SFMono-Regular", Menlo, monospace; letter-spacing: 2px; color: var(--ink-2); }
+.scan-fit { font-size: .9rem; color: var(--muted); }
+.scan-fit.ok { color: #2e7d4f; }
+.scan-fit.bad { color: #b3261e; }
+.scan-detected { margin: 10px 0 0; font-size: .95rem; color: var(--ink-2); }
+.scan-detail { margin: 12px 0 0; padding: 8px 12px; border-left: 3px solid rgb(var(--scan-long)); background: rgb(43 90 135 / .06); font-size: .95rem; }
+.scan-detail h2 { margin: 0 0 4px; font: 400 1.2rem/1.3 var(--greek); }
+.scan-detail ul { margin: 4px 0 0; padding-left: 18px; }
+.scan-detail li { margin: 3px 0; }
+.scan-detail .cite { color: var(--muted); font-size: .86rem; }
+.scan-detail .rid { font: .8rem ui-monospace, Menlo, monospace; color: var(--muted); }
+.scan-examples { font-size: .92rem; color: var(--muted); margin: 0 0 8px; }
+.scan-examples button { border: 0; background: none; padding: 0; color: var(--sea); font: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: .2em; }
+@media (max-width: 640px) {
+  .scan-verse { font-size: 1.25rem; }
+  .scan-controls { gap: 8px 14px; }
+}

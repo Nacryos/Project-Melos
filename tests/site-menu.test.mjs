@@ -27,7 +27,7 @@ test('panel lists the sections in order and ends with Log in', () => {
   assert.deepEqual([...at].sort((a, b) => a - b), at, 'sections in the requested order');
   assert.match(menu, /item\('Design studio', '\/legacy'/);
   assert.match(menu, /item\('What Melos does', '\/about'/);
-  for (const feature of ["['Reader', '/'", "['Poets & works', '/#collection'", "['Lexicon', '/lexicon'", "['Concepts', '/concepts'", "['Search', '/#search'", "['Scansion', '/'", "['Composer', '/composer'"]) {
+  for (const feature of ["['Reader', '/'", "['Poets & works', '/#collection'", "['Lexicon', '/lexicon'", "['Concepts', '/concepts'", "['Search', '/#search'", "['Scansion', '/scan'", "['Composer', '/composer'"]) {
     assert.ok(menu.includes(feature), feature);
   }
   // Release W: the composer page is owner-only: Vercel proxies /composer to the API, which serves it to the signed-in
@@ -80,11 +80,13 @@ test('the panel is a fixed overlay (no layout jump) that fills a phone screen an
 
 test('about page ships in the reader-only build with an /about route', () => {
   const build = read('scripts/build_frontend.mjs');
-  assert.match(build, /const toolPages = \['lemma\.html', 'concept\.html', 'about\.html'\];/);
+  assert.match(build, /const toolPages = \['lemma\.html', 'concept\.html', 'about\.html', 'owner\.html', 'scan\.html'\];/);
   assert.match(build, /'site-menu\.js'/);
   assert.match(build, /'site-menu\.css'/);
   const vercel = JSON.parse(read('vercel.json'));
   assert.ok(vercel.rewrites.some(rule => rule.source === '/about' && rule.destination === '/about.html'));
+  assert.ok(vercel.rewrites.some(rule => rule.source === '/scan' && rule.destination === '/scan.html'));
+  assert.match(read('scan.html'), /js\/scan-page\.js\?v=scan-page-\d+/);
   const about = read('about.html');
   for (const heading of ['Reading', 'Dictionaries', 'Lexicon', 'Concepts through time', 'Search', 'Citations', 'Sources and licences', 'The parser and how accuracy is measured']) {
     assert.ok(about.includes(`>${heading}</h2>`), heading);

@@ -1,6 +1,7 @@
 """HTTP routes for the scanner (not mounted in backend/server.py yet; see docs/scansion.md, "Shipping").
 
 POST /api/scan                  scan text (metre-free), optionally fit a metre or an antistrophe
+GET  /api/scan/metres           the metre templates by language, with labels
 GET  /api/scan/rules            the meta-grammar as a tree, its parameters, features, calibration, examples
 POST /api/scan/rules/validate   check an edited rules file; returns errors or the parsed tree
 POST /api/scan/rules/save       write an edited rules file (only when MELOS_SCANSION_DEV=1)
@@ -35,6 +36,8 @@ class ScanRequest(BaseModel):
     params: dict[str, float] | None = None          # tune the grammar's parameters for this request
     segment: bool = False                           # divide running text into verses of `metre`
     dialect: str = "none"                           # "none" | "aeolic" | "doric" | "ionic" | "attic"
+    language: str = "grc"                           # "grc" (Greek, default) | "la" (Latin)
+    stanzas: bool = False                           # metre="auto": let the stanza templates compete too (the scansion page)
 
 
 class RulesText(BaseModel):
@@ -65,7 +68,23 @@ def grammar() -> engine.Grammar:
         return _state["grammar"]
 
 
-def _scanner(req_params: dict | None, use_lexicon: bool, dialect: str = "none") -> Scanner:
+def _latin_scanner(req_params: dict | None, use_lexicon: bool):
+    from .quantity_la import LatinScanner, default_scanner
+    base = default_scanner()
+    g = base.grammar
+    if req_params:
+        bad = [k for k, v in req_params.items() if k not in g.params or not 0 <= v <= 1]
+        if bad:
+            raise HTTPException(422, f"unknown parameter or value outside 0..1: {', '.join(bad)}")
+        g = engine.Grammar({**g.params, **req_params}, g.vowel, g.unit, g.flags, g.source, g.features, g.lists)
+    return LatinScanner(lexicon=base.lexicon if use_lexicon else None, grammar=g)
+
+
+def _scanner(req_params: dict | None, use_lexicon: bool, dialect: str = "none", language: str = "grc"):
+    if language not in ("grc", "la"):
+        raise HTTPException(422, "language must be grc or la")
+    if language == "la":
+        return _latin_scanner(req_params, use_lexicon)
     g = grammar()
     if req_params:
         bad = [k for k, v in req_params.items() if k not in g.params or not 0 <= v <= 1]
@@ -80,7 +99,7 @@ def _scanner(req_params: dict | None, use_lexicon: bool, dialect: str = "none") 
 @router.post("/api/scan")
 def scan(req: ScanRequest):
     t0 = time.perf_counter()
-    sc = _scanner(req.params, req.lexicon, req.dialect)
+    sc = _scanner(req.params, req.lexicon, req.dialect, req.language)
     units = sc.scan(req.text)
     lines: dict[int, list] = {}
     for u in units:
@@ -90,13 +109,16 @@ def scan(req: ScanRequest):
         "version": 1,
         "units": [u.as_dict() for u in units],
         "lines": [{"line": k, "units": [u.index for u in lines[k]],
-                   "pattern": "".join({"L": "–", "S": "⏑", "A": "?"}[u.label] for u in lines[k])}
+                   "pattern": "".join({"L": "–", "S": "⏑", "A": "?"}[u.label] for u in lines[k] if u.label != "E"),
+                   "elided": [u.index for u in lines[k] if u.label == "E"]}
                   for k in sorted(lines)],
-        "lexicon": bool(req.lexicon and _lexicon() is not None),
-        "rules": {"file": "backend/scansion/rules.yaml", "params": sc.grammar.params},
+        "lexicon": bool(req.lexicon and (sc.lexicon is not None)),
+        "language": req.language,
+        "rules": {"file": "backend/scansion/rules_la.yaml" if req.language == "la" else "backend/scansion/rules.yaml",
+                  "params": sc.grammar.params},
     }
     if req.metre == "auto":
-        out["auto"] = metre.auto(line_units)
+        out["auto"] = metre.auto(line_units, language=req.language, stanzas=req.stanzas, positions=metre.stanza_positions(sorted(lines)))
     elif req.metre:
         if req.metre not in metre.TEMPLATES:
             raise HTTPException(422, f"unknown metre {req.metre!r}; known: {', '.join(sorted(metre.TEMPLATES))}")
@@ -110,6 +132,16 @@ def scan(req: ScanRequest):
         out["responsion"] = {"antistrophe_units": [u.as_dict() for line in other for u in line],
                              "lines": metre.responsion(line_units, other)}
     out["ms"] = round((time.perf_counter() - t0) * 1000, 2)
+    return out
+
+
+@router.get("/api/scan/metres")
+def metres():
+    """The metre templates by language, with their labels (the scansion page's metre list)."""
+    out = {}
+    for lang, names in metre.LANGUAGE_OF.items():
+        rows = [{"name": name, **metre.info(name)} for name in sorted(names)]
+        out[lang] = {"auto": metre.AUTO_BY_LANGUAGE.get(lang, []), "metres": rows}
     return out
 
 

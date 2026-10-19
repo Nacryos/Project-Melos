@@ -43,7 +43,7 @@ def lock_line(sylls, metre_name: str) -> dict:
     label = single.replace("_", " ").capitalize() if single.startswith("sapphic") else single.replace("_", " ")
     units = {}
     for entry in best.assignment:
-        if entry.get("synizesis"):
+        if entry.get("synizesis") or entry.get("elided"):
             continue
         (idx,) = entry["syllables"]
         s = by_index[idx]

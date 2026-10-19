@@ -1,7 +1,8 @@
 # Scansion: a metre-free syllable-quantity scanner (branch `scansion`)
 
-Status (2026-10-09): built and validated in the worktree `C:\Users\alvin\melos-scansion`; **not mounted in
-`backend/server.py` and not deployed**. Everything here runs locally.
+Status (2026-10-19): live since release V (Greek) and release X.11 (Latin, the `/scan` page); the router is mounted in
+`backend/server.py`. Section 11 is the current state of the Latin side and the page; sections 1-10 are the design
+record as it was written.
 
 ```
 # local preview (worktree only)
@@ -438,3 +439,38 @@ gaps), 16 adjusted, 4 conflicts; fr. 96 (not Book 1): nothing adjusted.
 `backend/scansion/api.py` and `js/composer.js` never import or call the lock (`tests/test_scansion_lock.py`
 asserts both the unchanged probabilities and the absence of any call). The composer's scans exist to catch the
 writer's errors.
+
+## 11. Release X.11: Latin, and the scansion page (2026-10-19)
+
+**The page.** `/scan` (`scan.html`, `js/scan-page.js`, `css/scan-page.css`; listed in the site menu as Scansion)
+takes pasted verse, one verse to a line. The language is told from the script (Greek letters: Greek; Latin letters:
+Latin; whichever has more letters wins, and a select overrides it) and the text goes to `POST /api/scan` with that
+`language`. Every syllable is printed with its mark above the vowel or diphthong (the reader's marks, `css/scansion.css`),
+coloured by the scanner's probability, with `|` between syllables at the server's display spans (`units[].syllable`,
+new: a single consonant opens the next syllable, of a cluster the first closes the one before; in Latin only real
+consonants count, so a-qua, Ze-phy-rus, lin-gua, Bac-chus, and h never splits). The metre list comes from
+`GET /api/scan/metres` (new: `{grc|la: {auto, metres: [{name, label, languages, lines, caesura}]}}`). "Detect" sends
+`metre: "auto", stanzas: true`: the stanza templates compete with the stichic ones, each line fitted to its place in
+the stanza (`metre.auto(stanzas=True, positions=...)`; the composer's own auto-detect is unchanged, `stanzas` defaults
+to false), and the page then fits the best one with a second request. "Settle by metre" shows the fit's posterior marks:
+an elided Latin syllable gets a dot and is faded, a synizesis a tie. Clicking a syllable lists the rules with their
+citations. Nothing pasted is stored (the page keeps its own text in the browser only).
+
+**Latin.** The Latin scanner from the `latin-composer` branch (built 2026-10-10/11, `docs/latin/` on that branch:
+survey, lexicon report, Hypotactic gold, eval log) is now on the live branch: `backend/scansion/latin.py`,
+`syllabify_la.py`, `quantity_la.py`, `lexicon_la.py`, `rules_la.yaml` (the Latin meta-grammar, same engine: `lists:`
+blocks for word lists, a grammar's own feature set), `metres_la.yaml` (Phalaecian, Horace's Sapphic and Alcaic, the
+Asclepiad systems, choliambic, pure trimeter, plus the shared Greek templates), `gold_la.py`; elision and
+prodelision are parse branches in `metre.py` (weight `E`, `posterior_elided`, hiatus violations). `POST /api/scan`
+takes `language: "grc" | "la"` (default Greek: every existing caller is unchanged) and returns `language`,
+`lines[].elided`, `units[].elision`, `units[].prodelision`. Held-out Catullan hendecasyllables (eval log on the
+branch): 88.9 % of syllables decided at 99.96 %, 284 of 285 genuine lines accepted, best pattern equal to
+Chamberlain's on 96.5 %; Horace Odes 1: 868 of 870 aligned lines fit their metre. Tests: `tests/test_scansion_la.py`
+(13, no data files needed). Not ported: the Latin corpus, lemma index, composer language switch and research routes
+(`backend/latin_*.py`), which stay on the branch.
+
+**Lexicons.** The container mounts `/app/data/scansion` (`deploy/release_x.sh`): `quantities.sqlite` (Greek, release
+V's; it had been dropped from the live mounts since release W, so the reader's marks ran without it from 2026-10-10 to
+2026-10-19) and `quantities_la.sqlite` (182 MB: Winge, Wiktionary, Lewis & Short; 1.07 M forms; manifest beside it).
+`sh deploy/scan_checks_x11.sh <origin>` checks both lexicons, the Latin detection and fit, the stanza detection, the
+metre list and the reader's Sappho 16 lock.

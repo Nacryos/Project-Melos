@@ -8,6 +8,7 @@
     { "source": "/lexicon", "destination": "/lemma.html" },
     { "source": "/concepts", "destination": "/concept.html" },
     { "source": "/about", "destination": "/about.html" },
+    { "source": "/scan", "destination": "/scan.html" },
     { "source": "/composer", "destination": "https://basecamp.taila44c41.ts.net:8443/composer" },
     { "source": "/composer.html", "destination": "https://basecamp.taila44c41.ts.net:8443/composer" },
     { "source": "/authors", "destination": "/authors.html" },

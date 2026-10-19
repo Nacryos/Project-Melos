@@ -13,7 +13,7 @@
     ['Lexicon', '/lexicon', 'One headword: dictionaries, counts, every use'],
     ['Concepts', '/concepts', 'Follow a meaning through time'],
     ['Search', '/#search', 'Greek, English, or a passage reference'],
-    ['Scansion', '/', 'Turn on Scansion above any poem in the Reader'],
+    ['Scansion', '/scan', 'Paste Greek or Latin verse and see it scanned'],
     ['Composer', '/composer', 'Write Greek verse with live scansion'],
   ];
   // The composer is owner-only (the API answers 404 to anyone else): list it only while the owner's sign-in marker

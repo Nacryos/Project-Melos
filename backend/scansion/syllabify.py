@@ -204,7 +204,12 @@ def syllabify_line(words: list[Word], line: int, first_index: int = 0) -> list[S
     return sylls
 
 
-def _assign_spans(sylls: list[Syllable], words: list[Word], nuclei_by_word) -> None:
+def _cut(letters: list[Letter], end_a: int, start_b: int) -> int:
+    """Where the syllable ends, between nucleus letters end_a and start_b: after the first consonant of a cluster."""
+    return end_a + 1 + (1 if start_b - end_a - 1 >= 2 else 0)
+
+
+def _assign_spans(sylls: list[Syllable], words: list[Word], nuclei_by_word, cut=_cut) -> None:
     """Display spans inside words: VC.CV splits a cluster after its first consonant; a single consonant
     goes with the following vowel; an elided word without a vowel (δ’) joins the next syllable."""
     by_word: dict[int, list[Syllable]] = {}
@@ -217,11 +222,7 @@ def _assign_spans(sylls: list[Syllable], words: list[Word], nuclei_by_word) -> N
         L = w.letters
         bounds = []
         for a, b in zip(ss, ss[1:]):
-            end_a = a.nucleus.letters[-1]
-            start_b = b.nucleus.letters[0]
-            n_cons = start_b - end_a - 1
-            split = end_a + 1 + (1 if n_cons >= 2 else 0)
-            bounds.append(split)
+            bounds.append(cut(L, a.nucleus.letters[-1], b.nucleus.letters[0]))
         cuts = [0] + bounds + [len(L)]
         for s, lo, hi in zip(ss, cuts, cuts[1:]):
             s.start = L[lo].start
