@@ -469,7 +469,7 @@ Chamberlain's on 96.5 %; Horace Odes 1: 868 of 870 aligned lines fit their metre
 (13, no data files needed). Not ported: the Latin corpus, lemma index, composer language switch and research routes
 (`backend/latin_*.py`), which stay on the branch.
 
-**Lexicons.** The container mounts `/app/data/scansion` (`deploy/release_x.sh`): `quantities.sqlite` (Greek, release
+**Lexicons.** The container mounts the lexicon directory at `/scansion` and names the files with `MELOS_SCANSION_LEXICON` and `MELOS_SCANSION_LEXICON_LA` (`deploy/release_x.sh`; `/app/data` is itself a read-only mount): `quantities.sqlite` (Greek, release
 V's; it had been dropped from the live mounts since release W, so the reader's marks ran without it from 2026-10-10 to
 2026-10-19) and `quantities_la.sqlite` (182 MB: Winge, Wiktionary, Lewis & Short; 1.07 M forms; manifest beside it).
 `sh deploy/scan_checks_x11.sh <origin>` checks both lexicons, the Latin detection and fit, the stanza detection, the

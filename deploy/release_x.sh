@@ -31,12 +31,16 @@ x_mounts() {
            "$X/data/scansion/quantities.sqlite" "$X/data/scansion/quantities_la.sqlite"; do
     test -s "$f" || { echo "missing $f" >&2; exit 1; }
   done
-  # X.11: the vowel-length lexicons (Greek, release V's; Latin, built on the latin-composer branch) at the scanners'
-  # default path /app/data/scansion (backend/scansion/lexicon.py, lexicon_la.py). The Greek one had been lost since W.
+  # X.11: the vowel-length lexicons (Greek, release V's; Latin, built on the latin-composer branch), mounted at
+  # /scansion and named by MELOS_SCANSION_LEXICON / MELOS_SCANSION_LEXICON_LA (backend/scansion/lexicon.py,
+  # lexicon_la.py); /app/data is itself a read-only mount, so nothing can be mounted inside it. The Greek lexicon
+  # had been missing from the live container since release W.
   echo --mount "$X/data/corpus.sqlite:/app/data/corpus.sqlite:ro" \
        --mount "$X/data/embeddings:/app/data/embeddings:ro" \
        --mount "$X/data/embeddings-s:/s-embeddings:ro" \
-       --mount "$X/data/scansion:/app/data/scansion:ro"
+       --mount "$X/data/scansion:/scansion:ro" \
+       --env MELOS_SCANSION_LEXICON=/scansion/quantities.sqlite \
+       --env MELOS_SCANSION_LEXICON_LA=/scansion/quantities_la.sqlite
 }
 
 join_network() {
