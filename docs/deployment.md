@@ -1,6 +1,36 @@
 # Deployment handoff
 
-## Current: release X.10 — reader scansion reads through brackets; syllable breaks at onsets (2026-10-14, ~2:45 PM PDT)
+## Current: release X.11 — scansion page `/scan` for pasted Greek or Latin; Latin scanner live; vowel-length lexicons restored (2026-10-19, ~2:35 AM PDT)
+
+Tree = `fallback-translations` b68b866. Backend image `melos-api:20261019x11` atop `20261014x10`, built from the tarball
+`/home/alvin/melos-x/x11.tgz` (`git archive HEAD`) extracted into `/home/alvin/melos-x/src` with
+`MELOS_X_IMAGE=melos-api:20261019x11 MELOS_X_KEPT=melos-api-before-x11 MELOS_X_CANARY=melos-api-canary-x11
+MELOS_X_CANARY_PORT=8798 MELOS_X_CANARY_RUNTIME=/home/alvin/melos-x/canary-runtime sh src/deploy/release_x.sh build|canary|promote`.
+Checks: `canary_checks_x.sh` 0 failures on the canary and on production before and after the promote; the new
+`deploy/scan_checks_x11.sh` (metre list, Latin lexicon and detection, Catullus 5.1 Phalaecian fit, elision, display
+spans, Greek lexicon, Sappho 1 stanza detection, Sappho 16 reader lock) 0 failures on the canary and on production.
+Canary stopped and kept. Frontend `project-melos-mukdq2vtv` from `~/Projects/melos-t` (first `vercel deploy` said
+"Not authorized", the retry went through, as before); cache tags `scan-page-20261019`.
+What changed: the page `scan.html` (`/scan`; `js/scan-page.js`, `css/scan-page.css`; the site menu's Scansion entry
+now points there) tells Greek from Latin by script, posts to `/api/scan` with `language`, prints marks above every
+syllable with bars at the server's new display spans (`units[].syllable`), detects the metre with the stanza templates
+competing (`stanzas: true`, `metre.auto(stanzas=True, positions=...)`), settles the marks by the fit, dots elided
+Latin syllables, lists rules on click. `GET /api/scan/metres` (new) gives the templates by language with labels. The
+Latin scanner (`backend/scansion/latin.py`, `syllabify_la.py`, `quantity_la.py`, `lexicon_la.py`, `rules_la.yaml`,
+`metres_la.yaml`, `gold_la.py`; elision/prodelision branches in `metre.py`; `engine.py` lists and per-grammar
+features) was ported from the `latin-composer` branch, keeping release X.3's stanza positions, which that branch
+predates. `release_x.sh` now also mounts `/home/alvin/melos-x/data/scansion` at `/scansion` with
+`MELOS_SCANSION_LEXICON=/scansion/quantities.sqlite` and `MELOS_SCANSION_LEXICON_LA=/scansion/quantities_la.sqlite`:
+the Greek lexicon (release V's) had been missing from the live container since release W, so the reader's marks ran
+on the core grammar alone from 2026-10-10 to this release; `/api/scan` now reports `lexicon: true` for both languages.
+Tests: scansion suites 49 passed (`test_scansion_la.py` 13 new), composer suites 37 passed + the pre-existing
+route-enumeration failure; frontend 548 of 551 (the 3 failures pre-exist: timeline preview, release-p cache tag,
+theme local-preview). Verified live: Catullus 5 (Phalaecian 3 of 3), Horace Odes 1.2 (Sapphic stanza (Horace) 4 of
+4), Sappho 1 (Sapphic stanza 4 of 4), phone width 390 without horizontal scroll.
+Rollback: `MELOS_X_KEPT=melos-api-before-x11 sh /home/alvin/melos-x/src/deploy/release_x.sh rollback` (X.10) and
+`vercel promote https://project-melos-iinn8qfax-nacryos-projects.vercel.app --yes`.
+
+## Previous: release X.10 — reader scansion reads through brackets; syllable breaks at onsets (2026-10-14, ~2:45 PM PDT)
 
 Tree = `fallback-translations` e929b60. Backend image `melos-api:20261014x10` atop `20261011x8`, built from the tarball
 `/home/alvin/melos-x/x10.tgz` (`git archive HEAD`) extracted into `/home/alvin/melos-x/src` with
