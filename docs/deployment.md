@@ -165,3 +165,28 @@ single-quotation boundary tradeoff.
 - Rebuild: package a frozen local runtime with `scripts/package_runtime.py`, transfer it privately, verify with `deploy/verify_runtime.py`, build `deploy/Dockerfile`, and cache the pinned model with `deploy/cache_model.py` before starting offline. Do not package databases while a collector/indexer is writing them.
 - `deploy/start_backend.sh` deliberately refuses to replace an existing container. Review the old image and mounts and arrange rollback before explicitly replacing it. Retain the previous verified runtime snapshot for data rollback; no automatic backup job has been configured.
 - To restore conservative publication filtering, recreate only the Melos container without `MELOS_PUBLICATION_POLICY=source-labels`. Do not weaken source validation or the separate paid-classifier guard.
+
+## Standing chore: monthly image rebuild (owner decision 2026-10-23)
+
+Container images only receive operating-system and Python library security
+patches when they are rebuilt; the host's unattended upgrades do not reach
+inside them. The owner therefore approved a standing monthly chore for every
+Melos image (`melos-api`, the composer agent, and any other long-running
+Melos container):
+
+1. Rebuild from a fresh base pull: `docker build --pull -f deploy/Dockerfile -t melos-api:<tag> .`
+   (and the composer agent's Dockerfile likewise), so the pinned base image's
+   latest patch layer and current wheels are used.
+2. Run the usual smoke and canary checks (`deploy/smoke_backend.py`,
+   `deploy/qa_regressions.py`, a canary container on 8792) before promoting
+   through the normal release path. No rebuild bypasses the release path.
+3. Record the rebuild date and image tag in the release notes.
+
+Cadence: at least monthly, folded into the next natural release when one is
+due. First rebuild: by the next release or 2026-11-19, whichever comes first.
+Rebuild sooner when `apt list --upgradable` in a throw-away container from the
+live image shows a security fix in a network-facing library (openssl, zlib,
+glibc, libssl, ca-certificates). Background: Hetzner's PHP advisory of
+2026-10-21 prompted a sweep; no Melos container contains PHP, so nothing was
+patched for it, but the live image at the time (`melos-api:20261019x11`) had
+been built four days earlier and would only age.
