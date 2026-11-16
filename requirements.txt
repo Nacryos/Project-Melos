@@ -9,3 +9,4 @@ sentence-transformers>=3,<6
 betacode==1.1
 argon2-cffi>=23.1,<26
 httpx>=0.27,<1
+pycollatinus==0.1.6

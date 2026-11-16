@@ -141,14 +141,14 @@ How to compose with it: `docs/latin/composing-hendecasyllables.md`; the critic's
 - **Acceptance** (`docs/latin/acceptance/`): Catullus 1.1-2 passes every check and is flagged verbatim; a fresh
   five-line poem passes every blocking check; the critic's verdict and its list of ten tool shortcomings are kept.
 
-**Open, for the owner.**
-1. `pycollatinus` (GPL) lifts paradigm coverage from 52 % to 93.9 %; it is installed locally but not added to
-   `requirements.txt`.
-2. Merrill's commentary and Allen & Greenough are public-domain books, but the digitisations carry share-alike
-   (Merrill: Perseus page CC BY-SA 3.0 US, TEI header non-commercial) and non-commercial (A&G: CC BY-NC-SA 3.0 US)
-   terms. Their text files are **not committed**; only the manifests and the ingest scripts are, which rebuild them.
-3. Which larger lexicon next: survey of the Thesaurus, the Oxford Latin Dictionary, Georges, Forcellini, Gaffiot in
-   `docs/latin/dictionary.md`.
+**Ruled by the owner, 2026-11-15 23:55 PST** (`docs/decisions.md`): private use, so
+1. `pycollatinus` (GPL; paradigm coverage 52 % to 93.9 %) is in `requirements.txt`.
+2. The Merrill and Allen & Greenough text files are committed under `data/open/latin/` with their manifests
+   (Merrill: Perseus page CC BY-SA 3.0 US, TEI header non-commercial; A&G: CC BY-NC-SA 3.0 US).
+3. Every further dictionary that is openly reachable is being ingested (Georges, Gaffiot, Smith & Hall, Döderlein,
+   Forcellini, the open-access Thesaurus): databases local under `data/lexica/lex_*.sqlite`, manifests under
+   `data/open/latin/lexica/`. The Oxford Latin Dictionary is in copyright and is not fetched; it waits for the
+   owner's PDF (`scripts/ingest_tll_la.py --pdf`).
 
 **Known weak points** (from the critic): L5 is noisy on a short poem and pairs words across sentences; nothing
 checks particle order or the force of a question; the corpus store holds Catullus and Horace only, so Virgil stands

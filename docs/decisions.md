@@ -159,3 +159,20 @@ with permission; no pirate or shadow-library sources. The Mac coordinator applie
 
 The register of licensed items is `docs/latin/licensed-data.md`. This does not change the rule for texts: poems and
 translations shown on the site come from open sources only (`docs/prd/latin-composer.md` §5).
+
+
+## 2026-11-15: Catullan composer, dependencies and reference texts (owner ruling)
+
+Asked three questions at the end of the Catullan hendecasyllable pass (`docs/latin/STATUS.md`), the owner answered
+(23:55 PST): "yes add all those, scrape what you can, this is private use anyways so dont worry about copyright".
+Applied as:
+
+1. **`pycollatinus`** (GPL) added to `requirements.txt`.
+2. **Merrill's commentary and Allen & Greenough** (public-domain books; Perseus and Alpheios digitisations under
+   share-alike and non-commercial terms): text files committed under `data/open/latin/` with their manifests and
+   the licence statements verbatim.
+3. **Further dictionaries**: every one that is openly reachable is ingested (Georges, Gaffiot, Smith & Hall,
+   Döderlein, Forcellini, the open-access Thesaurus Linguae Latinae). The built databases stay local
+   (`data/lexica/`, gitignored); a manifest per dictionary records source and licence. Unchanged from the policy
+   above: no pirate or shadow-library sources, so the Oxford Latin Dictionary (in copyright) is not fetched and waits
+   for a PDF from the owner.
