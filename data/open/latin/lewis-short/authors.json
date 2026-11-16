@@ -1,0 +1,2844 @@
+{
+ "source": "Lewis & Short, A Latin Dictionary (Oxford 1879), 'Abbreviations used in referring to ancient authors and their works' (dates 'on the authority of Teuffel'), as transcribed at https://en.wikisource.org/wiki/A_Latin_Dictionary#ABBREVIATIONS (Wikisource text, CC BY-SA 4.0; the dictionary itself is in the public domain); fetched 2026-11-15.",
+ "rule": "before_ad14: floruit by A.D. 14, or death by A.D. 34; undated sources (Inscr., Gloss., collections) are null and count for neither side. Years B.C. are negative.",
+ "editor_rows": "rows whose source begins 'editor:' are not in L&S's list as dated; the reason follows the colon.",
+ "citations": {
+  "Acc.": 0,
+  "Aem. Mac.": 7,
+  "Afran.": 26,
+  "Aggen.": 10,
+  "Agrim.": 10,
+  "Agrimens.": 0,
+  "Albin.": 35,
+  "Alcim.": 66,
+  "Aldh.": 10,
+  "Alfen.": 0,
+  "Ambros.": 475,
+  "Amm.": 2019,
+  "Ampel.": 7,
+  "Antho. Lat.": 65,
+  "Apic.": 234,
+  "App.": 3835,
+  "Arn.": 1020,
+  "Ascon.": 14,
+  "Asin.": 1,
+  "At. Cap.": 0,
+  "Att.": 110,
+  "Atta": 0,
+  "Auct. Aetn.": 26,
+  "Auct. B. Afr.": 0,
+  "Auct. B. Alex.": 0,
+  "Auct. B. G. 8.": 0,
+  "Auct. B. Hisp.": 0,
+  "Auct. Her.": 993,
+  "Auct. Pervig. Ven.": 0,
+  "Auct. Priap.": 0,
+  "Auct. ad Her.": 0,
+  "Aug.": 1420,
+  "August.": 0,
+  "Aur. Vict.": 322,
+  "Aus.": 875,
+  "Avien.": 163,
+  "Boëth.": 8,
+  "Brut.": 19,
+  "C.": 1,
+  "Caecil.": 20,
+  "Cael. Aur.": 1170,
+  "Caes.": 10142,
+  "Callistr.": 1,
+  "Calp.": 127,
+  "Capitol.": 251,
+  "Cass. Hem.": 0,
+  "Cassiod.": 584,
+  "Cat.": 1701,
+  "Cato": 1715,
+  "Catull.": 0,
+  "Cels.": 2090,
+  "Censor.": 79,
+  "Charis.": 628,
+  "Cic.": 74470,
+  "Cinc.": 0,
+  "Cinn.": 0,
+  "Claud.": 1142,
+  "Claud. Mam.": 106,
+  "Cloat.": 0,
+  "Cod.": 0,
+  "Cod. Just.": 657,
+  "Cod. Theod.": 46,
+  "Col.": 5599,
+  "Commod.": 30,
+  "Consent.": 6,
+  "Coripp.": 5,
+  "Corn. Gall.": 2,
+  "Corn. Sev.": 0,
+  "Cornif.": 0,
+  "Curt.": 2681,
+  "Cypr.": 59,
+  "Dict. Cret.": 34,
+  "Dig.": 0,
+  "Diom.": 397,
+  "Dion. Cato": 0,
+  "Don.": 0,
+  "Donat.": 19,
+  "Dracont.": 19,
+  "Eccl.": 6,
+  "Enn.": 150,
+  "Ennod.": 27,
+  "Eum.": 42,
+  "Eutr.": 221,
+  "Fab. Pict.": 0,
+  "Falisc.": 0,
+  "Favorin.": 0,
+  "Fenest.": 1,
+  "Fest.": 2728,
+  "Firm.": 0,
+  "Firm. Mat.": 2,
+  "Flor.": 1078,
+  "Fortun.": 15,
+  "Front.": 704,
+  "Frontin.": 13,
+  "Fronto": 93,
+  "Fulg.": 207,
+  "Gai.": 591,
+  "Gell.": 4559,
+  "German.": 27,
+  "Gloss.": 7,
+  "Grat.": 114,
+  "Hier.": 896,
+  "Hirt.": 402,
+  "Hor.": 13286,
+  "Hyg.": 806,
+  "Hyg. (Gromat.)": 0,
+  "Inscr.": 2639,
+  "Inst.": 239,
+  "Isid.": 895,
+  "Javol.": 0,
+  "Jornand.": 16,
+  "Jul. Val.": 120,
+  "Julian.": 7,
+  "Just.": 2220,
+  "Juv.": 3944,
+  "Juvenc.": 92,
+  "Laber.": 2,
+  "Lact.": 1129,
+  "Laev.": 0,
+  "Lampr.": 374,
+  "Leg. XII. Tab.": 0,
+  "Liv.": 23451,
+  "Liv. Andron.": 4,
+  "Luc.": 2003,
+  "Lucil.": 57,
+  "Lucr.": 6852,
+  "Macr.": 1364,
+  "Mamert.": 40,
+  "Manil.": 294,
+  "Marc. Emp.": 178,
+  "Mart.": 3649,
+  "Mart. Cap.": 936,
+  "Maxim.": 8,
+  "Mel.": 1168,
+  "Mela": 0,
+  "Min. Fel.": 59,
+  "Modest.": 0,
+  "Monum. Ancyr.": 3,
+  "Naev.": 51,
+  "Nazar.": 30,
+  "Nemes.": 81,
+  "Nep.": 2694,
+  "Nigid.": 1,
+  "Non.": 3921,
+  "Not. Tir.": 152,
+  "Nov.": 25,
+  "Novat.": 2,
+  "Obseq.": 10,
+  "Optat.": 0,
+  "Orell.": 0,
+  "Oros.": 42,
+  "Ov.": 20662,
+  "Pac.": 34,
+  "Pacat.": 25,
+  "Pacuv.": 0,
+  "Pall.": 1025,
+  "Papin.": 1,
+  "Paul.": 316,
+  "Paul. Nol.": 261,
+  "Paul. Petr.": 6,
+  "Pers.": 708,
+  "Petr.": 1568,
+  "Phaedr.": 697,
+  "Pict.": 0,
+  "Placid.": 17,
+  "Plaut.": 22399,
+  "Plin.": 26844,
+  "Plin. Val.": 89,
+  "Pomp.": 0,
+  "Pompon.": 32,
+  "Porc. Latro": 3,
+  "Priap.": 110,
+  "Prisc.": 1156,
+  "Prop.": 2407,
+  "Prud.": 635,
+  "Pub. Syr.": 24,
+  "Q. Cic.": 93,
+  "Quint.": 12476,
+  "Rhem. Fan.": 10,
+  "Ruf.": 42,
+  "Rufin.": 49,
+  "Rutil.": 29,
+  "Rutil. Lup.": 18,
+  "Rutil. Nam.": 0,
+  "Sall.": 4382,
+  "Salv.": 89,
+  "Scaev.": 2,
+  "Scrib.": 433,
+  "Sedul.": 87,
+  "Sen.": 6233,
+  "Ser. Samm.": 109,
+  "Serv.": 57,
+  "Sev.": 0,
+  "Sid.": 1033,
+  "Sil.": 2759,
+  "Sisenn.": 4,
+  "Sol.": 503,
+  "Solin.": 0,
+  "Spart.": 230,
+  "Stat.": 3189,
+  "Suet.": 9246,
+  "Sulp.": 120,
+  "Symm.": 263,
+  "T.": 0,
+  "Tac.": 11448,
+  "Ter.": 7781,
+  "Ter. Maur.": 42,
+  "Tert.": 2788,
+  "Theod. Prisc.": 137,
+  "Tib.": 1368,
+  "Tiro": 3,
+  "Titin.": 16,
+  "Titinn.": 0,
+  "Treb. Pol.": 23,
+  "Turp.": 11,
+  "Ulp.": 83,
+  "Val. Cato.": 3,
+  "Val. Fl.": 1498,
+  "Val. Max.": 1359,
+  "Val. Prob.": 16,
+  "Varr.": 4461,
+  "Veg.": 855,
+  "Vell.": 1444,
+  "Ven. Fort.": 0,
+  "Ver. Flac.": 0,
+  "Verg.": 16783,
+  "Vib. Seq.": 0,
+  "Vitr.": 2037,
+  "Vop.": 252,
+  "Vulc. Gall.": 4,
+  "Vulg.": 6393
+ },
+ "authors": {
+  "Acc.": [
+   {
+    "name": "L. Attius or Accius",
+    "description": "writer of tragedy",
+    "kind": "fl",
+    "year": -135,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Aem. Mac.": [
+   {
+    "name": "Aemilius Macer",
+    "description": "poet",
+    "kind": "ob",
+    "year": -14,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Afran.": [
+   {
+    "name": "Lucius Afranius",
+    "description": "writer of comedy",
+    "kind": "fl",
+    "year": -110,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Aggen.": [
+   {
+    "name": "Aggenus Urbicus",
+    "description": "writer on husbandry",
+    "kind": "fl",
+    "year": 400,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Agrim.": [
+   {
+    "name": "The ancient writers on surveying; especially Frontinus, Balbus, Hyginus, Siculus Flaccus, and Aggenus Urbicus",
+    "description": "",
+    "kind": "",
+    "year": null,
+    "doubtful": false,
+    "before_ad14": null,
+    "source": "L&S list (undated)"
+   }
+  ],
+  "Agrimens.": [
+   {
+    "name": "The ancient writers on surveying; especially Frontinus, Balbus, Hyginus, Siculus Flaccus, and Aggenus Urbicus",
+    "description": "",
+    "kind": "",
+    "year": null,
+    "doubtful": false,
+    "before_ad14": null,
+    "source": "L&S list (undated)"
+   }
+  ],
+  "Albin.": [
+   {
+    "name": "C. Pedo Albinovanus",
+    "description": "poet",
+    "kind": "fl",
+    "year": 28,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Alcim.": [
+   {
+    "name": "Alcimus Avitus",
+    "description": "Christian writer",
+    "kind": "ob",
+    "year": 523,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Aldh.": [
+   {
+    "name": "Aldhelmus",
+    "description": "Bishop of Salisbury, England",
+    "kind": "ob",
+    "year": 709,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Alfen.": [
+   {
+    "name": "P. Alfenus Varus",
+    "description": "JCtus",
+    "kind": "fl",
+    "year": -38,
+    "doubtful": true,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Ambros.": [
+   {
+    "name": "Ambrosius",
+    "description": "Christian writer",
+    "kind": "ob",
+    "year": 397,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Amm.": [
+   {
+    "name": "Ammianus Marcellinus",
+    "description": "hist",
+    "kind": "ob",
+    "year": 400,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Ampel.": [
+   {
+    "name": "L. Ampelius",
+    "description": "",
+    "kind": "fl",
+    "year": 200,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "editor: list prints 'fl. (?) 200' without era"
+   }
+  ],
+  "Antho. Lat.": [
+   {
+    "name": "Anthologia Latina, a collection of Epigrams, Inscriptions, and Fragments in verse by P. Burmann; edited also by Meyer an",
+    "description": "",
+    "kind": "",
+    "year": null,
+    "doubtful": false,
+    "before_ad14": null,
+    "source": "L&S list (undated)"
+   }
+  ],
+  "Apic.": [
+   {
+    "name": "Apicius Caelius",
+    "description": "writer on cookery",
+    "kind": "fl",
+    "year": 25,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "App.": [
+   {
+    "name": "Lucius Appuleius (Apu.)",
+    "description": "philos",
+    "kind": "fl",
+    "year": 160,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Arn.": [
+   {
+    "name": "Arnobius Afer",
+    "description": "Christian writer",
+    "kind": "fl",
+    "year": 295,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Ascon.": [
+   {
+    "name": "Q. Asconius Pedianus",
+    "description": "gramm",
+    "kind": "ob",
+    "year": 88,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Asin.": [
+   {
+    "name": "C. Asinius Pollio",
+    "description": "orator and hist",
+    "kind": "ob",
+    "year": 5,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "At. Cap.": [
+   {
+    "name": "Ateius Capito",
+    "description": "grammarian",
+    "kind": "fl",
+    "year": 14,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Att.": [
+   {
+    "name": "L. Attius or Accius",
+    "description": "writer of tragedy",
+    "kind": "fl",
+    "year": -135,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Atta": [
+   {
+    "name": "T. Quinctius Atta",
+    "description": "writer of comedy",
+    "kind": "fl",
+    "year": -80,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Auct. Aetn.": [
+   {
+    "name": "Auctor Aetnae (perhaps Lucilius Junior)",
+    "description": "",
+    "kind": "fl",
+    "year": 60,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Auct. B. Afr.": [
+   {
+    "name": "Auctor Belli Africani",
+    "description": "",
+    "kind": "fl",
+    "year": -50,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Auct. B. Alex.": [
+   {
+    "name": "Auctor Belli Alexandrini (probably Aulus Hirtius)",
+    "description": "",
+    "kind": "fl",
+    "year": -50,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Auct. B. G. 8.": [
+   {
+    "name": "Auctor de Bello Gallico libri viii, in continuation of Cæsar's commentarii (probably Aulus Hirtius)",
+    "description": "",
+    "kind": "fl",
+    "year": -50,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Auct. B. Hisp.": [
+   {
+    "name": "Auctor Belli Hispaniensis",
+    "description": "",
+    "kind": "fl",
+    "year": -50,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Auct. Her.": [
+   {
+    "name": "Cornificus",
+    "description": "rhetorician",
+    "kind": "fl",
+    "year": -80,
+    "doubtful": true,
+    "before_ad14": true,
+    "source": "L&S list (see Cornif.)"
+   }
+  ],
+  "Auct. Pervig. Ven.": [
+   {
+    "name": "Auctor Pervigilii Veneris, for. (?) A.D. 150",
+    "description": "",
+    "kind": "fl",
+    "year": 150,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Auct. Priap.": [
+   {
+    "name": "Priapea, a collection of satiric and erotic poems and fragments appended to L. Müller's Catullus",
+    "description": "",
+    "kind": "",
+    "year": null,
+    "doubtful": false,
+    "before_ad14": null,
+    "source": "L&S list (undated) (see Priap.)"
+   }
+  ],
+  "Auct. ad Her.": [
+   {
+    "name": "Cornificus",
+    "description": "rhetorician",
+    "kind": "fl",
+    "year": -80,
+    "doubtful": true,
+    "before_ad14": true,
+    "source": "L&S list (see Cornif.)"
+   }
+  ],
+  "Aug.": [
+   {
+    "name": "Aurelius Augustinus",
+    "description": "Christian writer",
+    "kind": "ob",
+    "year": 430,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "August.": [
+   {
+    "name": "Caesar Octavianus Augustus",
+    "description": "",
+    "kind": "ob",
+    "year": 13,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Aur. Vict.": [
+   {
+    "name": "Sextus Aurelius Victor",
+    "description": "hist",
+    "kind": "fl",
+    "year": 360,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Aus.": [
+   {
+    "name": "D. Magnus Ausonius",
+    "description": "poet",
+    "kind": "ob",
+    "year": 390,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Avien.": [
+   {
+    "name": "R. Festus Avienus",
+    "description": "poet",
+    "kind": "ob",
+    "year": 370,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Boëth.": [
+   {
+    "name": "Anicius Manl. Torq. Severinus Boëtius or Boëthius",
+    "description": "philos",
+    "kind": "fl",
+    "year": 525,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Brut.": [
+   {
+    "name": "M. Junius Brutus",
+    "description": "correspondent of Cicero",
+    "kind": "fl",
+    "year": -42,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "C.": [
+   {
+    "name": "M. Tullius Cicero",
+    "description": "orator and philosopher",
+    "kind": "ob",
+    "year": -43,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Caecil.": [
+   {
+    "name": "Statius Caecilius",
+    "description": "writer of comedy",
+    "kind": "fl",
+    "year": -180,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Cael. Aur.": [
+   {
+    "name": "Caelius Aurelianus",
+    "description": "physician",
+    "kind": "fl",
+    "year": 420,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Caes.": [
+   {
+    "name": "Caius Julius Caesar",
+    "description": "historian",
+    "kind": "ob",
+    "year": -44,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Callistr.": [
+   {
+    "name": "Callistratus",
+    "description": "JClus",
+    "kind": "fl",
+    "year": 200,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Calp.": [
+   {
+    "name": "Calpurnius Siculus",
+    "description": "poet",
+    "kind": "fl",
+    "year": 55,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Capitol.": [
+   {
+    "name": "Julius Capitolinus",
+    "description": "biographer",
+    "kind": "fl",
+    "year": 320,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Cass. Hem.": [
+   {
+    "name": "L. Cassius Hemina",
+    "description": "historian",
+    "kind": "fl",
+    "year": -140,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Cassiod.": [
+   {
+    "name": "Magnus Aurelius Cassiodorus",
+    "description": "historian",
+    "kind": "ob",
+    "year": 575,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Cat.": [
+   {
+    "name": "C. Valerius Catullus",
+    "description": "poet",
+    "kind": "ob",
+    "year": -54,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Cato": [
+   {
+    "name": "M. Porcius Cato",
+    "description": "orator and hist",
+    "kind": "ob",
+    "year": -149,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Catull.": [
+   {
+    "name": "C. Valerius Catullus",
+    "description": "poet",
+    "kind": "ob",
+    "year": -54,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Cels.": [
+   {
+    "name": "Aurel. Cornelius Celsus",
+    "description": "physic",
+    "kind": "fl",
+    "year": 50,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Censor.": [
+   {
+    "name": "Censorinus",
+    "description": "grammarian",
+    "kind": "fl",
+    "year": 238,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Charis.": [
+   {
+    "name": "Flav. Sosipater Charisius",
+    "description": "grammarian",
+    "kind": "fl",
+    "year": 375,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Cic.": [
+   {
+    "name": "M. Tullius Cicero",
+    "description": "orator and philosopher",
+    "kind": "ob",
+    "year": -43,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Cinc.": [
+   {
+    "name": "L. Cincius Alimentus",
+    "description": "annalist",
+    "kind": "fl",
+    "year": -210,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Cinn.": [
+   {
+    "name": "C. Helvius Cinna",
+    "description": "Epic. poet",
+    "kind": "fl",
+    "year": -40,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Claud.": [
+   {
+    "name": "Claudius Claudianus",
+    "description": "poet",
+    "kind": "fl",
+    "year": 400,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Claud. Mam.": [
+   {
+    "name": "Claudianus Ecdicius Mamertus",
+    "description": "Chr. writer",
+    "kind": "fl",
+    "year": 476,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Cloat.": [
+   {
+    "name": "Cloatius Verus",
+    "description": "grammarian",
+    "kind": "fl",
+    "year": 100,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Cod.": [
+   {
+    "name": "Codex",
+    "description": "",
+    "kind": "",
+    "year": null,
+    "doubtful": false,
+    "before_ad14": null,
+    "source": "L&S list (undated)"
+   }
+  ],
+  "Cod. Just.": [
+   {
+    "name": "Codex Justinianeus",
+    "description": "",
+    "kind": "fl",
+    "year": 534,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "editor: promulgation"
+   }
+  ],
+  "Cod. Theod.": [
+   {
+    "name": "Codex Theodosianus",
+    "description": "",
+    "kind": "fl",
+    "year": 438,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "editor: promulgation"
+   }
+  ],
+  "Col.": [
+   {
+    "name": "L. Junius Moderatus Columella",
+    "description": "writer on husbandry",
+    "kind": "fl",
+    "year": 50,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Commod.": [
+   {
+    "name": "Commodianus",
+    "description": "Chr. poet",
+    "kind": "fl",
+    "year": 245,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Consent.": [
+   {
+    "name": "P. Consentius",
+    "description": "grammarian",
+    "kind": "fl",
+    "year": 475,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Coripp.": [
+   {
+    "name": "Fl. Cresconius Corippus",
+    "description": "poet and grammarian",
+    "kind": "fl",
+    "year": 565,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Corn. Gall.": [
+   {
+    "name": "Cn. Cornelius Gallus",
+    "description": "poet",
+    "kind": "ob",
+    "year": -25,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Corn. Sev.": [
+   {
+    "name": "Cornelius Severus",
+    "description": "poet",
+    "kind": "ob",
+    "year": -28,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Cornif.": [
+   {
+    "name": "Cornificus",
+    "description": "rhetorician",
+    "kind": "fl",
+    "year": -80,
+    "doubtful": true,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Curt.": [
+   {
+    "name": "Q. Curtius Rufus",
+    "description": "historian",
+    "kind": "fl",
+    "year": 50,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Cypr.": [
+   {
+    "name": "Thascius Caecilius Cyprianus",
+    "description": "Chr. writer",
+    "kind": "ob",
+    "year": 257,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Dict. Cret.": [
+   {
+    "name": "Interpres Dictyos Cretensis",
+    "description": "",
+    "kind": "fl",
+    "year": 380,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Dig.": [
+   {
+    "name": "Digesta",
+    "description": "",
+    "kind": "fl",
+    "year": 533,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "editor: promulgation"
+   }
+  ],
+  "Diom.": [
+   {
+    "name": "Diomedes",
+    "description": "grammarian",
+    "kind": "fl",
+    "year": 375,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Dion. Cato": [
+   {
+    "name": "Dionysius Cato",
+    "description": "",
+    "kind": "fl",
+    "year": 300,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "editor: L&S: 'probably of the third or fourth century'"
+   }
+  ],
+  "Don.": [
+   {
+    "name": "Aelius Donatus",
+    "description": "commentator",
+    "kind": "fl",
+    "year": 350,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Donat.": [
+   {
+    "name": "Aelius Donatus",
+    "description": "commentator",
+    "kind": "fl",
+    "year": 350,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Dracont.": [
+   {
+    "name": "Dracontius",
+    "description": "poet",
+    "kind": "fl",
+    "year": 490,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Eccl.": [
+   {
+    "name": "Scriptores Ecclesiastici",
+    "description": "",
+    "kind": "fl",
+    "year": 300,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "editor: Christian writers as a class"
+   }
+  ],
+  "Enn.": [
+   {
+    "name": "Q. Ennius",
+    "description": "poet",
+    "kind": "ob",
+    "year": -169,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Ennod.": [
+   {
+    "name": "Ennodius",
+    "description": "Chr. poet and biographer",
+    "kind": "ob",
+    "year": 521,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Eum.": [
+   {
+    "name": "Eumenius",
+    "description": "orator and panegyrist",
+    "kind": "fl",
+    "year": 300,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Eutr.": [
+   {
+    "name": "Flavius Eutropius",
+    "description": "historian",
+    "kind": "fl",
+    "year": 375,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Fab. Pict.": [
+   {
+    "name": "Fabius Pictor",
+    "description": "historian",
+    "kind": "fl",
+    "year": -214,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Falisc.": [
+   {
+    "name": "Gratius Faliscus",
+    "description": "poet",
+    "kind": "fl",
+    "year": 10,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list (see Grat.)"
+   }
+  ],
+  "Favorin.": [
+   {
+    "name": "Favorinus",
+    "description": "philosopher",
+    "kind": "fl",
+    "year": 130,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Fenest.": [
+   {
+    "name": "L. Fenestella",
+    "description": "historian",
+    "kind": "fl",
+    "year": 36,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Fest.": [
+   {
+    "name": "Sext. Pompeius Festus",
+    "description": "grammarian",
+    "kind": "fl",
+    "year": 150,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Firm.": [
+   {
+    "name": "Julius Firmicus Maternus",
+    "description": "mathematician",
+    "kind": "fl",
+    "year": 340,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Firm. Mat.": [
+   {
+    "name": "Julius Firmicus Maternus",
+    "description": "mathematician",
+    "kind": "fl",
+    "year": 340,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Flor.": [
+   {
+    "name": "L. Annaeus Florus",
+    "description": "historian",
+    "kind": "fl",
+    "year": 140,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Fortun.": [
+   {
+    "name": "Venantius Fortunatus",
+    "description": "Christian poet",
+    "kind": "fl",
+    "year": 600,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Front.": [
+   {
+    "name": "S. Julius Frontinus",
+    "description": "engineer",
+    "kind": "ob",
+    "year": 103,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   },
+   {
+    "name": "M. Cornelius Fronto",
+    "description": "orator",
+    "kind": "ob",
+    "year": 168,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Frontin.": [
+   {
+    "name": "S. Julius Frontinus",
+    "description": "engineer",
+    "kind": "ob",
+    "year": 103,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Fronto": [
+   {
+    "name": "M. Cornelius Fronto",
+    "description": "orator",
+    "kind": "ob",
+    "year": 168,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Fulg.": [
+   {
+    "name": "Fabius Planciades Fulgentius",
+    "description": "grammarian",
+    "kind": "ob",
+    "year": 550,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Gai.": [
+   {
+    "name": "Gaius",
+    "description": "JCtus",
+    "kind": "ob",
+    "year": 180,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Gell.": [
+   {
+    "name": "Aulus Gellius",
+    "description": "gramm",
+    "kind": "ob",
+    "year": 175,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "German.": [
+   {
+    "name": "Caesar Germanicus",
+    "description": "poet",
+    "kind": "ob",
+    "year": 18,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Gloss.": [
+   {
+    "name": "Glossarium",
+    "description": "",
+    "kind": "",
+    "year": null,
+    "doubtful": false,
+    "before_ad14": null,
+    "source": "L&S list (undated)"
+   }
+  ],
+  "Grat.": [
+   {
+    "name": "Gratius Faliscus",
+    "description": "poet",
+    "kind": "fl",
+    "year": 10,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Hier.": [
+   {
+    "name": "Hieronymus",
+    "description": "Chr. writer",
+    "kind": "ob",
+    "year": 420,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Hirt.": [
+   {
+    "name": "Aulus Hirtius",
+    "description": "historian",
+    "kind": "ob",
+    "year": -44,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Hor.": [
+   {
+    "name": "Q. Horatius Flaccus",
+    "description": "poet",
+    "kind": "ob",
+    "year": -8,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Hyg.": [
+   {
+    "name": "C. Julius Hyginus",
+    "description": "poet and fabulist",
+    "kind": "fl",
+    "year": -10,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Hyg. (Gromat.)": [
+   {
+    "name": "Hyginus",
+    "description": "writer on surveying",
+    "kind": "fl",
+    "year": 100,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Inscr.": [
+   {
+    "name": "Inscriptiones",
+    "description": "",
+    "kind": "",
+    "year": null,
+    "doubtful": false,
+    "before_ad14": null,
+    "source": "L&S list (undated)"
+   }
+  ],
+  "Inst.": [
+   {
+    "name": "Institutiones (Justinian)",
+    "description": "",
+    "kind": "fl",
+    "year": 533,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "editor: promulgation"
+   }
+  ],
+  "Isid.": [
+   {
+    "name": "Isidorus Hispalensis",
+    "description": "gramm",
+    "kind": "ob",
+    "year": 640,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Javol.": [
+   {
+    "name": "Javolenus Priscus",
+    "description": "JCtus",
+    "kind": "fl",
+    "year": 100,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Jornand.": [
+   {
+    "name": "Jornandes or Jordanis",
+    "description": "historian",
+    "kind": "fl",
+    "year": 552,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Jul. Val.": [
+   {
+    "name": "Julius Valerius",
+    "description": "historian",
+    "kind": "fl",
+    "year": 290,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Julian.": [
+   {
+    "name": "Salvius Julianus",
+    "description": "JCtus",
+    "kind": "fl",
+    "year": 130,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Just.": [
+   {
+    "name": "Justinus",
+    "description": "historian",
+    "kind": "fl",
+    "year": 150,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   },
+   {
+    "name": "Justinianus",
+    "description": "emperor",
+    "kind": "ob",
+    "year": 565,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Juv.": [
+   {
+    "name": "D. Junius Juvenalis",
+    "description": "poet",
+    "kind": "ob",
+    "year": 130,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Juvenc.": [
+   {
+    "name": "C. Vettius Aquilinus Juvencus",
+    "description": "Chr. poet",
+    "kind": "fl",
+    "year": 325,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Laber.": [
+   {
+    "name": "C. Decius Laberius",
+    "description": "mimographer",
+    "kind": "fl",
+    "year": -50,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Lact.": [
+   {
+    "name": "L. Caelius Lactantius Firmianus",
+    "description": "Chr. writer",
+    "kind": "ob",
+    "year": 325,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Laev.": [
+   {
+    "name": "Laevius",
+    "description": "lyric poet",
+    "kind": "fl",
+    "year": -100,
+    "doubtful": true,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Lampr.": [
+   {
+    "name": "Aelius Lampridius",
+    "description": "",
+    "kind": "fl",
+    "year": 300,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "editor: list prints 'ob. B.C. 300'; Lampridius is a writer of the Historia Augusta, A.D."
+   }
+  ],
+  "Leg. XII. Tab.": [
+   {
+    "name": "Leges duodecim Tabularum, compiled B.C. 450",
+    "description": "",
+    "kind": "",
+    "year": null,
+    "doubtful": false,
+    "before_ad14": null,
+    "source": "L&S list (undated)"
+   }
+  ],
+  "Liv.": [
+   {
+    "name": "Titus Livius",
+    "description": "historian",
+    "kind": "ob",
+    "year": 17,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Liv. Andron.": [
+   {
+    "name": "Livius Andronicus",
+    "description": "writer of tragedy",
+    "kind": "ob",
+    "year": -204,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Luc.": [
+   {
+    "name": "M. Annaeus Lucanus",
+    "description": "poet",
+    "kind": "ob",
+    "year": 65,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Lucil.": [
+   {
+    "name": "C. Ennius Lucilius",
+    "description": "satirist",
+    "kind": "ob",
+    "year": -103,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Lucr.": [
+   {
+    "name": "T. Lucretius Carus",
+    "description": "poet and philosopher",
+    "kind": "ob",
+    "year": -55,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Macr.": [
+   {
+    "name": "Aurelius Theodosius Macrobius",
+    "description": "critic",
+    "kind": "fl",
+    "year": 400,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Mamert.": [
+   {
+    "name": "Claud. Mamertinus",
+    "description": "panegyrist",
+    "kind": "fl",
+    "year": 362,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Manil.": [
+   {
+    "name": "M. Manilius",
+    "description": "poet",
+    "kind": "fl",
+    "year": 12,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Marc. Emp.": [
+   {
+    "name": "Marcellus Empiricus",
+    "description": "physician",
+    "kind": "fl",
+    "year": 400,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Mart.": [
+   {
+    "name": "M. Valerius Martialis",
+    "description": "poet",
+    "kind": "ob",
+    "year": 102,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Mart. Cap.": [
+   {
+    "name": "Martianus Minneus Felix Capella",
+    "description": "satirist",
+    "kind": "fl",
+    "year": 425,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Maxim.": [
+   {
+    "name": "Maximianus",
+    "description": "poet",
+    "kind": "fl",
+    "year": 520,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Mel.": [
+   {
+    "name": "Pomponius Mela",
+    "description": "geographer",
+    "kind": "fl",
+    "year": 45,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Mela": [
+   {
+    "name": "Pomponius Mela",
+    "description": "geographer",
+    "kind": "fl",
+    "year": 45,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Min. Fel.": [
+   {
+    "name": "Minucius Felix",
+    "description": "Chr. writer",
+    "kind": "fl",
+    "year": 200,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Modest.": [
+   {
+    "name": "Herennius Modestinus",
+    "description": "JCtus",
+    "kind": "fl",
+    "year": 240,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Monum. Ancyr.": [
+   {
+    "name": "Monumentum Ancyranum, an inscription placed on the wall of the pronaos at Ancyra, by Augustus Cæsar",
+    "description": "",
+    "kind": "fl",
+    "year": 14,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Naev.": [
+   {
+    "name": "C. Naevius",
+    "description": "poet",
+    "kind": "ob",
+    "year": -198,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Nazar.": [
+   {
+    "name": "Nazarius",
+    "description": "panegyrist",
+    "kind": "fl",
+    "year": 320,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Nemes.": [
+   {
+    "name": "M. Aur. Olympius Nemesianus",
+    "description": "poet",
+    "kind": "fl",
+    "year": 260,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Nep.": [
+   {
+    "name": "Cornelius Nepos",
+    "description": "biographer",
+    "kind": "fl",
+    "year": -44,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Nigid.": [
+   {
+    "name": "P. Nigidius Figulus",
+    "description": "gramm",
+    "kind": "fl",
+    "year": -60,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Non.": [
+   {
+    "name": "Nonius Marcellus",
+    "description": "gramm",
+    "kind": "fl",
+    "year": 280,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Not. Tir.": [
+   {
+    "name": "Notae Tironianae",
+    "description": "",
+    "kind": "fl",
+    "year": 400,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "editor: L&S: 'a late collection'"
+   }
+  ],
+  "Nov.": [
+   {
+    "name": "Novius",
+    "description": "writer of comedy",
+    "kind": "fl",
+    "year": -90,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   },
+   {
+    "name": "Novatianus",
+    "description": "Chr. writer",
+    "kind": "fl",
+    "year": 250,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Novat.": [
+   {
+    "name": "Novatianus",
+    "description": "Chr. writer",
+    "kind": "fl",
+    "year": 250,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Obseq.": [
+   {
+    "name": "Julius Obsequens",
+    "description": "writer De Prodigiis",
+    "kind": "fl",
+    "year": 375,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Optat.": [
+   {
+    "name": "Publilius Optatianus Porphyrius",
+    "description": "panegyrist",
+    "kind": "fl",
+    "year": 330,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Orell.": [
+   {
+    "name": "Inscriptiones",
+    "description": "",
+    "kind": "",
+    "year": null,
+    "doubtful": false,
+    "before_ad14": null,
+    "source": "L&S list (undated) (see Inscr.)"
+   }
+  ],
+  "Oros.": [
+   {
+    "name": "Paulus Orosius",
+    "description": "historian",
+    "kind": "fl",
+    "year": 410,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Ov.": [
+   {
+    "name": "P. Ovidius Naso",
+    "description": "poet",
+    "kind": "ob",
+    "year": 17,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Pac.": [
+   {
+    "name": "M. Pacuvius",
+    "description": "writer of tragedy",
+    "kind": "ob",
+    "year": -132,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Pacat.": [
+   {
+    "name": "Latinus Pacatus Drepanius",
+    "description": "panegyrist",
+    "kind": "fl",
+    "year": 389,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Pacuv.": [
+   {
+    "name": "M. Pacuvius",
+    "description": "writer of tragedy",
+    "kind": "ob",
+    "year": -132,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Pall.": [
+   {
+    "name": "Palladius Rutilius Taurus",
+    "description": "writer on husbandry",
+    "kind": "fl",
+    "year": 350,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Papin.": [
+   {
+    "name": "Aemilius Papinius",
+    "description": "JCtus",
+    "kind": "fl",
+    "year": 200,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Paul.": [
+   {
+    "name": "Julius Paulus",
+    "description": "JCtus",
+    "kind": "fl",
+    "year": 200,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Paul. Nol.": [
+   {
+    "name": "Pontius Paulinus Nolanus",
+    "description": "Chr. writer",
+    "kind": "ob",
+    "year": 431,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Paul. Petr.": [
+   {
+    "name": "Paulinus Petricordiensis",
+    "description": "poet",
+    "kind": "fl",
+    "year": 470,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Pers.": [
+   {
+    "name": "A. Persius Flaccus",
+    "description": "satirist",
+    "kind": "ob",
+    "year": 62,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Petr.": [
+   {
+    "name": "Petronius Arbiter",
+    "description": "satirist",
+    "kind": "fl",
+    "year": 60,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Phaedr.": [
+   {
+    "name": "T. Phaedrus",
+    "description": "fabulist",
+    "kind": "fl",
+    "year": 40,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Pict.": [
+   {
+    "name": "Fabius Pictor",
+    "description": "historian",
+    "kind": "fl",
+    "year": -214,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list (see Fab. Pict.)"
+   }
+  ],
+  "Placid.": [
+   {
+    "name": "Luctatius (or Lactantius) Placidus",
+    "description": "scholiast",
+    "kind": "fl",
+    "year": 450,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Plaut.": [
+   {
+    "name": "T. Maccius Plautus",
+    "description": "writer of comedy",
+    "kind": "ob",
+    "year": -184,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Plin.": [
+   {
+    "name": "C. Plinius Secundus (major)",
+    "description": "",
+    "kind": "ob",
+    "year": 79,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   },
+   {
+    "name": "C. Plinius Caecilius Secundus (minor)",
+    "description": "",
+    "kind": "ob",
+    "year": 113,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Plin. Val.": [
+   {
+    "name": "C. Plinius Valerianus",
+    "description": "physic",
+    "kind": "ob",
+    "year": 400,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Pomp.": [
+   {
+    "name": "L. Pomponius",
+    "description": "writer of comedy",
+    "kind": "fl",
+    "year": -90,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Pompon.": [
+   {
+    "name": "Sextus Pomponius",
+    "description": "JCtus",
+    "kind": "ob",
+    "year": 138,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Porc. Latro": [
+   {
+    "name": "M. Porcius Latro",
+    "description": "rhetorician",
+    "kind": "ob",
+    "year": -3,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Priap.": [
+   {
+    "name": "Priapea, a collection of satiric and erotic poems and fragments appended to L. Müller's Catullus",
+    "description": "",
+    "kind": "",
+    "year": null,
+    "doubtful": false,
+    "before_ad14": null,
+    "source": "L&S list (undated)"
+   }
+  ],
+  "Prisc.": [
+   {
+    "name": "Priscianus",
+    "description": "",
+    "kind": "fl",
+    "year": 500,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "editor: list prints 'fl. B.C. 500'; Priscian taught at Constantinople about A.D. 500"
+   }
+  ],
+  "Prop.": [
+   {
+    "name": "Sex. Aurelius Propertius",
+    "description": "poet",
+    "kind": "ob",
+    "year": -16,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Prud.": [
+   {
+    "name": "Aurel. Prudentius Clemens",
+    "description": "Chr. poet",
+    "kind": "fl",
+    "year": 400,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Pub. Syr.": [
+   {
+    "name": "Publilius Syrus",
+    "description": "mimographer",
+    "kind": "fl",
+    "year": -44,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Q. Cic.": [
+   {
+    "name": "Quintus Tullius Cicero",
+    "description": "",
+    "kind": "ob",
+    "year": -43,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Quint.": [
+   {
+    "name": "M. T. Quintilianus",
+    "description": "rhetorician",
+    "kind": "ob",
+    "year": 95,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Rhem. Fan.": [
+   {
+    "name": "Rhemmius Fanninus or Remius Favinus",
+    "description": "poet",
+    "kind": "fl",
+    "year": 400,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Ruf.": [
+   {
+    "name": "Sextus Rufus",
+    "description": "historian",
+    "kind": "fl",
+    "year": 350,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Rufin.": [
+   {
+    "name": "Tyrannius Rufinus",
+    "description": "Chr. writer",
+    "kind": "ob",
+    "year": 410,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Rutil.": [
+   {
+    "name": "Claudius Rutilius Namatianus",
+    "description": "poet",
+    "kind": "fl",
+    "year": 416,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Rutil. Lup.": [
+   {
+    "name": "P. Rutilius Lupus",
+    "description": "grammarian",
+    "kind": "fl",
+    "year": 50,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Rutil. Nam.": [
+   {
+    "name": "Claudius Rutilius Namatianus",
+    "description": "poet",
+    "kind": "fl",
+    "year": 416,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Sall.": [
+   {
+    "name": "C. Sallustius Crispus",
+    "description": "historian",
+    "kind": "ob",
+    "year": -35,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Salv.": [
+   {
+    "name": "Salvianus",
+    "description": "Chr. writer",
+    "kind": "fl",
+    "year": 440,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Scaev.": [
+   {
+    "name": "Q. Mutius Scaevola",
+    "description": "JCtus",
+    "kind": "fl",
+    "year": -95,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Scrib.": [
+   {
+    "name": "Scribonius Largus",
+    "description": "physician",
+    "kind": "fl",
+    "year": 50,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Sedul.": [
+   {
+    "name": "Caelius Sedulius",
+    "description": "Chr. poet",
+    "kind": "fl",
+    "year": 470,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Sen.": [
+   {
+    "name": "M. Annaeus Seneca",
+    "description": "rhetorician",
+    "kind": "fl",
+    "year": 15,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   },
+   {
+    "name": "L. Annaeus, Seneca",
+    "description": "philosopher and tragedian",
+    "kind": "ob",
+    "year": 65,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Ser. Samm.": [
+   {
+    "name": "Q. Serenus Sammonicus",
+    "description": "physic",
+    "kind": "ob",
+    "year": 230,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Serv.": [
+   {
+    "name": "Servius Honoratus",
+    "description": "gramm",
+    "kind": "fl",
+    "year": 390,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Sev.": [
+   {
+    "name": "Cornelius Severus",
+    "description": "poet",
+    "kind": "ob",
+    "year": -28,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list (see Corn. Sev.)"
+   }
+  ],
+  "Sid.": [
+   {
+    "name": "Apollinaris Sidonius",
+    "description": "Christian writer",
+    "kind": "ob",
+    "year": 488,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Sil.": [
+   {
+    "name": "C. Silius Italicus",
+    "description": "poet",
+    "kind": "ob",
+    "year": 101,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Sisenn.": [
+   {
+    "name": "L. Cornelius Sisenna",
+    "description": "historian and orator",
+    "kind": "ob",
+    "year": -57,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Sol.": [
+   {
+    "name": "C. Julius Solinus",
+    "description": "grammarian",
+    "kind": "fl",
+    "year": 260,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Solin.": [
+   {
+    "name": "C. Julius Solinus",
+    "description": "grammarian",
+    "kind": "fl",
+    "year": 260,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Spart.": [
+   {
+    "name": "Aelius Spartianus",
+    "description": "biographer",
+    "kind": "fl",
+    "year": 385,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Stat.": [
+   {
+    "name": "P. Papinius Statius",
+    "description": "poet",
+    "kind": "ob",
+    "year": 96,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Suet.": [
+   {
+    "name": "C. Suetonius Tranquillus",
+    "description": "biographer",
+    "kind": "ob",
+    "year": 160,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Sulp.": [
+   {
+    "name": "Sulpicius Severus",
+    "description": "Chr. writer",
+    "kind": "ob",
+    "year": 425,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Symm.": [
+   {
+    "name": "Q. Aurelius Symmachus",
+    "description": "orator",
+    "kind": "ob",
+    "year": 420,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "T.": [
+   {
+    "name": "P. Terentius Afer",
+    "description": "writer of comedy",
+    "kind": "ob",
+    "year": -159,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Tac.": [
+   {
+    "name": "C. Cornelius Tacitus",
+    "description": "historian",
+    "kind": "ob",
+    "year": 119,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Ter.": [
+   {
+    "name": "P. Terentius Afer",
+    "description": "writer of comedy",
+    "kind": "ob",
+    "year": -159,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Ter. Maur.": [
+   {
+    "name": "Terentianus Maurus",
+    "description": "gramm",
+    "kind": "fl",
+    "year": 290,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Tert.": [
+   {
+    "name": "Q. Septimius Florens Tertullianus",
+    "description": "Chr. writer",
+    "kind": "ob",
+    "year": 220,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Theod. Prisc.": [
+   {
+    "name": "Theodorus Priscianus",
+    "description": "physician",
+    "kind": "fl",
+    "year": 400,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Tib.": [
+   {
+    "name": "Albius Tibullus",
+    "description": "poet",
+    "kind": "ob",
+    "year": -18,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Tiro": [
+   {
+    "name": "Tiro",
+    "description": "freedman of Cicero",
+    "kind": "fl",
+    "year": -40,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Titin.": [
+   {
+    "name": "Titinnius",
+    "description": "wirter of comedy",
+    "kind": "fl",
+    "year": -160,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Titinn.": [
+   {
+    "name": "Titinnius",
+    "description": "wirter of comedy",
+    "kind": "fl",
+    "year": -160,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Treb. Pol.": [
+   {
+    "name": "Trebellius Pollio",
+    "description": "historian",
+    "kind": "fl",
+    "year": 306,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Turp.": [
+   {
+    "name": "Sex. Turpilius",
+    "description": "writer of comedy",
+    "kind": "fl",
+    "year": -130,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Ulp.": [
+   {
+    "name": "Domitius Ulpianus",
+    "description": "JCtus",
+    "kind": "ob",
+    "year": 228,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Val. Cato.": [
+   {
+    "name": "Valerius Cato",
+    "description": "poet",
+    "kind": "fl",
+    "year": -80,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Val. Fl.": [
+   {
+    "name": "C. Valerius Flaccus",
+    "description": "poet",
+    "kind": "fl",
+    "year": 70,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Val. Max.": [
+   {
+    "name": "Valerius Maximus",
+    "description": "historian",
+    "kind": "fl",
+    "year": 26,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Val. Prob.": [
+   {
+    "name": "M. Valerius Probus",
+    "description": "gramm",
+    "kind": "fl",
+    "year": 60,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Varr.": [
+   {
+    "name": "M. Terentius Varro",
+    "description": "writer on husbandry",
+    "kind": "ob",
+    "year": -27,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Veg.": [
+   {
+    "name": "F. Vegetius Renatus",
+    "description": "writer on the art of war",
+    "kind": "fl",
+    "year": 386,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   },
+   {
+    "name": "P. Vegetius. fl.(?) A.D. 420",
+    "description": "",
+    "kind": "fl",
+    "year": 420,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Vell.": [
+   {
+    "name": "P. Velleius Paterculus",
+    "description": "historian",
+    "kind": "fl",
+    "year": 30,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Ven. Fort.": [
+   {
+    "name": "Venantius Fortunatus",
+    "description": "Christian poet",
+    "kind": "fl",
+    "year": 600,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   },
+   {
+    "name": "Venantius Fortunatus",
+    "description": "Chr. poet",
+    "kind": "ob",
+    "year": 600,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Ver. Flac.": [
+   {
+    "name": "Verrius Flaccus",
+    "description": "grammarian",
+    "kind": "ob",
+    "year": -4,
+    "doubtful": true,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Verg.": [
+   {
+    "name": "P. Vergilius Maro",
+    "description": "poet",
+    "kind": "ob",
+    "year": -19,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Vib. Seq.": [
+   {
+    "name": "Vibius Sequester",
+    "description": "geographer",
+    "kind": "fl",
+    "year": 500,
+    "doubtful": true,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Vitr.": [
+   {
+    "name": "Vitruvius Pollio",
+    "description": "writer on architecture",
+    "kind": "fl",
+    "year": -10,
+    "doubtful": false,
+    "before_ad14": true,
+    "source": "L&S list"
+   }
+  ],
+  "Vop.": [
+   {
+    "name": "Flavius Vopiscus",
+    "description": "historian",
+    "kind": "fl",
+    "year": 305,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Vulc. Gall.": [
+   {
+    "name": "Vulcatius Gallicanus",
+    "description": "historian",
+    "kind": "fl",
+    "year": 295,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "L&S list"
+   }
+  ],
+  "Vulg.": [
+   {
+    "name": "Biblia Vulgatae Editionis",
+    "description": "",
+    "kind": "fl",
+    "year": 405,
+    "doubtful": false,
+    "before_ad14": false,
+    "source": "editor: Jerome's revision; L&S gives no single date"
+   }
+  ]
+ }
+}

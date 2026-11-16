@@ -36,6 +36,8 @@ params:
   final_es: 0.7               # -es long except es (sum), 3rd-decl. nominatives with short -ĭs genitive (miles, hospes)
   final_is: 0.25              # -is short except dat./abl. pl., 2nd sg. 4th conj., uīs, glīs
   final_us: 0.15              # -us short except 4th-decl. gen. sg. / nom. pl. and -ūs stems (uirtūs, tellūs)
+  ital_long: 0.95             # Ītalia, Ītaliam: the I is long in 48 of 48 places of the gold (Catullus, Virgil, Horace)
+  ital_either: 0.18           # Ītalus / Italus and their forms: long in 9 of 51 places (Catullus 1.5 Ītalōrum, Aeneid 3.185 Ītala)
   lex_long: 0.9               # the macronised lexicon marks the vowel long
   lex_short: 0.05             # ... short
   lex_short_convention: 0.1   # the sources leave the vowel unmarked (short by convention; a macron is sometimes missing)
@@ -153,6 +155,21 @@ vowel:
         p: final_o_iambic
         reason: final -o of an iambic disyllable is often shortened (dabŏ 13.11, uolŏ 6.16)
         cite: A&G §603f note 2 (iambic shortening); Catullus 13.11
+  - id: LICENCE
+    when: poetic_initial != ""
+    reason: a first vowel the poets lengthen against the prose quantity (Ītalia, Ītalus)
+    cite: Hypotactic gold; Catullus 1.5, Aeneid 1.2, 3.185
+    then:
+      - id: LICENCE-ALWAYS
+        when: poetic_initial == "always"
+        p: ital_long
+        reason: Ītalia is always long in verse (48 of 48 places of the gold)
+        cite: Hypotactic gold; Aeneid 1.2
+      - id: LICENCE-EITHER
+        when: true
+        p: ital_either
+        reason: Ītalus or Italus, the poet chooses (long in 9 of 51 places of the gold)
+        cite: Hypotactic gold; Catullus 1.5, Aeneid 3.185
   - id: LEX
     when: lex in ("L", "S", "conflict", "unmarked")
     reason: vowel length from the lexical sources (optional layer)

@@ -139,6 +139,114 @@ convention the pattern metric already ignores at line end); `Tyndari` (Greek voc
 Reports: `docs/latin/eval/odes1-<metre>.json`; the Catullus regression run `catullus-hendecasyllables-held_out-lexicon-v3.json`
 (decided 88.9 %, accuracy on decided 100 %, 284/285 fitting, 275/285 pattern: unchanged except the `Cnidumque` unit now right).
 
+## 2026-11-15: every Catullan hendecasyllable in the gold, dev and held-out together (core + lexicon, as typed)
+
+All 552 lines the gold labels `hendecasyllables` (43 poems; 263 dev, 289 held-out), run by
+`scripts/validate_phalaecian_gold.py`; poems 55 and 58b may take the decasyllabic template. Counts are over all
+lines, misaligned ones included (the milestone tables above leave misaligned lines out of the fit counts, which is
+why 285 there is 289 here). Per-line result: `docs/latin/eval/catullus-hendeca-all-2026-11-15.json`.
+
+| | Lines | Same syllable count as gold | Accepted | Best pattern = gold | Accepted and = gold |
+|---|---|---|---|---|---|
+| All, before | 552 | 548 | 546 | 521 | 520 |
+| All, after the fix | 552 | 549 | 547 | 522 | 521 |
+| Dev, before and after | 263 | 263 | 259 | 243 | 242 |
+| Held-out, before | 289 | 285 | 287 | 278 | 278 |
+| Held-out, after | 289 | 286 | 288 | 279 | 279 |
+
+**THIS SPENDS THE HELD-OUT SET.** The one fix below was found on a held-out line (46.9), and this entry reads every
+held-out miss line by line. From today the held-out half of the Catullan hendecasyllables is no longer an unseen
+test for the scanner: its numbers are development numbers. A clean test now needs lines the scanner has never been
+tuned on (another author's hendecasyllables, e.g. Martial or Statius, or the Priapea).
+
+The fix: `coet` taken out of `SPLIT_OE` (`backend/scansion/latin.py`). `coetus` keeps its diphthong (coe-tūs) in all
+five places of the gold: Catullus 46.9, 64.34, 64.386, 64.408, 66.37. The split made 46.9 one syllable too long.
+
+Lines rejected after the fix (5 of 552), each with its cause; none fixed:
+
+| Line | Cause |
+|---|---|
+| 1.5 | `Ītalōrum`: Catullus lengthens the I; the lexicon has it short (as in prose), so the 6th place fails. A lexicon override would be right for verse only |
+| 38.2 | gold hiatus `hercule, et` (editors often emend), and `malest` unknown to the lexicon |
+| 55.9 | `avelte`: a textual crux, not a Latin word |
+| 55.10 | `Camerium`: resolved base, 12 syllables; no template covers it |
+| 55.11 | a 7-syllable fragment (lacuna) |
+
+Lines accepted but with a best pattern unlike the gold (26). Every one differs in the first or second syllable
+only: the scanner reads a spondaic base where the gold has an iamb or trochee. The base prior (spondee 0.80) beats
+a syllable the scanner already thinks is probably short.
+
+| Cause | Lines |
+|---|---|
+| vowel before vowel, short at p 0.1 (VAV-SHORT), overruled by the base prior | 1.4, 3.17, 7.2, 32.2, 35.9, 53.3 |
+| lexicon short by convention at p 0.1 (LEX-S-CONV), overruled | 35.2, 42.1, 45.10, 49.1 |
+| lexicon gives both lengths, p 0.5 (final -a nominative or ablative, homographs: LEX-CONFLICT) | 35.18, 36.7, 36.14, 40.7, 41.2, 41.3, 42.11, 42.19, 45.6, 45.25, 58.2 |
+| vowel unknown or a name, p 0.4-0.5 | 33.2 `Vibenni`, 38.1 `Malest`, 35.1 `Poetae`, 41.1 `Ameana` |
+| muta cum liquida, lexicon short at p 0.24 | 27.7 `migrate` |
+
+Tried and not adopted, because none is free of regression (lines accepted / pattern = gold; Horace Odes 1 = 876 lines):
+
+| Change | Dev (263) | Held-out (289) | Horace Odes 1 |
+|---|---|---|---|
+| none (after the coet fix) | 259 / 243 | 288 / 279 | 870 / 860 |
+| `vocal_before_vowel` 0.1 -> 0.05 | pattern 248 | pattern 280 | accepted 868 (2 lost) |
+| that, and `lex_short_convention` -> 0.05 | 255 / 251 | 285 / 281 | accepted 864 (6 lost) |
+| base priors as measured on dev (spondee 0.862, trochee 0.061, iamb 0.077) | pattern 237 | pattern 272 | not run |
+
+Regression check with `scripts/scansion_eval_la.py --lexicon` (the milestone metric, misaligned lines left out):
+
+| | Misaligned | Decided | Accuracy on decided | Brier | Elision | Lines fitting | Pattern = gold | Perturbed accepted (swap / replace) |
+|---|---|---|---|---|---|---|---|---|
+| Dev | 0 | 88.2 % | 99.87 % | 0.0325 | 98.4 % | 259/263 | 243/263 | 42/263, 55/263 |
+| Held-out, before | 4 | 88.9 % | 100 % | 0.030 | 99.3 % | 284/285 | 275/285 | 58/284, 55/284 |
+| Held-out, after | 3 | 88.9 % | 100 % | 0.0298 | 99.3 % | 285/286 | 276/286 | 61/285, 57/285 |
+
+Dev fitting is unchanged from LA2 (259/263); dev pattern is 243 against the 242 logged at LA2 (already 243 before
+this fix; not caused by it). Held-out gains the one line. The negative control moves from 20.4 % / 19.4 % of
+perturbed lines accepted to 21.4 % / 20.0 %. One seeded random stream runs through the lines in order, so the line
+that joined (46.9) changes the perturbation of every later line; whether the move is that redraw or a real
+loosening was not separated, and it is not an improvement. Still misaligned on held-out: 10.8 `aere`, 46.3
+`aureis`, 50.21 `vehemens` (synizesis). Horace Odes 1 is unchanged by the fix (870 accepted, 860 = gold of 876).
+
+Known and open: the base prior's overruling of p 0.1 shorts (10 lines) is the largest single cause and wants a
+principled change to how the prior combines with unit evidence, not a threshold nudge.
+
+## 2026-11-15, refinement round: iambus, aes, Ītalia, and the size of the "free long" hole
+
+Four defects reported by the other checks. Evidence is counted on the Hypotactic gold for Catullus, Virgil and
+Horace (`lines.jsonl.gz`, `lines-virgil.jsonl.gz`). No gold-derived quantity layer exists or was on in any run here.
+
+| Defect | Finding | Change |
+|---|---|---|
+| `iambos` 40.2, `iambis` 54.6 rejected when typed without j | the initial i was read as a consonant | `GREEK_INITIAL_I` gains the stems vocalic in every place of the gold: iamb- (4), Iacch- (4), Iāpy- (8), Īapet- (1), Iarb- (3), Ioll- (4), Iōpa- (1), Iaer- (1), iaspi- (1), ier- (1) |
+| `aere` 10.8 split a-e-re | `SPLIT_AE` split every word in aer- | diphthong : split in the gold: aere 28 : 6, aera 14 : 11, aeris 3 : 2, aerat- 12 : 0, aere- + vowel 11 : 2; aeri- + vowel 0 : 20, aer 0 : 2. Now only aeri- + vowel, `aer` and `aerem` split. The six `āere` (air) and eleven `āera` are now read wrongly: the spelling cannot tell them apart |
+| `Italorum` 1.5 rejected | lexicon has short I | new vowel rule LICENCE before LEX: Ītalia + vowel p 0.95 (long in 48 of 48 places), other Ital- p 0.18 (long in 9 of 51: Catullus 1.5, Aeneid 3.185, 7.643, 9.698) |
+| `Cui dono lepidum donum libellum` passes with dōnum's long o in the short 7th place | not a lexicon gap: the lexicon marks it long, but `lex_long` is 0.9, which leaves the short reading at 0.1, above the violation line of 0.05. Every lexicon long in an open syllable can stand in a short place | NOT FIXED (below) |
+
+Whole set (`scripts/validate_phalaecian_gold.py`, all 552 lines; JSON rewritten):
+
+| | Same count as gold | Accepted | Pattern = gold |
+|---|---|---|---|
+| Before this round | 549 | 547 | 522 |
+| After | 550 | 548 | 522 |
+
+Dev 260 accepted (was 259: 1.5), 243 = gold. Held-out 288 accepted, 279 = gold, 287 aligned (was 286: 10.8).
+10.8 is a held-out line: the held-out half was already spent in the entry above. Horace Odes 1: 870 accepted,
+860 = gold of 876, unchanged. Rejected now: 38.2, 55.9, 55.10, 55.11. The 26 base misreads are untouched.
+
+**Size of the hole.** Forms attested at least 3 times in the Catullus + Virgil + Horace gold: 7,346; in the quantity
+lexicon: 6,989; with at least one non-final syllable that has one weight only in every attestation: 6,632 forms,
+11,075 such syllables. The scanner leaves 4,285 of those syllables free (38.7 %; neither weight would be a
+violation) in 3,509 forms (52.9 %). By cause: lexicon long at p 0.9 where the gold is always long 2,069 (the
+dōnum class); vowel before vowel at p 0.1, gold always short 770; lexicon short by convention at p 0.1, gold always
+short 534; lexicon conflict at p 0.5-0.6 678; Greek vowel before vowel 161; other about 70.
+
+Tried: `lex_long` 0.9 -> 0.96 rejects the dōnum line but loses 1 dev line and 4 Horace lines (866 of 876), so it
+was not adopted. (0.95 changes nothing: 1 - 0.95 is a hair above 0.05 in floating point.) The gold index
+`data/scansion/prosody_la.sqlite` could close the hole for the attested forms as an override layer; that layer was
+NOT built in this round. If built it must stay off in `scripts/scansion_eval_la.py` and
+`scripts/validate_phalaecian_gold.py`, or the gold grades itself.
+
 ## Looks at the held-out half
 
 | Date | Setting | Reason |
@@ -147,3 +255,5 @@ Reports: `docs/latin/eval/odes1-<metre>.json`; the Catullus regression run `catu
 | 2026-10-10 19:59 PDT | core + lexicon, as typed and folded | LA2 milestone score (second look; the pattern metric now ignores the line-final anceps, so the core rows were re-read too) |
 | 2026-10-10 20:21 PDT | core + lexicon, after the lexicon audit's fixes (Lewis & Short "either" marks, Cyrillic y, Wiktionary page titles without marks dropped; Winge rows deduped to 325,380) | LA2 rebuild (third look). Held-out, lexicon: decided 88.9 %, accuracy on decided 99.96 %, Brier 0.030, lines fitting 284/285, best pattern = gold 275/285, perturbed rejected 80 % / 81 %. The LA2 tables above are from the first build; these are the current numbers |
 | 2026-10-11 (LA5) | core + lexicon, as typed, after the Horace list fixes and INIT-GREEK | regression check only (fourth look): decided 88.9 %, accuracy on decided 100 %, 284/285 fitting, 275/285 pattern, perturbed accepted 20 % / 19 %: no movement |
+| 2026-11-15 22:50 PST | core + lexicon, as typed; every line read one by one | whole-set validation (fifth look, and the last as a held-out set). The `coetus` fix came from held-out 46.9 and every held-out miss was read: **the held-out half is spent**. After the fix: 3 misaligned, decided 88.9 %, accuracy on decided 100 %, 285/286 fitting, 276/286 pattern, perturbed accepted 21.4 % / 20.0 % |
+| 2026-11-15 23:06 PST | core + lexicon, as typed, after the iambus / aes / Ītalia fixes; no gold layer | regression check (the set is already spent): 288/289 accepted, 279 pattern = gold, 287 aligned |

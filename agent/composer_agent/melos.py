@@ -71,6 +71,34 @@ HTTP_TOOLS: dict[str, tuple[str, str, str, dict]] = {
                  "context so an ambiguous spelling is read in context.",
                  _schema(("q",), q=_s("string", "Lemma or Latin form"), author=AUTHOR, limit=LIMIT,
                          context=_s("string", "The draft line holding the form (optional)"))),
+    "la_check": ("POST", "/api/la/check", "Latin: EVERY check on whole lines at once, blocking failures first: metre, forms, "
+                 "attestation, verbatim, L12 prosody attestation (each quantity against the poets' own lines), L8 elision "
+                 "and hiatus, L13 Phalaecian manner, L3 agreement, L10 word order, L14 period and register (Lewis & Short), "
+                 "L5 collocation, L6 manner evidence. Each check has status PASS / WARN / FAIL / unavailable and evidence. "
+                 "Run it on every finished line and after every repair.",
+                 _schema(("text",), text=_s("string", "Whole Latin lines, one per line"),
+                         metre=_s("string", "Template name (default phalaecian)"), author=AUTHOR,
+                         only=_s("string", "Check ids to run, comma separated, e.g. L7,L12 (default all)"),
+                         evidence=_s("integer", "Evidence rows per check (default 3, 0 = all)"))),
+    "la_prosody": ("GET", "/api/la/prosody", "Latin: how the poets scan one form (Catullus, then Virgil, hand scansion): "
+                   "its quantities with loci, and the variants (mute + liquid, final -o, iambic shortening, synizesis).",
+                   _schema(("form",), form=_s("string", "A Latin word form"), author=AUTHOR)),
+    "la_dictionary": ("GET", "/api/la/dictionary", "Latin: the Lewis & Short entries of a word: senses, constructions, the "
+                      "authors cited (is it in Catullus, Cicero, Plautus?) and period labels (ante-class., post-class., late).",
+                      _schema(("q",), q=_s("string", "A Latin word or headword"))),
+    "la_reverse": ("GET", "/api/la/reverse", "Latin: English -> Latin headwords whose Lewis & Short glosses carry the English "
+                   "word, with how often Catullus uses each. Use it to harvest candidates, then check each in la_lemma.",
+                   _schema(("q",), q=_s("string", "An English word or short phrase"), limit=LIMIT)),
+    "la_commentary": ("GET", "/api/la/commentary", "Latin: Merrill's commentary on Catullus (1893). poem (and line) for the "
+                      "notes on a passage; q to search the notes; words (the draft's words) for notes on those words; "
+                      "intro to search his introduction (metre, diction, life).",
+                      _schema((), poem=_s("string", "Poem number, e.g. 5"), line=_s("integer", "Line number"),
+                              q=_s("string", "Search the notes"), words=_s("string", "Latin words, space separated"),
+                              intro=_s("string", "Search the introduction"), limit=LIMIT)),
+    "la_grammar": ("GET", "/api/la/grammar", "Latin: Allen & Greenough's New Latin Grammar: section= a section number "
+                   "(e.g. 485 for sequence of tenses), or q= to search. Cite the section when you judge a construction.",
+                   _schema((), section=_s("string", "Section number, e.g. 485 or 485c"), q=_s("string", "Search the grammar"),
+                           limit=LIMIT)),
     "lemma_resolve": ("GET", "/api/lemma/resolve", "English or Greek word -> headword candidates.", _schema(("q",), q=Q)),
     "lemma_search": ("GET", "/api/lemma/search", "Passages with any form of a headword; forms_found is the author's form "
                      "inventory (the best attestation evidence).",

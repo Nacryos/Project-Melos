@@ -57,6 +57,7 @@ FEATURES_LA: dict[str, str] = {
     "stem": "the word without its enclitic -que / -ue / -ne (for word lists)",
     "capitalised": "the word is written with a capital (a name, often Greek)",
     "iambic_word": "a disyllable whose first syllable is an open short-vowel candidate (iambic shortening environment)",
+    "poetic_initial": 'the first vowel of a stem the poets lengthen: "always" (Ītalia), "either" (Ītalus), "" (no)',
     "lex": 'lexical evidence for this vowel: "L", "S", "conflict", "unmarked", "unknown_word", "none" (no lexicon)',
     "lex_sources": "which sources marked it",
     "p_vowel": "probability the nucleus is long (set by the vowel tree)",
@@ -233,6 +234,7 @@ class _Line:
             "stem": stem,
             "capitalised": w.text.lstrip("’'ʼ[⟨")[:1].isupper(),
             "iambic_word": _iambic_word(w, nuc),
+            "poetic_initial": _poetic_initial(stem) if idx == 0 else "",
             "lex": "none",
             "lex_sources": "",
         }
@@ -300,6 +302,14 @@ def _next_cluster(real: list[str], bounds: list[bool]) -> str:
     if nxt[0] in MCL_FIRST and nxt[1] in LIQUIDS:
         return "mcl"
     return "other"
+
+
+def _poetic_initial(stem: str) -> str:
+    """Ītalia (the I is long in all 48 places of the Hypotactic gold; the prose word, three shorts and a fourth
+    syllable, cannot stand in dactylic or Aeolic verse) against Ītalus / Italus (long in 9 of 51 places)."""
+    if not stem.startswith("ital"):
+        return ""
+    return "always" if stem.startswith("itali") and stem[5:6] in VOWELS and stem[5:6] else "either"
 
 
 def _iambic_word(w: Word, nuc: list[Nucleus]) -> bool:

@@ -1,6 +1,6 @@
 # Latin composer: live status
 
-Last updated: 2026-10-10 23:34 PDT
+Last updated: 2026-11-15 23:15 PST
 
 **Plan (one paragraph).** Build the Latin twin of the Greek composer on this branch (`latin-composer`, from release W)
 as a second language backend behind the release W code, not a fork. First the PRD (`docs/prd/latin-composer.md`,
@@ -102,6 +102,57 @@ metre-locking is never applied in the composer.
   Catullan lines are flagged by L11 and shown, not blocked. $2.04 for the four fills. A chat-only re-run with a ten-minute cap:
   a research-heavy question is answered well in about six minutes and two dollars (first text after three), naming the
   five poems echoed with corpus evidence and the lines reusable whole.
+
+## Catullan hendecasyllable checks (branch `catullan-composer`, 2026-11-15)
+
+PRD `docs/prd/catullan-hendecasyllable-checks.md`. One command runs everything on a draft:
+`python scripts/la_check.py --file draft.txt` (`--brief`, `--only L7,L12`, `--json`; exit 1 on a blocking failure).
+How to compose with it: `docs/latin/composing-hendecasyllables.md`; the critic's brief: `docs/latin/critic-brief.md`.
+
+- **Scanner on every Catullan hendecasyllable** (552 lines; the held-out set is now spent, logged in
+  `docs/latin/eval-log.md`): 548 accepted, 522 with the best pattern equal to the gold. Rejected: 38.2 (hiatus in the
+  gold), 55.9, 55.10, 55.11 (crux, twelve syllables, fragment). Fixed on the way: *iambus* (Greek initial i), *aere*,
+  *Italia* with long I. Known hole: the scanner alone still accepts about 1 in 5 lines with one broken quantity, since
+  a lexicon quantity is never a hard violation; L12 is the check that closes it.
+- **L12 prosody attestation** (`backend/latin_prosody.py`, `scripts/la_prosody.py <form>`,
+  `docs/latin/prosody-attestation.md`): every word's quantities against where the form stands in the Hypotactic hand
+  scansion of Catullus, then Virgil (12,913 lines) and Horace; 113,023 tokens, 27,138 forms. Leave-one-out on the 552
+  lines: confirmed in Catullus 59.2 %, in Virgil 11.2 %, in another poet 2.6 %, by stem 13.8 %, attested variant
+  (mute + liquid, *mihi*, *modo*, synizesis; shown with per-poet counts) 6.8 %, unattested 6.4 %, false blocks 0.07 %
+  (2 tokens: *Cyrenis* 7.4, *Pegaseo* 58b.3). 75 % of 300 planted quantity errors are caught.
+- **L13 Phalaecian manner and L8 elision / hiatus** (`backend/latin_metre_style.py`,
+  `docs/latin/phalaecian-profile.md`): base, word-ends, elisions and line-end shape against a profile counted from
+  all the hendecasyllables (spondee base 86.7 %, trochee 6.0 %); hiatus blocks.
+- **L3 agreement and L10 word order** (`backend/latin_grammar.py`, `backend/latin_morph.py`,
+  `docs/latin/grammar-check.md`): readings from LASLA, Morpheus and, when installed, `pycollatinus`. 7 of 552 genuine
+  lines fail L3 (1.27 %), none fail L10; a pass that hangs on a rare reading carries a note (2.9 % of genuine lines).
+- **L14 period and register, and the dictionary** (`backend/latin_dictionary.py`, `scripts/la_dict.py`,
+  `docs/latin/dictionary.md`): all of Lewis & Short (51,645 entries, 379,558 citations, 1,701 of Catullus), author
+  table audited (five errors fixed), English-to-Latin lookup from the dictionary and the Catullus interlinear. Warns
+  on 14 of 15 late words, on none of Catullus's vocabulary as shipped.
+- **Reference stores** (`backend/latin_reference.py`, `scripts/la_ref.py`, `docs/latin/reference-stores.md`):
+  Merrill's commentary (2,530 notes, 118 headnotes, 86 introduction sections), Allen & Greenough (642 sections with
+  a subject index), Ellis's commentary (2,035 notes, rough OCR, kept out of lookups).
+- **L5 collocation, L6 manner evidence** (`backend/latin_style.py`, `docs/latin/catullan-style-rubric.md`; counts
+  reproduced by `scripts/catullan_style_counts.py`): diminutives by the dictionary's label, 8.9 per 100 lines.
+- **Wiring**: `composer_lint.check(language="la")` runs all of them; routes `/api/la/check`, `/prosody`,
+  `/dictionary`, `/reverse`, `/commentary`, `/grammar`; agent tools of the same names (parse-checked only: the agent
+  SDK is not installed in this worktree); skill `.claude/skills/catullan-hendecasyllables/`.
+- **Acceptance** (`docs/latin/acceptance/`): Catullus 1.1-2 passes every check and is flagged verbatim; a fresh
+  five-line poem passes every blocking check; the critic's verdict and its list of ten tool shortcomings are kept.
+
+**Open, for the owner.**
+1. `pycollatinus` (GPL) lifts paradigm coverage from 52 % to 93.9 %; it is installed locally but not added to
+   `requirements.txt`.
+2. Merrill's commentary and Allen & Greenough are public-domain books, but the digitisations carry share-alike
+   (Merrill: Perseus page CC BY-SA 3.0 US, TEI header non-commercial) and non-commercial (A&G: CC BY-NC-SA 3.0 US)
+   terms. Their text files are **not committed**; only the manifests and the ingest scripts are, which rebuild them.
+3. Which larger lexicon next: survey of the Thesaurus, the Oxford Latin Dictionary, Georges, Forcellini, Gaffiot in
+   `docs/latin/dictionary.md`.
+
+**Known weak points** (from the critic): L5 is noisy on a short poem and pairs words across sentences; nothing
+checks particle order or the force of a question; the corpus store holds Catullus and Horace only, so Virgil stands
+behind L12 but not behind L4, L5 or the concordance; `la_dict.py` by form can open on the wrong entry.
 
 ## Running
 

@@ -28,7 +28,7 @@ def fit(text, m="phalaecian"):
 
 # --- letters and syllables -------------------------------------------------------------------------
 def test_iu_roles_and_diphthongs():
-    ws = words_of("cui dono maior silua fluuius uua Iuppiter poeta coepi Orpheus deus Europa eunt sanguis suauis suus")
+    ws = words_of("cui dono maior silua fluuius uua Iuppiter poeta coepi coetus coegi Orpheus deus Europa eunt sanguis suauis suus")
     kinds = {"".join(l.base for l in w.letters): [("".join(w.letters[i].base for i in n.letters), n.kind) for n in nuclei_of(w)]
              for w in ws}
     assert kinds["cui"] == [("ui", "diphthong")]
@@ -36,6 +36,7 @@ def test_iu_roles_and_diphthongs():
     assert len(kinds["silva"]) == 2 and len(kinds["fluvius"]) == 3 and len(kinds["uva"]) == 2
     assert kinds["juppiter"][0] == ("u", "vowel")
     assert len(kinds["poeta"]) == 3 and kinds["coepi"][0] == ("oe", "diphthong")
+    assert kinds["coetus"][0] == ("oe", "diphthong") and len(kinds["coegi"]) == 3   # coe-tūs (Catullus 46.9), co-ē-gī
     assert kinds["orpheus"][1] == ("eu", "diphthong") and len(kinds["deus"]) == 2
     assert kinds["europa"][0] == ("eu", "diphthong") and len(kinds["eunt"]) == 2
     assert len(kinds["sangwis"]) == 2 and len(kinds["swavis"]) == 2 and len(kinds["suus"]) == 2
@@ -126,3 +127,13 @@ def test_speed():
     for _ in range(50):
         fit("Viuamus, mea Lesbia, atque amemus")
     assert (time.perf_counter() - t0) / 50 < 0.02
+
+
+def test_gold_counted_lists_iambus_aes_and_italia():
+    # vocalic initial i of Greek words (iambus: Catullus 36.5, 40.2, 54.6), aes against āēr, Ītalia against Italus
+    n = {w.text: len(nuclei_of(w)) for w in words_of("iambos Iacchus iam aere aerata aeria aer Italiam")}
+    assert n["iambos"] == 3 and n["Iacchus"] == 3 and n["iam"] == 1
+    assert n["aere"] == 2 and n["aerata"] == 3 and n["aeria"] == 4 and n["aer"] == 2
+    assert unit("Italiam", "It").p_long >= 0.95 and unit("Italiam", "It").vowel["rule"] == "LICENCE-ALWAYS"
+    assert 0.05 < unit("Italorum", "It").p_long < 0.5
+    assert fit("agit praecipitem in meos iambos").ok and fit("iam tum, cum ausus es unus Italorum").ok

@@ -1,0 +1,81 @@
+la_check: 5 line(s), metre phalaecian, author Catullus: PASS (no blocking failure)
+
+ 1  Dic nobis, age, mi Fabulle, verum:
+    Dic no | bi sa ge mi | Fa bul le ve rum
+     –  –  | –  ⏑  ⏑  –  | ⏑   –  ⏑  –   ⏑   fits
+ 2  cur celas tacitus tuos amores?
+    cur ce | las ta ci tus | tu o sa mo res
+     –  –  |  –  ⏑  ⏑   –  | ⏑  – ⏑  –   –   fits
+ 3  non est bella satis? parum venusta?
+    no nest | bel la sa tis | pa rum ve nus ta
+    –   –   |  –  ⏑  ⏑   –  | ⏑   –  ⏑   –  –   fits
+ 4  an nostros metuis, miselle, risus?
+    an nos | tros me tu is | mi sel le ri sus
+    –   –  |  –   ⏑  ⏑  –  | ⏑   –  ⏑  –   –   fits
+ 5  quid sit, dic modo: nam tacebimus nos.
+    quid sit | dic mo do nam | ta ce bi mus nos
+     –    –  |  –  ⏑  ⏑   –  | ⏑  –  ⏑   –   –   fits
+
+WARN        L6   manner evidence                13 content words: 12 with a lemma in Catullus's polymetrics; in Catullus but not in the polymetrics: celas (long poems 1); more than one lemma: tacitus = tacitus (polymetrics 1) / taceo (polymetrics 4), bella = bellus (polymetrics 8) / bellum (polymetrics 1) / bello (polymetrics 0), satis = satis (polymetrics 5) / sero (polymetrics 0), venusta = uenustus (polymetrics 4), risus = risus (polymetrics 2) / rideo (polymetrics 5); 8/11 of the words Catullus uses in the metre start at a syllable where he starts the lemma; never there: bella (draft 3, his usual 2), satis (draft 5, his usual 7), venusta (draft 9, his usual 7); diminutives 1 in 5 lines (20.0 per 100; Catullus 8.9 per 100 over 552 lines); interjections 1 in 5 lines (20.0 per 100; Catullus 3.3 per 100 over 552 lines); vocatives 3 in 5 lines (60.0 per 100; Catullus 24.6 per 100 over 552 lines); second person 4 in 5 lines (80.0 per 100; Catullus 44.0 per 100 over 552 lines); repeated line openings 0 in 5 lines (0.0 per 100; Catullus 2.0 per 100 over 552 lines); repeated content lemmas 1 in 5 lines (20.0 per 100; Catullus 29.7 per 100 over 552 lines); run-on lines 0 in 5 lines (0.0 per 100; Catullus 33.7 per 100 over 481 lines)
+                 - celas at syllable 2 (celo VERB): polymetrics 0, long 1, epigrams 0; not in the poet's lines of the metre  << lemma not in the polymetrics: long poems 1 (wrong register for the metre?)
+                 - tacitus at syllable 4 (tacitus ADJ): polymetrics 1, long 2, epigrams 1; in the metre 1x, usual start syllable 4 (1/1), line-final 0/1; reading: tacitus; also read as taceo
+                 - tacitus at syllable 4 (read as taceo, not tacitus, VERB): polymetrics 4, long 1, epigrams 2; in the metre 4x, usual start syllable 9 (3/4), line-final 2/4
+                 - bella at syllable 3 (bellus ADJ): polymetrics 8, long 0, epigrams 6; in the metre 6x, usual start syllable 2 (3/6), line-final 1/6; reading: bellus (agrees with the line); also read as bellum, bello
+                 - bella at syllable 3 (read as bellum, not bellus, NOUN): polymetrics 1, long 3, epigrams 0; not in the poet's lines of the metre
+                 - bella at syllable 3 (read as bello, not bellus, VERB): polymetrics 0, long 0, epigrams 0; not in the poet's lines of the metre
+                 - ... 19 more evidence rows (--evidence 0 or --json for all)
+PASS        L7   metre                blocking  fits phalaecian: –––⏑⏑–⏑–⏑–⏑; fits phalaecian: –––⏑⏑–⏑–⏑––; fits phalaecian: –––⏑⏑–⏑–⏑––; fits phalaecian: –––⏑⏑–⏑–⏑––; fits phalaecian: –––⏑⏑–⏑–⏑––
+PASS        L1   forms                blocking  known to the lexicon but not printed in the corpus: metuis, tacebimus
+                 - form=Dic, reading=corpus, detail=10 token(s)
+                 - form=nobis, reading=corpus, detail=25 token(s)
+                 - form=age, reading=corpus, detail=11 token(s)
+                 - form=mi, reading=corpus, detail=21 token(s)
+                 - form=Fabulle, reading=corpus, detail=3 token(s)
+                 - form=verum, reading=corpus, detail=15 token(s)
+                 - ... 23 more evidence rows (--evidence 0 or --json for all)
+PASS        L2   dialect                        not applicable to Latin
+PASS        L4   attestation                    27/29 spellings printed in the Latin corpus; 25 printed by Catullus; headwords used by Catullus: 28/29; not printed: metuis, tacebimus
+                 - form=Dic, tokens=10, author_tokens=4, example={"author": "Catullus", "citation": "Carmina 6", "line": "velles dicere, nec tacere posses."}, readings=[{"lemma": "dico", "upos": "VERB", "count": 20, "source": "lasla"}], lemma_source=lasla, le
+                 - form=nobis, tokens=25, author_tokens=24, example={"author": "Catullus", "citation": "Carmina 5", "line": "nobis, cum semel occidit brevis lux,"}, readings=[{"lemma": "nos", "upos": "PRON", "count": 34, "source": "lasla"}], lemma_source=lasl
+                 - form=age, tokens=11, author_tokens=5, example={"author": "Catullus", "citation": "Carmina 61", "line": "quare age huc aditum ferens"}, readings=[{"lemma": "age", "upos": "INTJ", "count": 16, "source": "lasla"}, {"lemma": "ago", "upos": "VER
+                 - form=mi, tokens=21, author_tokens=21, example={"author": "Catullus", "citation": "Carmina 5", "line": "nox est perpetua una dormienda."}, readings=[{"lemma": "ego", "upos": "PRON", "count": 27, "source": "lasla"}, {"lemma": "meus", "upos": 
+                 - form=Fabulle, tokens=3, author_tokens=3, example={"author": "Catullus", "citation": "Carmina 13", "line": "Cenabis bene, mi Fabulle, apud me"}, readings=[{"lemma": "fabullus", "upos": "PROPN", "count": 3, "source": "lasla"}], lemma_source=l
+                 - form=verum, tokens=15, author_tokens=14, example={"author": "Catullus", "citation": "Carmina 6", "line": "verum nescio quid febriculosi"}, readings=[{"lemma": "uerum", "upos": "CCONJ", "count": 35, "source": "lasla"}, {"lemma": "uerus", "up
+                 - ... 23 more evidence rows (--evidence 0 or --json for all)
+PASS        L11  verbatim                       no run of 4+ words (or 3 long words) is copied from the Latin corpus
+PASS        L12  prosody attestation  blocking  confirmed 23, confirmed-virgil 2, confirmed-other 1, variant 1, stem 2 | variant: modo [SS]: syllable 2 short here: the spelling modo has two readings, modo (short: Catullus 6, Vergil 14, Horace 3, e.g. Catullus 1.2) and modus (long: Catullus 1, Vergil 9, e.g. Catullus 10.7); which is meant?
+                 - word=Dic, key=dic, weights=l, final_context=C, verdict=confirmed, per_poet={"Catullus": 4, "Vergil": 11, "Horace": 6}, loci=[{"locus": "Catullus 6.16", "text": "dīc nōbīs. volo tē ac tuōs amōrēs", "form": "dīc", "pattern": "L"}, {"locus": "
+                 - word=nobis, key=nobis, weights=lL, final_context=V, verdict=confirmed, syllables=[{"syllable": 2, "weight": "L", "status": "ok", "same": {"Catullus": 7, "Vergil": 14}, "other": {}}], per_poet={"Catullus": 23, "Vergil": 48, "Horace": 1}, loc
+                 - word=age, key=age, weights=SS, final_context=C, verdict=confirmed, syllables=[{"syllable": 1, "weight": "S", "status": "ok", "same": {"Catullus": 5, "Horace": 6, "Vergil": 28}, "other": {}}, {"syllable": 2, "weight": "S", "status": "ok", "s
+                 - word=mi, key=mi, weights=L, final_context=C, verdict=confirmed, syllables=[{"syllable": 1, "weight": "L", "status": "ok", "same": {"Catullus": 16, "Vergil": 2}, "other": {}}], per_poet={"Catullus": 22, "Vergil": 2}, loci=[{"locus": "Catullu
+                 - word=Fabulle, key=fabulle, weights=SLS, final_context=C, verdict=confirmed, syllables=[{"syllable": 1, "weight": "S", "status": "ok", "same": {"Catullus": 3}, "other": {}}, {"syllable": 2, "weight": "L", "status": "ok", "same": {"Catullus":
+                 - word=verum, key=uerum, weights=Ls, final_context=END, verdict=confirmed, syllables=[{"syllable": 1, "weight": "L", "status": "ok", "same": {"Catullus": 13, "Vergil": 17, "Horace": 1}, "other": {}}], per_poet={"Catullus": 13, "Vergil": 17, "
+                 - ... 23 more evidence rows (--evidence 0 or --json for all)
+PASS        L8   elision and hiatus   blocking  no elision, prodelision or hiatus
+PASS        L13  Phalaecian manner              line 1: spondee base (86.7 % of Catullus's lines); word-ends after the 1st (44 %), the 3rd (51 %), the 5th (48 %), the 6th (61 %), the 9th (26 %); word-end after both the 5th and the 6th (18.3 % of Catullus's lines); 0 elisions (62.7 % of Catullus's lines); line-end word verum, 2 syllables (28.4 % of Catullus's lines); line 2: spondee base (86.7 % of Catullus's lines); word-ends after the 1st (44 %), the 3rd (51 %), the 6th (61 %), the 8th (47 %); main break after the 6th (42.7 % of Catullus's lines); 0 elisions (62.7 % of Catullus's lines); line-end word amores, 3 syllables (44.5 % of Catullus's lines); line 3: spondee base (86.7 % of Catullus's lines); word-ends after the 1st (44 %), the 2nd (49 %), the 4th (7 %), the 6th (61 %), the 8th (47 %); main break after the 6th (42.7 % of Catullus's lines); 0 elisions (62.7 % of Catullus's lines); line-end word venusta, 3 syllables (44.5 % of Catullus's lines); line 4: spondee base (86.7 % of Catullus's lines); word-ends after the 1st (44 %), the 3rd (51 %), the 6th (61 %), the 9th (26 %); main break after the 6th (42.7 % of Catullus's lines); 0 elisions (62.7 % of Catullus's lines); line-end word risus, 2 syllables (28.4 % of Catullus's lines); line 5: spondee base (86.7 % of Catullus's lines); word-ends after the 1st (44 %), the 2nd (49 %), the 3rd (51 %), the 5th (48 %), the 6th (61 %), the 10th (1 %); word-end after both the 5th and the 6th (18.3 % of Catullus's lines); 0 elisions (62.7 % of Catullus's lines); line-end word nos, 1 syllable (1.3 % of Catullus's lines) | WARNINGS: line 5: word-end after the 10th is rare in Catullus: 6 of 536 lines (1.1 %, under 2 %): 5.5, 7.7, 10.31, 13.1, 24.7; line 5: line-end word of 1 syllable is rare in Catullus: 7 of 550 lines (1.3 %, under 2 %): 5.5, 7.7, 10.31, 13.1, 24.7
+                 - line=1, text=Dic nobis, age, mi Fabulle, verum:, fits=True, metre=phalaecian, pattern=–––⏑⏑–⏑–⏑–⏑, base=spondee, word_ends=[1, 3, 5, 6, 9], break=both, final_word={"form": "verum", "syllables": 2, "prodelided_est": false}, features=[{"key":
+                 - line=2, text=cur celas tacitus tuos amores?, fits=True, metre=phalaecian, pattern=–––⏑⏑–⏑–⏑––, base=spondee, word_ends=[1, 3, 6, 8], break=6th, final_word={"form": "amores", "syllables": 3, "prodelided_est": false}, features=[{"key": "lengt
+                 - line=3, text=non est bella satis? parum venusta?, fits=True, metre=phalaecian, pattern=–––⏑⏑–⏑–⏑––, base=spondee, word_ends=[1, 2, 4, 6, 8], break=6th, final_word={"form": "venusta", "syllables": 3, "prodelided_est": false}, features=[{"key
+                 - line=4, text=an nostros metuis, miselle, risus?, fits=True, metre=phalaecian, pattern=–––⏑⏑–⏑–⏑––, base=spondee, word_ends=[1, 3, 6, 9], break=6th, final_word={"form": "risus", "syllables": 2, "prodelided_est": false}, features=[{"key": "le
+                 - line=5, text=quid sit, dic modo: nam tacebimus nos., fits=True, metre=phalaecian, pattern=–––⏑⏑–⏑–⏑––, base=spondee, word_ends=[1, 2, 3, 5, 6, 10], break=both, final_word={"form": "nos", "syllables": 1, "prodelided_est": false}, features=[{
+PASS        L3   agreement                      no clash in 7 sentence(s), 29 word(s) | 1 reading to confirm | notes: line 3: passes only if *venusta* is the imperative of *uenusto* (Catullus, all forms of the lemma: adjective uenustus 6); as the adjective *uenustus* it agrees with no noun or pronoun of its sentence; line 2: tacitus agrees with no noun of its sentence: read as a substantive or as the predicate of an unexpressed subject; line 4: risus agrees with no noun of its sentence: read as a substantive or as the predicate of an unexpressed subject
+                 - rule=c, severity=note, word=tacitus, line=2, message=tacitus agrees with no noun of its sentence: read as a substantive or as the predicate of an unexpressed subject, readings=["tacitus ADJ nom sg m", "taceo VERB nom sg m perf part", "tacit
+                 - rule=confirm, severity=note, word=venusta, line=3, message=passes only if *venusta* is the imperative of *uenusto* (Catullus, all forms of the lemma: adjective uenustus 6); as the adjective *uenustus* it agrees with no noun or pronoun of it
+                 - rule=c, severity=note, word=risus, line=4, message=risus agrees with no noun of its sentence: read as a substantive or as the predicate of an unexpressed subject, readings=["risus NOUN gen sg m", "risus NOUN nom sg m", "risus NOUN acc pl m"
+PASS        L10  word order                     postpositives, enclitics and prepositions stand in possible places
+PASS        L14  period and register            no period warning in 28 words; notes: age: entry cites no author | mi: Cat. 24, 4; 107, 5 ('dativi ethici') | Fabulle: entry cites no author | celas: Cat. 64, 175 ('of place') | tacitus: Cat. 7, 7; 61, 126 ('to be still') | venusta: Cat. 89, 2; 31, 12; 3, 1 ('lovely') | metuis: Cat. 64, 146 ('ab') | miselle: rare; Cat. 3, 16 ('poor, wretched, unfortunate') | tacebimus: Cat. 7, 7; 61, 126 ('to be still')
+                 - word=Dic, in_author=60, status=ok, lemma=dico, headword=dīco, authors_before_ad14=15, earliest=Plaut. (ob. B.C. 184)
+                 - word=nobis, in_author=35, status=ok, lemma=nos, headword=nōs, authors_before_ad14=9, earliest=Plaut. (ob. B.C. 184)
+                 - word=age, in_author=3, status=note, lemma=age, headword=ăge, reason=entry cites no author, authors_before_ad14=0
+                 - word=mi, in_author=196, status=note, lemma=ego, headword=ĕgō^, reason=Cat. 24, 4; 107, 5 ('dativi ethici'), authors_before_ad14=11, earliest=Plaut. (ob. B.C. 184), cited=["24, 4", "107, 5"]
+                 - word=Fabulle, in_author=6, status=note, lemma=fabullus, headword=Fabullus, reason=entry cites no author, authors_before_ad14=0
+                 - word=verum, in_author=17, status=ok, lemma=uerum, headword=vērus, authors_before_ad14=11, earliest=Plaut. (ob. B.C. 184)
+                 - ... 22 more evidence rows (--evidence 0 or --json for all)
+PASS        L5   collocation                    19/41 content-word pairs have a parallel: 5 in Catullus (3 within one line), 14 only in Horace; without parallel: dico + fabullus, fabullus + celo, fabullus + tacitus, fabullus + amor, celo + bellus, celo + satis, celo + uenustus, tacitus + bellus ...; under another reading: dico + taceo (tacitus read as taceo; Catullus x2), taceo + amor (tacitus read as taceo; Catullus x1); 5/24 adjacent word pairs printed verbatim: Dic nobis (Catullus Carmina 55), mi Fabulle (Catullus Carmina 13), tuos amores (Catullus Carmina 6), non est (Catullus Carmina 14), quid sit (Horace Odes 1.9); Catullus's own 41 poems in the metre, each held out: 40% of 5170 pairs recur (median poem 39%, 10th percentile 22% = the warning line; draft 46%); Virgil is not in the lemma index
+                 - dico + fabullus (line 1, line): no parallel
+                 - fabullus + celo (line 1, adjacent lines): no parallel
+                 - fabullus + tacitus (line 1, adjacent lines): no parallel
+                 - fabullus + amor (line 1, adjacent lines): no parallel
+                 - celo + bellus (line 2, adjacent lines): no parallel
+                 - celo + satis (line 2, adjacent lines): no parallel
+                 - ... 61 more evidence rows (--evidence 0 or --json for all)

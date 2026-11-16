@@ -35,14 +35,23 @@ EO_FORMS = frozenset({"eum", "eunt", "euntem", "euntis", "eunti", "euntes", "eun
 UI_WORDS = frozenset({"cui", "huic", "hui"})
 EI_WORDS = frozenset({"hei", "ei", "dein", "deinde", "deinceps", "anteit"})   # anteit: synizesis (Horace Odes 1.35.17)
 # oe / ae / au split (two syllables) in these stems: poeta, poema, coego, coerceo, aer, Danae …
-SPLIT_OE = ("poet", "poem", "poes", "coeg", "coer", "coet", "coeo", "coeu", "coea", "coiu", "coempt", "pholo")  # coēmptōs, Pholoē
-SPLIT_AE = ("aer", "aeri", "aere", "dana", "israe", "laert")      # āēr, Danaē, Lāērtēs
+# (coetus keeps its diphthong: coe-tūs in all five places of the Hypotactic gold, Catullus 46.9, 64.34, 64.386, 64.408, 66.37)
+SPLIT_OE = ("poet", "poem", "poes", "coeg", "coer", "coeo", "coeu", "coea", "coiu", "coempt", "pholo")  # coēmptōs, Pholoē
+# Counted on the Hypotactic gold (Catullus, Virgil, Horace), diphthong : split.  aere 28 : 6, aera 14 : 11, aeris 3 : 2,
+# aerat- 12 : 0, aere- + vowel 11 : 2 (aes, bronze: the diphthong wins, e.g. Catullus 10.8, 64.263); aeri- + vowel
+# 0 : 20 and the word aer 0 : 2 (āēr, āerius: split).  The spelling cannot tell āere (air) from aere (bronze).
+SPLIT_AE = ("aeria", "aerii", "aerio", "aeriu", "dana", "israe", "laert")      # āerius, Danaē, Lāērtēs
+SPLIT_AE_WORDS = frozenset({"aer", "aerem"})                      # āēr; āerem (no form of aes is spelt so)
 SPLIT_AE_LOWER = ("aen",)     # aēnum, aēna, aēneus (bronze) when not capitalised; Aenēās keeps the diphthong
 INTERJECTIONS = frozenset({"o", "heu", "ah", "eheu", "io", "hem", "uae", "uah", "en", "ecce", "hei"})   # not a (ā = the preposition)
 PREFIXES = ("ab", "ad", "circum", "con", "de", "dis", "e", "ex", "in", "inter", "ob", "per", "prae", "pro", "re", "sub",
             "super", "tra", "trans", "quam", "quem", "quas", "quos")
 GREEK_INITIAL_I = ("iason", "iasi", "iolau", "iolc", "ione", "ioni", "iulus", "iuli", "iulo", "iulum", "iule", "iulae",
-                   "iulia", "iuliu")   # Iāsōn, Iolāus, Iōnes, Iūlus, Iūlia: vocalic initial i (Greek / names)
+                   "iulia", "iuliu",   # Iāsōn, Iolāus, Iōnes, Iūlus, Iūlia: vocalic initial i (Greek / names)
+                   # vocalic in every place of the Hypotactic gold (Catullus, Virgil, Horace; places in brackets):
+                   "iamb", "iacch", "iapy", "iapet", "iarb", "ioll", "iopa", "iaer", "iaspi", "ier")
+# iambus (4: Catullus 36.5, 40.2, 54.6), Iacchus (4), Iāpyx (8), Īapetus (1), Iarbās (3), Iollās (4), Iōpās (1), Iaera (1),
+# iaspis (1), ierit (1, Aeneid 7.223: perfect of eō)
 GREEK_INITIAL_I_WORDS = frozenset({"io", "ion", "ious", "ius"})   # Iō
 UE_ADVERBS = frozenset({"assidue", "strenue", "ingenue", "perpetue", "mutue", "promiscue", "ambigue", "exigue", "congrue",
                         "superflue", "uacue", "tenue", "continue", "arduue", "fatue", "innocue"})

@@ -1,0 +1,385 @@
+{
+ "name": "Hypotactic Latin hand scansion (David Chamberlain): Virgil",
+ "date": "2026-11-15",
+ "user_agent": "Melos/1.0 (+https://greeklyric.com)",
+ "origin": "https://hypotactic.com/latin/",
+ "licence": {
+  "name": "CC BY 4.0",
+  "url": "https://creativecommons.org/licenses/by/4.0/",
+  "stated_on": "https://hypotactic.com/latin/about.html",
+  "quote": "All the data on this site is/are licensed as CC-BY 4.0 ... While I have made minor corrections to most texts, the versions of Plautus and Terence found here have been substantially modified, and can be considered my own editions.  The CC-BY licence therefore applies to the full text."
+ },
+ "required_attribution": "David Chamberlain, hypotactic.com",
+ "use": "prosody attestation (L12) and evaluation gold; never a source for the quantity lexicon",
+ "files": {
+  "about.html": {
+   "url": "https://hypotactic.com/latin/about.html",
+   "sha256": "f7bcb3f2271d7ad585f3e6ab2ee174b993ac55476c2a91a4f38a18b11c3d8d6e",
+   "bytes": 13768
+  },
+  "aen1.html": {
+   "url": "https://hypotactic.com/latin/aen1.html",
+   "sha256": "1017dd54a90c9c202a60199b3d3d51f3aba3e7e156c8ac64968c004790226a0e",
+   "bytes": 541778,
+   "fetched_now": true,
+   "lines": 756,
+   "words": 4880,
+   "lines_per_metre": {
+    "hexameter": 756
+   }
+  },
+  "aen2.html": {
+   "url": "https://hypotactic.com/latin/aen2.html",
+   "sha256": "f9260ad406b0d65d4464c35cf75ccf3fbdae94997d2ce588cdb43bb2678a5fae",
+   "bytes": 578639,
+   "fetched_now": true,
+   "lines": 804,
+   "words": 5178,
+   "lines_per_metre": {
+    "hexameter": 804
+   }
+  },
+  "aen3.html": {
+   "url": "https://hypotactic.com/latin/aen3.html",
+   "sha256": "60843908460ad868226569cb9266e65f6cbbf9af1105262d3e39c62b53198180",
+   "bytes": 513777,
+   "fetched_now": true,
+   "lines": 718,
+   "words": 4533,
+   "lines_per_metre": {
+    "hexameter": 718
+   }
+  },
+  "aen4.html": {
+   "url": "https://hypotactic.com/latin/aen4.html",
+   "sha256": "93c25534ae00542fdb7d01e0d3baedbaa95dad093cdefdd188c1f826ae6b939b",
+   "bytes": 508355,
+   "fetched_now": true,
+   "lines": 705,
+   "words": 4574,
+   "lines_per_metre": {
+    "hexameter": 705
+   }
+  },
+  "aen5.html": {
+   "url": "https://hypotactic.com/latin/aen5.html",
+   "sha256": "6a86f6ed7e724a2c02d185411c3573a5ae37420e76b86a985250f437783e1f36",
+   "bytes": 623239,
+   "fetched_now": true,
+   "lines": 871,
+   "words": 5556,
+   "lines_per_metre": {
+    "hexameter": 871
+   }
+  },
+  "aen6.html": {
+   "url": "https://hypotactic.com/latin/aen6.html",
+   "sha256": "930bdfd0c8060f7e686bd70dd6e019c97ef313c539f5a5dd534d233f5b826e58",
+   "bytes": 647052,
+   "fetched_now": true,
+   "lines": 901,
+   "words": 5849,
+   "lines_per_metre": {
+    "hexameter": 901
+   }
+  },
+  "aen7.html": {
+   "url": "https://hypotactic.com/latin/aen7.html",
+   "sha256": "b486c2eaacff8656d2fb2ca1b51da575d1b6d701f9f8f5653ad839044c9a3ebb",
+   "bytes": 584993,
+   "fetched_now": true,
+   "lines": 817,
+   "words": 5218,
+   "lines_per_metre": {
+    "hexameter": 817
+   }
+  },
+  "aen8.html": {
+   "url": "https://hypotactic.com/latin/aen8.html",
+   "sha256": "4e2c7ba759bda4ac9e17a882f7b92a3458ccc625d316e39c652b2585da1aa32e",
+   "bytes": 520095,
+   "fetched_now": true,
+   "lines": 731,
+   "words": 4633,
+   "lines_per_metre": {
+    "hexameter": 731
+   }
+  },
+  "aen9.html": {
+   "url": "https://hypotactic.com/latin/aen9.html",
+   "sha256": "7504c90c146b46894fb2e917f94a4180d7f3c50401f71f9e425fe645a1c5729c",
+   "bytes": 585682,
+   "fetched_now": true,
+   "lines": 818,
+   "words": 5316,
+   "lines_per_metre": {
+    "hexameter": 818
+   }
+  },
+  "aen10.html": {
+   "url": "https://hypotactic.com/latin/aen10.html",
+   "sha256": "78bfa38fb99a18bef14e41e280a53fe51d14347a2a179c0b0d02e53006d275bd",
+   "bytes": 652238,
+   "fetched_now": true,
+   "lines": 908,
+   "words": 5906,
+   "lines_per_metre": {
+    "hexameter": 908
+   }
+  },
+  "aen11.html": {
+   "url": "https://hypotactic.com/latin/aen11.html",
+   "sha256": "84d8733da9a2e52139d3d195399c706375e4dff08b6bb63d431fb185334624ef",
+   "bytes": 657226,
+   "fetched_now": true,
+   "lines": 915,
+   "words": 5917,
+   "lines_per_metre": {
+    "hexameter": 915
+   }
+  },
+  "aen12.html": {
+   "url": "https://hypotactic.com/latin/aen12.html",
+   "sha256": "f6d3efb0d1c7d15a24e8f9f24d04226d4da31e24450dfbcb82e0efffd0166b3c",
+   "bytes": 683432,
+   "fetched_now": true,
+   "lines": 952,
+   "words": 6207,
+   "lines_per_metre": {
+    "hexameter": 952
+   }
+  },
+  "geo1.html": {
+   "url": "https://hypotactic.com/latin/geo1.html",
+   "sha256": "d64e5e247f15182c7fcb56b7829978cb14b0202c256602b37a62b72801bc66a1",
+   "bytes": 367801,
+   "fetched_now": true,
+   "lines": 514,
+   "words": 3306,
+   "lines_per_metre": {
+    "hexameter": 514
+   }
+  },
+  "geo2.html": {
+   "url": "https://hypotactic.com/latin/geo2.html",
+   "sha256": "17d1673055962e6c6e3626974b03bdd45fdf81e003ea9864ca90d3197bdc64cc",
+   "bytes": 387965,
+   "fetched_now": true,
+   "lines": 542,
+   "words": 3519,
+   "lines_per_metre": {
+    "hexameter": 542
+   }
+  },
+  "geo3.html": {
+   "url": "https://hypotactic.com/latin/geo3.html",
+   "sha256": "9d15fdc918315ca6aa178c27432f321ab34ab2e7be58b7ea99a921636737714a",
+   "bytes": 408720,
+   "fetched_now": true,
+   "lines": 566,
+   "words": 3699,
+   "lines_per_metre": {
+    "hexameter": 566
+   }
+  },
+  "geo4.html": {
+   "url": "https://hypotactic.com/latin/geo4.html",
+   "sha256": "b608846882be2f441c0668a0704a55c53c9eaa3fa65b5c1e2fc06f1d9f7c7b85",
+   "bytes": 404969,
+   "fetched_now": true,
+   "lines": 565,
+   "words": 3649,
+   "lines_per_metre": {
+    "hexameter": 565
+   }
+  },
+  "eclogue1.html": {
+   "url": "https://hypotactic.com/latin/eclogue1.html",
+   "sha256": "55f76bd35709d8ea26dcc4d52cf3a26189b8dd54750395a2546971d0a5bcca4d",
+   "bytes": 60576,
+   "fetched_now": true,
+   "lines": 83,
+   "words": 559,
+   "lines_per_metre": {
+    "hexameter": 83
+   }
+  },
+  "eclogue2.html": {
+   "url": "https://hypotactic.com/latin/eclogue2.html",
+   "sha256": "13585b8205cbaeb193db342df22040c2353981dedf7a3b68d45c9ff01527c1b9",
+   "bytes": 53869,
+   "fetched_now": true,
+   "lines": 73,
+   "words": 490,
+   "lines_per_metre": {
+    "hexameter": 73
+   }
+  },
+  "eclogue3.html": {
+   "url": "https://hypotactic.com/latin/eclogue3.html",
+   "sha256": "dc18846c28f8e9f3cc00d0ab748b5b19af0c4fa574b35381772e73a2d9fdee64",
+   "bytes": 83781,
+   "fetched_now": true,
+   "lines": 111,
+   "words": 793,
+   "lines_per_metre": {
+    "hexameter": 111
+   }
+  },
+  "eclogue4.html": {
+   "url": "https://hypotactic.com/latin/eclogue4.html",
+   "sha256": "e431bef0c3171bb31fbde27d348722588c5b3a5ac708dc8bd381ca21fbc70735",
+   "bytes": 45018,
+   "fetched_now": true,
+   "lines": 63,
+   "words": 409,
+   "lines_per_metre": {
+    "hexameter": 63
+   }
+  },
+  "eclogue5.html": {
+   "url": "https://hypotactic.com/latin/eclogue5.html",
+   "sha256": "9aadd2ac1cc6fe5a073cbc9cda43213093c6a651383d667eb6e22de1a878009f",
+   "bytes": 65454,
+   "fetched_now": true,
+   "lines": 90,
+   "words": 597,
+   "lines_per_metre": {
+    "hexameter": 90
+   }
+  },
+  "eclogue6.html": {
+   "url": "https://hypotactic.com/latin/eclogue6.html",
+   "sha256": "66d0ff03b38c620efeb0aa61eb0bafb27b2c65cb4824ee02fa9eaaf9e503d5c9",
+   "bytes": 61935,
+   "fetched_now": true,
+   "lines": 86,
+   "words": 558,
+   "lines_per_metre": {
+    "hexameter": 86
+   }
+  },
+  "eclogue7.html": {
+   "url": "https://hypotactic.com/latin/eclogue7.html",
+   "sha256": "21e19e9889467cd71283c6fedb8cca3adfa5185a8f77ca6221469d9d32813b65",
+   "bytes": 51549,
+   "fetched_now": true,
+   "lines": 70,
+   "words": 471,
+   "lines_per_metre": {
+    "hexameter": 70
+   }
+  },
+  "eclogue8.html": {
+   "url": "https://hypotactic.com/latin/eclogue8.html",
+   "sha256": "83a296a395c90871db21ec1d463d832b826d7e9cd8c03f9ba22437fb0d2089e5",
+   "bytes": 81933,
+   "fetched_now": true,
+   "lines": 110,
+   "words": 756,
+   "lines_per_metre": {
+    "hexameter": 110
+   }
+  },
+  "eclogue9.html": {
+   "url": "https://hypotactic.com/latin/eclogue9.html",
+   "sha256": "3a1a457e9bee4e9db5fcf039e0052128fd600545bdc1edde769d2cd6c2c50678",
+   "bytes": 50318,
+   "fetched_now": true,
+   "lines": 67,
+   "words": 472,
+   "lines_per_metre": {
+    "hexameter": 67
+   }
+  },
+  "eclogue10.html": {
+   "url": "https://hypotactic.com/latin/eclogue10.html",
+   "sha256": "d8e608bb9d3193744b4cb57b463068ad1deeb9d5f3398079c2f667018b0dc46c",
+   "bytes": 56343,
+   "fetched_now": true,
+   "lines": 77,
+   "words": 521,
+   "lines_per_metre": {
+    "hexameter": 77
+   }
+  },
+  "odes2.html": {
+   "url": "https://hypotactic.com/latin/odes2.html",
+   "sha256": "d86ea9b9708bd07e77c88eab858c86ca94a2f4645662cf84ec4ebdc6d0dc064c",
+   "bytes": 286325,
+   "fetched_now": true,
+   "lines": 572,
+   "words": 2409,
+   "lines_per_metre": {
+    "alcaic": 344,
+    "sapadon": 160,
+    "asc3": 28,
+    "trocstrophe": 40
+   }
+  },
+  "odes3.html": {
+   "url": "https://hypotactic.com/latin/odes3.html",
+   "sha256": "87820fd5a3aa21056df1f40b3408e510ce2cf9f297cb2c06665e1f327487b941",
+   "bytes": 509262,
+   "fetched_now": true,
+   "lines": 1004,
+   "words": 4354,
+   "lines_per_metre": {
+    "alcaic": 472,
+    "asc4": 48,
+    "sapadon": 224,
+    "asc2": 168,
+    "asc3": 64,
+    "ionaminore": 12,
+    "asc1": 16
+   }
+  },
+  "odes4.html": {
+   "url": "https://hypotactic.com/latin/odes4.html",
+   "sha256": "59f12aacfef3e6b62a03ea9393df178abfc16c2c9b5ca3402b78a1e98115b331",
+   "bytes": 333321,
+   "fetched_now": true,
+   "lines": 658,
+   "words": 2880,
+   "lines_per_metre": {
+    "asc2": 64,
+    "sapadon": 216,
+    "alcaic": 212,
+    "asc3": 68,
+    "arch1": 28,
+    "asc1": 34,
+    "asc5": 8,
+    "asc4": 28
+   }
+  },
+  "epodes.html": {
+   "url": "https://hypotactic.com/latin/epodes.html",
+   "sha256": "0111049f139b66276ed3007ce7b7f9263b4aca3de63b2a75644d1b3d3e2c9912",
+   "bytes": 345533,
+   "fetched_now": true,
+   "lines": 625,
+   "words": 3006,
+   "lines_per_metre": {
+    "iambic_strophe": 366,
+    "arch3": 28,
+    "alcmanic_strophe": 26,
+    "arch2": 18,
+    "1st_pythiambic": 40,
+    "2nd_pythiambic": 66,
+    "ia6": 81
+   }
+  },
+  "lines-virgil.jsonl.gz": {
+   "sha256": "680247cd0619034f07931b6f46fed265e884fff6a72eccc158b18427c1c5b3a8",
+   "bytes": 1919728
+  }
+ },
+ "counts": {
+  "lines": 15772,
+  "words": 96215,
+  "lines_per_author": {
+   "Vergil": 12913,
+   "Horace": 2859
+  }
+ }
+}

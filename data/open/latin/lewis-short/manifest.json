@@ -1,0 +1,41 @@
+{
+ "store": "data/lexica/lewis_short_la.sqlite (not committed; rebuild with scripts/build_dictionary_la.py)",
+ "source": "Charlton T. Lewis and Charles Short, A Latin Dictionary (Oxford: Clarendon Press, 1879); Perseus Digital Library TEI, lat.ls.perseus-eng2.xml (the file the PerseusDL/lexica repository distributes)",
+ "licence": "Available under a Creative Commons Attribution-ShareAlike 4.0 International License (https://creativecommons.org/licenses/by-sa/4.0/)",
+ "licence_file": "data/raw/latin/lewis-short/license.md",
+ "sha256": "a21c3799f42d33931b463c19a036b0e5c4a6504ccbd81ee55a262421a9e1836c",
+ "bytes": 77414882,
+ "counts": {
+  "entries": 51645,
+  "senses": 101982,
+  "citations": 379558,
+  "interlinear_pairs": 8268
+ },
+ "entries_by_label": {
+  "class.": 2822,
+  "post-class.": 2636,
+  "post-Aug.": 2044,
+  "late Lat.": 1643,
+  "poet.": 1333,
+  "rare": 1075,
+  "ante-class.": 995,
+  "very rare": 940,
+  "eccl. Lat.": 705,
+  "jurid. Lat.": 113
+ },
+ "authors_in_table": 231,
+ "author_strings_unresolved": {
+  "": 849,
+  "id.": 123,
+  "Georg Curtius": 67,
+  "ib.": 26,
+  "Ps.-Aug.": 14,
+  "Pseudo": 8,
+  "Pseudo Quint.": 5,
+  "Rib.": 3,
+  "Pseudo App.": 1,
+  "Georg Curtius.": 1,
+  "Schneid.": 1
+ },
+ "built": "2026-11-15T23:09:21-0800"
+}

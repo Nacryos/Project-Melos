@@ -1,0 +1,1368 @@
+{
+ "version": 1,
+ "metre": "phalaecian",
+ "author": "Catullus",
+ "source": "Hypotactic hand scansion (David Chamberlain, hypotactic.com), CC BY 4.0; metre label `hendecasyllables`",
+ "rare_threshold": 0.02,
+ "denominators": {
+  "gold_lines": 552,
+  "lines": 550,
+  "hendecasyllables": 536,
+  "decasyllables": 14,
+  "poems": 43
+ },
+ "irregular_lines": [
+  {
+   "locus": "55.10",
+   "text": "Camerium mihi pessimae puellae.",
+   "sounded": 12,
+   "gold_q": "SSSLSSLSLSLL"
+  },
+  {
+   "locus": "55.11",
+   "text": "quaedam inquit, nūdum redūc...",
+   "sounded": 7,
+   "gold_q": "LELLLLSL"
+  }
+ ],
+ "features": {
+  "base:iamb": {
+   "label": "iamb base",
+   "lines": 40,
+   "of": 550,
+   "share": 0.0727,
+   "rare": false,
+   "loci": []
+  },
+  "base:spondee": {
+   "label": "spondee base",
+   "lines": 477,
+   "of": 550,
+   "share": 0.8673,
+   "rare": false,
+   "loci": []
+  },
+  "base:trochee": {
+   "label": "trochee base",
+   "lines": 33,
+   "of": 550,
+   "share": 0.06,
+   "rare": false,
+   "loci": []
+  },
+  "break:5th": {
+   "label": "main break after the 5th",
+   "lines": 159,
+   "of": 536,
+   "share": 0.2966,
+   "rare": false,
+   "loci": []
+  },
+  "break:6th": {
+   "label": "main break after the 6th",
+   "lines": 229,
+   "of": 536,
+   "share": 0.4272,
+   "rare": false,
+   "loci": []
+  },
+  "break:both": {
+   "label": "word-end after both the 5th and the 6th",
+   "lines": 98,
+   "of": 536,
+   "share": 0.1828,
+   "rare": false,
+   "loci": []
+  },
+  "break:neither": {
+   "label": "no word-end after the 5th or the 6th",
+   "lines": 50,
+   "of": 536,
+   "share": 0.0933,
+   "rare": false,
+   "loci": []
+  },
+  "elision_at:1": {
+   "label": "elision at the 1st syllable",
+   "lines": 4,
+   "of": 550,
+   "share": 0.0073,
+   "rare": true,
+   "loci": [
+    "13.11",
+    "15.18",
+    "55.4",
+    "55.5"
+   ]
+  },
+  "elision_at:10": {
+   "label": "elision at the 10th syllable",
+   "lines": 14,
+   "of": 550,
+   "share": 0.0255,
+   "rare": false,
+   "loci": []
+  },
+  "elision_at:2": {
+   "label": "elision at the 2nd syllable",
+   "lines": 31,
+   "of": 550,
+   "share": 0.0564,
+   "rare": false,
+   "loci": []
+  },
+  "elision_at:3": {
+   "label": "elision at the 3rd syllable",
+   "lines": 62,
+   "of": 550,
+   "share": 0.1127,
+   "rare": false,
+   "loci": []
+  },
+  "elision_at:4": {
+   "label": "elision at the 4th syllable",
+   "lines": 15,
+   "of": 550,
+   "share": 0.0273,
+   "rare": false,
+   "loci": []
+  },
+  "elision_at:5": {
+   "label": "elision at the 5th syllable",
+   "lines": 11,
+   "of": 550,
+   "share": 0.02,
+   "rare": false,
+   "loci": []
+  },
+  "elision_at:6": {
+   "label": "elision at the 6th syllable",
+   "lines": 47,
+   "of": 550,
+   "share": 0.0855,
+   "rare": false,
+   "loci": []
+  },
+  "elision_at:7": {
+   "label": "elision at the 7th syllable",
+   "lines": 8,
+   "of": 550,
+   "share": 0.0145,
+   "rare": true,
+   "loci": [
+    "6.2",
+    "6.9",
+    "14b.1",
+    "24.10",
+    "35.15"
+   ]
+  },
+  "elision_at:8": {
+   "label": "elision at the 8th syllable",
+   "lines": 39,
+   "of": 550,
+   "share": 0.0709,
+   "rare": false,
+   "loci": []
+  },
+  "elision_at:9": {
+   "label": "elision at the 9th syllable",
+   "lines": 19,
+   "of": 550,
+   "share": 0.0345,
+   "rare": false,
+   "loci": []
+  },
+  "elision_kind:-m": {
+   "label": "elision of -m",
+   "lines": 57,
+   "of": 550,
+   "share": 0.1036,
+   "rare": false,
+   "loci": []
+  },
+  "elision_kind:long vowel or diphthong": {
+   "label": "elision of a long vowel or diphthong",
+   "lines": 84,
+   "of": 550,
+   "share": 0.1527,
+   "rare": false,
+   "loci": []
+  },
+  "elision_kind:short vowel": {
+   "label": "elision of a short vowel",
+   "lines": 88,
+   "of": 550,
+   "share": 0.16,
+   "rare": false,
+   "loci": []
+  },
+  "elision_monosyllable": {
+   "label": "elision of a monosyllable",
+   "lines": 30,
+   "of": 550,
+   "share": 0.0545,
+   "rare": false,
+   "loci": []
+  },
+  "elisions:0": {
+   "label": "0 elisions in the line",
+   "lines": 345,
+   "of": 550,
+   "share": 0.6273,
+   "rare": false,
+   "loci": []
+  },
+  "elisions:1": {
+   "label": "1 elision in the line",
+   "lines": 165,
+   "of": 550,
+   "share": 0.3,
+   "rare": false,
+   "loci": []
+  },
+  "elisions:2": {
+   "label": "2 elisions in the line",
+   "lines": 35,
+   "of": 550,
+   "share": 0.0636,
+   "rare": false,
+   "loci": []
+  },
+  "elisions:3": {
+   "label": "3 elisions in the line",
+   "lines": 5,
+   "of": 550,
+   "share": 0.0091,
+   "rare": true,
+   "loci": [
+    "9.6",
+    "15.7",
+    "36.12",
+    "45.3",
+    "57.7"
+   ]
+  },
+  "final_prodelided_est": {
+   "label": "line ending in prodelided est",
+   "lines": 10,
+   "of": 550,
+   "share": 0.0182,
+   "rare": true,
+   "loci": [
+    "7.10",
+    "10.3",
+    "12.5",
+    "12.16",
+    "13.10"
+   ]
+  },
+  "final_syllables:1": {
+   "label": "line-end word of 1 syllable",
+   "lines": 7,
+   "of": 550,
+   "share": 0.0127,
+   "rare": true,
+   "loci": [
+    "5.5",
+    "7.7",
+    "10.31",
+    "13.1",
+    "24.7"
+   ]
+  },
+  "final_syllables:2": {
+   "label": "line-end word of 2 syllables",
+   "lines": 156,
+   "of": 550,
+   "share": 0.2836,
+   "rare": false,
+   "loci": []
+  },
+  "final_syllables:3": {
+   "label": "line-end word of 3 syllables",
+   "lines": 245,
+   "of": 550,
+   "share": 0.4455,
+   "rare": false,
+   "loci": []
+  },
+  "final_syllables:4": {
+   "label": "line-end word of 4 syllables",
+   "lines": 78,
+   "of": 550,
+   "share": 0.1418,
+   "rare": false,
+   "loci": []
+  },
+  "final_syllables:5": {
+   "label": "line-end word of 5 syllables",
+   "lines": 43,
+   "of": 550,
+   "share": 0.0782,
+   "rare": false,
+   "loci": []
+  },
+  "final_syllables:6": {
+   "label": "line-end word of 6 syllables",
+   "lines": 20,
+   "of": 550,
+   "share": 0.0364,
+   "rare": false,
+   "loci": []
+  },
+  "final_syllables:7": {
+   "label": "line-end word of 7 syllables",
+   "lines": 1,
+   "of": 550,
+   "share": 0.0018,
+   "rare": true,
+   "loci": [
+    "6.11"
+   ]
+  },
+  "hiatus:at punctuation": {
+   "label": "hiatus at punctuation",
+   "lines": 1,
+   "of": 550,
+   "share": 0.0018,
+   "rare": true,
+   "loci": [
+    "38.2"
+   ]
+  },
+  "hiatus:beside an interjection": {
+   "label": "hiatus beside an interjection",
+   "lines": 1,
+   "of": 550,
+   "share": 0.0018,
+   "rare": true,
+   "loci": [
+    "3.16"
+   ]
+  },
+  "hiatus:semihiatus of a long monosyllable": {
+   "label": "hiatus semihiatus of a long monosyllable",
+   "lines": 1,
+   "of": 550,
+   "share": 0.0018,
+   "rare": true,
+   "loci": [
+    "55.4"
+   ]
+  },
+  "length:10": {
+   "label": "10 syllables",
+   "lines": 14,
+   "of": 550,
+   "share": 0.0255,
+   "rare": false,
+   "loci": []
+  },
+  "length:11": {
+   "label": "11 syllables",
+   "lines": 536,
+   "of": 550,
+   "share": 0.9745,
+   "rare": false,
+   "loci": []
+  },
+  "prodelision": {
+   "label": "prodelision of est / es",
+   "lines": 20,
+   "of": 550,
+   "share": 0.0364,
+   "rare": false,
+   "loci": []
+  },
+  "word_end:1": {
+   "label": "word-end after the 1st",
+   "lines": 235,
+   "of": 536,
+   "share": 0.4384,
+   "rare": false,
+   "loci": []
+  },
+  "word_end:10": {
+   "label": "word-end after the 10th",
+   "lines": 6,
+   "of": 536,
+   "share": 0.0112,
+   "rare": true,
+   "loci": [
+    "5.5",
+    "7.7",
+    "10.31",
+    "13.1",
+    "24.7"
+   ]
+  },
+  "word_end:2": {
+   "label": "word-end after the 2nd",
+   "lines": 262,
+   "of": 536,
+   "share": 0.4888,
+   "rare": false,
+   "loci": []
+  },
+  "word_end:3": {
+   "label": "word-end after the 3rd",
+   "lines": 271,
+   "of": 536,
+   "share": 0.5056,
+   "rare": false,
+   "loci": []
+  },
+  "word_end:4": {
+   "label": "word-end after the 4th",
+   "lines": 38,
+   "of": 536,
+   "share": 0.0709,
+   "rare": false,
+   "loci": []
+  },
+  "word_end:5": {
+   "label": "word-end after the 5th",
+   "lines": 257,
+   "of": 536,
+   "share": 0.4795,
+   "rare": false,
+   "loci": []
+  },
+  "word_end:6": {
+   "label": "word-end after the 6th",
+   "lines": 327,
+   "of": 536,
+   "share": 0.6101,
+   "rare": false,
+   "loci": []
+  },
+  "word_end:7": {
+   "label": "word-end after the 7th",
+   "lines": 105,
+   "of": 536,
+   "share": 0.1959,
+   "rare": false,
+   "loci": []
+  },
+  "word_end:8": {
+   "label": "word-end after the 8th",
+   "lines": 251,
+   "of": 536,
+   "share": 0.4683,
+   "rare": false,
+   "loci": []
+  },
+  "word_end:9": {
+   "label": "word-end after the 9th",
+   "lines": 141,
+   "of": 536,
+   "share": 0.2631,
+   "rare": false,
+   "loci": []
+  }
+ },
+ "base": {
+  "overall": {
+   "spondee": {
+    "n": 477,
+    "of": 550,
+    "share": 0.8673
+   },
+   "trochee": {
+    "n": 33,
+    "of": 550,
+    "share": 0.06
+   },
+   "iamb": {
+    "n": 40,
+    "of": 550,
+    "share": 0.0727
+   }
+  },
+  "by_poem": {
+   "1": {
+    "lines": 10,
+    "spondee": 6,
+    "trochee": 3,
+    "iamb": 1
+   },
+   "2": {
+    "lines": 10,
+    "spondee": 9,
+    "trochee": 0,
+    "iamb": 1
+   },
+   "2b": {
+    "lines": 3,
+    "spondee": 3,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "3": {
+    "lines": 18,
+    "spondee": 17,
+    "trochee": 0,
+    "iamb": 1
+   },
+   "5": {
+    "lines": 13,
+    "spondee": 13,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "6": {
+    "lines": 17,
+    "spondee": 17,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "7": {
+    "lines": 12,
+    "spondee": 11,
+    "trochee": 0,
+    "iamb": 1
+   },
+   "9": {
+    "lines": 11,
+    "spondee": 11,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "10": {
+    "lines": 34,
+    "spondee": 34,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "12": {
+    "lines": 17,
+    "spondee": 17,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "13": {
+    "lines": 14,
+    "spondee": 14,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "14": {
+    "lines": 23,
+    "spondee": 23,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "14b": {
+    "lines": 3,
+    "spondee": 3,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "15": {
+    "lines": 19,
+    "spondee": 19,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "16": {
+    "lines": 14,
+    "spondee": 14,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "21": {
+    "lines": 13,
+    "spondee": 13,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "23": {
+    "lines": 27,
+    "spondee": 27,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "24": {
+    "lines": 10,
+    "spondee": 10,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "26": {
+    "lines": 5,
+    "spondee": 5,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "27": {
+    "lines": 7,
+    "spondee": 4,
+    "trochee": 1,
+    "iamb": 2
+   },
+   "28": {
+    "lines": 15,
+    "spondee": 15,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "32": {
+    "lines": 11,
+    "spondee": 5,
+    "trochee": 2,
+    "iamb": 4
+   },
+   "33": {
+    "lines": 8,
+    "spondee": 7,
+    "trochee": 0,
+    "iamb": 1
+   },
+   "35": {
+    "lines": 18,
+    "spondee": 12,
+    "trochee": 2,
+    "iamb": 4
+   },
+   "36": {
+    "lines": 20,
+    "spondee": 15,
+    "trochee": 2,
+    "iamb": 3
+   },
+   "38": {
+    "lines": 8,
+    "spondee": 4,
+    "trochee": 2,
+    "iamb": 2
+   },
+   "40": {
+    "lines": 8,
+    "spondee": 4,
+    "trochee": 1,
+    "iamb": 3
+   },
+   "41": {
+    "lines": 8,
+    "spondee": 3,
+    "trochee": 3,
+    "iamb": 2
+   },
+   "42": {
+    "lines": 24,
+    "spondee": 13,
+    "trochee": 7,
+    "iamb": 4
+   },
+   "43": {
+    "lines": 8,
+    "spondee": 8,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "45": {
+    "lines": 26,
+    "spondee": 18,
+    "trochee": 4,
+    "iamb": 4
+   },
+   "46": {
+    "lines": 11,
+    "spondee": 11,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "47": {
+    "lines": 7,
+    "spondee": 6,
+    "trochee": 1,
+    "iamb": 0
+   },
+   "48": {
+    "lines": 6,
+    "spondee": 6,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "49": {
+    "lines": 7,
+    "spondee": 3,
+    "trochee": 2,
+    "iamb": 2
+   },
+   "50": {
+    "lines": 21,
+    "spondee": 20,
+    "trochee": 1,
+    "iamb": 0
+   },
+   "53": {
+    "lines": 5,
+    "spondee": 4,
+    "trochee": 0,
+    "iamb": 1
+   },
+   "54": {
+    "lines": 7,
+    "spondee": 3,
+    "trochee": 1,
+    "iamb": 3
+   },
+   "55": {
+    "lines": 20,
+    "spondee": 19,
+    "trochee": 0,
+    "iamb": 1
+   },
+   "56": {
+    "lines": 7,
+    "spondee": 7,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "57": {
+    "lines": 10,
+    "spondee": 10,
+    "trochee": 0,
+    "iamb": 0
+   },
+   "58": {
+    "lines": 5,
+    "spondee": 4,
+    "trochee": 1,
+    "iamb": 0
+   },
+   "58b": {
+    "lines": 10,
+    "spondee": 10,
+    "trochee": 0,
+    "iamb": 0
+   }
+  }
+ },
+ "word_end_after": {
+  "1": {
+   "n": 235,
+   "with_elided": 261,
+   "of": 536,
+   "share": 0.4384,
+   "share_with_elided": 0.4869
+  },
+  "2": {
+   "n": 262,
+   "with_elided": 312,
+   "of": 536,
+   "share": 0.4888,
+   "share_with_elided": 0.5821
+  },
+  "3": {
+   "n": 271,
+   "with_elided": 285,
+   "of": 536,
+   "share": 0.5056,
+   "share_with_elided": 0.5317
+  },
+  "4": {
+   "n": 38,
+   "with_elided": 48,
+   "of": 536,
+   "share": 0.0709,
+   "share_with_elided": 0.0896
+  },
+  "5": {
+   "n": 257,
+   "with_elided": 300,
+   "of": 536,
+   "share": 0.4795,
+   "share_with_elided": 0.5597
+  },
+  "6": {
+   "n": 327,
+   "with_elided": 335,
+   "of": 536,
+   "share": 0.6101,
+   "share_with_elided": 0.625
+  },
+  "7": {
+   "n": 105,
+   "with_elided": 144,
+   "of": 536,
+   "share": 0.1959,
+   "share_with_elided": 0.2687
+  },
+  "8": {
+   "n": 251,
+   "with_elided": 267,
+   "of": 536,
+   "share": 0.4683,
+   "share_with_elided": 0.4981
+  },
+  "9": {
+   "n": 141,
+   "with_elided": 154,
+   "of": 536,
+   "share": 0.2631,
+   "share_with_elided": 0.2873
+  },
+  "10": {
+   "n": 6,
+   "with_elided": 6,
+   "of": 536,
+   "share": 0.0112,
+   "share_with_elided": 0.0112
+  }
+ },
+ "main_break": {
+  "word_end_clear": {
+   "5th": {
+    "n": 159,
+    "of": 536,
+    "share": 0.2966
+   },
+   "6th": {
+    "n": 229,
+    "of": 536,
+    "share": 0.4272
+   },
+   "both": {
+    "n": 98,
+    "of": 536,
+    "share": 0.1828
+   },
+   "neither": {
+    "n": 50,
+    "of": 536,
+    "share": 0.0933
+   }
+  },
+  "counting_word_ends_in_elision": {
+   "5th": {
+    "n": 181,
+    "of": 536,
+    "share": 0.3377
+   },
+   "6th": {
+    "n": 216,
+    "of": 536,
+    "share": 0.403
+   },
+   "both": {
+    "n": 119,
+    "of": 536,
+    "share": 0.222
+   },
+   "neither": {
+    "n": 20,
+    "of": 536,
+    "share": 0.0373
+   }
+  }
+ },
+ "elision": {
+  "total": 250,
+  "lines_with": 205,
+  "of": 550,
+  "per_line": {
+   "0": {
+    "n": 345,
+    "of": 550,
+    "share": 0.6273
+   },
+   "1": {
+    "n": 165,
+    "of": 550,
+    "share": 0.3
+   },
+   "2": {
+    "n": 35,
+    "of": 550,
+    "share": 0.0636
+   },
+   "3": {
+    "n": 5,
+    "of": 550,
+    "share": 0.0091
+   }
+  },
+  "at_syllable": {
+   "1": {
+    "n": 4,
+    "of": 250,
+    "share": 0.016
+   },
+   "2": {
+    "n": 31,
+    "of": 250,
+    "share": 0.124
+   },
+   "3": {
+    "n": 62,
+    "of": 250,
+    "share": 0.248
+   },
+   "4": {
+    "n": 15,
+    "of": 250,
+    "share": 0.06
+   },
+   "5": {
+    "n": 11,
+    "of": 250,
+    "share": 0.044
+   },
+   "6": {
+    "n": 47,
+    "of": 250,
+    "share": 0.188
+   },
+   "7": {
+    "n": 8,
+    "of": 250,
+    "share": 0.032
+   },
+   "8": {
+    "n": 39,
+    "of": 250,
+    "share": 0.156
+   },
+   "9": {
+    "n": 19,
+    "of": 250,
+    "share": 0.076
+   },
+   "10": {
+    "n": 14,
+    "of": 250,
+    "share": 0.056
+   }
+  },
+  "kinds": {
+   "short vowel": {
+    "n": 98,
+    "of": 250,
+    "share": 0.392
+   },
+   "long vowel or diphthong": {
+    "n": 90,
+    "of": 250,
+    "share": 0.36
+   },
+   "-m": {
+    "n": 62,
+    "of": 250,
+    "share": 0.248
+   }
+  },
+  "monosyllables": {
+   "te": {
+    "n": 8,
+    "loci": [
+     "6.16",
+     "9.6",
+     "12.4",
+     "14.3",
+     "14.20"
+    ]
+   },
+   "me": {
+    "n": 5,
+    "loci": [
+     "10.28",
+     "15.1",
+     "16.3",
+     "28.9",
+     "38.2"
+    ]
+   },
+   "cum": {
+    "n": 3,
+    "loci": [
+     "1.5",
+     "13.13",
+     "28.4"
+    ]
+   },
+   "nam": {
+    "n": 2,
+    "loci": [
+     "13.11",
+     "21.7"
+    ]
+   },
+   "quem": {
+    "n": 2,
+    "loci": [
+     "2.2",
+     "15.18"
+    ]
+   },
+   "se": {
+    "n": 2,
+    "loci": [
+     "10.7",
+     "58.3"
+    ]
+   },
+   "si": {
+    "n": 2,
+    "loci": [
+     "13.6",
+     "14.8"
+    ]
+   },
+   "tu": {
+    "n": 2,
+    "loci": [
+     "10.33",
+     "49.7"
+    ]
+   },
+   "quae": {
+    "n": 1,
+    "loci": [
+     "3.14"
+    ]
+   },
+   "quam": {
+    "n": 1,
+    "loci": [
+     "57.8"
+    ]
+   },
+   "qui": {
+    "n": 1,
+    "loci": [
+     "15.7"
+    ]
+   },
+   "sum": {
+    "n": 1,
+    "loci": [
+     "45.4"
+    ]
+   }
+  },
+  "monosyllables_total": 30
+ },
+ "prodelision": {
+  "n": 20,
+  "lines": 20,
+  "of": 550,
+  "kinds": {
+   "-m": 9,
+   "long vowel or diphthong": 3,
+   "short vowel": 8
+  },
+  "at_line_end": 10,
+  "loci": [
+   "2b.1",
+   "3.2",
+   "7.10",
+   "9.10",
+   "10.3"
+  ]
+ },
+ "hiatus": [
+  {
+   "locus": "3.16",
+   "text": "ō factum male! ō miselle passer!",
+   "word": "male!",
+   "next": "ō",
+   "after": 5,
+   "kind": "beside an interjection"
+  },
+  {
+   "locus": "38.2",
+   "text": "malēst, mē hercule, et labōriōsē,",
+   "word": "hercule,",
+   "next": "et",
+   "after": 5,
+   "kind": "at punctuation"
+  },
+  {
+   "locus": "55.4",
+   "text": "tē in Circō, tē in omnibus libellīs,",
+   "word": "tē",
+   "next": "in",
+   "after": 4,
+   "kind": "semihiatus of a long monosyllable"
+  }
+ ],
+ "synizesis": [
+  {
+   "locus": "50.21",
+   "text": "est vēhemēns dea: laedere hanc cavētō.",
+   "syllable": "vēhe"
+  }
+ ],
+ "line_end": {
+  "word_syllables": {
+   "1": {
+    "n": 7,
+    "of": 550,
+    "share": 0.0127
+   },
+   "2": {
+    "n": 156,
+    "of": 550,
+    "share": 0.2836
+   },
+   "3": {
+    "n": 245,
+    "of": 550,
+    "share": 0.4455
+   },
+   "4": {
+    "n": 78,
+    "of": 550,
+    "share": 0.1418
+   },
+   "5": {
+    "n": 43,
+    "of": 550,
+    "share": 0.0782
+   },
+   "6": {
+    "n": 20,
+    "of": 550,
+    "share": 0.0364
+   },
+   "7": {
+    "n": 1,
+    "of": 550,
+    "share": 0.0018
+   }
+  },
+  "monosyllabic_endings": [
+   {
+    "locus": "5.5",
+    "word": "lūx,",
+    "text": "nōbīs cum semel occidit brevis lūx,"
+   },
+   {
+    "locus": "7.7",
+    "word": "nox,",
+    "text": "aut quam sīdera multa, cum tacet nox,"
+   },
+   {
+    "locus": "10.31",
+    "word": "mē?",
+    "text": "vērum, ūtrum illius an meī, quid ad mē?"
+   },
+   {
+    "locus": "13.1",
+    "word": "mē",
+    "text": "Cēnābis bene, mī Fabulle, apud mē"
+   },
+   {
+    "locus": "24.7",
+    "word": "est:",
+    "text": "‘quī? nōn est homo bellus?' inquiēs. est:"
+   },
+   {
+    "locus": "50.20",
+    "word": "tē.",
+    "text": "nē poenās Nemesis reposcat ā tē."
+   },
+   {
+    "locus": "55.13",
+    "word": "est;",
+    "text": "sed tē jam ferre Herculī labōs est;"
+   }
+  ],
+  "prodelided_est_endings": {
+   "n": 10,
+   "loci": [
+    "7.10",
+    "10.3",
+    "12.5",
+    "12.16",
+    "13.10"
+   ]
+  }
+ },
+ "decasyllable_lines": [
+  {
+   "locus": "55.1",
+   "text": "Ōrāmus, sī forte nōn molestum est,"
+  },
+  {
+   "locus": "55.3",
+   "text": "tē Campō quaesīvimus minōre,"
+  },
+  {
+   "locus": "55.5",
+   "text": "tē in templō summī Jovis sacrātō."
+  },
+  {
+   "locus": "55.7",
+   "text": "fēmellās omnēs, amīce, prēndī,"
+  },
+  {
+   "locus": "55.8",
+   "text": "quās vultū vīdī tamen serēnō."
+  },
+  {
+   "locus": "55.9",
+   "text": "aveltē, sīc ipse flāgitābam,"
+  },
+  {
+   "locus": "55.13",
+   "text": "sed tē jam ferre Herculī labōs est;"
+  },
+  {
+   "locus": "55.14",
+   "text": "tantō tē in fastū negās, amīce."
+  },
+  {
+   "locus": "55.16",
+   "text": "audācter, committe, crēde lūcī."
+  },
+  {
+   "locus": "55.18",
+   "text": "sī linguam clausō tenēs in ōre,"
+  },
+  {
+   "locus": "55.20",
+   "text": "verbōsā gaudet Venus loquellā."
+  },
+  {
+   "locus": "55.22",
+   "text": "dum vestrī sim particeps amōris."
+  },
+  {
+   "locus": "58b.1",
+   "text": "Nōn cūstōs sī fingar ille Crētum,"
+  },
+  {
+   "locus": "58b.9",
+   "text": "et multīs languōribus perēsus"
+  }
+ ],
+ "rare_features": {
+  "elision_at:1": {
+   "label": "elision at the 1st syllable",
+   "lines": 4,
+   "of": 550,
+   "share": 0.0073,
+   "rare": true,
+   "loci": [
+    "13.11",
+    "15.18",
+    "55.4",
+    "55.5"
+   ]
+  },
+  "elision_at:7": {
+   "label": "elision at the 7th syllable",
+   "lines": 8,
+   "of": 550,
+   "share": 0.0145,
+   "rare": true,
+   "loci": [
+    "6.2",
+    "6.9",
+    "14b.1",
+    "24.10",
+    "35.15"
+   ]
+  },
+  "elisions:3": {
+   "label": "3 elisions in the line",
+   "lines": 5,
+   "of": 550,
+   "share": 0.0091,
+   "rare": true,
+   "loci": [
+    "9.6",
+    "15.7",
+    "36.12",
+    "45.3",
+    "57.7"
+   ]
+  },
+  "final_prodelided_est": {
+   "label": "line ending in prodelided est",
+   "lines": 10,
+   "of": 550,
+   "share": 0.0182,
+   "rare": true,
+   "loci": [
+    "7.10",
+    "10.3",
+    "12.5",
+    "12.16",
+    "13.10"
+   ]
+  },
+  "final_syllables:1": {
+   "label": "line-end word of 1 syllable",
+   "lines": 7,
+   "of": 550,
+   "share": 0.0127,
+   "rare": true,
+   "loci": [
+    "5.5",
+    "7.7",
+    "10.31",
+    "13.1",
+    "24.7"
+   ]
+  },
+  "final_syllables:7": {
+   "label": "line-end word of 7 syllables",
+   "lines": 1,
+   "of": 550,
+   "share": 0.0018,
+   "rare": true,
+   "loci": [
+    "6.11"
+   ]
+  },
+  "hiatus:at punctuation": {
+   "label": "hiatus at punctuation",
+   "lines": 1,
+   "of": 550,
+   "share": 0.0018,
+   "rare": true,
+   "loci": [
+    "38.2"
+   ]
+  },
+  "hiatus:beside an interjection": {
+   "label": "hiatus beside an interjection",
+   "lines": 1,
+   "of": 550,
+   "share": 0.0018,
+   "rare": true,
+   "loci": [
+    "3.16"
+   ]
+  },
+  "hiatus:semihiatus of a long monosyllable": {
+   "label": "hiatus semihiatus of a long monosyllable",
+   "lines": 1,
+   "of": 550,
+   "share": 0.0018,
+   "rare": true,
+   "loci": [
+    "55.4"
+   ]
+  },
+  "word_end:10": {
+   "label": "word-end after the 10th",
+   "lines": 6,
+   "of": 536,
+   "share": 0.0112,
+   "rare": true,
+   "loci": [
+    "5.5",
+    "7.7",
+    "10.31",
+    "13.1",
+    "24.7"
+   ]
+  }
+ }
+}

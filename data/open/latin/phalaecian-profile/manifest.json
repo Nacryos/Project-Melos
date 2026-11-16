@@ -1,0 +1,23 @@
+{
+ "name": "phalaecian-profile",
+ "built": "2026-11-15",
+ "script": "scripts/build_phalaecian_profile.py",
+ "files": {
+  "profile.json": "86f985708d3516743080c2850bc5af6ba3bc063e2424ae320f2ace85ddbe16a2"
+ },
+ "source": {
+  "path": "data/open/latin/hypotactic/lines.jsonl.gz",
+  "sha256": "1c19d714ef50bd4ff666229944030f48d3b5ea2a50931b5089217247ffb42572",
+  "attribution": "David Chamberlain, Hypotactic (hypotactic.com)",
+  "license": "CC BY 4.0"
+ },
+ "license": "CC BY 4.0 (derived counts)",
+ "denominators": {
+  "gold_lines": 552,
+  "lines": 550,
+  "hendecasyllables": 536,
+  "decasyllables": 14,
+  "poems": 43
+ },
+ "rare_threshold": 0.02
+}

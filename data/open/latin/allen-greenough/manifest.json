@@ -1,0 +1,81 @@
+{
+ "name": "Allen and Greenough's New Latin Grammar for Schools and Colleges (1903), Perseus Digital Library TEI",
+ "date": "2026-11-15",
+ "user_agent": "Melos/1.0 (+https://greeklyric.com)",
+ "document": "Perseus:text:1999.04.0001",
+ "source": {
+  "editors": "J. B. Greenough, G. L. Kittredge, A. A. Howard, Benj. L. D'Ooge",
+  "publisher": "Ginn and Company",
+  "year": "1903",
+  "status": "public domain (published 1903 in the United States)"
+ },
+ "licence": {
+  "name": "Perseus availability statement (TEI header of the file)",
+  "quote": "(none: the TEI header of this file carries no availability statement)",
+  "alpheios_readme_url": "https://raw.githubusercontent.com/alpheios-project/grammar-allen-greenough/master/README.md",
+  "alpheios_readme_quote": "This work is licensed under a [Creative Commons Attribution-Noncommercial-Share Alike 3.0 United States License](https://creativecommons.org/licenses/by-nc-sa/3.0/us/)",
+  "perseus_page": "https://www.perseus.tufts.edu/hopper/text?doc=Perseus:text:1999.04.0001 answered HTTP 403 ('Please allow cookies') on 2026-11-15, so its rights sentence is not quoted here",
+  "note": "The 1903 text is public domain. The Alpheios README, which describes the same Perseus digitisation, is the only licence statement obtained for the markup; treat the markup as non-commercial, share-alike.",
+  "plain": "The underlying book (1903) is in the public domain; the encoding used here carries the terms quoted above."
+ },
+ "index": {
+  "what": "Index of Words and Subjects of the same book. It is not in the Perseus TEI (the file has no index), so it is read from the Internet Archive's OCR text of a scan of the 1903 printing. OCR, unaudited.",
+  "item": "https://archive.org/details/allengreenoughsn00alleiala",
+  "rights_fields": {
+   "date": "1903",
+   "publisher": "Boston, London : Ginn & Company",
+   "contributor": "University of California Libraries",
+   "possible-copyright-status": "NOT_IN_COPYRIGHT",
+   "licenseurl": null,
+   "rights": null
+  },
+  "confirmed": "a reference is confirmed when a word of its subject stands in the section of the TEI it points to (for a range, every word in one section of the range); lookups use confirmed references only",
+  "counts": {
+   "entries": 2045,
+   "entries_with_references": 1989,
+   "see_only_or_unreadable": 56,
+   "references": 4328,
+   "references_confirmed": 3526,
+   "headings": 333
+  }
+ },
+ "files": {
+  "Perseus_text_1999.04.0001.xml": {
+   "url": "https://www.perseus.tufts.edu/hopper/dltext?doc=Perseus:text:1999.04.0001",
+   "sha256": "5d24dbbb1bc1f1926ba305348f26d8cbd05bf8990bcc4de1825a2293ceccb4ab",
+   "bytes": 3523482,
+   "fetched_at": "2026-11-16T06:45:49Z"
+  },
+  "sections.jsonl": {
+   "sha256": "ce969d13e7053911e05b5a381ac0cb7647318d83aa5d652ce4f5e5531daf6447",
+   "bytes": 1442396
+  },
+  "allengreenoughsn00alleiala_djvu.txt": {
+   "url": "https://archive.org/download/allengreenoughsn00alleiala/allengreenoughsn00alleiala_djvu.txt",
+   "sha256": "5b7b8b79043a63a588c2cbaff0de4324212173eaf3573655cedf11b2f5c15552",
+   "bytes": 1260517,
+   "fetched_at": "2026-11-16T07:02:55Z"
+  },
+  "subjects.jsonl": {
+   "sha256": "b421c1a6bae5dd6149e37f557ef1ba69d8292097a84e71b15dbeada32b4cf316",
+   "bytes": 912247
+  }
+ },
+ "counts": {
+  "rows": 1603,
+  "sections": 642,
+  "first_section": 1,
+  "last_section": 642,
+  "missing_section_numbers": [],
+  "lettered_subsections": 961,
+  "duplicate_ids": [],
+  "empty_rows": 0,
+  "sections_per_part": {
+   "PART FIRST — WORDS AND FORMS": 267,
+   "PART SECOND — SYNTAX": 334,
+   "PROSODY": 41
+  },
+  "figures_replaced_by_[scheme]": 54,
+  "characters_before_first_section": 234
+ }
+}

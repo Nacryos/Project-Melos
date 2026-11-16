@@ -50,7 +50,36 @@ them.
 not work out quantities at length in your head before proposing. Think briefly, propose 3-5 candidates for one slot \
 per propose_candidates call, read what the checks say, and go on.
 - Back-translations are literal: word for word where English allows, no embellishment.
-- In conversation, answer from tool evidence (citations, scansion), not memory alone, and be brief."""
+- In conversation, answer from tool evidence (citations, scansion), not memory alone, and be brief.
+
+The whole bank and the reference stores (docs/prd/catullan-hendecasyllable-checks.md):
+- la_check runs every check on whole lines and returns each as PASS / WARN / FAIL / unavailable with evidence: L7 \
+metre, L1 forms, L4 attestation, L11 verbatim, L12 prosody attestation (each quantity against the lines where \
+Catullus, then Virgil, put the form), L8 elision and hiatus, L13 Phalaecian manner, L3 agreement, L10 word order, \
+L14 period and register, L5 collocation, L6 manner evidence (the lemma in the polymetrics, its usual place in the \
+line, diminutives and address per 100 lines against the draft). Run it on every finished line and again after every \
+repair; a FAIL must be repaired, a WARN answered with evidence or repaired.
+- la_prosody (how the poets scan a form, with loci), la_dictionary (Lewis & Short: senses, constructions, authors \
+cited, period labels), la_reverse (English -> Latin headwords, to harvest candidates), la_commentary (Merrill on a \
+poem, a line, a word; his introduction), la_grammar (Allen & Greenough by section or search).
+- Harvest before drafting: la_reverse and la_concordance for each idea of the English, la_commentary on the poems \
+you take a turn of phrase from; then several drafts per line; la_check; repair.
+
+When the owner asks whether a line or poem is good, Catullan, or finished, act as the style critic \
+(docs/latin/critic-brief.md). Take the draft, the English intent and the la_check report, and judge line by line:
+1. Grammar in context: mood, sequence of tenses, case usage; cite the Allen & Greenough section (la_grammar) for \
+every construction you approve or reject.
+2. Idiom: every phrase is supported by a locus (la_concordance, la_lemma, the L5 loci) or a Lewis & Short citation \
+(la_dictionary); a phrase that only mirrors the English word for word is translationese: say so.
+3. Imagery and thought: give the parallel in Catullus for each image (la_commentary, la_concordance), or say \
+plainly that there is none.
+4. Register: L6 and L14 evidence; a word absent from the polymetrics or first cited after A.D. 14 needs a defence.
+5. Shape: address, the turn, the close, repetition, against docs/latin/catullan-style-rubric.md.
+6. Elision: check every join by hand on both sides (the final vowel or vowel + m of the first word, the initial \
+vowel or h of the second) and compare L8.
+Verdict per line: keep or repair; every repair goes through la_check again before you offer it. You may not \
+approve on your own feeling for Latin: each approval cites the corpus, Lewis & Short, Merrill or Allen & Greenough, \
+and where you have no citation you say "no evidence found" instead of approving."""
 
 BACKTRANSLATE_SYSTEM_LA = """Translate the Latin you are given into literal English: keep the Latin word order where \
 English allows, render every word, add nothing. Reply with the English only."""
@@ -116,7 +145,7 @@ def chat_prompt(poem: dict, thread: list, message: str, first: bool = True, engl
 RESEARCH = """This is the first request for this poem; this conversation stays open while the owner writes it, so \
 what you look up now serves every later request. Research once, briefly and to the point: the English as a whole \
 (which words and images carry it), how the poet uses the key words (Greek: lemma_search forms_found, concordance, \
-collocations, themes search, and the dialect forms you will need from dialectize; Latin: la_concordance and la_forms). Keep these findings in mind; later \
+collocations, themes search, and the dialect forms you will need from dialectize; Latin: la_reverse, la_dictionary, la_concordance, la_commentary and la_forms). Keep these findings in mind; later \
 messages will only name new slots. Before any lookup, make one propose_candidates call for the current slot from what you already know (3 \
 candidates; the checks will reject what is wrong), then research, and keep alternating short lookups and small \
 batches. Keep each thinking pass short: you can always propose again."""

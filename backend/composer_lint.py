@@ -13,6 +13,10 @@ n-gram data is missing on this deployment) and never blocks then. A candidate pa
                   Ionic / Attic targets: a word printed only in Lesbian or Doric passages is flagged, not blocked.
   L4 attestation  tokens of each spelling in the corpus, in the dialect, and in the chosen poet. Never blocks.
   L11 verbatim    runs of 4+ words printed word for word in the corpus (homage). Never blocks.
+
+Latin only (language="la", whole lines; docs/prd/catullan-hendecasyllable-checks.md): L12 prosody attestation and
+L8 elision and hiatus (blocking), L13 Phalaecian manner, L3 agreement, L10 word order, L14 period and register,
+L5 collocation, L6 manner evidence; see LATIN_CHECKS. The Greek path does not run them.
 """
 from __future__ import annotations
 
@@ -446,15 +450,76 @@ def _unavailable(check_id: str, name: str, exc: Exception) -> dict:
     return {"id": check_id, "name": name, "ok": None, "blocking": False, "detail": f"not run: {reason}", "evidence": []}
 
 
+# The Latin-only checks of docs/prd/catullan-hendecasyllable-checks.md, in report order: (id, name, module, function).
+# Each module is imported when first needed; a module that is missing, raises or misses the budget is reported as
+# "unavailable:" (ok True, never blocking). L12 and L8 block through the dict their module returns.
+LATIN_CHECKS = (
+    ("L12", "prosody attestation", "latin_prosody", "check"),
+    ("L8", "elision and hiatus", "latin_metre_style", "check_elision"),
+    ("L13", "Phalaecian manner", "latin_metre_style", "check"),
+    ("L3", "agreement", "latin_grammar", "check"),
+    ("L10", "word order", "latin_grammar", "check_word_order"),
+    ("L14", "period and register", "latin_dictionary", "check"),
+    ("L5", "collocation", "latin_style", "check_collocation"),
+    ("L6", "manner evidence", "latin_style", "check_manner"),
+)
+
+
+def status_of(check: dict) -> str:
+    """PASS / WARN / FAIL / unavailable for a report (scripts/la_check.py, POST /api/la/check): a failed blocking
+    check is FAIL, a failed advisory one WARN, a check that did not run unavailable."""
+    if check.get("ok") is None or str(check.get("detail") or "").startswith(("unavailable:", "not run:")):
+        return "unavailable"
+    if check.get("ok") is False:
+        return "FAIL" if check.get("blocking") else "WARN"
+    return "PASS"
+
+
+def _latin_unavailable(check_id: str, name: str, reason) -> dict:
+    return {"id": check_id, "name": name, "ok": True, "blocking": False, "detail": f"unavailable: {reason}", "evidence": []}
+
+
+def _latin_call(module: str, function: str, text: str, metre_name: str, author: str) -> dict:
+    import importlib
+    return getattr(importlib.import_module(f".{module}", __package__), function)(text, metre_name=metre_name, author=author)
+
+
+def latin_checks_start(text: str, metre_name: str | None, author: str, only=None) -> dict:
+    """Submit the Latin-only checks on whole lines: {check id: future}. ``only``: the ids to run (default all)."""
+    return {cid: _outer().submit(_latin_call, module, function, text, metre_name or "phalaecian", author or "Catullus")
+            for cid, _name, module, function in LATIN_CHECKS if only is None or cid in only}
+
+
+def latin_checks_collect(futures: dict, deadline: float, ms: dict, t0: float) -> list[dict]:
+    out = []
+    for cid, name, _module, _function in LATIN_CHECKS:
+        if cid not in futures:
+            continue
+        done, value, exc = _wait(futures[cid], deadline)
+        ms[cid] = (time.perf_counter() - t0) * 1000
+        if not done:
+            out.append(_latin_unavailable(cid, name, f"timeout ({round((deadline - t0) * 1000)} ms)"))
+        elif exc is not None or not isinstance(value, dict):
+            reason = (f"{type(exc).__name__}: {exc}" if exc is not None else "the check returned no result")
+            out.append(_latin_unavailable(cid, name, reason))
+        else:
+            out.append({"evidence": [], **value, "id": value.get("id") or cid, "name": value.get("name") or name})
+    return out
+
+
 def check(greek: str, *, metre_name: str | None = None, dialect: str | None = None, author: str | None = None,
           remaining_template: str | None = None, prefix: str | None = None, line_index: int = 0,
-          require_template: bool = False, language: str = "grc") -> dict:
+          require_template: bool = False, language: str = "grc", latin_budget: float | None = None,
+          latin_only=None) -> dict:
     """Run the bank on one candidate within the latency budget. ``prefix`` is the current line before the caret
     (scanned with the candidate so word-boundary quantities are right; only the candidate's syllables are
     fitted). ``require_template`` (the agent's candidates): without remaining_template or a concrete metre the
     metre cannot reject anything, so L7 fails instead of passing. ``language`` "la" runs the Latin backend
     (backend/latin_backend.py): L7 via the Latin scanner with the prefix's last syllable included when the
-    candidate elides it, L1/L4/L11 over the Latin corpus partition, L2 not applicable."""
+    candidate elides it, L1/L4/L11 over the Latin corpus partition, L2 not applicable; then, when the candidate
+    completes its line (no open slots left), the Latin-only checks of LATIN_CHECKS on the whole lines, within
+    ``latin_budget`` seconds (default: the common budget; scripts/la_check.py gives them longer). ``latin_only``
+    limits those to the given ids. The Greek path takes neither."""
     from .scansion import api as scan_api, metre
     t0 = time.perf_counter()
     budget = budget_seconds()
@@ -527,6 +592,10 @@ def check(greek: str, *, metre_name: str | None = None, dialect: str | None = No
              "template": "missing"}
     checks.append(c)
     ms["L7"] = (time.perf_counter() - t0) * 1000
+    extra = {}
+    if latin and words and not any(f.get("remaining_template") for f in fits):
+        whole = (lead + " " + text) if lead else text
+        extra = latin_checks_start(whole, metre_name, author, latin_only)
     names = {"L1": [("L1", "forms")], "L2+L4": [("L2", "dialect"), ("L4", "attestation")], "L11": [("L11", "verbatim")]}
     for key, future in pending.items():
         # The per-word lookups inside each check honour the deadline; this outer wait adds a small grace for
@@ -543,6 +612,8 @@ def check(greek: str, *, metre_name: str | None = None, dialect: str | None = No
                 checks.append({"id": i, "name": n, "ok": False if blocking else None, "blocking": blocking,
                                "detail": _timeout_note(words, budget) if blocking else f"not run: timeout ({round(budget * 1000)} ms)",
                                "evidence": []})
+    if extra:
+        checks.extend(latin_checks_collect(extra, t0 + latin_budget if latin_budget else deadline + 0.05, ms, t0))
     passed = all(ch["ok"] is not False for ch in checks if ch["blocking"])
     scansion = {"language": language, "dialect": target, "metre": metre_name, "remaining_template": remaining_template,
                 "template": "given" if (remaining_template or metre_name) else "missing",
