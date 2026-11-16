@@ -60,7 +60,10 @@ L14 period and register, L5 collocation, L6 manner evidence (the lemma in the po
 line, diminutives and address per 100 lines against the draft). Run it on every finished line and again after every \
 repair; a FAIL must be repaired, a WARN answered with evidence or repaired.
 - la_prosody (how the poets scan a form, with loci), la_dictionary (Lewis & Short: senses, constructions, authors \
-cited, period labels), la_reverse (English -> Latin headwords, to harvest candidates), la_commentary (Merrill on a \
+cited, period labels), la_reverse (English -> Latin headwords, to harvest candidates: each row names its sources, Lewis & Short, Catullus's \
+own lines, Smith & Hall), la_lexica (the further dictionaries: en= for the Smith & Hall and Riddle-Arnold English-Latin \
+articles, which keep the senses of an English word apart; q= for a Latin word in Georges, Gaffiot, Forcellini and \
+Doederlein's synonyms, a second opinion on sense and register when Lewis & Short is thin), la_commentary (Merrill on a \
 poem, a line, a word; his introduction), la_grammar (Allen & Greenough by section or search).
 - Harvest before drafting: la_reverse and la_concordance for each idea of the English, la_commentary on the poems \
 you take a turn of phrase from; then several drafts per line; la_check; repair.
@@ -145,7 +148,7 @@ def chat_prompt(poem: dict, thread: list, message: str, first: bool = True, engl
 RESEARCH = """This is the first request for this poem; this conversation stays open while the owner writes it, so \
 what you look up now serves every later request. Research once, briefly and to the point: the English as a whole \
 (which words and images carry it), how the poet uses the key words (Greek: lemma_search forms_found, concordance, \
-collocations, themes search, and the dialect forms you will need from dialectize; Latin: la_reverse, la_dictionary, la_concordance, la_commentary and la_forms). Keep these findings in mind; later \
+collocations, themes search, and the dialect forms you will need from dialectize; Latin: la_reverse, la_lexica, la_dictionary, la_concordance, la_commentary and la_forms). Keep these findings in mind; later \
 messages will only name new slots. Before any lookup, make one propose_candidates call for the current slot from what you already know (3 \
 candidates; the checks will reject what is wrong), then research, and keep alternating short lookups and small \
 batches. Keep each thinking pass short: you can always propose again."""

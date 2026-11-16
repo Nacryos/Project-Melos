@@ -25,11 +25,18 @@ Greenough section. Where there is none, say "no evidence found".
    ```
    scripts/la_dict.py --en "kiss"          # English -> Latin headwords
    scripts/la_dict.py basium --full        # senses, constructions, authors cited
+   scripts/la_lex.py --en "darling"        # Smith & Hall, Riddle-Arnold English-Latin articles
+   scripts/la_lex.py basium                # Georges, Gaffiot, Forcellini, Döderlein's synonyms
    scripts/la_ref.py word basium           # Merrill's notes on the word
    scripts/la_ref.py commentary 5 7        # Merrill on a poem and line
    scripts/la_ref.py search "hiatus"       # grammar, commentary, introduction
    ```
    Keep for each idea: candidate lemmas, the forms that fit, one locus each, the construction the verb takes.
+   `la_dict.py --en` marks each headword's sources (`LS` Lewis & Short, `Cat` a line of Catullus, `SH` Smith & Hall);
+   prefer a word two sources give. The further dictionaries (`docs/latin/lexica.md`: Georges, Gaffiot, Forcellini,
+   Lewis's Elementary, Döderlein, Smith & Hall, Riddle-Arnold) are read with `scripts/la_lex.py <word>`,
+   `--en "<english>"`, `--search "<words>"`, `--dict georges,gaffiot`; the critic may cite them as second witnesses
+   on sense and on the difference between near-synonyms, never against the corpus or L14.
 3. **Drafts.** At least three per line, in whole lines. Vary the last word, the opening word, the stops.
 4. **Check.**
    ```
@@ -62,7 +69,7 @@ Greenough section. Where there is none, say "no evidence found".
 
 ## With the composer agent
 
-The same bank and stores are the tools `la_check`, `la_prosody`, `la_dictionary`, `la_reverse`, `la_commentary`,
+The same bank and stores are the tools `la_check`, `la_prosody`, `la_dictionary`, `la_reverse`, `la_lexica`, `la_commentary`,
 `la_grammar`, beside `la_concordance`, `la_lemma`, `la_forms` and `scan`.
 
 ## Do not

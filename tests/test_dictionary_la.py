@@ -130,11 +130,15 @@ def test_english_stems_and_g2():
 
 @store
 def test_reverse_names_its_sources():
-    kiss = ld.reverse("kiss", 5)
-    assert kiss[0]["sources"] == ["lewis-short", "catullus-interlinear"] and "5.7" in kiss[0]["interlinear"]["loci"]
+    kiss = ld.reverse("kiss", 5)                 # Smith & Hall joins as a third source when its store is built
+    assert kiss[0]["sources"][:2] == ["lewis-short", "catullus-interlinear"] and "5.7" in kiss[0]["interlinear"]["loci"]
     assert "kiss" in kiss[0]["interlinear"]["english"].lower() and kiss[0]["interlinear"]["latin"]
-    napkin = ld.reverse("napkin", 5)[0]          # L&S glosses linteum "a linen cloth"; Catullus 12 supplies it
-    assert napkin["lemma"] == "linteum" and napkin["sources"] == ["catullus-interlinear"] and napkin["interlinear"]["locus"] == "12.3"
+    napkin = next(r for r in ld.reverse("napkin", 8) if r["lemma"] == "linteum")     # L&S glosses linteum "a linen cloth"; Catullus 12 supplies it
+    assert napkin["sources"] == ["catullus-interlinear"] and napkin["interlinear"]["locus"] == "12.3"
     assert ld.reverse("tasteless", 3)[0]["lemma"] == "insulsus" and ld.reverse("charming", 3)[0]["lemma"] == "uenustus"
     assert [r["lemma"] for r in ld.reverse("sparrow", 5) if "catullus-interlinear" in r["sources"]] == ["passer"]
-    assert ld.reverse("strigil", 3)[0]["sources"] == ["lewis-short"] and ld.reverse("strigil", 3)[0]["interlinear"] is None
+    strigil = ld.reverse("strigil", 3)[0]
+    assert strigil["sources"][0] == "lewis-short" and strigil["interlinear"] is None
+    for r in ld.reverse("darling", 12):
+        assert set(r["sources"]) <= {"lewis-short", "catullus-interlinear", "smith-hall"} and r["sources"]
+        assert ("smith-hall" in r["sources"]) == bool(r["smith_hall"])

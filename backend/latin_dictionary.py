@@ -170,6 +170,9 @@ def _attested(lemma: str) -> tuple[int, int]:
     from . import latin_lemma
     try:
         by = latin_lemma.lemma_attestation(lemma).get("by_author", {})
+        if not by:                    # L&S's headword is not the lemma index's: deliciae there is delicia
+            other = next((r["lemma"] for r in latin_lemma.readings(lemma) if r["lemma"] != lemma), "")
+            by = latin_lemma.lemma_attestation(other).get("by_author", {}) if other else {}
     except Exception:  # noqa: BLE001
         return 0, 0
     return by.get("Catullus", {}).get("tokens", 0), by.get("Horace", {}).get("tokens", 0)
@@ -231,49 +234,103 @@ def _interlinear(english: str) -> dict[str, dict]:
     return {lem: {k: v for k, v in d.items() if k != "_stems"} for lem, d in out.items() if len(d["_stems"]) == need}
 
 
+def _bare_row(lem: str, match: str, taken: list[dict]) -> dict | None:
+    """A reverse() row for a lemma that L&S's glosses did not find: its L&S entry if it has one. None if the
+    entry is already among `taken`."""
+    es = [_entry(i) for i in _entry_ids(fold(lem))]
+    e = min(es, key=lambda x: (x["folded"] != fold(lem), x["folded"][-2:] != fold(lem)[-2:], -x["citations"])) if es else None
+    if e and any(o["headword"] == e["headword"] for o in taken):
+        return None
+    c, h = _attested(e["folded"] if e and not _attested(lem)[0] else lem)
+    return {"headword": e["headword"] if e else lem, "lemma": lem, "pos": e["pos"] if e else "",
+            "gender": e["gender"] if e else "", "inflection": e["inflection"] if e else "", "match": match, "score": 0.0,
+            "sense": {"n": "", "glosses": next((s["glosses"] for s in e["senses"] if s["glosses"]), "") if e else "", "translations": ""},
+            "labels": e["labels"] if e else [], "late": bool(e and e["period"]["late"]),
+            "before_ad14": bool(e["period"]["authors_before_ad14"]) if e else True,
+            "catullus": c, "horace": h, "cites_catullus": e["authors"].get("Cat.", 0) if e else 0,
+            "sources": [], "interlinear": None, "smith_hall": None}
+
+
+def _smith_hall(english: str) -> list[dict]:
+    """[{word, folded, context, under}] in the dictionary's order: the Latin words Smith & Hall's English-Latin
+    dictionary (1871) gives under the English headword, if data/lexica/lex_smith_hall.sqlite is there."""
+    try:
+        from . import latin_lexica
+        out, seen = [], set()
+        for e in latin_lexica.english(english, 6, ["smith_hall"]):
+            if e["how"] != "headword":
+                continue
+            for w in e["latin"]:
+                if w["folded"] not in seen:
+                    seen.add(w["folded"])
+                    out.append({**w, "under": e["headword"]})
+        return out
+    except Exception:  # noqa: BLE001 - a second source; reverse() stands without it
+        return []
+
+
 def reverse(english: str, limit: int = 20) -> list[dict]:
-    """English -> Latin headwords from two sources, each row saying which found it (`sources`): Lewis & Short's
-    glosses (`lewis-short`) and the audited literal English of Catullus (`catullus-interlinear`: the lemma stands in
-    the same line as the English word more often than chance; `interlinear` gives count, G2, loci and the first
-    line in Latin and English). Order: words both sources give (strongest Catullan association first), then
-    Catullus's own words that L&S glosses otherwise (two lines or more, the lemma's own strongest English word, G2 >= 10.83, five at most), then L&S's other
-    headwords. A Catullan hit is a co-occurrence, so a neighbour in the same lines can intrude: read the line given."""
+    """English -> Latin headwords from three sources, each row naming those that found it in `sources`:
+    `lewis-short` (L&S's glosses, 1879, Latin -> English read backwards); `catullus-interlinear` (the audited
+    literal English of Catullus: the lemma stands in the same line as the English word more often than chance;
+    `interlinear` gives count, G2, loci and the first line in Latin and English); `smith-hall` (Smith & Hall's
+    English-Latin dictionary, 1871, a dictionary made for composing: `smith_hall` gives the word as printed and
+    the clause it stands in). Order: words that two or three sources give; then Catullus's own words that the
+    dictionaries gloss otherwise (two lines or more, the lemma's own strongest English word, G2 >= 10.83, five at
+    most); then Smith & Hall's other answers in its order; then L&S's other headwords. A Catullan hit is a
+    co-occurrence, so a neighbour in the same lines can intrude: read the line given."""
     if not available():
         return []
     ls = _reverse_ls(english, max(limit * 3, 200))
     cat = _interlinear(english)
-    table = authors()
+    sh = {w["folded"]: w for w in _smith_hall(english)}
     both, only_cat, only_ls = [], [], []
     for r in ls:
         hit = cat.pop(r["lemma"], None)
         if hit:
-            both.append({**r, "sources": ["lewis-short", "catullus-interlinear"], "interlinear": hit})
+            both.append({**r, "sources": ["lewis-short", "catullus-interlinear"], "interlinear": hit, "smith_hall": None})
         else:
-            only_ls.append({**r, "sources": ["lewis-short"], "interlinear": None})
-    for lem, hit in sorted(cat.items(), key=lambda kv: -kv[1]["g2"]):
-        if hit["g2"] < 10.83 or len(only_cat) >= 5:
-            break
-        if hit["count"] < 2 or hit["rank"] > 1:    # without L&S's agreement: two lines, and the lemma's own best English
-            continue
-        es = [_entry(i) for i in _entry_ids(fold(lem))]
-        e = min(es, key=lambda x: (x["folded"] != fold(lem), x["folded"][-2:] != fold(lem)[-2:], -x["citations"])) if es else None
-        if e and any(o["headword"] == e["headword"] for o in both + only_cat):
-            continue
-        c, h = _attested(lem)
-        only_cat.append({"headword": e["headword"] if e else lem, "lemma": lem, "pos": e["pos"] if e else "",
-                         "gender": e["gender"] if e else "", "inflection": e["inflection"] if e else "",
-                         "match": "catullus line", "score": 0.0,
-                         "sense": {"n": "", "glosses": next((s["glosses"] for s in e["senses"] if s["glosses"]), "") if e else "",
-                                   "translations": ""},
-                         "labels": e["labels"] if e else [], "late": bool(e and e["period"]["late"]),
-                         "before_ad14": bool(e and e["period"]["authors_before_ad14"]) if e else True,
-                         "catullus": c, "horace": h, "cites_catullus": e["authors"].get("Cat.", 0) if e else 0,
-                         "sources": ["catullus-interlinear"], "interlinear": hit})
+            only_ls.append({**r, "sources": ["lewis-short"], "interlinear": None, "smith_hall": None})
     both.sort(key=lambda d: (d["_tier"] == 2 and d["interlinear"]["rank"] > 2, -d["interlinear"]["g2"]))
-    out = both + only_cat + only_ls
-    for d in out:
+    held = {}                                       # Catullan hits that only Smith & Hall's agreement will admit
+    for lem, hit in sorted(cat.items(), key=lambda kv: -kv[1]["g2"]):
+        if hit["g2"] < 10.83 or hit["count"] < 2 or hit["rank"] > 1 or len(only_cat) >= 5:
+            held[lem] = hit                         # without a dictionary's agreement: two lines, the lemma's best English
+            continue
+        row = _bare_row(lem, "catullus line", both + only_cat)
+        if row:
+            only_cat.append({**row, "sources": ["catullus-interlinear"], "interlinear": hit})
+    rows = both + only_cat + only_ls
+    only_sh = []
+    for key, w in sh.items():
+        if not _entry_ids(key):                     # printed in a form that is no headword (amores, mellita): its lemma
+            key = next((e["folded"] for e in lookup(w["word"])), key)
+        row = next((r for r in rows + only_sh if key in (fold(r["lemma"]), fold(r["headword"]))), None)
+        if row is not None and "smith-hall" in row["sources"]:
+            continue
+        if row is None:
+            row = _bare_row(key, "smith-hall", rows + only_sh)
+            if row is None:
+                continue
+            hit = held.get(key) or held.get(row["lemma"])
+            if hit:
+                row["sources"], row["interlinear"] = ["catullus-interlinear"], hit
+            only_sh.append(row)
+        row["sources"] = [*row["sources"], "smith-hall"]
+        row["smith_hall"] = {"word": w["word"], "under": w["under"], "context": w["context"]}
+    rows += only_sh
+    order = {id(r): i for i, r in enumerate(rows)}
+
+    def rank(r: dict) -> tuple:
+        n = len(r["sources"])
+        solo = {"catullus-interlinear": 1, "smith-hall": 2, "lewis-short": 3}[r["sources"][0]] if n == 1 else 0
+        lone_ls = solo == 3 and r.get("_tier", 2) == 2            # an L&S hit outside the first two tiers
+        return (solo, -n, lone_ls, order[id(r)])
+
+    rows.sort(key=rank)
+    for d in rows:
         d.pop("_tier", None)
-    return out[:limit]
+    return rows[:limit]
 
 
 def _reverse_ls(english: str, limit: int = 20) -> list[dict]:
@@ -426,6 +483,19 @@ def word_report(word: str, author: str = "Catullus", *, corpus: bool = True, pro
             "cited": [(c["work"] + " " + c["locus"]).strip() for c in (loci or [])][:8]}
 
 
+def _second_opinion(rows: list[dict]) -> None:
+    """Evidence only, never the verdict: a word that warns or that L&S lacks gets `gloss`, one line each from Georges
+    (1913) and Gaffiot (1934) when those stores are there (backend/latin_lexica.py), so the reader sees what they say."""
+    try:
+        from . import latin_lexica
+        for r in rows[:12]:
+            g = latin_lexica.gloss(r["lemma"] or r["word"])
+            if g:
+                r["gloss"] = g
+    except Exception:  # noqa: BLE001
+        return
+
+
 def check(text: str, *, metre_name: str = "phalaecian", author: str = "Catullus") -> dict:
     """L14 period and register (never blocks): ok is False when a word warns; evidence has one row per distinct word."""
     base = {"id": "L14", "name": "period and register", "ok": True, "blocking": False, "detail": "", "evidence": []}
@@ -442,6 +512,7 @@ def check(text: str, *, metre_name: str = "phalaecian", author: str = "Catullus"
         warn = [r for r in rows if r["status"] == "warn"]
         note = [r for r in rows if r["status"] == "note"]
         missing = [r["word"] for r in rows if r["status"] == "no entry"]
+        _second_opinion([r for r in rows if r["status"] in ("warn", "no entry")])
         parts = [f"{len(warn)} of {len(rows)} words warn" if warn else f"no period warning in {len(rows)} words"]
         parts += [f"{r['word']} ({r['headword']}): {r['reason']}" for r in warn]
         if note:

@@ -145,10 +145,17 @@ How to compose with it: `docs/latin/composing-hendecasyllables.md`; the critic's
 1. `pycollatinus` (GPL; paradigm coverage 52 % to 93.9 %) is in `requirements.txt`.
 2. The Merrill and Allen & Greenough text files are committed under `data/open/latin/` with their manifests
    (Merrill: Perseus page CC BY-SA 3.0 US, TEI header non-commercial; A&G: CC BY-NC-SA 3.0 US).
-3. Every further dictionary that is openly reachable is being ingested (Georges, Gaffiot, Smith & Hall, Döderlein,
-   Forcellini, the open-access Thesaurus): databases local under `data/lexica/lex_*.sqlite`, manifests under
-   `data/open/latin/lexica/`. The Oxford Latin Dictionary is in copyright and is not fetched; it waits for the
-   owner's PDF (`scripts/ingest_tll_la.py --pdf`).
+3. Nine further dictionaries are ingested (2026-11-16 00:35 PST; `docs/latin/lexica.md`, `scripts/la_lex.py`,
+   `backend/latin_lexica.py`, route `/api/la/lexica`, agent tool `la_lexica`): Georges 1913 (54,782 entries), Gaffiot
+   2016 (72,163), Lewis's Elementary (17,582), Döderlein's synonyms (556 groups), Smith & Hall English-Latin
+   (30,247; now a source of the reverse lookup), Riddle & Arnold English-Latin (32,432), Georges German-Latin
+   (27,043), Forcellini (46,983, from uncorrected OCR: noisy, about 27 very common words missing), and the
+   open-access Thesaurus Linguae Latinae (60 PDFs, 6.4 GB; A-M, O, P, N to *netura*, R to *resurgo*; 91,750
+   headwords, every page in full text). Databases are local under `data/lexica/lex_*.sqlite`; manifests under
+   `data/open/latin/lexica/`. Gaffiot (CC BY-NC-ND) and the Thesaurus (CC BY-NC-ND, no public upload) must never
+   be shown on the site. Not got: the corrected Forcellini at lexica.linguax.com (robots file and CAPTCHA refuse
+   crawlers); the Oxford Latin Dictionary (in copyright, not fetched; waits for the owner's PDF,
+   `scripts/ingest_tll_la.py --pdf FILE --name old`, a mode so far tried only on Thesaurus fascicles).
 
 **Known weak points** (from the critic): L5 is noisy on a short poem and pairs words across sentences; nothing
 checks particle order or the force of a question; the corpus store holds Catullus and Horace only, so Virgil stands

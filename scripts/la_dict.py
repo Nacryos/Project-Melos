@@ -2,7 +2,7 @@
 """Lewis & Short from the command line (backend/latin_dictionary.py; docs/latin/dictionary.md).
 
     .venv/bin/python scripts/la_dict.py basia            # the entry of a headword or an inflected form
-    .venv/bin/python scripts/la_dict.py --en "kiss"      # English -> Latin headwords, Catullus's words first
+    .venv/bin/python scripts/la_dict.py --en "kiss"      # English -> Latin: L&S read backwards, Catullus's lines, Smith & Hall
     .venv/bin/python scripts/la_dict.py --check "da mi basia mille"   # L14 period and register on a draft
 """
 from __future__ import annotations
@@ -54,11 +54,13 @@ def main() -> int:
         for r in rows:
             use = f"Cat. {r['catullus']}, Hor. {r['horace']}"
             flag = " LATE" if r["late"] or not r["before_ad14"] else ""
-            src = "+".join("LS" if x == "lewis-short" else "Cat" for x in r["sources"])
-            print(f"{r['headword']:<18} {src:<7} {use:<20} {r['match']:<14} {', '.join(r['labels']) or '-':<22}{flag}  {r['sense']['glosses'][:70]}")
+            src = "+".join({"lewis-short": "LS", "catullus-interlinear": "Cat", "smith-hall": "SH"}[x] for x in r["sources"])
+            print(f"{r['headword']:<18} {src:<10} {use:<20} {r['match']:<14} {', '.join(r['labels']) or '-':<22}{flag}  {r['sense']['glosses'][:70]}")
             if r["interlinear"]:
                 h = r["interlinear"]
                 print(f"{'':<18} Catullus {h['loci']}: {h['latin']} | {h['english']}")
+            if r.get("smith_hall"):
+                print(f"{'':<18} Smith & Hall, {r['smith_hall']['under']}: {r['smith_hall']['context']}")
         return 0
     if args.check:
         out = ld.check(args.check)

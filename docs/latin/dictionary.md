@@ -147,7 +147,9 @@ demonstration, not a rate.
 
 ## Reverse lookup
 
-`reverse(english, limit)` reads two sources and every row says which found it in `sources`:
+`reverse(english, limit)` reads two sources of its own and, when `data/lexica/lex_smith_hall.sqlite` is built, a
+third, Smith & Hall's English-Latin dictionary (`smith-hall`; `docs/latin/lexica.md`, Wiring). Every row says
+which found it in `sources`:
 
 1. `lewis-short`: L&S's glosses through FTS5. Three tiers: a gloss equal to the query in the entry's first glossed
    sense; an equal gloss in a later sense or a containing gloss in the first; the rest by score. Inside the first

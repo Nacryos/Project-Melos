@@ -86,9 +86,21 @@ HTTP_TOOLS: dict[str, tuple[str, str, str, dict]] = {
     "la_dictionary": ("GET", "/api/la/dictionary", "Latin: the Lewis & Short entries of a word: senses, constructions, the "
                       "authors cited (is it in Catullus, Cicero, Plautus?) and period labels (ante-class., post-class., late).",
                       _schema(("q",), q=_s("string", "A Latin word or headword"))),
-    "la_reverse": ("GET", "/api/la/reverse", "Latin: English -> Latin headwords whose Lewis & Short glosses carry the English "
-                   "word, with how often Catullus uses each. Use it to harvest candidates, then check each in la_lemma.",
+    "la_reverse": ("GET", "/api/la/reverse", "Latin: English -> Latin headwords from three sources named in each row's "
+                   "`sources`: Lewis & Short's glosses read backwards, the lines of Catullus whose literal English has the "
+                   "word (`interlinear`: loci and the line), and Smith & Hall's English-Latin dictionary (`smith_hall`), "
+                   "with how often Catullus uses each. Use it to harvest candidates, then check each in la_lemma.",
                    _schema(("q",), q=_s("string", "An English word or short phrase"), limit=LIMIT)),
+    "la_lexica": ("GET", "/api/la/lexica", "Latin: the further dictionaries beside Lewis & Short. q = a Latin word or "
+                  "inflected form: its entry in Georges (Latin-German 1913), Gaffiot (Latin-French 1934), Forcellini "
+                  "(Latin-Latin), Lewis's Elementary, Doederlein's synonyms (how near-synonyms differ), and the Thesaurus "
+                  "Linguae Latinae where it is loaded. en = an English word: the whole Smith & Hall and Riddle-Arnold "
+                  "English-Latin articles, with the Latin words they offer (made for composing: senses kept apart, authors "
+                  "named). search = full text across all of them. With no argument: the list of stores, with licences.",
+                  _schema((), q=_s("string", "A Latin word or headword"), en=_s("string", "An English word"),
+                          search=_s("string", "Words to find anywhere in the entries"),
+                          dict=_s("string", "Comma-separated stores, e.g. georges,gaffiot (default: all that fit)"),
+                          limit=LIMIT, full=_s("boolean", "Whole entries instead of the first 320 characters"))),
     "la_commentary": ("GET", "/api/la/commentary", "Latin: Merrill's commentary on Catullus (1893). poem (and line) for the "
                       "notes on a passage; q to search the notes; words (the draft's words) for notes on those words; "
                       "intro to search his introduction (metre, diction, life).",

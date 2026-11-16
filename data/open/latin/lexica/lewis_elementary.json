@@ -1,0 +1,25 @@
+{
+ "name": "lewis_elementary",
+ "title": "C. T. Lewis, An Elementary Latin Dictionary (1890)",
+ "language": "en",
+ "direction": "la-en",
+ "source_url": "https://github.com/latin-dict/Lewis1890",
+ "licence": "Creative Commons Legal Code Attribution-ShareAlike 3.0 Unported CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE LEGAL SERVICES. DISTRIBUTION OF THIS LICENSE DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP. CREATIVE COMMONS PROVIDES THIS INFORMATION ON AN \"AS-IS\" BASIS. CREATIVE COMMONS MAKES NO WARRANTIES REGARDING THE INFORMATION PROVIDED, AND DISCLAIMS L",
+ "retrieved": "2026-11-16",
+ "n_entries": 17582,
+ "n_alternative_forms": 0,
+ "store": "data/lexica/lex_lewis_elementary.sqlite (local, gitignored)",
+ "stardict_info": {
+  "bookname": "An Elementary Latin Dictionary, Lewis (1890)",
+  "wordcount": "17582",
+  "sametypesequence": "h"
+ },
+ "raw_files": [
+  {
+   "url": "https://github.com/latin-dict/Lewis1890/releases/download/v1.1/Lewis1890-stardict.zip",
+   "path": "data/raw/latin/lexica/lewis_elementary/Lewis1890-stardict.zip",
+   "bytes": 4327112,
+   "sha256": "0f3a5673ad93b3dbaff3fd30124d8ab14472ea65695eb721b2866ab7d5f98404"
+  }
+ ]
+}

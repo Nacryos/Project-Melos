@@ -1,0 +1,1497 @@
+{
+ "name": "tll",
+ "title": "Thesaurus Linguae Latinae (open access PDFs, Bayerische Akademie der Wissenschaften)",
+ "store": "data/lexica/lex_tll.sqlite (local, gitignored)",
+ "raw": "data/raw/latin/lexica/tll/ (local, gitignored)",
+ "script": "scripts/ingest_tll_la.py",
+ "sources": {
+  "index": "https://thesaurus.badw.de/en/tll-digital/tll-open-access.html",
+  "record": "https://publikationen.badw.de/en/thesaurus",
+  "pdf_host": "https://publikationen.badw.de/"
+ },
+ "access_note": "In consultation with the publisher De Gruyter, we offer here an Open Access PDF version (organized by volumes and lemmas) of the previously published volumes A - M and O - P, as well as parts of N and R. Access is free of charge.",
+ "licence_record": "Lizenz License : CC BY-NC-ND (https://publikationen.badw.de/en/thesaurus)",
+ "licence_in_each_pdf": "This work is offered to you under a Creative Commons Attribution-NonCommercial-NoDerivs CC BY-NC-ND license (explanation here). In addition, you are not allowed to print or modify (parts of) this file or to upload it to a public website (no file-sharing). We kindly ask you to respect these restrictions. Instead, please refer fellow researchers to our website. Continued access to this version of the ThLL depends on your acceptance of these conditions. Please also leave this page and the watermark in the file.",
+ "use": "private lookup only; neither the PDFs nor the store is committed or redistributed",
+ "retrieved": "2026-11-16",
+ "n_files": 60,
+ "n_pages": 16163,
+ "n_headwords": 91750,
+ "n_entry_rows": 96617,
+ "headwords_placed_on_their_line": 78641,
+ "n_addenda_rows": 1748,
+ "letters_covered": "ABCDEFGHIKLMNOPR",
+ "headwords_by_initial": {
+  "a": 15870,
+  "b": 6298,
+  "c": 19953,
+  "d": 8349,
+  "e": 4407,
+  "f": 2757,
+  "g": 1557,
+  "h": 1802,
+  "i": 6687,
+  "k": 86,
+  "l": 2760,
+  "m": 4187,
+  "n": 821,
+  "o": 2752,
+  "p": 11070,
+  "q": 10,
+  "r": 2335,
+  "s": 11,
+  "t": 13,
+  "u": 20,
+  "y": 3,
+  "z": 2
+ },
+ "missing": [
+  "N after 'netura' (vol. IX 1 in progress)",
+  "Q (not published)",
+  "R after 'resurgo' (vol. XI 2 in progress)",
+  "S-Z (not published)",
+  "Onomasticon after D (suspended)"
+ ],
+ "volumes": [
+  {
+   "file": "tll_01_col0001-0724_a-adli.pdf",
+   "url": "https://publikationen.badw.de/en/000924304/000924304%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2001%20col.%200001%E2%80%930724%20%28a%E2%80%93adli%29%7D.pdf",
+   "volume": "01",
+   "columns": [
+    1,
+    724
+   ],
+   "lemmata": [
+    "a",
+    "adli"
+   ],
+   "bytes": 138997199,
+   "sha256": "3cc17eb91b0074b46d41ee4819931bd3bfcc3d9708dfd62adbb183fe80bfd531",
+   "pages": 377,
+   "entries": 2169,
+   "located": 1806,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 361,
+   "pages_with_running_head": 367,
+   "pages_without_text": 2,
+   "chars": 4003663
+  },
+  {
+   "file": "tll_01_col0725-1410_adluc-agoge.pdf",
+   "url": "https://publikationen.badw.de/en/000924304/000924304%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2001%20col.%200725%E2%80%931410%20%28adluc%E2%80%93agoge%29%7D.pdf",
+   "volume": "01",
+   "columns": [
+    725,
+    1410
+   ],
+   "lemmata": [
+    "adluc",
+    "agoge"
+   ],
+   "bytes": 129636551,
+   "sha256": "8dca75e45323d8356aa86882f5b0c1c9a05cfdee4674c5fc390978d31356eca5",
+   "pages": 345,
+   "entries": 2141,
+   "located": 1845,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 343,
+   "pages_with_running_head": 343,
+   "pages_without_text": 1,
+   "chars": 3774389
+  },
+  {
+   "file": "tll_01_col1411-2032_agogima-amyzon.pdf",
+   "url": "https://publikationen.badw.de/en/000924304/000924304%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2001%20col.%201411%E2%80%932032%20%28agogima%E2%80%93Amyzon%29%7D.pdf",
+   "volume": "01",
+   "columns": [
+    1411,
+    2032
+   ],
+   "lemmata": [
+    "agogima",
+    "Amyzon"
+   ],
+   "bytes": 115682506,
+   "sha256": "8652e49ac7bdcb0faac8de01947f1d15993541f3d21e49db33fa0708c9169365",
+   "pages": 313,
+   "entries": 3334,
+   "located": 2777,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 311,
+   "pages_with_running_head": 311,
+   "pages_without_text": 1,
+   "chars": 3385459
+  },
+  {
+   "file": "tll_02_col0001-0706_an-artigi.pdf",
+   "url": "https://publikationen.badw.de/en/000914810/000914810%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2002%20col.%200001%E2%80%930706%20%28an%E2%80%93Artigi%29%7D.pdf",
+   "volume": "02",
+   "columns": [
+    1,
+    706
+   ],
+   "lemmata": [
+    "an",
+    "Artigi"
+   ],
+   "bytes": 136786108,
+   "sha256": "6eb70d6cfcfaff42f579d59c9106e97052ba54b21f43249da32e029dcdfd4e69",
+   "pages": 355,
+   "entries": 4359,
+   "located": 3769,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 352,
+   "pages_with_running_head": 352,
+   "pages_without_text": 0,
+   "chars": 3812097
+  },
+  {
+   "file": "tll_02_col0707-1324_artigraphia-aues.pdf",
+   "url": "https://publikationen.badw.de/en/000914810/000914810%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2002%20col.%200707%E2%80%931324%20%28artigraphia%E2%80%93Aves%29%7D.pdf",
+   "volume": "02",
+   "columns": [
+    707,
+    1324
+   ],
+   "lemmata": [
+    "artigraphia",
+    "Aves"
+   ],
+   "bytes": 121764477,
+   "sha256": "68288f4e7c3f79358dd97f76404e284d38afbf8653c76559a0799af842de111d",
+   "pages": 311,
+   "entries": 2614,
+   "located": 2179,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 309,
+   "pages_with_running_head": 309,
+   "pages_without_text": 1,
+   "chars": 3377091
+  },
+  {
+   "file": "tll_02_col1325-1646_auesica-azzi.pdf",
+   "url": "https://publikationen.badw.de/en/000914810/000914810%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2002%20col.%201325%E2%80%931646%20%28Avesica%E2%80%93Azzi%29%7D.pdf",
+   "volume": "02",
+   "columns": [
+    1325,
+    1646
+   ],
+   "lemmata": [
+    "Avesica",
+    "Azzi"
+   ],
+   "bytes": 63143805,
+   "sha256": "b004ad495a0d5aed7c741a92c858ff6438458660570a162acfc2cbf79fbb845d",
+   "pages": 163,
+   "entries": 1291,
+   "located": 1076,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 161,
+   "pages_with_running_head": 161,
+   "pages_without_text": 1,
+   "chars": 1751817
+  },
+  {
+   "file": "tll_02_col1647-2270_b-byzeres.pdf",
+   "url": "https://publikationen.badw.de/en/000914810/000914810%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2002%20col.%201647%E2%80%932270%20%28b%E2%80%93Byzeres%29%7D.pdf",
+   "volume": "02",
+   "columns": [
+    1647,
+    2270
+   ],
+   "lemmata": [
+    "b",
+    "Byzeres"
+   ],
+   "bytes": 115901110,
+   "sha256": "1ba9ddd40e1c8aa508279a8da9364687f5a876778a965846bb9bc6fab8313d48",
+   "pages": 314,
+   "entries": 6329,
+   "located": 5318,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 312,
+   "pages_with_running_head": 312,
+   "pages_without_text": 1,
+   "chars": 3283390
+  },
+  {
+   "file": "tll_03_col0001-0748_c-celebro.pdf",
+   "url": "https://publikationen.badw.de/en/000924306/000924306%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2003%20col.%200001%E2%80%930748%20%28c%E2%80%93celebro%29%7D.pdf",
+   "volume": "03",
+   "columns": [
+    1,
+    748
+   ],
+   "lemmata": [
+    "c",
+    "celebro"
+   ],
+   "bytes": 183094308,
+   "sha256": "5e407a495f8a2999c99247b26bb724e8cfd9b38b98a1ed10f1cee97d5db0afbf",
+   "pages": 382,
+   "entries": 2028,
+   "located": 1786,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 373,
+   "pages_with_running_head": 375,
+   "pages_without_text": 0,
+   "chars": 4142107
+  },
+  {
+   "file": "tll_03_col0749-1444_celebrum-coeuangelista.pdf",
+   "url": "https://publikationen.badw.de/en/000924306/000924306%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2003%20col.%200749%E2%80%931444%20%28celebrum%E2%80%93coevangelista%29%7D.pdf",
+   "volume": "03",
+   "columns": [
+    749,
+    1444
+   ],
+   "lemmata": [
+    "celebrum",
+    "coevangelista"
+   ],
+   "bytes": 202071764,
+   "sha256": "0b8c92fb5668e13d8b0c85e26a079be1cc2538a16335772d9cdf81ff0b73f0e8",
+   "pages": 350,
+   "entries": 2535,
+   "located": 2200,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 348,
+   "pages_with_running_head": 348,
+   "pages_without_text": 0,
+   "chars": 3822728
+  },
+  {
+   "file": "tll_03_col1445-2186_coeuntia-comus.pdf",
+   "url": "https://publikationen.badw.de/en/000924306/000924306%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2003%20col.%201445%E2%80%932186%20%28coeuntia%E2%80%93comus%29%7D.pdf",
+   "volume": "03",
+   "columns": [
+    1445,
+    2186
+   ],
+   "lemmata": [
+    "coeuntia",
+    "comus"
+   ],
+   "bytes": 176885958,
+   "sha256": "24bc808329afb90177ce0caf541db4ac1ce198b51798bd43a3aeec7c7f679432",
+   "pages": 373,
+   "entries": 1503,
+   "located": 1285,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 371,
+   "pages_with_running_head": 371,
+   "pages_without_text": 0,
+   "chars": 4069501
+  },
+  {
+   "file": "tll_04_col0001-0788_con-controuersus.pdf",
+   "url": "https://publikationen.badw.de/en/000924307/000924307%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2004%20col.%200001%E2%80%930788%20%28con%E2%80%93controversus%29%7D.pdf",
+   "volume": "04",
+   "columns": [
+    1,
+    788
+   ],
+   "lemmata": [
+    "con",
+    "controversus"
+   ],
+   "bytes": 144289004,
+   "sha256": "f10573286e22e8b69fdf6c7b73a70be187cf0a14a890bbe33658d1fa1d353cb6",
+   "pages": 396,
+   "entries": 1698,
+   "located": 1462,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 393,
+   "pages_with_running_head": 393,
+   "pages_without_text": 0,
+   "chars": 4374931
+  },
+  {
+   "file": "tll_04_col0789-1594_controuerto-cyulus.pdf",
+   "url": "https://publikationen.badw.de/en/000924307/000924307%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2004%20col.%200789%E2%80%931594%20%28controverto%E2%80%93cyulus%29%7D.pdf",
+   "volume": "04",
+   "columns": [
+    789,
+    1594
+   ],
+   "lemmata": [
+    "controverto",
+    "cyulus"
+   ],
+   "bytes": 174472856,
+   "sha256": "80648b3c7d4fc8977ffab4f55c7f7b2ee8f67755fe001bee8c8acf0fe042de66",
+   "pages": 405,
+   "entries": 1855,
+   "located": 1622,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 403,
+   "pages_with_running_head": 403,
+   "pages_without_text": 0,
+   "chars": 4429630
+  },
+  {
+   "file": "tll_05.1_col0001-0558_d-deopto.pdf",
+   "url": "https://publikationen.badw.de/en/000924308/000924308%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2005.1%20col.%200001%E2%80%930558%20%28d%E2%80%93deopto%29%7D.pdf",
+   "volume": "05.1",
+   "columns": [
+    1,
+    558
+   ],
+   "lemmata": [
+    "d",
+    "deopto"
+   ],
+   "bytes": 185886205,
+   "sha256": "201446870ba04df441d92f4888f1160293d6ac6b7ec73642e379f7260e0e4d03",
+   "pages": 291,
+   "entries": 1344,
+   "located": 1170,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 278,
+   "pages_with_running_head": 279,
+   "pages_without_text": 0,
+   "chars": 3080666
+  },
+  {
+   "file": "tll_05.1_col0559-1102_deorata-diffidus.pdf",
+   "url": "https://publikationen.badw.de/en/000924308/000924308%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2005.1%20col.%200559%E2%80%931102%20%28deorata%E2%80%93diffidus%29%7D.pdf",
+   "volume": "05.1",
+   "columns": [
+    559,
+    1102
+   ],
+   "lemmata": [
+    "deorata",
+    "diffidus"
+   ],
+   "bytes": 178607059,
+   "sha256": "92c88b261a22eb6943d81842e5d7166b6128f5c9473efc410ca71a6b6dbde975",
+   "pages": 274,
+   "entries": 1133,
+   "located": 978,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 272,
+   "pages_with_running_head": 272,
+   "pages_without_text": 0,
+   "chars": 3001559
+  },
+  {
+   "file": "tll_05.1_col1103-1812_diffindentia-dogarius.pdf",
+   "url": "https://publikationen.badw.de/en/000924308/000924308%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2005.1%20col.%201103%E2%80%931812%20%28diffindentia%E2%80%93dogarius%29%7D.pdf",
+   "volume": "05.1",
+   "columns": [
+    1103,
+    1812
+   ],
+   "lemmata": [
+    "diffindentia",
+    "dogarius"
+   ],
+   "bytes": 239869569,
+   "sha256": "2273992158409349f9680ba21012726ff85a0a3fb3d98ef796821c7f50945864",
+   "pages": 357,
+   "entries": 1304,
+   "located": 1099,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 355,
+   "pages_with_running_head": 355,
+   "pages_without_text": 0,
+   "chars": 3951246
+  },
+  {
+   "file": "tll_05.1_col1813-2334_dogma-dze.pdf",
+   "url": "https://publikationen.badw.de/en/000924308/000924308%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2005.1%20col.%201813%E2%80%932334%20%28dogma%E2%80%93dze%29%7D.pdf",
+   "volume": "05.1",
+   "columns": [
+    1813,
+    2334
+   ],
+   "lemmata": [
+    "dogma",
+    "dze"
+   ],
+   "bytes": 176648467,
+   "sha256": "81598c3ee5e52d9e16dc7ba108135de7ad5f8683fd7284af0acc4558bbd8091b",
+   "pages": 264,
+   "entries": 653,
+   "located": 569,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 261,
+   "pages_with_running_head": 261,
+   "pages_without_text": 1,
+   "chars": 2896645
+  },
+  {
+   "file": "tll_05.2_col0001-0758_e-ergenna.pdf",
+   "url": "https://publikationen.badw.de/en/000924309/000924309%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2005.2%20col.%200001%E2%80%930758%20%28e%E2%80%93ergenna%29%7D.pdf",
+   "volume": "05.2",
+   "columns": [
+    1,
+    758
+   ],
+   "lemmata": [
+    "e",
+    "ergenna"
+   ],
+   "bytes": 136552898,
+   "sha256": "d00a7ea8cb711b297979f321a7d47fb5aff18814a4f2ebd75d991ecaeb9d3996",
+   "pages": 384,
+   "entries": 2038,
+   "located": 1751,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 378,
+   "pages_with_running_head": 378,
+   "pages_without_text": 2,
+   "chars": 4158563
+  },
+  {
+   "file": "tll_05.2_col0759-1276_erginario-excolligo.pdf",
+   "url": "https://publikationen.badw.de/en/000924309/000924309%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2005.2%20col.%200759%E2%80%931276%20%28erginario%E2%80%93excolligo%29%7D.pdf",
+   "volume": "05.2",
+   "columns": [
+    759,
+    1276
+   ],
+   "lemmata": [
+    "erginario",
+    "excolligo"
+   ],
+   "bytes": 92324783,
+   "sha256": "57b56a120a5d08632fbf51e4111f6b040ea9a94da85d172245537130a2c3ff4b",
+   "pages": 261,
+   "entries": 1015,
+   "located": 829,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 255,
+   "pages_with_running_head": 259,
+   "pages_without_text": 1,
+   "chars": 2882625
+  },
+  {
+   "file": "tll_05.2_col1277-1822_excolo-exquiro.pdf",
+   "url": "https://publikationen.badw.de/en/000924309/000924309%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2005.2%20col.%201277%E2%80%931822%20%28excolo%E2%80%93exquiro%29%7D.pdf",
+   "volume": "05.2",
+   "columns": [
+    1277,
+    1822
+   ],
+   "lemmata": [
+    "excolo",
+    "exquiro"
+   ],
+   "bytes": 140191769,
+   "sha256": "9fde4e50de808c73b94225a40c6f9ad555d23408a8018c81bc96244932f2842d",
+   "pages": 275,
+   "entries": 800,
+   "located": 669,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 273,
+   "pages_with_running_head": 273,
+   "pages_without_text": 1,
+   "chars": 2999549
+  },
+  {
+   "file": "tll_05.2_col1823-2134_exquisitim-eozani.pdf",
+   "url": "https://publikationen.badw.de/en/000924309/000924309%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2005.2%20col.%201823%E2%80%932134%20%28exquisitim%E2%80%93eozani%29%7D.pdf",
+   "volume": "05.2",
+   "columns": [
+    1823,
+    2134
+   ],
+   "lemmata": [
+    "exquisitim",
+    "eozani"
+   ],
+   "bytes": 120411318,
+   "sha256": "6138b86f0645210b1c9514003b496043c68d180c436470eee39b8b3fde10ff2f",
+   "pages": 158,
+   "entries": 539,
+   "located": 463,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 156,
+   "pages_with_running_head": 156,
+   "pages_without_text": 1,
+   "chars": 1728333
+  },
+  {
+   "file": "tll_06.1_col0001-0808_f-firmitas.pdf",
+   "url": "https://publikationen.badw.de/en/000924310/000924310%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2006.1%20col.%200001%E2%80%930808%20%28f%E2%80%93firmitas%29%7D.pdf",
+   "volume": "06.1",
+   "columns": [
+    1,
+    808
+   ],
+   "lemmata": [
+    "f",
+    "firmitas"
+   ],
+   "bytes": 161751180,
+   "sha256": "46c8d0e32f55481d174edb0f179aedbbe475ad39f4be238ed655dd618cc87394",
+   "pages": 409,
+   "entries": 1252,
+   "located": 978,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 403,
+   "pages_with_running_head": 403,
+   "pages_without_text": 1,
+   "chars": 4512328
+  },
+  {
+   "file": "tll_06.1_col0809-1664_firmiter-fysis.pdf",
+   "url": "https://publikationen.badw.de/en/000924310/000924310%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2006.1%20col.%200809%E2%80%931664%20%28firmiter%E2%80%93fysis%29%7D.pdf",
+   "volume": "06.1",
+   "columns": [
+    809,
+    1664
+   ],
+   "lemmata": [
+    "firmiter",
+    "fysis"
+   ],
+   "bytes": 160802868,
+   "sha256": "9ad25505359b43bc48a4e8219ae6fe32aedf98a2c9206e086ac42121fc508a11",
+   "pages": 430,
+   "entries": 1497,
+   "located": 1180,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 428,
+   "pages_with_running_head": 428,
+   "pages_without_text": 0,
+   "chars": 4794038
+  },
+  {
+   "file": "tll_06.2_col1665-2388_g-gytus.pdf",
+   "url": "https://publikationen.badw.de/en/000924311/000924311%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2006.2%20col.%201665%E2%80%932388%20%28g%E2%80%93gytus%29%7D.pdf",
+   "volume": "06.2",
+   "columns": [
+    1665,
+    2388
+   ],
+   "lemmata": [
+    "g",
+    "gytus"
+   ],
+   "bytes": 125680935,
+   "sha256": "94ca3a0fe8b02c92f548b3b2896e0413760a4074f78e234f8c48b47a2af37f5f",
+   "pages": 367,
+   "entries": 1552,
+   "located": 1376,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 361,
+   "pages_with_running_head": 361,
+   "pages_without_text": 1,
+   "chars": 4029432
+  },
+  {
+   "file": "tll_06.3_col2389-2780_h-hieranthemis.pdf",
+   "url": "https://publikationen.badw.de/en/000924312/000924312%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2006.3%20col.%202389%E2%80%932780%20%28h%E2%80%93hieranthemis%29%7D.pdf",
+   "volume": "06.3",
+   "columns": [
+    2389,
+    2780
+   ],
+   "lemmata": [
+    "h",
+    "hieranthemis"
+   ],
+   "bytes": 147520688,
+   "sha256": "50061cd6300bd2f7686d9e84d1b5468d94a7c0fef42d6ebb84f19ae6c1654341",
+   "pages": 199,
+   "entries": 872,
+   "located": 753,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 195,
+   "pages_with_running_head": 195,
+   "pages_without_text": 1,
+   "chars": 2142162
+  },
+  {
+   "file": "tll_06.3_col2781-3166_hierarchia-hystrix.pdf",
+   "url": "https://publikationen.badw.de/en/000924312/000924312%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2006.3%20col.%202781%E2%80%933166%20%28hierarchia%E2%80%93hystrix%29%7D.pdf",
+   "volume": "06.3",
+   "columns": [
+    2781,
+    3166
+   ],
+   "lemmata": [
+    "hierarchia",
+    "hystrix"
+   ],
+   "bytes": 146170277,
+   "sha256": "e6cf9f84bcbe555ef8afa3772e33a3686035515715b08781bac38fa76f2a05bc",
+   "pages": 195,
+   "entries": 924,
+   "located": 790,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 193,
+   "pages_with_running_head": 193,
+   "pages_without_text": 0,
+   "chars": 2101733
+  },
+  {
+   "file": "tll_07.1_col0001-0840_i-inaures.pdf",
+   "url": "https://publikationen.badw.de/en/000914816/000914816%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2007.1%20col.%200001%E2%80%930840%20%28i%E2%80%93inaures%29%7D.pdf",
+   "volume": "07.1",
+   "columns": [
+    1,
+    840
+   ],
+   "lemmata": [
+    "i",
+    "inaures"
+   ],
+   "bytes": 152147241,
+   "sha256": "87e6d2cc5e5a3205478085d255a8038c19ab125311a5ef0885b9a8d3be22ce37",
+   "pages": 427,
+   "entries": 1531,
+   "located": 1203,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 413,
+   "pages_with_running_head": 420,
+   "pages_without_text": 1,
+   "chars": 4700339
+  },
+  {
+   "file": "tll_07.1_col0841-1596_inauricula-inhonestitas.pdf",
+   "url": "https://publikationen.badw.de/en/000914816/000914816%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2007.1%20col.%200841%E2%80%931596%20%28inauricula%E2%80%93inhonestitas%29%7D.pdf",
+   "volume": "07.1",
+   "columns": [
+    841,
+    1596
+   ],
+   "lemmata": [
+    "inauricula",
+    "inhonestitas"
+   ],
+   "bytes": 140299407,
+   "sha256": "7b8c1aef096e16a45d567f9c9c553fbe2b99f42471a23cd240300e2079990295",
+   "pages": 382,
+   "entries": 2007,
+   "located": 1563,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 378,
+   "pages_with_running_head": 379,
+   "pages_without_text": 0,
+   "chars": 4198464
+  },
+  {
+   "file": "tll_07.1_col1597-2304_inhonesto-interuulsus.pdf",
+   "url": "https://publikationen.badw.de/en/000914816/000914816%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2007.1%20col.%201597%E2%80%932304%20%28inhonesto%E2%80%93intervulsus%29%7D.pdf",
+   "volume": "07.1",
+   "columns": [
+    1597,
+    2304
+   ],
+   "lemmata": [
+    "inhonesto",
+    "intervulsus"
+   ],
+   "bytes": 135181762,
+   "sha256": "e35d2aebc38d1d5dc85941d6785519d069d5b092be790dc6c107e479ab0393d3",
+   "pages": 356,
+   "entries": 1760,
+   "located": 1491,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 354,
+   "pages_with_running_head": 354,
+   "pages_without_text": 0,
+   "chars": 4051200
+  },
+  {
+   "file": "tll_07.2.1_col0001-0760_intestabilis-kyrie.pdf",
+   "url": "https://publikationen.badw.de/en/000914817/000914817%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2007.2.1%20col.%200001%E2%80%930760%20%28intestabilis%E2%80%93kyrie%29%7D.pdf",
+   "volume": "07.2.1",
+   "columns": [
+    1,
+    760
+   ],
+   "lemmata": [
+    "intestabilis",
+    "kyrie"
+   ],
+   "bytes": 146682666,
+   "sha256": "44ca799c6b56c61c9d22d4e89b9865f81988f266728c0b62b7f0f9464cbdd7e3",
+   "pages": 389,
+   "entries": 1402,
+   "located": 1229,
+   "addenda": 15,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 379,
+   "pages_with_running_head": 379,
+   "pages_without_text": 2,
+   "chars": 4318001
+  },
+  {
+   "file": "tll_07.2.2_col0761-1346_l-librariolus.pdf",
+   "url": "https://publikationen.badw.de/en/000914817/000914817%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2007.2.2%20col.%200761%E2%80%931346%20%28l%E2%80%93librariolus%29%7D.pdf",
+   "volume": "07.2.2",
+   "columns": [
+    761,
+    1346
+   ],
+   "lemmata": [
+    "l",
+    "librariolus"
+   ],
+   "bytes": 113936937,
+   "sha256": "dd7a2866bb3b6a435b816d4ac4353d86e338099b36d48983a61af4ad6907fcf0",
+   "pages": 298,
+   "entries": 1491,
+   "located": 1335,
+   "addenda": 70,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 292,
+   "pages_with_running_head": 293,
+   "pages_without_text": 1,
+   "chars": 3357469
+  },
+  {
+   "file": "tll_07.2.2_col1347-1952_librarium-lyxipyretos.pdf",
+   "url": "https://publikationen.badw.de/en/000914817/000914817%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2007.2.2%20col.%201347%E2%80%931952%20%28librarium%E2%80%93lyxipyretos%29%7D.pdf",
+   "volume": "07.2.2",
+   "columns": [
+    1347,
+    1952
+   ],
+   "lemmata": [
+    "librarium",
+    "lyxipyretos"
+   ],
+   "bytes": 119334961,
+   "sha256": "7bcfb63f656022cb475a2baccda0674b969a9a42f290a9b32a59d12aea05b1cf",
+   "pages": 307,
+   "entries": 1265,
+   "located": 1141,
+   "addenda": 145,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 305,
+   "pages_with_running_head": 304,
+   "pages_without_text": 0,
+   "chars": 3492911
+  },
+  {
+   "file": "tll_08_col0001-0786_m-meocarius.pdf",
+   "url": "https://publikationen.badw.de/en/000914818/000914818%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2008%20col.%200001%E2%80%930786%20%28m%E2%80%93meocarius%29%7D.pdf",
+   "volume": "08",
+   "columns": [
+    1,
+    786
+   ],
+   "lemmata": [
+    "m",
+    "meocarius"
+   ],
+   "bytes": 141145447,
+   "sha256": "7193a458c7e1ebe62df30775fe1d62e194e73918efc69e2cb22e55dc31797dd2",
+   "pages": 398,
+   "entries": 1703,
+   "located": 1388,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 392,
+   "pages_with_running_head": 392,
+   "pages_without_text": 2,
+   "chars": 4359874
+  },
+  {
+   "file": "tll_08_col0787-1332_meoculos-mogilalus.pdf",
+   "url": "https://publikationen.badw.de/en/000914818/000914818%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2008%20col.%200787%E2%80%931332%20%28meoculos%E2%80%93mogilalus%29%7D.pdf",
+   "volume": "08",
+   "columns": [
+    787,
+    1332
+   ],
+   "lemmata": [
+    "meoculos",
+    "mogilalus"
+   ],
+   "bytes": 101443127,
+   "sha256": "cfc8a936535d1daf049aa5101fc9db5377002e50a3e1d821107fba5afee229a3",
+   "pages": 275,
+   "entries": 1060,
+   "located": 910,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 273,
+   "pages_with_running_head": 273,
+   "pages_without_text": 1,
+   "chars": 3096086
+  },
+  {
+   "file": "tll_08_col1333-1764_moincipium-myzon.pdf",
+   "url": "https://publikationen.badw.de/en/000914818/000914818%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2008%20col.%201333%E2%80%931764%20%28moincipium%E2%80%93myzon%29%7D.pdf",
+   "volume": "08",
+   "columns": [
+    1333,
+    1764
+   ],
+   "lemmata": [
+    "moincipium",
+    "myzon"
+   ],
+   "bytes": 81136197,
+   "sha256": "aa45bec1d924a72f02f67e43611347044d3fd708f46a711bc8176ca958904be8",
+   "pages": 218,
+   "entries": 1415,
+   "located": 1287,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 215,
+   "pages_with_running_head": 216,
+   "pages_without_text": 1,
+   "chars": 2411049
+  },
+  {
+   "file": "tll_9.1.1_col0001-0208_n-naualis.pdf",
+   "url": "https://publikationen.badw.de/de/039602104/039602104%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%209%2C1%2C1%20col.%200001%E2%80%930208%20%28n%E2%80%93navalis%29%7D.pdf",
+   "volume": "9.1.1",
+   "columns": [
+    1,
+    208
+   ],
+   "lemmata": [
+    "n",
+    "navalis"
+   ],
+   "bytes": 2213313,
+   "sha256": "5576dd296797218cbf3f133ddb456159833a9b8dbff2bfa9e6ae8b0ba6b67906",
+   "pages": 105,
+   "entries": 256,
+   "located": 227,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 103,
+   "pages_with_running_head": 104,
+   "pages_without_text": 0,
+   "chars": 1099762
+  },
+  {
+   "file": "tll_9.1.2_col0209-0336_naualis-nebel.pdf",
+   "url": "https://publikationen.badw.de/de/039602104/039602104%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%209%2C1%2C2%20col.%200209%E2%80%930336%20%28navalis%E2%80%93nebel%29%7D.pdf",
+   "volume": "9.1.2",
+   "columns": [
+    209,
+    336
+   ],
+   "lemmata": [
+    "navalis",
+    "nebel"
+   ],
+   "bytes": 1349147,
+   "sha256": "997abceae2b441f4a2bbca69aea51916c37e51c0137512cdde401ea9a9a774d2",
+   "pages": 65,
+   "entries": 146,
+   "located": 136,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 63,
+   "pages_with_running_head": 61,
+   "pages_without_text": 0,
+   "chars": 683413
+  },
+  {
+   "file": "tll_9.1.3_col0337-0516_nebel-nemo.pdf",
+   "url": "https://publikationen.badw.de/de/039602104/039602104%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%209%2C1%2C3%20col.%200337%E2%80%930516%20%28nebel%E2%80%93nemo%29%7D.pdf",
+   "volume": "9.1.3",
+   "columns": [
+    337,
+    516
+   ],
+   "lemmata": [
+    "nebel",
+    "nemo"
+   ],
+   "bytes": 1841824,
+   "sha256": "16fb6e5f59354ce83fc2ea64c25a4d50525d167bea1b142769682cb59239905e",
+   "pages": 91,
+   "entries": 215,
+   "located": 189,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 90,
+   "pages_with_running_head": 87,
+   "pages_without_text": 0,
+   "chars": 956829
+  },
+  {
+   "file": "tll_9.1.4_col0513-0648_nemo-netura.pdf",
+   "url": "https://publikationen.badw.de/de/039602104/039602104%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%209%2C1%2C4%20col.%200513%E2%80%930648%20%28nemo%E2%80%93netura%29%7D.pdf",
+   "volume": "9.1.4",
+   "columns": [
+    513,
+    648
+   ],
+   "lemmata": [
+    "nemo",
+    "netura"
+   ],
+   "bytes": 1450947,
+   "sha256": "67357108c7072baba864458ca6e06b3ace414db9d3701fc94d27ac5bcf9a42f5",
+   "pages": 69,
+   "entries": 199,
+   "located": 189,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 68,
+   "pages_with_running_head": 65,
+   "pages_without_text": 0,
+   "chars": 722403
+  },
+  {
+   "file": "tll_09.2_col0001-0624_o-omniuidens.pdf",
+   "url": "https://publikationen.badw.de/en/000914819/000914819%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2009.2%20col.%200001%E2%80%930624%20%28o%E2%80%93omnividens%29%7D.pdf",
+   "volume": "09.2",
+   "columns": [
+    1,
+    624
+   ],
+   "lemmata": [
+    "o",
+    "omnividens"
+   ],
+   "bytes": 227116108,
+   "sha256": "116470eabfb9045de335a8eefbb66ef4aa711b0b12a474a680eeecf2c3e8e9b8",
+   "pages": 320,
+   "entries": 1565,
+   "located": 1436,
+   "addenda": 36,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 311,
+   "pages_with_running_head": 306,
+   "pages_without_text": 3,
+   "chars": 3518741
+  },
+  {
+   "file": "tll_09.2_col0625-1214_omniuidentia-ozynosus.pdf",
+   "url": "https://publikationen.badw.de/en/000914819/000914819%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2009.2%20col.%200625%E2%80%931214%20%28omnividentia%E2%80%93ozynosus%29%7D.pdf",
+   "volume": "09.2",
+   "columns": [
+    625,
+    1214
+   ],
+   "lemmata": [
+    "omnividentia",
+    "ozynosus"
+   ],
+   "bytes": 111152962,
+   "sha256": "e4fa83e67c66c814d0635ae833ddb0af8d0f7fa7b13df38aa22b4734b4105390",
+   "pages": 298,
+   "entries": 1187,
+   "located": 1073,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 296,
+   "pages_with_running_head": 295,
+   "pages_without_text": 1,
+   "chars": 3308964
+  },
+  {
+   "file": "tll_10.1.1_col0001-0694_p-paternaliter.pdf",
+   "url": "https://publikationen.badw.de/en/000094372/000094372%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2010.1.1%20col.%200001%E2%80%930694%20%28p%E2%80%93paternaliter%29%7D.pdf",
+   "volume": "10.1.1",
+   "columns": [
+    1,
+    694
+   ],
+   "lemmata": [
+    "p",
+    "paternaliter"
+   ],
+   "bytes": 133082549,
+   "sha256": "be9dd58baa3354007b17c2c0276b842266035524061c6cd405d2e015b06617bb",
+   "pages": 356,
+   "entries": 1429,
+   "located": 1308,
+   "addenda": 81,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 348,
+   "pages_with_running_head": 350,
+   "pages_without_text": 1,
+   "chars": 3902888
+  },
+  {
+   "file": "tll_10.1.1_col0695-1472_paterne-perimelides.pdf",
+   "url": "https://publikationen.badw.de/en/000094372/000094372%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2010.1.1%20col.%200695%E2%80%931472%20%28paterne%E2%80%93perimelides%29%7D.pdf",
+   "volume": "10.1.1",
+   "columns": [
+    695,
+    1472
+   ],
+   "lemmata": [
+    "paterne",
+    "perimelides"
+   ],
+   "bytes": 129303822,
+   "sha256": "bff7c5f5668bff1f0ec030c494f5305f3d7f5ae406f1be36fef74c3269112ee3",
+   "pages": 395,
+   "entries": 1520,
+   "located": 1461,
+   "addenda": 90,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 390,
+   "pages_with_running_head": 392,
+   "pages_without_text": 1,
+   "chars": 4125041
+  },
+  {
+   "file": "tll_10.1.2_col1473-2074_perimetros-piceno.pdf",
+   "url": "https://publikationen.badw.de/en/000094372/000094372%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2010.1.2%20col.%201473%E2%80%932074%20%28perimetros%E2%80%93piceno%29%7D.pdf",
+   "volume": "10.1.2",
+   "columns": [
+    1473,
+    2074
+   ],
+   "lemmata": [
+    "perimetros",
+    "piceno"
+   ],
+   "bytes": 100857723,
+   "sha256": "b807d4177a7c25378d48037e9c8bed8023bccf4e3ce85be2458da83106d72983",
+   "pages": 308,
+   "entries": 1624,
+   "located": 1557,
+   "addenda": 54,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 302,
+   "pages_with_running_head": 305,
+   "pages_without_text": 1,
+   "chars": 3227737
+  },
+  {
+   "file": "tll_10.1.2_col2075-2780_picercula-porrus.pdf",
+   "url": "https://publikationen.badw.de/en/000094372/000094372%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2010.1.2%20col.%202075%E2%80%932780%20%28picercula%E2%80%93porrus%29%7D.pdf",
+   "volume": "10.1.2",
+   "columns": [
+    2075,
+    2780
+   ],
+   "lemmata": [
+    "picercula",
+    "porrus"
+   ],
+   "bytes": 121720948,
+   "sha256": "fbcc80fee3e14ad9ca91b4bb2fe88b842da90ddca51e5e2777a7ec8a8a6d366f",
+   "pages": 359,
+   "entries": 1618,
+   "located": 1511,
+   "addenda": 331,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 357,
+   "pages_with_running_head": 357,
+   "pages_without_text": 1,
+   "chars": 3720351
+  },
+  {
+   "file": "tll_10.2.1_col0001-0644_porta-praefinitiuus.pdf",
+   "url": "https://publikationen.badw.de/en/000094373/000094373%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2010.2.1%20col.%200001%E2%80%930644%20%28porta%E2%80%93praefinitivus%29%7D.pdf",
+   "volume": "10.2.1",
+   "columns": [
+    1,
+    644
+   ],
+   "lemmata": [
+    "porta",
+    "praefinitivus"
+   ],
+   "bytes": 122481757,
+   "sha256": "1f9429c32590bc01d61b7866aacf4d6bf24cf1ebc7fa58350f3887f2b309bd84",
+   "pages": 330,
+   "entries": 837,
+   "located": 753,
+   "addenda": 79,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 321,
+   "pages_with_running_head": 324,
+   "pages_without_text": 1,
+   "chars": 3741215
+  },
+  {
+   "file": "tll_10.2.1_col0645-1232_praefinitus-primaeuitas.pdf",
+   "url": "https://publikationen.badw.de/en/000094373/000094373%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2010.2.1%20col.%200645%E2%80%931232%20%28praefinitus%E2%80%93primaevitas%29%7D.pdf",
+   "volume": "10.2.1",
+   "columns": [
+    645,
+    1232
+   ],
+   "lemmata": [
+    "praefinitus",
+    "primaevitas"
+   ],
+   "bytes": 100431395,
+   "sha256": "cc3f6a3e32468076a9a36f167c50176fbc3cf2c7320f7d171dca3471331b735a",
+   "pages": 299,
+   "entries": 1224,
+   "located": 1145,
+   "addenda": 59,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 294,
+   "pages_with_running_head": 297,
+   "pages_without_text": 1,
+   "chars": 3186161
+  },
+  {
+   "file": "tll_10.2.2_col1233-1970_primaeuus-propello.pdf",
+   "url": "https://publikationen.badw.de/en/000094373/000094373%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2010.2.2%20col.%201233%E2%80%931970%20%28primaevus%E2%80%93propello%29%7D.pdf",
+   "volume": "10.2.2",
+   "columns": [
+    1233,
+    1970
+   ],
+   "lemmata": [
+    "primaevus",
+    "propello"
+   ],
+   "bytes": 129236125,
+   "sha256": "d7d367587fb9ed02cd44ecb14d978a9aabbaef33f5f6ce5d07ab205cdfccc67d",
+   "pages": 375,
+   "entries": 1012,
+   "located": 959,
+   "addenda": 42,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 369,
+   "pages_with_running_head": 372,
+   "pages_without_text": 1,
+   "chars": 3985715
+  },
+  {
+   "file": "tll_10.2.2_col1971-2798_propemodum-pyxodes.pdf",
+   "url": "https://publikationen.badw.de/en/000094373/000094373%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2010.2.2%20col.%201971%E2%80%932798%20%28propemodum%E2%80%93pyxodes%29%7D.pdf",
+   "volume": "10.2.2",
+   "columns": [
+    1971,
+    2798
+   ],
+   "lemmata": [
+    "propemodum",
+    "pyxodes"
+   ],
+   "bytes": 140798349,
+   "sha256": "02c38a9eb738dd81adae207e50e70ab6d4059f206bc72d9bbfc01197bdf86c45",
+   "pages": 419,
+   "entries": 1778,
+   "located": 1667,
+   "addenda": 236,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 417,
+   "pages_with_running_head": 417,
+   "pages_without_text": 1,
+   "chars": 4367952
+  },
+  {
+   "file": "tll_11.2.1_col0001-0144_r-rarus.pdf",
+   "url": "https://publikationen.badw.de/en/040453075/040453075%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2011%2C2%2C1%20col.%200001%E2%80%930144%20%28r%E2%80%93rarus%29%7D.pdf",
+   "volume": "11.2.1",
+   "columns": [
+    1,
+    144
+   ],
+   "lemmata": [
+    "r",
+    "rarus"
+   ],
+   "bytes": 1602425,
+   "sha256": "228a94c0e392e8127251d9e3fde3f17ae7178f6e5862f2b0dacd830303c5742e",
+   "pages": 73,
+   "entries": 305,
+   "located": 273,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 71,
+   "pages_with_running_head": 71,
+   "pages_without_text": 0,
+   "chars": 750940
+  },
+  {
+   "file": "tll_11.2.2_col0145-0320_rarus-recido.pdf",
+   "url": "https://publikationen.badw.de/en/040453075/040453075%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2011%2C2%2C2%20col.%200145%E2%80%930320%20%28rarus%E2%80%93recido%29%7D.pdf",
+   "volume": "11.2.2",
+   "columns": [
+    145,
+    320
+   ],
+   "lemmata": [
+    "rarus",
+    "recido"
+   ],
+   "bytes": 1806208,
+   "sha256": "78dfda987168b2120ffb4512f42086c152e5dc0f638ea521e65dbdfd510168b1",
+   "pages": 89,
+   "entries": 298,
+   "located": 274,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 88,
+   "pages_with_running_head": 88,
+   "pages_without_text": 0,
+   "chars": 934947
+  },
+  {
+   "file": "tll_11.2.3_col0321-0496_recido-reddo.pdf",
+   "url": "https://publikationen.badw.de/en/040453075/040453075%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2011%2C2%2C3%20col.%200321%E2%80%930496%20%28recido%E2%80%93reddo%29%7D.pdf",
+   "volume": "11.2.3",
+   "columns": [
+    321,
+    496
+   ],
+   "lemmata": [
+    "recido",
+    "reddo"
+   ],
+   "bytes": 1864531,
+   "sha256": "db6a7eb2ef435480d67da334bc2f417a1a094a142566f14e9f1ceb7d6d6c305a",
+   "pages": 89,
+   "entries": 295,
+   "located": 277,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 88,
+   "pages_with_running_head": 87,
+   "pages_without_text": 0,
+   "chars": 932349
+  },
+  {
+   "file": "tll_11.2.4_col0497-0656_reddo-refocilo.pdf",
+   "url": "https://publikationen.badw.de/en/040453075/040453075%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2011%2C2%2C4%20col.%200497%E2%80%930656%20%28reddo%E2%80%93refocilo%29%7D.pdf",
+   "volume": "11.2.4",
+   "columns": [
+    497,
+    656
+   ],
+   "lemmata": [
+    "reddo",
+    "refocilo"
+   ],
+   "bytes": 1701164,
+   "sha256": "2acf459aff4720b4597faa8fd62769e27e8f930fcb1bd6d5a9fccb5d954362ac",
+   "pages": 81,
+   "entries": 208,
+   "located": 194,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 80,
+   "pages_with_running_head": 80,
+   "pages_without_text": 0,
+   "chars": 848807
+  },
+  {
+   "file": "tll_11.2.5_col0657-0784_refodio-regnum.pdf",
+   "url": "https://publikationen.badw.de/en/040453075/040453075%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2011%2C2%2C5%20col.%200657%E2%80%930784%20%28refodio%E2%80%93regnum%29%7D.pdf",
+   "volume": "11.2.5",
+   "columns": [
+    657,
+    784
+   ],
+   "lemmata": [
+    "refodio",
+    "regnum"
+   ],
+   "bytes": 1418691,
+   "sha256": "5e28ff2a719920e2a14f7e1347a6d9af6fb0239153fdcc4f4f273e0ed82eb8cf",
+   "pages": 65,
+   "entries": 185,
+   "located": 176,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 64,
+   "pages_with_running_head": 64,
+   "pages_without_text": 0,
+   "chars": 676933
+  },
+  {
+   "file": "tll_11.2.6_col0785-0960_regnum-relinquo.pdf",
+   "url": "https://publikationen.badw.de/en/040453075/040453075%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2011%2C2%2C6%20col.%200785%E2%80%930960%20%28regnum%E2%80%93relinquo%29%7D.pdf",
+   "volume": "11.2.6",
+   "columns": [
+    785,
+    960
+   ],
+   "lemmata": [
+    "regnum",
+    "relinquo"
+   ],
+   "bytes": 1818368,
+   "sha256": "f2c70c1b638e1ccb71c4937d662d58877f6902c659059254407ad9d6c305cbeb",
+   "pages": 89,
+   "entries": 168,
+   "located": 156,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 88,
+   "pages_with_running_head": 84,
+   "pages_without_text": 0,
+   "chars": 936612
+  },
+  {
+   "file": "tll_11.2.7_col0961-1120_relinquosus-renuo.pdf",
+   "url": "https://publikationen.badw.de/en/040453075/040453075%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2011%2C2%2C7%20col.%200961%E2%80%931120%20%28relinquosus%E2%80%93renuo%29%7D.pdf",
+   "volume": "11.2.7",
+   "columns": [
+    961,
+    1120
+   ],
+   "lemmata": [
+    "relinquosus",
+    "renuo"
+   ],
+   "bytes": 1684891,
+   "sha256": "6c2d14e3d7d9ff4c773633d35ae5d5cc0f8a513a78724bb28692cc6ad93c773b",
+   "pages": 81,
+   "entries": 268,
+   "located": 258,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 80,
+   "pages_with_running_head": 74,
+   "pages_without_text": 0,
+   "chars": 841893
+  },
+  {
+   "file": "tll_11.2.8_col1121-1280_renuo-repressio.pdf",
+   "url": "https://publikationen.badw.de/en/040453075/040453075%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2011%2C2%2C8%20col.%201121%E2%80%931280%20%28renuo%E2%80%93repressio%29%7D.pdf",
+   "volume": "11.2.8",
+   "columns": [
+    1121,
+    1280
+   ],
+   "lemmata": [
+    "renuo",
+    "repressio"
+   ],
+   "bytes": 1666265,
+   "sha256": "7cdfee3cd920b9909d1b604b9def9d8e9ed1b5c96045af5204062d12b7965773",
+   "pages": 81,
+   "entries": 225,
+   "located": 212,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 80,
+   "pages_with_running_head": 80,
+   "pages_without_text": 0,
+   "chars": 842475
+  },
+  {
+   "file": "tll_11.2.9_col1121-1280_repressio-resilio.pdf",
+   "url": "https://publikationen.badw.de/de/040453075/040453075%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2011%2C2%2C9%20col.%201121%E2%80%931280%20%28repressio%E2%80%93resilio%29%7D.pdf",
+   "volume": "11.2.9",
+   "columns": [
+    1121,
+    1280
+   ],
+   "lemmata": [
+    "repressio",
+    "resilio"
+   ],
+   "bytes": 1879970,
+   "sha256": "2938c45069f6334b82a87ac48e491617f5ab2d4daa17e3385f082728a86d9261",
+   "pages": 93,
+   "entries": 235,
+   "located": 220,
+   "addenda": 0,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 92,
+   "pages_with_running_head": 90,
+   "pages_without_text": 0,
+   "chars": 977053
+  },
+  {
+   "file": "tll_11.2.10_col1465-1624_resilio-resurgo.pdf",
+   "url": "https://publikationen.badw.de/de/040453075/040453075%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%2011%2C2%2C10%20col.%201465%E2%80%931624%20%28resilio%E2%80%93resurgo%29%7D.pdf",
+   "volume": "11.2.10",
+   "columns": [
+    1465,
+    1624
+   ],
+   "lemmata": [
+    "resilio",
+    "resurgo"
+   ],
+   "bytes": 1493111,
+   "sha256": "41484efdd8d75e40965a72bda35df9d04cb0b6d5b608dad043de4417f7eb1982",
+   "pages": 80,
+   "entries": 147,
+   "located": 147,
+   "addenda": 0,
+   "headwords_from": "bold type",
+   "pages_with_column_numbers": 80,
+   "pages_with_running_head": 80,
+   "pages_without_text": 0,
+   "chars": 843738
+  },
+  {
+   "file": "tll_onom.2_col0001-0814_c-cyzistra.pdf",
+   "url": "https://publikationen.badw.de/en/036397929/036397929%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%20onom.2%20col.%200001%E2%80%930814%20%28c%E2%80%93cyzistra%29%7D.pdf",
+   "volume": "onom.2",
+   "columns": [
+    1,
+    814
+   ],
+   "lemmata": [
+    "c",
+    "cyzistra"
+   ],
+   "bytes": 144886128,
+   "sha256": "bfefcf4dcb048eb80a5d1cc8122f09a0f281ab39d197f50617859f362fd3639c",
+   "pages": 411,
+   "entries": 10471,
+   "located": 8675,
+   "addenda": 272,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 406,
+   "pages_with_running_head": 407,
+   "pages_without_text": 0,
+   "chars": 4301529
+  },
+  {
+   "file": "tll_onom.3_col0001-0280_d-dzoni.pdf",
+   "url": "https://publikationen.badw.de/en/036397930/036397930%5BCC%20BY-NC-ND%5D%7BThLL%20vol.%20onom.3%20col.%200001%E2%80%930280%20%28d%E2%80%93dzoni%29%7D.pdf",
+   "volume": "onom.3",
+   "columns": [
+    1,
+    280
+   ],
+   "lemmata": [
+    "d",
+    "dzoni"
+   ],
+   "bytes": 50848109,
+   "sha256": "e5a89ae8855a7637a473eff77d177bc92ce0b3e79aaa25321ebbf2741efc7e8f",
+   "pages": 144,
+   "entries": 3922,
+   "located": 2891,
+   "addenda": 238,
+   "headwords_from": "bookmarks",
+   "pages_with_column_numbers": 141,
+   "pages_with_running_head": 141,
+   "pages_without_text": 0,
+   "chars": 1482083
+  }
+ ]
+}

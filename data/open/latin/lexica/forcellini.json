@@ -1,0 +1,108 @@
+{
+  "name": "forcellini",
+  "title": "Aegidii Forcellini Lexicon Totius Latinitatis (ed. Furlanetto, Corradini, Perin; Patavii, Typis Seminarii)",
+  "language": "la",
+  "direction": "la-la",
+  "source": "archive.org OCR text (_djvu.txt) of the five volumes; not the linguax.com electronic text",
+  "source_url": "https://archive.org/details/forcellini2",
+  "licence": "archive.org item metadata licenseurl: http://creativecommons.org/publicdomain/mark/1.0/ (Public Domain Mark 1.0)",
+  "retrieved": "2026-11-16",
+  "store": "data/lexica/lex_forcellini.sqlite",
+  "n_entries": 46983,
+  "distinct_folded_headwords": 45087,
+  "headwords_repaired_against_known_lemmas": 6181,
+  "entries_cut_per_volume": {
+    "I": 10954,
+    "II": 12337,
+    "III": 11848,
+    "IVa": 7513,
+    "IVb": 4331
+  },
+  "complete": true,
+  "coverage": {
+    "catullus": {
+      "lemmas": 3156,
+      "with_entry": 2450,
+      "share": 0.7763
+    },
+    "horace": {
+      "lemmas": 3942,
+      "with_entry": 2932,
+      "share": 0.7438
+    }
+  },
+  "entries_sha256": "893a7d8ee7bb01b05ff88456bde81f324c5a043136a5411ccd89a4f12824f5e9",
+  "raw_files": [
+    {
+      "item": "forcellini2",
+      "volume": "I",
+      "letters": "A-C",
+      "url": "https://archive.org/download/forcellini2/2%20Forcellini_djvu.txt",
+      "path": "data/raw/latin/lexica/forcellini/forcellini2_djvu.txt",
+      "bytes": 12545831,
+      "sha256": "ff2ad349b8f9acb4a54f05d92fd727449a28e005ea228d912eb480bd1ff446ea",
+      "licenseurl": "http://creativecommons.org/publicdomain/mark/1.0/",
+      "ocr": "ABBYY FineReader 11.0 (Extended OCR)",
+      "item_title": "Lexicon totius Latinitatis I",
+      "item_date": "1864"
+    },
+    {
+      "item": "forcellini3",
+      "volume": "II",
+      "letters": "D-K",
+      "url": "https://archive.org/download/forcellini3/3%20Forcellini_djvu.txt",
+      "path": "data/raw/latin/lexica/forcellini/forcellini3_djvu.txt",
+      "bytes": 12748374,
+      "sha256": "44058fe7ed0284da28bb64bcc40a8b93c3884ab29115b8d4008e5d138d0b706d",
+      "licenseurl": "http://creativecommons.org/publicdomain/mark/1.0/",
+      "ocr": "ABBYY FineReader 11.0 (Extended OCR)",
+      "item_title": "Lexicon totius Latinitatis II",
+      "item_date": "1864"
+    },
+    {
+      "item": "forcellini4",
+      "volume": "III",
+      "letters": "L-Q",
+      "url": "https://archive.org/download/forcellini4/4%20Forcellini_djvu.txt",
+      "path": "data/raw/latin/lexica/forcellini/forcellini4_djvu.txt",
+      "bytes": 12736010,
+      "sha256": "8720aa0c552dab5f061d54c1a1a158e83d77b4220190ecc0da676bb5dd86ccfd",
+      "licenseurl": "http://creativecommons.org/publicdomain/mark/1.0/",
+      "ocr": "ABBYY FineReader 11.0 (Extended OCR)",
+      "item_title": "Lexicon totius Latinitatis III",
+      "item_date": "1871"
+    },
+    {
+      "item": "5forcellini",
+      "volume": "IVa",
+      "letters": "R-S",
+      "url": "https://archive.org/download/5forcellini/5%20Forcellini_djvu.txt",
+      "path": "data/raw/latin/lexica/forcellini/5forcellini_djvu.txt",
+      "bytes": 7790470,
+      "sha256": "97d6102be7bc7ed0fe75d30e5958f61becb1947adf7f162389d27bbdb5081bc8",
+      "licenseurl": "http://creativecommons.org/publicdomain/mark/1.0/",
+      "ocr": "ABBYY FineReader 11.0 (Extended OCR)",
+      "item_title": "Lexicon totius Latinitatis IVa",
+      "item_date": "1871"
+    },
+    {
+      "item": "forcellini6",
+      "volume": "IVb",
+      "letters": "T-Z",
+      "url": "https://archive.org/download/forcellini6/6%20Forcellini_djvu.txt",
+      "path": "data/raw/latin/lexica/forcellini/forcellini6_djvu.txt",
+      "bytes": 4892717,
+      "sha256": "3a5f9ebbc1689e1408892b2eb96197980b3c600f62af6ca30e68457047f03fbd",
+      "licenseurl": "http://creativecommons.org/publicdomain/mark/1.0/",
+      "ocr": "ABBYY FineReader 11.0 (Extended OCR)",
+      "item_title": "Lexicon totius Latinitatis IVb",
+      "item_date": "1875"
+    }
+  ],
+  "missing": [
+    "the Onomasticon (proper names; De-Vit / Perin) is not part of these five volumes",
+    "one-letter headwords (A, E, O ...) and headwords whose capitals the OCR broke are not cut out; their text sits at the end of the entry before",
+    "entry text is uncorrected OCR: Greek is garbled, letters are misread (u/n, s/a, l/i), citations are not marked up",
+    "lexica.linguax.com (the corrected electronic text) refused automated access: robots.txt Disallow: / for all agents and an HTTP 511 proof-of-work / CAPTCHA page"
+  ]
+}

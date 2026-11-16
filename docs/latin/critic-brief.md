@@ -36,12 +36,24 @@ is `unavailable`, say so in your verdict: that part of the draft is unchecked, n
 | How the poets scan a form | | `la_prosody` |
 | Lewis & Short: senses, constructions, authors | `scripts/la_dict.py <word> --full` | `la_dictionary` |
 | English to Latin headwords | `scripts/la_dict.py --en "<english>"` | `la_reverse` |
+| Georges, Gaffiot, Forcellini, Döderlein, Smith & Hall | `scripts/la_lex.py <word>`, `la_lex.py --en "<english>"`, `la_lex.py --search "<words>"` | `la_lexica` |
 | Merrill on a poem, a line, a word | `scripts/la_ref.py commentary 5 7`, `la_ref.py word bellus` | `la_commentary` |
 | Merrill's introduction | `scripts/la_ref.py intro Metres` | `la_commentary` (intro) |
 | Allen & Greenough | `scripts/la_ref.py grammar 485`, `la_ref.py search "<topic>"` | `la_grammar` |
 | Where a word or phrase occurs | L5 and L6 evidence of `la_check` | `la_concordance`, `la_lemma`, `la_forms` |
 
 Read the `la_check` report first. Do not repeat its work; start from its warnings.
+
+Further dictionaries stand beside Lewis & Short (`docs/latin/lexica.md`): Georges (Latin-German, 1913), Gaffiot
+(Latin-French, 1934), Forcellini (Latin-Latin), Lewis's Elementary, Döderlein's synonyms, and two English-Latin
+dictionaries made for composing, Smith & Hall (1871) and Riddle-Arnold (1864). `scripts/la_lex.py <word>` (tool
+`la_lexica`, `q`) prints a Latin word's entry in each; `--en "<english>"` (`en`) prints the English-Latin articles,
+which keep the senses of the English word apart and name the authors; `--search` finds words anywhere in the entries;
+`--dict georges,gaffiot` narrows. Use them when Lewis & Short is thin or silent, when two candidates look alike (ask
+Döderlein how they differ), and to test a suspected translationese word: if Smith & Hall gives another word for that
+sense of the English, say so and cite the article. They are second witnesses. A word's period and register are still
+judged by L14 from Lewis & Short's labels and authors; an L14 row that warns or has no entry carries `gloss`, one line
+each from Georges and Gaffiot, as evidence only.
 
 ## Duties, in order
 

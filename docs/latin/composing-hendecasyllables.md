@@ -25,10 +25,21 @@ Before any line is drafted, collect Latin for each idea of the English. Do not t
 ```
 scripts/la_dict.py --en "sparrow"            # English -> Lewis & Short headwords (agent: la_reverse)
 scripts/la_dict.py passer --full             # senses, constructions, the authors cited (la_dictionary)
+scripts/la_lex.py --en "darling"             # Smith & Hall, Riddle-Arnold: the English-Latin articles (la_lexica en=)
+scripts/la_lex.py venustus                   # Georges, Gaffiot, Forcellini, Döderlein on a Latin word (la_lexica q=)
 scripts/la_ref.py word passer                # Merrill's notes that discuss the word (la_commentary)
 scripts/la_ref.py commentary 2 1             # Merrill on a poem and line you mean to echo
 scripts/la_ref.py search "diminutives"       # the grammar, the commentary, the introduction
 ```
+
+`la_dict.py --en` names the sources of each headword: `LS` (Lewis & Short's glosses read backwards), `Cat` (a line
+of Catullus whose literal English has the word) and `SH` (Smith & Hall's English-Latin dictionary, 1871). A word two
+or three of them give comes first. The further dictionaries (`docs/latin/lexica.md`) are read with `scripts/la_lex.py`:
+`--en` prints the whole Smith & Hall and Riddle-Arnold articles, which sort the senses of the English word and name
+the authors, so they are the place to choose between candidates; a Latin word prints its entry in Georges
+(Latin-German), Gaffiot (Latin-French), Forcellini (Latin-Latin), Lewis's Elementary and Döderlein's synonyms (how
+*osculum*, *suavium* and *basium* differ); `--search` finds words anywhere in them. They widen the harvest; whether
+Catullus has the word is still settled by the corpus (`la_lemma`) and its period by L14.
 
 With the agent, `la_concordance` and `la_lemma` give every locus of a word or lemma and `la_forms` its inflected
 forms; `la_prosody` shows how the poets scan a form and where in the line they put it.

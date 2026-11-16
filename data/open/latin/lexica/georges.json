@@ -1,0 +1,26 @@
+{
+ "name": "georges",
+ "title": "K. E. Georges, Ausfuehrliches lateinisch-deutsches Handwoerterbuch, 8th ed. (1913-1918)",
+ "language": "de",
+ "direction": "la-de",
+ "source_url": "https://tuxor1337.frama.io/firedict/dictionaries.html",
+ "licence": "Public Domain (copyright expired, published 1913) [the keeper's list, tuxor1337.frama.io/firedict/dictionaries.html; the text was converted from zeno.org with the keeper's tool dictmaster, and zeno.org states its own terms for its edition]",
+ "retrieved": "2026-11-16",
+ "n_entries": 54782,
+ "n_alternative_forms": 64,
+ "store": "data/lexica/lex_georges.sqlite (local, gitignored)",
+ "stardict_info": {
+  "bookname": "Georges: Ausführliches lateinisch-deutsches Handwörterbuch",
+  "wordcount": "54782",
+  "synwordcount": "11866",
+  "sametypesequence": "h"
+ },
+ "raw_files": [
+  {
+   "url": "https://tovotu.de/data/stardict/georges_lat-de.zip",
+   "path": "data/raw/latin/lexica/georges/georges_lat-de.zip",
+   "bytes": 10798600,
+   "sha256": "b6f624a8f2e1fe70e5c86e71ab8c88fa1a0482952bebeb91775937a84ba9ead7"
+  }
+ ]
+}

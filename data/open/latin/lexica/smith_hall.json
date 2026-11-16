@@ -1,0 +1,26 @@
+{
+ "name": "smith_hall",
+ "title": "W. Smith and T. D. Hall, A Copious and Critical English-Latin Dictionary (1871)",
+ "language": "en",
+ "direction": "en-la",
+ "source_url": "https://github.com/latin-dict/SmithHall1871",
+ "licence": "Creative Commons Legal Code CC0 1.0 Universal CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE LEGAL SERVICES. DISTRIBUTION OF THIS DOCUMENT DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP. CREATIVE COMMONS PROVIDES THIS INFORMATION ON AN \"AS-IS\" BASIS. CREATIVE COMMONS MAKES NO WARRANTIES REGARDING THE USE OF THIS DOCUMENT OR THE INFORMATION OR WORKS P",
+ "retrieved": "2026-11-16",
+ "n_entries": 30247,
+ "n_alternative_forms": 304,
+ "store": "data/lexica/lex_smith_hall.sqlite (local, gitignored)",
+ "stardict_info": {
+  "bookname": "A Copious and Critical English-Latin Dictionary, Smith & Hall (1871)",
+  "wordcount": "30251",
+  "synwordcount": "245",
+  "sametypesequence": "h"
+ },
+ "raw_files": [
+  {
+   "url": "https://github.com/latin-dict/SmithHall1871/releases/download/v0.2/SmithHall1871-stardict.zip",
+   "path": "data/raw/latin/lexica/smith_hall/SmithHall1871-stardict.zip",
+   "bytes": 6364428,
+   "sha256": "b2756b2d6f028e9968426ae1ee138d03cdb023753be561d403c783ba2c1fe3fa"
+  }
+ ]
+}

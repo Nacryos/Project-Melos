@@ -1,0 +1,26 @@
+{
+ "name": "riddle_arnold",
+ "title": "J. E. Riddle and T. K. Arnold, A Copious and Critical English-Latin Lexicon (1864)",
+ "language": "en",
+ "direction": "en-la",
+ "source_url": "https://github.com/latin-dict/Riddle1864",
+ "licence": "no licence statement in the keeper's repository",
+ "retrieved": "2026-11-16",
+ "n_entries": 32432,
+ "n_alternative_forms": 683,
+ "store": "data/lexica/lex_riddle_arnold.sqlite (local, gitignored)",
+ "stardict_info": {
+  "bookname": "A Copious and Critical English-Latin Lexicon, Riddle (1864)",
+  "wordcount": "32432",
+  "synwordcount": "685",
+  "sametypesequence": "h"
+ },
+ "raw_files": [
+  {
+   "url": "https://github.com/latin-dict/Riddle1864/releases/download/v1.0/Riddle1864-stardict.zip",
+   "path": "data/raw/latin/lexica/riddle_arnold/Riddle1864-stardict.zip",
+   "bytes": 4493553,
+   "sha256": "72314c867e19ba1293c6bc4f2e2f19a75e58244475d602b54887b8d4e547d75a"
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+{
+ "name": "georges_de_la",
+ "title": "K. E. Georges, Kleines deutsch-lateinisches Handwoerterbuch (1910)",
+ "language": "de",
+ "direction": "de-la",
+ "source_url": "https://github.com/latin-dict/Georges1910",
+ "licence": "This is free and unencumbered software released into the public domain. Anyone is free to copy, modify, publish, use, compile, sell, or distribute this software, either in source code form or as a compiled binary, for any purpose, commercial or non-commercial, and by any means. In jurisdictions that recognize copyright laws, the author or authors of this software dedicate any and all copyright i",
+ "retrieved": "2026-11-16",
+ "n_entries": 27043,
+ "n_alternative_forms": 17064,
+ "store": "data/lexica/lex_georges_de_la.sqlite (local, gitignored)",
+ "stardict_info": {
+  "bookname": "Kleines deutsch-lateinisches Handwörterbuch, Georges (1910)",
+  "wordcount": "27044",
+  "synwordcount": "17064",
+  "sametypesequence": "h"
+ },
+ "raw_files": [
+  {
+   "url": "https://github.com/latin-dict/Georges1910/releases/download/v1.0/Georges1910-stardict.zip",
+   "path": "data/raw/latin/lexica/georges_de_la/Georges1910-stardict.zip",
+   "bytes": 5792004,
+   "sha256": "f8ca4bdac33acb1a5046c7a7c0c1b44ffac743bdfb5aeb1d7fb5dc41252e92aa"
+  }
+ ]
+}

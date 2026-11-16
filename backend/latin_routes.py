@@ -9,7 +9,8 @@ GET /api/la/status                            counts of the partition and of the
 POST /api/la/check {text, metre, author, only, evidence}   every check on whole lines (scripts/la_check.py's report)
 GET /api/la/prosody?form=&author=             how the poets scan a form: quantities with loci (Catullus, then Virgil)
 GET /api/la/dictionary?q=                     Lewis & Short entries of a word: senses, authors cited, period labels
-GET /api/la/reverse?q=&limit=                 English -> Latin headwords whose Lewis & Short glosses carry the word
+GET /api/la/reverse?q=&limit=                 English -> Latin headwords: Lewis & Short read backwards, Catullus's lines, Smith & Hall
+GET /api/la/lexica?q= | en= | search= &dict=&limit=&full=   the further dictionaries (data/lexica/lex_*.sqlite): Georges, Gaffiot, Smith & Hall ...
 GET /api/la/commentary?poem=&line= | q= | words=   Merrill's notes on a poem or line, or searched; intro= his introduction
 GET /api/la/grammar?section= | q=             Allen & Greenough by section number, or searched
 """
@@ -189,6 +190,15 @@ def la_check(body: LaCheckIn, _=Depends(require_owner_or_agent)):
 def la_prosody(form: str = Query(..., min_length=1, max_length=80), author: str = Query("", max_length=80),
                _=Depends(require_owner_or_agent)):
     return _call("latin_prosody", "attested", form, author)
+
+
+@router.get("/api/la/lexica")
+def la_lexica(q: str = Query("", max_length=80), en: str = Query("", max_length=80), search: str = Query("", max_length=120),
+              dict: str = Query("", max_length=120), limit: int = Query(3, ge=1, le=20), full: bool = Query(False),
+              _=Depends(require_owner_or_agent)):
+    """The further dictionaries (Georges, Gaffiot, Smith & Hall, Forcellini ...): q a Latin word, en English,
+    search full text; dict a comma-separated choice of stores. With nothing asked, the list of stores."""
+    return _call("latin_lexica", "query", q, en=en, search_text=search, dicts=dict or None, limit=limit, full=full)
 
 
 @router.get("/api/la/dictionary")
